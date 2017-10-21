@@ -1,0 +1,151 @@
+/* ---------------------
+	操作图标样式
+	s_button.css
+	author: qj
+	date: 2011-9-26
+   --------------------- */
+   
+.s_confirm, .s_delete, .s_cancle, .s_edit, .s_recall, .s_examination, 
+.s_report, .s_add, .s_song, .s_yisong, .s_shangbao, .s_bohui, .s_setMark, 
+.s_print, .s_word, .s_kj, .s_fx, .s_ls, .s_save, .s_quz, .s_arrowDown,
+ .s_arrowUp, .s_wbd, .s_zbzc, .s_kqzc, .s_excel, .s_tk, .s_ck, .s_cz,
+  .s_qj, .s_sx,.s_statistic,.s_release,.s_yas,.s_pq,.s_yl,.s_sp,.s_yp,.s_tp{
+	display: inline-block;
+	margin-right:3px;
+	padding-left: 20px;
+	padding-top:0px;
+	height:20px;
+	cursor:pointer;
+}
+.s_release{background:url(images/buttons.gif) no-repeat 0px -60px;}
+.s_confirm {
+	background:url(images/buttons.gif) no-repeat 0px -237px;
+}
+.s_delete {
+	background:url(images/buttons.gif) no-repeat 0px -17px;
+}
+.s_cancle {
+	background:url(images/buttons.gif) no-repeat 0px -217px;
+}
+.s_edit {
+	background:url(images/buttons.gif) no-repeat 0px -97px;
+}
+.s_recall {
+	background:url(images/buttons.gif) no-repeat 0px -337px;
+}
+.s_examination {
+	background:url(images/buttons.gif) no-repeat 0px -277px;
+}
+.s_report {
+	background:url(images/buttons.gif) no-repeat 0px -357px;
+}
+.s_add {
+	background:url(images/buttons.gif) no-repeat 0px -197px;
+}
+.s_song {
+	background:url(images/buttons.gif) no-repeat 0px -177px;
+}
+.s_yisong {
+	background:url(images/buttons.gif) no-repeat 0px -317px;
+}
+.s_shangbao {
+	background:url(images/buttons.gif) no-repeat 0px -157px;
+}
+.s_bohui {
+	background:url(images/buttons.gif) no-repeat 0px -257px;
+}
+.s_setMark {
+	background:url(images/buttons.gif) no-repeat 0px -117px;
+}
+.s_print {
+	background:url(images/buttons.gif) no-repeat 0px -37px;
+}
+.s_word {
+	background:url(images/buttons.gif) no-repeat 0px -377px;
+}
+.s_kj {
+	background:url(images/buttons.gif) no-repeat 0px -397px;
+}
+.s_fx {
+	background:url(images/buttons.gif) no-repeat 0px -137px;
+}
+.s_ls {
+	background:url(images/buttons.gif) no-repeat 0px -397px;
+}
+/*2011-10-18新增保存图标*/
+.s_save {
+	background:url(images/buttons.gif) no-repeat 0px -436px;
+}
+/*2011-10-18新增解答图标*/
+.s_quz {
+	background:url(images/buttons.gif) no-repeat 0px -457px;
+}
+/*2011-10-20新增下发图标*/
+.s_arrowDown {
+	background:url(images/buttons.gif) no-repeat 0px -477px;
+}
+/*2011-10-21新增下移图标*/
+.s_arrowUp {
+	background:url(images/buttons.gif) no-repeat 0px -497px;
+}
+/*2011-10-24新增未报到图标*/
+.s_wbd {
+	background:url(images/buttons.gif) no-repeat 0px -537px;
+}
+/*2011-10-24新增暂不注册图标*/
+.s_zbzc {
+	background:url(images/buttons.gif) no-repeat 0px -517px;
+}
+/*2011-10-24新增开启注册图标*/
+.s_kqzc {
+	background:url(images/buttons.gif) no-repeat 0px -557px;
+}
+/*2011-10-25新增导出图标*/
+.s_excel {
+	background:url(images/buttons.gif) no-repeat 0px -297px;
+}
+/*2011-10-27新增重开、重置、停开图标*/
+.s_tk {
+	background:url(images/buttons.gif) no-repeat 0px -577px;
+}
+.s_ck {
+	background:url(images/buttons.gif) no-repeat 0px -597px;
+}
+.s_cz {
+	background:url(images/buttons.gif) no-repeat 0px -617px;
+}
+/*2011-10-28新增请假图标*/
+.s_qj {
+	background:url(images/buttons.gif) no-repeat 0px -637px;
+}
+/*2011-11-01新增筛选图标*/
+.s_sx {
+	background:url(images/buttons.gif) no-repeat 0px -657px;
+}
+/*2011-11-07新增统计图标*/
+.s_statistic {
+	background:url(images/buttons.gif) no-repeat 0px -137px;
+}
+/*2011-11-09新增压缩图标*/
+.s_yas{
+	background:url(images/buttons.gif) no-repeat 0px -677px;	
+}
+/*2011-11-10新增聘请图标*/
+.s_pq{
+	background:url(images/buttons.gif) no-repeat 0px -697px;	
+}
+/*2012-03-28新增预览图标*/
+.s_yl{
+	background:url(images/buttons.gif) no-repeat 0px -760px;	
+}
+/* add by yangrui 开始 */
+.s_sp{
+	background:url(images/sp.jpg) no-repeat 0px 0px;	
+}
+.s_yp{
+	background:url(images/yp.jpg) no-repeat 0px 0px;	
+}
+.s_tp{
+	background:url(images/tp.jpg) no-repeat 0px 0px;	
+}
+/* add by yangrui 结束 */

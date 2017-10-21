@@ -1,0 +1,50 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<title>字典索引管理</title>
+		<script type="text/javascript" src="../../common/include.js"></script>
+		<script type="text/javascript" src="dic_mgr.js"></script>
+	</head>
+	<body>
+		<!-- 索引 -->
+		<div class="title" id="_title" width="1px"></div>
+		<!-- 查询条件 -->
+		<div class="formContent">
+			<form id="formSearch">
+				<table class="searchTable">
+					<tr>
+						<th>字典名称</th>
+						<td><input class="inputStyle" type="text" name="dicName" /></td>
+						<th>字典代码</th>
+						<td><input class="inputStyle" type="text" name="dicCode" /></td>
+						<th>字典类型</th>
+						<td><input class="inputStyle" type="text" name="dicType"
+							dataDic="ZDLX" /></td>
+						<td><input type="button" name="button" value="查询" title="查询"
+							class="v_button" id="btnSearch" /> &nbsp;&nbsp; <input
+							type="reset" name="button" value="重置" title="重置" class="r_button" />
+						</td>
+					</tr>
+				</table>
+			</form>
+		</div>
+		<!-- 按钮  -->
+		<div class="buttonArea operation">
+			<div class="left newButton">
+				<div>
+					<input type="button" class="add" id="btn_add" value="添加" />
+				</div>
+			</div>
+			<div class="clear"></div>
+		</div>
+	
+		<!-- 列表 -->
+		<div class="listArea">
+			<table id="mainGrid"></table>
+		</div>
+	
+		<!-- 分页 -->
+		<div id="mainGridPager"></div>
+	</body>
+</html>

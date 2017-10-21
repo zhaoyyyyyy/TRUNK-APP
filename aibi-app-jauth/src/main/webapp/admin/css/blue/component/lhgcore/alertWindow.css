@@ -1,0 +1,74 @@
+﻿/* ----------------------------------------------
+    alert window 
+	author: qy
+   ---------------------------------------------- */
+.alertWindow {
+	width: 100%;
+	height: 100%;
+	background: #d4f0fc url(images/a	png) repeat-x left top;
+	color: #464646;
+}
+.alert-right, .alert-wrong, .alert-alarm, .alert-shield, .alert-heart, .alert-error, .alert-success, .alert-question, .alert-message {
+	padding-top: 20px;
+	padding-bottom: 20px;
+	font-size: 13px;
+	color: #464646;
+}
+.alert-right {
+	padding-left: 80px;
+	background: url(images/alert-right.gif) no-repeat 15px 10px;
+}
+.alert-wrong {
+	padding-left: 80px;
+	background: url(images/alert-wrong.gif) no-repeat 15px 10px;
+}
+.alert-alarm {
+	padding-left: 80px;
+	background: url(images/wattention.png) no-repeat 20px 18px;
+	_background: url(images/wattention.gif) no-repeat 20px 18px;
+}
+.alert-message {
+	padding-left: 20px;
+}
+.alert-shield {
+	padding-left: 80px;
+	background: url(images/alert-shield.gif) no-repeat 15px 10px;
+}
+.alert-heart {
+	padding-left: 80px;
+	background: url(images/alert-heart.gif) no-repeat 15px 10px;
+}
+.alert-error {
+	padding-left: 80px;
+	background: url(images/werror.png) no-repeat 20px 18px;
+	_background: url(images/werror.gif) no-repeat 20px 18px;
+}
+.alert-success {
+	padding-left: 80px;
+	background: url(images/wok.png) no-repeat 20px 18px;
+	_background: url(images/wok.gif) no-repeat 20px 18px;
+}
+.alert-question {
+	padding-left: 80px;
+	background: url(images/whelp.png) no-repeat 20px 18px;
+	_background: url(images/whelp.gif) no-repeat 20px 18px;
+}
+.alertWindow h1 {
+	height: 36px;
+	background: url(images/alert-h1.png) no-repeat center top;
+	line-height: 36px;
+	text-align: center;
+	font-size: 1.2em;
+	font-weight: bold;
+	color: #fff;
+}
+.alertWindow p {
+	margin: 0.5em 0;
+}
+.alertWindow .alert-buttonArea {
+	margin-top: 1em;
+	text-align: right;
+}
+.blueButton {
+	margin: 0 1em;
+}

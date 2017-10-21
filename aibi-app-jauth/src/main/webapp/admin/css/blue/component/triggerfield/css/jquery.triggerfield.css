@@ -1,0 +1,79 @@
+/* 
+	styles for the psuedo-trigger box 
+*/
+div.mcdropdown {
+	display: inline;
+	white-space: nowrap;
+	width: 100%;
+	background: transparent;
+	height: 22px;
+	line-height: 22px;
+	margin: 0;
+	padding: 0;
+}
+
+div.mcdropdown input.emptyField{
+	color: gray;
+}
+/* style either the input or div where the plug-in is attached to */
+div.mcdropdown input {
+	background-color: #fff;
+	height: 22px;
+	line-height: 22px;
+	padding: 0px;
+	color: #000;
+}
+
+div.mcdropdown a {
+	background: transparent url(../images/trigger.gif) no-repeat -17px 0;
+	border-bottom: #7c8faa 1px solid;
+	width: 17px;
+	height: 21px;
+	text-decoration: none;
+	font-size: 0pt;
+	outline: 0;
+	display: inline-block;
+	vertical-align: top;
+	*margin-top: 4px;
+}
+
+div.mcdropdown a:hover,div.mcdropdown a:focus {
+	background-position: -34px 0 !important;
+}
+
+div.mcdropdown a:active {
+	background-position: -85px 0 !important;
+	outline: none; /* hide dotted outline in Firefox */
+}
+
+div.mcdropdownDisabled a {
+	filter: alpha(opacity =   40);
+	-moz-opacity: 0.4;
+	opacity: 0.4;
+	-khtml-user-select: none;
+	-o-user-select: none;
+	-moz-user-select: none;
+	-moz-user-focus: ignore;
+	-moz-user-input: disabled;
+}
+
+div.mcdropdownDisabled input {
+	cursor: default;
+	background:url(../images/read_input.jpg) repeat-x;
+	color:#7C7C7C;
+}
+
+div.mcdropdownDisabled a:hover,div.mcdropdownDisabled a:focus {
+	background-position: 0 0!important;
+	cursor: default;
+}
+
+.triggerIcon{
+	background: transparent url(../images/search-trigger.gif) no-repeat -17px 0 !important;
+}
+.date_triggerIcon{
+	background: transparent url(../images/date-trigger.gif) no-repeat -17px 0 !important;
+}
+.clear_triggerIcon{
+	background: transparent url(../images/clear-trigger.gif) no-repeat -17px 0 !important;
+}

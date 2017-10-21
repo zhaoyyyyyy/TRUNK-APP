@@ -1,0 +1,187 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
+		<title>树示例代码</title>
+		
+		<!-- 
+			必须引入的文件：jquery-1.4.2.js、jquery.util.js、jquery.simple.tree.js、jquery.simple.tree.css。
+		-->
+			<script type="text/javascript" src="../../../jquery-1.5.2.js"></script>
+			<script type="text/javascript" src="../../../jquery.util.js"></script>
+		<link rel="stylesheet" type="text/css" href="../../../../../admin/css/blue/component/simpletree/css/jquery.simple.tree.css"/>
+		<script type="text/javascript" src="../../../component/triggerfield/js/jquery.triggerfield.js"></script>
+				<script type="text/javascript" src="../js/jquery.simple.tree.js"></script>
+		
+		<!-- 
+			按照如下代码初始化树，可以选择的属性为：
+		 -->
+		<script>
+			$(function(){
+				// 构建树。
+				var mySimpleTree = $('.simpleTree').simpleTree({
+					autoclose: false,
+					nodeCheckBox: true,
+					showIcon: true,
+					showRoot: true,
+					
+					ignoreIndeterminate : false,
+					
+					
+					selectValues:['10_01_01'],
+					afterClick: function(node){
+						$("#infoDiv").html("");
+						// alert('text-' + $('span:first', node).text());
+					},
+					afterContextMenu:function(node, e){
+						$('#contextMenu').menu('show', {
+							left: e.pageX,
+							top: e.pageY
+						});
+					},
+					afterDblClick: function(node){
+						// alert('text-' + $('span:first', node).text());
+					},
+					afterMove: function(destination, source, pos){
+						// alert('destination-' + destination.attr('id') 
+						//     + ' source-' + source.attr('id') + ' pos-' + pos);
+					},
+					afterAjax: function(node){
+						// alert($(node).html());
+					},
+					animate: true,
+					beforeDelete: function(node){
+						if(node.attr("id") == '10_01_01'){
+							alert('不能删除');
+							return false;
+						}
+						return true;
+					},
+					afterDelete: function(){
+						if(this.getSelected().length == 0){//删除节点为当前选中节点
+							$("#infoDiv").html("请选择树节点进行操作");
+						}
+					}
+				});
+				
+				// 构建下拉框。
+				/**var myTreeCombox = $("#myTreeCombox").treecombo({
+				    multiSelected: false,
+					url		      : 'simpleTreeData.htm',
+					valueAttr		: 'id',
+					labelFieldName	: 'myTreeComboxLabel'
+				});**/
+				
+				// 显示树选中的值。
+				$("#showTreeValue").click(function(){
+					var a = mySimpleTree[0].getSelectionsValue();
+					
+					alert(a.text);
+					alert(a.value);
+					/**var myTreeSelected = mySimpleTree[0].getSelections();
+					if (myTreeSelected.length == 0) {
+						alert('请选择一个值');
+						return;
+					} else {
+						alert(myTreeSelected.find(".showValue").text());
+					}**/
+				});
+				
+				// 显示下拉框选中的值。
+				$("#showComboxValue").click(function(){
+					alert($("#myTreeCombox").val());
+				});
+				
+				// 添加树节点。
+				$("#addTreeNode").click(function(){
+					mySimpleTree[0].addNode("0001", "测试节点", {parentId:"10_01", showDelete:true}, function(){
+						alert('添加成功')
+					});
+				});
+				
+				// 清除选中节点。
+				$("#clearSelectedTreeNodes").click(function(){
+					mySimpleTree[0].clearSelections();
+				});
+			});
+		</script>
+	</head>
+	<body style="margin: 50px; padding: 50px;">
+		<!--
+		<div>						
+			<ul class="simpleTree">
+				<li class="root">
+					<ul>
+						<li>
+							<span class='text'>节点10</span>
+							<ul>
+								<li>
+									<span class='text'>节点10_01</span>
+									<ul>
+										<li>
+											<span class='text'>节点10_01_01</span>
+										</li>
+										<li>
+											<span class='text'>节点10_01_02</span>
+										</li>
+									</ul>
+								</li>
+								<li>
+									<span class='text'>节点10_02</span>
+								</li>
+							</ul>
+						</li>
+						<li>
+							<span class='text'>节点20</span>
+							<ul>
+								<li>
+									<span class='text'>节点20_01</span>
+								</li>
+								<li>
+									<span class='text'>节点20_02</span>
+								</li>
+							</ul>
+						</li>
+					</ul>
+				</li>
+			</ul>
+		</div>
+		-->
+		<div id="infoDiv" style="color:red;"></div>
+		<!-- ajax的方式去请求，提供数据，生成树。 -->
+		<div>						
+			<ul class="simpleTree">
+				<li class="root">
+					<span>根节点</span>
+					<ul class="ajax">
+					    <li>{url: simpleTreeData.htm}</li>
+					</ul>
+				</li>
+			</ul>
+		</div>
+		<br />
+		<br />
+		<!-- 下拉选择树。 -->
+		<form>
+			<table>
+				<tr>
+					<td>
+						<label>
+							下拉选择树：&nbsp;
+						</label>
+					</td>
+					<td>
+						<input type="text" id="myTreeCombox" name="myTreeCombox" readonly="readonly" />
+					</td>
+				</tr>
+			</table>
+		</form>
+		<br />
+		<br />
+		<!-- 显示选中值按钮。 -->
+		<button id="showTreeValue" class="but">显示树选中值</button>
+		<button id="showComboxValue" class="but">显示下拉框选中值</button>
+		<button id="addTreeNode" class="but">添加树节点</button>
+		<button id="clearSelectedTreeNodes" class="but">清除选中节点</button>
+	</body>
+</html>

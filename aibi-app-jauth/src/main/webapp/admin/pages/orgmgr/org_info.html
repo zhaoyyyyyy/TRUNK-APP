@@ -1,0 +1,86 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<title>组织详细信息</title>
+		<script type="text/javascript" src="../../common/include.js"></script>
+		<script type="text/javascript" src="org_info.js"></script>
+	</head>
+	<body>
+	<form id="saveDataForm">
+		<table border="0" width="100%" cellpadding="0" cellspacing="0" class="commTable" >
+			<tbody> 
+				<tr>
+					<th>组织Code</th>
+					<td>
+						<input type="hidden" id="orgCode" v-model="organization.orgCode" />
+						{{organization.orgCode}}
+					</td>
+					<th>组织名称缩写</th>
+					<td>
+						{{organization.simpleName}}
+					</td>
+				</tr>
+				<tr>
+					<th>排序序号</th>
+					<td>
+						{{organization.orderNum}}
+					</td>
+					<th>组织类型</th>
+					<td>
+						{{organization.orgType}}
+					</td>
+				</tr>
+				<tr>
+					<th>父组织名称</th>
+					<td colspan="3">
+						{{organization.parentName}}
+					</td>
+				</tr>
+				<tr>
+					<th>创建人姓名</th>
+					<td>
+						{{organization.createrName}}
+					</td>
+					<th>创建人账号</th>
+					<td>
+						{{organization.creater}}
+					</td>
+				</tr>
+				<tr>
+					<th>创建时间</th>
+					<td colspan="3">
+						{{organization.createTime}}
+					</td>
+				</tr>
+				<tr>
+					<th>审核方式</th>
+					<td>
+						{{organization.interrogateType}}
+					</td>
+					<th>组织状态</th>
+					<td>
+						{{organization.orgStatus}}
+					</td>
+				</tr>
+				<tr>
+					<th>树路径</th>
+					<td colspan="3">
+						{{organization.treePath}}
+					</td>
+				</tr>	
+				<tr>
+					<th>组织全名</th>
+					<td colspan="3">
+						{{organization.fullName}}
+					</td>
+				</tr>
+			</tbody>		
+		</table>
+		</form>
+		<!-- 批量创建  -->
+    	<div class="buttonArea operation">
+    		<div class="left newButton"><div>	<input type="button" id="btn_creatChild" value="创建下级节点" title="创建下级节点" class="add" /></div></div>
+		</div>
+	</body>
+</html>

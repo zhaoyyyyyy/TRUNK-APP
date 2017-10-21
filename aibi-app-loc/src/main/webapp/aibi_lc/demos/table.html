@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>常用表格和分页</title>
+<link rel="stylesheet" type="text/css" href="../asset/css/common/reset.css" />
+<link rel="stylesheet" type="text/css" href="../asset/css/common/button.css" />
+<link rel="stylesheet" type="text/css" href="../asset/css/common/table.css" />
+<link rel="stylesheet" type="text/css" href="../asset/css/common/page.css" />
+<script type="text/javascript" src="../asset/script/common/jQuery/jquery-1.12.4.js"></script>
+</head>
+<body>
+<!-- 常用表格  -->
+<div class="common-width common-table-wrp">
+   <!-- 表格上方的搜索栏 -->
+   <div class="common-table-search clearfix">
+   		<ul>
+			<li>
+				<label class="fleft">关键字：</label>
+				<input type="text" class="search-input fleft" value="模糊查询">
+			</li>
+			<li>
+			    <!-- 增加类名open 显示下拉列表-->
+				<div class="fleft querySel-box">
+		      		<div class="fleft sel-text">全部数据状态</div>
+		      	  	<a href="javascript:void(0);" class="hand fright sel-btn"></a>
+		      	 	<div class="querySel-list">
+			      	  	<ol>
+			      	  		<li><a href="javascript:void(0);">全部数据状态</a></li>
+			      	  	 	<li><a href="javascript:void(0);">全部数据状态111</a></li>
+			      	  	 	<li><a href="javascript:void(0);">全部数据状态222</a></li>
+			      	  	</ol>
+		      	    </div>
+				</div>
+			</li>
+			<li>
+				<div class="fleft querySel-box">
+		      		<div class="fleft sel-text">全部审批状态</div>
+		      	  	<a href="javascript:void(0);" class="hand fright sel-btn"></a>
+		      	 	<div class="querySel-list">
+			      	  	<dl>
+			      	  	 	<dd>
+			      	  	 		<a href="javascript:void(0);">全部审批状态</a>
+			      	  	 		<a href="javascript:void(0);">状态1</a>
+			      	  	 		<a href="javascript:void(0);">状态2</a>
+			      	  	 	</dd>
+			      	  	</dl>
+		      	    </div>
+				</div>
+			</li>
+			<li>
+				<input placeholder="创建时间" readonly type="text" class="search-input">
+				 -- 
+				<input placeholder="创建时间" readonly type="text" class="search-input">
+			</li>
+			<li><input type="text" class="search-input" placeholder="指标名称"></li>
+			<li>
+				<button type="button" class="btn search-btn">
+				     <span class="caret"></span>
+				   	 <span>查询</span>
+				</button>
+			</li>
+		</ul>
+	</div><!-- common-table-searchs -->
+    <!-- 表格上方的工具栏 -->
+    <div class="common-table-tools">
+		<ul class="overflow-clear">
+			<li class="first">
+				<a role="button" href="javascript:;" class="btn  icon-btn add-btn">
+			    	<span class="caret"></span>
+			   	 	<span>新增新增新增新增</span>
+			    </a>
+			</li>
+			<li>
+				<a role="button" href="javascript:;" class="btn  icon-btn import-btn">
+			    	<span class="caret"></span>
+			   	 	<span>导入</span>
+			    </a>
+			</li>
+			<li>
+				<a role="button" href="javascript:;" disabled="disabled" class="btn  icon-btn del-btn">
+				     <span class="caret"></span>
+				   	 <span>删除不可用去掉disabled有惊喜</span>
+				</a>
+			</li>
+		</ul>
+   </div><!-- common-table-tools -->
+   <!-- 表格和分页部分 -->
+   <div class="common-table-box">
+	   <table class="common-table">
+	     <thead>
+	       <tr>
+		       <th>序号<span class="sort">&nbsp;</span></th>
+		       <th class="sort-up">场景ID<span class="sort">&nbsp;</span></th>
+		       <th class="sort-down">场景名称<span class="sort">&nbsp;</span></th>
+		       <th>场景编码<span class="sort">&nbsp;</span></th>
+		       <th>创建时间<span class="sort">&nbsp;</span></th>
+		       <th>数据状态<span class="sort">&nbsp;</span></th>
+		       <!-- 使用图标按钮时根据具体情况修改宽度值  -->
+		       <th width="250px" class="noborder">操作</th>
+		       <!-- 使用操作下拉列表时 width不设置即可 -->
+		      <!--  <th class="noborder">操作</th> -->
+	       </tr>
+	     </thead>
+		 <tr class="even">
+	    	<td>1</td>
+	    	<td class="long-str-td" title="全称">场景场景场景场景场景场景场景场景场景场景场景场景场景场景场景场景场景场景场景场景场景场景的好哒肯定会卡萨丁</td>
+	        <td>
+	        	<a href="javascript:void(0);">空</a>
+	        </td>
+	        <td>63ADA75B699A7A9AD8AF9B27947F5CC8</td>
+	        <td>2017-07-05 10:31:42&nbsp;</td>
+	        <td>已保存</td>
+	        <td class="text-left">
+				<!-- 删除 -->
+				<a role="button" href="javascript:;" class="btn  table-btn del-btn" >
+				     <span class="caret"></span>
+				   	 <span>table中的删除</span>
+				</a>
+			    <!-- 授权 -->
+			    <a role="button" href="javascript:;" class="btn  table-btn auth-btn" >
+			    	<span class="caret"></span>
+			   	 	<span>授权</span>
+			    </a>
+	     </tr>
+	     <tr class="odd">
+	    	<td>1</td>
+	    	<td>222</td>
+	        <td>
+	        	<a href="javascript:void(0);">空</a>
+	        </td>
+	        <td>63ADA75B699A7A9AD8AF9B27947F5CC8</td>
+	        <td>2017-07-05 10:31:42&nbsp;</td>
+	        <td>已保存</td>
+	        <td>
+	        	<div class="btn-group menu-left">
+				  <button type="button" class="btn dropdown-btn" >操作<span class="caret"></span></button>
+				  <ul class="dropdown-menu">
+				    <li><a href="javascript:;">添加到收藏栏</a></li>
+				    <li><a href="javascript:;">操作名称</a></li>
+				  </ul>
+				</div>
+			</td>
+	     </tr>
+	  </table><!-- common-table 结束 -->
+	   <!-- 分页 -->
+	   <div class="common-page clearfix">
+	   		<div class="total">总记录<span>19</span>条</div>
+		    <ul>
+		       <li><a href="javascript:void(0);" class="disabled">上一页</a></li>
+		          <li class="active"><a href="javascript:void(0);" class="num">1</a></li>
+		          <li><a href="javascript:void(0);" class="num">2</a></li>
+		          <li><a href="javascript:void(0);">…</a></li>
+		          <li><a href="javascript:void(0);" class="num">38</a></li>
+		          <li><a href="javascript:void(0);">下一页</a></li>
+		    	  <li class="jump"><span>跳转</span><input type="text"><span>页</span></li>
+		    	  <li><a href="javascript:;">GO</a></li>
+			</ul>
+	   </div><!-- common-page结束 -->
+	</div><!-- common-table-box -->
+</div>
+</body>
+</html>

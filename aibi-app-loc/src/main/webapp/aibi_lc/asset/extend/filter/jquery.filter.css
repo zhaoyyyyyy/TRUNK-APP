@@ -1,0 +1,96 @@
+.hidden-important{display:none !important;}
+/* 已选结果 */
+.selected-box{border-bottom: 1px solid #dcdcdc;}
+.selected-box .selected-left{width: 75px;line-height:34px;text-align: right;color: #0081cc;}
+.selected-box .selected-right{width: 915px;padding-top:6px;}
+.selected-item{height: 20px;margin: 0 10px 10px 0;background-color: #FFF;border: 1px solid #bfbfbf;}
+.selected-item:hover{border: 1px solid #88b72f;}
+.selected-item .item-name{padding: 2px 8px;max-width: 200px;white-space: nowrap;text-overflow: ellipsis;overflow: hidden;}
+.selected-item .item-del-btn{position:relative;font-size:14px;color:#999;font-weight: bold;margin: 0 3px;}
+.selected-item:hover .item-del-btn{color:#88b72f;}
+/* 条件部分 */
+.filter-row-box {
+	  color: #333;
+	  border-bottom: 1px dashed #d6d6d6;
+	  padding-top: 5px;
+}
+.filter-row-left {
+	width: 75px;
+	padding:0 5px 0 0;
+	line-height:23px;
+	white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+.filter-row-right{
+	width: 895px;
+}
+.filter-row-right > ul > li {
+	position:relative; 
+	float: left;
+	height:20px;
+	margin: 0 5px 5px;
+	display:inline-block;
+}
+.filter-row-right li a {
+	display: block;
+	height: 20px;
+	line-height: 20px;
+	padding: 0px 10px;
+	color: #3c3c3c ;
+    text-align:center;
+    max-width: 160px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+.filter-row-right li:hover > a,
+.filter-row-right li.active > a{
+	color: #FFF;
+	background-color: #88b72f;
+}
+.filter-row-right ul > li.hasChildren:hover > a{
+	color:#0081cc;
+	background-color:#fff;
+}
+.filter-row-right > ul > li > a > span{
+	float:left;
+}
+.filter-row-right ul > li.hasChildren > a > i{
+	float:left;
+	width: 18px;
+	height: 20px;
+	background:transparent url(../../images/marketingNavigation.png) no-repeat -125px 4px;   
+	cursor: pointer;
+}
+.filter-row-right ul > li.hasChildren.hover > a{
+	border:1px solid #ccc;
+	border-bottom:0;
+}
+.childrenBox{
+	position:absolute;
+	left:0;
+	top:19;
+	border:1px solid #ccc;
+	background:#fff;
+	z-index:2;
+	display:none;
+}
+.childrenBox .filter-row-box {
+	width:500px;
+	border-bottom:1px solid #ccc;
+	padding:5px 10px 0 10px;
+}
+.childrenBox .filter-row-right{
+	width:350px;
+}
+.childrenBox .filter-row-left{
+	cursor:pointer;
+	font-weight:bold;
+	width:120px;
+}
+.childrenBox .filter-row-left:hover{
+	text-decoration:underline;
+	color:#0081cc;
+}

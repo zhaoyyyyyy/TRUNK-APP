@@ -1,0 +1,63 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<title>数据权限管理</title>
+		<script type="text/javascript" src="../../common/include.js"></script>
+		<script type="text/javascript" src="group_mgr.js"></script>
+	</head>
+	<body>
+		<!-- 索引 -->
+		<div class="title" id="_title">
+		</div>
+
+		<div class="formContent">
+			<form id="formSearch">
+				<table class="searchTable">
+					<tr>
+						<th>
+							数据权限名称
+						</th>
+						<td>
+							<input class="inputStyle" type="text" name="groupName"
+								id="groupName" />
+						</td>
+						<th>
+							创建时间
+						</th>
+						<td>
+							<input type="text" name="createTimeStart"
+								id="groupVo.createTimeStart" class="inputStyle Wdate" />
+							至
+							<input type="test" name="createTimeEnd"
+								id="groupVo.createTimeEnd" class="inputStyle Wdate" />
+							<td>
+								<input type="button" name="button" value="查询" title="查询"
+									class="v_button" id="btnSearch" />
+								&nbsp;&nbsp;
+								<input type="reset" name="button" value="重置" title="重置"
+									class="r_button" />
+							</td>
+					</tr>
+				</table>
+			</form>
+		</div>
+		<!-- 按钮  -->
+		<div class="buttonArea operation">
+			<div class="left newButton">
+				<div>
+					<input type="button" class="add" id="btn_add" value="创建数据权限" />
+				</div>
+			</div>
+			<div class="clear"></div>
+		</div>
+
+		<!-- 列表 -->
+		<div class="listArea">
+			<table id="mainGrid"></table>
+		</div>
+
+		<!-- 分页 -->
+		<div id="mainGridPager"></div>
+	</body>
+</html>

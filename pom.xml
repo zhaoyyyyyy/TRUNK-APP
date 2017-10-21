@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.asiainfo.prd</groupId>
+  <artifactId>xportrait</artifactId>
+  <version>1.0.0</version>
+  <packaging>pom</packaging>
+  <modules>
+    <module>aibi-app-loc</module>
+    <module>aibi-app-jauth</module>
+    <module>aibi-tool-gateway</module>
+  </modules>
+  
+  <parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>1.4.3.RELEASE</version>
+		<relativePath/>
+	</parent>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		<java.version>1.8</java.version>
+	</properties>
+  
+  	<dependencies>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+		<!-- 
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-configuration-processor</artifactId>
+			<optional>true</optional>
+		</dependency>
+	     <dependency>  
+            <groupId>org.springframework.boot</groupId>  
+            <artifactId>spring-boot-autoconfigure</artifactId>  
+        </dependency>
+         -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-jpa</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>io.jsonwebtoken</groupId>
+			<artifactId>jjwt</artifactId>
+			 <version>0.6.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+			<version>3.3.2</version>
+		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-core</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-annotations</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>io.springfox</groupId>
+			<artifactId>springfox-swagger2</artifactId>
+			<version>2.2.2</version>
+		</dependency>
+		<dependency>
+			<groupId>io.springfox</groupId>
+			<artifactId>springfox-swagger-ui</artifactId>
+			<version>2.2.2</version>
+		</dependency> 
+		
+		
+		
+	</dependencies>
+	
+	
+	
+	    <dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.springframework.cloud</groupId>
+				<artifactId>spring-cloud-dependencies</artifactId>
+				<version>Brixton.RELEASE</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+	
+		
+	  <build>
+	  
+	  		<!--TODO 假设权限jauth为测试代码目录 20170927 -->
+	  		<testSourceDirectory>${basedir}/src/main/jauth</testSourceDirectory>
+	        <testOutputDirectory>${basedir}/target/classes</testOutputDirectory> 
+	  		<!--springboot默认打成jar包-->
+	  		<resources>
+		            <resource>
+		                <directory>${basedir}/src/main/webapp</directory>
+	                    
+		                <targetPath>META-INF/resources</targetPath> 
+		                <includes>
+		                    <include>**/**</include>
+		                </includes>
+		            </resource>
+		            <resource>
+		                <directory>${basedir}/src/main/resources</directory>
+		                <includes>
+		                    <include>**/**</include>
+		                </includes>
+		            </resource>
+		    </resources>
+		    
+			<plugins>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-war-plugin</artifactId>
+					<version>2.1.1</version>
+					<configuration>
+						<archive>
+							<addMavenDescriptor>false</addMavenDescriptor>
+						</archive>
+						<failOnMissingWebXml>false</failOnMissingWebXml>
+					</configuration>
+				</plugin>
+	
+	<!-- 			<plugin>
+					<inherited>true</inherited>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-deploy-plugin</artifactId>
+					<goals>deploy-file</goals>
+					<configuration>
+						<file>target/aibi-component-${name}-${version}.jar</file>
+						<artifactId>aibi-component-${name}</artifactId>
+						<groupId>com.asiainfo.biframe</groupId>
+						<version>${version}</version>
+						<packaging>jar</packaging>
+						<repositoryId>nexus-public-snapshots</repositoryId>
+						<url>http://10.1.251.240:8081/nexus/content/repositories/${release-dir}</url>
+					</configuration>
+				</plugin>
+	 -->		
+	 			<plugin>
+					<groupId>org.springframework.boot</groupId>
+					<artifactId>spring-boot-maven-plugin</artifactId>
+				</plugin>
+			</plugins>
+		</build>
+	
+</project>

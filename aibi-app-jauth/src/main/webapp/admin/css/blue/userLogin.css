@@ -1,0 +1,97 @@
+body{
+	width: 100%;
+	height: 100%;
+	background-color: #f8fafc;
+	margin:0px auto;
+	overflow: hidden;
+	background-image: url('./images/login/login-bg.png');
+	background-position:center -30px;
+	}
+.userLogin-box{
+	width:1050px;
+	margin:0 auto;
+	overflow:hidden;
+	clear:both;
+	height:460px;
+	position:absolute;
+	top:50%;
+	left:50%;
+	margin-left: -525px;
+    margin-top: -230px;
+}
+.loginRight-box{
+	width:400px;
+	height:380px;
+	border-radius:5px;
+}
+.loginRight-box form{
+	background:#014c8e;
+}
+.login-logo{
+	padding:14px 0 30px 0;
+}
+.login-logo img{
+	width:300px;
+}
+.loginRight-box ul{
+	padding:10px 40px 6px 40px;
+	margin-top:50px;
+}
+.loginLeft-box{
+	width:529px;
+	height:454px;
+	background-image: url('./images/login/login-left.png');
+}
+.psd-li{
+	overflow:hidden;
+	padding:0 10px 40px 20px;
+}
+.psd-li label{
+	color:#fff;
+}
+.psd-li label input{
+	margin:-2px 5px 0 0;
+	position:relative;
+	top:2px;
+}
+.psd-li a{
+	color:#fff;
+}
+input.login-input{
+	width: 300px;
+	padding: 10px 3px 10px 0px;
+	margin-bottom:27px;
+	text-indent:13px;
+	color:#666666;
+	background: #d9e4ee;
+	border-radius: 3px;
+}
+input.btn-loginSubmit{
+	background-color:#179fed;
+	color: white;
+	font-size: 18px;
+	border: none;
+	text-align: center;
+	border-radius:2px;
+	cursor: pointer;
+}
+.loginRight-box li{
+	position:relative;
+}
+.loginRight-box .head-logo{
+	padding:0 0 20px;
+}
+.login-icon{
+	display:inline-block;
+	width:30px;
+	height:34px;
+	background:url('./images/login/login-icon.png');
+	position:absolute;
+	left:12px;
+}
+.login-icon-name{
+	background-position: 2px -2px;
+}
+.login-icon-psd{
+	background-position: 3px -55px;
+}

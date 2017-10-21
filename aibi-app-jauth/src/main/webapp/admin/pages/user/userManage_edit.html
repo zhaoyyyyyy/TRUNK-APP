@@ -1,0 +1,99 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<title>COC-后台配置管理</title>
+		<script type="text/javascript" src="../../common/include.js"></script>
+		<script type="text/javascript" src="userManage_edit.js"></script>
+	</head>
+	<body>
+
+		<div style="height: 420px; overflow-y: auto; overflow-x: hidden;">
+			<div class="caption">
+				<div class="caption_outer" state="open">
+					<span>基础信息</span>
+				</div>
+				<div class="caption_inner">
+
+				</div>
+				<a type="button" class="right s_edit" id="btn_edit_user_password">修改密码</a>
+				<a type="button" class="right s_edit" id="btn_edit_user_information">编辑</a>
+			</div>
+			<div class="caption_body">
+				<div class="caption_body_inner">
+					<form id="saveDataForm">
+						<table border="0" width="100%" cellpadding="0" cellspacing="0"
+							class="commTable">
+							<colgroup>
+								<col width="10%" />
+								<col width="23%" />
+								<col width="10%" />
+								<col width="23%" />
+								<col width="10%" />
+								<col width="17%" />
+								<col width="10%" />
+							</colgroup>
+							<tbody>
+								<!-- {{user.id}} -->
+								<tr>
+									<th>
+										用户名
+									</th>
+									<td>
+										{{user.userName}}
+									</td>
+									<th>
+										真实姓名
+									</th>
+									<td>
+										{{user.realName}}
+									</td>
+									<th>
+										性别
+									</th>
+									<td>
+										{{user.sex}}
+									</td>
+									<td rowspan="2">
+									
+									</td>
+								</tr>
+								<tr>
+									<th>
+										手机
+									</th>
+									<td>
+										{{user.phoneNumber}}
+									</td>
+									<th>
+										邮箱
+									</th>
+									<td colspan="3">
+										{{user.email}}
+									</td>
+								</tr>
+								<tr>
+									<!-- <th>
+										所属组织
+									</th>
+									<td title="{{user.orgNames}}"  v-text="user.orgNames" >
+									</td>
+									<th>
+										数据范围
+									</th>
+									<td title="{{user.groupNames}}" v-text="user.groupNames">
+									</td> -->
+									<th>
+										角色
+									</th>
+									<td colspan="7" title="{{user.roleNames}}" v-text="user.roleNames">
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</form>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>

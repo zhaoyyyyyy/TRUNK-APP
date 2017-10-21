@@ -1,0 +1,25 @@
+server:
+  port: 8442
+  context-path: /
+spring:
+  profiles:
+    active: dev
+  application:
+    name: gateway
+eureka:
+  client:
+    healthcheck:
+      enabled: true
+    serviceUrl:
+      defaultZone: "http://${jauth-url}/eureka/"
+  instance:
+    leaseExpirationDurationInSeconds: 1
+    leaseRenewalIntervalInSeconds: 1
+zuul:
+  routes:
+    loc:
+      path: /loc/**
+      serviceId: loc
+    jauth:
+      path: /jauth/**
+      url: http://${jauth-url}

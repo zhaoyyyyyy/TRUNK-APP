@@ -1,0 +1,28 @@
+server:
+  port: 8441
+  context-path: /
+spring:
+  profiles:
+    active: dev
+  application:
+    name: loc
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://182.92.105.202:3306/jauth
+    username: jauth
+    password: jauth
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: true
+    open-in-view: true
+    
+eureka:
+  client:
+    healthcheck:
+      enabled: true
+    serviceUrl:
+      defaultZone: "http://${jauth-url}/eureka/"
+  instance:
+    leaseExpirationDurationInSeconds: 1
+    leaseRenewalIntervalInSeconds: 1

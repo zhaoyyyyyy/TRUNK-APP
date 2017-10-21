@@ -1,0 +1,13 @@
+﻿@charset "utf-8";
+.common-page .total{float:left; padding:0;line-height: 42px;}
+.common-page .total span{margin:0 5px;}
+.common-page{height:42px;}
+.common-page ul{height:20px;padding-bottom:11px;float:right;padding-top:11px;}
+.common-page ul li{float:left;height:20px;padding:0px 6px;}
+.common-page ul li a {display:block;    padding: 2px 7px;border:1px solid #cdcdcd;text-decoration:none;color:#333;}
+.common-page ul li a.disabled {border:1px solid #ededed; color:#898989;background: #DCDBDB;}/*上一页下一页不可用状态CSS*/
+.common-page ul li a:hover{border:1px solid #0194e9;}
+.common-page ul li.active a.num{border:1px solid #0194e9;background-color:#0194e9;color:#fff;}
+.common-page ul li.jump{margin:0px 9px 0 2px;}
+.common-page ul li.jump span{height:22px; line-height:22px; display:block;float:left;}
+.common-page ul li.jump input{float:left;width:43px; height:20px; line-height:20px; margin:0 4px; padding:0 3px; border:1px solid #aaa;}

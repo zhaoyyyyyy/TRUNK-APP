@@ -1,0 +1,55 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<title>字典索引详情</title>
+		<script type="text/javascript" src="../../common/include.js"></script>
+		
+		<script type="text/javascript" src="dic_edit.js"></script>
+	</head>
+	<body>
+	  <form id="saveDataForm">
+	  	 <input type="hidden" name="id" v-model="dic.id" />
+    	 <table border="0" width="100%" cellpadding="0" cellspacing="0" class="commTable" >
+    	 		
+                <tbody>
+                	<tr>
+                        <th>
+                          	字典类型
+                        </th>
+                        <td>
+                            <input class="inputStyle" type="text" name="dicType" v-model="dic.dicType" />
+                        </td>
+                    </tr>         
+                    <tr>
+                        <th>
+                          	 编码<span class="required">*</span>
+                        </th>
+                        <td>
+                        <input  name="dicCode" id="dic" class="inputStyle easyui-validatebox"  type="text" v-model="dic.dicCode"  required="true" />
+                          
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                                                                           名字<span class="required">*</span>
+                        </th>
+                        <td>
+                            <input  name="dicName" class="inputStyle easyui-validatebox"  v-model="dic.dicName"  required="true"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                           	备注
+                        </th>
+                        <td>
+                            <textarea v-model="dic.note" rows="" cols="" name="note" class="input_textarea"></textarea>
+                        </td>
+                    </tr>
+               	</tbody>
+             
+          </table>
+	 </form>
+	
+	</body>
+</html>

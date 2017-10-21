@@ -1,0 +1,30 @@
+server:
+  port: 8440
+  context-path: /jauth
+spring:
+  profiles:
+    active: dev
+  application:
+    name: jauth
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: true
+    open-in-view: true
+demo.security.jwt:
+  tokenExpirationTime: 120 # Number of minutes
+  refreshTokenExpTime: 200 # Minutes
+  tokenIssuer: http://asiainfo.com
+  tokenSigningKey: xm8EV6Hy5RMFK4EEACIDAwQus
+eureka:
+  client:
+    register-with-eureka: false
+    fetch-registry: false
+    serviceUrl:
+      defaultZone: http://localhost:${server.port}${server.context-path}/eureka/
+  dashboard:
+    path: /dashborad
+  server:
+    enableSelfPreservation: false
+    evictionIntervalTimerInMs: 10000
+

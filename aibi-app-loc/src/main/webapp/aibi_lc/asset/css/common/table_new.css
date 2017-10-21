@@ -1,0 +1,116 @@
+.comTable  , .bottom-table{
+  position: relative;
+  width: 100%;
+  background-color: #fff;
+}
+.comTable thead >tr >th{
+	height: 40px;
+    line-height: 40px;
+    overflow: hidden;
+    text-align: center;
+    color: #000;
+    border: 1px solid #dde7f1;
+    border-left: none;
+    border-right: 1px solid #efefef;
+    background-color: #fafcff;
+}
+.common-table th span.sort{display:inline-block; *display:inline; zoom:1; width:15px;height:25px;background: url(../../images/table-bg.png) no-repeat -5px -3px;cursor: pointer; overflow:hidden; vertical-align:middle;}
+.common-table th.sort-up span.sort{background-position:-20px -3px;}
+.common-table th.sort-down span.sort{background-position: -35px -3px;}
+.comTable tbody >tr >td{
+	  height: 36px;
+	  overflow: hidden;
+	  text-align: center;
+	  color: #666;
+	  border-bottom: 1px solid #efefef;
+	  border-right: 1px solid #efefef;
+	  text-indent: 5px;
+	  word-wrap: break-word;
+	  word-break: break-all;
+}
+.comTable tbody >tr  .orange{
+	color: #FFBB66;
+}
+.comTable tbody >tr:nth-child(even) >td{
+    background-color: #fbfbfb;
+}
+.comTable thead >tr >th:last-child , .comTable tbody >tr >td:last-child{
+    border-right: none;
+}
+
+.comTable.waterMarkTable , .comTable.waterMarkTable tbody >tr:nth-child(even) >td{
+	background-color: transparent;
+}
+
+
+
+
+.bottom-table thead >tr >th{
+	height: 40px;
+    line-height: 40px;
+    overflow: hidden;
+    text-align: center;
+    color: #000;
+    border-bottom: 1px solid #efefef;
+    background-color: #fafcff;
+}
+
+.bottom-table tbody >tr >td{
+	  height: 36px;
+	  overflow: hidden;
+	  text-align: center;
+	  color: #666;
+	  border-bottom: 1px solid #efefef;
+	  text-indent: 5px;
+	  word-wrap: break-word;
+	  word-break: break-all;
+}
+.comTable tbody >tr >td > input[disabled]{
+	  text-align: right;
+}
+
+.bottom-table  tbody >tr:nth-child(even) >td{
+     background-color: #fbfbfb;
+}
+
+
+
+
+
+
+
+
+/*************
+	UL LI 拼接grid
+*/
+.ui-ul-table{
+	width: 100%;
+	overflow: hidden;
+}
+.ui-ul-table > li{
+	width: 100%;
+	overflow: hidden;
+	border-bottom:1px solid #ddd; 
+}
+.ui-ul-table > li.ui-thead{
+	background: #f7f7f9;
+	padding: 12px 8px;
+	font-size: 14px;
+	font-weight: 600;
+	text-align: center;
+}
+.ui-ul-table > li >span{
+	padding: 8px;
+	float: left;
+	line-height: 1.42857143;
+	width: auto;
+}
+.ui-ul-table.table-striped > li:nth-of-type(odd) {
+    background-color: #f9f9f9;
+}
+
+
+
+
+
+

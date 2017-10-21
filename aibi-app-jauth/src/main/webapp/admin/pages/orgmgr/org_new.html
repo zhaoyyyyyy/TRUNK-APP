@@ -1,0 +1,62 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<title>组织详细信息</title>
+		<script type="text/javascript" src="../../common/include.js"></script>
+		<script type="text/javascript" src="org_new.js"></script>
+	</head>
+	<body>
+		<form id="saveDataForm">
+			<table border="0" width="100%" cellpadding="0" cellspacing="0" class="commTable" >
+				<tbody> 
+					<tr>
+						<th>父组织名称</th>
+						<td colspan="3" id="vie">
+							<span id="parentOrgCode" name="parentOrgCode" style="display:none">{{parent.id}}</span>
+							<span>{{parent.simpleName}}</span>
+						</td>
+					</tr>
+					<tr>
+						<th>组织Code<span class="required">*</span></th>
+						<td>
+							<input class="inputStyle easyui-validatebox" required="true" maxLen="30" type="text" name="orgCode" />
+						</td>
+						<th>组织名称缩写<span class="required">*</span></th>
+						<td>
+							<input class="inputStyle easyui-validatebox" required="true" maxLen="30" type="text" name="simpleName" />
+						</td>
+					</tr>
+					<tr>
+						<th>排序序号</th>
+						<td>
+							<input class="inputStyle"  numberbox="true" maxlength="10" type="text" name="orderNum" />
+						</td>
+						<th>组织类型<span class="required">*</span></th>
+						<td>
+							<input class="inputStyle easyui-validatebox" required="true" type="text" name="orgType"/>
+						</td>
+					</tr>
+					<tr>
+						<th>审核方式<span class="required">*</span></th>
+						<td>
+                       		<input class="inputStyle easyui-validatebox" required="true" type="text" name="interrogateType" value="ADMIN" />
+						</td>
+						<th>组织状态<span class="required">*</span></th>
+						<td>
+                       		<input class="inputStyle easyui-validatebox" required="true" type="text" name="orgStatus" value="OPEN" />
+						</td>
+					</tr>
+				</tbody>		
+			</table>
+			
+			<div class="buttonArea operation">
+				<div class="left newButton"><div>	<input type="button" id="btn_rtn" value="返回" title="返回" class="return"/></div></div>
+				<div class="right newButton"><div>	<input type="button" id="btn_save" value="保存" title="保存" class="save" /></div></div>
+				<div class="right newButton"><div>	<input type="reset" name="button" value="重置" title="重置" class="reset" /></div></div>
+				<div class="clear"></div>
+			</div>
+			
+		</form>
+	</body>
+</html>

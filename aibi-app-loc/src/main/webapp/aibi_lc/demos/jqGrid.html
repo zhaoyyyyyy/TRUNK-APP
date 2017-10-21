@@ -1,0 +1,55 @@
+<!DOCTYPE html >
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>jqGrid demo页面</title>
+<link href="../asset/css/common/reset.css" rel="stylesheet"  />
+<link href="../asset/css/common/header-nav.css" rel="stylesheet"  />
+<link rel="stylesheet" type="text/css" href="../asset/css/jQueryUI/jquery-ui-1.12.1.min.css" />
+<link rel="stylesheet" type="text/css" href="../asset/script/common/gird/css/ui.jqgrid.css" />
+<!-- <link rel="stylesheet" type="text/css" href="../asset/script/common/gird/css/ui.jqgrid-bootstrap.css" /> -->
+<link rel="stylesheet" type="text/css" href="../asset/script/common/gird/page/page.css" />
+<script type="text/javascript" src="../asset/script/common/jQuery/jquery-1.12.4.js"></script>
+<script type="text/javascript" src="../asset/script/common/gird/js/i18n/grid.locale-cn.js"></script>
+<script type="text/javascript" src="../asset/script/common/gird/js/jquery.jqGrid.min.js"></script>
+<script type="text/javascript" src="../asset/script/common/gird/page/jquery.page.js"></script>
+<script type="text/javascript" src="../asset/script/common/gird/jquery.jqGrid.extend.js"></script>
+<script type="text/javascript">
+$(function(){
+	$("#jsonmap").AIGrid({        
+	   	url:'./grid.json',
+		datatype: "json",
+	   	colNames:['Inv No','Date', 'Client', 'Amount','Tax','Total','Notes'],
+	   	colModel:[
+	   		{name:'id',index:'id', width:75},
+	   		{name:'invdate',index:'invdate', width:90, jsonmap:"invdate"},
+	   		{name:'name',index:'name asc, invdate', width:100},
+	   		{name:'amount',index:'amount', width:80, align:"right"},
+	   		{name:'tax',index:'tax', width:80, align:"right"},		
+	   		{name:'total',index:'total', width:80,align:"right"},		
+	   		{name:'note',index:'note', width:150, sortable:false}		
+	   	],
+	   	rowNum:10,
+	   	rowList:[10,20,30],
+	   	pager: '#pjmap',
+	   	sortname: 'id',
+	    viewrecords: true,
+	    sortorder: "desc",
+		jsonReader: {
+			repeatitems : false,
+			id: "0"
+		},
+		height: '100%' 
+	});	
+	
+});
+
+
+
+</script>
+</head>
+<body>
+<table id="jsonmap"></table>
+<div id="pjmap"></div>
+</body>
+</html>

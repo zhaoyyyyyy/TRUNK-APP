@@ -1,0 +1,6 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://182.92.105.202:3306/jauth
+    username: jauth
+    password: jauth
