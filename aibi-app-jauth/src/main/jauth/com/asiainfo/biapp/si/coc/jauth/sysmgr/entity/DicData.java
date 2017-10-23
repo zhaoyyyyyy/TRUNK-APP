@@ -31,10 +31,9 @@ public class DicData extends BaseEntity{
 	
 	
 	@Id @Column(name="ID")
-//    @GeneratedValue(strategy = GenerationType.IDENTITY)
 	@GenericGenerator(name="idGenerator", strategy="uuid") 
 	@GeneratedValue(generator="idGenerator") //使用uuid的生成策略  
-    public String id;
+    private String id;
     public String getId() {
 		return id;
 	}
@@ -42,32 +41,29 @@ public class DicData extends BaseEntity{
 		this.id = id;
 	}
 	
-	
-	
-	
 	@Column(name="dic_code")
-	public String dicCode ;
+	private String dicCode ;
 	
 	@Column(name="code")
-	public String code ;
+	private String code ;
 	
 	@Column(name="parent_id")
-	public String parentId ;
+	private String parentId ;
 	
 	@Column(name="status")
-	public String status ;
+	private String status ;
 	
 	@Column(name="note")
-	public String note ;
+	private String note ;
 	
 	@Column(name="dataname")
-	public String dataName;
+	private String dataName;
 	
 	@Column(name="ordernum")
-	public Integer orderNum;
+	private Integer orderNum;
 	
 	@Column(name="appsyscode")
-	public String appSysCode ;
+	private String appSysCode ;
 	
 //	@OneToMany
 //	@JoinColumn(name="parent_id",insertable=false,updatable=false)

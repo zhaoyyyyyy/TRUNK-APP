@@ -2,8 +2,6 @@ package com.asiainfo.biapp.si.coc.jauth.frame.page;
 
 import io.swagger.annotations.ApiParam;
 
-import org.apache.commons.lang3.StringUtils;
-
 import com.asiainfo.biapp.si.coc.jauth.frame.Constants;
 
 /**
@@ -12,8 +10,8 @@ import com.asiainfo.biapp.si.coc.jauth.frame.Constants;
 public class JQGridPage<T> extends Page<T> {
 
   private static final long serialVersionUID = -8488719493119941270L;
-
-  public static Integer MAX_PAGE_SIZE = 100000;
+  
+  public static final Integer MAX_PAGE_SIZE = 100000;
   
   /** 开始查询的页数 */
   @ApiParam(value="开始查询的页数")
@@ -31,14 +29,14 @@ public class JQGridPage<T> extends Page<T> {
   @ApiParam(value="排序的方向")
   private String sortOrder;
 
-  public JQGridPage() {
-	  this(0, Constants.DEFAULT_PAGE_SIZE);
-}
+	public JQGridPage() {
+		this(0, Constants.DEFAULT_PAGE_SIZE);
+	}
   
   public JQGridPage(int start, int pageSize)
   {
-    this.setPageSize(pageSize);
-    this.pageStart = start;
+	 this.pageStart = start;
+     this.setPageSize(pageSize);
   }
   
   public int getPageStart() {
@@ -65,14 +63,13 @@ public class JQGridPage<T> extends Page<T> {
     this.sortOrder = sortOrder;
   }
 
+  @Override
   public void setTotalCount(int totalCount) {
     if (this.getStart() >= totalCount && this.getPageSize() > 0) {
       this.pageStart = totalCount / this.getPageSize();
     }
-
     super.setTotalCount(totalCount);
   }
-
 
   @Override
   public int getStart() {

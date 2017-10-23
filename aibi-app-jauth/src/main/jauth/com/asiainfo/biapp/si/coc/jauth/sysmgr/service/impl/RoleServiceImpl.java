@@ -46,6 +46,7 @@ public class RoleServiceImpl extends BaseServiceImpl<Role,String> implements
 			role.setId(null);
 			role.setCreateTime(getSystemDate());
 			role.setCreateUserId(sessionInfoHolder.getLoginUser().getUserName());
+			role.setCreateUserOrgId(sessionInfoHolder.getLoginUser().getOrginfoId());
 			role.setAppsysCode(sessionInfoHolder.getAppSysCode());
 		} else{
 			role.setUpdateTime(getSystemDate());

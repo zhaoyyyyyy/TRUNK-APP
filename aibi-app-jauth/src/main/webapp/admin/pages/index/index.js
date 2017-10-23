@@ -15,7 +15,6 @@ window.jauth_onload = function(){
 			type:'post',
 			cache:false,
 			onSuccess:function(data){
-				data.ctx = $.ctx;
 				console.log(data);
 				new Vue({ el:'#container', data: data });
 				bindMenuEvent();
@@ -76,10 +75,8 @@ window.top.getTitleHtml = function(titleObj,hasreturn){
 		if( k!="" && v!="~~~~~"){
 			if(v != ""){
 				html +='<li><a href="'+v+'" >'+k+'</a></li>';
-//				alert("if------K-->"+k+"<------");
 			}else{
 				html ='<li><a >'+k+'</a></li>'+html;
-//				alert("else------HTML-->"+html+"<------");
 			}
 		}
 	});

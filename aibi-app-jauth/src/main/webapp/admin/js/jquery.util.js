@@ -37,7 +37,7 @@ $.extend({
 		var codes = '';
 		
 		$.commAjax({
-			url : $.ctx + '/api/datadic/dicdata/dicdatas/query',
+			url : $.ctx + '/api/datadic/dicdatas/query',
 			async : false,
 			postData : {
 				dicCode : codeClass
@@ -141,8 +141,15 @@ $.extend({
 						if ($.isFunction(options.onSuccess))
 							options.onSuccess.call(this, obj);
 					}
-				} else if (st == 'error' && req.status == "404") {
-					$.alert('未找到对应请求。');
+				} else if (st == 'error') {
+					if(req.status == "404"){
+						$.alert('未找到对应请求。');
+					}else if(req.status == "401"){
+						$.alert('登录超时，点击确认重新登录。',function(){
+							 location.href = jQuery.ctx;
+						});
+					}
+					
 				} else if (st == 'timeout') {
 					$.alert('连接超时，请刷新后重试。');
 				} else {

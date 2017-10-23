@@ -1,6 +1,5 @@
 package com.asiainfo.biapp.si.coc.jauth.sysmgr.controller;
 
-import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
@@ -24,7 +23,6 @@ import com.asiainfo.biapp.si.coc.jauth.frame.json.JSONResult;
 import com.asiainfo.biapp.si.coc.jauth.frame.page.JQGridPage;
 import com.asiainfo.biapp.si.coc.jauth.frame.service.BaseService;
 import com.asiainfo.biapp.si.coc.jauth.frame.util.StringUtil;
-import com.asiainfo.biapp.si.coc.jauth.sysmgr.entity.Dic;
 import com.asiainfo.biapp.si.coc.jauth.sysmgr.entity.Dic;
 import com.asiainfo.biapp.si.coc.jauth.sysmgr.entity.DicData;
 import com.asiainfo.biapp.si.coc.jauth.sysmgr.service.DicDataService;
@@ -69,7 +67,7 @@ public class DicController extends BaseController<Dic>{
 		String dicType = request.getParameter("dicType");
 		
 		//拼装hql 及参数
-		Map<String,Object> params = new HashMap<String,Object>();
+		Map<String,Object> params = new HashMap<>();
 		StringBuilder hql = new StringBuilder();
 		hql.append("from Dic where 1=1 ");
 		if(!StringUtil.isEmpty(dicName)){
@@ -108,7 +106,7 @@ public class DicController extends BaseController<Dic>{
 		if(!StringUtil.isEmpty(id)){
 			dic = dicService.get(id);
 		}
-		Map<String,Object> map = new HashMap<String,Object>();
+		Map<String,Object> map = new HashMap<>();
 		map.put("dic", dic);
 		return map;
 		
@@ -129,7 +127,7 @@ public class DicController extends BaseController<Dic>{
 			Dic dicd=dicService.get(id);
 			String dicCo=dicd.getDicCode();
 			List<Dic> diclist = dicService.findDicListByDic(dic.getDicCode());
-			if(diclist.size()==0){
+			if(diclist.isEmpty()){
 				dicd.setDicCode(dic.getDicCode());
 			}else if(!dicd.getDicCode().equals(dic.getDicCode())){
 				return "haveCode";
@@ -140,7 +138,7 @@ public class DicController extends BaseController<Dic>{
 			dicService.update(dicd);
 			//更改字典详情的字典代码
 			List<DicData> dicD=dicDataService.findDataListByDicCode(dicCo);
-			if(dicD.size()!=0){
+			if(!dicD.isEmpty()){
 				for(DicData dD:dicD){
 					dD.setDicCode(dicd.getDicCode());
 					dicDataService.update(dD);
@@ -150,7 +148,7 @@ public class DicController extends BaseController<Dic>{
 		}
 		Dic newdic = new Dic();
 		List<Dic> ifdata = dicService.findDicListByDic(dic.getDicCode());
-		if(ifdata.size()==0){
+		if(ifdata.isEmpty()){
 			newdic.setDicCode(dic.getDicCode());
 		}else{
 			return "haveCode";

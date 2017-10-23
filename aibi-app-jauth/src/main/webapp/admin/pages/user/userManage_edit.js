@@ -9,7 +9,8 @@ window.jauth_onload = function(){
 		cache:false,
 		async:false,
 		onSuccess:function(data){
-			new Vue({ el:'#saveDataForm', data: data });
+			data.user.sex = $.getCodeDesc('SEX', data.user.sex);
+			new Vue({ el:'#saveDataForm', data:data });
 		}
 	});
 	

@@ -5,8 +5,9 @@ window.jauth_onload = function(){
 	var colNames = ['用户名称', '姓名', '性别', 
 //	                '所在组织',
 	                '角色', 
-//	                '数据范围','状态',
-	                '创建时间', '操作'];
+//	                '数据范围',
+	                '状态',
+	                '更新时间', '操作'];
 	var colModel = [{
 		name : 'userName',
 		index : 'userName',
@@ -26,7 +27,10 @@ window.jauth_onload = function(){
 		name : 'sex',
 		index : 'sex',
 		width : 10,
-		align : 'center'
+		align : 'center',
+		formatter : function(value, opts, data) {
+			return  $.getCodeDesc('SEX', data.sex) ;
+		}
 	}, 
 //	{
 //		name : 'orgNames',
@@ -46,28 +50,32 @@ window.jauth_onload = function(){
 //		index : 'groupNames',
 //		width : 15,
 //		align : 'center'
-//	},{
-//		name : 'status',
-//		index : 'status',
-//		width : 10,
-//		align : 'center',
-//		formatter : function(value, opts, data) {
-//			if (data.status == 1) {
-//				return "<a href='###' onclick='fun_to_status(\"" + data.id
-//				+ "\",\"" + data.status + "\")' ><font color='green'>"
-//				+ $.getCodeDesc('YHZT', data.status) + "</font></a>";
-//			} else {
-//				return "<a href='###' onclick='fun_to_status(\"" + data.id
-//				+ "\",\"" + data.status + "\")' ><font color='red'>"
-//				+ $.getCodeDesc('YHZT', data.status) + "</font></a>";
-//			}
-//		}
-//	}, 
+//	},
+	{
+		name : 'status',
+		index : 'status',
+		width : 10,
+		align : 'center',
+		formatter : function(value, opts, data) {
+			if (data.status == 1) {
+				return "<a href='###' onclick='fun_to_status(\"" + data.id
+				+ "\",\"" + data.status + "\")' ><font color='green'>"
+				+ $.getCodeDesc('YHZT', data.status) + "</font></a>";
+			} else {
+				return "<a href='###' onclick='fun_to_status(\"" + data.id
+				+ "\",\"" + data.status + "\")' ><font color='red'>"
+				+ $.getCodeDesc('YHZT', data.status) + "</font></a>";
+			}
+		}
+	}, 
 	{
 		name : 'createTime',
 		index : 'createTime',
 		width : 25,
-		align : 'center'
+		align : 'center',
+		formatter : function(cellvalue) {  
+			 return cellvalue.substr(0,19);
+		}
 	}, {
 		name : 'id',
 		index : 'id',

@@ -164,15 +164,19 @@
 			  
 			  //下拉框渲染
 			  var dataDic = $defObj.attr('dataDic');
+			  var defValue = $defObj.attr('defValue');
+			  var bb = defValue.split(".");
+			  $.each(bb,function(i){
+				  parentData = parentData[bb[i]];
+			  })
+			  
 			  if(dataDic && dataDic != ''){
-				  var defValue = $defObj.attr('defValue');
-				  var bb = defValue.split(".");
-				  $.each(bb,function(i){
-					  parentData = parentData[bb[i]];
-				  })
 				  $defObj.attr("defValue",parentData);
 				  $.initCodeComponents();
+			  }else{
+				  $defObj.val(parentData);
 			  }
+			
 			  
 			  $.parser = {
 						defaults:{

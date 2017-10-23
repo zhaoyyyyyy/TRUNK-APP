@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -33,11 +32,8 @@ import com.asiainfo.biapp.si.coc.jauth.sysmgr.entity.Role;
 import com.asiainfo.biapp.si.coc.jauth.sysmgr.entity.User;
 import com.asiainfo.biapp.si.coc.jauth.sysmgr.service.ResourceService;
 import com.asiainfo.biapp.si.coc.jauth.sysmgr.service.UserService;
-import com.asiainfo.biapp.si.coc.jauth.sysmgr.service.RoleService;
 import com.asiainfo.biapp.si.coc.jauth.sysmgr.utils.SessionInfoHolder;
 import com.asiainfo.biapp.si.coc.jauth.sysmgr.vo.ResourceVo;
-import com.asiainfo.biapp.si.coc.jauth.sysmgr.vo.RoleVo;
-import com.sun.media.jfxmedia.logging.Logger;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -49,7 +45,7 @@ import io.swagger.annotations.ApiOperation;
  * @author liukai
  * @date 2013-6-25
  */
-//@Api(value = "资源管理")
+@Api(value = "资源管理")
 @RequestMapping("api/resource")
 @RestController
 public class ResourceController extends BaseController<Resource> {
@@ -64,8 +60,6 @@ public class ResourceController extends BaseController<Resource> {
 	private SessionInfoHolder sessionInfoHolder;
 	@Autowired
 	private UserService userServer;
-	@Autowired
-	private RoleService roleService;
 	
 	@Override
 	protected BaseService<Resource,String> getBaseService() {
@@ -103,14 +97,13 @@ public class ResourceController extends BaseController<Resource> {
 			JQGridPage<Resource> resourceList = resourceService.findResourceList(page,resourceVo);
 			return JSONResult.page2Json(resourceList, cols);
 		}else{
-			Set<Resource> list = new HashSet<Resource>();
+			Set<Resource> list = new HashSet<>();
 			for (Role role : user.getRoleSet()) {
 				for (Resource r : role.getResourceSet()) {
 					list.add(r);
 				}
 			}
 			resourceVo.setRoleSet(user.getRoleSet());
-//			resourceVo.setOrginfoId(user.getOrginfoId());
 			JQGridPage<Resource> resourceList = resourceService.findResourceList(page,resourceVo);
 			return JSONResult.page2Json(resourceList, cols);
 		}
@@ -128,7 +121,6 @@ public class ResourceController extends BaseController<Resource> {
 	@ApiImplicitParam(name = "id", value = "角色主键", required = true, paramType = "query" ,dataType = "string")
 	@RequestMapping(value="/delete", method=RequestMethod.POST)
 	public void deleteResource(String id) {
-//		String id = this.getRequest().getParameter("id");
 		resourceService.delete(id);
 	}
 
@@ -196,6 +188,9 @@ public class ResourceController extends BaseController<Resource> {
 		Resource resource = resourceService.get(id);
 		Map<String,Object> pmap = new HashMap<String,Object>();
 		String ptid = resource.getParentId();
+		if(null==ptid) {
+			return null;
+		}
 		Resource parent = resourceService.get(ptid);
 		pmap.put("parent",parent);
 		return pmap;
@@ -214,7 +209,8 @@ public class ResourceController extends BaseController<Resource> {
 		Map<String,Object> map = new HashMap<String,Object>();
 		User user = sessionInfoHolder.getLoginUser();
 		String backgroundId = Constants.BACKGROUND_ID;
-		List<Resource> resourceList = resourceService.getParentResourceByRole(user, backgroundId);
+		List<Resource> resourceList = resourceService.getParentResourceByRole(
+				user, backgroundId);
 		//
 		for(int i=0;i<resourceList.size();i++){
 			resourceList.get(i).getChildren().clear();

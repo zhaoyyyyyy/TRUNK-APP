@@ -6,8 +6,8 @@ window.jauth_onload=function() {
 	var colModel = [
 		{name:'dicName', index:'dicName', width:20, align:'left'},
 		{name:'dicCode', index:'dicCode', width:20,  align:'left'},
-		{name:'dicType',index:'dicType', width:20, align:'left'
-//			formatter:function(v){return $.getCodeDesc('ZDLX',v);}
+		{name:'dicType',index:'dicType', width:20, align:'left',
+			formatter:function(v){return $.getCodeDesc('ZDLX',v);}
 		},
 		{name:'note', index:'note', width:40,  align:'left'},
 		{name:'id', index:'id', width:120, fixed:true,  align:'center',

@@ -43,7 +43,6 @@ public class Organization extends BaseEntity{
 	
 	
 	@Id @Column(name="ID")
-//    @GeneratedValue(strategy = GenerationType.IDENTITY)
 	@GenericGenerator(name="idGenerator", strategy="uuid") 
 	@GeneratedValue(generator="idGenerator") //使用uuid的生成策略
     private String id;

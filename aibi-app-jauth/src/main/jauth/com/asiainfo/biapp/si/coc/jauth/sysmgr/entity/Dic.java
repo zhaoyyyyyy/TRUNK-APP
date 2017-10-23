@@ -26,7 +26,6 @@ public class Dic extends BaseEntity{
 	private static final long serialVersionUID = 1L;
 	
 	@Id @Column(name="ID")
-//    @GeneratedValue(strategy = GenerationType.IDENTITY)
 	@GenericGenerator(name="idGenerator", strategy="uuid") 
 	@GeneratedValue(generator="idGenerator") //使用uuid的生成策略  
     private String id;
@@ -38,24 +37,20 @@ public class Dic extends BaseEntity{
 	}
 	
 	@Column(name="note")
-	public String note;
+	private String note;
 	
 	@Column(name="diccode")
-	public String dicCode;
+	private String dicCode;
 	
 	@Column(name="dicname")
-	public String dicName;
+	private String dicName;
 	
 	@Column(name="dictype")
-	public String dicType;
+	private String dicType;
 	
 	@Column(name="appsyscode")
-	public String appSysCode;
+	private String appSysCode;
 	
-	public Dic(){
-		
-	}
-
 	public String getNote() {
 		return note;
 	}

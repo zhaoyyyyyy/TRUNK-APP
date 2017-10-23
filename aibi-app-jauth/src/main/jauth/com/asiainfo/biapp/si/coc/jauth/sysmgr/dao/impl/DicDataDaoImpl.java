@@ -5,15 +5,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.persistence.EntityManager;
-
 import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Repository;
 
-import com.asiainfo.biapp.si.coc.jauth.frame.Constants;
 import com.asiainfo.biapp.si.coc.jauth.frame.dao.BaseDaoImpl;
 import com.asiainfo.biapp.si.coc.jauth.frame.page.JQGridPage;
-import com.asiainfo.biapp.si.coc.jauth.frame.page.Page;
 import com.asiainfo.biapp.si.coc.jauth.sysmgr.dao.DicDataDao;
 import com.asiainfo.biapp.si.coc.jauth.sysmgr.entity.DicData;
 import com.asiainfo.biapp.si.coc.jauth.sysmgr.vo.DicDataVo;
@@ -71,26 +67,25 @@ public class DicDataDaoImpl extends BaseDaoImpl<DicData,String> implements DicDa
 		super.update(entity);
 	}
 	
-	
 	public JQGridPage<DicData> findDicDataList(JQGridPage<DicData> page,DicDataVo dicDataVo) {
 		//拼装hql 及参数
 		Map<String,Object> params = new HashMap<String,Object>();
 		StringBuilder hql = new StringBuilder("from DicData where 1=1 ");
-		if(StringUtils.isNotBlank(dicDataVo.dataName)){
+		if(StringUtils.isNotBlank(dicDataVo.getDataName())){
 			hql.append(" and dataName like :dataName");
-			params.put("dataName", "%"+dicDataVo.dataName+"%");
+			params.put("dataName", "%"+dicDataVo.getDataName()+"%");
 		}
-		if(StringUtils.isNotBlank(dicDataVo.dicCode)){
+		if(StringUtils.isNotBlank(dicDataVo.getDicCode())){
 			hql.append(" and dicCode = :dicCode");
-			params.put("dicCode", dicDataVo.dicCode);
+			params.put("dicCode", dicDataVo.getDicCode());
 		}
-		if(StringUtils.isNotBlank(dicDataVo.code)){
+		if(StringUtils.isNotBlank(dicDataVo.getCode())){
 			hql.append(" and code like :code");
-			params.put("code","%"+ dicDataVo.code+"%");
+			params.put("code","%"+ dicDataVo.getCode()+"%");
 		}
-		if(StringUtils.isNotBlank(dicDataVo.note)){
+		if(StringUtils.isNotBlank(dicDataVo.getNote())){
 			hql.append(" and note like :note");
-			params.put("note", "%"+dicDataVo.note+"%");
+			params.put("note", "%"+dicDataVo.getNote()+"%");
 		}
 		if(StringUtils.isNotBlank(page.getSortCol())){
 			hql.append(" order by "+page.getSortCol()+" "+page.getSortOrder());

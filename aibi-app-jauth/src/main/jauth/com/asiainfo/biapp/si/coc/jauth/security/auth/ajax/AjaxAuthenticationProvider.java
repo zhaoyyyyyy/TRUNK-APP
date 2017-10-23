@@ -23,7 +23,7 @@ import com.asiainfo.biapp.si.coc.jauth.sysmgr.service.UserService;
 /**
  * 
  * @author zhougz3
- * TODO  调用user接口
+ *   调用user接口
  *
  * 2017-07-29
  */
@@ -51,7 +51,9 @@ public class AjaxAuthenticationProvider implements AuthenticationProvider {
             throw new BadCredentialsException("Authentication Failed. Username or Password not valid.");
         }
 
-        if (user.getRoleSet() == null) throw new InsufficientAuthenticationException("User has no roles assigned");
+        if (user.getRoleSet() == null) {
+        	throw new InsufficientAuthenticationException("User has no roles assigned");
+        }
         
         List<GrantedAuthority> authorities = user.getRoleSet().stream()
                 .map(authority -> new SimpleGrantedAuthority(authority.getRoleName()))
@@ -63,6 +65,6 @@ public class AjaxAuthenticationProvider implements AuthenticationProvider {
 
     @Override
     public boolean supports(Class<?> authentication) {
-        return (UsernamePasswordAuthenticationToken.class.isAssignableFrom(authentication));
+        return UsernamePasswordAuthenticationToken.class.isAssignableFrom(authentication);
     }
 }

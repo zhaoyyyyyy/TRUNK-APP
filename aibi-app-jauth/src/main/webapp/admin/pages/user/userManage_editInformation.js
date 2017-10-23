@@ -37,17 +37,17 @@ window.jauth_onload = function() {
 				if ($('#saveDataForm').validateForm()) {
 					var user = $("#saveDataForm").serialize();
 					$.commAjax({
-						url : $.ctx + '/api/user/userInfo/update',
-						postData : $("#saveDataForm").formToJson(),
-						onSuccess : function(data) {
-							if (data == 'success') {
-								$.success('保存成功。', function() {
-											dg.cancel();
-											dg.reload();
-										})
-							}
-						}
-					});
+								url : $.ctx + '/api/user/userInfo/update',
+								postData : $("#saveDataForm").formToJson(),
+								onSuccess : function(data) {
+									if (data == 'success') {
+										$.success('保存成功。', function() {
+													dg.cancel();
+													dg.reload();
+												})
+									}
+								}
+							});
 				}
 			});
 	dg.addBtn("cancel", "取消", function() {

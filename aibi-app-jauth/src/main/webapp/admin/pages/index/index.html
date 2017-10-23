@@ -64,7 +64,7 @@
 							  	  <p v-text="resource.resourceName"></p>
 							    </div>
 						    	<ul class="menuson">
-									<li v-for="r in resource.children"><cite></cite><a v-bind:href="ctx+'/admin/pages'+r.address" v-text="r.resourceName" target="singleIframe"></a><i></i></li>
+									<li v-for="r in resource.children"><cite></cite><a v-bind:href="$.ctx + '/admin/pages' + r.address" v-text="r.resourceName" target="singleIframe"></a><i></i></li>
 						        </ul>    
 						    </dd>
 					    </dl>

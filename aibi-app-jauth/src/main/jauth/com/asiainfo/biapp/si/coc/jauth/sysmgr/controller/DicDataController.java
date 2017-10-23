@@ -5,12 +5,9 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,25 +22,19 @@ import springfox.documentation.annotations.ApiIgnore;
 import com.asiainfo.biapp.si.coc.jauth.frame.controller.BaseController;
 import com.asiainfo.biapp.si.coc.jauth.frame.json.JSONResult;
 import com.asiainfo.biapp.si.coc.jauth.frame.page.JQGridPage;
-import com.asiainfo.biapp.si.coc.jauth.frame.page.Page;
 import com.asiainfo.biapp.si.coc.jauth.frame.service.BaseService;
 import com.asiainfo.biapp.si.coc.jauth.frame.util.StringUtil;
 import com.asiainfo.biapp.si.coc.jauth.sysmgr.entity.DicData;
-import com.asiainfo.biapp.si.coc.jauth.sysmgr.entity.Group;
-import com.asiainfo.biapp.si.coc.jauth.sysmgr.entity.Role;
 import com.asiainfo.biapp.si.coc.jauth.sysmgr.service.DicDataService;
 import com.asiainfo.biapp.si.coc.jauth.sysmgr.service.DicService;
 import com.asiainfo.biapp.si.coc.jauth.sysmgr.vo.DicDataVo;
-import com.asiainfo.biapp.si.coc.jauth.sysmgr.vo.GroupVo;
-@Api(value = "数据字典管理")
-@RequestMapping("api/datadic/dicdata")
+//@Api(value = "数据字典管理")
+@RequestMapping("api/datadic")
 @RestController
 public class DicDataController extends BaseController<DicData>{
 	
 	private static final long serialVersionUID = 1L;
 	
-	@Autowired
-	private DicService dicService;
 	@Autowired
 	private DicDataService dicDataService;
 	
@@ -60,7 +51,7 @@ public class DicDataController extends BaseController<DicData>{
 	@ApiImplicitParam(name = "id", value = "字典ID", required = true, paramType = "query" ,dataType = "string")
 	@RequestMapping(value="/get", method=RequestMethod.POST, produces={ MediaType.APPLICATION_JSON_VALUE })
 	public Map<String, Object> toDataDicDetail(String id){
-		Map<String,Object> map = new HashMap<String,Object>();
+		Map<String,Object> map = new HashMap<>();
 		DicData dicData = new DicData();
 		if(!StringUtil.isEmpty(id)){
 			dicData = dicDataService.get(id);
@@ -80,15 +71,6 @@ public class DicDataController extends BaseController<DicData>{
 	})
 	@RequestMapping(value="/save", method=RequestMethod.POST, produces={ MediaType.APPLICATION_JSON_VALUE })
 	public String save(DicData dicData){
-		//去掉参数中的逗号
-		if(dicData.getDicCode().contains(",")){
-			String[] dicc = dicData.getDicCode().split(",");
-			if(StringUtils.isNotBlank(dicc[0])){
-				dicData.setDicCode(dicc[0]);
-			}else{
-				dicData.setDicCode(dicc[1]);
-			}
-		}
 		int i = 0;
 		String id=dicData.getId();
 		if(StringUtils.isNotBlank(id)){
@@ -106,6 +88,7 @@ public class DicDataController extends BaseController<DicData>{
 			dicdata.setCode(dicData.getCode());
 			dicdata.setDataName(dicData.getDataName());
 			dicdata.setNote(dicData.getNote());
+			dicdata.setStatus("1");
 			dicDataService.update(dicdata);
 			return "success";
 		}
@@ -123,9 +106,9 @@ public class DicDataController extends BaseController<DicData>{
 		}
 		newdata.setDicCode(dicCode);
 		newdata.setCode(dicData.getCode());
-		newdata.setOrderNum(Integer.parseInt(dicData.getCode()));
 		newdata.setDataName(dicData.getDataName());
 		newdata.setNote(dicData.getNote());
+		newdata.setStatus("1");
 		dicDataService.save(newdata);
 		return "success";
 	}
@@ -168,10 +151,7 @@ public class DicDataController extends BaseController<DicData>{
 	@RequestMapping(value="/dicdatas/query", method=RequestMethod.POST, produces={ MediaType.APPLICATION_JSON_VALUE })
 	public List<DicData> findDicDataByParams(@ApiIgnore DicDataVo dicDataVo){
 		
-		JQGridPage<DicData> page = new JQGridPage<DicData>();
-		page.setAutoCount(false);
-		page.setStart(0);
-		page.setPageSize(JQGridPage.MAX_PAGE_SIZE);
+		JQGridPage<DicData> page = new JQGridPage<>();
 		JQGridPage<DicData> dicDataList = dicDataService.findDicDataList(page, dicDataVo);
 		return dicDataList.getData();
 	}

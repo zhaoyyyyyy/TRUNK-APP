@@ -312,5 +312,25 @@ public class UserController {
 		userService.saveOrUpdate(user);
 		return "success";
 	}
+	
+	/**
+	 * 
+	 * @describe 变更用户状态
+	 * @author liukai
+	 * @param
+	 * @date 2013-7-1
+	 */
+	@RequestMapping(value="/changeStatus",method=RequestMethod.POST, produces={ MediaType.APPLICATION_JSON_VALUE })
+	public void changeStatus(String id) {
+		User user = userService.get(id);
+		// 原状态正常
+		if (user.getStatus().equals(Constants.USER_ENABLE_STATUS)) {
+			user.setStatus(Constants.USER_LOCKED_STATUS);
+			// 原状态 停用
+		} else if (user.getStatus().equals(Constants.USER_LOCKED_STATUS)) {
+			user.setStatus(Constants.USER_ENABLE_STATUS);
+		}
+		userService.saveOrUpdate(user);
+	}
 
 }

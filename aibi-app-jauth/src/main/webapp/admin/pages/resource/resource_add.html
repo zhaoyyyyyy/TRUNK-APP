@@ -17,9 +17,9 @@
 							资源名称<span class="req">*</span>
 						</th>
 						<td>
-							<input v-model="resource.resourceName" name="resourceName"
+							<v-input defValue="resource.resourceName" name="resourceName"
 								id="resourceName" class="inputStyle easyui-validatebox"
-								required="true" maxLen="30" />
+								required="true" maxLen="30" ></v-input>
 								  <!-- easyui-validatebox -->
 						</td>
 						
@@ -27,9 +27,9 @@
 							资源编码<span class="req">*</span>
 						</th>
 						<td>
-							<input v-model="resource.resourceCode" name="resourceCode"
+							<v-input defValue="resource.resourceCode" name="resourceCode"
 								id="resourceCode" class="inputStyle easyui-validatebox" 
-								required="true" maxLen="30" />
+								required="true" maxLen="30" ></v-input>
 								 <!-- easyui-validatebox -->
 						</td>
 					</tr>
@@ -39,9 +39,9 @@
 							资源值<span class="req">*</span>
 						</th>
 						<td colspan="3">
-							<input v-model="resource.address" name="address"
+							<v-input defValue="resource.address" name="address"
 								id="address" class="inputStyle easyui-validatebox" 
-								required="true" maxLen="500"  style="width:400px;"/>
+								required="true" maxLen="500"  style="width:400px;"/></v-input>
 								 <!-- easyui-validatebox -->
 						</td>
 					</tr>
@@ -50,8 +50,8 @@
 							请选择父资源<span class="req">*</span>
 						</th>
 						<td>
-							<input v-model="resource.parentName" id="parentName" name="parentName" class="easyui-validatebox read_inputStyle" 
-								required="true" maxLen="30" readonly="readonly" />
+							<v-input defValue="resource.parentName" id="parentName" name="parentName" class="easyui-validatebox read_inputStyle" 
+								required="true" maxLen="30" readonly="readonly" /></v-input>
 						<th >
 							序号
 						</th>

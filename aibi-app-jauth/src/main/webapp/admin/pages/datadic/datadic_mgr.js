@@ -3,7 +3,7 @@ window.jauth_onload = function() {
 	 * 列表
 	 */
 	var dicCode = $.getUrlParam("dicCode");
-	var urlShow = $.ctx + '/api/datadic/dicdata/dicdataPage/query?dicCode='+dicCode;
+	var urlShow = $.ctx + '/api/datadic/dicdataPage/query?dicCode='+dicCode;
 	var colNames = [ '编码', '名称', '备注', '操作' ];
 	var colModel = [
 			{
@@ -93,7 +93,7 @@ function fun_detail(id) {
 function fun_del(id) {
 	$.confirm('您确定要继续删除么？', function() {
 		$.commAjax({
-			url : $.ctx + '/api/datadic/dicdata/delete',
+			url : $.ctx + '/api/datadic/delete',
 			postData : {
 				id : id
 			},

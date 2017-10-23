@@ -5,7 +5,6 @@
 		<title>COC-后台配置管理</title>
 		<script type="text/javascript" src="../../common/include.js"></script>
 		<script type="text/javascript" src="userManage_editInformation.js"></script>
-		
 	</head>
 	<body>
 		<div style="width:672px;height:280px;overflow:auto">
@@ -15,7 +14,7 @@
 					<tbody>
 						<input id="userid" name="id" v-model="user.id" type="hidden" />
 						<tr>
-							<th >
+							<th>
 								用户名
 							</th>
 							<td>
@@ -25,9 +24,9 @@
 								真实姓名
 							</th>
 							<td>
-								<input id="user.realName" name="realName"
-									v-model="user.realName" class="inputStyle easyui-validatebox"
-									required="true" validType="blankVid" />
+								<v-input id="user.realName" name="realName"
+									defValue="user.realName" class="inputStyle easyui-validatebox"
+									required="true" validType="blankVid" ></v-input>
 							</td>
 						</tr>
 						<tr>
@@ -35,15 +34,7 @@
 								性别
 							</th>
 							<td>
-								<v-input name="user.sex" defValue="user.sex" type="text" class="inputStyle easyui-validatebox" required="true"  ></v-input>
-								
-								
-								<!-- <input id="user.sex" name="user.sex" type="radio" value="保密"
-									<c:if test="${user.sex == '保密'}">checked="checked"</c:if> />
-								保密
-								</input>-->
-								<!-- 	<input id="user.sex" name="user.sex" value="${user.sex}"
-									class="inputStyle easyui-validatebox" />-->
+								<v-input name="sex" defValue="user.sex" type="text" dataDic="SEX" class="inputStyle easyui-validatebox" required="true" /></v-input>
 							</td>
 							<th>
 								手机

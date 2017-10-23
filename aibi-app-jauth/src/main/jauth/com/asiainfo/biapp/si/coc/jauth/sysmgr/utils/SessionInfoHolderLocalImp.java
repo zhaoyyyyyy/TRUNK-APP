@@ -5,30 +5,31 @@ package com.asiainfo.biapp.si.coc.jauth.sysmgr.utils;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 import com.asiainfo.biapp.si.coc.jauth.frame.Constants;
 import com.asiainfo.biapp.si.coc.jauth.frame.ssh.extend.SpringContextHolder;
+import com.asiainfo.biapp.si.coc.jauth.security.auth.ajax.AjaxLoginProcessingFilter;
 import com.asiainfo.biapp.si.coc.jauth.security.model.UserContext;
 import com.asiainfo.biapp.si.coc.jauth.sysmgr.entity.User;
 import com.asiainfo.biapp.si.coc.jauth.sysmgr.service.UserService;
 
 
 /**
- * @describe TODO
+ * @describe 
  * @author zhougz
  * @date 2013-6-4
  */
 @Component
 public class SessionInfoHolderLocalImp implements SessionInfoHolder{
-	
-//	private User user;
+	private static final Logger LOGGER = LoggerFactory.getLogger(SessionInfoHolderLocalImp.class);
 	
 	public String getAppSysCode(){
-		return 1+"";
-		//return Constants.DEF_APPSYSCODE;
+		return Integer.toString(1);
 	}
 
 	@Override
@@ -43,20 +44,14 @@ public class SessionInfoHolderLocalImp implements SessionInfoHolder{
 	
 	public User getLoginUser() {
 		try {	
-			User u = null;
-			if(u != null){
-				return u;
-			}else{
-				Authentication authentication =  SecurityContextHolder.getContext().getAuthentication();
-				UserContext userContext = (UserContext) authentication.getPrincipal();
-				UserService userService = (UserService)SpringContextHolder.getBean("userServiceImpl");
-				User user = userService.getUserByName(userContext.getUsername());
-				return user;
-			}
+			Authentication authentication =  SecurityContextHolder.getContext().getAuthentication();
+			UserContext userContext = (UserContext) authentication.getPrincipal();
+			UserService userService = (UserService)SpringContextHolder.getBean("userServiceImpl");
+			return userService.getUserByName(userContext.getUsername());
 		} catch (Exception e) {
-			e.printStackTrace();
-			return null;
+			LOGGER.info("context", e);
 		}
+		return null;
 	}
 	
 	public User getLoginUser(HttpServletRequest request) {

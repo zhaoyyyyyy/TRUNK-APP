@@ -176,7 +176,7 @@ window.jauth_onload = function() {
 			
 // 删除按钮
 function fun_del(id) {
-	$.confirm('您确定要继续删除么？', function() {
+	$.confirm('此操作会删除本节点及叶子节点数据，且不可恢复，是否继续？', function() {
 				$.commAjax({
 							url : $.ctx + '/api/resource/delete',
 							postData : {

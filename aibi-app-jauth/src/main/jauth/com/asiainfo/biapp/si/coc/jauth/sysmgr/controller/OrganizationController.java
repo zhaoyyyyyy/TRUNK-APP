@@ -4,7 +4,6 @@
 package com.asiainfo.biapp.si.coc.jauth.sysmgr.controller;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -15,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.asiainfo.biapp.si.coc.jauth.frame.controller.BaseController;
-import com.asiainfo.biapp.si.coc.jauth.frame.entity.BaseEntity;
 import com.asiainfo.biapp.si.coc.jauth.frame.service.BaseService;
 import com.asiainfo.biapp.si.coc.jauth.frame.util.StringUtil;
 import com.asiainfo.biapp.si.coc.jauth.sysmgr.entity.Organization;
@@ -68,7 +66,7 @@ public class OrganizationController extends BaseController<Organization>{
 		@ApiImplicitParam(name = "isAsynchron", value = "树类型", required = false, paramType = "query" ,dataType = "string"),
 		@ApiImplicitParam(name = "sec", value = "树类型", required = false, paramType = "query" ,dataType = "string")
 	})
-	@RequestMapping(value="/renderOrgTree",method=RequestMethod.POST,  produces={ MediaType.APPLICATION_JSON_VALUE })
+	@RequestMapping(value="/renderOrgTree",method=RequestMethod.POST,  produces={ MediaType.ALL_VALUE })
 	public String renderOrgTree(String orgCode,String treeType,String isAsynchron,String sec){
 		if("true".equals(sec)){
 			StringBuffer sb = new StringBuffer();
@@ -128,7 +126,7 @@ public class OrganizationController extends BaseController<Organization>{
 	private String getTree(Organization common, String selectable, String treeType, StringBuffer htmlCon,boolean isAsynchron){
 		String orgType = common.getOrgType();
 		String status = common.getInterrogateType();
-		htmlCon.append("<li id='").append(common.getOrgCode()).append("' name='").append(common.getId()).append(common.getId()).append("' selectable='").append(selectable);
+		htmlCon.append("<li id='").append(common.getOrgCode()).append("' name='").append(common.getId()).append("' selectable='").append(selectable);
 		if (orgType != null) {
 			htmlCon.append("' orgType='").append(orgType);
 		}
