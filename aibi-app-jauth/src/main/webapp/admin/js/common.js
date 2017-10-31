@@ -147,52 +147,51 @@
 	 * vue组件
 	 */
 	Vue.component('v-input', {
-		  template: '<input v-bind:dataDic="dataDic" v-bind:name="name" v-bind:defValue="defValue"  v-bind:type="type" />',
-		  data: function () {
-			  var returnDate = {};
-			  returnDate.dataDic =  this.dataDic;
-			  returnDate.name = this.name;
-			  returnDate.defValue = this.defValue;
-			  returnDate.type = this.type || "text";
-			 
-		    return returnDate;
-		  },
-		  mounted: function () {
-			  
-			  var parentData = this.$parent._data;
-			  var $defObj = $(this.$el);
-			  
-			  //下拉框渲染
-			  var dataDic = $defObj.attr('dataDic');
-			  var defValue = $defObj.attr('defValue');
-			  var bb = defValue.split(".");
-			  $.each(bb,function(i){
-				  parentData = parentData[bb[i]];
-			  })
-			  
-			  if(dataDic && dataDic != ''){
-				  $defObj.attr("defValue",parentData);
-				  $.initCodeComponents();
-			  }else{
-				  $defObj.val(parentData);
-			  }
-			
-			  
-			  $.parser = {
-						defaults:{
-							auto:true
-						},
-						parse	: function(context) {
-							if ($.parser.defaults.auto) {
-								var r = $(".easyui-validatebox", context);
-								if (r.length)
-									r.validatebox();
-							}
-						}
-					};
-			  $.parser.parse();
-		  }
-		  
+	    props: ['defvalue'],
+	    template: '<input v-bind:dataDic="dataDic" v-bind:name="name" v-bind:defvalue="defvalue" v-bind:type="type" />',
+	    data: function() {
+	        var returndate = {};
+	        returndate.dataDic = this.dataDic;
+	        returndate.name = this.name;
+	        returndate.defvalue = this.defvalue;
+	        returndate.type = this.type || "text";
+
+	        return returndate;
+	    },
+	    mounted : function() {
+
+	        var parentData = this.$parent._data;
+	        var $defObj = $(this.$el);
+
+	        //下拉框渲染
+	        var dataDic = $defObj.attr('dataDic');
+	        var defValue = $defObj.attr('defvalue');
+	        var bb = defValue.split(".");
+	        $.each(bb,
+	        function(i) {
+	            parentData = parentData[bb[i]];
+	        })
+
+	        if (dataDic && dataDic != '') {
+	            $defObj.attr("defvalue", parentData);
+	            $.initCodeComponents();
+	        } else {
+	            $defObj.val(parentData);
+	        }
+	        $.parser = {
+	            defaults: {
+	                auto: true
+	            },
+	            parse: function(context) {
+	                if ($.parser.defaults.auto) {
+	                    var r = $(".easyui-validatebox", context);
+	                    if (r.length) r.validatebox();
+	                }
+	            }
+	        };
+	        $.parser.parse();
+	    }
+
 	})
 		
 		

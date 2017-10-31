@@ -14,7 +14,7 @@ import com.asiainfo.biapp.si.coc.jauth.sysmgr.entity.User;
 import com.asiainfo.biapp.si.coc.jauth.sysmgr.vo.UserVo;
 
 /**
- * @describe TODO
+ * @describe
  * @author liukai
  * @date 2013-6-28
  */
@@ -23,7 +23,7 @@ public interface UserDao extends BaseDao<User,String>{
 	/**
 	 * 根据查询条件查询出角色
 	 * 
-	 * @describe TODO
+	 * @describe 
 	 * @author liukai
 	 * @param
 	 * @date 2013-6-21

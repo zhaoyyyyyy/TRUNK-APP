@@ -103,7 +103,6 @@
 		$self.parents().bind('scroll', function(){
 			thismenu.closeMenu();
 		});
-		
 		// attach window behaviors
 		$(document)
 				// Bind a click event to hide all visible menus when the

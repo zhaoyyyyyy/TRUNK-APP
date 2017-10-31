@@ -167,7 +167,7 @@ $.extend({
 	strLen		: function(str) {// 判断字符长度(汉字算三个长度)
 		str = $.trim(str);
 		var len = 0;
-		for (i = 0; i < str.length; i++) {
+		for (var i = 0; i < str.length; i++) {
 			if (str.charCodeAt(i) > 256) {
 				len += 3;
 			} else {
@@ -213,7 +213,7 @@ $.extend({
 		var pos = {'left' : 0, 'top' : 0, 'bottom' : 9999999};
 		while (_ownerWin != top) {
 			var ifs = _ownerWin.parent.document.getElementsByTagName("iframe");
-			for (i = 0; i < ifs.length; i++) {
+			for (var i = 0; i < ifs.length; i++) {
 				try{
 					if (ifs[i].contentWindow == _ownerWin) {
 						var _pos = ifs[i].getBoundingClientRect();
@@ -308,7 +308,7 @@ $.extend({
 				
 			}
 			if (!_codes) {
-				alert(codeClass + "未指定");
+				$.alert(codeClass + "未指定");
 				return;
 			}
 			
@@ -509,7 +509,7 @@ $.fn.extend({
 					var disabled = $(this).attr('disabled');
 					
 					if (disabled == true || disabled == 'true') {
-						
+						console.log("sss");
 					} else {
 						// 获取该输入框的中文输入项为什么
 						var thmess = $(this).attr("titleText");
@@ -536,7 +536,7 @@ $.fn.extend({
 				try {
 					var uploadingFileNum1 = uploadingFileNum;
 				} catch (e) {
-					var uploadingFileNum1 = 0;
+					uploadingFileNum1 = 0;
 				}
 				if (uploadingFileNum1 > 0) {
 					
@@ -574,9 +574,9 @@ $.fn.extend({
 			}
 		}
 		try {
-			var uploadingFileNum1 = uploadingFileNum;
+			uploadingFileNum1 = uploadingFileNum;
 		} catch (e) {
-			var uploadingFileNum1 = 0;
+			uploadingFileNum1 = 0;
 		}
 		if (uploadingFileNum1 > 0) {
 			$.alert("当前有正在上传的文件，请稍后提交。");
@@ -588,7 +588,7 @@ $.fn.extend({
 		var $self = $(this);
 		var winPos = {'left' : 0, 'top' : 0, 'bottom' : 9999999};
 		var ifs = parent.document.getElementsByTagName("iframe");
-		for (i = 0; i < ifs.length; i++) {
+		for (var i = 0; i < ifs.length; i++) {
 			try{
 				if (ifs[i].contentWindow == window) {
 					winPos = ifs[i].getBoundingClientRect();

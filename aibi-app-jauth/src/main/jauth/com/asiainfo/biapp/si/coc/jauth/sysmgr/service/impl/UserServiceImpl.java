@@ -30,7 +30,7 @@ import com.asiainfo.biapp.si.coc.jauth.sysmgr.service.UserService;
 import com.asiainfo.biapp.si.coc.jauth.sysmgr.vo.UserVo;
 
 /**
- * @describe TODO
+ * @describe
  * @author liukai
  * @date 2013-6-28
  */
@@ -41,7 +41,6 @@ public class UserServiceImpl extends BaseServiceImpl<User,String> implements
 	@Autowired
 	private UserDao userDao;
 	@Autowired
-//	private OrgUserService orgUserService;
 	
 	@Override
 	protected BaseDao<User,String> getBaseDao() {
@@ -52,7 +51,7 @@ public class UserServiceImpl extends BaseServiceImpl<User,String> implements
 	/**
 	 * 根据查询条件查询出角色
 	 * 
-	 * @describe TODO
+	 * @describe 
 	 * @author liukai
 	 * @param
 	 * @date 2013-6-21

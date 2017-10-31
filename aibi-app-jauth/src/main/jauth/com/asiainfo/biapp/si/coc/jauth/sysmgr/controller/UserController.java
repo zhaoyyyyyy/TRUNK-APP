@@ -20,7 +20,6 @@ import com.asiainfo.biapp.si.coc.jauth.frame.Constants;
 import com.asiainfo.biapp.si.coc.jauth.frame.json.JSONResult;
 import com.asiainfo.biapp.si.coc.jauth.frame.page.JQGridPage;
 import com.asiainfo.biapp.si.coc.jauth.frame.util.Bcrypt;
-import com.asiainfo.biapp.si.coc.jauth.frame.util.DateUtil;
 import com.asiainfo.biapp.si.coc.jauth.sysmgr.entity.Group;
 import com.asiainfo.biapp.si.coc.jauth.sysmgr.entity.Role;
 import com.asiainfo.biapp.si.coc.jauth.sysmgr.entity.User;
@@ -35,7 +34,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 
 /**
- * @describe TODO
+ * @describe 
  * @author liukai
  * @date 2013-6-28
  */
@@ -67,7 +66,7 @@ public class UserController {
 	@RequestMapping(value="/userPage/query", method=RequestMethod.POST, produces={ MediaType.APPLICATION_JSON_VALUE })
 	public String list(@ModelAttribute JQGridPage<User> page,String cols,@ApiIgnore UserVo userVo) {
 		User user = userService.get(sessionInfoHolder.getLoginId());
-		if (user.getGroupSet() != null && user.getGroupSet().size() > 0) {
+		if (user.getGroupSet() != null && !user.getGroupSet().isEmpty()) {
 			userVo.setGroupSet(user.getGroupSet());
 		}
 		//zn
@@ -97,7 +96,7 @@ public class UserController {
 		String[] ids = id.split(",");
 		String roleId = null;
 		
-		List<User> userList = new ArrayList<User>();
+		List<User> userList = new ArrayList<>();
 		// 如果只选择了一个用户则回显
 		if (ids.length == 1) {
 			User user = userService.get(ids[0]);
@@ -114,7 +113,7 @@ public class UserController {
 			userList.add(userService.get(i));
 		}
 		
-		Map<String,Object> map = new HashMap<String,Object>();
+		Map<String,Object> map = new HashMap<>();
 		map.put("userList", userList);
 		map.put("roleId", roleId);
 		return map;
@@ -122,7 +121,7 @@ public class UserController {
 
 	/**
 	 * 
-	 * @describe 分配用户角色 TODO
+	 * @describe 分配用户角色 
 	 * @author liukai
 	 * @param
 	 * @date 2013-7-2
@@ -138,7 +137,7 @@ public class UserController {
 		for (String i : ids) {
 			User user = userService.get(i);
 			String[] roleIds = roleId.split(",");
-			Set<Role> roleSet = new HashSet<Role>();
+			Set<Role> roleSet = new HashSet<>();
 			for (String rId : roleIds) {
 				Role role = new Role();
 				role.setId(rId);
@@ -176,12 +175,12 @@ public class UserController {
 			groupId = sb.toString();
 		}
 		
-		List<User> userList = new ArrayList<User>();
+		List<User> userList = new ArrayList<>();
 		for (String i : ids) {
 			userList.add(userService.get(i));
 		}
 		
-		Map<String,Object> map = new HashMap<String,Object>();
+		Map<String,Object> map = new HashMap<>();
 		map.put("userList", userList);
 		map.put("groupId", groupId);
 		return map;
@@ -205,7 +204,7 @@ public class UserController {
 		for (String i : ids) {
 			User user = userService.get(i);
 			String[] groupIds = groupId.split(",");
-			Set<Group> groupSet = new HashSet<Group>();
+			Set<Group> groupSet = new HashSet<>();
 			for (String gId : groupIds) {
 				Group group = new Group();
 				group.setId(gId);
@@ -231,7 +230,7 @@ public class UserController {
 	public Map<String,Object> initEditUser(String id) {
 		User user = userService.get(id);
 		User luser = sessionInfoHolder.getLoginUser();
-		Map<String,Object> map = new HashMap<String,Object>();
+		Map<String,Object> map = new HashMap<>();
 		map.put("user",user);
 		map.put("luser", luser);
 		return map;
@@ -258,7 +257,6 @@ public class UserController {
 	})
 	@RequestMapping(value="/userInfo/update",method=RequestMethod.POST , produces={ MediaType.APPLICATION_JSON_VALUE })
 	public String save(User user) {
-//		String id = request.getParameter("resourceId");
 		User oldUser = userService.get(user.getId());
 		oldUser = fromTobean(user, oldUser);
 		userService.saveOrUpdate(oldUser);

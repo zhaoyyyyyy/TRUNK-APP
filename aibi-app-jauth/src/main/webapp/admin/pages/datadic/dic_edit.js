@@ -37,45 +37,6 @@ window.jauth_onload = function() {
 		});
 	}
 	dg.addBtn("save", "保存", function() {
-
-		// if(!$('#saveDataForm').validateForm() ){
-		// return ;
-		//				
-		// }
-		// if($.trim($('[name=entity.id]').val()) != ''){
-		// saveOrUpdate();
-		// return false;
-		// }
-		//		
-		// function saveOrUpdate() {
-		//		
-		//			
-		// $.commAjax({
-		// url : $.ctx+'/sysmgr/datadic/dic!commSave.action',
-		// postData:$('#saveDataForm').formToJson(),
-		// onSuccess:function(){
-		// $.success('保存成功。',function(){
-		// dg.cancel();
-		// dg.reload();
-		// })
-		// }
-		// })
-		// }
-		//		
-		//		
-		//		
-		// $.commAjax({
-		// url : $.ctx+'/sysmgr/datadic/dic!verifyCode.action',
-		// postData:{"dic":$("#dic").val()},
-		// type: "POST",
-		// onSuccess:function(data){
-		// if(data==false){
-		// saveOrUpdate();
-		// }else{
-		// $.alert("编码不能重复。");
-		// }
-		// }
-		// })
 		if ($('#saveDataForm').validateForm()) {
 			$.commAjax({
 				url : $.ctx + '/api/datadic/dic/save',

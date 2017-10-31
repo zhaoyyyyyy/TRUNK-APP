@@ -11,30 +11,28 @@ window.jauth_onload = function() {
 				new Vue({ el:'#saveDataForm', data: data });
 			}
 		});
+	}else{
+		new Vue({ el:'#roleName', data:null });
 	}
 	var proscenium = "1"; // 前台
-	var app = "2"; //APP
+	var app = "2"; // APP
 	var backstage = "3"; // 后台
-	var resourceId = "";
 	var mySimpleTree;
 	var myTree;
 	var appTree;
 	// 所选节点
 	var selectTrees = $("#selectTrees").val();
-	var dg = frameElement.lhgDG;
-	dg.removeBtn();
 	
 	var cascadeParentChecked = true;
 	var cascadeChildrenChecked = true;
 	var filterOrgType = null;
 	
 	
-	//前台
-	//var url_ = $.ctx + '/api/resource/renderOrgTree?resourceId=' + proscenium + "roleId" + id;
+	// 前台
 	var url1 = $.ctx + '/api/resource/renderOrgTree';
 	$.commAjax({
 		url : url1,
-		postData:{"resourceId":proscenium},//,"roleId":id
+		postData:{"resourceId":proscenium},// ,"roleId":id
 		isShowMask : true,
 		type : 'post',
 		async:false,
@@ -54,7 +52,7 @@ window.jauth_onload = function() {
 		},
 		maskMassage : '数据加载中...'
 	});
-	//后台
+	// 后台
 	$.commAjax({
 		url :url1,
 		postData:{"resourceId":backstage},
@@ -76,7 +74,7 @@ window.jauth_onload = function() {
 		},
 		maskMassage : '数据加载中...'
 	});
-	//app 
+	// app
 	$.commAjax({
 		url : url1,
 		postData:{"resourceId":app},

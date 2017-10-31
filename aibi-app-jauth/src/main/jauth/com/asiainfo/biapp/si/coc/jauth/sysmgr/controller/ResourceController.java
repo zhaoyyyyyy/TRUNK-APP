@@ -45,7 +45,7 @@ import io.swagger.annotations.ApiOperation;
  * @author liukai
  * @date 2013-6-25
  */
-@Api(value = "资源管理")
+//@Api(value = "资源管理")
 @RequestMapping("api/resource")
 @RestController
 public class ResourceController extends BaseController<Resource> {
@@ -176,7 +176,7 @@ public class ResourceController extends BaseController<Resource> {
 	@RequestMapping(value="/get", method=RequestMethod.POST, produces={ MediaType.APPLICATION_JSON_VALUE })
 	public Map<String,Object> initEditResource(String id) {
 		Resource resource = resourceService.get(id);
-		Map<String,Object> map = new HashMap<String,Object>();
+		Map<String,Object> map = new HashMap<>();
 		map.put("resource",resource);
 		return map;
 	}
@@ -186,7 +186,7 @@ public class ResourceController extends BaseController<Resource> {
 	@RequestMapping(value="/parentResource/get", method=RequestMethod.POST, produces={ MediaType.APPLICATION_JSON_VALUE })
 	public Map<String,Object> queryParent(String id) {
 		Resource resource = resourceService.get(id);
-		Map<String,Object> pmap = new HashMap<String,Object>();
+		Map<String,Object> pmap = new HashMap<>();
 		String ptid = resource.getParentId();
 		if(null==ptid) {
 			return null;
@@ -206,7 +206,7 @@ public class ResourceController extends BaseController<Resource> {
 	@ApiOperation(value="进入后台")
 	@RequestMapping(value="/initBackground", method=RequestMethod.POST, produces={ MediaType.APPLICATION_JSON_VALUE })
 	public Map<String,Object> initBackground() {
-		Map<String,Object> map = new HashMap<String,Object>();
+		Map<String,Object> map = new HashMap<>();
 		User user = sessionInfoHolder.getLoginUser();
 		String backgroundId = Constants.BACKGROUND_ID;
 		List<Resource> resourceList = resourceService.getParentResourceByRole(
@@ -241,7 +241,7 @@ public class ResourceController extends BaseController<Resource> {
 		String resource = this.getRequest().getParameter("resourceId");
 		String roleId = this.getRequest().getParameter("roleId");
 		User user = userServer.get(sessionInfoHolder.getLoginId());
-		List<String> list = new ArrayList<String>();
+		List<String> list = new ArrayList<>();
 		//如果是管理员能显示所有菜单
 		if(user.getIsAdmin() == 1){
 			String orgId = null;
@@ -250,10 +250,6 @@ public class ResourceController extends BaseController<Resource> {
 					list.add(resourc.getId());
 			}
 		}else{
-//			List<Resource> resourceList = resourceService.findResourceList(user.getOrginfoId());
-//			for (Resource resourc : resourceList) {
-//					list.add(resourc.getId());
-//			}
 			for (Role role : user.getRoleSet()) {
 				for (Resource r : role.getResourceSet()) {
 					list.add(r.getId());
@@ -274,7 +270,7 @@ public class ResourceController extends BaseController<Resource> {
 	 */
 	private String getTree(Resource common, String selectable, String treeType,
 			StringBuffer htmlCon, String roleId, List<String> list) {
-		if (list != null && list.size() > 0 && list.contains(common.getId())) {
+		if (list != null && !list.isEmpty() && list.contains(common.getId())) {
 			String orgType = common.getType();
 			htmlCon.append("<li id='").append(common.getId()).append(
 					"' name='").append(common.getResourceCode()).append("' selectable='")
@@ -304,7 +300,7 @@ public class ResourceController extends BaseController<Resource> {
 			List<String> list) {
 		for (Resource common : set) {
 			if (common.getChildren() != null
-					&& common.getChildren().size() != 0) {
+					&& !common.getChildren().isEmpty()) {
 				getTree(common, selectable, treeType, htmlCon, roleId, list);
 			} else {
 				getLeaf(common, treeType, htmlCon, roleId, list);

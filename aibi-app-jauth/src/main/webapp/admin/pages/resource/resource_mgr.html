@@ -1,111 +1,93 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-		<title>资源管理</title>
-		<script type="text/javascript" src="../../common/include.js"></script>
-		<script type="text/javascript" src="resource_mgr.js"></script>
-	</head>
-	<body>
- 		
-<!-- 索引 -->
-		<div class="title" id="_title">
-		</div>   
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>资源管理</title>
+<script type="text/javascript" src="../../common/include.js"></script>
+<script type="text/javascript" src="resource_mgr.js"></script>
+</head>
+<body>
+
+	<!-- 索引 -->
+	<div class="title" id="_title"></div>
 
 
-		<!-- 左边 -->
-		<div id="_simptree" style="width:22%;height:92%;float:left;overflow:auto;">
-						<div >
-							<ul class="simpleTree" id="tree"
-								style="margin-left: 5px; margin-top: 5px;">
-								<li class="root" id="sRoot">
-									<span class='text' id="root">前台菜单</span>
-								</li>
-							</ul>
-						</div>
-						<div >
-							<ul class="simpleTree" id="simpleTree"
-								style="margin-left: 5px; margin-top: 5px;">
-								<li class="root" id="simpleRoot">
-									<span class='text' id="roots">后台菜单</span>
-								</li>
-							</ul>
-						</div>
-						<div >
-							<ul class="simpleTree" id="appTree"
-								style="margin-left: 5px; margin-top: 5px;">
-								<li class="root" id="simpleRootAPP">
-									<span class='text' id="roots">接口资源</span>
-								</li>
-							</ul>
-						</div>
+	<!-- 左边 -->
+	<div id="_simptree"
+		style="width: 22%; height: 92%; float: left; overflow: auto;">
+		<div>
+			<ul class="simpleTree" id="tree"
+				style="margin-left: 5px; margin-top: 5px;">
+				<li class="root" id="sRoot"><span class='text' id="root">前台菜单</span>
+				</li>
+			</ul>
 		</div>
-	
-	
-		
-		<!-- 右边 
+		<div>
+			<ul class="simpleTree" id="simpleTree"
+				style="margin-left: 5px; margin-top: 5px;">
+				<li class="root" id="simpleRoot"><span class='text' id="roots">后台菜单</span>
+				</li>
+			</ul>
+		</div>
+		<div>
+			<ul class="simpleTree" id="appTree"
+				style="margin-left: 5px; margin-top: 5px;">
+				<li class="root" id="simpleRootAPP"><span class='text'
+					id="roots">接口资源</span></li>
+			</ul>
+		</div>
+	</div>
+
+
+
+	<!-- 右边 
 		String type = this.getRequest().getParameter("type");
 		String parentId = this.getRequest().getParameter("parentId");
 		String status = this.getRequest().getParameter("status");
 		-->
-		<div style="width:78%;float:left;">
-		
-			<div class="formContent">
-				<form id="formSearch">
-					<input type="hidden" value="" name="parentId"  id="parentId"/>
-					<table class="searchTable">
-						<tr>
-							<th>
-								资源名称
-							</th>
-							<td>
-								<input class="inputStyle" type="text" name="resourceName"
-									id="resourceName" />
-							</td>
-							
-							<th>
-								资源值
-							</th>
-							<td>
-								<input class="inputStyle" type="text" name="address"
-									id="address" />
-							</td>
-							
-							<th>
-								资源编码
-							</th>
-							<td>
-								<input class="inputStyle" type="text" name="resourceCode"
-									id="resourceCode" />
-							</td>
-								<td>
-									<input type="button" name="button" value="查询" title="查询"
-										class="v_button" id="btnSearch" />
-									&nbsp;&nbsp;
-									<input type="reset" name="button" value="重置" title="重置"
-										class="r_button" />
-								</td>
-						</tr>
-					</table>
-				</form>
-			</div>
-			<!-- 按钮  -->
-			<div class="buttonArea operation">
-				<div class="left newButton">
-					<div>
-						<input type="button" class="add" id="btn_add" value="创建资源" />
-					</div>
-				</div>
-				<div class="clear"></div>
-			</div>
-	
-			<!-- 列表 -->
-			<div class="listArea">
-				<table id="mainGrid"></table>
-			</div>
-	
-			<!-- 分页 -->
-			<div id="mainGridPager"></div>
+	<div style="width: 78%; float: left;">
+
+		<div class="formContent">
+			<form id="formSearch">
+				<input type="hidden" value="" name="parentId" id="parentId" />
+				<table class="searchTable">
+					<tr>
+						<th>资源名称</th>
+						<td><input class="inputStyle" type="text" name="resourceName"
+							id="resourceName" /></td>
+
+						<th>资源值</th>
+						<td><input class="inputStyle" type="text" name="address"
+							id="address" /></td>
+
+						<th>资源编码</th>
+						<td><input class="inputStyle" type="text" name="resourceCode"
+							id="resourceCode" /></td>
+						<td><input type="button" name="button" value="查询" title="查询"
+							class="v_button" id="btnSearch" /> &nbsp;&nbsp; <input
+							type="reset" name="button" value="重置" title="重置" class="r_button" />
+						</td>
+					</tr>
+				</table>
+			</form>
 		</div>
-	</body>
+		<!-- 按钮  -->
+		<div class="buttonArea operation">
+			<div class="left newButton">
+				<div>
+					<input type="button" class="add" id="btn_add" value="创建资源" />
+				</div>
+			</div>
+			<div class="clear"></div>
+		</div>
+
+		<!-- 列表 -->
+		<div class="listArea">
+			<table id="mainGrid"></table>
+		</div>
+
+		<!-- 分页 -->
+		<div id="mainGridPager"></div>
+	</div>
+</body>
 </html>

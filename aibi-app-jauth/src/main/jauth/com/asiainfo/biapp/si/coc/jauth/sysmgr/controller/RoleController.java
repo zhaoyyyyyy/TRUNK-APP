@@ -14,39 +14,31 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import javax.transaction.Transactional;
-
-import net.sf.json.JSONArray;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import springfox.documentation.annotations.ApiIgnore;
 
-import com.asiainfo.biapp.si.coc.jauth.frame.Constants;
 import com.asiainfo.biapp.si.coc.jauth.frame.controller.BaseController;
 import com.asiainfo.biapp.si.coc.jauth.frame.json.JSONResult;
 import com.asiainfo.biapp.si.coc.jauth.frame.page.JQGridPage;
 import com.asiainfo.biapp.si.coc.jauth.frame.service.BaseService;
-import com.asiainfo.biapp.si.coc.jauth.sysmgr.entity.Group;
 import com.asiainfo.biapp.si.coc.jauth.sysmgr.entity.Resource;
 import com.asiainfo.biapp.si.coc.jauth.sysmgr.entity.Role;
 import com.asiainfo.biapp.si.coc.jauth.sysmgr.entity.User;
 import com.asiainfo.biapp.si.coc.jauth.sysmgr.service.ResourceService;
 import com.asiainfo.biapp.si.coc.jauth.sysmgr.service.RoleService;
 import com.asiainfo.biapp.si.coc.jauth.sysmgr.utils.SessionInfoHolder;
-import com.asiainfo.biapp.si.coc.jauth.sysmgr.vo.GroupVo;
 import com.asiainfo.biapp.si.coc.jauth.sysmgr.vo.RoleVo;
 
 /**
- * @describe TODO
+ * @describe
  * @author liukai
  * @date 2013-6-21
  */
@@ -59,11 +51,6 @@ public class RoleController extends BaseController<Role> {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-
-	private String id;
-	private String tree;  //前台
-	private String tree2; //后台
-	private String tree3; //APP
 
 	private Role role;
 	@Autowired
@@ -81,7 +68,7 @@ public class RoleController extends BaseController<Role> {
 	/**
 	 * 查询角色列表
 	 * 
-	 * @describe TODO
+	 * @describe 
 	 * @author liukai
 	 * @param
 	 * @return 
@@ -135,7 +122,7 @@ public class RoleController extends BaseController<Role> {
 			tree = sb.toString();
 		}
 		
-		Map<String,Object> returnMap = new HashMap<String,Object>();
+		Map<String,Object> returnMap = new HashMap<>();
 		returnMap.put("tree", tree);
 		returnMap.put("role", role);
 		return returnMap;
@@ -169,10 +156,10 @@ public class RoleController extends BaseController<Role> {
 		if(StringUtils.isBlank(id)){
 			 roles = roleService.findRoleByName(id, roleName);
 		}
-		if (roles != null && roles.size() > 0) {
+		if (roles != null && !roles.isEmpty()) {
 			return "haveSameName";
 		} else {
-			Set<Resource> rSet = new HashSet<Resource>();
+			Set<Resource> rSet = new HashSet<>();
 			// 前台有选中节点
 			if (StringUtils.isNotBlank(tree)) {
 				// 获取所选节点
@@ -181,7 +168,6 @@ public class RoleController extends BaseController<Role> {
 					Resource r = new Resource();
 					r.setId(t);
 					r=resourceService.get(t);
-					//rSet.add(r);
 					//zn
 					if(!rSet.contains(r)){
 						if(r!=null){
@@ -217,7 +203,6 @@ public class RoleController extends BaseController<Role> {
 					Resource r = new Resource();
 					r.setId(t);
 					r=resourceService.get(t);
-					//rSet.add(r);
 					//zn
 					if(!rSet.contains(r)){
 						if(r!=null){
@@ -253,7 +238,6 @@ public class RoleController extends BaseController<Role> {
 					Resource r = new Resource();
 					r.setId(t);
 					r=resourceService.get(t);
-					//rSet.add(r);
 					//zn
 					if(!rSet.contains(r)){
 						if(r!=null){
@@ -311,8 +295,6 @@ public class RoleController extends BaseController<Role> {
 		roleService.delete(id);
 	}
 
-	
-
 	public RoleService getRoleService() {
 		return roleService;
 	}
@@ -321,21 +303,6 @@ public class RoleController extends BaseController<Role> {
 		this.roleService = roleService;
 	}
 
-	public String getTree() {
-		return tree;
-	}
-
-	public void setTree(String tree) {
-		this.tree = tree;
-	}
-
-	public String getId() {
-		return id;
-	}
-
-	public void setId(String id) {
-		this.id = id;
-	}
 
 	public Role getRole() {
 		return role;
@@ -345,18 +312,4 @@ public class RoleController extends BaseController<Role> {
 		this.role = role;
 	}
 
-	public String getTree2() {
-		return tree2;
-	}
-
-	public void setTree2(String tree2) {
-		this.tree2 = tree2;
-	}
-	public String getTree3() {
-		return tree3;
-	}
-
-	public void setTree3(String tree3) {
-		this.tree3 = tree3;
-	}
 }

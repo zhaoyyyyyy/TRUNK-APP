@@ -31,7 +31,7 @@ import com.asiainfo.biapp.si.coc.jauth.sysmgr.entity.User;
 import com.asiainfo.biapp.si.coc.jauth.sysmgr.vo.UserVo;
 
 /**
- * @describe TODOs
+ * @describe
  * @author liukai
  * @date 2013-6-28
  */
@@ -42,14 +42,14 @@ public class UserDaoImpl extends BaseDaoImpl<User,String> implements UserDao {
 
 	/**
 	 * 根据查询条件查询出角色
-	 * @describe TODO
+	 * @describe
 	 * @author liukai
 	 * @param
 	 * @date 2013-6-21
 	 */
 	public JQGridPage<User> findUserList(JQGridPage<User> page, UserVo userVo) {
 		// 拼装hql 及参数
-		Map<String, Object> params = new HashMap<String, Object>();
+		Map<String, Object> params = new HashMap<>();
 		StringBuffer hql = new StringBuffer(
 				"from User r where r.status!=3 and r.id !='-2' ");
 		// 管理员
@@ -69,7 +69,6 @@ public class UserDaoImpl extends BaseDaoImpl<User,String> implements UserDao {
 		}
 		// 组织名称
 		if (StringUtils.isNotBlank(userVo.getOrgName())) {
-//			hql.append(" and exists (select 'X' from OrgUser o where o.userId=r.id and o.organization.fullName like :orgName)");
 			hql.append(" and exists(select 'X' from r.orgSet l where l.fullName like :fullName)");
 			params.put("fullName", "%" + userVo.getOrgName() + "%");
 		}

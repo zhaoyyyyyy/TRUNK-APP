@@ -10,14 +10,14 @@
 		<form id="saveDataForm">
 			<table border="0" width="100%" cellpadding="0" cellspacing="0" class="commTable">
 				<tbody>
-					<input id="resourceId" name="resourceId" type="hidden" v-model="resource.id" />
-					<input v-model="resource.parentId" name="parentId" id="parentId"  type="hidden"/>
+					<input id="resourceId" name="resourceId" type="hidden" v-model="resourceId" />
+					<input v-model="parentId" name="parentId" id="parentId"  type="hidden"/>
 					<tr>
 						<th>
 							资源名称<span class="req">*</span>
 						</th>
 						<td>
-							<v-input defValue="resource.resourceName" name="resourceName"
+							<v-input defValue="resourceName" name="resourceName"
 								id="resourceName" class="inputStyle easyui-validatebox"
 								required="true" maxLen="30" ></v-input>
 								  <!-- easyui-validatebox -->
@@ -27,7 +27,7 @@
 							资源编码<span class="req">*</span>
 						</th>
 						<td>
-							<v-input defValue="resource.resourceCode" name="resourceCode"
+							<v-input defValue="resourceCode" name="resourceCode"
 								id="resourceCode" class="inputStyle easyui-validatebox" 
 								required="true" maxLen="30" ></v-input>
 								 <!-- easyui-validatebox -->
@@ -39,7 +39,7 @@
 							资源值<span class="req">*</span>
 						</th>
 						<td colspan="3">
-							<v-input defValue="resource.address" name="address"
+							<v-input defValue="address" name="address"
 								id="address" class="inputStyle easyui-validatebox" 
 								required="true" maxLen="500"  style="width:400px;"/></v-input>
 								 <!-- easyui-validatebox -->
@@ -50,13 +50,13 @@
 							请选择父资源<span class="req">*</span>
 						</th>
 						<td>
-							<v-input defValue="resource.parentName" id="parentName" name="parentName" class="easyui-validatebox read_inputStyle" 
+							<v-input defValue="parentName" id="parentName" name="parentName" class="easyui-validatebox read_inputStyle" 
 								required="true" maxLen="30" readonly="readonly" /></v-input>
 						<th >
 							序号
 						</th>
 						<td>
-							<input v-model="resource.dispOrder" name="dispOrder"
+							<input v-model="dispOrder" name="dispOrder"
 								id="dispOrder" class="inputStyle"  maxLen="30" />
 						</td>
 					</tr>

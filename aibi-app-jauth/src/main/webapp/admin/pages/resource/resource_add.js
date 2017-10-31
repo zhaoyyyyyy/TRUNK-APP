@@ -18,14 +18,38 @@ window.jauth_onload = function() {
 							if(data.resource.parentId != null && data.resource.parentId != ""){
 								data.resource.parentName = data1.parent.resourceName;
 							}
-							new Vue({ el:'#saveDataForm', data: data });
+							new Vue({ 
+								el:'#saveDataForm', 
+								data : {
+									resourceId : data.resource.id ,
+									parentId : data.resource.parentId ,
+									resourceName : data.resource.resourceName ,
+									resourceCode : data.resource.resourceCode ,
+									address : data.resource.address ,
+									parentName : data.resource.parentName,
+									dispOrder : data.resource.dispOrder
+								}
+							});
 						}
 				});
 			}
 		});
+	}else{
+		new Vue({
+			el : '#saveDataForm',
+			data : {
+				resourceId : null ,
+				parentId : null ,
+				resourceName : null ,
+				resourceCode : null ,
+				address : null ,
+				parentName : null ,
+				dispOrder : null
+			}
+		});
 	}
 	var proscenium = "1"; // 前台
-	var app = "2"; //APP
+	var app = "2"; // APP
 	var backstage = "3"; // 后台
 	var roleId = "";
 	var mySimpleTree;
@@ -41,7 +65,7 @@ window.jauth_onload = function() {
 	var filterOrgType = null;
 	
 	
-	//前台
+	// 前台
 	var url1 = $.ctx + '/api/resource/renderOrgTree';
 	$.commAjax({
 		url : url1,
@@ -67,7 +91,7 @@ window.jauth_onload = function() {
 		},
 		maskMassage : '数据加载中...'
 	});
-	//后台
+	// 后台
 	$.commAjax({
 		url : url1,
 		postData:{"resourceId":backstage},
@@ -94,7 +118,7 @@ window.jauth_onload = function() {
 	});
 	
 	
-	//app 
+	// app
 	$.commAjax({
 		url : url1,
 		postData:{"resourceId":app},
