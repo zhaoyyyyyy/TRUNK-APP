@@ -1,6 +1,9 @@
 
 package com.asiainfo.biapp.si.coc.jauth.log.entity;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
+
 import com.asiainfo.biapp.si.coc.jauth.frame.entity.BaseEntity;
 
 /**
@@ -24,6 +27,20 @@ import com.asiainfo.biapp.si.coc.jauth.frame.entity.BaseEntity;
  * @author  panweiwei
  * @version 1.0.0.2017年10月20日
  */
+@Entity
 public class LogOperationDetail extends BaseEntity{
+	
+	private static final long serialVersionUID = 1L;
+
+	@Id
+	private String id;
+
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
 
 }

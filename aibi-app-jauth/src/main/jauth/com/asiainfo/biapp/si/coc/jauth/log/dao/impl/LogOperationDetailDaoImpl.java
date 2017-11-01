@@ -1,11 +1,13 @@
 
 package com.asiainfo.biapp.si.coc.jauth.log.dao.impl;
 
+import org.springframework.stereotype.Repository;
+
 import com.asiainfo.biapp.si.coc.jauth.frame.dao.BaseDaoImpl;
 import com.asiainfo.biapp.si.coc.jauth.log.dao.ILogOperationDetailDao;
-import com.asiainfo.biapp.si.coc.jauth.sysmgr.entity.Dic;
+import com.asiainfo.biapp.si.coc.jauth.log.entity.LogOperationDetail;
 
-
-public class LogOperationDetailDaoImpl extends BaseDaoImpl<Dic,String>  implements ILogOperationDetailDao {
+@Repository
+public class LogOperationDetailDaoImpl extends BaseDaoImpl<LogOperationDetail,String>  implements ILogOperationDetailDao {
 
 }
