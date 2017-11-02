@@ -18,6 +18,7 @@ import com.asiainfo.biapp.si.loc.base.utils.HttpUtil;
 @Service("userService")
 public class UserServiceImpl extends BaseServiceImpl<User, String> implements UserService{
 
+
 	@Override
 	protected BaseDao<User, String> getBaseDao() {
 		return null;

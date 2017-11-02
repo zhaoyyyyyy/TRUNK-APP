@@ -16,17 +16,15 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.boot.web.servlet.ServletComponentScan;
 import org.springframework.stereotype.Component;
 
-import com.asiainfo.biapp.si.loc.base.exception.AuthException;
-import com.asiainfo.biapp.si.loc.base.utils.StringUtil;
+import com.asiainfo.biapp.si.loc.auth.model.User;
+import com.asiainfo.biapp.si.loc.auth.utils.AuthUtils;
 
 @Component
 @ServletComponentScan
 @WebFilter(urlPatterns = "/*", filterName = "tokenAuthFilter")
 public class TokenAuthFilter implements Filter {
 	
-	public static final String JWT_TOKEN_REQUSET_PARAM = "token";
-	public static final String JWT_TOKEN_HEADER_PARAM = "X-Authorization";
-	public static final String JAUTH_ME_URL = "/api/me";
+	
 	
 	
     Log log = LogFactory.getLog(TokenAuthFilter.class);
@@ -38,31 +36,26 @@ public class TokenAuthFilter implements Filter {
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
-    	 //1.判断IP地址是否在白名单范围内
-    	 //TODO
+    	//1.请求JAUTH 判断IP地址是否在白名单范围内
     	
-         //2.拿到token（参数带着token 或者header带着X-Authorization ）
+    	
+    	//3.拿到用户信息
     	HttpServletRequest request = (HttpServletRequest)servletRequest;
-    	String token = request.getParameter(JWT_TOKEN_REQUSET_PARAM);
-    	if(StringUtil.isEmpty(token)){
-    		token = request.getHeader(JWT_TOKEN_HEADER_PARAM);
+    	User user = AuthUtils.getLoginUser(request);
+    	if(user != null){
+    		filterChain.doFilter(servletRequest,servletResponse);
+    	}else{
+    		//抛出异常
     	}
-    	if(StringUtil.isEmpty(token)){
-    		throw new AuthException();
-    	}
-        
-    	//2.拿到用户
+    	//4.判断用户是否能够访问该地址接口权限
     	
     	
-    	//3.判断用户是否能够访问该地址接口权限
-    	
-    	
-        //4 将用户及权限近期放入全局 kv缓存
+        //5. 将用户及权限近期放入全局 kv缓存
         
         
         
         
-        filterChain.doFilter(servletRequest,servletResponse);
+        
     }
 
     @Override

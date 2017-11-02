@@ -5,6 +5,10 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.web.bind.annotation.ModelAttribute;
 
+import com.asiainfo.biapp.si.loc.auth.model.User;
+import com.asiainfo.biapp.si.loc.auth.utils.AuthUtils;
+import com.asiainfo.biapp.si.loc.base.exception.AuthException;
+
 public abstract class BaseController<T>  {
 
 	private static final long serialVersionUID = -42856136017302010L;
@@ -25,6 +29,14 @@ public abstract class BaseController<T>  {
 	}
 	
 	
+	/**
+	 * 拿到当前登录用户及此用户权限信息
+	 * @return
+	 * @throws AuthException
+	 */
+	protected User getLoginUser() throws AuthException{
+		return AuthUtils.getLoginUser(request);
+	}
 	
 	
 	public String getCtx(){
