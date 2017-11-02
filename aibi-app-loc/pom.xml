@@ -15,7 +15,7 @@
 	<url>http://maven.apache.org</url>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<start-class>com.asiainfo.biapp.si.loc.core.LocApplication</start-class>
+		<start-class>com.asiainfo.biapp.si.loc.LocApplication</start-class>
 	</properties>
 	<dependencies>
 	

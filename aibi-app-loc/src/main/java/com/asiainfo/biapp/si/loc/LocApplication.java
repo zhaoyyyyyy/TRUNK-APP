@@ -1,4 +1,4 @@
-package com.asiainfo.biapp.si.loc.core;
+package com.asiainfo.biapp.si.loc;
 
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
