@@ -42,7 +42,7 @@ public class OrgUserDaoImpl extends BaseDaoImpl<OrgUser,String> implements OrgUs
 	public JQGridPage<OrgUser> findUserPageByParams(Page<OrgUser> page,
 			OrgUserVo orgUserVo) {
 		// 拼装hql 及参数
-		Map<String, Object> params = new HashMap<String, Object>();
+		Map<String, Object> params = new HashMap<>();
 		StringBuilder hql = new StringBuilder();
 		hql.append("from OrgUser where 1=1");
 		if (!StringUtil.isEmpty(orgUserVo.getOrgCode())) {
@@ -78,7 +78,7 @@ public class OrgUserDaoImpl extends BaseDaoImpl<OrgUser,String> implements OrgUs
 	public List<OrgUser> findOrgUserList(OrgUserVo orgUserVo) {
 		List<OrgUser> list = null;
 		StringBuilder hql = new StringBuilder();
-		Map<String, Object> map = new HashMap<String, Object>();
+		Map<String, Object> map = new HashMap<>();
 		hql.append("from OrgUser where 1=1");
 		if (!StringUtil.isEmpty(orgUserVo.getOrgCode())) {
 			hql.append(" and orgCode =:orgCode");
@@ -88,7 +88,6 @@ public class OrgUserDaoImpl extends BaseDaoImpl<OrgUser,String> implements OrgUs
 		if (!StringUtil.isEmpty(orgUserVo.getUserName())) {
 			hql.append(" and userName like :userName");
 			map.put("userName", "%" + orgUserVo.getUserName() + "%");
-//			System.out.println(orgUserVo.getUserName());
 		}
 
 		if (!StringUtil.isEmpty(orgUserVo.getStatus())) {
@@ -98,11 +97,6 @@ public class OrgUserDaoImpl extends BaseDaoImpl<OrgUser,String> implements OrgUs
 
 		if (orgUserVo.getJoinTime_min() != null
 				&& orgUserVo.getJoinTime_max() != null) {
-			// hql.append(" and oc.organization.createTime BETWEEN TO_DATE(:startTime,'"+
-			// Constants.ORACLEFORMAT+ "') and TO_DATE(:endTime,'"+
-			// Constants.ORACLEFORMAT + "')");
-			// map.put("startTime",orgUserVo.getJoinTime_min());
-			// map.put("endTime",orgUserVo.getJoinTime_max());
 			hql.append(" and joinTime between :joinTime_min and :joinTime_max");
 			map.put("joinTime_min", orgUserVo.getJoinTime_min());
 			map.put("joinTime_max", orgUserVo.getJoinTime_max());
@@ -126,11 +120,6 @@ public class OrgUserDaoImpl extends BaseDaoImpl<OrgUser,String> implements OrgUs
 	@Override
 	public Serializable updateStatus(String id) {
 		OrgUser orgUser = findOneByHql("from OrgUser where id =?", new Object[] { id });
-//		if (OrgConstants.OPEN.equals(orgUser.getStatus())) {
-//			orgUser.setStatus(OrgConstants.CLOSE);
-//		} else {
-//			orgUser.setStatus(OrgConstants.OPEN);
-//		}
 		updateStatus(id, orgUser.getStatus());
 		return orgUser.getStatus();
 	}
@@ -207,7 +196,7 @@ public class OrgUserDaoImpl extends BaseDaoImpl<OrgUser,String> implements OrgUs
 	public JQGridPage<OrgUser> findOfficialMemberPageByParams(
 			Page<OrgUser> page, OrgUserVo orgUserVo) {
 		StringBuilder hql = new StringBuilder();
-		Map<String, Object> map = new HashMap<String, Object>();
+		Map<String, Object> map = new HashMap<>();
 		hql.append("from OrgUser ou where 1=1");
 
 		if (!StringUtil.isEmpty(orgUserVo.getOrgCode())) {
@@ -218,7 +207,6 @@ public class OrgUserDaoImpl extends BaseDaoImpl<OrgUser,String> implements OrgUs
 		if (!StringUtil.isEmpty(orgUserVo.getUserName())) {
 			hql.append(" and userName like :userName");
 			map.put("userName", "%" + orgUserVo.getUserName() + "%");
-//			System.out.println(orgUserVo.getUserName());
 		}
 
 		if (!StringUtil.isEmpty(orgUserVo.getStatus())) {
@@ -228,11 +216,6 @@ public class OrgUserDaoImpl extends BaseDaoImpl<OrgUser,String> implements OrgUs
 
 		if (orgUserVo.getJoinTime_min() != null
 				&& orgUserVo.getJoinTime_max() != null) {
-			// hql.append(" and oc.organization.createTime BETWEEN TO_DATE(:startTime,'"+
-			// Constants.ORACLEFORMAT+ "') and TO_DATE(:endTime,'"+
-			// Constants.ORACLEFORMAT + "')");
-			// map.put("startTime",orgUserVo.getJoinTime_min());
-			// map.put("endTime",orgUserVo.getJoinTime_max());
 			hql.append(" and joinTime between :joinTime_min and :joinTime_max");
 			map.put("joinTime_min", orgUserVo.getJoinTime_min());
 			map.put("joinTime_max", orgUserVo.getJoinTime_max());
@@ -323,7 +306,7 @@ public class OrgUserDaoImpl extends BaseDaoImpl<OrgUser,String> implements OrgUs
 	public List<OrgUser> listOrgUser(String orgCode, String[] userTypes,
 			String[] notUserTypes) {
 		// 拼装hql 及参数
-		Map<String, Object> params = new HashMap<String, Object>();
+		Map<String, Object> params = new HashMap<>();
 		StringBuilder hql = new StringBuilder();
 		if (orgCode == null) {
 			return null;

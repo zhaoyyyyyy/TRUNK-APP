@@ -14,7 +14,6 @@ import com.asiainfo.biapp.si.coc.jauth.sysmgr.vo.RoleVo;
 /**
  * 角色管理Service
  * 
- * @describe TODO
  * @author liukai
  * @date 2013-6-21
  */
@@ -22,7 +21,6 @@ public interface RoleService extends BaseService<Role,String> {
 	/**
 	 * 根据查询条件查询出角色
 	 * 
-	 * @describe TODO
 	 * @author liukai
 	 * @param
 	 * @date 2013-6-21
@@ -32,7 +30,6 @@ public interface RoleService extends BaseService<Role,String> {
 	/**
 	 * 根据角色名查询角色
 	 * 
-	 * @describe TODO
 	 * @author liukai
 	 * @param
 	 * @date 2013-6-27

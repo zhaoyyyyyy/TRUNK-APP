@@ -9,7 +9,6 @@ import com.asiainfo.biapp.si.coc.jauth.frame.dao.BaseDao;
 import com.asiainfo.biapp.si.coc.jauth.sysmgr.entity.Dic;
 
 /**
- * @describe TODO
  * @author zhougz
  * @date 2013-5-24
  */

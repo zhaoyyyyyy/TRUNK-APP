@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script type="text/javascript" src="../../common/include.js"></script>
+<script type="text/javascript" src="task_detail.js"></script>
+</head>
+<body>
+	<div id="saveDataDiv">
+		<table border="0" width="100%" cellpadding="0" cellspacing="0"
+			class="commTable">
+			<tr>
+				<th>调度名称</th>
+				<td colspan="3"><span
+					style="fontSize: 20px; fontWeight: bolder">{{taskExeName}}</span></td>
+			</tr>
+			<tr>
+				<th>调度时间</th>
+				<td><span>{{taskExeTime}}</span></td>
+				<th>调度参数</th>
+				<td><span>{{sysId}}</span></td>
+			</tr>
+		</table>
+	</div>
+	<div style="padding-top: 15px;" class="formContent">
+		<form id="formSearch">
+			<table class="searchTable">
+				<tr>
+					<th>执行时间</th>
+					<td colspan="5"><input type="text" name="timeStart"
+						id="timeStart" class="inputStyle Wdate" /> 至 <input type="test"
+						name="timeEnd" id="timeEnd" class="inputStyle Wdate" /></td>
+				</tr>
+				<tr>
+					<th>执行状态</th>
+					<td><input class="inputStyle" type="text" name="exeStatus"
+						id="exeStatus" /></td>
+					<th>执行人</th>
+					<td><input class="inputStyle" type="text" name="exeStatus"
+						id="exeStatus" /></td>
+					<td><input type="button" name="button" value="查询" title="查询"
+						class="v_button" id="btnSearch" /><input type="reset"
+						name="button" value="重置" title="重置" class="r_button" /></td>
+				</tr>
+			</table>
+		</form>
+	</div>
+
+	<!-- 列表 -->
+	<div class="listArea">
+		<table id="mainGrid"></table>
+	</div>
+
+	<!-- 分页 -->
+	<div id="mainGridPager"></div>
+</body>
+</html>

@@ -24,7 +24,6 @@ import com.asiainfo.biapp.si.coc.jauth.sysmgr.utils.SessionInfoHolder;
 import com.asiainfo.biapp.si.coc.jauth.sysmgr.vo.ResourceVo;
 
 /**
- * @describe TODO
  * @author liukai
  * @date 2013-6-25
  */

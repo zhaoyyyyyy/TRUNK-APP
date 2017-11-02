@@ -8,7 +8,6 @@ import javax.servlet.http.HttpServletRequest;
 import com.asiainfo.biapp.si.coc.jauth.sysmgr.entity.User;
 
 /**
- * @describe TODO
  * @author zhougz
  * @date 2013-5-22
  */
@@ -39,7 +38,6 @@ public interface SessionInfoHolder {
 	public String getLoginId();
 	
 	/**
-	 * @describe TODO
 	 * @author liukai
 	 * @param
 	 * @date 2013-7-24

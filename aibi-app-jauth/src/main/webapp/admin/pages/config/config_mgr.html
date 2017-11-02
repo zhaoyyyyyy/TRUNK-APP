@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>配置管理</title>
+<script type="text/javascript" src="../../common/include.js"></script>
+<script type="text/javascript" src="config_mgr.js"></script>
+</head>
+<body>
+	<!-- 索引 -->
+	<div class="title" id="_title" width="1px"></div>
+	<div style="width: 22%; float: left; height: 92%; overflow: auto;">
+		<ul class="simpleTree" id="tree"
+			style="margin-left: 5px; margin-top: 5px;">
+			<li class="root"><span class='text' id="root">配置项树</span></li>
+		</ul>
+	</div>
+
+	<!-- 右边 -->
+	<div style="width: 76%; float: left; height: 100%; border-left: 2px solid #a9c7cf;">
+		<div class="formContent">
+			<form id="formSearch">
+				<input type="hidden" value="" name="parentId" id="parentId" />
+				<table class="searchTable">
+					<tr>
+
+						<th>配置编码</th>
+						<td><input class="inputStyle" type="text" name="configKey"
+							id="configKey" /></td>
+
+						<th>配置描述</th>
+						<td><input class="inputStyle" type="text" name="configDesc"
+							id="configDesc" /></td>
+
+						<td><input type="button" name="button" value="查询" title="查询"
+							class="v_button" id="btnSearch" /> 
+							<input type="reset"
+							name="button" value="重置" title="重置" class="r_button" /></td>
+					</tr>
+				</table>
+			</form>
+		</div>
+
+		<!-- 按钮  -->
+		<div id="buttonA" class="buttonArea operation" v-html="btn"
+			style="padding-top: 5px; padding-bottom: 5px; padding-left: 2px">
+		</div>
+
+		<!-- 列表 -->
+		<div class="listArea">
+			<table id="mainGrid"></table>
+		</div>
+
+		<!-- 分页 -->
+		<div id="mainGridPager"></div>
+	</div>
+</body>
+</html>

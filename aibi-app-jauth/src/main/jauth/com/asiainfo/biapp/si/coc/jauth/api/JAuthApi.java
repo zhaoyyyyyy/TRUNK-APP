@@ -44,7 +44,7 @@ import io.swagger.annotations.ApiOperation;
  *
  * Aug 4, 2016
  */
-@Api(value = "认证与授权接口",description = "用户登录,角色,资源等接口")
+@Api(value = "认证与授权接口",tags = "用户登录,角色,资源等接口")
 @RequestMapping("api/auth")
 @RestController
 public class JAuthApi {

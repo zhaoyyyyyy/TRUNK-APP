@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 
 import com.asiainfo.biapp.si.coc.jauth.frame.dao.BaseDao;
 import com.asiainfo.biapp.si.coc.jauth.frame.page.JQGridPage;
-import com.asiainfo.biapp.si.coc.jauth.frame.page.Page;
 import com.asiainfo.biapp.si.coc.jauth.frame.service.impl.BaseServiceImpl;
 import com.asiainfo.biapp.si.coc.jauth.sysmgr.dao.RoleDao;
 import com.asiainfo.biapp.si.coc.jauth.sysmgr.entity.Role;
@@ -19,8 +18,6 @@ import com.asiainfo.biapp.si.coc.jauth.sysmgr.utils.SessionInfoHolder;
 import com.asiainfo.biapp.si.coc.jauth.sysmgr.vo.RoleVo;
 
 /**
- * 
- * @describe TODO
  * @author liukai
  * @date 2013-6-21
  */
@@ -58,8 +55,6 @@ public class RoleServiceImpl extends BaseServiceImpl<Role,String> implements
 
 	/**
 	 * 根据查询条件查询出角色
-	 * 
-	 * @describe TODO
 	 * @author liukai
 	 * @param
 	 * @date 2013-6-21
@@ -69,7 +64,6 @@ public class RoleServiceImpl extends BaseServiceImpl<Role,String> implements
 	}
 	/**
 	 * 删除角色
-	 * @describe TODO
 	 * @author liukai
 	 * @param
 	 * @date 2013-6-27
@@ -89,7 +83,6 @@ public class RoleServiceImpl extends BaseServiceImpl<Role,String> implements
 	}
 	/**
 	 * 根据角色名查询角色
-	 * @describe TODO
 	 * @author liukai
 	 * @param
 	 * @date 2013-6-27

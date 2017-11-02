@@ -121,7 +121,7 @@ public class UserDaoImpl extends BaseDaoImpl<User,String> implements UserDao {
 	@Override
 	public List<User> listUser(UserVo userVo) {
 		// 拼装hql 及参数
-		Map<String, Object> params = new HashMap<String, Object>();
+		Map<String, Object> params = new HashMap<>();
 		StringBuffer hql = new StringBuffer(
 				"from User r where r.status!=3 and r.id !='-2'");
 		// 组织名称
@@ -159,9 +159,7 @@ public class UserDaoImpl extends BaseDaoImpl<User,String> implements UserDao {
 		}
 		// 该用户有数据范围
 		if (userVo.getGroupSet() != null && userVo.getGroupSet().size() > 0) {
-			// hql.append(" and  r.orgSet in ( ");
-			hql
-					.append(" and  exists (select 'X' from r.orgSet o where o.orgCode in (:orgSet)) ");
+			hql.append(" and  exists (select 'X' from r.orgSet o where o.orgCode in (:orgSet)) ");
 			Set<String> set = new HashSet<String>();
 
 			for (Group group : userVo.getGroupSet()) {
@@ -173,7 +171,7 @@ public class UserDaoImpl extends BaseDaoImpl<User,String> implements UserDao {
 			params.put("orgSet", set);
 		}
 		hql.append(" order by r.createTime desc,r.userName");
-		return (List<User>) super.findListByHql(hql.toString(), params);
+		return super.findListByHql(hql.toString(), params);
 	}
 
 	/**
@@ -185,7 +183,7 @@ public class UserDaoImpl extends BaseDaoImpl<User,String> implements UserDao {
 	 */
 	public List<User> findUserListByHql(UserVo userVo) {
 		// 拼装hql 及参数
-		Map<String, Object> params = new HashMap<String, Object>();
+		Map<String, Object> params = new HashMap<>();
 		StringBuffer hql = new StringBuffer(
 				"from User r where r.status!=3 and r.id !='-2' ");
 		// 组织名称
@@ -222,12 +220,9 @@ public class UserDaoImpl extends BaseDaoImpl<User,String> implements UserDao {
 			params.put("userName", "%" + userVo.getUserName() + "%");
 		}
 		// 该用户有数据范围
-		if (userVo.getGroupSet() != null && userVo.getGroupSet().size() > 0) {
-			// hql.append(" and  r.orgSet in ( ");
-			hql
-					.append(" and  exists (select 'X' from r.orgSet o where o.orgCode in (:orgSet)) ");
-			Set<String> set = new HashSet<String>();
-
+		if (!userVo.getGroupSet().isEmpty()) {
+			hql.append(" and  exists (select 'X' from r.orgSet o where o.orgCode in (:orgSet)) ");
+			Set<String> set = new HashSet<>();
 			for (Group group : userVo.getGroupSet()) {
 				for (Organization o : group.getOrganizationSet()) {
 					set.add(o.getOrgCode());
@@ -283,7 +278,7 @@ public class UserDaoImpl extends BaseDaoImpl<User,String> implements UserDao {
 		
 		
 		if (user != null) {
-			List<Resource> resources = new ArrayList<Resource>();
+			List<Resource> resources = new ArrayList<>();
 			Set<Role> roles = user.getRoleSet();
 			for (Role role : roles) {
 				Set<Resource> tempRes = role.getResourceSet();
@@ -303,7 +298,7 @@ public class UserDaoImpl extends BaseDaoImpl<User,String> implements UserDao {
 	 */
 	public List<User> findNotUserFriendList(JQGridPage<User> page, UserVo userVo) {
 		StringBuffer hql = new StringBuffer();
-		Map<String, Object> params = new HashMap<String, Object>();
+		Map<String, Object> params = new HashMap<>();
 		hql.append("from User su where 1=1 and su.status=1");
 		if (!StringUtil.isEmpty(userVo.getRealName())) {
 			hql.append(" and su.realName like :realName");
@@ -348,8 +343,7 @@ public class UserDaoImpl extends BaseDaoImpl<User,String> implements UserDao {
 	 * @return
 	 */
 	public List<User> findNotUserFriendList(String userId, String orgCode) {
-		return super
-				.findListByHql(
+		return super.findListByHql(
 						"from User su where su.id not in (select tu.id from UserFriend tu where exists"
 								+ "(select tg.id from UserFriendGroup tg where tg.id=tu.groupId and tg.userId=?) "
 								+ "and su.id=tu.userId)  and  exists (select 'X' from su.roleSet o where o.id not in "

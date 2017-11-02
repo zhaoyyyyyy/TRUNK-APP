@@ -13,7 +13,6 @@ import com.asiainfo.biapp.si.coc.jauth.sysmgr.entity.Organization;
 import com.asiainfo.biapp.si.coc.jauth.sysmgr.entity.User;
 
 /**
- * @describe TODO
  * @author zhougz
  * @date 2013-6-19
  */

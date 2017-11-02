@@ -15,7 +15,6 @@ import com.asiainfo.biapp.si.coc.jauth.sysmgr.entity.DicData;
 import com.asiainfo.biapp.si.coc.jauth.sysmgr.vo.DicDataVo;
 
 /**
- * @describe TODO
  * @author zhougz
  * @date 2013-5-24
  */
@@ -69,7 +68,7 @@ public class DicDataDaoImpl extends BaseDaoImpl<DicData,String> implements DicDa
 	
 	public JQGridPage<DicData> findDicDataList(JQGridPage<DicData> page,DicDataVo dicDataVo) {
 		//拼装hql 及参数
-		Map<String,Object> params = new HashMap<String,Object>();
+		Map<String,Object> params = new HashMap<>();
 		StringBuilder hql = new StringBuilder("from DicData where 1=1 ");
 		if(StringUtils.isNotBlank(dicDataVo.getDataName())){
 			hql.append(" and dataName like :dataName");

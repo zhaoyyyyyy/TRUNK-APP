@@ -16,7 +16,6 @@ public class LogInterfaceDetailController extends BaseController<LogInterfaceDet
 
     @Override
     protected BaseService<LogInterfaceDetail, String> getBaseService() {
-        // TODO Auto-generated method stub
         return null;
     }
 }

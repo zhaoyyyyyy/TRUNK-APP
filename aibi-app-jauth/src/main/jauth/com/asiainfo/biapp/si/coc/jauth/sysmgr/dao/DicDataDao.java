@@ -7,12 +7,10 @@ import java.util.List;
 
 import com.asiainfo.biapp.si.coc.jauth.frame.dao.BaseDao;
 import com.asiainfo.biapp.si.coc.jauth.frame.page.JQGridPage;
-import com.asiainfo.biapp.si.coc.jauth.frame.page.Page;
 import com.asiainfo.biapp.si.coc.jauth.sysmgr.entity.DicData;
 import com.asiainfo.biapp.si.coc.jauth.sysmgr.vo.DicDataVo;
 
 /**
- * @describe TODO
  * @author zhougz
  * @date 2013-5-24
  */

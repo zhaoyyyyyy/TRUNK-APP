@@ -9,8 +9,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.persistence.EntityManager;
-
 import org.springframework.stereotype.Repository;
 
 import com.asiainfo.biapp.si.coc.jauth.frame.dao.BaseDaoImpl;
@@ -44,7 +42,7 @@ public class OrganizationDaoImpl extends BaseDaoImpl<Organization,String> implem
 		.append(" exists (select 1 from T_SYS_USERGROUP ug where ug.user_id = ? and ug.group_id = go.group_id)) order by o.id ");
 		List<Organization> list = super.findListBySql(sql.toString(), userId);
 		
-		List<Organization> returnList = new ArrayList<Organization>();
+		List<Organization> returnList = new ArrayList<>();
 		for(int i = 0;i<list.size();i++){
 		    Organization o = new Organization();
 		    Object obj = list.get(i);
@@ -76,9 +74,8 @@ public class OrganizationDaoImpl extends BaseDaoImpl<Organization,String> implem
 	 */
 	public List<Organization> selectUserAllParentCode(User user) {
 		// 该用户有组织
-		if (user.getOrgSet() != null && user.getOrgSet().size() > 0) {
-			Map<String, Object> params = new HashMap<String, Object>();
-			
+		if (!user.getOrgSet().isEmpty()) {
+			Map<String, Object> params = new HashMap<>();
 			StringBuffer sql = new StringBuffer(
 			"select distinct o.orgCode  from T_SYS_ORGANIZATION o");
 			sql.append(" where o.orgcode in(");
@@ -125,8 +122,8 @@ public class OrganizationDaoImpl extends BaseDaoImpl<Organization,String> implem
 	 */
 	@Override
 	public Serializable updateStatus(String orgCode) {
-		Organization organization = (Organization) findOneByHql(
-				"from Organization where orgCode =?", new Object[] { orgCode });
+		Organization organization = findOneByHql(
+				"from Organization where orgCode =?", orgCode);
 		if ("OPEN".equals(organization.getOrgStatus())) {
 			organization.setOrgStatus("CLOSE");
 		} else {
@@ -147,7 +144,7 @@ public class OrganizationDaoImpl extends BaseDaoImpl<Organization,String> implem
 	public Serializable updateStatus(String orgCode, String orgStatus) {
 		return excuteHql(
 				"update Organization set orgStatus =? where orgCode =?",
-				new Object[] { orgStatus, orgCode });
+				orgStatus, orgCode);
 	}
 
 	/**
@@ -160,7 +157,7 @@ public class OrganizationDaoImpl extends BaseDaoImpl<Organization,String> implem
 	@Override
 	public Serializable updateType(String orgCode, String orgType) {
 		return excuteHql("update Organization set orgType =? where orgCode =?",
-				new Object[] { orgType, orgCode });
+				orgType, orgCode);
 	}
 
 	/**
@@ -175,7 +172,7 @@ public class OrganizationDaoImpl extends BaseDaoImpl<Organization,String> implem
 			String interrogateType) {
 		return excuteHql(
 				"update Organization set interrogateType =? where orgCode =?",
-				new Object[] { interrogateType, orgCode });
+				interrogateType, orgCode);
 	}
 
 	/**
@@ -234,7 +231,7 @@ public class OrganizationDaoImpl extends BaseDaoImpl<Organization,String> implem
 	@Override
 	public List<Organization> listOrganization(String orgType) {
 		// 拼装hql 及参数
-		Map<String, Object> params = new HashMap<String, Object>();
+		Map<String, Object> params = new HashMap<>();
 		StringBuilder hql = new StringBuilder();
 		hql.append("from Organization where 1=1");
 		if (StringUtil.isNotEmpty(orgType)) {
@@ -256,7 +253,7 @@ public class OrganizationDaoImpl extends BaseDaoImpl<Organization,String> implem
 	@Override
 	public List<Organization> listOrganization(String orgType, String parentId) {
 		// 拼装hql 及参数
-		Map<String, Object> params = new HashMap<String, Object>();
+		Map<String, Object> params = new HashMap<>();
 		StringBuilder hql = new StringBuilder();
 		hql.append("from Organization where 1=1");
 		if (StringUtil.isNotEmpty(orgType)) {
@@ -294,14 +291,15 @@ public class OrganizationDaoImpl extends BaseDaoImpl<Organization,String> implem
 	 */
 	public List<Organization> findListOrganization(String orgCode) {
 		String hql = "from Organization";
+		String code = "";
 		if (!StringUtil.isEmpty(orgCode)) {
 			hql = "from Organization where orgCode=?";
 			Organization organization = super.findOneByHql(hql, orgCode);
 			if (organization != null) {
 				hql = "from Organization where parentId=? order by simpleName desc";
-				orgCode = organization.getId();
+				code = organization.getId();
 			}
 		}
-		return findListByHql(hql, orgCode);
+		return findListByHql(hql, code);
 	}
 }

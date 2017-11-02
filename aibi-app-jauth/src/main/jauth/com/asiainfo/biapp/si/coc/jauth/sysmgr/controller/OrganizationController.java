@@ -96,7 +96,7 @@ public class OrganizationController extends BaseController<Organization>{
 	@ApiImplicitParam(name = "orgCode", value = "组织信息主键", required = true, paramType = "query" ,dataType = "string")
 	@RequestMapping(value="/get",method=RequestMethod.POST,  produces={ MediaType.APPLICATION_JSON_VALUE })
 	public Map<String, Object> detail(String orgCode){
-		Map<String,Object> map = new HashMap<String,Object>();
+		Map<String,Object> map = new HashMap<>();
 		Organization organization = organizationService.getOrgByOrgCode(orgCode);
 		map.put("organization", organization);
 		return map;
@@ -105,9 +105,9 @@ public class OrganizationController extends BaseController<Organization>{
 	@ApiImplicitParam(name = "orgCode", value = "组织信息主键", required = true, paramType = "query" ,dataType = "string")
 	@RequestMapping(value="/parentOrg/get",method=RequestMethod.POST,  produces={ MediaType.APPLICATION_JSON_VALUE })
 	public Map<String, Object> queryParent(String orgCode){
-		Map<String,Object> map = new HashMap<String,Object>();
+		Map<String,Object> map = new HashMap<>();
 		Organization organization = organizationService.getOrgByOrgCode(orgCode);
-		Organization parent = new Organization();
+		Organization parent;
 		if(organization.getParentId()!=null&&organization.getParentId()!=""){
 			parent=organizationService.get(organization.getParentId());
 		}else{
@@ -148,7 +148,7 @@ public class OrganizationController extends BaseController<Organization>{
 		
 		return htmlCon.toString();
 	}
-	private String getLeaf(Organization common, String treeType, StringBuffer htmlCon){
+	private String getLeaf(Organization common, StringBuffer htmlCon){
 		String orgType = common.getOrgType();
 		String status = common.getInterrogateType();
 		htmlCon.append("<li id='").append(common.getOrgCode()).append("' name='").append(common.getId()).append("' selectable='true'");
@@ -176,10 +176,10 @@ public class OrganizationController extends BaseController<Organization>{
 			if(StringUtil.isNotEmpty(treeType) && treeType.indexOf(common.getOrgType())== -1){
 				continue;
 			}
-			if (common.getChildren() != null && common.getChildren().size() != 0) {
+			if (!common.getChildren().isEmpty()) {
 				getTree(common, selectable, treeType, htmlCon,isAsynchron);
 			}else{
-				getLeaf(common, treeType, htmlCon);
+				getLeaf(common, htmlCon);
 			}
 		}
 		return htmlCon.toString();

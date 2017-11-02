@@ -7,13 +7,11 @@ import java.util.List;
 
 import com.asiainfo.biapp.si.coc.jauth.frame.dao.BaseDao;
 import com.asiainfo.biapp.si.coc.jauth.frame.page.JQGridPage;
-import com.asiainfo.biapp.si.coc.jauth.frame.page.Page;
 import com.asiainfo.biapp.si.coc.jauth.sysmgr.entity.Resource;
 import com.asiainfo.biapp.si.coc.jauth.sysmgr.entity.User;
 import com.asiainfo.biapp.si.coc.jauth.sysmgr.vo.ResourceVo;
 
 /**
- * @describe TODO
  * @author liukai
  * @date 2013-6-25
  */

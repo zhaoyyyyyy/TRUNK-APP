@@ -26,9 +26,8 @@ import com.asiainfo.biapp.si.coc.jauth.frame.service.BaseService;
 import com.asiainfo.biapp.si.coc.jauth.frame.util.StringUtil;
 import com.asiainfo.biapp.si.coc.jauth.sysmgr.entity.DicData;
 import com.asiainfo.biapp.si.coc.jauth.sysmgr.service.DicDataService;
-import com.asiainfo.biapp.si.coc.jauth.sysmgr.service.DicService;
 import com.asiainfo.biapp.si.coc.jauth.sysmgr.vo.DicDataVo;
-//@Api(value = "数据字典管理")
+@Api(value = "数据字典管理")
 @RequestMapping("api/datadic")
 @RestController
 public class DicDataController extends BaseController<DicData>{

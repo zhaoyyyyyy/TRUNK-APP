@@ -175,7 +175,6 @@ public interface OrgUserDao extends BaseDao<OrgUser,String> {
 	
 	/**
 	 * 
-	 * @describe TODO
 	 * @author liukai
 	 * @param
 	 * @date 2013-10-25

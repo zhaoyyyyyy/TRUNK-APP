@@ -11,9 +11,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
-import com.asiainfo.biapp.si.coc.jauth.frame.Constants;
 import com.asiainfo.biapp.si.coc.jauth.frame.ssh.extend.SpringContextHolder;
-import com.asiainfo.biapp.si.coc.jauth.security.auth.ajax.AjaxLoginProcessingFilter;
 import com.asiainfo.biapp.si.coc.jauth.security.model.UserContext;
 import com.asiainfo.biapp.si.coc.jauth.sysmgr.entity.User;
 import com.asiainfo.biapp.si.coc.jauth.sysmgr.service.UserService;

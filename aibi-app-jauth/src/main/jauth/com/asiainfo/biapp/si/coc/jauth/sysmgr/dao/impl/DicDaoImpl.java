@@ -1,9 +1,6 @@
 package com.asiainfo.biapp.si.coc.jauth.sysmgr.dao.impl;
 
-import java.io.Serializable;
 import java.util.List;
-
-import javax.persistence.EntityManager;
 
 import org.springframework.stereotype.Repository;
 
@@ -12,7 +9,6 @@ import com.asiainfo.biapp.si.coc.jauth.sysmgr.dao.DicDao;
 import com.asiainfo.biapp.si.coc.jauth.sysmgr.entity.Dic;
 
 /**
- * @describe TODO
  * @author zhougz
  * @date 2013-5-24
  */

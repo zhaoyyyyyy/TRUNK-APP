@@ -7,7 +7,6 @@ import org.apache.log4j.MDC;
 import org.slf4j.Logger;
 
 /**
- * @describe TODO
  * @author zhougz
  * @date 2013-6-4
  */

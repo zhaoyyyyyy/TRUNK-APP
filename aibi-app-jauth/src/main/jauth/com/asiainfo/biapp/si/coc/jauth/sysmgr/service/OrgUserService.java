@@ -15,7 +15,6 @@ import com.asiainfo.biapp.si.coc.jauth.sysmgr.entity.OrgUser;
 import com.asiainfo.biapp.si.coc.jauth.sysmgr.vo.OrgUserVo;
 
 /**
- * @describe TODO
  * @author ljs
  * @date 2013-6-26
  */
@@ -242,7 +241,6 @@ public interface OrgUserService extends BaseService<OrgUser,String>{
 	
 	/**
 	 * 
-	 * @describe TODO
 	 * @author liukai
 	 * @param
 	 * @date 2013-10-25

@@ -11,7 +11,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * @describe TODO
  * @author zhougz
  * @date 2013-6-4
  */

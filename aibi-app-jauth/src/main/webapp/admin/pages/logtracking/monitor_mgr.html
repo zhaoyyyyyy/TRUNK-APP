@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script type="text/javascript" src="../../common/include.js"></script>
+<script type="text/javascript" src="monitor_mgr.js"></script>
+</head>
+<body>
+	<!-- 索引 -->
+	<div class="title" id="_title" width="1px"></div>
+
+	<div class="formContent">
+		<form id="formSearch">
+			<table class="searchTable">
+				<tr>
+					<th>时间</th>
+					<td colspan="5"><input type="text" name="timeStart"
+						id="timeStart" class="inputStyle Wdate" /> - <input type="test"
+						name="timeEnd" id="timeEnd" class="inputStyle Wdate" /></td>
+					<td><input type="button" name="button" value="查询" title="查询"
+						class="v_button" id="btnSearch" /></td>
+				</tr>
+				<tr>
+					<th>用户名</th>
+					<td><input class="inputStyle" type="text" /></td>
+					<th>LEVEL</th>
+					<td><input dataDic="LEVEL" class="inputStyle" type="text" /></td>
+					<th>MESSAGE</th>
+					<td><input class="inputStyle" type="text" /></td>
+					<td><input type="reset" name="button" value="重置" title="重置"
+						class="r_button" /></td>
+				</tr>
+			</table>
+		</form>
+	</div>
+
+	<!-- 列表 -->
+	<div class="listArea">
+		<table id="mainGrid"></table>
+	</div>
+
+	<!-- 分页 -->
+	<div id="mainGridPager"></div>
+
+</body>
+</html>

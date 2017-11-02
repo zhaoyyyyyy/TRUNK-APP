@@ -17,7 +17,6 @@ import org.springframework.stereotype.Repository;
 import com.asiainfo.biapp.si.coc.jauth.frame.page.Page;
 
 /**
- * @describe TODO
  * @author zhougz
  * @date 2013-5-22
  */

@@ -6,7 +6,6 @@ package com.asiainfo.biapp.si.coc.jauth.sysmgr.vo;
 import com.asiainfo.biapp.si.coc.jauth.sysmgr.entity.Group;
 
 /**
- * @describe TODO
  * @author liukai
  * @date 2013-6-27
  */

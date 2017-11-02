@@ -24,7 +24,6 @@ import com.asiainfo.biapp.si.coc.jauth.sysmgr.service.OrganizationService;
 import com.asiainfo.biapp.si.coc.jauth.sysmgr.vo.GroupVo;
 
 /**
- * @describe TODO
  * @author liukai
  * @date 2013-6-27
  */
@@ -80,7 +79,6 @@ public class GroupServiceImpl extends BaseServiceImpl<Group,String> implements
 
 	/**
 	 * 
-	 * @describe TODO
 	 * @author liukai
 	 * @param
 	 * @date 2013-6-28

@@ -19,6 +19,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import org.apache.commons.lang3.StringUtils;
 import org.hibernate.annotations.GenericGenerator;
 
 import com.asiainfo.biapp.si.coc.jauth.frame.entity.BaseExportEntity;
@@ -42,9 +43,11 @@ public class User extends BaseExportEntity {
 	@GenericGenerator(name="idGenerator", strategy="uuid") 
 	@GeneratedValue(generator="idGenerator") //使用uuid的生成策略  
     private String id;
+	@Override
     public String getId() {
 		return id;
 	}
+	@Override
 	public void setId(String id) {
 		this.id = id;
 	}
@@ -274,10 +277,10 @@ public class User extends BaseExportEntity {
 	public String orgNames;
 
 	public String getOrgNames() {
-		if (null != orgSet && orgSet.size() > 0) {
+		if (!orgSet.isEmpty()) {
 			StringBuffer s = new StringBuffer();
 			for (Organization org : orgSet) {
-				if (null != s && s.length() > 0) {
+				if (!StringUtils.isBlank(s)) {
 					s.append("/");
 				}
 				s.append(org.getSimpleName());
@@ -298,10 +301,10 @@ public class User extends BaseExportEntity {
 	public String roleNames;
 
 	public String getRoleNames() {
-		if (null != roleSet && roleSet.size() > 0) {
+		if (!roleSet.isEmpty()) {
 			StringBuffer s = new StringBuffer();
 			for (Role role : roleSet) {
-				if (null != s && s.length() > 0) {
+				if (!StringUtils.isBlank(s)) {
 					s.append("/");
 				}
 				s.append(role.getRoleName());
@@ -319,10 +322,10 @@ public class User extends BaseExportEntity {
 	public String groupNames;
 	
 	public String getGroupNames() {
-		if (null != groupSet && groupSet.size() > 0) {
+		if (!groupSet.isEmpty()) {
 			StringBuffer s = new StringBuffer();
 			for (Group group : groupSet) {
-				if (null != s && s.length() > 0) {
+				if (!StringUtils.isBlank(s)) {
 					s.append("/");
 				}
 				s.append(group.getGroupName());

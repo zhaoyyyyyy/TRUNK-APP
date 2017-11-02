@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script type="text/javascript" src="../../common/include.js"></script>
+<script type="text/javascript" src="task_add.js"></script>
+</head>
+<body>
+	<form id="saveDataForm">
+		<table border="0" width="100%" cellpadding="0" cellspacing="0"
+			class="commTable">
+			<tbody>
+				<tr style="display:none">
+					<td colspan="8"><input id="exeType" name="exeType" v-model="exeType" type="text" readonly="readonly" />
+						<input id="taskExeId" name="taskExeId" v-model="taskExeId" type="text" readonly="readonly" />
+					</td>
+				</tr>
+				<tr>
+					<th>父调度</th>
+					<td colspan="7"><input id="parentExeName" name="parentExeName"
+							v-model="parentExeName" readonly="readonly"
+							class="read_inputStyle"></input><input id="parentExeId" name="parentExeId" v-model="parentExeId" type="hidden"></input></td>
+				</tr>
+				<tr>
+					<th>任务选择</th>
+					<td colspan="7"><v-input v-bind:defvalue="taskId" id="taskId" name="taskId"
+							 dataDic="DDRW" class="inputStyle" type="text"></v-input></td>
+				</tr>
+				<tr>
+					<th>调度名称<span class="required">*</span></th>
+					<td colspan="7"><input id="taskExeName" name="taskExeName" v-model="taskExeName"
+						onblur="fun_jiaoyan(this)" class="inputStyle easyui-validatebox"></input>
+						<span v-bind:style="{color:msgColor}">{{message}}</span><input type="hidden" id="oldName" name="oldName"></input></td>
+				</tr>
+				<tr>
+					<th>调度参数</th>
+					<td colspan="7"><input id="sysId" name="sysId" v-model="sysId" class="inputStyle" /></td>
+				</tr>
+				<tr v-show="showChoose">
+					<td colspan="8">
+						<div>
+							<span v-bind:style="{fontWeight:timedExecution}">&nbsp;&nbsp;<a style="text-decoration:none;display:inline-block;cursor:pointer;font-size:20px" onclick="fun_to_qiehuan(1)">{{timedCircle}}定时执行</a>&nbsp;&nbsp;&nbsp;</span>
+							<span v-bind:style="{fontWeight:delayExecution}">&nbsp;&nbsp;&nbsp;&nbsp;<a style="text-decoration:none;display:inline-block;cursor:pointer;font-size:20px" onclick="fun_to_qiehuan(2)">{{delayCircle}}延时执行</a></span>
+						</div>
+					</td>
+				</tr>
+			</tbody>
+			<tbody v-show="showTimed">
+				<tr>
+					<td></td>
+					<td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;秒</td>
+					<td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;分</td>
+					<td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;时</td>
+					<td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;日</td>
+					<td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;月</td>
+					<td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;年</td>
+					<td></td>
+				</tr>
+				<tr>
+					<th>调度时间规则<span class="required">*</span></th>
+					<td><input class="exeTime" id="taskExeTime1" name="taskExeTime" onkeyup="this.value=this.value.replace(/[\u4e00-\u9fa5]/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')" size="8" /></td>
+					<td><input class="exeTime" id="taskExeTime2" name="taskExeTime" onkeyup="this.value=this.value.replace(/[\u4e00-\u9fa5]/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')" size="8" /></td>
+					<td><input class="exeTime" id="taskExeTime3" name="taskExeTime" onkeyup="this.value=this.value.replace(/[\u4e00-\u9fa5]/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')" size="8" /></td>
+					<td><input class="exeTime" id="taskExeTime4" name="taskExeTime" onkeyup="this.value=this.value.replace(/[\u4e00-\u9fa5]/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')" size="8" /></td>
+					<td><input class="exeTime" id="taskExeTime5" name="taskExeTime" onkeyup="this.value=this.value.replace(/[\u4e00-\u9fa5]/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')" size="8" /></td>
+					<td><input class="exeTime" id="taskExeTime6" name="taskExeTime" onkeyup="this.value=this.value.replace(/[\u4e00-\u9fa5]/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')" size="8" /></td>
+					<td></td>
+				</tr>
+				<tr>
+					<th>每小时执行一次</th>
+					<td><input value="0" readonly="readonly" class="read_inputStyle" size="10" /></td>
+					<td><input value="0" readonly="readonly" class="read_inputStyle" size="10" /></td>
+					<td><input value="1/1" readonly="readonly" class="read_inputStyle" size="10" /></td>
+					<td><input value="*" readonly="readonly" class="read_inputStyle" size="10" /></td>
+					<td><input value="*" readonly="readonly" class="read_inputStyle" size="10" /></td>
+					<td><input value="?" readonly="readonly" class="read_inputStyle" size="10" /></td>
+					<td><a style="text-decoration:none;display:inline-block;cursor:pointer;font-weight:bold" onclick="fun_to_change(1)">使用</a></td>
+				</tr>
+				<tr>
+					<th>每月8日执行</th>
+					<td><input value="0" readonly="readonly" class="read_inputStyle" size="10" /></td>
+					<td><input value="0" readonly="readonly" class="read_inputStyle" size="10" /></td>
+					<td><input value="0" readonly="readonly" class="read_inputStyle" size="10" /></td>
+					<td><input value="8/1" readonly="readonly" class="read_inputStyle" size="10" /></td>
+					<td><input value="*" readonly="readonly" class="read_inputStyle" size="10" /></td>
+					<td><input value="?" readonly="readonly" class="read_inputStyle" size="10" /></td>
+					<td><a style="text-decoration:none;display:inline-block;cursor:pointer;font-weight:bold" onclick="fun_to_change(2)">使用</a></td>
+				</tr>
+				<tr>
+					<th>每20分钟执行一次</th>
+					<td><input value="0" readonly="readonly" class="read_inputStyle" size="10" /></td>
+					<td><input value="20/1" readonly="readonly" class="read_inputStyle" size="10" /></td>
+					<td><input value="*" readonly="readonly" class="read_inputStyle" size="10" /></td>
+					<td><input value="*" readonly="readonly" class="read_inputStyle" size="10" /></td>
+					<td><input value="*" readonly="readonly" class="read_inputStyle" size="10" /></td>
+					<td><input value="?" readonly="readonly" class="read_inputStyle" size="10" /></td>
+					<td><a style="text-decoration:none;display:inline-block;cursor:pointer;font-weight:bold" onclick="fun_to_change(3)">使用</a></td>
+				</tr>
+			</tbody>
+			<tbody v-show="showDelay">
+				<tr>
+					<td colspan="8">
+						在父调度执行后&nbsp;&nbsp;&nbsp;<input class="exeTime" id="taskExeTime" name="taskExeTime" onkeyup="this.value=this.value.replace(/[\u4e00-\u9fa5]/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')" size="5"></input>&nbsp;&nbsp;&nbsp;秒执行
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</form>
+</body>
+</html>

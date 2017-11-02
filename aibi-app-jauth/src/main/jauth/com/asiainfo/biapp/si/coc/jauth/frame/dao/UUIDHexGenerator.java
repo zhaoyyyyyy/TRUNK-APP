@@ -5,7 +5,6 @@ package com.asiainfo.biapp.si.coc.jauth.frame.dao;
 import java.net.InetAddress;
 
 /**
- * @describe TODO
  * @author zhougz
  * @date 2013-5-27
  */

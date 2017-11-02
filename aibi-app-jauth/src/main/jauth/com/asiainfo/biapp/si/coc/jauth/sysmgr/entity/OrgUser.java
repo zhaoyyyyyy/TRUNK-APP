@@ -7,7 +7,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Table;
 
 import com.asiainfo.biapp.si.coc.jauth.frame.entity.BaseExportEntity;
 import com.asiainfo.biapp.si.coc.jauth.sysmgr.utils.DataDicUtil;
@@ -42,9 +41,11 @@ public class OrgUser extends BaseExportEntity {
 	@Id @Column(name="ID")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String id;
+	@Override
     public String getId() {
 		return id;
 	}
+	@Override
     public void setId(String id) {
 		this.id = id;
 	}

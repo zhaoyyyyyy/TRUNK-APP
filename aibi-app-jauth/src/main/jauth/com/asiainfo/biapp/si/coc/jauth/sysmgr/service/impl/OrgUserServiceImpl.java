@@ -30,7 +30,6 @@ import com.asiainfo.biapp.si.coc.jauth.sysmgr.service.UserService;
 import com.asiainfo.biapp.si.coc.jauth.sysmgr.utils.SessionInfoHolder;
 import com.asiainfo.biapp.si.coc.jauth.sysmgr.vo.OrgUserVo;
 /**
- * @describe TODO
  * @author ljs
  * @date 2013-6-26
  */

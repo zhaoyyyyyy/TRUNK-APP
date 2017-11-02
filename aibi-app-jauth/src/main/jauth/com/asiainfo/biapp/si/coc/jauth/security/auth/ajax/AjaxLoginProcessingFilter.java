@@ -20,7 +20,6 @@ import org.springframework.security.web.authentication.AbstractAuthenticationPro
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
-import com.asiainfo.biapp.si.coc.jauth.common.WebUtil;
 import com.asiainfo.biapp.si.coc.jauth.frame.util.StringUtil;
 import com.asiainfo.biapp.si.coc.jauth.security.exceptions.AuthMethodNotSupportedException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -33,7 +32,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  * Aug 3, 2016
  */
 public class AjaxLoginProcessingFilter extends AbstractAuthenticationProcessingFilter {
-	private static final Logger LOGGER = LoggerFactory.getLogger(AjaxLoginProcessingFilter.class);
+	private static final Logger logger = LoggerFactory.getLogger(AjaxLoginProcessingFilter.class);
 
     private final AuthenticationSuccessHandler successHandler;
     private final AuthenticationFailureHandler failureHandler;
@@ -52,8 +51,8 @@ public class AjaxLoginProcessingFilter extends AbstractAuthenticationProcessingF
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
             throws IOException, ServletException {
         if (!HttpMethod.POST.name().equals(request.getMethod()) ) {
-            if(LOGGER.isDebugEnabled()) {
-            	LOGGER.debug("Authentication method not supported. Request method: " + request.getMethod());
+            if(logger.isDebugEnabled()) {
+            	logger.debug("Authentication method not supported. Request method: " + request.getMethod());
             }
             throw new AuthMethodNotSupportedException("Authentication method not supported");
         }

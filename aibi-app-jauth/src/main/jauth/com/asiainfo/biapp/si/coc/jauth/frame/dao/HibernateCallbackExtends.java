@@ -14,7 +14,6 @@ import org.springframework.orm.hibernate3.HibernateCallback;
 import com.asiainfo.biapp.si.coc.jauth.frame.page.Page;
 
 /**
- * @describe TODO
  * @author zhougz
  * @date 2013-5-27
  */

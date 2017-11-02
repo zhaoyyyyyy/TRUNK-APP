@@ -35,7 +35,6 @@ public class LogOperationDetailController  extends BaseController<LogOperationDe
 
     @Override
     protected BaseService<LogOperationDetail, String> getBaseService() {
-        // TODO Auto-generated method stub
         return null;
     }
     /**

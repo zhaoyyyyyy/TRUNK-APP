@@ -10,7 +10,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.hibernate.Query;
 
 /**
- * @describe TODO
  * @author zhougz
  * @date 2013-5-27
  */

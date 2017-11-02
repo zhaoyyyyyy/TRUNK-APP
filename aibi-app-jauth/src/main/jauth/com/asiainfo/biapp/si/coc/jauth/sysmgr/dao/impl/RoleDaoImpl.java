@@ -22,7 +22,6 @@ import com.asiainfo.biapp.si.coc.jauth.sysmgr.entity.Role;
 import com.asiainfo.biapp.si.coc.jauth.sysmgr.vo.RoleVo;
 
 /**
- * @describe TODO
  * @author liukai
  * @date 2013-6-21
  */
@@ -32,25 +31,23 @@ public class RoleDaoImpl extends BaseDaoImpl<Role,String> implements RoleDao {
 
 	/**
 	 * 查询角色
-	 * 
-	 * @describe TODO
 	 * @author liukai
 	 * @param
 	 * @date 2013-6-21
 	 */
 	public JQGridPage<Role> findRoleList(JQGridPage<Role> page, RoleVo roleVo) {
 		// 拼装hql 及参数
-		Map<String, Object> params = new HashMap<String, Object>();
+		Map<String, Object> params = new HashMap<>();
 		StringBuffer hql = new StringBuffer("from Role r where 1=1");
 		//创建人ID
-		if (StringUtils.isNotBlank(roleVo.createUserId)) {
+		if (StringUtils.isNotBlank(roleVo.getCreateUserId())) {
 			hql.append(" and r.createUserId = :createUserId");
-			params.put("createUserId", roleVo.createUserId);
+			params.put("createUserId", roleVo.getCreateUserId());
 		}
 		// 角色名称
-		if (StringUtils.isNotBlank(roleVo.roleName)) {
+		if (StringUtils.isNotBlank(roleVo.getRoleName())) {
 			hql.append(" and r.roleName LIKE :roleName");
-			params.put("roleName", "%" + roleVo.roleName + "%");
+			params.put("roleName", "%" + roleVo.getRoleName() + "%");
 		}
 		// 创建时间
 		if (StringUtils.isNotBlank(roleVo.roleCreateTimeStart)) {
@@ -100,15 +97,13 @@ public class RoleDaoImpl extends BaseDaoImpl<Role,String> implements RoleDao {
 
 	/**
 	 * 根据角色名查询角色
-	 * 
-	 * @describe TODO
 	 * @author liukai
 	 * @param
 	 * @date 2013-6-27
 	 */
 	public List<Role> findRoleByName(String id, String roleName) {
 		// 拼装hql 及参数
-		Map<String, Object> params = new HashMap<String, Object>();
+		Map<String, Object> params = new HashMap<>();
 		StringBuffer hql = new StringBuffer(
 				"from Role r where roleName = :roleName");
 		params.put("roleName", roleName);

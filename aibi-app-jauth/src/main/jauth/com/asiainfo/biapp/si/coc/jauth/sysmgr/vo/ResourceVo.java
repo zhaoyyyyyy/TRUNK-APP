@@ -5,7 +5,6 @@ import com.asiainfo.biapp.si.coc.jauth.sysmgr.entity.Resource;
 /**
  * 角色Vo
  * 
- * @describe TODO
  * @author liukai
  * @date 2013-6-21
  */

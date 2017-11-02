@@ -15,7 +15,6 @@ import com.asiainfo.biapp.si.coc.jauth.sysmgr.entity.User;
 import com.asiainfo.biapp.si.coc.jauth.sysmgr.vo.ResourceVo;
 
 /**
- * @describe TODO
  * @author liukai
  * @date 2013-6-25
  */

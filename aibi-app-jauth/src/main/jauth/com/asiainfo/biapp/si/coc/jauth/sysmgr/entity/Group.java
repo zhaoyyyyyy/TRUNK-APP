@@ -10,13 +10,11 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
-import javax.persistence.CascadeType; 
 
 import org.hibernate.annotations.GenericGenerator;
 
@@ -31,25 +29,15 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @Entity
 @Table(name="CI_SYS_GROUP")
 public class Group extends BaseEntity {
-	
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	
 	@Id @Column(name="ID")
 	@GenericGenerator(name="idGenerator", strategy="uuid") 
 	@GeneratedValue(generator="idGenerator") //使用uuid的生成策略  
     private String id;
-    public String getId() {
-		return id;
-	}
-	public void setId(String id) {
-		this.id = id;
-	}
-	
-	
 
 	/**
 	 * 归属
@@ -70,7 +58,6 @@ public class Group extends BaseEntity {
 	/**
 	 * 数据范围描述
 	 */
-	
 	@Column(name="groupdesc")
 	private String groupDesc;
 	/**
@@ -109,6 +96,16 @@ public class Group extends BaseEntity {
 	@JoinTable(name="CI_SYS_GROUPORG",  
 	joinColumns={@JoinColumn(name="GROUP_ID")},inverseJoinColumns={@JoinColumn(name="ORG_CODE",referencedColumnName="ORGCODE")})  
 	private Set<Organization> organizationSet;
+
+	@Override
+	public String getId() {
+		return id;
+	}
+
+	@Override
+	public void setId(String id) {
+		this.id = id;
+	}
 
 	public String getAppSysCode() {
 		return appSysCode;

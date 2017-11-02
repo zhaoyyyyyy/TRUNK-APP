@@ -1,12 +1,9 @@
 
 package com.asiainfo.biapp.si.coc.jauth.log.entity;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
-import org.hibernate.annotations.GenericGenerator;
 
 import com.asiainfo.biapp.si.coc.jauth.frame.entity.BaseEntity;
 
@@ -18,10 +15,12 @@ public class LogInterfaceDetail extends BaseEntity{
 	@Id
 	private String id;
 
+	@Override
 	public String getId() {
 		return id;
 	}
 
+	@Override
 	public void setId(String id) {
 		this.id = id;
 	}

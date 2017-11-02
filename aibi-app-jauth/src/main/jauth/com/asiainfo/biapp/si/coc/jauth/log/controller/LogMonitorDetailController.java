@@ -2,6 +2,7 @@
 package com.asiainfo.biapp.si.coc.jauth.log.controller;
 
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.asiainfo.biapp.si.coc.jauth.frame.controller.BaseController;
@@ -29,12 +30,12 @@ import com.asiainfo.biapp.si.coc.jauth.log.entity.LogMonitorDetail;
  * @author  panweiwei
  * @version 1.0.0.2017年10月24日
  */
+@RequestMapping("api/monitor")
 @RestController
 public class LogMonitorDetailController  extends BaseController<LogMonitorDetail>{
 
     @Override
     protected BaseService<LogMonitorDetail, String> getBaseService() {
-        // TODO Auto-generated method stub
         return null;
     }
     /**

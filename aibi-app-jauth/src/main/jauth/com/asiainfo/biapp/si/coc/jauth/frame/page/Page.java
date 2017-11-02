@@ -1,6 +1,5 @@
 package com.asiainfo.biapp.si.coc.jauth.frame.page;
 
-import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiParam;
 
 import java.io.Serializable;
@@ -8,9 +7,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.domain.Sort.Direction;
 
 import com.asiainfo.biapp.si.coc.jauth.frame.Constants;
 
@@ -23,7 +19,7 @@ public class Page<T> implements Serializable {
 	@ApiParam(value="是否自动查询条数",defaultValue="true")
 	private boolean autoCount = true;
 	@ApiParam(value="",hidden=true)
-	private List<T> data = new ArrayList<T>();
+	private List<T> data = new ArrayList<>();
 	@ApiParam(value="总行数")
 	private int totalCount;
 
@@ -117,6 +113,7 @@ public class Page<T> implements Serializable {
 	 * @return
 	 */
 
+	@Override
 	public String toString() {
 		return new ToStringBuilder(this).append("起始行", this.start)
 				.append("每页行数", this.pageSize).append("总条数", this.totalCount)

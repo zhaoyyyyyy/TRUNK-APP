@@ -11,7 +11,6 @@ import com.asiainfo.biapp.si.coc.jauth.sysmgr.vo.RoleVo;
 /**
  * 角色的Dao
  * 
- * @describe TODO
  * @author liukai
  * @date 2013-6-21
  */
@@ -19,7 +18,6 @@ public interface RoleDao extends BaseDao<Role,String> {
 	/**
 	 * 查询角色
 	 * 
-	 * @describe TODO
 	 * @author liukai
 	 * @param
 	 * @date 2013-6-21
@@ -29,7 +27,6 @@ public interface RoleDao extends BaseDao<Role,String> {
 	/**
 	 * 根据角色名查询角色
 	 * 
-	 * @describe TODO
 	 * @author liukai
 	 * @param
 	 * @date 2013-6-27

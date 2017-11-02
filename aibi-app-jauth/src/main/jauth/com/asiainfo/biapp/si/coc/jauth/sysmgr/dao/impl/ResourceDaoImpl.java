@@ -18,15 +18,12 @@ import com.asiainfo.biapp.si.coc.jauth.sysmgr.entity.User;
 import com.asiainfo.biapp.si.coc.jauth.sysmgr.vo.ResourceVo;
 
 /**
- * @describe TODO
  * @author liukai
  * @date 2013-6-25
  */
 @Repository
 public class ResourceDaoImpl extends BaseDaoImpl<Resource,String> implements
 		ResourceDao {
-	
-	
 
 	/**
 	 * 查询资源
@@ -37,14 +34,9 @@ public class ResourceDaoImpl extends BaseDaoImpl<Resource,String> implements
 	 */
 	public JQGridPage<Resource> findResourceList(JQGridPage<Resource> page, ResourceVo resourceVo) {
 		// 拼装hql 及参数
-		Map<String, Object> params = new HashMap<String, Object>();
+		Map<String, Object> params = new HashMap<>();
 		StringBuffer hql = new StringBuffer("from Resource r where 1=1");
 		
-		// 组织
-//		if (StringUtils.isNotBlank(resourceVo.getOrginfoId())) {
-//			hql.append(" and r.orginfoId = :orginfoId");
-//			params.put("orginfoId", resourceVo.getOrginfoId());
-//		}
 		// 资源集合
 		if (!resourceVo.roleSet.isEmpty()) {
 			hql.append(" and exists(select 'X' FROM  r.roleSet role where role in (:roleSet))");
@@ -113,7 +105,7 @@ public class ResourceDaoImpl extends BaseDaoImpl<Resource,String> implements
 	public List<Resource> getParentResourceByRole(User user, String parentId) {
 		StringBuffer hql = new StringBuffer(
 				"from Resource r where exists(select 'X' FROM  r.roleSet role where role in (:roleSet)) and r.parentId =:parentId and r.status=0 order by r.dispOrder");
-		Map<String, Object> map = new HashMap<String, Object>();
+		Map<String, Object> map = new HashMap<>();
 		map.put("roleSet", user.getRoleSet());
 		map.put("parentId", parentId);
 		return this.findListByHql(hql.toString(), map);
@@ -127,7 +119,7 @@ public class ResourceDaoImpl extends BaseDaoImpl<Resource,String> implements
 	 */
 	public List<Resource> findResourceList(String orgId) {
 		StringBuffer hql = new StringBuffer("from Resource r where 1=1");
-		Map<String, String> map = new HashMap<String, String>();
+		Map<String, String> map = new HashMap<>();
 		if(StringUtils.isNotBlank(orgId)){
 			hql.append(" and r.orginfoId = :orginfoId");
 			map.put("orginfoId",  orgId );
@@ -139,7 +131,7 @@ public class ResourceDaoImpl extends BaseDaoImpl<Resource,String> implements
 	public List<Resource> getResourceByParentId(String parentId) {
 		StringBuffer hql = new StringBuffer(
 				"from Resource r where r.parentId =:parentId and r.status=0 order by r.dispOrder");
-		Map<String, Object> map = new HashMap<String, Object>();
+		Map<String, Object> map = new HashMap<>();
 		map.put("parentId", parentId);
 		return this.findListByHql(hql.toString(), map);
 	}

@@ -31,21 +31,25 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
 
 /**
- * @describe 
+ * @describe
  * @author liukai
  * @date 2013-6-28
  */
 
-//@Api(value = "用户管理",description = "用户登录,角色,资源等接口1")
+@Api(value = "用户管理", tags = "用户登录,角色,资源等接口1")
 @RequestMapping("api/user")
 @RestController
 public class UserController {
 
-	@Autowired private UserService userService;
-	@Autowired private SessionInfoHolder sessionInfoHolder;
+	@Autowired
+	private UserService userService;
+	@Autowired
+	private SessionInfoHolder sessionInfoHolder;
+	
+	private String success = "success";
+
 	/**
 	 * 
 	 * @describe 用户查询
@@ -53,35 +57,34 @@ public class UserController {
 	 * @param
 	 * @date 2013-6-28
 	 */
-	@ApiOperation(value="显示用户的列表（分页形式）")
+	@ApiOperation(value = "显示用户的列表（分页形式）")
 	@ApiImplicitParams({
-		@ApiImplicitParam(name = "cols", value = "列名称", required = true, paramType = "query" ,dataType = "string" ,defaultValue = "userName,realName,sex,orgNames,roleNames,groupNames,status,createTime,id"),
-		@ApiImplicitParam(name = "userName", value = "用户姓名", required = false, paramType = "query" ,dataType = "string"),
-		@ApiImplicitParam(name = "realName", value = "用户真实姓名", required = false, paramType = "query" ,dataType = "string"),
-		@ApiImplicitParam(name = "orgNames", value = "用户所在组织", required = false, paramType = "query" ,dataType = "string"),
-		@ApiImplicitParam(name = "roleName", value = "用户角色", required = false, paramType = "query" ,dataType = "string"),
-		@ApiImplicitParam(name = "createTimeStart", value = "用户创建时间（开始）", required = false, paramType = "query" ,dataType = "string"),
-		@ApiImplicitParam(name = "createTimeEnd", value = "用户创建时间（结束）", required = false, paramType = "query" ,dataType = "string")
-	})
-	@RequestMapping(value="/userPage/query", method=RequestMethod.POST, produces={ MediaType.APPLICATION_JSON_VALUE })
-	public String list(@ModelAttribute JQGridPage<User> page,String cols,@ApiIgnore UserVo userVo) {
+			@ApiImplicitParam(name = "cols", value = "列名称", required = true, paramType = "query", dataType = "string", defaultValue = "userName,realName,sex,orgNames,roleNames,groupNames,status,createTime,id"),
+			@ApiImplicitParam(name = "userName", value = "用户姓名", required = false, paramType = "query", dataType = "string"),
+			@ApiImplicitParam(name = "realName", value = "用户真实姓名", required = false, paramType = "query", dataType = "string"),
+			@ApiImplicitParam(name = "orgNames", value = "用户所在组织", required = false, paramType = "query", dataType = "string"),
+			@ApiImplicitParam(name = "roleName", value = "用户角色", required = false, paramType = "query", dataType = "string"),
+			@ApiImplicitParam(name = "createTimeStart", value = "用户创建时间（开始）", required = false, paramType = "query", dataType = "string"),
+			@ApiImplicitParam(name = "createTimeEnd", value = "用户创建时间（结束）", required = false, paramType = "query", dataType = "string") })
+	@RequestMapping(value = "/userPage/query", method = RequestMethod.POST, produces = { MediaType.APPLICATION_JSON_VALUE })
+	public String list(@ModelAttribute JQGridPage<User> page, String cols,
+			@ApiIgnore UserVo userVo) {
 		User user = userService.get(sessionInfoHolder.getLoginId());
 		if (user.getGroupSet() != null && !user.getGroupSet().isEmpty()) {
 			userVo.setGroupSet(user.getGroupSet());
 		}
-		//zn
-		if(user.getIsAdmin()==1){
+		if (user.getIsAdmin() == 1) {
 			JQGridPage<User> userList = userService.findUserList(page, userVo);
 			return JSONResult.page2Json(userList, cols);
-		}else{
-			userVo.setOrginfoId(user.getOrginfoId());//本组织
-			userVo.setId(user.getId());//当前用户
+		} else {
+			userVo.setOrginfoId(user.getOrginfoId());// 本组织
+			userVo.setId(user.getId());// 当前用户
 			userVo.setIsAdmin(2);
 			JQGridPage<User> userList = userService.findUserList(page, userVo);
-			//zn
 			return JSONResult.page2Json(userList, cols);
 		}
 	}
+
 	/**
 	 * 
 	 * @describe 分配角色
@@ -89,13 +92,13 @@ public class UserController {
 	 * @param
 	 * @date 2013-7-1
 	 */
-	@ApiOperation(value="查询角色")
-	@ApiImplicitParam(name = "id", value = "用户信息主键", required = true, paramType = "query" ,dataType = "string")
-	@RequestMapping(value="/role/query",method=RequestMethod.POST,  produces={ MediaType.APPLICATION_JSON_VALUE })
-	public Map<String,Object> toDistributionRole(String id) {
+	@ApiOperation(value = "查询角色")
+	@ApiImplicitParam(name = "id", value = "用户信息主键", required = true, paramType = "query", dataType = "string")
+	@RequestMapping(value = "/role/query", method = RequestMethod.POST, produces = { MediaType.APPLICATION_JSON_VALUE })
+	public Map<String, Object> toDistributionRole(String id) {
 		String[] ids = id.split(",");
 		String roleId = null;
-		
+
 		List<User> userList = new ArrayList<>();
 		// 如果只选择了一个用户则回显
 		if (ids.length == 1) {
@@ -112,8 +115,8 @@ public class UserController {
 		for (String i : ids) {
 			userList.add(userService.get(i));
 		}
-		
-		Map<String,Object> map = new HashMap<>();
+
+		Map<String, Object> map = new HashMap<>();
 		map.put("userList", userList);
 		map.put("roleId", roleId);
 		return map;
@@ -121,18 +124,17 @@ public class UserController {
 
 	/**
 	 * 
-	 * @describe 分配用户角色 
+	 * @describe 分配用户角色
 	 * @author liukai
 	 * @param
 	 * @date 2013-7-2
 	 */
-	@ApiOperation(value="修改角色")
+	@ApiOperation(value = "修改角色")
 	@ApiImplicitParams({
-		@ApiImplicitParam(name = "id", value = "用户信息主键", required = true, paramType = "query" ,dataType = "string"),
-		@ApiImplicitParam(name = "roleId", value = "角色信息主键", required = true, paramType = "query" ,dataType = "string")
-	})
-	@RequestMapping(value="/role/update",method=RequestMethod.POST, produces={ MediaType.APPLICATION_JSON_VALUE })
-	public String distributionRole(String id,String roleId) {
+			@ApiImplicitParam(name = "id", value = "用户信息主键", required = true, paramType = "query", dataType = "string"),
+			@ApiImplicitParam(name = "roleId", value = "角色信息主键", required = true, paramType = "query", dataType = "string") })
+	@RequestMapping(value = "/role/update", method = RequestMethod.POST, produces = { MediaType.APPLICATION_JSON_VALUE })
+	public String distributionRole(String id, String roleId) {
 		String[] ids = id.split(",");
 		for (String i : ids) {
 			User user = userService.get(i);
@@ -146,7 +148,7 @@ public class UserController {
 			user.setRoleSet(roleSet);
 			userService.saveOrUpdate(user);
 		}
-		return "success";
+		return success;
 	}
 
 	/**
@@ -156,10 +158,10 @@ public class UserController {
 	 * @param
 	 * @date 2013-7-1
 	 */
-	@ApiOperation(value="查询数据范围")
-	@ApiImplicitParam(name = "id", value = "用户信息主键", required = true, paramType = "query" ,dataType = "string")
-	@RequestMapping(value="/group/query",method=RequestMethod.POST,  produces={ MediaType.APPLICATION_JSON_VALUE })
-	public Map<String,Object> toDistributionGroup(String id) {
+	@ApiOperation(value = "查询数据范围")
+	@ApiImplicitParam(name = "id", value = "用户信息主键", required = true, paramType = "query", dataType = "string")
+	@RequestMapping(value = "/group/query", method = RequestMethod.POST, produces = { MediaType.APPLICATION_JSON_VALUE })
+	public Map<String, Object> toDistributionGroup(String id) {
 		String[] ids = id.split(",");
 		String groupId = null;
 		// 如果只有一个用户则进行回显
@@ -174,13 +176,13 @@ public class UserController {
 			}
 			groupId = sb.toString();
 		}
-		
+
 		List<User> userList = new ArrayList<>();
 		for (String i : ids) {
 			userList.add(userService.get(i));
 		}
-		
-		Map<String,Object> map = new HashMap<>();
+
+		Map<String, Object> map = new HashMap<>();
 		map.put("userList", userList);
 		map.put("groupId", groupId);
 		return map;
@@ -193,13 +195,12 @@ public class UserController {
 	 * @param
 	 * @date 2013-7-2
 	 */
-	@ApiOperation(value="修改数据范围")
+	@ApiOperation(value = "修改数据范围")
 	@ApiImplicitParams({
-		@ApiImplicitParam(name = "id", value = "用户信息主键", required = true, paramType = "query" ,dataType = "string"),
-		@ApiImplicitParam(name = "groupId", value = "数据范围信息主键", required = true, paramType = "query" ,dataType = "string")
-	})
-	@RequestMapping(value="/group/update",method=RequestMethod.POST,  produces={ MediaType.APPLICATION_JSON_VALUE })
-	public String distributionGroup(String id,String groupId) {
+			@ApiImplicitParam(name = "id", value = "用户信息主键", required = true, paramType = "query", dataType = "string"),
+			@ApiImplicitParam(name = "groupId", value = "数据范围信息主键", required = true, paramType = "query", dataType = "string") })
+	@RequestMapping(value = "/group/update", method = RequestMethod.POST, produces = { MediaType.APPLICATION_JSON_VALUE })
+	public String distributionGroup(String id, String groupId) {
 		String[] ids = id.split(",");
 		for (String i : ids) {
 			User user = userService.get(i);
@@ -213,9 +214,8 @@ public class UserController {
 			user.setGroupSet(groupSet);
 			userService.saveOrUpdate(user);
 		}
-		return "success";
+		return success;
 	}
-
 
 	/**
 	 * 
@@ -224,18 +224,17 @@ public class UserController {
 	 * @param
 	 * @date 2013-7-2
 	 */
-	@ApiOperation(value="查询详细信息")
-	@ApiImplicitParam(name = "id", value = "用户信息主键", required = true, paramType = "query" ,dataType = "string")
-	@RequestMapping(value="/userInfo/query",method=RequestMethod.POST,  produces={ MediaType.APPLICATION_JSON_VALUE })
-	public Map<String,Object> initEditUser(String id) {
+	@ApiOperation(value = "查询详细信息")
+	@ApiImplicitParam(name = "id", value = "用户信息主键", required = true, paramType = "query", dataType = "string")
+	@RequestMapping(value = "/userInfo/query", method = RequestMethod.POST, produces = { MediaType.APPLICATION_JSON_VALUE })
+	public Map<String, Object> initEditUser(String id) {
 		User user = userService.get(id);
 		User luser = sessionInfoHolder.getLoginUser();
-		Map<String,Object> map = new HashMap<>();
-		map.put("user",user);
+		Map<String, Object> map = new HashMap<>();
+		map.put("user", user);
 		map.put("luser", luser);
 		return map;
 	}
-
 
 	/**
 	 * 
@@ -244,23 +243,22 @@ public class UserController {
 	 * @param
 	 * @date 2013-7-3
 	 */
-	@ApiOperation(value="修改用户信息")
+	@ApiOperation(value = "修改用户信息")
 	@ApiImplicitParams({
-		@ApiImplicitParam(name = "id", value = "用户信息主键", required = false, paramType = "query" ,dataType = "string"),
-		@ApiImplicitParam(name = "realName", value = "真实姓名", required = false, paramType = "query" ,dataType = "string"),
-		@ApiImplicitParam(name = "sex", value = "性别", required = false, paramType = "query" ,dataType = "string"),
-		@ApiImplicitParam(name = "phoneNumber", value = "手机", required = false, paramType = "query" ,dataType = "string"),
-		@ApiImplicitParam(name = "grade", value = "等级", required = false, paramType = "query" ,dataType = "string"),
-		@ApiImplicitParam(name = "totalIntegra", value = "积分", required = false, paramType = "query" ,dataType = "string"),
-		@ApiImplicitParam(name = "email", value = "邮箱", required = false, paramType = "query" ,dataType = "string"),
-		@ApiImplicitParam(name = "isAdmin", value = "是否允许进入后台", required = false, paramType = "query" ,dataType = "string")
-	})
-	@RequestMapping(value="/userInfo/update",method=RequestMethod.POST , produces={ MediaType.APPLICATION_JSON_VALUE })
+			@ApiImplicitParam(name = "id", value = "用户信息主键", required = false, paramType = "query", dataType = "string"),
+			@ApiImplicitParam(name = "realName", value = "真实姓名", required = false, paramType = "query", dataType = "string"),
+			@ApiImplicitParam(name = "sex", value = "性别", required = false, paramType = "query", dataType = "string"),
+			@ApiImplicitParam(name = "phoneNumber", value = "手机", required = false, paramType = "query", dataType = "string"),
+			@ApiImplicitParam(name = "grade", value = "等级", required = false, paramType = "query", dataType = "string"),
+			@ApiImplicitParam(name = "totalIntegra", value = "积分", required = false, paramType = "query", dataType = "string"),
+			@ApiImplicitParam(name = "email", value = "邮箱", required = false, paramType = "query", dataType = "string"),
+			@ApiImplicitParam(name = "isAdmin", value = "是否允许进入后台", required = false, paramType = "query", dataType = "string") })
+	@RequestMapping(value = "/userInfo/update", method = RequestMethod.POST, produces = { MediaType.APPLICATION_JSON_VALUE })
 	public String save(User user) {
 		User oldUser = userService.get(user.getId());
 		oldUser = fromTobean(user, oldUser);
 		userService.saveOrUpdate(oldUser);
-		return "success";
+		return success;
 	}
 
 	/**
@@ -285,21 +283,20 @@ public class UserController {
 	 * @param
 	 * @date 2013-9-24
 	 */
-	@ApiOperation(value="修改密码")
+	@ApiOperation(value = "修改密码")
 	@ApiImplicitParams({
-		@ApiImplicitParam(name = "id", value = "用户信息主键", required = true, paramType = "query" ,dataType = "string"),
-		@ApiImplicitParam(name = "password", value = "密码", required = true, paramType = "query" ,dataType = "string")
-	})
-	@RequestMapping(value="/password/update",method=RequestMethod.POST, produces={ MediaType.APPLICATION_JSON_VALUE })
-	public String savePassword(String id ,String password) {
+			@ApiImplicitParam(name = "id", value = "用户信息主键", required = true, paramType = "query", dataType = "string"),
+			@ApiImplicitParam(name = "password", value = "密码", required = true, paramType = "query", dataType = "string") })
+	@RequestMapping(value = "/password/update", method = RequestMethod.POST, produces = { MediaType.APPLICATION_JSON_VALUE })
+	public String savePassword(String id, String password) {
 		User user = userService.get(id);
 		user.setPassword(Bcrypt.BcryptCode(password));
 		userService.saveOrUpdate(user);
-		return "success";
+		return success;
 	}
 
-	@RequestMapping(value="/newUser",method=RequestMethod.POST, produces={ MediaType.APPLICATION_JSON_VALUE })
-	public String newUser(User user){
+	@RequestMapping(value = "/newUser", method = RequestMethod.POST, produces = { MediaType.APPLICATION_JSON_VALUE })
+	public String newUser(User user) {
 		User luser = sessionInfoHolder.getLoginUser();
 		user.setOrginfoId(luser.getOrginfoId());
 		user.setCreateOrgId(luser.getOrginfoId());
@@ -308,9 +305,9 @@ public class UserController {
 		user.setStatus(2);
 		user.setPassword(Bcrypt.BcryptCode(user.getPassword()));
 		userService.saveOrUpdate(user);
-		return "success";
+		return success;
 	}
-	
+
 	/**
 	 * 
 	 * @describe 变更用户状态
@@ -318,7 +315,7 @@ public class UserController {
 	 * @param
 	 * @date 2013-7-1
 	 */
-	@RequestMapping(value="/changeStatus",method=RequestMethod.POST, produces={ MediaType.APPLICATION_JSON_VALUE })
+	@RequestMapping(value = "/changeStatus", method = RequestMethod.POST, produces = { MediaType.APPLICATION_JSON_VALUE })
 	public void changeStatus(String id) {
 		User user = userService.get(id);
 		// 原状态正常

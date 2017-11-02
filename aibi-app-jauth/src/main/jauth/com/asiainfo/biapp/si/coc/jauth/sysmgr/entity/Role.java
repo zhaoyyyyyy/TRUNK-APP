@@ -10,7 +10,6 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
@@ -40,9 +39,11 @@ public class Role extends BaseEntity {
 	@GenericGenerator(name="idGenerator", strategy="uuid") 
 	@GeneratedValue(generator="idGenerator") //使用uuid的生成策略  
     private String id;
+	@Override
     public String getId() {
 		return id;
 	}
+	@Override
 	public void setId(String id) {
 		this.id = id;
 	}
@@ -52,59 +53,59 @@ public class Role extends BaseEntity {
 	 *归属
 	 */
 	@Column(name="appsyscode")
-	public String appsysCode;
+	private String appsysCode;
 	
 	/**
 	 * 角色名称
 	 */
 	@Column(name="rolename")
-	public String roleName;
+	private String roleName;
 	
 	/**
 	 * 组织信息ID
 	 */
 	@Column(name="orginfo_id")
-	public String orginfoId;
+	private String orginfoId;
 	
 	/**
 	 * 图片位置
 	 */
 	@Column(name="picturehome")
-	public String pictureHome;
+	private String pictureHome;
 	
 	/**
 	 * 角色描述
 	 */
 	@Column(name="roledesc")
-	public String roleDesc;
+	private String roleDesc;
 	
 	/**
 	 * 创建人ID
 	 */
 	@Column(name="createuserid")
-	public String createUserId;
+	private String createUserId;
 	
 	/**
 	 * 创建人组织ID
 	 */
 	@Column(name="createuserorgid")
-	public String createUserOrgId;
+	private String createUserOrgId;
 	
 	/**
 	 * 更新时间
 	 */
 	@Column(name="updatetime")
-	public Date updateTime;
+	private Date updateTime;
 	/**
 	 * 创建时间
 	 */
 	@Column(name="createtime")
-	public Date createTime;
+	private Date createTime;
 	/**
 	 * 角色编码
 	 */
 	@Column(name="rolecode")
-	public String roleCode;
+	private String roleCode;
 	
 	
 	/**
@@ -113,7 +114,7 @@ public class Role extends BaseEntity {
 	@ManyToMany(fetch=FetchType.LAZY)
 	@JoinTable(name="CI_SYS_ROLERESOURCE",  
 	joinColumns={@JoinColumn(name="ROLE_ID")},inverseJoinColumns={@JoinColumn(name="RESOURCE_ID")})  
-	public Set<Resource> resourceSet;
+	private Set<Resource> resourceSet;
 	
 	/**
 	 * 用户集合
@@ -122,7 +123,7 @@ public class Role extends BaseEntity {
 	@ManyToMany(fetch=FetchType.LAZY)
 	@JoinTable(name="CI_SYS_USEROLE",  
 	joinColumns={@JoinColumn(name="ROLE_ID")},inverseJoinColumns={@JoinColumn(name="USER_ID")})  
-	public Set<User> userSet;
+	private Set<User> userSet;
 
 	public String getAppsysCode() {
 		return appsysCode;

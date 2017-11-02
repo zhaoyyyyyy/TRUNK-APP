@@ -3,7 +3,6 @@ package com.asiainfo.biapp.si.coc.jauth.sysmgr.entity;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
@@ -19,7 +18,6 @@ import com.asiainfo.biapp.si.coc.jauth.frame.entity.BaseEntity;
 @Entity
 @Table(name="CI_SYS_DIC")
 public class Dic extends BaseEntity{
-	
 	/**
 	 * 
 	 */
@@ -29,12 +27,6 @@ public class Dic extends BaseEntity{
 	@GenericGenerator(name="idGenerator", strategy="uuid") 
 	@GeneratedValue(generator="idGenerator") //使用uuid的生成策略  
     private String id;
-    public String getId() {
-		return id;
-	}
-	public void setId(String id) {
-		this.id = id;
-	}
 	
 	@Column(name="note")
 	private String note;
@@ -50,35 +42,55 @@ public class Dic extends BaseEntity{
 	
 	@Column(name="appsyscode")
 	private String appSysCode;
-	
+
+	@Override
+	public String getId() {
+		return id;
+	}
+
+	@Override
+	public void setId(String id) {
+		this.id = id;
+	}
+
 	public String getNote() {
 		return note;
 	}
+
 	public void setNote(String note) {
 		this.note = note;
 	}
+
 	public String getDicCode() {
 		return dicCode;
 	}
+
 	public void setDicCode(String dicCode) {
 		this.dicCode = dicCode;
 	}
+
 	public String getDicName() {
 		return dicName;
 	}
+
 	public void setDicName(String dicName) {
 		this.dicName = dicName;
 	}
+
 	public String getDicType() {
 		return dicType;
 	}
+
 	public void setDicType(String dicType) {
 		this.dicType = dicType;
 	}
+
 	public String getAppSysCode() {
 		return appSysCode;
 	}
+
 	public void setAppSysCode(String appSysCode) {
 		this.appSysCode = appSysCode;
 	}
+
 }
