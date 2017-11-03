@@ -18,10 +18,11 @@ import org.springframework.stereotype.Component;
 
 import com.asiainfo.biapp.si.loc.auth.model.User;
 import com.asiainfo.biapp.si.loc.auth.utils.AuthUtils;
+import com.asiainfo.biapp.si.loc.base.exception.BaseException;
 
 @Component
 @ServletComponentScan
-@WebFilter(urlPatterns = "/*", filterName = "tokenAuthFilter")
+@WebFilter(urlPatterns = "/api/*", filterName = "tokenAuthFilter")
 public class TokenAuthFilter implements Filter {
 	
 	
@@ -41,7 +42,13 @@ public class TokenAuthFilter implements Filter {
     	
     	//3.拿到用户信息
     	HttpServletRequest request = (HttpServletRequest)servletRequest;
-    	User user = AuthUtils.getLoginUser(request);
+    	
+    	User user = null;
+    	try {
+    		user = AuthUtils.getLoginUser(request);
+		} catch (BaseException e) {
+			// TODO: handle exception
+		}
     	if(user != null){
     		filterChain.doFilter(servletRequest,servletResponse);
     	}else{
@@ -52,7 +59,7 @@ public class TokenAuthFilter implements Filter {
     	
         //5. 将用户及权限近期放入全局 kv缓存
         
-        
+    	filterChain.doFilter(servletRequest,servletResponse);
         
         
         

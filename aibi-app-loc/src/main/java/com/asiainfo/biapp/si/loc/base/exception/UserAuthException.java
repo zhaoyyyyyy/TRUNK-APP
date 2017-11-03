@@ -1,25 +1,25 @@
 package com.asiainfo.biapp.si.loc.base.exception;
 
+import javax.servlet.ServletException;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 /**
- * 请求参数异常
+ * 用户权限异常
  * @author zhougz3
  *
  */
-public class ParamRequiredException extends BaseException{
+public class UserAuthException extends BaseException{
 	
+	private String errorCode = super.USER_AUTH_CODE;
 	
-	private String errorCode = super.PARAM_REQUIRED_CODE;
-	
-	
-	public ParamRequiredException(String message){
+	public UserAuthException(String message){
 		super.setMsg(message);
 		super.setCode(errorCode);
 	}
 	
-	public ParamRequiredException(){
+	public UserAuthException(){
 		super.setCode(errorCode);
 	}
 }

@@ -4,7 +4,8 @@ import javax.servlet.http.HttpServletRequest;
 
 import com.asiainfo.biapp.si.loc.auth.model.User;
 import com.asiainfo.biapp.si.loc.auth.service.UserService;
-import com.asiainfo.biapp.si.loc.base.exception.AuthException;
+import com.asiainfo.biapp.si.loc.base.exception.BaseException;
+import com.asiainfo.biapp.si.loc.base.exception.UserAuthException;
 import com.asiainfo.biapp.si.loc.base.extend.SpringContextHolder;
 import com.asiainfo.biapp.si.loc.base.utils.StringUtil;
 
@@ -17,9 +18,9 @@ public class AuthUtils {
 	 * 
 	 * @param request
 	 * @return
-	 * @throws AuthException
+	 * @throws UserAuthException
 	 */
-	public static User getLoginUser(HttpServletRequest request) throws AuthException {
+	public static User getLoginUser(HttpServletRequest request) throws BaseException {
 		String token = getTokenByRequest(request);
 		User user = getUserByToken(token);
 		return user;
@@ -29,7 +30,7 @@ public class AuthUtils {
 	 * 通过token拿到用户基本信息
 	 * @return
 	 */
-	public static User getUserByToken(String token) throws AuthException {
+	public static User getUserByToken(String token) throws BaseException {
 		
 		//1 TODO 先判断是否存在此用户
 		
@@ -44,13 +45,13 @@ public class AuthUtils {
 	 * 在用户提交请求的时候拿到用户token
 	 * @return
 	 */
-	public static String getTokenByRequest(HttpServletRequest request) throws AuthException {
+	public static String getTokenByRequest(HttpServletRequest request) throws BaseException {
     	String token = request.getParameter(JWT_TOKEN_REQUSET_PARAM);
     	if(StringUtil.isEmpty(token)){
     		token = request.getHeader(JWT_TOKEN_HEADER_PARAM);
     	}
     	if(StringUtil.isEmpty(token)){
-    		throw new AuthException();
+    		throw new UserAuthException("");
     	}
 		return token;
 	}
