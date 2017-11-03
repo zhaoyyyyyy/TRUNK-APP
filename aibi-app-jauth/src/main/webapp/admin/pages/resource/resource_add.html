@@ -10,7 +10,7 @@
 		<form id="saveDataForm">
 			<table border="0" width="100%" cellpadding="0" cellspacing="0" class="commTable">
 				<tbody>
-					<input id="resourceId" name="resourceId" type="hidden" v-model="resourceId" />
+					<input v-model="resourceId" name="resourceId" id="resourceId" type="hidden" />
 					<input v-model="parentId" name="parentId" id="parentId"  type="hidden"/>
 					<tr>
 						<th>
@@ -65,7 +65,7 @@
 							<table style="width:100%;">
 								<tr>
 									<td >
-										<div style="width:169px;height: 210px; overflow: auto;">
+										<div style="width:123px;height: 210px; overflow: auto;">
 											<ul class="simpleTree" id="tree"
 												style="margin-left: 5px; margin-top: 5px;">
 												<li class="root" id="sRoot">
@@ -75,7 +75,7 @@
 										</div>
 									</td>
 									<td>
-										<div style="width:169px;height: 210px; overflow: auto;">
+										<div style="width:123px;height: 210px; overflow: auto;">
 											<ul class="simpleTree" id="simpleTree"
 												style="margin-left: 5px; margin-top: 5px;">
 												<li class="root" id="simpleRoot">
@@ -85,11 +85,21 @@
 										</div>
 									</td>
 									<td>
-										<div style="width:169px;height: 210px; overflow: auto;">
+										<div style="width:123px;height: 210px; overflow: auto;">
 											<ul class="simpleTree" id="appTree"
 												style="margin-left: 5px; margin-top: 5px;">
 												<li class="root" id="simpleRootAPP">
 													<span class='text' id="roots">接口资源</span>
+												</li>
+											</ul>
+										</div>
+									</td>
+									<td>
+										<div style="width:123px;height: 210px; overflow: auto;">
+											<ul class="simpleTree" id="elementTree"
+												style="margin-left: 5px; margin-top: 5px;">
+												<li class="root" id="simpleEle">
+													<span class='text' id="roots">页面元素</span>
 												</li>
 											</ul>
 										</div>

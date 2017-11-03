@@ -48,7 +48,7 @@ import io.swagger.annotations.ApiOperation;
  * @author liukai
  * @date 2013-6-25
  */
-@Api(value = "资源管理")
+//@Api(value = "资源管理")
 @RequestMapping("api/resource")
 @RestController
 public class ResourceController extends BaseController<Resource> {

@@ -14,7 +14,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -42,7 +41,7 @@ import com.asiainfo.biapp.si.coc.jauth.sysmgr.vo.RoleVo;
  * @author liukai
  * @date 2013-6-21
  */
-//@Api(value = "角色管理",description = "用户登录,角色,资源等接口")
+// @Api(value = "角色管理",description = "用户登录,角色,资源等接口")
 @RequestMapping("api/role")
 @RestController
 public class RoleController extends BaseController<Role> {
@@ -52,7 +51,6 @@ public class RoleController extends BaseController<Role> {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	private Role role;
 	@Autowired
 	private RoleService roleService;
 	@Autowired
@@ -61,39 +59,39 @@ public class RoleController extends BaseController<Role> {
 	private SessionInfoHolder sessionInfoHolder;
 
 	@Override
-	protected BaseService<Role,String> getBaseService() {
+	protected BaseService<Role, String> getBaseService() {
 		return roleService;
 	}
 
 	/**
 	 * 查询角色列表
 	 * 
-	 * @describe 
+	 * @describe
 	 * @author liukai
 	 * @param
-	 * @return 
-	 * @return 
+	 * @return
+	 * @return
 	 * @date 2013-6-21
 	 */
-	@ApiOperation(value="显示角色的列表（分页形式）")
+	@ApiOperation(value = "显示角色的列表（分页形式）")
 	@ApiImplicitParams({
-		@ApiImplicitParam(name = "cols", value = "列名称", required = true, paramType = "query" ,dataType = "string",defaultValue="pictureHome,roleName,createUserId,createTime,roleDesc,id"),
-		@ApiImplicitParam(name = "roleName", value = "角色名称", required = false, paramType = "query" ,dataType = "string"),
-		@ApiImplicitParam(name = "createTimeStart", value = "角色创建时间（开始）", required = false, paramType = "query" ,dataType = "string"),
-		@ApiImplicitParam(name = "createTimeEnd", value = "角色创建时间（结束）", required = false, paramType = "query" ,dataType = "string")
-	})
-	@RequestMapping(value="/rolePage/query", method=RequestMethod.POST, produces={ MediaType.APPLICATION_JSON_VALUE })
-	public String list(@ModelAttribute JQGridPage<Role> page,@ApiIgnore RoleVo roleVo,String cols) {
-		//zn
+			@ApiImplicitParam(name = "cols", value = "列名称", required = true, paramType = "query", dataType = "string", defaultValue = "pictureHome,roleName,createUserId,createTime,roleDesc,id"),
+			@ApiImplicitParam(name = "roleName", value = "角色名称", required = false, paramType = "query", dataType = "string"),
+			@ApiImplicitParam(name = "createTimeStart", value = "角色创建时间（开始）", required = false, paramType = "query", dataType = "string"),
+			@ApiImplicitParam(name = "createTimeEnd", value = "角色创建时间（结束）", required = false, paramType = "query", dataType = "string") })
+	@RequestMapping(value = "/rolePage/query", method = RequestMethod.POST, produces = { MediaType.APPLICATION_JSON_VALUE })
+	public String list(@ModelAttribute JQGridPage<Role> page,
+			@ApiIgnore RoleVo roleVo, String cols) {
+		// zn
 		User user = sessionInfoHolder.getLoginUser();
-		if(user.getIsAdmin()==1){
-			JQGridPage<Role> roleList = roleService.findRoleList(page,roleVo);
+		if (user.getIsAdmin() == 1) {
+			JQGridPage<Role> roleList = roleService.findRoleList(page, roleVo);
 			return JSONResult.page2Json(roleList, cols);
-		}else{
+		} else {
 			roleVo.setCreateUserId(user.getUserName());
-			JQGridPage<Role> roleList = roleService.findRoleList(page,roleVo);
+			JQGridPage<Role> roleList = roleService.findRoleList(page, roleVo);
 			return JSONResult.page2Json(roleList, cols);
-		}//zn
+		}// zn
 	}
 
 	/**
@@ -103,12 +101,13 @@ public class RoleController extends BaseController<Role> {
 	 * @param
 	 * @date 2013-6-24
 	 */
-	@ApiOperation(value="查询角色资源")
-	@ApiImplicitParam(name = "id", value = "角色主键", required = true, paramType = "query" ,dataType = "string")
-	@RequestMapping(value="/resource/query", method=RequestMethod.POST, produces={ MediaType.APPLICATION_JSON_VALUE })
-	public Map<String,Object> resources(String id) {
+	@ApiOperation(value = "查询角色资源")
+	@ApiImplicitParam(name = "id", value = "角色主键", required = true, paramType = "query", dataType = "string")
+	@RequestMapping(value = "/resource/query", method = RequestMethod.POST, produces = { MediaType.APPLICATION_JSON_VALUE })
+	public Map<String, Object> resources(String id) {
 		String tree = null;
-		User user=sessionInfoHolder.getLoginUser();
+		Role role = new Role();
+		User user = sessionInfoHolder.getLoginUser();
 		// 有ID则为编辑
 		if (StringUtils.isNotBlank(id)) {
 			role = roleService.get(id);
@@ -121,29 +120,29 @@ public class RoleController extends BaseController<Role> {
 			}
 			tree = sb.toString();
 		}
-		
-		Map<String,Object> returnMap = new HashMap<>();
+
+		Map<String, Object> returnMap = new HashMap<>();
 		returnMap.put("tree", tree);
 		returnMap.put("role", role);
 		return returnMap;
 	}
-	
-	
+
 	/**
 	 * 保存角色信息
-	 * @return 
+	 * 
+	 * @return
 	 */
-	@ApiOperation(value="新建或修改角色")
+	@ApiOperation(value = "新建或修改角色")
 	@ApiImplicitParams({
-		@ApiImplicitParam(name = "id", value = "角色主键", required = false, paramType = "query" ,dataType = "string"),
-		@ApiImplicitParam(name = "roleName", value = "角色名称", required = false, paramType = "query" ,dataType = "string"),
-		@ApiImplicitParam(name = "pictureHome", value = "标志", required = false, paramType = "query" ,dataType = "string"),
-		@ApiImplicitParam(name = "roleDesc", value = "角色描述", required = false, paramType = "query" ,dataType = "string"),
-		@ApiImplicitParam(name = "tree", value = "角色赋权（前台）", required = false, paramType = "query" ,dataType = "string"),
-		@ApiImplicitParam(name = "tree2", value = "角色赋权（后台）", required = false, paramType = "query" ,dataType = "string"),
-		@ApiImplicitParam(name = "tree3", value = "角色赋权（接口）", required = false, paramType = "query" ,dataType = "string"),
-	})
-	@RequestMapping(value="/save", method=RequestMethod.POST, produces={ MediaType.APPLICATION_JSON_VALUE })
+			@ApiImplicitParam(name = "id", value = "角色主键", required = false, paramType = "query", dataType = "string"),
+			@ApiImplicitParam(name = "roleName", value = "角色名称", required = false, paramType = "query", dataType = "string"),
+			@ApiImplicitParam(name = "pictureHome", value = "标志", required = false, paramType = "query", dataType = "string"),
+			@ApiImplicitParam(name = "roleDesc", value = "角色描述", required = false, paramType = "query", dataType = "string"),
+			@ApiImplicitParam(name = "tree", value = "角色赋权（前台）", required = false, paramType = "query", dataType = "string"),
+			@ApiImplicitParam(name = "tree2", value = "角色赋权（后台）", required = false, paramType = "query", dataType = "string"),
+			@ApiImplicitParam(name = "tree3", value = "角色赋权（接口）", required = false, paramType = "query", dataType = "string"),
+			@ApiImplicitParam(name = "tree4", value = "角色赋权（页面）", required = false, paramType = "query", dataType = "string") })
+	@RequestMapping(value = "/save", method = RequestMethod.POST, produces = { MediaType.APPLICATION_JSON_VALUE })
 	public String save() {
 		String roleName = request.getParameter("roleName");
 		String id = request.getParameter("id");
@@ -152,9 +151,10 @@ public class RoleController extends BaseController<Role> {
 		String tree = request.getParameter("tree");
 		String tree2 = request.getParameter("tree2");
 		String tree3 = request.getParameter("tree3");
+		String tree4 = request.getParameter("tree4");
 		List<Role> roles = null;
-		if(StringUtils.isBlank(id)){
-			 roles = roleService.findRoleByName(id, roleName);
+		if (StringUtils.isBlank(id)) {
+			roles = roleService.findRoleByName(id, roleName);
 		}
 		if (roles != null && !roles.isEmpty()) {
 			return "haveSameName";
@@ -167,32 +167,34 @@ public class RoleController extends BaseController<Role> {
 				for (String t : trees) {
 					Resource r = new Resource();
 					r.setId(t);
-					r=resourceService.get(t);
-					//zn
-					if(!rSet.contains(r)){
-						if(r!=null){
+					r = resourceService.get(t);
+					// zn
+					if (!rSet.contains(r)) {
+						if (r != null) {
 							rSet.add(r);
 						}
 					}
-					if(r.getParentId()!=null&&r.getParentId()!=""){
+					if (r.getParentId() != null && r.getParentId() != "") {
 						Resource pr = new Resource();
-						pr=resourceService.get(resourceService.get(r.getId()).getParentId());
-						if(!rSet.contains(pr)){
-							if(pr!=null){
+						pr = resourceService.get(resourceService.get(r.getId())
+								.getParentId());
+						if (!rSet.contains(pr)) {
+							if (pr != null) {
 								rSet.add(pr);
 							}
 						}
-						if(pr.getParentId()!=null&&pr.getParentId()!=""){
+						if (pr.getParentId() != null && pr.getParentId() != "") {
 							Resource ppr = new Resource();
-							ppr=resourceService.get(resourceService.get(pr.getId()).getParentId());
-							if(!rSet.contains(ppr)){
-								if(ppr!=null){
+							ppr = resourceService.get(resourceService.get(
+									pr.getId()).getParentId());
+							if (!rSet.contains(ppr)) {
+								if (ppr != null) {
 									rSet.add(ppr);
 								}
 							}
 						}
 					}
-					//zn
+					// zn
 				}
 			}
 			// 后台有选中节点
@@ -202,32 +204,34 @@ public class RoleController extends BaseController<Role> {
 				for (String t : trees) {
 					Resource r = new Resource();
 					r.setId(t);
-					r=resourceService.get(t);
-					//zn
-					if(!rSet.contains(r)){
-						if(r!=null){
+					r = resourceService.get(t);
+					// zn
+					if (!rSet.contains(r)) {
+						if (r != null) {
 							rSet.add(r);
 						}
 					}
-					if(r.getParentId()!=null&&r.getParentId()!=""){
+					if (r.getParentId() != null && r.getParentId() != "") {
 						Resource pr = new Resource();
-						pr=resourceService.get(resourceService.get(r.getId()).getParentId());
-						if(!rSet.contains(pr)){
-							if(pr!=null){
+						pr = resourceService.get(resourceService.get(r.getId())
+								.getParentId());
+						if (!rSet.contains(pr)) {
+							if (pr != null) {
 								rSet.add(pr);
 							}
 						}
-						if(pr.getParentId()!=null&&pr.getParentId()!=""){
+						if (pr.getParentId() != null && pr.getParentId() != "") {
 							Resource ppr = new Resource();
-							ppr=resourceService.get(resourceService.get(pr.getId()).getParentId());
-							if(!rSet.contains(ppr)){
-								if(ppr!=null){
+							ppr = resourceService.get(resourceService.get(
+									pr.getId()).getParentId());
+							if (!rSet.contains(ppr)) {
+								if (ppr != null) {
 									rSet.add(ppr);
 								}
 							}
 						}
 					}
-					//zn
+					// zn
 				}
 			}
 			// APP有选中节点
@@ -237,32 +241,71 @@ public class RoleController extends BaseController<Role> {
 				for (String t : trees) {
 					Resource r = new Resource();
 					r.setId(t);
-					r=resourceService.get(t);
-					//zn
-					if(!rSet.contains(r)){
-						if(r!=null){
+					r = resourceService.get(t);
+					// zn
+					if (!rSet.contains(r)) {
+						if (r != null) {
 							rSet.add(r);
 						}
 					}
-					if(r.getParentId()!=null&&r.getParentId()!=""){
+					if (r.getParentId() != null && r.getParentId() != "") {
 						Resource pr = new Resource();
-						pr=resourceService.get(resourceService.get(r.getId()).getParentId());
-						if(!rSet.contains(pr)){
-							if(pr!=null){
+						pr = resourceService.get(resourceService.get(r.getId())
+								.getParentId());
+						if (!rSet.contains(pr)) {
+							if (pr != null) {
 								rSet.add(pr);
 							}
 						}
-						if(pr.getParentId()!=null&&pr.getParentId()!=""){
+						if (pr.getParentId() != null && pr.getParentId() != "") {
 							Resource ppr = new Resource();
-							ppr=resourceService.get(resourceService.get(pr.getId()).getParentId());
-							if(!rSet.contains(ppr)){
-								if(ppr!=null){
+							ppr = resourceService.get(resourceService.get(
+									pr.getId()).getParentId());
+							if (!rSet.contains(ppr)) {
+								if (ppr != null) {
 									rSet.add(ppr);
 								}
 							}
 						}
 					}
-					//zn
+					// zn
+				}
+			}
+			// 页面元素有选中节点
+			if (StringUtils.isNotBlank(tree4)) {
+				// 获取所选节点
+				String[] trees = tree4.split(",");
+				for (String t : trees) {
+					Resource r = new Resource();
+					r.setId(t);
+					r = resourceService.get(t);
+					// zn
+					if (!rSet.contains(r)) {
+						if (r != null) {
+							rSet.add(r);
+						}
+					}
+					if (r.getParentId() != null && r.getParentId() != "") {
+						Resource pr = new Resource();
+						pr = resourceService.get(resourceService.get(r.getId())
+								.getParentId());
+						if (!rSet.contains(pr)) {
+							if (pr != null) {
+								rSet.add(pr);
+							}
+						}
+						if (pr.getParentId() != null && pr.getParentId() != "") {
+							Resource ppr = new Resource();
+							ppr = resourceService.get(resourceService.get(
+									pr.getId()).getParentId());
+							if (!rSet.contains(ppr)) {
+								if (ppr != null) {
+									rSet.add(ppr);
+								}
+							}
+						}
+					}
+					// zn
 				}
 			}
 			// 封装角色信息
@@ -270,7 +313,7 @@ public class RoleController extends BaseController<Role> {
 			Role role = new Role();
 			if (StringUtils.isNotBlank(id)) {
 				role = roleService.get(id);
-			} 
+			}
 			role.setRoleName(roleName);
 			role.setPictureHome(pictureHome);
 			role.setRoleDesc(roleDesc);
@@ -288,28 +331,11 @@ public class RoleController extends BaseController<Role> {
 	 * @param
 	 * @date 2013-6-26
 	 */
-	@ApiOperation(value="删除")
-	@ApiImplicitParam(name = "id", value = "角色主键", required = true, paramType = "query" ,dataType = "string")
-	@RequestMapping(value="/delete", method=RequestMethod.POST, produces={ MediaType.APPLICATION_JSON_VALUE })
+	@ApiOperation(value = "删除")
+	@ApiImplicitParam(name = "id", value = "角色主键", required = true, paramType = "query", dataType = "string")
+	@RequestMapping(value = "/delete", method = RequestMethod.POST, produces = { MediaType.APPLICATION_JSON_VALUE })
 	public void deleteRole(String id) {
 		roleService.delete(id);
-	}
-
-	public RoleService getRoleService() {
-		return roleService;
-	}
-
-	public void setRoleService(RoleService roleService) {
-		this.roleService = roleService;
-	}
-
-
-	public Role getRole() {
-		return role;
-	}
-
-	public void setRole(Role role) {
-		this.role = role;
 	}
 
 }

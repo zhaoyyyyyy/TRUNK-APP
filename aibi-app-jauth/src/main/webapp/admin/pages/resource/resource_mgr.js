@@ -66,7 +66,7 @@ window.jauth_onload = function() {
 	var proscenium = "1"; // 前台
 	var app = "2"; //APP
 	var backstage = "3"; // 后台
-	var roleId = "";
+	var proelement = "4";  //前台页面元素
 	var mySimpleTree;
 	var myTree;
 	var appTree;
@@ -148,6 +148,37 @@ window.jauth_onload = function() {
 		onSuccess : function(data) {
 			$("#simpleRootAPP").append(data);
 			appTree = $('#appTree').simpleTree({
+				autoclose : false,
+				showCheckBox : true,
+				cascadeParentChecked : cascadeParentChecked,
+				cascadeChildrenChecked : cascadeChildrenChecked,
+				afterClick: function(node){
+					$('#parentId').val(node.attr('id'));
+					$("#mainGrid").setGridParam({
+						postData : $("#formSearch").formToJson()
+					}).trigger("reloadGrid", [{
+								page : 1
+					}]);
+					
+				},
+				ignoreIndeterminate : false
+			});
+		
+		},
+		onFailure : function() {
+		},
+		maskMassage : '数据加载中...'
+	});
+	
+	$.commAjax({
+		url : url1,
+		isShowMask : true,
+		postData:{"resourceId":proelement},
+		type : 'POST',
+		async:false,
+		onSuccess : function(data) {
+			$("#simpleEle").append(data);
+			appTree = $('#elementTree').simpleTree({
 				autoclose : false,
 				showCheckBox : true,
 				cascadeParentChecked : cascadeParentChecked,

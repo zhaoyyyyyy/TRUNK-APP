@@ -56,7 +56,7 @@ import springfox.documentation.annotations.ApiIgnore;
  * @author chenchao3
  * @version 5.0.0.2017年10月23日
  */
-@Api(value = "调度管理")
+//@Api(value = "调度管理")
 @RequestMapping("api/schedule")
 @RestController
 public class ScheduleController extends BaseController<LocTaskExeInfo> {

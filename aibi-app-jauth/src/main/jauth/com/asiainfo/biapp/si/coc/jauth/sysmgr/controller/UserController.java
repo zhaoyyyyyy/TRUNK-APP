@@ -38,7 +38,7 @@ import io.swagger.annotations.ApiOperation;
  * @date 2013-6-28
  */
 
-@Api(value = "用户管理", tags = "用户登录,角色,资源等接口1")
+//@Api(value = "用户管理", description = "用户登录,角色,资源等接口1")
 @RequestMapping("api/user")
 @RestController
 public class UserController {

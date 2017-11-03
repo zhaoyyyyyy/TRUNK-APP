@@ -51,7 +51,7 @@ window.jauth_onload = function() {
 	var proscenium = "1"; // 前台
 	var app = "2"; // APP
 	var backstage = "3"; // 后台
-	var roleId = "";
+	var proelement = "4";  //页面
 	var mySimpleTree;
 	var myTree;
 	var appTree;
@@ -62,8 +62,6 @@ window.jauth_onload = function() {
 	
 	var cascadeParentChecked = true;
 	var cascadeChildrenChecked = true;
-	var filterOrgType = null;
-	
 	
 	// 前台
 	var url1 = $.ctx + '/api/resource/renderOrgTree';
@@ -116,8 +114,6 @@ window.jauth_onload = function() {
 		},
 		maskMassage : '数据加载中...'
 	});
-	
-	
 	// app
 	$.commAjax({
 		url : url1,
@@ -128,6 +124,31 @@ window.jauth_onload = function() {
 		onSuccess : function(data) {
 			$("#simpleRootAPP").append(data);
 			appTree = $('#appTree').simpleTree({
+				autoclose : true,
+				cascadeParentChecked : cascadeParentChecked,
+				cascadeChildrenChecked : cascadeChildrenChecked,
+				afterClick: function(node){
+					$('#parentName').val($('span:first', node).text());
+					$('#parentId').val(node.attr('id'));
+				},
+				ignoreIndeterminate : false
+			});
+		
+		},
+		onFailure : function() {
+		},
+		maskMassage : '数据加载中...'
+	});
+	//页面
+	$.commAjax({
+		url : url1,
+		postData:{"resourceId":proelement},
+		isShowMask : true,
+		type : 'POST',
+		async:false,
+		onSuccess : function(data) {
+			$("#simpleEle").append(data);
+			eleTree = $('#elementTree').simpleTree({
 				autoclose : true,
 				cascadeParentChecked : cascadeParentChecked,
 				cascadeChildrenChecked : cascadeChildrenChecked,
