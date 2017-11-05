@@ -7,7 +7,7 @@ import com.asiainfo.biapp.si.loc.base.exception.BaseException;
  * 用户业务处理层
  * @author zhougz3
  */
-public interface UserService {
+public interface IUserService {
 	
 	/**
 	 * 登录方法，通过用户名密码拿到token

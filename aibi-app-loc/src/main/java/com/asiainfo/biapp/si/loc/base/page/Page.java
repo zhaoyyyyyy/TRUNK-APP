@@ -11,8 +11,6 @@ import com.asiainfo.biapp.si.loc.base.BaseConstants;
 import io.swagger.annotations.ApiParam;
 
 public class Page<T> implements Serializable {
-	
-	
 
 	  public static Integer MAX_PAGE_SIZE = 100000;
 	  
@@ -26,9 +24,9 @@ public class Page<T> implements Serializable {
 
 	  public static long getSerialversionuid() {
 		return serialVersionUID;
-	}
+	  }
 
-	/** 排序的方向 */
+	  /** 排序的方向 */
 	  @ApiParam(value="排序的方向")
 	  private String sortOrder;
 

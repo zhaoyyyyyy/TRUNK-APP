@@ -33,26 +33,26 @@ function rememb(){
 	
 }
 function COCLogin(){
-	//svlada@gmail.com
-	var node = JSON.stringify({
-		    "username": $("#username").val(),
-		    "password": $("#pwd").val()
-	});
 	$.ajax({
-		  url: jQuery.ctx + "/api/auth/login",
+		  url: $.ctx + "/api/user/login",
 		  type:'post',
 		  cache:false,
-		  contentType:'application/json',
-		  dataType:'json',
-		  data:node,
-		  success: function(data){
-			  if(data && data.token){
+		  data :{
+			  "username": $("#username").val(),
+			  "password": $("#pwd").val()
+		  },
+//		  contentType:'application/json',
+//		  dataType:'json',
+		  //data:node,
+		  success: function(returnObj){
+			  if(returnObj && returnObj.status == '200'){
+				  var data = returnObj.data;
 				  var ssg = window.sessionStorage;
 				  ssg.setItem("token",data.token);
 				  ssg.setItem("refreshToken",data.refreshToken);
-				  location.href = jQuery.ctx+"/aibi_lc/demos/index.html";
+				  location.href = jQuery.ctx+"/aibi_lc/pages/label/market.html";
 			  }else{
-				  alert('用户名/密码错误');
+				  alert(returnObj.message);
 			  }
 		   },
 		   error: function(req){

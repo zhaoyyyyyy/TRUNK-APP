@@ -24,6 +24,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.asiainfo.biapp.si.loc.base.exception.BaseException;
+import com.asiainfo.biapp.si.loc.base.exception.SqlRunException;
 import com.asiainfo.biapp.si.loc.base.page.Page;
 
 /**
@@ -133,10 +135,15 @@ public class BaseDaoImpl<T, ID extends Serializable>  implements BaseDao<T,ID> {
 
 
 	@Override
-	public List<T> findListByHql(String hql, Object... args) {
-		Query query = em.createQuery(hql);
-		query = this.addParametersForArr(query, args);
-		return query.getResultList();
+	public List<T> findListByHql(String hql, Object... args) throws BaseException{
+		try{
+			Query query = em.createQuery(hql);
+			query = this.addParametersForArr(query, args);
+			return query.getResultList();
+		}catch(Exception e){
+			e.printStackTrace();
+			throw new SqlRunException();
+		}
 	}
 
 	@Override

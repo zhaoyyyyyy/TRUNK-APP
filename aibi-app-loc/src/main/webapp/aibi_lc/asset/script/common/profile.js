@@ -1,8 +1,4 @@
-(function($) {
-	$.extend({ 
-		ctx:"/"
-	});
-})(jQuery);
+$.ctx = "";
  
 
 

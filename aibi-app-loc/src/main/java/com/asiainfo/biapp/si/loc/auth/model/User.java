@@ -5,6 +5,30 @@ import java.util.Map;
 
 public class User {
 
+	public String getUserName() {
+		return userName;
+	}
+
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
+
+	public String getRealName() {
+		return realName;
+	}
+
+	public void setRealName(String realName) {
+		this.realName = realName;
+	}
+
+	public Map<String, List<Resource>> getResourcePrivaliege() {
+		return resourcePrivaliege;
+	}
+
+	public void setResourcePrivaliege(Map<String, List<Resource>> resourcePrivaliege) {
+		this.resourcePrivaliege = resourcePrivaliege;
+	}
+
 	private String userName;
 	private String realName;
 

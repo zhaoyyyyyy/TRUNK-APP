@@ -14,6 +14,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import antlr.Token;
+
 
 public class HttpUtil {
 	 static boolean proxySet = false;
@@ -117,7 +119,6 @@ public class HttpUtil {
 	    public static String sendGet(String url, Map<String,Object> paramMap) {
 	    	StringBuilder paramStrSb = new StringBuilder();
 	    	if(paramMap != null && paramMap.size() > 0){
-	    		paramStrSb.append("?");
 	    		Iterator<String> it = paramMap.keySet().iterator();
 	    		int i = 0;
 	    		while(it.hasNext()){
@@ -145,7 +146,7 @@ public class HttpUtil {
 	        String result = "";
 	        BufferedReader in = null;
 	        try {
-	            String urlNameString = url + "?" + param;
+	            String urlNameString = url ;
 	            URL realUrl = new URL(urlNameString);
 	            // 打开和URL之间的连接
 	            URLConnection connection = realUrl.openConnection();
@@ -154,14 +155,19 @@ public class HttpUtil {
 	            connection.setRequestProperty("connection", "Keep-Alive");
 	            connection.setRequestProperty("user-agent",
 	                    "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1;SV1)");
+	            
+	            if(param.contains("token")){
+	            	connection.setRequestProperty("X-Authorization", param.split("=")[1]);
+	            }
+	            
 	            // 建立实际的连接
 	            connection.connect();
 	            // 获取所有响应头字段
 	            Map<String, List<String>> map = connection.getHeaderFields();
 	            // 遍历所有的响应头字段
-	            for (String key : map.keySet()) {
-	                System.out.println(key + "--->" + map.get(key));
-	            }
+//	            for (String key : map.keySet()) {
+//	                System.out.println(key + "--->" + map.get(key));
+//	            }
 	            // 定义 BufferedReader输入流来读取URL的响应
 	            in = new BufferedReader(new InputStreamReader(
 	                    connection.getInputStream()));
@@ -170,7 +176,7 @@ public class HttpUtil {
 	                result += line;
 	            }
 	        } catch (Exception e) {
-	            System.out.println("发送GET请求出现异常！" + e);
+//	            System.out.println("发送GET请求出现异常！" + e);
 	            e.printStackTrace();
 	        }
 	        // 使用finally块来关闭输入流
@@ -200,7 +206,7 @@ public class HttpUtil {
 	    public static String sendPost(String url, Map<String,Object> paramMap) {
 	    	StringBuilder paramStrSb = new StringBuilder();
 	    	if(paramMap != null && paramMap.size() > 0){
-	    		paramStrSb.append("?");
+	    		//paramStrSb.append("?");
 	    		Iterator<String> it = paramMap.keySet().iterator();
 	    		int i = 0;
 	    		while(it.hasNext()){
@@ -250,7 +256,7 @@ public class HttpUtil {
 	            conn.setRequestProperty("accept", "*/*");
 	            conn.setRequestProperty("connection", "Keep-Alive");
 	            conn.setRequestProperty("user-agent","Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1;SV1)");
-	            conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+	            //conn.setRequestProperty("Content-Type", "application/json");
 
 	            conn.connect();
 
@@ -268,7 +274,7 @@ public class HttpUtil {
 	                result += line;
 	            }
 	        } catch (Exception e) {
-	            System.out.println("发送 POST 请求出现异常！"+e);
+//	            System.out.println("发送 POST 请求出现异常！"+e);
 	            e.printStackTrace();
 	        }
 	        //使用finally块来关闭输出流、输入流
@@ -288,12 +294,4 @@ public class HttpUtil {
 	        return result;
 	    }    
 
-	    public static void main(String[] args) {
-	        //demo:代理访问
-	        String url = "http://www.iyouwei.com.cn";
-	        String para = "key=youkeyid&youuid=uid&advert_type=int&domain=adf.ly&url=http://somewebsite.com";
-
-	        String sr=HttpUtil.sendGet(url,para);
-	        System.out.println(sr);
-	    }
 }

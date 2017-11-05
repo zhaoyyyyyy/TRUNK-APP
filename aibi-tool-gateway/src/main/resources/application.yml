@@ -11,7 +11,7 @@ eureka:
     healthcheck:
       enabled: true
     serviceUrl:
-      defaultZone: "http://${jauth-url}/eureka/"
+      defaultZone: "${jauth-url}/eureka/"
   instance:
     leaseExpirationDurationInSeconds: 1
     leaseRenewalIntervalInSeconds: 1
