@@ -12,6 +12,7 @@ import com.asiainfo.biapp.si.loc.auth.model.DicData;
 import com.asiainfo.biapp.si.loc.auth.service.IDicDataService;
 import com.asiainfo.biapp.si.loc.base.exception.BaseException;
 import com.asiainfo.biapp.si.loc.base.exception.ParamRequiredException;
+import com.asiainfo.biapp.si.loc.base.page.Page;
 import com.asiainfo.biapp.si.loc.base.utils.StringUtil;
 
 
@@ -30,4 +31,8 @@ public class DicDataServiceImpl implements IDicDataService{
 		return dicDataDao.selectDataBycode(code);
 	}
 
+
+	public Page<DicData> findDicDataList(Page<DicData> page,String dicCode) {
+		return dicDataDao.findDicDataList(page, dicCode);
+	}
 }

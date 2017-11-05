@@ -116,7 +116,7 @@ public class HttpUtil {
 	     *            请求参数，请求参数应该是K-V 的形式。
 	     * @return URL 所代表远程资源的响应结果
 	     */
-	    public static String sendGet(String url, Map<String,Object> paramMap) {
+	    public static String sendGet(String url, Map<String,Object> paramMap)  throws Exception{
 	    	StringBuilder paramStrSb = new StringBuilder();
 	    	if(paramMap != null && paramMap.size() > 0){
 	    		Iterator<String> it = paramMap.keySet().iterator();
@@ -139,10 +139,10 @@ public class HttpUtil {
 	     * @param url
 	     *            发送请求的URL
 	     * @param param
-	     *            请求参数，请求参数应该是 name1=value1&name2=value2 的形式。
+	     *            请求参数，请求参数应该是 name1=value1&name2=value2 的形式。IO
 	     * @return URL 所代表远程资源的响应结果
 	     */
-	    public static String sendGet(String url, String param) {
+	    public static String sendGet(String url, String param) throws Exception{
 	        String result = "";
 	        BufferedReader in = null;
 	        try {
@@ -176,8 +176,9 @@ public class HttpUtil {
 	                result += line;
 	            }
 	        } catch (Exception e) {
+	        	e.printStackTrace();
+	        	throw new IOException();
 //	            System.out.println("发送GET请求出现异常！" + e);
-	            e.printStackTrace();
 	        }
 	        // 使用finally块来关闭输入流
 	        finally {

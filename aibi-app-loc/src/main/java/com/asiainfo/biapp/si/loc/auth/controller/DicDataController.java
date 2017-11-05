@@ -4,21 +4,23 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.asiainfo.biapp.si.loc.auth.model.DicData;
-import com.asiainfo.biapp.si.loc.auth.model.User;
 import com.asiainfo.biapp.si.loc.auth.service.IDicDataService;
 import com.asiainfo.biapp.si.loc.base.controller.BaseController;
 import com.asiainfo.biapp.si.loc.base.exception.BaseException;
+import com.asiainfo.biapp.si.loc.base.page.Page;
 import com.asiainfo.biapp.si.loc.base.utils.WebResult;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import springfox.documentation.annotations.ApiIgnore;
 
 /**
  * 
@@ -74,4 +76,28 @@ public class DicDataController extends BaseController<DicData>{
 		return webResult.success("获取数据字典成功.",dicDataList );
 	}
 	
+	
+	/**
+	 * 通过参数查询字典分页
+	 * @return 
+	 * @return
+	 */
+	@ApiOperation(value="显示数据字典的列表（分页形式）")
+	@ApiImplicitParams({
+		@ApiImplicitParam(name = "code", value = "编码", required = false, paramType = "query" ,dataType = "string"),
+		@ApiImplicitParam(name = "dataName", value = "名称", required = false, paramType = "query" ,dataType = "string"),
+		@ApiImplicitParam(name = "note", value = "备注", required = false, paramType = "query" ,dataType = "string"),
+		@ApiImplicitParam(name = "dicCode", value = "字典编码", required = false, paramType = "query" ,dataType = "string"),
+	})
+	@RequestMapping(value="/dicdataPage/query", method=RequestMethod.POST, produces={ MediaType.APPLICATION_JSON_VALUE })
+	public Page<DicData> findDicDataPageByParams(@ModelAttribute Page<DicData> page,String dicCode){
+		
+		Page<DicData> dicDataPage = new Page<DicData>();
+		try {
+			dicDataPage = dicDataService.findDicDataList(page, dicCode);
+		} catch (BaseException e) {
+			dicDataPage.fail(e);
+		}
+		return dicDataPage;
+	}
 }

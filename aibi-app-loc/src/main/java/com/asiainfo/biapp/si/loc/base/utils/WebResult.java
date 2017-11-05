@@ -144,18 +144,18 @@ public class WebResult<T extends Object> {
      *
      * @return
      */
-    public static WebResult<Object> fail(String message){
+    public WebResult<T> fail(String message){
 //    	 Map<String, Object> result = new HashMap<String, Object>();
 //         result.put(WebResult.Result.STATUS, WebResult.Code.FAIL);
 //         result.put(WebResult.Result.MSG, message);
 //         result.put(WebResult.Result.LIST, null);
 //         return result;
     	
-    	 WebResult<Object> webResult = new WebResult<>();
-    	 webResult.setData(null);
-    	 webResult.setMsg(message);
-    	 webResult.setStatus(WebResult.Code.FAIL+"");
-         return webResult;
+    	 //WebResult<T> webResult = new WebResult<T>();
+    	 this.setData(null);
+    	 this.setMsg(message);
+    	 this.setStatus(WebResult.Code.FAIL+"");
+         return this;
     }
     
     /**
@@ -169,11 +169,11 @@ public class WebResult<T extends Object> {
 //       result.put(WebResult.Result.MSG, message);
 //       result.put(WebResult.Result.LIST, obj);
     	 
-    	 WebResult<T> webResult = new WebResult<>();
-    	 webResult.setData(obj);
-    	 webResult.setStatus(WebResult.Code.OK+"");
-    	 webResult.setMsg(message);
-         return webResult;
+    	 //WebResult<T> webResult = new WebResult<>();
+    	 this.setData(obj);
+    	 this.setStatus(WebResult.Code.OK+"");
+    	 this.setMsg(message);
+         return this;
     }
     
     /**
@@ -187,11 +187,11 @@ public class WebResult<T extends Object> {
 //         result.put(WebResult.Result.MSG, baseException.getMessage());
 //         result.put(WebResult.Result.LIST, null);
 //         return result;
-    	 WebResult<T> webResult = new WebResult<>();
-    	 webResult.setData(null);
-    	 webResult.setMsg(baseException.getMessage());
-    	 webResult.setStatus(baseException.getErrorCode());
-    	 return webResult;
+    	 //WebResult<T> webResult = new WebResult<>();
+    	 this.setData(null);
+    	 this.setMsg(baseException.getMessage());
+    	 this.setStatus(baseException.getErrorCode());
+    	 return this;
     }  
 
 }

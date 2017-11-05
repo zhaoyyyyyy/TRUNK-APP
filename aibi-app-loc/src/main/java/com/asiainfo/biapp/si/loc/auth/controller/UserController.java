@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.asiainfo.biapp.si.loc.auth.model.DicData;
 import com.asiainfo.biapp.si.loc.auth.model.User;
 import com.asiainfo.biapp.si.loc.auth.service.IUserService;
+import com.asiainfo.biapp.si.loc.auth.utils.TokenModel;
 import com.asiainfo.biapp.si.loc.base.controller.BaseController;
 import com.asiainfo.biapp.si.loc.base.exception.BaseException;
 import com.asiainfo.biapp.si.loc.base.utils.WebResult;
@@ -38,10 +39,10 @@ public class UserController extends BaseController<User>{
 		@ApiImplicitParam(name = "password", value = "密码", required = true, paramType = "query", dataType = "string") 
 	})
 	@RequestMapping(value="/login", method=RequestMethod.POST, produces={ MediaType.APPLICATION_JSON_VALUE })
-	public @ResponseBody WebResult<String> login(String username,String password){
-		WebResult<String> webResult = new WebResult<String>();
+	public WebResult<TokenModel> login(String username,String password){
+		WebResult<TokenModel> webResult = new WebResult<TokenModel>();
 		
-		String token = null;
+		TokenModel token = null;
 		try {
 			token = userService.getTokenByUsernamePassword(username, password);
 		} catch (BaseException e) {
