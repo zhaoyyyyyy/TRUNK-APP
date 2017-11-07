@@ -1,5 +1,6 @@
 package com.asiainfo.biapp.si.loc.auth.service.impl;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,7 +23,6 @@ import com.asiainfo.biapp.si.loc.base.service.impl.BaseServiceImpl;
 import com.asiainfo.biapp.si.loc.base.utils.HttpUtil;
 import com.asiainfo.biapp.si.loc.base.utils.StringUtil;
 
-import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
 /**
@@ -114,8 +114,13 @@ public class UserServiceImpl extends BaseServiceImpl<User, String> implements IU
 		
 		//拿到数据权限
 		try{
+			List<Organization> organizationPrivaliege = new ArrayList<Organization>();
+			
+			
 			String dataJson = HttpUtil.sendGet(jauthUrl+"/api/auth/permission/data", params);
-			System.out.println(dataJson);//TODO
+			
+			//TODO 把data Json 转成 orglist
+			user.setOrganizationPrivaliege(organizationPrivaliege);
 			
 		}catch(Exception e){
 			throw new UserAuthException("获取用户数据权限失败",e);
@@ -123,8 +128,13 @@ public class UserServiceImpl extends BaseServiceImpl<User, String> implements IU
 		
 		//拿到资源权限
 		try{
+			List<Resource> resourcePrivaliege = new ArrayList<Resource>();
+			
 			String resourceJson = HttpUtil.sendGet(jauthUrl+"/api/auth/permission/resource", params);
-			System.out.println(resourceJson);//TODO
+			
+			//TODO 把data Json 转成 orglist
+			user.setResourcePrivaliege(resourcePrivaliege);
+		
 		}catch(Exception e){
 			throw new UserAuthException("获取用户资源权限失败",e);
 		}
