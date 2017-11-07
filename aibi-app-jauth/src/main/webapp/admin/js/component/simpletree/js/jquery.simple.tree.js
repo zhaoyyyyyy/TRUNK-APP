@@ -51,6 +51,7 @@ $.fn.simpleTree = function(opt) {
 		
 		var TREE = this;
 		var ROOT = $('.root', this);
+		var ROOTD = $('.rootd', this);
 		var mousePressed = false;
 		var mouseMoved = false;
 		var dragMoveType = false;
@@ -118,6 +119,7 @@ $.fn.simpleTree = function(opt) {
 		
 		if(TREE.option.showRoot){
 			ROOT.removeClass('root').addClass('root_show');
+			ROOTD.removeClass('rootd').addClass('root_show');
 			if(TREE.option.afterRootClick){
 				var $rootSpan = ROOT.find(">span");
 				$rootSpan.hover(function(){
@@ -130,6 +132,19 @@ $.fn.simpleTree = function(opt) {
 				$rootSpan.click(function(){
 					$('.active', TREE).removeClass('active');
 					$rootSpan.removeClass('hoverRoot').addClass('activeRoot');
+					TREE.option.afterRootClick();
+				});
+				var $rootdSpan = ROOTD.find(">span");
+				$rootSpan.hover(function(){
+					if(!$rootdSpan.hasClass('activeRoot')){
+						$rootdSpan.addClass('hoverRoot');
+					}
+				}, function(){
+					$rootdSpan.removeClass('hoverRoot');
+				});
+				$rootdSpan.click(function(){
+					$('.active', TREE).removeClass('active');
+					$rootdSpan.removeClass('hoverRoot').addClass('activeRoot');
 					TREE.option.afterRootClick();
 				});
 			}
@@ -210,6 +225,7 @@ $.fn.simpleTree = function(opt) {
 			
 			$('.active', TREE).removeClass('active');
 			ROOT.find(">span").removeClass('activeRoot');
+			ROOTD.find(">span").removeClass('activeRoot');
 			var $divChild = $node.children('div');
 			$divChild.removeClass('hover').addClass('active');
 			return true;
@@ -911,6 +927,7 @@ $.fn.simpleTree = function(opt) {
 		TREE.addNode = function(id, text,opts, callback) {
 			if(!$.isNull(opts.parentId)){
 				dragNode_destination = $("#"+opts.parentId, ROOT);
+				dragNode_destination = $("#"+opts.parentId, ROOTD);
 			}else{
 				dragNode_destination = TREE.getSelected();
 			}
@@ -966,6 +983,7 @@ $.fn.simpleTree = function(opt) {
 			TREE.setTreeNodes(obj, false);
 		};
 		TREE.init(ROOT);
+		TREE.init(ROOTD);
 	});
 };
 
