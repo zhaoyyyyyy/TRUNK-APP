@@ -96,11 +96,9 @@ public class UserServiceImpl extends BaseServiceImpl<User, String> implements IU
 	@Override
 	public User getUserByToken(String token) throws BaseException{
 		
-		
 		String username = null;
 		Map<String,Object> params = new HashMap<String,Object>();
 		params.put("token", token);
-		
 		
 		//拿到用户名
 		try{
@@ -120,7 +118,7 @@ public class UserServiceImpl extends BaseServiceImpl<User, String> implements IU
 			System.out.println(dataJson);//TODO
 			
 		}catch(Exception e){
-			throw new UserAuthException("获取用户数据权限失败");
+			throw new UserAuthException("获取用户数据权限失败",e);
 		}
 		
 		//拿到资源权限
