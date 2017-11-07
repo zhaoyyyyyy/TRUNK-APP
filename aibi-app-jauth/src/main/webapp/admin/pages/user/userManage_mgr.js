@@ -87,8 +87,8 @@ window.jauth_onload = function(){
 			+ "\")' class='s_edit' >编辑</a>" 
 			+ "<a onclick='fun_to_role(\"" + data.id
 			+ "\")' class='s_ls' >分配角色</a>"
-//			+ "<a onclick='fun_to_group(\"" + data.id
-//			+ "\")' class='s_ls' >分配数据范围</a>"
+			+ "<a onclick='fun_to_group(\"" + data.id
+			+ "\")' class='s_ls' >分配数据范围</a>"
 		}
 	}];
 	$("#mainGrid").jqGrid({
