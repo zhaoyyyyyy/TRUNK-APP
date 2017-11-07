@@ -146,15 +146,14 @@ public class HttpUtil {
 	        String result = "";
 	        BufferedReader in = null;
 	        try {
-	            String urlNameString = url ;
+	            String urlNameString = url + "?" + param ;
 	            URL realUrl = new URL(urlNameString);
 	            // 打开和URL之间的连接
 	            URLConnection connection = realUrl.openConnection();
 	            // 设置通用的请求属性
 	            connection.setRequestProperty("accept", "*/*");
 	            connection.setRequestProperty("connection", "Keep-Alive");
-	            connection.setRequestProperty("user-agent",
-	                    "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1;SV1)");
+	            connection.setRequestProperty("user-agent","Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1;SV1)");
 	            
 	            if(param.contains("token")){
 	            	connection.setRequestProperty("X-Authorization", param.split("=")[1]);
@@ -162,6 +161,7 @@ public class HttpUtil {
 	            
 	            // 建立实际的连接
 	            connection.connect();
+	            
 	            // 获取所有响应头字段
 	            Map<String, List<String>> map = connection.getHeaderFields();
 	            // 遍历所有的响应头字段
@@ -171,6 +171,7 @@ public class HttpUtil {
 	            // 定义 BufferedReader输入流来读取URL的响应
 	            in = new BufferedReader(new InputStreamReader(
 	                    connection.getInputStream()));
+	            
 	            String line;
 	            while ((line = in.readLine()) != null) {
 	                result += line;

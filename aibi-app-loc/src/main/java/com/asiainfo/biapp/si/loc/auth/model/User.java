@@ -4,7 +4,27 @@ import java.util.List;
 import java.util.Map;
 
 public class User {
+	private String userName;
+	private String realName;
+	/**
+	 * 资源权限
+	 */
+	private List<Resource> resourcePrivaliege;
+	
+	/**
+	 * 资源权限
+	 */
+	private List<Organization> organizationPrivaliege;
+	
+	
+	
+	public void setResourcePrivaliege(List<Resource> resourcePrivaliege) {
+		this.resourcePrivaliege = resourcePrivaliege;
+	}
 
+	public void setOrganizationPrivaliege(List<Organization> organizationPrivaliege) {
+		this.organizationPrivaliege = organizationPrivaliege;
+	}
 	public String getUserName() {
 		return userName;
 	}
@@ -20,26 +40,10 @@ public class User {
 	public void setRealName(String realName) {
 		this.realName = realName;
 	}
-
-	public Map<String, List<Resource>> getResourcePrivaliege() {
-		return resourcePrivaliege;
-	}
-
-	public void setResourcePrivaliege(Map<String, List<Resource>> resourcePrivaliege) {
-		this.resourcePrivaliege = resourcePrivaliege;
-	}
-
-	private String userName;
-	private String realName;
-
-
-	/**
-	 * 资源权限
-	 */
-	private Map<String,List<Resource>> resourcePrivaliege;
 	
 	
 	
+
 	//资源权限（菜单，按钮，接口等）
 	public List<Resource> getResourceMenus(){
 		return null;
@@ -54,10 +58,5 @@ public class User {
 	}
 	
 	
-	/**
-	 * 组织权限
-	 */
-	//数据权限（省中心专区，地市专区，第三方换区，场景?? 个人 ？？专区）
-	//private Map<String,List<Resource>> resourcePrivaliege;
 	
 }
