@@ -29,7 +29,7 @@ import io.swagger.annotations.Api;
  * @date 2013-6-28
  */
 
-//@Api(value = "组织成员接口")
+@Api(value = "组织成员接口")
 @RequestMapping("api/orguser")
 @RestController
 public class OrgUserController extends BaseController<OrgUser>{
