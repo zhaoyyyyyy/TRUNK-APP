@@ -33,7 +33,7 @@ import springfox.documentation.annotations.ApiIgnore;
  * @author zhangnan
  * @date 2017年9月27日 下午2:32:56
  */
-//@Api(value = "配置管理接口", description = "配置新建，编辑，查询，删除等")
+@Api(value = "配置管理接口", description = "配置新建，编辑，查询，删除等")
 @RequestMapping("api/config")
 @RestController
 public class ConfigController extends BaseController<Coconfig> {

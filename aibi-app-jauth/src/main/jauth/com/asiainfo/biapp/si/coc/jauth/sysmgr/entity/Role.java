@@ -27,7 +27,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
  * @date 2013-6-21
  */
 @Entity
-@Table(name="CI_SYS_ROLE")
+@Table(name="LOC_SYS_ROLE")
 public class Role extends BaseEntity {
 	/**
 	 * 

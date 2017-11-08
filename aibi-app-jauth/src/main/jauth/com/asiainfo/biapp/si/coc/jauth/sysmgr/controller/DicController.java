@@ -1,5 +1,6 @@
 package com.asiainfo.biapp.si.coc.jauth.sysmgr.controller;
 
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
@@ -28,7 +29,7 @@ import com.asiainfo.biapp.si.coc.jauth.sysmgr.entity.DicData;
 import com.asiainfo.biapp.si.coc.jauth.sysmgr.service.DicDataService;
 import com.asiainfo.biapp.si.coc.jauth.sysmgr.service.DicService;
 
-//@Api(value = "数据字典管理")
+@Api(value = "数据字典管理")
 @RequestMapping("api/datadic/dic")
 @RestController
 public class DicController extends BaseController<Dic>{

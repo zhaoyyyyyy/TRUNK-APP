@@ -27,7 +27,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
  * @date 2013-6-27
  */
 @Entity
-@Table(name="CI_SYS_GROUP")
+@Table(name="LOC_SYS_GROUP")
 public class Group extends BaseEntity {
 	/**
 	 * 

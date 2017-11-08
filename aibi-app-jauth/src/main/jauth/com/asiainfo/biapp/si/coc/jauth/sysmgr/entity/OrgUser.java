@@ -17,7 +17,7 @@ import com.asiainfo.biapp.si.coc.jauth.sysmgr.utils.DataDicUtil;
  * @date 2013-6-26
  */
 @Entity
-//@Table(name="CI_SYS_ORG_USER")
+//@Table(name="LOC_SYS_ORG_USER")
 public class OrgUser extends BaseExportEntity {
 	
 	/**@describe 组织机构状态*/

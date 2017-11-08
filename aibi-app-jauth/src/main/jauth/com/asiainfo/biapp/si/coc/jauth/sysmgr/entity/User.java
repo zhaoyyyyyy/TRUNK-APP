@@ -31,7 +31,7 @@ import com.asiainfo.biapp.si.coc.jauth.sysmgr.utils.DataDicUtil;
  * @date 2013-6-27
  */
 @Entity
-@Table(name="CI_SYS_USER")
+@Table(name="LOC_SYS_USER")
 public class User extends BaseExportEntity {
 	
 	/**

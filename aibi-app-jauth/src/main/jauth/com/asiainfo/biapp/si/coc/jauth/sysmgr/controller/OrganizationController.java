@@ -32,7 +32,7 @@ import io.swagger.annotations.ApiOperation;
  * @author zhougz
  * @date 2013-6-19
  */
-//@Api(value = "组织机构管理接口")
+@Api(value = "组织机构管理接口")
 @RequestMapping("api/organization")
 @RestController
 public class OrganizationController extends BaseController<Organization>{

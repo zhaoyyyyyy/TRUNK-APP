@@ -16,7 +16,7 @@ import com.asiainfo.biapp.si.coc.jauth.frame.entity.BaseEntity;
  * @date 2013-5-13
  */
 @Entity
-@Table(name="CI_SYS_DIC")
+@Table(name="LOC_SYS_DIC")
 public class Dic extends BaseEntity{
 	/**
 	 * 

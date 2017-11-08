@@ -41,7 +41,7 @@ import com.asiainfo.biapp.si.coc.jauth.sysmgr.vo.RoleVo;
  * @author liukai
  * @date 2013-6-21
  */
-// @Api(value = "角色管理",description = "用户登录,角色,资源等接口")
+@Api(value = "角色管理",description = "用户登录,角色,资源等接口")
 @RequestMapping("api/role")
 @RestController
 public class RoleController extends BaseController<Role> {

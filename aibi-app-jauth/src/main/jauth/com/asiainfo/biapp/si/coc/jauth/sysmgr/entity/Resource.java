@@ -34,7 +34,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
  * @date 2013-6-24
  */
 @Entity
-@Table(name="CI_SYS_RESOURCE")
+@Table(name="LOC_SYS_RESOURCE")
 public class Resource extends BaseEntity {
 	/**    
 	 * 
