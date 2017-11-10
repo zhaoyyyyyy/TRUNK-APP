@@ -97,6 +97,7 @@ public class UserServiceImpl extends BaseServiceImpl<User, String> implements IU
 	public User getUserByToken(String token) throws BaseException{
 		
 		String username = null;
+		String userId = null;
 		Map<String,Object> params = new HashMap<String,Object>();
 		params.put("token", token);
 		
@@ -106,11 +107,13 @@ public class UserServiceImpl extends BaseServiceImpl<User, String> implements IU
 			String tokenStr = HttpUtil.sendGet(jauthUrl+"/api/auth/me", params);
 			JSONObject jsObject = JSONObject.fromObject(tokenStr);
 			username = jsObject.getString("username");
+			userId = jsObject.getString("userId");
 		}catch(Exception e){
 			throw new UserAuthException("无效的token");
 		}
 		User user = new User();
 		user.setUserName(username);
+		user.setUserId(userId);
 		
 		//拿到数据权限
 		try{

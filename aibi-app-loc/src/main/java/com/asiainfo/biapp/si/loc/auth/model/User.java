@@ -4,8 +4,11 @@ import java.util.List;
 import java.util.Map;
 
 public class User {
+	
+	private String userId;
 	private String userName;
 	private String realName;
+	
 	/**
 	 * 资源权限
 	 */
@@ -17,7 +20,12 @@ public class User {
 	private List<Organization> organizationPrivaliege;
 	
 	
-	
+	public String getUserId() {
+		return userId;
+	}
+	public void setUserId(String userId) {
+		this.userId = userId;
+	}
 	public void setResourcePrivaliege(List<Resource> resourcePrivaliege) {
 		this.resourcePrivaliege = resourcePrivaliege;
 	}
@@ -40,9 +48,6 @@ public class User {
 	public void setRealName(String realName) {
 		this.realName = realName;
 	}
-	
-	
-	
 
 	//资源权限（菜单，按钮，接口等）
 	public List<Resource> getResourceMenus(){
