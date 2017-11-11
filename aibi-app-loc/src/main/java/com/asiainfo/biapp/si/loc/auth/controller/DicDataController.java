@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.asiainfo.biapp.si.loc.auth.model.DicData;
 import com.asiainfo.biapp.si.loc.auth.service.IDicDataService;
+import com.asiainfo.biapp.si.loc.auth.utils.AuthUtils;
 import com.asiainfo.biapp.si.loc.base.controller.BaseController;
 import com.asiainfo.biapp.si.loc.base.exception.BaseException;
 import com.asiainfo.biapp.si.loc.base.page.Page;

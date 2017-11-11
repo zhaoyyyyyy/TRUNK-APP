@@ -178,7 +178,7 @@ public class JAuthApi {
                 .map(authority -> new SimpleGrantedAuthority(authority.getRoleName()))
                 .collect(Collectors.toList());
 
-        UserContext userContext = UserContext.create(user.getUserName(), authorities);
+        UserContext userContext = UserContext.create(user.getId(),user.getUserName(), authorities);
 
         return tokenFactory.createAccessJwtToken(userContext);
     }

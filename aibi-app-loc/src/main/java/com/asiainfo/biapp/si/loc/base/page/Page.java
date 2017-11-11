@@ -49,6 +49,8 @@ public class Page<T> implements Serializable {
 	/** 每页条数 */
 	public static final int DEFAULT_PAGE_SIZE = 10;
 	
+	/** 每页条数 */
+	@ApiParam(value = "每页多少条")
 	private int pageSize = DEFAULT_PAGE_SIZE;
 	
 
@@ -56,8 +58,8 @@ public class Page<T> implements Serializable {
 	@ApiParam(value = "开始查询的页数")
 	private int pageStart;
 
-	@ApiParam(value = "开始查询的条数")
-	private int start;
+	//@ApiParam(value = "开始查询的条数")
+	//private int start;
 	
 	/** 排序的列 */
 	@ApiParam(value = "排序的列")
@@ -135,15 +137,15 @@ public class Page<T> implements Serializable {
 		this(0, DEFAULT_PAGE_SIZE);
 	}
 
-	public Page(int start, int pageSize) {
+	public Page(int pageStart, int pageSize) {
 		this.pageSize = pageSize;
-		this.start = start;
+		this.pageStart = pageStart;
 	}
 
 	public Page(List<T> list) {
 		if (list != null) {
 			this.pageSize = 0;
-			this.start = 0;
+			this.pageStart = 0;
 			this.totalCount = list.size();
 			this.data = list;
 		}
@@ -191,9 +193,6 @@ public class Page<T> implements Serializable {
 		this.data = data;
 	}
 
-	public void setStart(int start) {
-		this.start = start;
-	}
 
 	public void setPageSize(int pageSize) {
 		this.pageSize = pageSize;
@@ -242,7 +241,7 @@ public class Page<T> implements Serializable {
 	 * @return
 	 */
 	public String toString() {
-		return new ToStringBuilder(this).append("起始行", this.start).append("每页行数", this.pageSize)
+		return new ToStringBuilder(this).append("起始行", this.getStart()).append("每页行数", this.pageSize)
 				.append("总条数", this.totalCount).append("当前列表size", this.data.size()).toString();
 	}
 }

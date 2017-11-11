@@ -51,7 +51,7 @@ public class JwtTokenFactory {
 
         Claims claims = Jwts.claims().setSubject(userContext.getUsername());
         claims.put("scopes", userContext.getAuthorities().stream().map(s -> s.toString()).collect(Collectors.toList()));
-
+        claims.put("userId", userContext.getUserId());
         LocalDateTime currentTime = LocalDateTime.now();
         
         String token = Jwts.builder()
@@ -75,6 +75,7 @@ public class JwtTokenFactory {
         LocalDateTime currentTime = LocalDateTime.now();
 
         Claims claims = Jwts.claims().setSubject(userContext.getUsername());
+        claims.put("userId", userContext.getUserId());
         claims.put("scopes", Arrays.asList(Scopes.REFRESH_TOKEN.authority()));
         
         String token = Jwts.builder()
