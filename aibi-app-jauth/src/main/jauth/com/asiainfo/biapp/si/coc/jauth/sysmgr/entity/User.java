@@ -79,7 +79,7 @@ public class User extends BaseExportEntity {
 	 * 角色集合
 	 */
 	@ManyToMany(fetch=FetchType.LAZY)  
-	@JoinTable(name="CI_SYS_USEROLE",  
+	@JoinTable(name="LOC_SYS_USEROLE",  
 	joinColumns={@JoinColumn(name="USER_ID")},inverseJoinColumns={@JoinColumn(name="ROLE_ID")})  
 	private Set<Role> roleSet;
     
@@ -87,14 +87,14 @@ public class User extends BaseExportEntity {
 	 * 数据范围集合
 	 */
 	@ManyToMany(fetch=FetchType.LAZY)
-	@JoinTable(name="CI_SYS_USERGROUP",  
+	@JoinTable(name="LOC_SYS_USERGROUP",  
 	joinColumns={@JoinColumn(name="USER_ID")},inverseJoinColumns={@JoinColumn(name="GROUP_ID")})  
 	private Set<Group> groupSet;
 	/**
 	 * 组织属性
 	 */
 	@ManyToMany(fetch=FetchType.LAZY)  
-	@JoinTable(name="CI_SYS_ORG_USER",  
+	@JoinTable(name="LOC_SYS_ORG_USER",  
 	joinColumns={@JoinColumn(name="USER_ID")},inverseJoinColumns={@JoinColumn(name="ORGCODE",referencedColumnName="ORGCODE")})
 	private Set<Organization> orgSet;
 	

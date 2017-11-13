@@ -112,7 +112,7 @@ public class Role extends BaseEntity {
 	 * 资源集合
 	 */
 	@ManyToMany(fetch=FetchType.LAZY)
-	@JoinTable(name="CI_SYS_ROLERESOURCE",  
+	@JoinTable(name="LOC_SYS_ROLERESOURCE",  
 	joinColumns={@JoinColumn(name="ROLE_ID")},inverseJoinColumns={@JoinColumn(name="RESOURCE_ID")})  
 	private Set<Resource> resourceSet;
 	
@@ -121,7 +121,7 @@ public class Role extends BaseEntity {
 	 */
 	@JsonIgnore
 	@ManyToMany(fetch=FetchType.LAZY)
-	@JoinTable(name="CI_SYS_USEROLE",  
+	@JoinTable(name="LOC_SYS_USEROLE",  
 	joinColumns={@JoinColumn(name="ROLE_ID")},inverseJoinColumns={@JoinColumn(name="USER_ID")})  
 	private Set<User> userSet;
 

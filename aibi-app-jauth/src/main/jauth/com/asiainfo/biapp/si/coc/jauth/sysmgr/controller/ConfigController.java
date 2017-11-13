@@ -113,6 +113,18 @@ public class ConfigController extends BaseController<Coconfig> {
 		map.put("config", coconfig);
 		return map;
 	}
+	
+	// 得到配置子信息
+	@ApiOperation(value = "通过parentKey查询")
+    @ApiImplicitParam(name = "parentCode", value = "配置key", required = true, paramType = "query", dataType = "string")
+    @RequestMapping(value = "/getChild", method = RequestMethod.POST, produces = { MediaType.APPLICATION_JSON_VALUE })
+	public List<Coconfig> getChildren(String parentCode){
+	    List<Coconfig> conList = coconfigService.getCoconfigByParentKey(parentCode);
+	    for(int i=0;i<conList.size();i++){
+	        conList.get(i).setChildren(null);
+	    }
+	    return conList;
+	}
 
 	// 得到列表并分页
 	@ApiOperation(value = "分页显示列表")
@@ -192,11 +204,12 @@ public class ConfigController extends BaseController<Coconfig> {
 			for (int i = 0; i < conKeys.length; i++) {// 添加新配置
 				Coconfig newCon = new Coconfig();
 				newCon.setConfigName(conNames[i]);
-				newCon.setConfigKey(conKeys[i]);
+				newCon.setConfigKey(coconfig.getParentKey()+"_"+conKeys[i]);
 				newCon.setConfigVal(conVals[i]);
 				newCon.setConfigValType(Integer.parseInt(conTypes[i]));
 				newCon.setParentKey(coconfig.getParentKey());
 				newCon.setStatus(1);
+				newCon.setSysId("1");//TODO SYS_ID具体如何保存
 				coconfigService.saveOrUpdate(newCon);
 			}
 			return "success";

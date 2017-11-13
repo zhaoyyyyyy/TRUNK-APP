@@ -87,13 +87,13 @@ public class Group extends BaseEntity {
 	private String groupCode;
 
 	@ManyToMany(fetch=FetchType.LAZY)  
-	@JoinTable(name="CI_SYS_USERGROUP",  
+	@JoinTable(name="LOC_SYS_USERGROUP",  
 	joinColumns={@JoinColumn(name="GROUP_ID")},inverseJoinColumns={@JoinColumn(name="USER_ID")})
 	@JsonIgnore
 	private Set<User> userSet;
 	
 	@ManyToMany(fetch=FetchType.LAZY)  
-	@JoinTable(name="CI_SYS_GROUPORG",  
+	@JoinTable(name="LOC_SYS_GROUPORG",  
 	joinColumns={@JoinColumn(name="GROUP_ID")},inverseJoinColumns={@JoinColumn(name="ORG_CODE",referencedColumnName="ORGCODE")})  
 	private Set<Organization> organizationSet;
 

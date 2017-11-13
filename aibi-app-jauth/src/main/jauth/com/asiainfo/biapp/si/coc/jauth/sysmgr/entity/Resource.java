@@ -113,7 +113,7 @@ public class Resource extends BaseEntity {
 	 */
 	@JsonIgnore
 	@ManyToMany(fetch=FetchType.LAZY)
-	@JoinTable(name="CI_SYS_ROLERESOURCE",  
+	@JoinTable(name="LOC_SYS_ROLERESOURCE",  
 	joinColumns={@JoinColumn(name="RESOURCE_ID")},inverseJoinColumns={@JoinColumn(name="ROLE_ID")})  
 	public Set<Role> roleSet = new HashSet<>(0);
 	/** 子组织列表 */

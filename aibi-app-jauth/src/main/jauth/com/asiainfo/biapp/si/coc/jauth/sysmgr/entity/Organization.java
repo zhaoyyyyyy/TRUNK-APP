@@ -106,7 +106,7 @@ public class Organization extends BaseEntity{
 	 */
 	@JsonIgnore
 	@ManyToMany(fetch=FetchType.LAZY)  
-	@JoinTable(name="CI_SYS_ORG_USER",
+	@JoinTable(name="LOC_SYS_ORG_USER",
 	joinColumns={@JoinColumn(name="ORGCODE",referencedColumnName="ORGCODE")},inverseJoinColumns={@JoinColumn(name="USER_ID")})  
 	public Set<User> userSet;
 
