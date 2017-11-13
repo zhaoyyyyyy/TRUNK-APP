@@ -1,0 +1,41 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<title>ip白名单修改</title>
+		<script type="text/javascript" src="../../common/include.js"></script>
+		
+		<script type="text/javascript" src="ipwhitelist_edit.js"></script>
+	</head>
+	<body>
+	  <form id="saveDataForm">
+	  	 <input type="hidden" id="listId" name="listId" v-model="ipwhitelist.listId" />
+    	 <table border="0" width="100%" heid cellpadding="0" cellspacing="0" 
+    	     class="commTable" >
+    	        	 		
+                <tbody>
+                	<tr>
+                        <th>
+                          	ip白名单
+                        </th>
+                        <td>
+                            <textarea v-model="ipwhitelist.ipAddress" rows="" cols="" name="ipAddress"
+							class="input_textarea easyui-validatebox" required="true"></textarea>
+                        </td>
+                    </tr>                           
+                    <tr>
+                        <th>
+                                                         请求地址
+                        </th>
+                        <td>
+                            <textarea v-model=ipwhitelist.requestAddress rows="" cols="" name="requestAddress"
+							class="input_textarea easyui-validatebox" required="true"></textarea>
+                        </td>
+                    </tr>  
+                    <tr>
+                    </tr> 
+               	</tbody>            
+          </table>
+	 </form>	
+	</body>
+</html>
