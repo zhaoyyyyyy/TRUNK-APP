@@ -50,17 +50,17 @@ public class LogTaskExecuteDetail extends BaseEntity{
 	@Column(name="sys_id")
 	private String sysId;
 	
-	@Column(name="task_exe_id")
-	private String taskExeId;
+	@Column(name="task_ext_id")
+	private String taskExtId;
 	
 	@Column(name="exe_params")
 	private String exeParams;
 	
 	@Column(name="exe_type")
-	private Date exeType;
+	private String exeType;
 	
 	@Column(name="start_time")
-	private String startTime;
+	private Date startTime;
 	
 	@Column(name="status")
 	private String status;
@@ -95,12 +95,12 @@ public class LogTaskExecuteDetail extends BaseEntity{
 		this.sysId = sysId;
 	}
 
-	public String getTaskExeId() {
-		return taskExeId;
+	public String getTaskExtId() {
+		return taskExtId;
 	}
 
-	public void setTaskExeId(String taskExeId) {
-		this.taskExeId = taskExeId;
+	public void setTaskExtId(String taskExeId) {
+		this.taskExtId = taskExeId;
 	}
 
 	public String getExeParams() {
@@ -111,23 +111,26 @@ public class LogTaskExecuteDetail extends BaseEntity{
 		this.exeParams = exeParams;
 	}
 
-	public Date getExeType() {
-		return exeType;
-	}
+    public String getExeType() {
+        return exeType;
+    }
 
-	public void setExeType(Date exeType) {
-		this.exeType = exeType;
-	}
+    
+    public void setExeType(String exeType) {
+        this.exeType = exeType;
+    }
 
-	public String getStartTime() {
-		return startTime;
-	}
+    
+    public Date getStartTime() {
+        return startTime;
+    }
 
-	public void setStartTime(String startTime) {
-		this.startTime = startTime;
-	}
+    
+    public void setStartTime(Date startTime) {
+        this.startTime = startTime;
+    }
 
-	public String getStatus() {
+    public String getStatus() {
 		return status;
 	}
 

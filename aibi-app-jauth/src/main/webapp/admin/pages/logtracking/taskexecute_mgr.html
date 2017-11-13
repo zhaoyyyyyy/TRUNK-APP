@@ -13,7 +13,7 @@
 	<div style="width: 22%; float: left; height: 92%; overflow: auto;">
 		<ul class="simpleTree" id="tree"
 			style="margin-left: 5px; margin-top: 5px;">
-			<li class="root"><span class='text' id="root">根</span></li>
+			<li class="rootd"><span class='text' id="root">根</span></li>
 		</ul>
 	</div>
 
@@ -40,17 +40,15 @@
 			<table class="searchTable">
 				<tr>
 					<th>执行时间</th>
-					<td colspan="5"><input type="text" name="timeStart"
-						id="timeStart" class="inputStyle Wdate" /> 至 <input type="test"
-						name="timeEnd" id="timeEnd" class="inputStyle Wdate" /></td>
+					<td colspan="5"><input type="text" name="startTimeStart"
+						id="startTimeStart" class="inputStyle Wdate" /> 至 <input type="test"
+						name="startTimeEnd" id="startTimeEnd" class="inputStyle Wdate" /></td>
 				</tr>
 				<tr>
 					<th>执行状态</th>
-					<td><input class="inputStyle" type="text" name="exeStatus"
-						id="exeStatus" /></td>
+					<td><input dataDic="STATUS" class="inputStyle" type="text" name="status"/></td>
 					<th>执行人</th>
-					<td><input class="inputStyle" type="text" name="exeStatus"
-						id="exeStatus" /></td>
+					<td><input class="inputStyle" type="text" name="userID" id="userID" /></td>
 					<td><input type="button" name="button" value="查询" title="查询"
 						class="v_button" id="btnSearch" /><input type="reset"
 						name="button" value="重置" title="重置" class="r_button" /></td>

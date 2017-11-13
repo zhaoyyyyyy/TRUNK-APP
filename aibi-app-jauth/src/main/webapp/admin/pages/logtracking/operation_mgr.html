@@ -1,0 +1,80 @@
+<!-- <kt:baseDataDic dataDic="YHZT" /> -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<title>用户操作日志</title>
+		<script type="text/javascript" src="../../common/include.js"></script>
+		<script type="text/javascript" src="operation_mgr.js"></script>
+	</head>
+	<body>
+		<!-- 索引 -->
+		<div class="title" id="_title">
+		</div>
+		
+		<div class="formContent">
+			<form id="formSearch">
+				<table class="searchTable">
+					<tr>
+						<th>
+							用户名
+						</th>
+						<td>
+							<input class="inputStyle" type="text" name="userId" 
+							   id="userId" />
+						</td>
+						<th>
+							操作
+						</th>
+						<td>
+							<input class="inputStyle" type="text" name="sysId"
+								id="sysId" />
+						</td>
+						<th>
+							时间
+						</th>
+						<td>
+							<input type="text" name="opTimeStart"
+								id="opTimeStart" class="inputStyle Wdate" />
+							至
+							<input type="test" name="opTimeEnd"
+								id="opTimeEnd" class="inputStyle Wdate" />
+						</td>		
+						<td>
+							<input type="button" name="button" value="查询" title="查询"
+								class="v_button" id="btnSearch" />
+						</td>
+					</tr>
+					<tr>
+					    <th>
+							资源类型
+						</th>
+						<td>
+							<!-- <input class="inputStyle" type="text" name="type"
+								id="type" /> -->
+							<input dataDic="RESOURCETYPE" class="inputStyle" type="text" name="type"/>
+						</td>
+						<th>
+						       资源名称
+						</th>	
+						<td colspan="3">
+						    <input class="inputStyle" type="text" name="resourceName" 
+						        id="resourceName" />
+						</td>	
+						<td>
+							<input type="reset" name="button" value="重置" title="重置"
+								class="r_button" />
+						</td>
+					</tr>
+				</table>
+			</form>
+		</div>
+		<!-- 列表 -->
+		<div class="listArea">
+			<table id="mainGrid"></table>
+		</div>
+
+		<!-- 分页 -->
+		<div id="mainGridPager"></div>
+	</body>
+</html>

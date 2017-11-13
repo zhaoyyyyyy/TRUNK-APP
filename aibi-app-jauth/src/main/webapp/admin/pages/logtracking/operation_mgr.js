@@ -1,17 +1,16 @@
 window.jauth_onload = function(){
 	// 列表
-	var urlShow = $.ctx + '/api/monitor/monitorPage/query';
+	var urlShow = $.ctx + '/api/logOperation/logoperPage/query';
 	
-	var colNames = ['timestamp', 'userid', 'host', 
-	                'level',
-	                'thread_name',
-	                'nodename',
-	                'logger_na',
-	                'message'];
+	var colNames = ['时间', '用户名', '操作', 
+	                '资源类型',
+	                '资源名称', 
+	                '信息',
+	                'IP地址'];
 	var colModel = [{
 		name : 'opTime',
 		index : 'opTime',
-		width : 30,
+		width : 20,
 		align : 'center',
 		formatter : function(cellvalue) {  
 			 return cellvalue.substr(0,19);
@@ -19,39 +18,34 @@ window.jauth_onload = function(){
 	},{
 		name : 'userId',
 		index : 'userId',
-		width : 20,
+		width : 10,
 		align : 'center',
+	}, {
+		name : 'sysId',
+		index : 'sysId',
+		width : 20,
+		align : 'center'
+	}, {
+		name : 'resource.type',
+		index : 'resource.type',
+		width : 10,
+		align : 'center',
+		formatter:function(v){return $.getCodeDesc('RESOURCETYPE',v);}
+	}, {
+		name : 'resource.resourceName',
+		index : 'resource.resourceName',
+		width : 20,
+		align : 'center'
+	},{
+		name : 'params',
+		index : 'params',
+		width : 20,
+		align : 'center'
 	}, {
 		name : 'ipAddr',
 		index : 'ipAddr',
-		width : 35,
-		align : 'center'
-	}, {
-		name : 'levelId',
-		index : 'levelId',
-		width : 20,
-		align : 'center',
-		formatter:function(v){return $.getCodeDesc('LEVEL',v);}
-	}, {
-		name : 'threadName',
-		index : 'threadName',
-		width : 40,
-		align : 'center'
-	},{
-		name : 'nodeName',
-		index : 'nodeName',
-		width : 25,
-		align : 'center'
-	}, {
-		name : 'interfaceUrl',
-		index : 'interfaceUrl',
-		width : 70,
-		align : 'center'
-	},{
-		name : 'errorMsg',
-		index : 'errorMsg',
+		width : 160,
 		fixed : true,
-		width : 100,
 		align : 'center'
 	}];
 	$("#mainGrid").jqGrid({

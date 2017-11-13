@@ -1,17 +1,16 @@
 window.jauth_onload = function(){
 	// 列表
-	var urlShow = $.ctx + '/api/monitor/monitorPage/query';
+	var urlShow = $.ctx + '/api/interface/interfacePage/query';
 	
-	var colNames = ['timestamp', 'userid', 'host', 
-	                'level',
-	                'thread_name',
-	                'nodename',
-	                'logger_na',
-	                'message'];
+	var colNames = ['时间', '用户名', 'IP地址', 
+	                '接口名称',
+	                '接口路径', 
+	                '参数',
+	                '输出CODE/MESSAGE'];
 	var colModel = [{
 		name : 'opTime',
 		index : 'opTime',
-		width : 30,
+		width : 20,
 		align : 'center',
 		formatter : function(cellvalue) {  
 			 return cellvalue.substr(0,19);
@@ -19,39 +18,33 @@ window.jauth_onload = function(){
 	},{
 		name : 'userId',
 		index : 'userId',
-		width : 20,
+		width : 10,
 		align : 'center',
 	}, {
 		name : 'ipAddr',
 		index : 'ipAddr',
-		width : 35,
-		align : 'center'
-	}, {
-		name : 'levelId',
-		index : 'levelId',
 		width : 20,
-		align : 'center',
-		formatter:function(v){return $.getCodeDesc('LEVEL',v);}
-	}, {
-		name : 'threadName',
-		index : 'threadName',
-		width : 40,
 		align : 'center'
-	},{
-		name : 'nodeName',
-		index : 'nodeName',
-		width : 25,
+	}, {
+		name : 'interfaceName',
+		index : 'interfaceName',
+		width : 20,
 		align : 'center'
 	}, {
 		name : 'interfaceUrl',
 		index : 'interfaceUrl',
-		width : 70,
+		width : 30,
 		align : 'center'
 	},{
-		name : 'errorMsg',
-		index : 'errorMsg',
+		name : 'inputParams',
+		index : 'inputParams',
+		width : 30,
+		align : 'center'
+	}, {
+		name : 'outputParams',
+		index : 'outputParams',
+		width : 200,
 		fixed : true,
-		width : 100,
 		align : 'center'
 	}];
 	$("#mainGrid").jqGrid({
