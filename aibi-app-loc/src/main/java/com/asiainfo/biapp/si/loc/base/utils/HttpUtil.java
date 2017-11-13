@@ -260,6 +260,17 @@ public class HttpUtil {
 	            conn.setRequestProperty("user-agent","Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1;SV1)");
 	            //conn.setRequestProperty("Content-Type", "application/json");
 
+	            if(param.contains("token")){
+                    String[] params = param.split("&");
+                    for(int i = 0;i<params.length;i++){
+                        if(params[i].contains("token")){
+                            conn.setRequestProperty("X-Authorization", params[i].split("=")[1]);
+                        }else{
+                            continue;
+                        }
+                    }
+                }
+	            
 	            conn.connect();
 
 	            // 获取URLConnection对象对应的输出流

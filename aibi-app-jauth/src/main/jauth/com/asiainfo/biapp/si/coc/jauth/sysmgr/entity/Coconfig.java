@@ -23,7 +23,7 @@ import com.asiainfo.biapp.si.coc.jauth.frame.entity.BaseEntity;
  * @date 2017-9-27
  */
 @Entity
-@Table(name = "CI_CONFIG_INFO")
+@Table(name = "LOC_CONFIG_INFO")
 public class Coconfig extends BaseEntity {
 	/**
 	 * 
