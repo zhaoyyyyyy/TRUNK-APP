@@ -146,7 +146,7 @@ window.jauth_onload = function() {
 			{
 				name : 'configKey',
 				index : 'configKey',
-				width : 20,
+				width : 25,
 				align : 'left'
 			},
 			{

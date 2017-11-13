@@ -49,10 +49,10 @@ window.jauth_onload = function() {
 			html+='<th v-show="\'undefined\'!=\''+obj[0].name+'\'">配置名称<span class="req">*</span></th><td v-show="\'undefined\'!=\''+obj[0].name+'\'"><v-input name="configName" defValue="configName" type="text" class="inputStyle easyui-validatebox" required="true"></v-input>';
 			html+='<th v-show="\'undefined\'!=\''+obj[0].code+'\'">配置编码<span class="req">*</span></th>';
 			if('0'==isEdit){
-				html+='<td v-show="\'undefined\'!=\''+obj[0].code+'\'"><v-input name="configKey" defValue="configKey" type="text"class="inputStyle easyui-validatebox" required="true" ></v-input></td>'
+				html+='<td width="33%" v-show="\'undefined\'!=\''+obj[0].code+'\'">{{parentKey}}_<v-input name="configKey" defValue="configKey" type="text"class="inputStyle easyui-validatebox" required="true" ></v-input></td>'
 			}
 			if('1'==isEdit){
-				html+='<td v-show="\'undefined\'!=\''+obj[0].code+'\'"><v-input name="configKey" defValue="configKey" type="text"class="inputStyle easyui-validatebox" required="true" readonly="readonly"></v-input></td>';
+				html+='<td v-show="\'undefined\'!=\''+obj[0].code+'\'"><v-input name="configKey" defValue="configKey" type="text"class="read_inputStyle easyui-validatebox" required="true" readonly="readonly"></v-input></td>';
 			}	
 			html+=
 				  '<th v-show="\'undefined\'!=\''+obj[0].type+'\'">配置值<span class="req">*</span></th><td v-show="\'undefined\'!=\''+obj[0].type+'\'">'
@@ -68,7 +68,7 @@ window.jauth_onload = function() {
 			for(var i=0;i<obj.length;i++){
 				html+='<tr><td colspan="6"></td></tr><tr>';
 				html+='<th v-show="\'undefined\'!=\''+obj[i].name+'\'">配置名称<span class="req">*</span></th><td v-show="\'undefined\'!=\''+obj[i].name+'\'"><v-input name="configName" defValue="configName" type="text"class="inputStyle easyui-validatebox" required="true"></v-input>'
-				html+='<th v-show="\'undefined\'!=\''+obj[i].code+'\'">配置编码<span class="req">*</span></th><td v-show="\'undefined\'!=\''+obj[i].code+'\'">{{parentKey}}_<v-input name="configKey" defValue="configKey"type="text"class="inputStyle easyui-validatebox" required="true"></v-input></td>';
+				html+='<th v-show="\'undefined\'!=\''+obj[i].code+'\'">配置编码<span class="req">*</span></th><td width="33%" v-show="\'undefined\'!=\''+obj[i].code+'\'">{{parentKey}}_<v-input name="configKey" defValue="configKey"type="text"class="inputStyle easyui-validatebox" required="true"></v-input></td>';
 				html+=
 					  '<th v-show="\'undefined\'!=\''+obj[i].type+'\'">配置值<span class="req">*</span></th><td v-show="\'undefined\'!=\''+obj[i].type+'\'">'
 					+'<p v-if="\'enum\'==\''+obj[i].type+'\'"><v-input id="configVal"name="configVal" defValue="configVal" type="text" class="inputStyle easyui-validatebox" required="true" datadic="'+obj[i].dimCode+'"></v-input><input name="configValTypes" type="hidden" value="4" /></p>'
