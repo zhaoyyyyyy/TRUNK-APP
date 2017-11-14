@@ -21,6 +21,7 @@ import com.asiainfo.biapp.si.loc.base.exception.ParamRequiredException;
 import com.asiainfo.biapp.si.loc.base.exception.UserAuthException;
 import com.asiainfo.biapp.si.loc.base.service.impl.BaseServiceImpl;
 import com.asiainfo.biapp.si.loc.base.utils.HttpUtil;
+import com.asiainfo.biapp.si.loc.base.utils.JsonUtil;
 import com.asiainfo.biapp.si.loc.base.utils.StringUtil;
 
 import net.sf.json.JSONObject;
@@ -121,7 +122,7 @@ public class UserServiceImpl extends BaseServiceImpl<User, String> implements IU
 			
 			
 			String dataJson = HttpUtil.sendGet(jauthUrl+"/api/auth/permission/data", params);
-			
+			organizationPrivaliege = (List<Organization>) JsonUtil.json2CollectionBean(dataJson, List.class, Organization.class);
 			//TODO 把data Json 转成 orglist
 			user.setOrganizationPrivaliege(organizationPrivaliege);
 			
@@ -134,7 +135,7 @@ public class UserServiceImpl extends BaseServiceImpl<User, String> implements IU
 			List<Resource> resourcePrivaliege = new ArrayList<Resource>();
 			
 			String resourceJson = HttpUtil.sendGet(jauthUrl+"/api/auth/permission/resource", params);
-			
+			resourcePrivaliege = (List<Resource>) JsonUtil.json2CollectionBean(resourceJson, List.class, Resource.class);
 			//TODO 把data Json 转成 orglist
 			user.setResourcePrivaliege(resourcePrivaliege);
 		
