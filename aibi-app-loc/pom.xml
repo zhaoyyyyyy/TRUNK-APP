@@ -4,11 +4,11 @@
 	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
-		<groupId>com.asiainfo.prd</groupId>
+		<groupId>com.asiainfo.biapp</groupId>
 		<artifactId>xportrait</artifactId>
 		<version>1.0.0</version>
 	</parent>
-	<groupId>com.asiainfo.prd</groupId>
+	<groupId>com.asiainfo.biapp</groupId>
 	<artifactId>aibi-app-loc</artifactId>
 	<version>1.0.0</version>
 	<name>aibi-app-loc</name>
