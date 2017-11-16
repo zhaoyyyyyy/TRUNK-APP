@@ -312,7 +312,6 @@ public class OrganizationServiceImpl extends BaseServiceImpl<Organization,String
     @Override
     public boolean deleteOrgByOrgCode(String orgCode){
     	Organization organization = getOrgByOrgCode(orgCode);
-//    	this.organizationDao.deleteObject(organization);
     	try {
     		if(organization.getChildren() == null || organization.getChildren().size() == 0){
     			this.organizationDao.deleteObject(organization);

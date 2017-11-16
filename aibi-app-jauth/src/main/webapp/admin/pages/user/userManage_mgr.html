@@ -1,104 +1,81 @@
 <!-- <kt:baseDataDic dataDic="YHZT" /> -->
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
-	<head>
-		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-		<title>用户管理</title>
-		<script type="text/javascript" src="../../common/include.js"></script>
-		<script type="text/javascript" src="userManage_mgr.js"></script>
-	</head>
-	<body>
-		<!-- 索引 -->
-		<div class="title" id="_title">
-		</div>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>用户管理</title>
+<script type="text/javascript" src="../../common/include.js"></script>
+<script type="text/javascript" src="userManage_mgr.js"></script>
+</head>
+<body>
+	<!-- 索引 -->
+	<div class="title" id="_title"></div>
 
-		<div class="formContent">
-			<form id="formSearch""
+	<div class="formContent">
+		<form id="formSearch" "
 				target="exportIframe">
-				<table class="searchTable">
-					<tr>
-						<th>
-							用户名
-						</th>
-						<td>
-							<input class="inputStyle" type="text" name="userName"
-								id="userName" />
-						</td>
-						<th>
-							真实姓名
-						</th>
-						<td>
-							<input class="inputStyle" type="text" name="realName"
-								id="realName" />
-						</td>
-						<th>
-							角色
-						</th>
-						<td>
-							<input class="inputStyle" type="text" name="roleName"
-								id="roleName" />
-						</td>
-						<!-- <th>
-							所在组织
-						</th>
-						<td>
-							<input class="inputStyle" type="text" name="orgName"
-								id="orgName" />
-						</td> -->
-						
-						<td>
-							<input type="button" name="button" value="查询" title="查询"
-								class="v_button" id="btnSearch" />
-						</td>
-					</tr>
-					<tr>
-						<th>
-							创建时间
-						</th>
-						<td colspan="5">
-							<input type="text" name="createTimeStart"
-								id="createTimeStart" class="inputStyle Wdate" />
-							至
-							<input type="test" name="createTimeEnd"
-								id="createTimeEnd" class="inputStyle Wdate" />
-						</td>
-						
-						<td>
-							<input type="reset" name="button" value="重置" title="重置"
-								class="r_button" />
-						</td>
-					</tr>
-				</table>
-			</form>
-			<iframe id="exportIframe" name="exportIframe" style="display: none;">
-			</iframe>
-		</div>
-		<!-- 按钮  -->
-		<div class="buttonArea operation">
-			<div class="left newButton">
-				<div>
-					<input type="button" class="examination" id="btn_batch_new" value="创建新用户" />
-				</div>
-			</div>
-			<div class="left newButton">
-				<div>
-					<input type="button" class="examination" id="btn_batch_role" value="分配角色" />
-				</div>
-			</div>
-			<!-- <div class="left newButton">
-				<div>
-					<input type="button" class="examination" id="btn_batch_group" value="分配数据范围" />
-				</div>
-			</div> -->
-			<div class="clear"></div>
-		</div>
+			<table class="searchTable">
+				<tr>
+					<th>用户名</th>
+					<td><input class="inputStyle" type="text" name="userName"
+						id="userName" /></td>
+					<th>真实姓名</th>
+					<td><input class="inputStyle" type="text" name="realName"
+						id="realName" /></td>
+					<th>角色</th>
+					<td><input class="inputStyle" type="text" name="roleName"
+						id="roleName" /></td>
+					<th>所在组织</th>
+					<td><input class="inputStyle" type="text" name="orgName"
+						id="orgName" /></td>
 
-		<!-- 列表 -->
-		<div class="listArea">
-			<table id="mainGrid"></table>
-		</div>
+					<td><input type="button" name="button" value="查询" title="查询"
+						class="v_button" id="btnSearch" /></td>
+				</tr>
+				<tr>
+					<th>创建时间</th>
+					<td colspan="5"><input type="text" name="createTimeStart"
+						id="createTimeStart" class="inputStyle Wdate" /> 至 <input
+						type="test" name="createTimeEnd" id="createTimeEnd"
+						class="inputStyle Wdate" /></td>
 
-		<!-- 分页 -->
-		<div id="mainGridPager"></div>
-	</body>
+					<td><input type="reset" name="button" value="重置" title="重置"
+						class="r_button" /></td>
+				</tr>
+			</table>
+		</form>
+		<iframe id="exportIframe" name="exportIframe" style="display: none;">
+		</iframe>
+	</div>
+	<!-- 按钮  -->
+	<div class="buttonArea operation">
+		<div class="left newButton">
+			<div>
+				<input type="button" class="examination" id="btn_batch_new"
+					value="创建新用户" />
+			</div>
+		</div>
+		<div class="left newButton">
+			<div>
+				<input type="button" class="examination" id="btn_batch_role"
+					value="分配角色" />
+			</div>
+		</div>
+		<div class="left newButton">
+			<div>
+				<input type="button" class="examination" id="btn_batch_group"
+					value="分配数据范围" />
+			</div>
+		</div>
+		<div class="clear"></div>
+	</div>
+
+	<!-- 列表 -->
+	<div class="listArea">
+		<table id="mainGrid"></table>
+	</div>
+
+	<!-- 分页 -->
+	<div id="mainGridPager"></div>
+</body>
 </html>

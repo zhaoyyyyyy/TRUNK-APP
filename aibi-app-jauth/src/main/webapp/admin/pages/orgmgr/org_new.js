@@ -14,7 +14,7 @@ window.jauth_onload = function() {
 	$("#btn_save").click(function(){
 		if ($('#saveDataForm').validateForm()){
 			$.commAjax({
-				url : $.ctx+'/api/organization/add?poc='+parentOrgCode,
+				url : $.ctx+'/api/organization/save?poc='+parentOrgCode,
 				postData:$('#saveDataForm').formToJson(),
 				onSuccess:function(data){
 					if(data == "success"){

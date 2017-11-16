@@ -336,5 +336,12 @@ public class UserController {
         }
         userService.saveOrUpdate(user);
     }
+    
+    @RequestMapping(value = "/delete", method = RequestMethod.POST, produces = { MediaType.APPLICATION_JSON_VALUE })
+    public void delete(String id) {
+        User user = userService.get(id);
+        user.setStatus(Constants.USER_DELETE_STATUS);
+        userService.saveOrUpdate(user);
+    }
 
 }

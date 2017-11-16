@@ -3,9 +3,9 @@ window.jauth_onload = function(){
 	var urlShow = $.ctx + '/api/user/userPage/query';
 	
 	var colNames = ['用户名称', '姓名', '性别', 
-//	                '所在组织',
+	                '所在组织',
 	                '角色', 
-//	                '数据范围',
+	                '数据范围',
 	                '状态',
 	                '更新时间', '操作'];
 	var colModel = [{
@@ -32,25 +32,25 @@ window.jauth_onload = function(){
 			return  $.getCodeDesc('SEX', data.sex) ;
 		}
 	}, 
-//	{
-//		name : 'orgNames',
-//		index : 'orgNames',
-//		width : 20,
-//		align : 'center'
-//			
-//	},
+	{
+		name : 'orgNames',
+		index : 'orgNames',
+		width : 20,
+		align : 'center'
+			
+	},
 	{
 		name : 'roleNames',
 		index : 'roleNames',
 		width : 20,
 		align : 'center'
 	},
-//	{
-//		name : 'groupNames',
-//		index : 'groupNames',
-//		width : 15,
-//		align : 'center'
-//	},
+	{
+		name : 'groupNames',
+		index : 'groupNames',
+		width : 15,
+		align : 'center'
+	},
 	{
 		name : 'status',
 		index : 'status',
@@ -89,6 +89,8 @@ window.jauth_onload = function(){
 			+ "\")' class='s_ls' >分配角色</a>"
 			+ "<a onclick='fun_to_group(\"" + data.id
 			+ "\")' class='s_ls' >分配数据范围</a>"
+			+ "<a onclick='fun_del(\"" + data.id
+			+ "\")' class='s_delete' >删除</a>"
 		}
 	}];
 	$("#mainGrid").jqGrid({
