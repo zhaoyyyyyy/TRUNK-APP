@@ -3,6 +3,7 @@ package com.asiainfo.biapp.si.coc.jauth.api;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import javax.servlet.ServletException;
@@ -130,6 +131,23 @@ public class JAuthApi {
         	for(Role role : user.getRoleSet()){
         		list.addAll(role.getResourceSet());
         	}
+        }
+        for (Resource resource : list) {
+            if (resource.getChildren().size()!=0) {
+                resource.setChildren(null);
+            }
+        }
+        List<Resource> list1 = new ArrayList<Resource>();
+        for (Resource resource : list) {
+            if (resource.getType().equals(type)) {
+                if (resource.getChildren().size()!=0) {
+                    resource.setChildren(null);
+                }
+                list1.add(resource);
+            }
+        }
+        if (type!=null) {
+            return list1;
         }
         return list;
     }

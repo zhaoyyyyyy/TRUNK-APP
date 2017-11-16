@@ -16,7 +16,10 @@ window.jauth_onload = function() {
 						name : 'createTime',
 						index : 'createTime',
 						width : 40,
-						align : 'center'
+						align : 'center',
+						formatter : function(cellvalue) {  
+							 return cellvalue.substr(0,19);
+						}
 					}, {
 						name : 'groupDesc',
 						index : 'groupDesc',
