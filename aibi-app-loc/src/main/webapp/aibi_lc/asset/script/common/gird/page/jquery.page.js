@@ -53,7 +53,7 @@
 					obj.remove('.nextPage');
 					obj.append('<span class="disabled">下一页</span>');
 				}
-				obj.append('<span class="inputPageNum"><input type ="text" id="pageNum"/></span>');
+				obj.append('<select class="ui-pg-selbox ui-widget-content ui-corner-all" id="'+args.gridId+'_listbox" role="listbox" title="每页记录数"></select><span class="inputPageNum">第<input type ="text" id="'+args.gridId+'_pageNum"/>页</span>');
 				obj.append('<a href="javascript:;" class="jumpPageNum">跳转</a>');
 			})();
 		},
@@ -85,7 +85,7 @@
 				});
 				//跳转
 				obj.off("click","a.jumpPageNum").on("click","a.jumpPageNum",function(){
-					var current = parseInt($("#pageNum").val());
+					var current = parseInt($("#"+args.gridId+"_pageNum").val());
 					if(!$.isNumeric(current) ){
 						return false;
 					}
@@ -106,6 +106,7 @@
 		var args = $.extend({
 			pageCount : 15,
 			current : 1,
+			gridId: Math.random()*100,
 			backFn : function(){}
 		},options);
 		ms.init(this,args);

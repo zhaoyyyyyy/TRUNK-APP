@@ -83,12 +83,12 @@
 
 .tcdPageCode a ,.jumpPageNum{
 	display: inline-block;
-	color: #428bca;
+	color: #999 !important;
 	display: inline-block;
 	height: 25px;
 	line-height: 25px;
 	padding: 0 10px;
-	border: 1px solid #ddd;
+	border: 1px solid #efefef;
     background: #fff;
 	margin: 0 2px;
 	border-radius: 0px;
@@ -98,26 +98,27 @@
 	color: #666;
 }
 .tcdPageCode a:HOVER{
-	background: #428bca;
-	color: #fff;
+	background: #1cb0f6;
+	color: #fff !important;
 }
 
 .tcdPageCode a:hover ,.jumpPageNum:hover{
 	text-decoration: none;
-	border: 1px solid #428bca;
+	border: 1px solid #1cb0f6;
+	color:#fff;
 }
 
 .tcdPageCode span.current {
 	display: inline-block;
-	height: 25px;
-	line-height: 25px;
-	padding: 0 10px;
-	margin: 0 2px;
-	color: #278bdd;
-	background-color: transparent;
-	border: 0px;
-	border-radius: 0px;
-	vertical-align: middle;
+    height: 25px;
+    line-height: 25px;
+    padding: 0 10px;
+    margin: 0 2px;
+    color: #fff;
+    background-color: #1cb0f6;
+    border: 0px;
+    border-radius: 0px;
+    vertical-align: middle;
 }
 
 .tcdPageCode span.disabled {
@@ -135,9 +136,10 @@
 }
 .totalPage{
 	text-align: left;
-    padding: 10px;
+    padding: 13px 10px 0;
     font-size: 14px;
     overflow: hidden;
+    color: #999;
 }
 .totalPage > select{
 	margin: 0 15px !important;
@@ -146,12 +148,14 @@
 	padding: 17px;
 	height: 25px;
 	line-height: 25px;
+	color: #999;
 }
 .inputPageNum > input{
 	width:25px;
 	height: 22px;
 	line-height: 22px;
-	border: 1px solid #bfbfbf;
-	border-radius: 4px;
+	border: 1px solid #d9d9d9;
+	border-radius: 2px;
 	color: #222;
+	margin:0 5px;
 }
