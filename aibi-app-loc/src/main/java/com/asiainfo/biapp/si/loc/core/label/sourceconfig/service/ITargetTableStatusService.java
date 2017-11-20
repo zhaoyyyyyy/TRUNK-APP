@@ -1,5 +1,5 @@
 /*
- * @(#)IDimTargetTableStatusService.java
+ * @(#)ITargetTableStatusService.java
  * 
  * CopyRight (c) 2017 北京亚信智慧数据科技有限公司 保留所有权利。
  */
@@ -11,11 +11,11 @@ import java.util.List;
 import com.asiainfo.biapp.si.loc.base.exception.BaseException;
 import com.asiainfo.biapp.si.loc.base.page.Page;
 import com.asiainfo.biapp.si.loc.base.service.BaseService;
-import com.asiainfo.biapp.si.loc.core.label.sourceconfig.entity.DimTargetTableStatus;
-import com.asiainfo.biapp.si.loc.core.label.sourceconfig.vo.DimTargetTableStatusVo;
+import com.asiainfo.biapp.si.loc.core.label.sourceconfig.entity.TargetTableStatus;
+import com.asiainfo.biapp.si.loc.core.label.sourceconfig.vo.TargetTableStatusVo;
 
 /**
- * Title : IDimTargetTableStatusService
+ * Title : ITargetTableStatusService
  * <p/>
  * Description :
  * <p/>
@@ -40,25 +40,25 @@ import com.asiainfo.biapp.si.loc.core.label.sourceconfig.vo.DimTargetTableStatus
  * @author zhangnan7
  * @version 1.0.0.2017年11月15日
  */
-public interface IDimTargetTableStatusService extends BaseService<DimTargetTableStatus, String> {
+public interface ITargetTableStatusService extends BaseService<TargetTableStatus, String> {
 
     /**
      * 根据条件分页查询
      *
      * @param page
-     * @param dimTargetTableStatusVo
+     * @param targetTableStatusVo
      * @return
      */
-    public Page<DimTargetTableStatus> findDimTargetTableStatusPageList(Page<DimTargetTableStatus> page,
-            DimTargetTableStatusVo dimTargetTableStatusVo) throws BaseException;
+    public Page<TargetTableStatus> findTargetTableStatusPageList(Page<TargetTableStatus> page,
+            TargetTableStatusVo targetTableStatusVo) throws BaseException;
 
     /**
      * 根据条件查询列表
      *
-     * @param dimTargetTableStatusVo
+     * @param targetTableStatusVo
      * @return
      */
-    public List<DimTargetTableStatus> findDimTargetTableStatusList(DimTargetTableStatusVo dimTargetTableStatusVo)
+    public List<TargetTableStatus> findTargetTableStatusList(TargetTableStatusVo targetTableStatusVo)
             throws BaseException;
 
     /**
@@ -68,23 +68,23 @@ public interface IDimTargetTableStatusService extends BaseService<DimTargetTable
      * @return
      * @throws BaseException
      */
-    public DimTargetTableStatus getById(String labelId) throws BaseException;
+    public TargetTableStatus getById(String labelId) throws BaseException;
 
     /**
      * 新增一个实体
      *
-     * @param dimTargetTableStatus
+     * @param targetTableStatus
      * @throws BaseException
      */
-    public void saveT(DimTargetTableStatus dimTargetTableStatus) throws BaseException;
+    public void saveT(TargetTableStatus targetTableStatus) throws BaseException;
 
     /**
      * 修改一个实体
      *
-     * @param dimTargetTableStatus
+     * @param targetTableStatus
      * @throws BaseException
      */
-    public void updateT(DimTargetTableStatus dimTargetTableStatus);
+    public void updateT(TargetTableStatus targetTableStatus);
 
     /**
      * 根据ID删除一个实体
