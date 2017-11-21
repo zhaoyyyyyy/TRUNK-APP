@@ -103,7 +103,7 @@ public class SourceInfoServiceImpl extends BaseServiceImpl<SourceInfo, String> i
      * @param sourceInfo
      * @throws BaseException
      */
-    public void saveT(SourceInfo sourceInfo) throws BaseException {
+    public void saveT(SourceInfo sourceInfo) {
         super.saveOrUpdate(sourceInfo);
     }
 
@@ -123,7 +123,7 @@ public class SourceInfoServiceImpl extends BaseServiceImpl<SourceInfo, String> i
      * @param sourceId
      * @throws BaseException
      */
-    public void deleteById(String sourceId) throws BaseException {
+    public void deleteById(String sourceId) {
         super.delete(sourceId);
     }
 

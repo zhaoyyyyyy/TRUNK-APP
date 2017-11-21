@@ -1,5 +1,5 @@
 /*
- * @(#)DimTargetTableStatus.java
+ * @(#)TargetTableStatus.java
  * 
  * CopyRight (c) 2017 北京亚信智慧数据科技有限公司 保留所有权利。
  */
@@ -19,7 +19,7 @@ import org.hibernate.annotations.GenericGenerator;
 import com.asiainfo.biapp.si.loc.base.entity.BaseEntity;
 
 /**
- * Title : DimTargetTableStatus
+ * Title : TargetTableStatus
  * <p/>
  * Description :
  * <p/>
@@ -46,7 +46,7 @@ import com.asiainfo.biapp.si.loc.base.entity.BaseEntity;
  */
 @Entity
 @Table(name = "DIM_TARGET_TABLE_STATUS")
-public class DimTargetTableStatus extends BaseEntity {
+public class TargetTableStatus extends BaseEntity {
 
     private static final long serialVersionUID = 2035013017939483936L;
 

@@ -58,6 +58,10 @@ public class SourceInfoDaoImpl extends BaseDaoImpl<SourceInfo, String> implement
     public Page<SourceInfo> findSourceInfoPageList(Page<SourceInfo> page, SourceInfoVo sourceInfoVo) {
         Map<String, Object> params = new HashMap<>();
         StringBuffer hql = new StringBuffer("from SourceInfo s where 1=1 ");
+        if (StringUtil.isNotBlank(sourceInfoVo.getSourceId())) {
+            hql.append("and s.sourceId = :sourceId ");
+            params.put("sourceId", sourceInfoVo.getSourceId());
+        }
         if (StringUtil.isNotBlank(sourceInfoVo.getSourceName())) {
             hql.append("and s.sourceName = :sourceName ");
             params.put("sourceName", sourceInfoVo.getSourceName());
@@ -110,6 +114,10 @@ public class SourceInfoDaoImpl extends BaseDaoImpl<SourceInfo, String> implement
     public List<SourceInfo> findSourceInfoList(SourceInfoVo sourceInfoVo) {
         Map<String, Object> params = new HashMap<>();
         StringBuffer hql = new StringBuffer("from SourceInfo s where 1=1 ");
+        if (StringUtil.isNotBlank(sourceInfoVo.getSourceId())) {
+            hql.append("and s.sourceId = :sourceId ");
+            params.put("sourceId", sourceInfoVo.getSourceId());
+        }
         if (StringUtil.isNotBlank(sourceInfoVo.getSourceName())) {
             hql.append("and s.sourceName = :sourceName ");
             params.put("sourceName", sourceInfoVo.getSourceName());
