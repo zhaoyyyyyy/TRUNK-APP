@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>按钮组demo</title>
+<!--[if IE]>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+<![endif]--> 
+<link href="../../asset/css/common/reset.css" rel="stylesheet"  />
+<link href="../../asset/css/theme/default/button.css" rel="stylesheet"  />
+<link href="../../asset/css/theme/default/form.css" rel="stylesheet"  />
+<!--
+	H5兼容js CSS3 兼容JS
+-->
+<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+<!--[if lt IE 9]>
+  <script src="http://apps.bdimg.com/libs/html5shiv/3.7/html5shiv.min.js"></script>
+  <script src="http://apps.bdimg.com/libs/respond.js/1.4.2/respond.min.js"></script>
+<![endif]-->
+</head>
+<body style="margin:20px;">
+ 	<h3>典型表单</h3>
+ 	<form class="form-horizontal ui-form">
+		<div class="ui-form-group">
+	        <label for="inputEmail3" class="control-label">活动名称</label>
+	        <div class="control-input">
+	          <input type="text" class="form-control" id="inputEmail3" placeholder="活动名称">
+	        </div>
+	    </div>
+ 		<div class="ui-form-group">
+	        <label for="inputEmail4" class="control-label">活动区域</label>
+	        <div class="control-input ">
+	          <input type="text" class="form-control input-pointer" id="inputEmail4" placeholder="请选择活动区域" readonly="readonly">
+	          <span class="glyphicon-select form-control-feedback"></span>
+	        </div>
+	    </div>
+ 		<div class="ui-form-group">
+	        <label for="inputEmail4" class="control-label">活动日期</label>
+	        <div class="control-input">
+	        		<div class="control-input date-input fleft ">
+		          	<input type="text" class="form-control input-pointer" id="inputEmail4" placeholder="请选择开始日期" readonly="readonly">
+		          	<span class="glyphicon-date form-control-feedback"></span>
+		        </div>
+		        <div class="control-input date-input fleft ml10">
+		          	<input type="text" class="form-control input-pointer" id="inputEmail4" placeholder="请选择结束日期" readonly="readonly">
+		          	<span class="glyphicon-date form-control-feedback"></span>
+		        </div>
+	        </div>
+	    </div>
+	    <div class="ui-form-group">
+	        <label for="inputEmail4" class="control-label">延时配送</label>
+	        <div class="control-input">
+	         	 <button class="ui-radio-btn" type="button">
+	         	 	<i></i>
+	         	 	<span>关</span>
+	        	 	</button>
+	        	 	<button class="ui-radio-btn active" type="button">
+	         	 	<i></i>
+	         	 	<span>开</span>
+	        	 	</button>
+	        </div>
+	    </div>
+	    <div class="ui-form-group">
+	        <label for="inputEmail4" class="control-label">活动性质</label>
+	        <div class="control-input">
+		       	<div class='checkbox fleft'>
+				    <input id="mycheckbox2" type="checkbox" class="checkbix" checked="checked">
+				    <label aria-label="" role="checkbox" for="mycheckbox2" class="checkbix">
+				    		<span class="large"></span>美食/餐厅线上活动
+				    	</label>
+				</div>
+		       	<div class='checkbox fleft'>
+				     <input id="mycheckbox3" type="checkbox" class="checkbix" >
+				    <label aria-label="" role="checkbox" for="mycheckbox3" class="checkbix">
+				    		<span class="large"></span>美食/餐厅线上活动
+				    	</label>
+				</div>
+				<div class='checkbox fleft'>
+				     <input id="mycheckbox1" type="checkbox" class="checkbix" >
+				    <label aria-label="" role="checkbox" for="mycheckbox1" class="checkbix">
+				    		<span class="large"></span>美食/餐厅线上活动
+				    	</label>
+				</div>
+				<div class='checkbox fleft'>
+				     <input id="mycheckbox4" type="checkbox" class="checkbix" >
+				    <label aria-label="" role="checkbox" for="mycheckbox4" class="checkbix">
+				    		<span class="large"></span>美食/餐厅线上活动
+				    	</label>
+				</div>
+	   		 </div>
+	    </div>
+	    <div class="ui-form-group">
+	        <label for="inputEmail4" class="control-label">活动性质</label>
+	        <div class="control-input">
+	       	  <div class="radio circle success"> 
+				   <input type="radio" name="radio19" id="myr3" checked="checked"> 
+				   <label for="myr3"><i class="default"></i> 线下活动优惠</label>
+				</div>
+			    <div class="radio circle success">
+				   <input type="radio" name="radio19"  id="myr4"> 
+				   <label  for="myr4"><i class="default"></i> 线下活动免费</label>
+				</div>
+	    		</div>
+	    </div>
+	    <div class="ui-form-group">
+	        <label for="inputEmail4" class="control-label">活动形式</label>
+	        <div class="control-input">
+	       	   <textarea rows="3"  class="form-control form-control-textarea"></textarea>
+	    		</div>
+	    </div>
+	    <div class="ui-form-group">
+	        <label for="inputEmail4" class="control-label">活动素材</label>
+	        <div class="control-input">
+	       	   	<a href="javascript:;" class="file-up-btn">
+	       	   		<input type="file" class="input-pointer"/>
+	       	   		<span><i>+</i>上传素材</span>
+	       	   	</a>
+	    		</div>
+	    </div>
+	    <div class="ui-form-group">
+	        <label for="inputEmail4" class="control-label">活动素材</label>
+	        <div class="control-input">
+	       	   	 <span class="file-up-name">spark学习文档.pdf</span>
+	    		</div>
+	    </div>
+	    <div class="form-btn-content">
+    			<button type="button" class="ui-btn ui-btn-default">立即创建</button>
+	    		<button type="button" class="ui-btn ui-btn-second ml10">取消</button>
+	    </div>
+ 	</form>
+ 	<h3>行内表单</h3>
+ 	<form class="form-inline ui-form">
+ 		<div class="form-group">
+	        <label class="sr-only" for="exampleInputEmail3">活动审批人</label>
+	        <input type="text" class="form-control" id="exampleInputEmail3" placeholder="活动审批人">
+        </div>
+ 	    <div class="form-group">
+	        <div class="control-input ">
+	          <input type="text" class="form-control input-pointer" id="inputEmail4" placeholder="择活动区域" readonly="readonly">
+	          <span class="glyphicon-select form-control-feedback"></span>
+	        </div>
+        </div>
+	    <div class="checkbox">
+	       <label>
+	          <input type="checkbox"> 是否发邮件
+	       </label>
+        </div>
+ 		<button type="button" class="ui-btn ui-btn-default">立即审批</button>
+ 	</form>
+ 	<form class="form-inline ui-form">
+ 		<div class="form-group">
+	        <label   for="exampleInputEmail3">活动审批人</label>
+	        <input type="text" class="form-control" id="exampleInputEmail3" placeholder="活动审批人">
+        </div>
+ 	    <div class="form-group">
+ 	    		<label class="fleft mt5" for="exampleInputEmail3">活动审批人</label>
+	        <div class="control-input ">
+	          <input type="text" class="form-control input-pointer" id="inputEmail4" placeholder="择活动区域" readonly="readonly">
+	          <span class="glyphicon-select form-control-feedback"></span>
+	        </div>
+        </div>
+	    <div class="checkbox">
+	       <label>
+	          <input type="checkbox"> 是否发邮件
+	       </label>
+        </div>
+ 		<button type="button" class="ui-btn ui-btn-default">立即审批</button>
+ 	</form>
+ 	<h3>基本表单</h3>
+ 	<form class="form-base ui-form">
+ 		<div class="form-group width-360">
+       		<label for="exampleInputEmail1">审批人</label>
+        		<input type="text" class="form-control" id="exampleInputEmail1" placeholder="审批人">
+        </div>
+ 		<div class="form-group width-360">
+       		<label for="exampleInputEmail2">活动名称</label>
+        		<input type="text" class="form-control" id="exampleInputEmail2" placeholder="活动名称">
+        </div>
+ 		<div class="form-group width-360">
+       		<label for="exampleInputEmail2">活动开始方式</label>
+        		<input type="text" class="form-control" id="exampleInputEmail2" placeholder="活动开始方式">
+        </div>
+ 	</form>
+ 	<h3>水平排列的表单(right)</h3>
+ 	<form class="form-horizontal ui-form">
+ 		<div class="ui-form-group">
+	        <label for="inputEmail3" class="control-label">活动名称</label>
+	        <div class="control-input">
+	          <input type="text" class="form-control" id="inputEmail3" placeholder="活动名称">
+	        </div>
+	    </div>
+ 		<div class="ui-form-group">
+	        <label for="inputEmail3" class="control-label">活动</label>
+	        <div class="control-input">
+	          <input type="text" class="form-control" id="inputEmail3" placeholder="活动">
+	        </div>
+	    </div>
+ 	</form>
+ 	<h3>水平排列的表单(left)</h3>
+ 	<form class="form-horizontal left ui-form">
+ 		<div class="ui-form-group">
+	        <label for="inputEmail3" class="control-label">活动名称</label>
+	        <div class="control-input">
+	          <input type="text" class="form-control" id="inputEmail3" placeholder="活动名称">
+	        </div>
+	    </div>
+ 		<div class="ui-form-group">
+	        <label for="inputEmail3" class="control-label">活动</label>
+	        <div class="control-input">
+	          <input type="text" class="form-control" id="inputEmail3" placeholder="活动">
+	        </div>
+	    </div>
+ 	</form>
+ 	<h3>居内对齐的表单</h3>
+ 	<form class="form-horizontal left ui-form">
+ 		<div class="ui-form-group">
+	        <div class="control-input">
+	          <input type="text" class="form-control" id="inputEmail3" placeholder="活动名称">
+	        </div>
+	    </div>
+ 		<div class="ui-form-group">
+	        <div class="control-input">
+	          <input type="text" class="form-control" id="inputEmail3" placeholder="活动">
+	        </div>
+	    </div>
+ 	</form>
+ 	<h3>提示信息的表单</h3>
+ 	<form class="form-horizontal left ui-form">
+ 		<div class="ui-form-group">
+	        <label for="inputEmail3" class="control-label">持卡人</label>
+	        <div class="control-input">
+	          <input type="text" class="form-control form-control-tip" id="inputEmail3" placeholder="请保证与身份证一致">
+	        </div>
+	    </div>
+ 		<div class="ui-form-group">
+	        <label for="inputEmail3" class="control-label">执照号码</label>
+	        <div class="control-input">
+	          <input type="text" class="form-control form-control-bubble" id="inputEmail3" placeholder="活动">
+	          <div class="tooltip right" role="tooltip">
+			      <div class="tooltip-arrow"></div>
+			      <div class="tooltip-inner">
+			        输入的营业执照号码与证件上保持一致
+			      </div>
+			  </div>
+	          <p class="mt10"> 输入的营业执照号码与证件上保持一致</p>
+	        </div>
+	        
+	    </div>
+ 	</form>
+ 	<h3>表单校验</h3>
+ 	<form class="form-horizontal left ui-form">
+ 		<div class="ui-form-group">
+	        <label for="inputEmail3" class="control-label">持卡人</label>
+	        <div class="control-input">
+	          <input type="text" class="form-control form-control-tip" id="inputEmail3" placeholder="请保证与身份证一致">
+	        </div>
+	    </div>
+	    <div class="ui-form-group">
+	        <label for="inputEmail4" class="control-label">活动区域</label>
+	        <div class="control-input ">
+	          <input type="text" class="form-control input-pointer" id="inputEmail4" placeholder="请选择活动区域">
+	          <span class="form-control-feedback">1/10</span>
+	        </div>
+	    </div>
+ 	</form>
+ 	
+ 	
+ 	
+ 	
+ 	
+</body>
+</html>
