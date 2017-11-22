@@ -1,5 +1,5 @@
 /*
- * @(#)DimTargetTableStatusController.java
+ * @(#)TargetTableStatusController.java
  * 
  * CopyRight (c) 2017 北京亚信智慧数据科技有限公司 保留所有权利。
  */
@@ -27,12 +27,12 @@ import com.asiainfo.biapp.si.loc.base.exception.BaseException;
 import com.asiainfo.biapp.si.loc.base.page.Page;
 import com.asiainfo.biapp.si.loc.base.utils.StringUtil;
 import com.asiainfo.biapp.si.loc.base.utils.WebResult;
-import com.asiainfo.biapp.si.loc.core.label.sourceconfig.entity.DimTargetTableStatus;
-import com.asiainfo.biapp.si.loc.core.label.sourceconfig.service.IDimTargetTableStatusService;
-import com.asiainfo.biapp.si.loc.core.label.sourceconfig.vo.DimTargetTableStatusVo;
+import com.asiainfo.biapp.si.loc.core.label.sourceconfig.entity.TargetTableStatus;
+import com.asiainfo.biapp.si.loc.core.label.sourceconfig.service.ITargetTableStatusService;
+import com.asiainfo.biapp.si.loc.core.label.sourceconfig.vo.TargetTableStatusVo;
 
 /**
- * Title : DimTargetTableStatusController
+ * Title : TargetTableStatusController
  * <p/>
  * Description :
  * <p/>
@@ -60,53 +60,53 @@ import com.asiainfo.biapp.si.loc.core.label.sourceconfig.vo.DimTargetTableStatus
 @Api(value = "指标源表状态管理")
 @RequestMapping("api/source")
 @RestController
-public class DimTargetTableStatusController extends BaseController<DimTargetTableStatus> {
+public class TargetTableStatusController extends BaseController<TargetTableStatus> {
 
     @Autowired
-    private IDimTargetTableStatusService iDimTargetTableStatusService;
+    private ITargetTableStatusService iTargetTableStatusService;
 
     private static final String SUCCESS = "success";
 
     @ApiOperation(value = "分页查询")
-    @RequestMapping(value = "/dimTargetTableStatusPage/query", method = RequestMethod.POST)
-    public Page<DimTargetTableStatus> queryPage(@ModelAttribute Page<DimTargetTableStatus> page,
-            @ModelAttribute DimTargetTableStatusVo dimTargetTableStatusVo) {
-        Page<DimTargetTableStatus> dimTargetTableStatusPage = new Page<>();
+    @RequestMapping(value = "/TargetTableStatusPage/query", method = RequestMethod.POST)
+    public Page<TargetTableStatus> queryPage(@ModelAttribute Page<TargetTableStatus> page,
+            @ModelAttribute TargetTableStatusVo targetTableStatusVo) {
+        Page<TargetTableStatus> TargetTableStatusPage = new Page<>();
         try {
-            dimTargetTableStatusPage = iDimTargetTableStatusService.findDimTargetTableStatusPageList(page,
-                dimTargetTableStatusVo);
+            TargetTableStatusPage = iTargetTableStatusService.findTargetTableStatusPageList(page,
+                targetTableStatusVo);
         } catch (BaseException e) {
-            dimTargetTableStatusPage.fail(e);
+            TargetTableStatusPage.fail(e);
         }
-        return dimTargetTableStatusPage;
+        return TargetTableStatusPage;
     }
 
     @ApiOperation(value = "查询列表")
-    @RequestMapping(value = "/dimTargetTableStatus/queryList", method = RequestMethod.POST)
-    public WebResult<List<DimTargetTableStatus>> queryList(@ModelAttribute DimTargetTableStatusVo dimTargetTableStatusVo) {
-        WebResult<List<DimTargetTableStatus>> webResult = new WebResult<>();
-        List<DimTargetTableStatus> dimTargetTableStatusList = new ArrayList<>();
+    @RequestMapping(value = "/TargetTableStatus/queryList", method = RequestMethod.POST)
+    public WebResult<List<TargetTableStatus>> queryList(@ModelAttribute TargetTableStatusVo targetTableStatusVo) {
+        WebResult<List<TargetTableStatus>> webResult = new WebResult<>();
+        List<TargetTableStatus> TargetTableStatusList = new ArrayList<>();
         try {
-            dimTargetTableStatusList = iDimTargetTableStatusService
-                .findDimTargetTableStatusList(dimTargetTableStatusVo);
+            TargetTableStatusList = iTargetTableStatusService
+                .findTargetTableStatusList(targetTableStatusVo);
         } catch (BaseException e) {
             return webResult.fail(e);
         }
-        return webResult.success("获取指标源表状态成功.", dimTargetTableStatusList);
+        return webResult.success("获取指标源表状态成功.", TargetTableStatusList);
     }
 
     @ApiOperation(value = "根据ID查询")
     @ApiImplicitParam(name = "labelId", value = "ID", required = true, paramType = "query", dataType = "string")
-    @RequestMapping(value = "/dimTargetTableStatus/get", method = RequestMethod.POST)
-    public WebResult<DimTargetTableStatus> getById(String labelId) throws BaseException {
-        WebResult<DimTargetTableStatus> webResult = new WebResult<>();
-        DimTargetTableStatus dimTargetTableStatus = new DimTargetTableStatus();
+    @RequestMapping(value = "/TargetTableStatus/get", method = RequestMethod.POST)
+    public WebResult<TargetTableStatus> getById(String labelId) throws BaseException {
+        WebResult<TargetTableStatus> webResult = new WebResult<>();
+        TargetTableStatus targetTableStatus = new TargetTableStatus();
         try {
-            dimTargetTableStatus = iDimTargetTableStatusService.getById(labelId);
+            targetTableStatus = iTargetTableStatusService.getById(labelId);
         } catch (BaseException e) {
             return webResult.fail(e);
         }
-        return webResult.success("获取指标源表状态成功.", dimTargetTableStatus);
+        return webResult.success("获取指标源表状态成功.", targetTableStatus);
     }
 
     @ApiOperation(value = "新增")
@@ -119,11 +119,11 @@ public class DimTargetTableStatusController extends BaseController<DimTargetTabl
             @ApiImplicitParam(name = "dataStatus", value = "数据状态", required = false, paramType = "query", dataType = "int"),
             @ApiImplicitParam(name = "dataBatch", value = "批次", required = false, paramType = "query", dataType = "int"),
             @ApiImplicitParam(name = "exceptionDesc", value = "错误信息描述", required = false, paramType = "query", dataType = "string") })
-    @RequestMapping(value = "/dimTargetTableStatus/save", method = RequestMethod.POST)
-    public WebResult<String> save(@ApiIgnore DimTargetTableStatus dimTargetTableStatus) {
+    @RequestMapping(value = "/TargetTableStatus/save", method = RequestMethod.POST)
+    public WebResult<String> save(@ApiIgnore TargetTableStatus targetTableStatus) {
         WebResult<String> webResult = new WebResult<>();
         try {
-            iDimTargetTableStatusService.saveT(dimTargetTableStatus);
+            iTargetTableStatusService.saveT(targetTableStatus);
         } catch (BaseException e) {
             return webResult.fail(e);
         }
@@ -141,17 +141,17 @@ public class DimTargetTableStatusController extends BaseController<DimTargetTabl
             @ApiImplicitParam(name = "dataStatus", value = "数据状态", required = false, paramType = "query", dataType = "int"),
             @ApiImplicitParam(name = "dataBatch", value = "批次", required = false, paramType = "query", dataType = "int"),
             @ApiImplicitParam(name = "exceptionDesc", value = "错误信息描述", required = false, paramType = "query", dataType = "string") })
-    @RequestMapping(value = "/dimTargetTableStatus/update", method = RequestMethod.POST)
-    public WebResult<String> update(@ApiIgnore DimTargetTableStatus dimTargetTableStatus) {
+    @RequestMapping(value = "/TargetTableStatus/update", method = RequestMethod.POST)
+    public WebResult<String> update(@ApiIgnore TargetTableStatus targetTableStatus) {
         WebResult<String> webResult = new WebResult<>();
-        DimTargetTableStatus oldDim = new DimTargetTableStatus();
+        TargetTableStatus oldTar = new TargetTableStatus();
         try {
-            oldDim = iDimTargetTableStatusService.getById(dimTargetTableStatus.getLabelId());
+            oldTar = iTargetTableStatusService.getById(targetTableStatus.getLabelId());
         } catch (BaseException e) {
             return webResult.fail(e);
         }
-        oldDim = fromToBean(dimTargetTableStatus, oldDim);
-        iDimTargetTableStatusService.updateT(oldDim);
+        oldTar = fromToBean(targetTableStatus, oldTar);
+        iTargetTableStatusService.updateT(oldTar);
         return webResult.success("修改指标源表状态成功", SUCCESS);
     }
 
@@ -162,11 +162,11 @@ public class DimTargetTableStatusController extends BaseController<DimTargetTabl
      */
     @ApiOperation(value = "删除")
     @ApiImplicitParam(name = "labelId", value = "ID", required = true, paramType = "query", dataType = "string")
-    @RequestMapping(value = "/dimTargetTableStatus/delete", method = RequestMethod.POST)
+    @RequestMapping(value = "/TargetTableStatus/delete", method = RequestMethod.POST)
     public WebResult<String> delete(String labelId) {
         WebResult<String> webResult = new WebResult<>();
         try {
-            iDimTargetTableStatusService.deleteById(labelId);
+            iTargetTableStatusService.deleteById(labelId);
         } catch (BaseException e) {
             return webResult.fail(e);
         }
@@ -176,36 +176,36 @@ public class DimTargetTableStatusController extends BaseController<DimTargetTabl
     /**
      * 封装实体信息
      *
-     * @param dim
-     * @param oldDim
+     * @param tar
+     * @param oldTar
      * @return
      */
-    public DimTargetTableStatus fromToBean(DimTargetTableStatus dim, DimTargetTableStatus oldDim) {
-        if (StringUtil.isNotBlank(dim.getCooTableName())) {
-            oldDim.setCooTableName(dim.getCooTableName());
+    public TargetTableStatus fromToBean(TargetTableStatus tar, TargetTableStatus oldTar) {
+        if (StringUtil.isNotBlank(tar.getCooTableName())) {
+            oldTar.setCooTableName(tar.getCooTableName());
         }
-        if (null != dim.getCooTableType()) {
-            oldDim.setCooTableType(dim.getCooTableType());
+        if (null != tar.getCooTableType()) {
+            oldTar.setCooTableType(tar.getCooTableType());
         }
-        if (null != dim.getManualExecution()) {
-            oldDim.setManualExecution(dim.getManualExecution());
+        if (null != tar.getManualExecution()) {
+            oldTar.setManualExecution(tar.getManualExecution());
         }
-        if (null != dim.getIsDoing()) {
-            oldDim.setIsDoing(dim.getIsDoing());
+        if (null != tar.getIsDoing()) {
+            oldTar.setIsDoing(tar.getIsDoing());
         }
-        if (StringUtil.isNotBlank(dim.getDataDate())) {
-            oldDim.setDataDate(dim.getDataDate());
+        if (StringUtil.isNotBlank(tar.getDataDate())) {
+            oldTar.setDataDate(tar.getDataDate());
         }
-        if (null != dim.getDataStatus()) {
-            oldDim.setDataStatus(dim.getDataStatus());
+        if (null != tar.getDataStatus()) {
+            oldTar.setDataStatus(tar.getDataStatus());
         }
-        if (null != dim.getDataBatch()) {
-            oldDim.setDataBatch(dim.getDataBatch());
+        if (null != tar.getDataBatch()) {
+            oldTar.setDataBatch(tar.getDataBatch());
         }
-        if (StringUtil.isNotBlank(dim.getExceptionDesc())) {
-            oldDim.setExceptionDesc(dim.getExceptionDesc());
+        if (StringUtil.isNotBlank(tar.getExceptionDesc())) {
+            oldTar.setExceptionDesc(tar.getExceptionDesc());
         }
-        return oldDim;
+        return oldTar;
     }
 
 }

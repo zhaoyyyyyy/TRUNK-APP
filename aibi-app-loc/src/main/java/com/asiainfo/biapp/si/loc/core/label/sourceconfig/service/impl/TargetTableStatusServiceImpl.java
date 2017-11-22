@@ -1,5 +1,5 @@
 /*
- * @(#)DimTargetTableStatusServiceImpl.java
+ * @(#)TargetTableStatusServiceImpl.java
  * 
  * CopyRight (c) 2017 北京亚信智慧数据科技有限公司 保留所有权利。
  */
@@ -19,13 +19,13 @@ import com.asiainfo.biapp.si.loc.base.exception.BaseException;
 import com.asiainfo.biapp.si.loc.base.exception.ParamRequiredException;
 import com.asiainfo.biapp.si.loc.base.page.Page;
 import com.asiainfo.biapp.si.loc.base.service.impl.BaseServiceImpl;
-import com.asiainfo.biapp.si.loc.core.label.sourceconfig.dao.IDimTargetTableStatusDao;
-import com.asiainfo.biapp.si.loc.core.label.sourceconfig.entity.DimTargetTableStatus;
-import com.asiainfo.biapp.si.loc.core.label.sourceconfig.service.IDimTargetTableStatusService;
-import com.asiainfo.biapp.si.loc.core.label.sourceconfig.vo.DimTargetTableStatusVo;
+import com.asiainfo.biapp.si.loc.core.label.sourceconfig.dao.ITargetTableStatusDao;
+import com.asiainfo.biapp.si.loc.core.label.sourceconfig.entity.TargetTableStatus;
+import com.asiainfo.biapp.si.loc.core.label.sourceconfig.service.ITargetTableStatusService;
+import com.asiainfo.biapp.si.loc.core.label.sourceconfig.vo.TargetTableStatusVo;
 
 /**
- * Title : DimTargetTableStatusServiceImpl
+ * Title : TargetTableStatusServiceImpl
  * <p/>
  * Description :
  * <p/>
@@ -52,37 +52,37 @@ import com.asiainfo.biapp.si.loc.core.label.sourceconfig.vo.DimTargetTableStatus
  */
 @Service
 @Transactional
-public class DimTargetTableStatusServiceImpl extends BaseServiceImpl<DimTargetTableStatus, String> implements
-        IDimTargetTableStatusService {
+public class TargetTableStatusServiceImpl extends BaseServiceImpl<TargetTableStatus, String> implements
+        ITargetTableStatusService {
 
     @Autowired
-    private IDimTargetTableStatusDao iDimTargetTableStatusDao;
+    private ITargetTableStatusDao iTargetTableStatusDao;
 
     @Override
-    protected BaseDao<DimTargetTableStatus, String> getBaseDao() {
-        return iDimTargetTableStatusDao;
+    protected BaseDao<TargetTableStatus, String> getBaseDao() {
+        return iTargetTableStatusDao;
     }
 
     /**
      * 根据条件分页查询
      *
      * @param page
-     * @param dimTargetTableStatusVo
+     * @param targetTableStatusVo
      * @return
      */
-    public Page<DimTargetTableStatus> findDimTargetTableStatusPageList(Page<DimTargetTableStatus> page,
-            DimTargetTableStatusVo dimTargetTableStatusVo) {
-        return iDimTargetTableStatusDao.findDimTargetTableStatusPageList(page, dimTargetTableStatusVo);
+    public Page<TargetTableStatus> findTargetTableStatusPageList(Page<TargetTableStatus> page,
+            TargetTableStatusVo targetTableStatusVo) {
+        return iTargetTableStatusDao.findTargetTableStatusPageList(page, targetTableStatusVo);
     }
 
     /**
      * 根据条件查询列表
      *
-     * @param dimTargetTableStatusVo
+     * @param targetTableStatusVo
      * @return
      */
-    public List<DimTargetTableStatus> findDimTargetTableStatusList(DimTargetTableStatusVo dimTargetTableStatusVo) {
-        return iDimTargetTableStatusDao.findDimTargetTableStatusList(dimTargetTableStatusVo);
+    public List<TargetTableStatus> findTargetTableStatusList(TargetTableStatusVo targetTableStatusVo) {
+        return iTargetTableStatusDao.findTargetTableStatusList(targetTableStatusVo);
     }
 
     /**
@@ -92,7 +92,7 @@ public class DimTargetTableStatusServiceImpl extends BaseServiceImpl<DimTargetTa
      * @return
      * @throws BaseException
      */
-    public DimTargetTableStatus getById(String labelId) throws BaseException {
+    public TargetTableStatus getById(String labelId) throws BaseException {
         if (StringUtils.isBlank(labelId)) {
             throw new ParamRequiredException("ID不能为空");
         }
@@ -102,21 +102,21 @@ public class DimTargetTableStatusServiceImpl extends BaseServiceImpl<DimTargetTa
     /**
      * 新增一个实体
      *
-     * @param dimTargetTableStatus
+     * @param targetTableStatus
      * @throws BaseException
      */
-    public void saveT(DimTargetTableStatus dimTargetTableStatus) throws BaseException {
-        super.saveOrUpdate(dimTargetTableStatus);
+    public void saveT(TargetTableStatus targetTableStatus) throws BaseException {
+        super.saveOrUpdate(targetTableStatus);
     }
 
     /**
      * 修改一个实体
      *
-     * @param dimTargetTableStatus
+     * @param targetTableStatus
      * @throws BaseException
      */
-    public void updateT(DimTargetTableStatus dimTargetTableStatus) {
-        super.saveOrUpdate(dimTargetTableStatus);
+    public void updateT(TargetTableStatus targetTableStatus) {
+        super.saveOrUpdate(targetTableStatus);
     }
 
     /**

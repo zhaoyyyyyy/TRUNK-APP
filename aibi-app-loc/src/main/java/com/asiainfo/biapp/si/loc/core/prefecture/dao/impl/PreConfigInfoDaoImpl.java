@@ -58,6 +58,10 @@ public class PreConfigInfoDaoImpl extends BaseDaoImpl<PreConfigInfo, String> imp
     public Page<PreConfigInfo> findPreConfigInfoPageList(Page<PreConfigInfo> page, PreConfigInfoVo preConfigInfoVo) {
         Map<String, Object> params = new HashMap<>();
         StringBuffer hql = new StringBuffer("from PreConfigInfo p where 1=1 ");
+        if (StringUtils.isNotBlank(preConfigInfoVo.getConfigId())) {
+            hql.append("and p.configId = :configId ");
+            params.put("configId", preConfigInfoVo.getConfigId());
+        }
         if (StringUtils.isNotBlank(preConfigInfoVo.getOrgId())) {
             hql.append("and p.orgId = :orgId ");
             params.put("orgId", preConfigInfoVo.getOrgId());
@@ -103,6 +107,10 @@ public class PreConfigInfoDaoImpl extends BaseDaoImpl<PreConfigInfo, String> imp
     public List<PreConfigInfo> findPreConfigInfoList(PreConfigInfoVo preConfigInfoVo) {
         Map<String, Object> params = new HashMap<>();
         StringBuffer hql = new StringBuffer("from PreConfigInfo p where 1=1 ");
+        if (StringUtils.isNotBlank(preConfigInfoVo.getConfigId())) {
+            hql.append("and p.configId = :configId ");
+            params.put("configId", preConfigInfoVo.getConfigId());
+        }
         if (StringUtils.isNotBlank(preConfigInfoVo.getOrgId())) {
             hql.append("and p.orgId = :orgId ");
             params.put("orgId", preConfigInfoVo.getOrgId());

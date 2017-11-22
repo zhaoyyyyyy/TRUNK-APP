@@ -22,4 +22,4 @@ zuul:
       serviceId: loc
     jauth:
       path: /jauth/**
-      url: http://${jauth-url}
+      url: ${jauth-url}

@@ -1,5 +1,5 @@
 /*
- * @(#)IDimTargetTableStatusDao.java
+ * @(#)ITargetTableStatusDao.java
  * 
  * CopyRight (c) 2017 北京亚信智慧数据科技有限公司 保留所有权利。
  */
@@ -10,11 +10,11 @@ import java.util.List;
 
 import com.asiainfo.biapp.si.loc.base.dao.BaseDao;
 import com.asiainfo.biapp.si.loc.base.page.Page;
-import com.asiainfo.biapp.si.loc.core.label.sourceconfig.entity.DimTargetTableStatus;
-import com.asiainfo.biapp.si.loc.core.label.sourceconfig.vo.DimTargetTableStatusVo;
+import com.asiainfo.biapp.si.loc.core.label.sourceconfig.entity.TargetTableStatus;
+import com.asiainfo.biapp.si.loc.core.label.sourceconfig.vo.TargetTableStatusVo;
 
 /**
- * Title : IDimTargetTableStatusDao
+ * Title : ITargetTableStatusDao
  * <p/>
  * Description :
  * <p/>
@@ -39,24 +39,24 @@ import com.asiainfo.biapp.si.loc.core.label.sourceconfig.vo.DimTargetTableStatus
  * @author zhangnan7
  * @version 1.0.0.2017年11月15日
  */
-public interface IDimTargetTableStatusDao extends BaseDao<DimTargetTableStatus, String> {
+public interface ITargetTableStatusDao extends BaseDao<TargetTableStatus, String> {
 
     /**
      * 根据条件分页查询
      *
      * @param page
-     * @param dimTargetTableStatusVo
+     * @param targetTableStatusVo
      * @return
      */
-    public Page<DimTargetTableStatus> findDimTargetTableStatusPageList(Page<DimTargetTableStatus> page,
-            DimTargetTableStatusVo dimTargetTableStatusVo);
+    public Page<TargetTableStatus> findTargetTableStatusPageList(Page<TargetTableStatus> page,
+            TargetTableStatusVo targetTableStatusVo);
 
     /**
      * 根据条件查询列表
      *
-     * @param dimTargetTableStatusVo
+     * @param targetTableStatusVo
      * @return
      */
-    public List<DimTargetTableStatus> findDimTargetTableStatusList(DimTargetTableStatusVo dimTargetTableStatusVo);
+    public List<TargetTableStatus> findTargetTableStatusList(TargetTableStatusVo targetTableStatusVo);
 
 }
