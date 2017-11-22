@@ -1,6 +1,7 @@
-/target/
-/.classpath
 /.project
-/.settings/
 /.gitignore
 *.rej
+/bin/
+/target/
+.classpath
+/.settings/
