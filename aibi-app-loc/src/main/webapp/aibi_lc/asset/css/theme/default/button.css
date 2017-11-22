@@ -15,6 +15,7 @@
 .ui-btn-default{
 	background: #009241;
 	color: #FFF;
+	border: 1px solid #009241;
 }
 .ui-btn-default:HOVER{ 
     background: #3DAC6E; 
