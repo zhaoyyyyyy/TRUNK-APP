@@ -3,6 +3,7 @@ package com.asiainfo.biapp.si.loc.base.utils;
 import java.util.HashMap;
 import java.util.Map;
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Value;
 
 public class LogUtil {
 
@@ -15,6 +16,9 @@ public class LogUtil {
     private static String LEVEL_WARN = "WARN";
 
     private static String LEVEL_ERROR = "ERROR";
+    
+    @Value("${jauth-url}")  
+    private static String jauthUrl; 
 
     public static void main(String[] args) throws Exception {
 
@@ -121,8 +125,18 @@ public class LogUtil {
      * @param msg
      */
     private static void saveLog(String level,String threadName, String interfaceUrl, String method, Object msg) {
-        // 组装http远程调用
-        System.out.println(interfaceUrl + "========method==" + method + "msg" + msg+"threadName==="+threadName);
+        try {
+            // 组装http远程调用
+            System.out.println(interfaceUrl + "========method==" + method + "msg" + msg+"threadName==="+threadName);
+            Map params = new HashMap();
+            params.put("level", level);
+            params.put("threadName", threadName);
+            params.put("interfaceUrl", interfaceUrl+"/"+method);
+            params.put("msg", msg);
+            String tokenStr = HttpUtil.sendGet(jauthUrl+"/api/auth/me", params);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 }
