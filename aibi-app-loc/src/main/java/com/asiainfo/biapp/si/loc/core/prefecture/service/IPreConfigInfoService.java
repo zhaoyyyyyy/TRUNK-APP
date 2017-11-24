@@ -43,62 +43,63 @@ import com.asiainfo.biapp.si.loc.core.prefecture.vo.PreConfigInfoVo;
 public interface IPreConfigInfoService extends BaseService<PreConfigInfo, String> {
 
     /**
-     * 根据条件分页查询专区
-     * 
+     * Description: 分页查询专区
+     *
      * @param page
-     * @param preConfigInfo
+     * @param preConfigInfoVo
      * @return
+     * @throws BaseException
      */
     public Page<PreConfigInfo> findPreConfigInfoPageList(Page<PreConfigInfo> page, PreConfigInfoVo preConfigInfoVo)
             throws BaseException;
 
     /**
-     * 根据条件查询专区列表
-     * 
-     * @param page
-     * @param dataSourceInfo
+     * Description: 查询专区列表
+     *
+     * @param preConfigInfoVo
      * @return
+     * @throws BaseException
      */
     public List<PreConfigInfo> findPreConfigInfoList(PreConfigInfoVo preConfigInfoVo) throws BaseException;
 
     /**
-     * 根据数据源名称查询一个专区
-     * 
+     * Description: 根据名称查询专区
+     *
      * @param sourceName
      * @return
+     * @throws BaseException
      */
-    public PreConfigInfo findOneBySourceName(String sourceName);
+    public PreConfigInfo findOneBySourceName(String sourceName) throws BaseException;
 
     /**
-     * 通过主键得到实体
-     * 
-     * @param id
+     * Description: 通过ID得到专区
+     *
+     * @param configId
      * @return
+     * @throws BaseException
      */
     public PreConfigInfo getById(String configId) throws BaseException;
 
     /**
-     * 新增专区
+     * Description: 新增一个专区
      *
      * @param preConfigInfo
-     * @return
      * @throws BaseException
      */
     public void saveT(PreConfigInfo preConfigInfo) throws BaseException;
 
     /**
-     * 修改专区
+     * Description: 修改专区
      *
      * @param preConfigInfo
-     * @return
      * @throws BaseException
      */
-    public void updateT(PreConfigInfo preConfigInfo);
+    public void updateT(PreConfigInfo preConfigInfo) throws BaseException;
 
     /**
-     * 删除专区
+     * Description: 删除专区
      *
-     * @param preConfigInfo
+     * @param configId
      * @throws BaseException
      */
     public void deleteById(String configId) throws BaseException;

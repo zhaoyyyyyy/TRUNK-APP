@@ -62,32 +62,17 @@ public class DataSourceInfoServiceImpl extends BaseServiceImpl<DataSourceInfo, S
         return iDataSourceInfoDao;
     }
 
-    /**
-     * 根据条件查询数据源列表
-     * 
-     * @param dataSourceInfo
-     * @return
-     */
-    public List<DataSourceInfo> findDataSourceInfoList(DataSourceInfoVo dataSourceInfoVo) {
+    public List<DataSourceInfo> findDataSourceInfoList(DataSourceInfoVo dataSourceInfoVo) throws BaseException {
         return iDataSourceInfoDao.findDataSourceInfoList(dataSourceInfoVo);
     }
 
-    /**
-     * 根据数据源名称查询一个数据源
-     * 
-     * @param dataSourceName
-     * @return
-     */
-    public DataSourceInfo findOneByDataSourceName(String dataSourceName) {
+    public DataSourceInfo findOneByDataSourceName(String dataSourceName) throws BaseException {
+        if (StringUtils.isBlank(dataSourceName)) {
+            throw new ParamRequiredException("名称不能为空");
+        }
         return iDataSourceInfoDao.findOneByDataSourceName(dataSourceName);
     }
 
-    /**
-     * 通过主键得到实体
-     * 
-     * @param id
-     * @return
-     */
     public DataSourceInfo getById(String dataSourceId) throws BaseException {
         if (StringUtils.isBlank(dataSourceId)) {
             throw new ParamRequiredException("ID不能为空");
@@ -95,31 +80,18 @@ public class DataSourceInfoServiceImpl extends BaseServiceImpl<DataSourceInfo, S
         return super.get(dataSourceId);
     }
 
-    /**
-     * 新增数据源
-     *
-     * @throws BaseException
-     */
-    public void saveT(DataSourceInfo dataSourceInfo) {
+    public void saveT(DataSourceInfo dataSourceInfo) throws BaseException {
         super.saveOrUpdate(dataSourceInfo);
     }
 
-    /**
-     * 修改数据源
-     *
-     * @throws BaseException
-     */
-    public void updateT(DataSourceInfo dataSourceInfo) {
+    public void updateT(DataSourceInfo dataSourceInfo) throws BaseException {
         super.saveOrUpdate(dataSourceInfo);
     }
 
-    /**
-     * 删除数据源
-     *
-     * @param dataSourceId
-     * @throws BaseException
-     */
-    public void deleteById(String dataSourceId) {
+    public void deleteById(String dataSourceId) throws BaseException {
+        if (StringUtils.isBlank(dataSourceId)) {
+            throw new ParamRequiredException("ID不能为空");
+        }
         super.delete(dataSourceId);
     }
 

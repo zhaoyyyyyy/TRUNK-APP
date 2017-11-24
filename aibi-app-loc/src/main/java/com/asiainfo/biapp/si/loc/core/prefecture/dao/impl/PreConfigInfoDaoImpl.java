@@ -48,13 +48,6 @@ import com.asiainfo.biapp.si.loc.core.prefecture.vo.PreConfigInfoVo;
 @Repository
 public class PreConfigInfoDaoImpl extends BaseDaoImpl<PreConfigInfo, String> implements IPreConfigInfoDao {
 
-    /**
-     * 根据条件分页查询数据源
-     * 
-     * @param page
-     * @param dataSourceInfo
-     * @return
-     */
     public Page<PreConfigInfo> findPreConfigInfoPageList(Page<PreConfigInfo> page, PreConfigInfoVo preConfigInfoVo) {
         Map<String, Object> params = new HashMap<>();
         StringBuffer hql = new StringBuffer("from PreConfigInfo p where 1=1 ");
@@ -97,13 +90,6 @@ public class PreConfigInfoDaoImpl extends BaseDaoImpl<PreConfigInfo, String> imp
         return super.findPageByHql(page, hql.toString(), params);
     }
 
-    /**
-     * 根据条件查询专区列表
-     * 
-     * @param page
-     * @param dataSourceInfo
-     * @return
-     */
     public List<PreConfigInfo> findPreConfigInfoList(PreConfigInfoVo preConfigInfoVo) {
         Map<String, Object> params = new HashMap<>();
         StringBuffer hql = new StringBuffer("from PreConfigInfo p where 1=1 ");
@@ -146,12 +132,6 @@ public class PreConfigInfoDaoImpl extends BaseDaoImpl<PreConfigInfo, String> imp
         return super.findListByHql(hql.toString(), params);
     }
 
-    /**
-     * 根据专区名称查询专区
-     * 
-     * @param sourceName
-     * @return
-     */
     public PreConfigInfo findOneBySourceName(String sourceName) {
         return super.findOneByHql("from PreConfigInfo p where p.sourceName = ?0", sourceName);
     }
