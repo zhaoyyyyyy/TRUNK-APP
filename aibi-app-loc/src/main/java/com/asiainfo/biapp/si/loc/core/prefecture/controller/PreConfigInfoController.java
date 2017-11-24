@@ -147,15 +147,20 @@ public class PreConfigInfoController extends BaseController<PreConfigInfo> {
     @RequestMapping(value = "/preConfigInfo/save", method = RequestMethod.POST)
     public WebResult<String> save(@ApiIgnore PreConfigInfo preConfigInfo) {
         WebResult<String> webResult = new WebResult<>();
-        PreConfigInfo rePre = iPreConfigInfoService.findOneBySourceName(preConfigInfo.getSourceName());
+        PreConfigInfo rePre = new PreConfigInfo();
+        try {
+            rePre = iPreConfigInfoService.findOneBySourceName(preConfigInfo.getSourceName());
+        } catch (BaseException e) {
+            return webResult.fail(e);
+        }
         if (null != rePre) {
             return webResult.fail("专区名称已存在");
         }
         preConfigInfo.setCreateTime(new Date());
         try {
             iPreConfigInfoService.saveT(preConfigInfo);
-        } catch (BaseException e) {
-            return webResult.fail(e);
+        } catch (BaseException e1) {
+            return webResult.fail(e1);
         }
         return webResult.success("新增专区成功", SUCCESS);
     }
@@ -187,7 +192,11 @@ public class PreConfigInfoController extends BaseController<PreConfigInfo> {
             return webResult.fail(e);
         }
         oldPre = fromToBean(preConfigInfo, oldPre);
-        iPreConfigInfoService.updateT(oldPre);
+        try {
+            iPreConfigInfoService.updateT(oldPre);
+        } catch (BaseException e1) {
+            return webResult.fail(e1);
+        }
         return webResult.success("修改专区成功", SUCCESS);
     }
 

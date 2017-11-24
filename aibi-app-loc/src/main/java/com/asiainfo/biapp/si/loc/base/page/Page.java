@@ -72,7 +72,7 @@ public class Page<T> implements Serializable {
 	@ApiParam(value = "是否自动查询条数", defaultValue = "true")
 	private boolean autoCount = true;
 	
-	@ApiParam(value = "", hidden = true)
+	@ApiParam(value="不必填写")
 	private List<T> data = new ArrayList<T>();
 	
 	@ApiParam(value = "总行数")
@@ -204,8 +204,10 @@ public class Page<T> implements Serializable {
 	 *  框架返回参数
 	 */
 	// 状态码
+	@ApiParam(value="不必填写")
 	private String status = WebResult.Code.OK + "";
 	// 信息
+	@ApiParam(value="不必填写")
 	private String msg = "分页查询成功";
 
 	public String getStatus() {

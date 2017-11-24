@@ -62,44 +62,22 @@ public class PreConfigInfoServiceImpl extends BaseServiceImpl<PreConfigInfo, Str
         return iPreConfigInfoDao;
     }
 
-    /**
-     * 根据条件分页查询专区
-     * 
-     * @param page
-     * @param preConfigInfo
-     * @return
-     */
-    public Page<PreConfigInfo> findPreConfigInfoPageList(Page<PreConfigInfo> page, PreConfigInfoVo preConfigInfoVo) {
+    public Page<PreConfigInfo> findPreConfigInfoPageList(Page<PreConfigInfo> page, PreConfigInfoVo preConfigInfoVo)
+            throws BaseException {
         return iPreConfigInfoDao.findPreConfigInfoPageList(page, preConfigInfoVo);
     }
 
-    /**
-     * 根据条件查询专区列表
-     * 
-     * @param page
-     * @param dataSourceInfo
-     * @return
-     */
-    public List<PreConfigInfo> findPreConfigInfoList(PreConfigInfoVo preConfigInfoVo) {
+    public List<PreConfigInfo> findPreConfigInfoList(PreConfigInfoVo preConfigInfoVo) throws BaseException {
         return iPreConfigInfoDao.findPreConfigInfoList(preConfigInfoVo);
     }
 
-    /**
-     * 根据数据源名称查询一个数据源
-     * 
-     * @param dataSourceName
-     * @return
-     */
-    public PreConfigInfo findOneBySourceName(String sourceName) {
+    public PreConfigInfo findOneBySourceName(String sourceName) throws BaseException {
+        if (StringUtils.isBlank(sourceName)) {
+            throw new ParamRequiredException("名称不能为空");
+        }
         return iPreConfigInfoDao.findOneBySourceName(sourceName);
     }
 
-    /**
-     * 通过主键得到实体
-     * 
-     * @param id
-     * @return
-     */
     public PreConfigInfo getById(String configId) throws BaseException {
         if (StringUtils.isBlank(configId)) {
             throw new ParamRequiredException("ID不能为空");
@@ -107,35 +85,18 @@ public class PreConfigInfoServiceImpl extends BaseServiceImpl<PreConfigInfo, Str
         return super.get(configId);
     }
 
-    /**
-     * 新增专区
-     *
-     * @param preConfigInfo
-     * @return
-     * @throws BaseException
-     */
-    public void saveT(PreConfigInfo preConfigInfo) {
+    public void saveT(PreConfigInfo preConfigInfo) throws BaseException {
         super.saveOrUpdate(preConfigInfo);
     }
 
-    /**
-     * 修改专区
-     *
-     * @param preConfigInfo
-     * @return
-     * @throws BaseException
-     */
-    public void updateT(PreConfigInfo preConfigInfo) {
+    public void updateT(PreConfigInfo preConfigInfo) throws BaseException {
         super.saveOrUpdate(preConfigInfo);
     }
 
-    /**
-     * 删除专区
-     *
-     * @param preConfigInfo
-     * @throws BaseException
-     */
-    public void deleteById(String configId) {
+    public void deleteById(String configId) throws BaseException {
+        if (StringUtils.isBlank(configId)) {
+            throw new ParamRequiredException("ID不能为空");
+        }
         super.delete(configId);
     }
 

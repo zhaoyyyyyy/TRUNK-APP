@@ -42,45 +42,50 @@ import com.asiainfo.biapp.si.loc.core.prefecture.vo.DataSourceInfoVo;
 public interface IDataSourceInfoService extends BaseService<DataSourceInfo, String> {
 
     /**
-     * 根据条件查询数据源列表
-     * 
-     * @param dataSourceInfo
+     * Description: 查询数据源列表
+     *
+     * @param dataSourceInfoVo
      * @return
+     * @throws BaseException
      */
     public List<DataSourceInfo> findDataSourceInfoList(DataSourceInfoVo dataSourceInfoVo) throws BaseException;
 
     /**
-     * 根据数据源名称查询一个数据源
-     * 
+     * Description: 根据名称查询数据源
+     *
      * @param dataSourceName
      * @return
+     * @throws BaseException
      */
-    public DataSourceInfo findOneByDataSourceName(String dataSourceName);
+    public DataSourceInfo findOneByDataSourceName(String dataSourceName) throws BaseException;;
 
     /**
-     * 通过主键得到实体
-     * 
-     * @param id
+     * Description: 通过ID得到数据源
+     *
+     * @param dataSourceId
      * @return
+     * @throws BaseException
      */
     public DataSourceInfo getById(String dataSourceId) throws BaseException;
 
     /**
-     * 新增数据源
+     * Description: 新增一个数据源
      *
+     * @param dataSourceInfo
      * @throws BaseException
      */
     public void saveT(DataSourceInfo dataSourceInfo) throws BaseException;
 
     /**
-     * 修改数据源
+     * Description: 修改数据源
      *
+     * @param dataSourceInfo
      * @throws BaseException
      */
-    public void updateT(DataSourceInfo dataSourceInfo);
+    public void updateT(DataSourceInfo dataSourceInfo) throws BaseException;;
 
     /**
-     * 删除数据源
+     * Description: 删除数据源
      *
      * @param dataSourceId
      * @throws BaseException

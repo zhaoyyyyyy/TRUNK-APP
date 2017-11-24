@@ -47,12 +47,6 @@ import com.asiainfo.biapp.si.loc.core.prefecture.vo.DataSourceInfoVo;
 @Repository
 public class DataSourceInfoDaoImpl extends BaseDaoImpl<DataSourceInfo, String> implements IDataSourceInfoDao {
 
-    /**
-     * 根据条件查询数据源列表
-     * 
-     * @param dataSourceInfo
-     * @return
-     */
     public List<DataSourceInfo> findDataSourceInfoList(DataSourceInfoVo dataSourceInfoVo) {
         Map<String, Object> params = new HashMap<>();
         StringBuffer hql = new StringBuffer("from DataSourceInfo d where 1=1 ");
@@ -131,12 +125,6 @@ public class DataSourceInfoDaoImpl extends BaseDaoImpl<DataSourceInfo, String> i
         return super.findListByHql(hql.toString(), params);
     }
 
-    /**
-     * 根据数据源名称查询一个数据源
-     * 
-     * @param dataSourceName
-     * @return
-     */
     public DataSourceInfo findOneByDataSourceName(String dataSourceName) {
         return super.findOneByHql("from DataSourceInfo d where d.dataSourceName = ?0", dataSourceName);
     }

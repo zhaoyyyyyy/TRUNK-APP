@@ -24,8 +24,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import springfox.documentation.annotations.ApiIgnore;
 
+import com.asiainfo.biapp.si.loc.auth.model.User;
+import com.asiainfo.biapp.si.loc.auth.utils.AuthUtils;
 import com.asiainfo.biapp.si.loc.base.controller.BaseController;
 import com.asiainfo.biapp.si.loc.base.exception.BaseException;
+import com.asiainfo.biapp.si.loc.base.utils.LogUtil;
 import com.asiainfo.biapp.si.loc.base.utils.WebResult;
 import com.asiainfo.biapp.si.loc.core.prefecture.entity.DataSourceInfo;
 import com.asiainfo.biapp.si.loc.core.prefecture.service.IDataSourceInfoService;
@@ -135,15 +138,20 @@ public class DataSourceInfoController extends BaseController<DataSourceInfo> {
     @RequestMapping(value = "/dataSourceInfo/save", method = RequestMethod.POST)
     public WebResult<String> save(@ApiIgnore DataSourceInfo dataSourceInfo) {
         WebResult<String> webResult = new WebResult<>();
-        DataSourceInfo reData = iDataSourceInfoService.findOneByDataSourceName(dataSourceInfo.getDataSourceName());
+        DataSourceInfo reData = new DataSourceInfo();
+        try {
+            reData = iDataSourceInfoService.findOneByDataSourceName(dataSourceInfo.getDataSourceName());
+        } catch (BaseException e) {
+            return webResult.fail(e);
+        }
         if (null != reData) {
             return webResult.fail("数据源名称已存在");
         }
         dataSourceInfo.setCreateTime(new Date());
         try {
             iDataSourceInfoService.saveT(dataSourceInfo);
-        } catch (BaseException e) {
-            return webResult.fail(e);
+        } catch (BaseException e1) {
+            return webResult.fail(e1);
         }
         return webResult.success("新增数据源成功", SUCCESS);
     }
@@ -184,7 +192,11 @@ public class DataSourceInfoController extends BaseController<DataSourceInfo> {
             return webResult.fail(e);
         }
         oldData = fromToBean(dataSourceInfo, oldData);
-        iDataSourceInfoService.updateT(oldData);
+        try {
+            iDataSourceInfoService.updateT(oldData);
+        } catch (BaseException e1) {
+            return webResult.fail(e1);
+        }
         return webResult.success("修改数据源成功", SUCCESS);
     }
 
