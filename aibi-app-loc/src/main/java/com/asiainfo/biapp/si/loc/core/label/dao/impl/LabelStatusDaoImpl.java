@@ -68,6 +68,10 @@ public class LabelStatusDaoImpl extends BaseDaoImpl<LabelStatus, String> impleme
             hql.append("and l.dataStatus = :dataStatus ");
             params.put("dataStatus", labelStatusVo.getDataStatus());
         }
+        if(null != labelStatusVo.getDataInsertTime()) {
+            hql.append("and l.dataInsertTime = :dataInsertTime ");
+            params.put("dataInsertTime", labelStatusVo.getDataInsertTime());
+        }
         if(StringUtil.isNoneBlank(labelStatusVo.getExceptionDesc())){
             hql.append("and l.exceptionDesc = :exceptionDesc ");
             params.put("exceptionDesc", labelStatusVo.getExceptionDesc());

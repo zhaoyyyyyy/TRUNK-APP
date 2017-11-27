@@ -118,7 +118,7 @@ public class NewestLabelDateController extends BaseController<NewestLabelDate>{
 
     @ApiOperation(value = "修改")
     @ApiImplicitParams({
-        @ApiImplicitParam(name = "dayNewestDate", value = "最新日数据日期", required = false, paramType = "query", dataType = "string"),
+        @ApiImplicitParam(name = "dayNewestDate", value = "最新日数据日期", required = true, paramType = "query", dataType = "string"),
         @ApiImplicitParam(name = "monthNewestDate", value = "最新月数据月份", required = false, paramType = "query", dataType = "string"),
         @ApiImplicitParam(name = "dayNewestStatus", value = "是否统计过日数据", required = false, paramType = "query", dataType = "int"),
         @ApiImplicitParam(name = "monthNewestStatus", value = "是否统计过月数据", required = false, paramType = "query", dataType = "int") })
