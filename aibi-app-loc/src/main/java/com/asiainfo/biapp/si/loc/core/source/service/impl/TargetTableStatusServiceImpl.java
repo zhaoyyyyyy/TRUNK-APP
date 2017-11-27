@@ -63,32 +63,32 @@ public class TargetTableStatusServiceImpl extends BaseServiceImpl<TargetTableSta
         return iTargetTableStatusDao;
     }
 
-    public Page<TargetTableStatus> findTargetTableStatusPageList(Page<TargetTableStatus> page,
+    public Page<TargetTableStatus> selectTargetTableStatusPageList(Page<TargetTableStatus> page,
             TargetTableStatusVo targetTableStatusVo) throws BaseException {
-        return iTargetTableStatusDao.findTargetTableStatusPageList(page, targetTableStatusVo);
+        return iTargetTableStatusDao.selectTargetTableStatusPageList(page, targetTableStatusVo);
     }
 
-    public List<TargetTableStatus> findTargetTableStatusList(TargetTableStatusVo targetTableStatusVo)
+    public List<TargetTableStatus> selectTargetTableStatusList(TargetTableStatusVo targetTableStatusVo)
             throws BaseException {
-        return iTargetTableStatusDao.findTargetTableStatusList(targetTableStatusVo);
+        return iTargetTableStatusDao.selectTargetTableStatusList(targetTableStatusVo);
     }
 
-    public TargetTableStatus getById(String tableId) throws BaseException {
+    public TargetTableStatus selectTargerTableStatusById(String tableId) throws BaseException {
         if (StringUtils.isBlank(tableId)) {
             throw new ParamRequiredException("ID不能为空");
         }
         return super.get(tableId);
     }
 
-    public void saveT(TargetTableStatus targetTableStatus) throws BaseException {
+    public void addTargerTableStatus(TargetTableStatus targetTableStatus) throws BaseException {
         super.saveOrUpdate(targetTableStatus);
     }
 
-    public void updateT(TargetTableStatus targetTableStatus) throws BaseException {
+    public void modifyTargerTableStatus(TargetTableStatus targetTableStatus) throws BaseException {
         super.saveOrUpdate(targetTableStatus);
     }
 
-    public void deleteById(String tableId) throws BaseException {
+    public void deleteTargerTableStatus(String tableId) throws BaseException {
         if (StringUtils.isBlank(tableId)) {
             throw new ParamRequiredException("ID不能为空");
         }

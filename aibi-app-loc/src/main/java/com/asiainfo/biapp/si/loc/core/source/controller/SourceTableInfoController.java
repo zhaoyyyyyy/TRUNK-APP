@@ -75,11 +75,11 @@ public class SourceTableInfoController extends BaseController<SourceTableInfo> {
 
     @ApiOperation(value = "分页查询")
     @RequestMapping(value = "/sourceTableInfoPage/query", method = RequestMethod.POST)
-    public Page<SourceTableInfo> queryPage(@ModelAttribute Page<SourceTableInfo> page,
+    public Page<SourceTableInfo> list(@ModelAttribute Page<SourceTableInfo> page,
             @ModelAttribute SourceTableInfoVo sourceTableInfoVo) {
         Page<SourceTableInfo> sourceTableInfoPage = new Page<>();
         try {
-            sourceTableInfoPage = iSourceTableInfoService.findSourceTableInfoPageList(page, sourceTableInfoVo);
+            sourceTableInfoPage = iSourceTableInfoService.selectSourceTableInfoPageList(page, sourceTableInfoVo);
         } catch (BaseException e) {
             sourceTableInfoPage.fail(e);
         }
@@ -92,7 +92,7 @@ public class SourceTableInfoController extends BaseController<SourceTableInfo> {
         WebResult<List<SourceTableInfo>> webResult = new WebResult<>();
         List<SourceTableInfo> sourceTableInfoList = new ArrayList<>();
         try {
-            sourceTableInfoList = iSourceTableInfoService.findSourceTableInfoList(sourceTableInfoVo);
+            sourceTableInfoList = iSourceTableInfoService.selectSourceTableInfoList(sourceTableInfoVo);
         } catch (BaseException e) {
             return webResult.fail(e);
         }
@@ -102,11 +102,11 @@ public class SourceTableInfoController extends BaseController<SourceTableInfo> {
     @ApiOperation(value = "根据ID查询")
     @ApiImplicitParam(name = "sourceTableId", value = "ID", required = true, paramType = "query", dataType = "string")
     @RequestMapping(value = "/sourceTableInfo/get", method = RequestMethod.POST)
-    public WebResult<SourceTableInfo> getById(String sourceTableId) throws BaseException {
+    public WebResult<SourceTableInfo> findById(String sourceTableId) throws BaseException {
         WebResult<SourceTableInfo> webResult = new WebResult<>();
         SourceTableInfo sourceTableInfo = new SourceTableInfo();
         try {
-            sourceTableInfo = iSourceTableInfoService.getById(sourceTableId);
+            sourceTableInfo = iSourceTableInfoService.selectSourceTableInfoById(sourceTableId);
         } catch (BaseException e) {
             return webResult.fail(e);
         }
@@ -146,7 +146,7 @@ public class SourceTableInfoController extends BaseController<SourceTableInfo> {
         }
         sourceTableInfo.setCreateUserId(user.getUserId());
         try {
-            iSourceTableInfoService.saveT(sourceTableInfo);
+            iSourceTableInfoService.addSourceTableInfo(sourceTableInfo);
         } catch (BaseException e1) {
             return webResult.fail(e1);
         }
@@ -176,17 +176,17 @@ public class SourceTableInfoController extends BaseController<SourceTableInfo> {
             @ApiImplicitParam(name = "whereSql", value = "过滤条件", required = false, paramType = "query", dataType = "string"),
             @ApiImplicitParam(name = "statusId", value = "状态", required = false, paramType = "query", dataType = "int") })
     @RequestMapping(value = "/sourceTableInfo/update", method = RequestMethod.POST)
-    public WebResult<String> update(@ApiIgnore SourceTableInfo sourceTableInfo) {
+    public WebResult<String> edit(@ApiIgnore SourceTableInfo sourceTableInfo) {
         WebResult<String> webResult = new WebResult<>();
         SourceTableInfo oldSou = new SourceTableInfo();
         try {
-            oldSou = iSourceTableInfoService.getById(sourceTableInfo.getSourceTableId());
+            oldSou = iSourceTableInfoService.selectSourceTableInfoById(sourceTableInfo.getSourceTableId());
         } catch (BaseException e) {
             return webResult.fail(e);
         }
         oldSou = fromToBean(sourceTableInfo, oldSou);
         try {
-            iSourceTableInfoService.updateT(oldSou);
+            iSourceTableInfoService.modifySourceTableInfo(oldSou);
         } catch (BaseException e1) {
             return webResult.fail(e1);
         }
@@ -201,16 +201,16 @@ public class SourceTableInfoController extends BaseController<SourceTableInfo> {
     @ApiOperation(value = "删除")
     @ApiImplicitParam(name = "sourceTableId", value = "ID", required = true, paramType = "query", dataType = "string")
     @RequestMapping(value = "/sourceTableInfo/delete", method = RequestMethod.POST)
-    public WebResult<String> delete(String sourceTableId) {
+    public WebResult<String> del(String sourceTableId) {
         WebResult<String> webResult = new WebResult<>();
         try {
-            iSourceTableInfoService.deleteById(sourceTableId);
+            iSourceTableInfoService.deleteSourceTableInfo(sourceTableId);
         } catch (BaseException e) {
             return webResult.fail(e);
         }
         return webResult.success("删除指标数据源信息配置成功", SUCCESS);
     }
-    
+
     /**
      * 封装实体信息
      *

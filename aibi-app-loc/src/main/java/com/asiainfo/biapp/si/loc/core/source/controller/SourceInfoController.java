@@ -70,10 +70,10 @@ public class SourceInfoController extends BaseController<SourceInfo> {
 
     @ApiOperation(value = "分页查询")
     @RequestMapping(value = "/sourceInfoPage/query", method = RequestMethod.POST)
-    public Page<SourceInfo> queryPage(@ModelAttribute Page<SourceInfo> page, @ModelAttribute SourceInfoVo sourceInfoVo) {
+    public Page<SourceInfo> list(@ModelAttribute Page<SourceInfo> page, @ModelAttribute SourceInfoVo sourceInfoVo) {
         Page<SourceInfo> sourceInfoPage = new Page<>();
         try {
-            sourceInfoPage = iSourceInfoService.findSourceInfoPageList(page, sourceInfoVo);
+            sourceInfoPage = iSourceInfoService.selectSourceInfoPageList(page, sourceInfoVo);
         } catch (BaseException e) {
             sourceInfoPage.fail(e);
         }
@@ -86,7 +86,7 @@ public class SourceInfoController extends BaseController<SourceInfo> {
         WebResult<List<SourceInfo>> webResult = new WebResult<>();
         List<SourceInfo> sourceInfoList = new ArrayList<>();
         try {
-            sourceInfoList = iSourceInfoService.findSourceInfoList(sourceInfoVo);
+            sourceInfoList = iSourceInfoService.selectSourceInfoList(sourceInfoVo);
         } catch (BaseException e) {
             return webResult.fail(e);
         }
@@ -96,11 +96,11 @@ public class SourceInfoController extends BaseController<SourceInfo> {
     @ApiOperation(value = "根据ID查询")
     @ApiImplicitParam(name = "sourceId", value = "ID", required = true, paramType = "query", dataType = "string")
     @RequestMapping(value = "/sourceInfo/get", method = RequestMethod.POST)
-    public WebResult<SourceInfo> getById(String sourceId) {
+    public WebResult<SourceInfo> findById(String sourceId) {
         WebResult<SourceInfo> webResult = new WebResult<>();
         SourceInfo sourceInfo = new SourceInfo();
         try {
-            sourceInfo = iSourceInfoService.getById(sourceId);
+            sourceInfo = iSourceInfoService.selectSourceInfoById(sourceId);
         } catch (BaseException e) {
             return webResult.fail(e);
         }
@@ -123,7 +123,7 @@ public class SourceInfoController extends BaseController<SourceInfo> {
     public WebResult<String> save(@ApiIgnore SourceInfo sourceInfo) {
         WebResult<String> webResult = new WebResult<>();
         try {
-            iSourceInfoService.saveT(sourceInfo);
+            iSourceInfoService.addSourceInfo(sourceInfo);
         } catch (BaseException e) {
             return webResult.fail(e);
         }
@@ -138,7 +138,7 @@ public class SourceInfoController extends BaseController<SourceInfo> {
         List<SourceInfo> sourceList = sourceInfos.getSourceInfos();
         for (SourceInfo sourceInfo : sourceList) {
             try {
-                iSourceInfoService.saveT(sourceInfo);
+                iSourceInfoService.addSourceInfo(sourceInfo);
             } catch (BaseException e) {
                 return webResult.fail(e);
             }
@@ -160,17 +160,17 @@ public class SourceInfoController extends BaseController<SourceInfo> {
             @ApiImplicitParam(name = "columnCaliber", value = "业务口径", required = false, paramType = "query", dataType = "string"),
             @ApiImplicitParam(name = "columnNum", value = "列序", required = false, paramType = "query", dataType = "int") })
     @RequestMapping(value = "/sourceInfo/update", method = RequestMethod.POST)
-    public WebResult<String> update(@ApiIgnore SourceInfo sourceInfo) {
+    public WebResult<String> edit(@ApiIgnore SourceInfo sourceInfo) {
         WebResult<String> webResult = new WebResult<>();
         SourceInfo oldSou = new SourceInfo();
         try {
-            oldSou = iSourceInfoService.getById(sourceInfo.getSourceId());
+            oldSou = iSourceInfoService.selectSourceInfoById(sourceInfo.getSourceId());
         } catch (BaseException e) {
             return webResult.fail(e);
         }
         oldSou = fromToBean(sourceInfo, oldSou);
         try {
-            iSourceInfoService.updateT(oldSou);
+            iSourceInfoService.modifySourceInfo(oldSou);
         } catch (BaseException e1) {
             return webResult.fail(e1);
         }
@@ -185,10 +185,10 @@ public class SourceInfoController extends BaseController<SourceInfo> {
     @ApiOperation(value = "删除")
     @ApiImplicitParam(name = "sourceId", value = "ID", required = true, paramType = "query", dataType = "string")
     @RequestMapping(value = "/sourceInfo/delete", method = RequestMethod.POST)
-    public WebResult<String> delete(String sourceId) {
+    public WebResult<String> del(String sourceId) {
         WebResult<String> webResult = new WebResult<>();
         try {
-            iSourceInfoService.deleteById(sourceId);
+            iSourceInfoService.deleteSourceInfo(sourceId);
         } catch (BaseException e) {
             return webResult.fail(e);
         }

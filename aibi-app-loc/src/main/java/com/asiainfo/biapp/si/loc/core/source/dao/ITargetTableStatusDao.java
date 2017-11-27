@@ -48,7 +48,7 @@ public interface ITargetTableStatusDao extends BaseDao<TargetTableStatus, String
      * @param targetTableStatusVo
      * @return
      */
-    public Page<TargetTableStatus> findTargetTableStatusPageList(Page<TargetTableStatus> page,
+    public Page<TargetTableStatus> selectTargetTableStatusPageList(Page<TargetTableStatus> page,
             TargetTableStatusVo targetTableStatusVo);
 
     /**
@@ -57,6 +57,6 @@ public interface ITargetTableStatusDao extends BaseDao<TargetTableStatus, String
      * @param targetTableStatusVo
      * @return
      */
-    public List<TargetTableStatus> findTargetTableStatusList(TargetTableStatusVo targetTableStatusVo);
+    public List<TargetTableStatus> selectTargetTableStatusList(TargetTableStatusVo targetTableStatusVo);
 
 }

@@ -69,11 +69,11 @@ public class TargetTableStatusController extends BaseController<TargetTableStatu
 
     @ApiOperation(value = "分页查询")
     @RequestMapping(value = "/TargetTableStatusPage/query", method = RequestMethod.POST)
-    public Page<TargetTableStatus> queryPage(@ModelAttribute Page<TargetTableStatus> page,
+    public Page<TargetTableStatus> list(@ModelAttribute Page<TargetTableStatus> page,
             @ModelAttribute TargetTableStatusVo targetTableStatusVo) {
         Page<TargetTableStatus> TargetTableStatusPage = new Page<>();
         try {
-            TargetTableStatusPage = iTargetTableStatusService.findTargetTableStatusPageList(page, targetTableStatusVo);
+            TargetTableStatusPage = iTargetTableStatusService.selectTargetTableStatusPageList(page, targetTableStatusVo);
         } catch (BaseException e) {
             TargetTableStatusPage.fail(e);
         }
@@ -86,7 +86,7 @@ public class TargetTableStatusController extends BaseController<TargetTableStatu
         WebResult<List<TargetTableStatus>> webResult = new WebResult<>();
         List<TargetTableStatus> TargetTableStatusList = new ArrayList<>();
         try {
-            TargetTableStatusList = iTargetTableStatusService.findTargetTableStatusList(targetTableStatusVo);
+            TargetTableStatusList = iTargetTableStatusService.selectTargetTableStatusList(targetTableStatusVo);
         } catch (BaseException e) {
             return webResult.fail(e);
         }
@@ -96,11 +96,11 @@ public class TargetTableStatusController extends BaseController<TargetTableStatu
     @ApiOperation(value = "根据ID查询")
     @ApiImplicitParam(name = "tableId", value = "ID", required = true, paramType = "query", dataType = "string")
     @RequestMapping(value = "/TargetTableStatus/get", method = RequestMethod.POST)
-    public WebResult<TargetTableStatus> getById(String tableId) throws BaseException {
+    public WebResult<TargetTableStatus> findById(String tableId) throws BaseException {
         WebResult<TargetTableStatus> webResult = new WebResult<>();
         TargetTableStatus targetTableStatus = new TargetTableStatus();
         try {
-            targetTableStatus = iTargetTableStatusService.getById(tableId);
+            targetTableStatus = iTargetTableStatusService.selectTargerTableStatusById(tableId);
         } catch (BaseException e) {
             return webResult.fail(e);
         }
@@ -121,7 +121,7 @@ public class TargetTableStatusController extends BaseController<TargetTableStatu
     public WebResult<String> save(@ApiIgnore TargetTableStatus targetTableStatus) {
         WebResult<String> webResult = new WebResult<>();
         try {
-            iTargetTableStatusService.saveT(targetTableStatus);
+            iTargetTableStatusService.addTargerTableStatus(targetTableStatus);
         } catch (BaseException e) {
             return webResult.fail(e);
         }
@@ -140,17 +140,17 @@ public class TargetTableStatusController extends BaseController<TargetTableStatu
             @ApiImplicitParam(name = "dataBatch", value = "批次", required = false, paramType = "query", dataType = "int"),
             @ApiImplicitParam(name = "exceptionDesc", value = "错误信息描述", required = false, paramType = "query", dataType = "string") })
     @RequestMapping(value = "/TargetTableStatus/update", method = RequestMethod.POST)
-    public WebResult<String> update(@ApiIgnore TargetTableStatus targetTableStatus) {
+    public WebResult<String> edit(@ApiIgnore TargetTableStatus targetTableStatus) {
         WebResult<String> webResult = new WebResult<>();
         TargetTableStatus oldTar = new TargetTableStatus();
         try {
-            oldTar = iTargetTableStatusService.getById(targetTableStatus.getTableId());
+            oldTar = iTargetTableStatusService.selectTargerTableStatusById(targetTableStatus.getTableId());
         } catch (BaseException e) {
             return webResult.fail(e);
         }
         oldTar = fromToBean(targetTableStatus, oldTar);
         try {
-            iTargetTableStatusService.updateT(oldTar);
+            iTargetTableStatusService.modifyTargerTableStatus(oldTar);
         } catch (BaseException e1) {
             return webResult.fail(e1);
         }
@@ -165,10 +165,10 @@ public class TargetTableStatusController extends BaseController<TargetTableStatu
     @ApiOperation(value = "删除")
     @ApiImplicitParam(name = "tableId", value = "ID", required = true, paramType = "query", dataType = "string")
     @RequestMapping(value = "/TargetTableStatus/delete", method = RequestMethod.POST)
-    public WebResult<String> delete(String tableId) {
+    public WebResult<String> del(String tableId) {
         WebResult<String> webResult = new WebResult<>();
         try {
-            iTargetTableStatusService.deleteById(tableId);
+            iTargetTableStatusService.deleteTargerTableStatus(tableId);
         } catch (BaseException e) {
             return webResult.fail(e);
         }

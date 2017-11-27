@@ -48,57 +48,20 @@ import com.asiainfo.biapp.si.loc.core.source.vo.SourceInfoVo;
 @Repository
 public class SourceInfoDaoImpl extends BaseDaoImpl<SourceInfo, String> implements ISourceInfoDao {
 
-    public Page<SourceInfo> findSourceInfoPageList(Page<SourceInfo> page, SourceInfoVo sourceInfoVo) {
-        Map<String, Object> params = new HashMap<>();
-        StringBuffer hql = new StringBuffer("from SourceInfo s where 1=1 ");
-        if (StringUtil.isNotBlank(sourceInfoVo.getSourceId())) {
-            hql.append("and s.sourceId = :sourceId ");
-            params.put("sourceId", sourceInfoVo.getSourceId());
-        }
-        if (StringUtil.isNotBlank(sourceInfoVo.getSourceName())) {
-            hql.append("and s.sourceName = :sourceName ");
-            params.put("sourceName", sourceInfoVo.getSourceName());
-        }
-        if (StringUtil.isNotBlank(sourceInfoVo.getCooTableId())) {
-            hql.append("and s.cooTableId = :cooTableId ");
-            params.put("cooTableId", sourceInfoVo.getCooTableId());
-        }
-        if (StringUtil.isNotBlank(sourceInfoVo.getColumnName())) {
-            hql.append("and s.columnName = :columnName ");
-            params.put("columnName", sourceInfoVo.getColumnName());
-        }
-        if (StringUtil.isNotBlank(sourceInfoVo.getSourceColumnRule())) {
-            hql.append("and s.sourceColumnRule = :sourceColumnRule ");
-            params.put("sourceColumnRule", sourceInfoVo.getSourceColumnRule());
-        }
-        if (StringUtil.isNotBlank(sourceInfoVo.getColumnCnName())) {
-            hql.append("and s.columnCnName = :columnCnName ");
-            params.put("columnCnName", sourceInfoVo.getColumnCnName());
-        }
-        if (StringUtil.isNotBlank(sourceInfoVo.getCooColumnType())) {
-            hql.append("and s.cooColumnType = :cooColumnType ");
-            params.put("cooColumnType", sourceInfoVo.getCooColumnType());
-        }
-        if (null != sourceInfoVo.getColumnLength()) {
-            hql.append("and s.columnLength = :columnLength ");
-            params.put("columnLength", sourceInfoVo.getColumnLength());
-        }
-        if (StringUtil.isNotBlank(sourceInfoVo.getColumnUnit())) {
-            hql.append("and s.columnUnit = :columnUnit ");
-            params.put("columnUnit", sourceInfoVo.getColumnUnit());
-        }
-        if (StringUtil.isNotBlank(sourceInfoVo.getColumnCaliber())) {
-            hql.append("and s.columnCaliber = :columnCaliber ");
-            params.put("columnCaliber", sourceInfoVo.getColumnCaliber());
-        }
-        if (null != sourceInfoVo.getColumnNum()) {
-            hql.append("and s.columnNum = :columnNum ");
-            params.put("columnNum", sourceInfoVo.getColumnNum());
-        }
-        return super.findPageByHql(page, hql.toString(), params);
+    public Page<SourceInfo> selectSourceInfoPageList(Page<SourceInfo> page, SourceInfoVo sourceInfoVo) {
+        Map<String, Object> reMap = fromBean(sourceInfoVo);
+        Map<String, Object> params = (Map<String, Object>) reMap.get("params");
+        return super.findPageByHql(page, reMap.get("hql").toString(), params);
     }
 
-    public List<SourceInfo> findSourceInfoList(SourceInfoVo sourceInfoVo) {
+    public List<SourceInfo> selectSourceInfoList(SourceInfoVo sourceInfoVo) {
+        Map<String, Object> reMap = fromBean(sourceInfoVo);
+        Map<String, Object> params = (Map<String, Object>) reMap.get("params");
+        return super.findListByHql(reMap.get("hql").toString(), params);
+    }
+
+    public Map<String, Object> fromBean(SourceInfoVo sourceInfoVo) {
+        Map<String, Object> reMap = new HashMap<>();
         Map<String, Object> params = new HashMap<>();
         StringBuffer hql = new StringBuffer("from SourceInfo s where 1=1 ");
         if (StringUtil.isNotBlank(sourceInfoVo.getSourceId())) {
@@ -145,7 +108,9 @@ public class SourceInfoDaoImpl extends BaseDaoImpl<SourceInfo, String> implement
             hql.append("and s.columnNum = :columnNum ");
             params.put("columnNum", sourceInfoVo.getColumnNum());
         }
-        return super.findListByHql(hql.toString(), params);
+        reMap.put("hql", hql);
+        reMap.put("params", params);
+        return reMap;
     }
 
 }

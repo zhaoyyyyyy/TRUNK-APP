@@ -48,7 +48,7 @@ public interface ISourceTableInfoDao extends BaseDao<SourceTableInfo, String> {
      * @param sourceTableInfoVo
      * @return
      */
-    public Page<SourceTableInfo> findSourceTableInfoPageList(Page<SourceTableInfo> page,
+    public Page<SourceTableInfo> selectSourceTableInfoPageList(Page<SourceTableInfo> page,
             SourceTableInfoVo sourceTableInfoVo);
 
     /**
@@ -57,6 +57,6 @@ public interface ISourceTableInfoDao extends BaseDao<SourceTableInfo, String> {
      * @param sourceTableInfoVo
      * @return
      */
-    public List<SourceTableInfo> findSourceTableInfoList(SourceTableInfoVo sourceTableInfoVo);
+    public List<SourceTableInfo> selectSourceTableInfoList(SourceTableInfoVo sourceTableInfoVo);
 
 }

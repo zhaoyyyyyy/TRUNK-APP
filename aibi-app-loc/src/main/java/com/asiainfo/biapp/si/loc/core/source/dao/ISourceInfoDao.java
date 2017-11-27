@@ -48,7 +48,7 @@ public interface ISourceInfoDao extends BaseDao<SourceInfo, String> {
      * @param sourceInfoVo
      * @return
      */
-    public Page<SourceInfo> findSourceInfoPageList(Page<SourceInfo> page, SourceInfoVo sourceInfoVo);
+    public Page<SourceInfo> selectSourceInfoPageList(Page<SourceInfo> page, SourceInfoVo sourceInfoVo);
 
     /**
      * 根据条件查询列表
@@ -56,6 +56,6 @@ public interface ISourceInfoDao extends BaseDao<SourceInfo, String> {
      * @param sourceInfoVo
      * @return
      */
-    public List<SourceInfo> findSourceInfoList(SourceInfoVo sourceInfoVo);
+    public List<SourceInfo> selectSourceInfoList(SourceInfoVo sourceInfoVo);
 
 }

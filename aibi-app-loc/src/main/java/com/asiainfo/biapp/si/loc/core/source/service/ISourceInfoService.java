@@ -50,7 +50,7 @@ public interface ISourceInfoService extends BaseService<SourceInfo, String> {
      * @return
      * @throws BaseException
      */
-    public Page<SourceInfo> findSourceInfoPageList(Page<SourceInfo> page, SourceInfoVo sourceInfoVo)
+    public Page<SourceInfo> selectSourceInfoPageList(Page<SourceInfo> page, SourceInfoVo sourceInfoVo)
             throws BaseException;
 
     /**
@@ -60,7 +60,7 @@ public interface ISourceInfoService extends BaseService<SourceInfo, String> {
      * @return
      * @throws BaseException
      */
-    public List<SourceInfo> findSourceInfoList(SourceInfoVo sourceInfoVo) throws BaseException;
+    public List<SourceInfo> selectSourceInfoList(SourceInfoVo sourceInfoVo) throws BaseException;
 
     /**
      * Description: 通过ID拿到指标信息
@@ -69,7 +69,7 @@ public interface ISourceInfoService extends BaseService<SourceInfo, String> {
      * @return
      * @throws BaseException
      */
-    public SourceInfo getById(String sourceId) throws BaseException;
+    public SourceInfo selectSourceInfoById(String sourceId) throws BaseException;
 
     /**
      * Description: 新增一个指标信息
@@ -77,7 +77,7 @@ public interface ISourceInfoService extends BaseService<SourceInfo, String> {
      * @param sourceInfo
      * @throws BaseException
      */
-    public void saveT(SourceInfo sourceInfo) throws BaseException;
+    public void addSourceInfo(SourceInfo sourceInfo) throws BaseException;
 
     /**
      * Description: 修改指标信息
@@ -85,7 +85,7 @@ public interface ISourceInfoService extends BaseService<SourceInfo, String> {
      * @param sourceInfo
      * @throws BaseException
      */
-    public void updateT(SourceInfo sourceInfo) throws BaseException;
+    public void modifySourceInfo(SourceInfo sourceInfo) throws BaseException;
 
     /**
      * Description: 删除指标信息
@@ -93,6 +93,6 @@ public interface ISourceInfoService extends BaseService<SourceInfo, String> {
      * @param sourceId
      * @throws BaseException
      */
-    public void deleteById(String sourceId) throws BaseException;
+    public void deleteSourceInfo(String sourceId) throws BaseException;
 
 }

@@ -62,31 +62,31 @@ public class SourceInfoServiceImpl extends BaseServiceImpl<SourceInfo, String> i
         return iSourceInfoDao;
     }
 
-    public Page<SourceInfo> findSourceInfoPageList(Page<SourceInfo> page, SourceInfoVo sourceInfoVo)
+    public Page<SourceInfo> selectSourceInfoPageList(Page<SourceInfo> page, SourceInfoVo sourceInfoVo)
             throws BaseException {
-        return iSourceInfoDao.findSourceInfoPageList(page, sourceInfoVo);
+        return iSourceInfoDao.selectSourceInfoPageList(page, sourceInfoVo);
     }
 
-    public List<SourceInfo> findSourceInfoList(SourceInfoVo sourceInfoVo) throws BaseException {
-        return iSourceInfoDao.findSourceInfoList(sourceInfoVo);
+    public List<SourceInfo> selectSourceInfoList(SourceInfoVo sourceInfoVo) throws BaseException {
+        return iSourceInfoDao.selectSourceInfoList(sourceInfoVo);
     }
 
-    public SourceInfo getById(String sourceId) throws BaseException {
+    public SourceInfo selectSourceInfoById(String sourceId) throws BaseException {
         if (StringUtils.isBlank(sourceId)) {
             throw new ParamRequiredException("ID不能为空");
         }
         return super.get(sourceId);
     }
 
-    public void saveT(SourceInfo sourceInfo) throws BaseException {
+    public void addSourceInfo(SourceInfo sourceInfo) throws BaseException {
         super.saveOrUpdate(sourceInfo);
     }
 
-    public void updateT(SourceInfo sourceInfo) throws BaseException {
+    public void modifySourceInfo(SourceInfo sourceInfo) throws BaseException {
         super.saveOrUpdate(sourceInfo);
     }
 
-    public void deleteById(String sourceId) throws BaseException {
+    public void deleteSourceInfo(String sourceId) throws BaseException {
         if (StringUtils.isBlank(sourceId)) {
             throw new ParamRequiredException("ID不能为空");
         }

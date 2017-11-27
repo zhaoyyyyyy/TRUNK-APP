@@ -51,7 +51,7 @@ public interface ISourceTableInfoService extends BaseService<SourceTableInfo, St
      * @return
      * @throws BaseException
      */
-    public Page<SourceTableInfo> findSourceTableInfoPageList(Page<SourceTableInfo> page,
+    public Page<SourceTableInfo> selectSourceTableInfoPageList(Page<SourceTableInfo> page,
             SourceTableInfoVo sourceTableInfoVo) throws BaseException;
 
     /**
@@ -62,7 +62,7 @@ public interface ISourceTableInfoService extends BaseService<SourceTableInfo, St
      * @return
      * @throws BaseException
      */
-    public List<SourceTableInfo> findSourceTableInfoList(SourceTableInfoVo sourceTableInfoVo) throws BaseException;
+    public List<SourceTableInfo> selectSourceTableInfoList(SourceTableInfoVo sourceTableInfoVo) throws BaseException;
 
     /**
      * 
@@ -72,7 +72,7 @@ public interface ISourceTableInfoService extends BaseService<SourceTableInfo, St
      * @return
      * @throws BaseException
      */
-    public SourceTableInfo getById(String sourceTableId) throws BaseException;
+    public SourceTableInfo selectSourceTableInfoById(String sourceTableId) throws BaseException;
 
     /**
      * 
@@ -81,7 +81,7 @@ public interface ISourceTableInfoService extends BaseService<SourceTableInfo, St
      * @param sourceTableInfo
      * @throws BaseException
      */
-    public void saveT(SourceTableInfo sourceTableInfo) throws BaseException;
+    public void addSourceTableInfo(SourceTableInfo sourceTableInfo) throws BaseException;
 
     /**
      * 
@@ -90,7 +90,7 @@ public interface ISourceTableInfoService extends BaseService<SourceTableInfo, St
      * @param sourceTableInfo
      * @throws BaseException
      */
-    public void updateT(SourceTableInfo sourceTableInfo) throws BaseException;
+    public void modifySourceTableInfo(SourceTableInfo sourceTableInfo) throws BaseException;
 
     /**
      * 
@@ -99,6 +99,6 @@ public interface ISourceTableInfoService extends BaseService<SourceTableInfo, St
      * @param sourceTableId
      * @throws BaseException
      */
-    public void deleteById(String sourceTableId) throws BaseException;
+    public void deleteSourceTableInfo(String sourceTableId) throws BaseException;
 
 }

@@ -50,7 +50,7 @@ public interface ITargetTableStatusService extends BaseService<TargetTableStatus
      * @return
      * @throws BaseException
      */
-    public Page<TargetTableStatus> findTargetTableStatusPageList(Page<TargetTableStatus> page,
+    public Page<TargetTableStatus> selectTargetTableStatusPageList(Page<TargetTableStatus> page,
             TargetTableStatusVo targetTableStatusVo) throws BaseException;
 
     /**
@@ -60,7 +60,7 @@ public interface ITargetTableStatusService extends BaseService<TargetTableStatus
      * @return
      * @throws BaseException
      */
-    public List<TargetTableStatus> findTargetTableStatusList(TargetTableStatusVo targetTableStatusVo)
+    public List<TargetTableStatus> selectTargetTableStatusList(TargetTableStatusVo targetTableStatusVo)
             throws BaseException;
 
     /**
@@ -70,7 +70,7 @@ public interface ITargetTableStatusService extends BaseService<TargetTableStatus
      * @return
      * @throws BaseException
      */
-    public TargetTableStatus getById(String tableId) throws BaseException;
+    public TargetTableStatus selectTargerTableStatusById(String tableId) throws BaseException;
 
     /**
      * Description: 新增一个指标源表状态
@@ -78,7 +78,7 @@ public interface ITargetTableStatusService extends BaseService<TargetTableStatus
      * @param targetTableStatus
      * @throws BaseException
      */
-    public void saveT(TargetTableStatus targetTableStatus) throws BaseException;
+    public void addTargerTableStatus(TargetTableStatus targetTableStatus) throws BaseException;
 
     /**
      * Description: 修改指标源表状态
@@ -86,14 +86,14 @@ public interface ITargetTableStatusService extends BaseService<TargetTableStatus
      * @param targetTableStatus
      * @throws BaseException
      */
-    public void updateT(TargetTableStatus targetTableStatus) throws BaseException;
+    public void modifyTargerTableStatus(TargetTableStatus targetTableStatus) throws BaseException;
 
     /**
      * Description: 删除指标源表状态
      *
-     * @param labelId
+     * @param tabelId
      * @throws BaseException
      */
-    public void deleteById(String tableId) throws BaseException;
+    public void deleteTargerTableStatus(String tableId) throws BaseException;
 
 }

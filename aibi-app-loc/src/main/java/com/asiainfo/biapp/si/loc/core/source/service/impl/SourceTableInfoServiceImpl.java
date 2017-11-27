@@ -63,31 +63,31 @@ public class SourceTableInfoServiceImpl extends BaseServiceImpl<SourceTableInfo,
         return iSourceTableInfoDao;
     }
 
-    public Page<SourceTableInfo> findSourceTableInfoPageList(Page<SourceTableInfo> page,
+    public Page<SourceTableInfo> selectSourceTableInfoPageList(Page<SourceTableInfo> page,
             SourceTableInfoVo sourceTableInfoVo) throws BaseException {
-        return iSourceTableInfoDao.findSourceTableInfoPageList(page, sourceTableInfoVo);
+        return iSourceTableInfoDao.selectSourceTableInfoPageList(page, sourceTableInfoVo);
     }
 
-    public List<SourceTableInfo> findSourceTableInfoList(SourceTableInfoVo sourceTableInfoVo) throws BaseException {
-        return iSourceTableInfoDao.findSourceTableInfoList(sourceTableInfoVo);
+    public List<SourceTableInfo> selectSourceTableInfoList(SourceTableInfoVo sourceTableInfoVo) throws BaseException {
+        return iSourceTableInfoDao.selectSourceTableInfoList(sourceTableInfoVo);
     }
 
-    public SourceTableInfo getById(String sourceTableId) throws BaseException {
+    public SourceTableInfo selectSourceTableInfoById(String sourceTableId) throws BaseException {
         if (StringUtils.isBlank(sourceTableId)) {
             throw new ParamRequiredException("ID不能为空");
         }
         return super.get(sourceTableId);
     }
 
-    public void saveT(SourceTableInfo sourceTableInfo) throws BaseException {
+    public void addSourceTableInfo(SourceTableInfo sourceTableInfo) throws BaseException {
         super.saveOrUpdate(sourceTableInfo);
     }
 
-    public void updateT(SourceTableInfo sourceTableInfo) throws BaseException {
+    public void modifySourceTableInfo(SourceTableInfo sourceTableInfo) throws BaseException {
         super.saveOrUpdate(sourceTableInfo);
     }
 
-    public void deleteById(String sourceTableId) throws BaseException {
+    public void deleteSourceTableInfo(String sourceTableId) throws BaseException {
         if (StringUtils.isBlank(sourceTableId)) {
             throw new ParamRequiredException("ID不能为空");
         }
