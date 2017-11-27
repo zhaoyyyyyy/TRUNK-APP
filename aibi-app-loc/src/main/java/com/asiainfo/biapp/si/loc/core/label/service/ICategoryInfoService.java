@@ -46,7 +46,7 @@ public interface ICategoryInfoService extends BaseService<CategoryInfo, String>{
      * @param categoryInfoVo
      * @return
      */
-    public Page<CategoryInfo> findCategoryInfoPageList(Page<CategoryInfo> page, CategoryInfoVo categoryInfoVo) throws BaseException;
+    public Page<CategoryInfo> selectCategoryInfoPageList(Page<CategoryInfo> page, CategoryInfoVo categoryInfoVo) throws BaseException;
     
     /**
      * 根据条件查询列表
@@ -54,7 +54,7 @@ public interface ICategoryInfoService extends BaseService<CategoryInfo, String>{
      * @param categoryInfoVo
      * @return
      */
-    public List<CategoryInfo> findCategoryInfoList(CategoryInfoVo categoryInfoVo) throws BaseException;
+    public List<CategoryInfo> selectCategoryInfoList(CategoryInfoVo categoryInfoVo) throws BaseException;
 
     /**
      * 通过ID得到一个实体 Description:
@@ -63,7 +63,7 @@ public interface ICategoryInfoService extends BaseService<CategoryInfo, String>{
      * @return
      * @throws BaseException
      */
-    public CategoryInfo getById(String categoryId) throws BaseException;
+    public CategoryInfo selectCategoryInfoById(String categoryId) throws BaseException;
 
     /**
      * 新增或修改一个实体 Description:
@@ -71,7 +71,7 @@ public interface ICategoryInfoService extends BaseService<CategoryInfo, String>{
      * @param categoryInfo
      * @throws BaseException
      */
-    public void saveT(CategoryInfo categoryInfo) throws BaseException;
+    public void addCategoryInfo(CategoryInfo categoryInfo) throws BaseException;
 
     /**
      * 修改一个实体 Description:
@@ -79,7 +79,7 @@ public interface ICategoryInfoService extends BaseService<CategoryInfo, String>{
      * @param categoryInfo
      * @throws BaseException
      */
-    public void updateT(CategoryInfo categoryInfo) throws BaseException;
+    public void modifyCategoryInfo(CategoryInfo categoryInfo) throws BaseException;
 
     /**
      * 通过ID删除一个实体 Description:
@@ -87,6 +87,6 @@ public interface ICategoryInfoService extends BaseService<CategoryInfo, String>{
      * @param categoryId
      * @throws BaseException
      */
-    public void deleteById(String categoryId) throws BaseException;
+    public void deleteCategoryInfoById(String categoryId) throws BaseException;
 
 }

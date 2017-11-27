@@ -42,7 +42,7 @@ public interface INewestLabelDateDao extends BaseDao<NewestLabelDate, String>{
      * @param NewestLabelDate
      * @return 
      */
-    public Page<NewestLabelDate> findNewestLabelDatePageList(Page<NewestLabelDate> page, NewestLabelDateVo newestLabelDateVo);
+    public Page<NewestLabelDate> selectNewestLabelDatePageList(Page<NewestLabelDate> page, NewestLabelDateVo newestLabelDateVo);
     
     /**
      * 根据条件查询列表
@@ -50,5 +50,5 @@ public interface INewestLabelDateDao extends BaseDao<NewestLabelDate, String>{
      * @param NewestLabelDate
      * @return
      */
-    public List<NewestLabelDate> findNewestLabelDateList(NewestLabelDateVo newestLabelDateVo);
+    public List<NewestLabelDate> selectNewestLabelDateList(NewestLabelDateVo newestLabelDateVo);
 }

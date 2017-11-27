@@ -43,7 +43,7 @@ public interface ILabelStatusService extends BaseService<LabelStatus, String>{
      * @param LabelStatusVo
      * @return 
      */
-    public Page<LabelStatus> findLabelStatusPageList(Page<LabelStatus> page, LabelStatusVo labelStatusVo) throws BaseException;
+    public Page<LabelStatus> selectLabelStatusPageList(Page<LabelStatus> page, LabelStatusVo labelStatusVo) throws BaseException;
 
     /**
      * 根据条件查询列表
@@ -51,7 +51,7 @@ public interface ILabelStatusService extends BaseService<LabelStatus, String>{
      * @param LabelStatusVo
      * @return
      */
-    public List<LabelStatus> findLabelStatusList(LabelStatusVo labelStatusVo) throws BaseException;
+    public List<LabelStatus> selectLabelStatusList(LabelStatusVo labelStatusVo) throws BaseException;
     
     /**
      * 通过ID得到一个实体类Description
@@ -60,7 +60,7 @@ public interface ILabelStatusService extends BaseService<LabelStatus, String>{
      * @return 
      * @throws BaseException
      */
-    public LabelStatus getById(String labelId) throws BaseException;
+    public LabelStatus selectLabelStatusById(String labelId) throws BaseException;
     
     /**
      * 新增或修改一个实体 Description:
@@ -68,7 +68,7 @@ public interface ILabelStatusService extends BaseService<LabelStatus, String>{
      * @param labelStatus
      * @throws BaseException
      */
-    public void saveT(LabelStatus labelStatus) throws BaseException;
+    public void addLabelStatus(LabelStatus labelStatus) throws BaseException;
     
     /**
      * 修改一个实体 Description:
@@ -76,7 +76,7 @@ public interface ILabelStatusService extends BaseService<LabelStatus, String>{
      * @param labelStatus
      * @throws BaseException
      */
-    public void updateT(LabelStatus labelStatus) throws BaseException;
+    public void modifyLabelStatus(LabelStatus labelStatus) throws BaseException;
     
     /**
      * 通过ID删除一个实体 Description:
@@ -84,5 +84,5 @@ public interface ILabelStatusService extends BaseService<LabelStatus, String>{
      * @param labelId
      * @throws BaseException
      */
-    public void deleteById(String labelId) throws BaseException;
+    public void deleteLabelStatusById(String labelId) throws BaseException;
 }

@@ -48,7 +48,7 @@ public interface IMdaSysTableDao extends BaseDao<MdaSysTable, String> {
      * @param mdaSysTableVo
      * @return
      */
-    public Page<MdaSysTable> findMdaSysTablePageList(Page<MdaSysTable> page, MdaSysTableVo mdaSysTableVo);
+    public Page<MdaSysTable> selectMdaSysTablePageList(Page<MdaSysTable> page, MdaSysTableVo mdaSysTableVo);
 
     /**
      * @Describe 根据条件查询列表
@@ -57,5 +57,5 @@ public interface IMdaSysTableDao extends BaseDao<MdaSysTable, String> {
      * @param mdaSysTableVo
      * @return
      */
-    public List<MdaSysTable> findMdaSysTableList(MdaSysTableVo mdaSysTableVo);
+    public List<MdaSysTable> selectMdaSysTableList(MdaSysTableVo mdaSysTableVo);
 }

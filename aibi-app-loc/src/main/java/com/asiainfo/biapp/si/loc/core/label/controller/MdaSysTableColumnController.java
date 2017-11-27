@@ -59,33 +59,33 @@ import springfox.documentation.annotations.ApiIgnore;
 @Api(value = "元数据表列管理")
 @RequestMapping("api/label")
 @RestController
-public class MdaSysTableColController extends BaseController<MdaSysTableColumn> {
+public class MdaSysTableColumnController extends BaseController<MdaSysTableColumn> {
 
     private static final String SUCCESS = "success";
 
     @Autowired
     private IMdaSysTableColService iMdaSysTableColService;
 
-    @ApiOperation(value = "分页查询")
+    @ApiOperation(value = "元数据表列分页查询")
     @RequestMapping(value = "/mdaSysTableColPage/query", method = RequestMethod.POST)
-    public Page<MdaSysTableColumn> queryPage(@ModelAttribute Page<MdaSysTableColumn> page,
+    public Page<MdaSysTableColumn> listPage(@ModelAttribute Page<MdaSysTableColumn> page,
             @ModelAttribute MdaSysTableColumnVo mdaSysTableColumnVo) {
         Page<MdaSysTableColumn> mdaSysTableColPage = new Page<>();
         try {
-            mdaSysTableColPage = iMdaSysTableColService.findMdaSysTableColPageList(page, mdaSysTableColumnVo);
+            mdaSysTableColPage = iMdaSysTableColService.selectMdaSysTableColPageList(page, mdaSysTableColumnVo);
         } catch (BaseException e) {
             mdaSysTableColPage.fail(e);
         }
         return mdaSysTableColPage;
     }
 
-    @ApiOperation(value = "查询列表(不分页)")
+    @ApiOperation(value = "元数据列查询(不分页)")
     @RequestMapping(value = "/mdaSysTableCol/queryList", method = RequestMethod.POST)
-    public WebResult<List<MdaSysTableColumn>> queryList(@ModelAttribute MdaSysTableColumnVo mdaSysTableColumnVo) {
+    public WebResult<List<MdaSysTableColumn>> findList(@ModelAttribute MdaSysTableColumnVo mdaSysTableColumnVo) {
         WebResult<List<MdaSysTableColumn>> webResult = new WebResult<>();
         List<MdaSysTableColumn> mdaSysTableColList = new ArrayList<>();
         try {
-            mdaSysTableColList = iMdaSysTableColService.findMdaSysTableColList(mdaSysTableColumnVo);
+            mdaSysTableColList = iMdaSysTableColService.selectMdaSysTableColList(mdaSysTableColumnVo);
         } catch (BaseException e) {
             return webResult.fail(e);
         }
@@ -95,11 +95,11 @@ public class MdaSysTableColController extends BaseController<MdaSysTableColumn> 
     @ApiOperation(value = "根据Id获取元数据列信息")
     @ApiImplicitParam(name = "columnId", value = "元数据列id", required = true, paramType = "query", dataType = "string")
     @RequestMapping(value = "/mdaSysTableCol/get", method = RequestMethod.POST)
-    public WebResult<MdaSysTableColumn> getById(String columnId) {
+    public WebResult<MdaSysTableColumn> findById(String columnId) {
         WebResult<MdaSysTableColumn> webResult = new WebResult<>();
         MdaSysTableColumn mdaSysTableColumn = new MdaSysTableColumn();
         try {
-            mdaSysTableColumn = iMdaSysTableColService.getById(columnId);
+            mdaSysTableColumn = iMdaSysTableColService.selectMdaSysTableColumnById(columnId);
         } catch (BaseException e) {
             return webResult.fail(e);
         }
@@ -121,7 +121,7 @@ public class MdaSysTableColController extends BaseController<MdaSysTableColumn> 
     public WebResult<MdaSysTableColumn> save(@ApiIgnore MdaSysTableColumn mdaSysTableColumn) {
         WebResult<MdaSysTableColumn> webResult = new WebResult<>();
         try {
-            iMdaSysTableColService.saveT(mdaSysTableColumn);
+            iMdaSysTableColService.addMdaSysTableColumn(mdaSysTableColumn);
         } catch (BaseException e) {
             return webResult.fail(e);
         }
@@ -141,17 +141,17 @@ public class MdaSysTableColController extends BaseController<MdaSysTableColumn> 
             @ApiImplicitParam(name = "dataType", value = "数据类型", required = false, paramType = "query", dataType = "string"),
             @ApiImplicitParam(name = "columnStatus", value = "列状态", required = false, paramType = "query", dataType = "int") })
     @RequestMapping(value = "/mdaSysTableCol/update", method = RequestMethod.POST)
-    public WebResult<String> update(@ApiIgnore MdaSysTableColumn mdaSysTableColumn) {
+    public WebResult<String> edit(@ApiIgnore MdaSysTableColumn mdaSysTableColumn) {
         WebResult<String> webResult = new WebResult<>();
         MdaSysTableColumn oldmdaSysTableCol = new MdaSysTableColumn();
         try {
-            oldmdaSysTableCol = iMdaSysTableColService.getById(mdaSysTableColumn.getColumnId());
+            oldmdaSysTableCol = iMdaSysTableColService.selectMdaSysTableColumnById(mdaSysTableColumn.getColumnId());
         } catch (BaseException e) {
             webResult.fail(e);
         }
         oldmdaSysTableCol = fromToBean(mdaSysTableColumn, oldmdaSysTableCol);
         try {
-            iMdaSysTableColService.updateT(oldmdaSysTableCol);
+            iMdaSysTableColService.modifyMdaSysTableColumn(oldmdaSysTableCol);
         } catch (BaseException e1) {
             webResult.fail(e1);
         }
@@ -161,10 +161,10 @@ public class MdaSysTableColController extends BaseController<MdaSysTableColumn> 
     @ApiOperation(value = "列Id")
     @ApiImplicitParam(name = "columnId", value = "列Id", required = true, paramType = "query", dataType = "string")
     @RequestMapping(value = "/mdaSysTableCol/delete", method = RequestMethod.POST)
-    public WebResult<String> delete(String columnId) {
+    public WebResult<String> del(String columnId) {
         WebResult<String> webResult = new WebResult<>();
         try {
-            iMdaSysTableColService.deleteById(columnId);
+            iMdaSysTableColService.deleteMdaSysTableColumnById(columnId);
         } catch (BaseException e) {
             return webResult.fail(e);
         }

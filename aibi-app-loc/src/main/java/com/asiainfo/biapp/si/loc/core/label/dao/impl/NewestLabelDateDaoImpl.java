@@ -17,6 +17,7 @@ import com.asiainfo.biapp.si.loc.base.page.Page;
 import com.asiainfo.biapp.si.loc.base.utils.StringUtil;
 import com.asiainfo.biapp.si.loc.core.label.dao.INewestLabelDateDao;
 import com.asiainfo.biapp.si.loc.core.label.entity.NewestLabelDate;
+import com.asiainfo.biapp.si.loc.core.label.vo.LabelStatusVo;
 import com.asiainfo.biapp.si.loc.core.label.vo.NewestLabelDateVo;
 
 /**
@@ -42,8 +43,21 @@ import com.asiainfo.biapp.si.loc.core.label.vo.NewestLabelDateVo;
 @Repository
 public class NewestLabelDateDaoImpl extends BaseDaoImpl<NewestLabelDate, String> implements INewestLabelDateDao{
 
-    public Page<NewestLabelDate> findNewestLabelDatePageList(Page<NewestLabelDate> page,
+    public Page<NewestLabelDate> selectNewestLabelDatePageList(Page<NewestLabelDate> page,
             NewestLabelDateVo newestLabelDateVo) {
+        Map<String, Object> reMap = fromBean(newestLabelDateVo);
+        Map<String, Object> params = (Map<String, Object>)reMap.get("params");
+        return super.findPageByHql(page, reMap.get("hql").toString(), params);
+    }
+
+    public List<NewestLabelDate> selectNewestLabelDateList(NewestLabelDateVo newestLabelDateVo) {
+        Map<String, Object> reMap = fromBean(newestLabelDateVo);
+        Map<String, Object> params = (Map<String, Object>)reMap.get("params");
+        return super.findListByHql(reMap.get("hql").toString(), params);
+    }
+    
+    public Map<String, Object> fromBean(NewestLabelDateVo newestLabelDateVo){
+        Map<String, Object> reMap = new HashMap<>();
         Map<String, Object> params = new HashMap<>();
         StringBuffer hql = new StringBuffer("from NewestLabelDate n where 1=1 ");
         if(StringUtil.isNoneBlank(newestLabelDateVo.getDayNewestDate()) && StringUtil.isNoneBlank(newestLabelDateVo.getMonthNewestDate())){
@@ -59,26 +73,8 @@ public class NewestLabelDateDaoImpl extends BaseDaoImpl<NewestLabelDate, String>
             hql.append("and n.monthNewestStatus = :monthNewestStatus ");
             params.put("monthNewestStatus", newestLabelDateVo.getMonthNewestStatus());
         }
-        return super.findPageByHql(page, hql.toString(), params);
+        reMap.put("hql", hql);
+        reMap.put("params",params );
+        return reMap;
     }
-
-    public List<NewestLabelDate> findNewestLabelDateList(NewestLabelDateVo newestLabelDateVo) {
-        Map<String, Object> params = new HashMap<>();
-        StringBuffer hql = new StringBuffer("from NewestLabelDate n where 1=1 ");
-        if(StringUtil.isNoneBlank(newestLabelDateVo.getDayNewestDate()) && StringUtil.isNoneBlank(newestLabelDateVo.getMonthNewestDate())){
-            hql.append("and n.dayNewestDate = :dayNewestDate and n.monthNewestDate = :monthNewestDate ");
-            params.put("dayNewestDate", newestLabelDateVo.getDayNewestDate());
-            params.put("monthNewestDate", newestLabelDateVo.getMonthNewestDate());
-        }
-        if(null != newestLabelDateVo.getDayNewestStatus()){
-            hql.append("and n.dayNewestStatus = :dayNewestStatus ");
-            params.put("dayNewestStatus", newestLabelDateVo.getDayNewestStatus());
-        }
-        if(null != newestLabelDateVo.getMonthNewestStatus()){
-            hql.append("and n.monthNewestStatus = :monthNewestStatus ");
-            params.put("monthNewestStatus", newestLabelDateVo.getMonthNewestStatus());
-        }
-        return super.findListByHql(hql.toString(), params);
-    }
-
 }

@@ -55,33 +55,33 @@ public class NewestLabelDateServiceImpl extends BaseServiceImpl<NewestLabelDate,
         return iNewestLabelDateDao;
     }
     
-    public Page<NewestLabelDate> findNewestLabelDatePageList(Page<NewestLabelDate> page,
+    public Page<NewestLabelDate> selectNewestLabelDatePageList(Page<NewestLabelDate> page,
             NewestLabelDateVo newestLabelDateVo) throws BaseException {
-        return iNewestLabelDateDao.findNewestLabelDatePageList(page, newestLabelDateVo);
+        return iNewestLabelDateDao.selectNewestLabelDatePageList(page, newestLabelDateVo);
     }
 
-    public List<NewestLabelDate> findNewestLabelDateList(NewestLabelDateVo newestLabelDateVo) throws BaseException {
-        return iNewestLabelDateDao.findNewestLabelDateList(newestLabelDateVo);
+    public List<NewestLabelDate> selectNewestLabelDateList(NewestLabelDateVo newestLabelDateVo) throws BaseException {
+        return iNewestLabelDateDao.selectNewestLabelDateList(newestLabelDateVo);
     }
 
-    public NewestLabelDate getByDayNewestDate(String dayNewestDate) throws BaseException {
+    public NewestLabelDate selectNewestLabelDateByDayNewestDate(String dayNewestDate) throws BaseException {
         if(StringUtil.isBlank(dayNewestDate)){
             throw new ParamRequiredException("最新日数据日期不能为空");
         }
         return super.get(dayNewestDate);
     }
 
-    public void saveT(NewestLabelDate newestLabelDate) throws BaseException {
+    public void addNewestLabelDate(NewestLabelDate newestLabelDate) throws BaseException {
         super.saveOrUpdate(newestLabelDate);
         
     }
 
-    public void updateT(NewestLabelDate newestLabelDate) throws BaseException {
+    public void modifyNewestLabelDate(NewestLabelDate newestLabelDate) throws BaseException {
         super.saveOrUpdate(newestLabelDate);
         
     }
 
-    public void deleteByDayNewestDate(String dayNewestDate) throws BaseException {
+    public void deleteNewestLabelDateByDayNewestDate(String dayNewestDate) throws BaseException {
         super.delete(dayNewestDate);
         
     }

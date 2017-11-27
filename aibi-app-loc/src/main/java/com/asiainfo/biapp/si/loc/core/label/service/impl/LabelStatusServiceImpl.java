@@ -56,32 +56,32 @@ public class LabelStatusServiceImpl extends BaseServiceImpl<LabelStatus, String>
         return iLabelStatusDao;
     }
     
-    public Page<LabelStatus> findLabelStatusPageList(Page<LabelStatus> page, LabelStatusVo labelStatusVo) throws BaseException{
-        return iLabelStatusDao.findLabelStatusPageList(page, labelStatusVo);
+    public Page<LabelStatus> selectLabelStatusPageList(Page<LabelStatus> page, LabelStatusVo labelStatusVo) throws BaseException{
+        return iLabelStatusDao.selectLabelStatusPageList(page, labelStatusVo);
     }
 
-    public List<LabelStatus> findLabelStatusList(LabelStatusVo labelStatusVo) throws BaseException{
-        return iLabelStatusDao.findLabelStatusList(labelStatusVo);
+    public List<LabelStatus> selectLabelStatusList(LabelStatusVo labelStatusVo) throws BaseException{
+        return iLabelStatusDao.selectLabelStatusList(labelStatusVo);
     }
 
-    public LabelStatus getById(String labelId) throws BaseException {
+    public LabelStatus selectLabelStatusById(String labelId) throws BaseException {
         if(StringUtils.isBlank(labelId)){
             throw new ParamRequiredException("Id不能为空");
         }
         return super.get(labelId);
     }
 
-    public void saveT(LabelStatus labelStatus) throws BaseException {
+    public void addLabelStatus(LabelStatus labelStatus) throws BaseException {
         super.saveOrUpdate(labelStatus);
         
     }
 
-    public void deleteById(String labelId) throws BaseException {
+    public void deleteLabelStatusById(String labelId) throws BaseException {
         super.delete(labelId);
         
     }
 
-    public void updateT(LabelStatus labelStatus) throws BaseException {
+    public void modifyLabelStatus(LabelStatus labelStatus) throws BaseException {
         super.saveOrUpdate(labelStatus);
 
     }

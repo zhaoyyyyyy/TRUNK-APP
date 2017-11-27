@@ -57,31 +57,31 @@ public class CategoryInfoServiceImpl extends BaseServiceImpl<CategoryInfo, Strin
         return iCategoryInfoDao;
     }
 
-    public Page<CategoryInfo> findCategoryInfoPageList(Page<CategoryInfo> page, CategoryInfoVo categoryInfoVo) throws BaseException{
-        return iCategoryInfoDao.findCategoryInfoPageList(page, categoryInfoVo);
+    public Page<CategoryInfo> selectCategoryInfoPageList(Page<CategoryInfo> page, CategoryInfoVo categoryInfoVo) throws BaseException{
+        return iCategoryInfoDao.selectCategoryInfoPageList(page, categoryInfoVo);
     }
 
-    public List<CategoryInfo> findCategoryInfoList(CategoryInfoVo categoryInfoVo) throws BaseException{
-        return iCategoryInfoDao.findCategoryInfoList(categoryInfoVo);
+    public List<CategoryInfo> selectCategoryInfoList(CategoryInfoVo categoryInfoVo) throws BaseException{
+        return iCategoryInfoDao.selectCategoryInfoList(categoryInfoVo);
     }
 
-    public CategoryInfo getById(String categoryId) throws BaseException {
+    public CategoryInfo selectCategoryInfoById(String categoryId) throws BaseException {
         if(StringUtils.isBlank(categoryId)){
             throw new ParamRequiredException("ID不能为空");
         }
         return super.get(categoryId);
     }
 
-    public void saveT(CategoryInfo categoryInfo) throws BaseException {
+    public void addCategoryInfo(CategoryInfo categoryInfo) throws BaseException {
         super.saveOrUpdate(categoryInfo);
     }
 
-    public void updateT(CategoryInfo categoryInfo) throws BaseException{
+    public void modifyCategoryInfo(CategoryInfo categoryInfo) throws BaseException{
         super.saveOrUpdate(categoryInfo);
         
     }
 
-    public void deleteById(String categoryId) throws BaseException {
+    public void deleteCategoryInfoById(String categoryId) throws BaseException {
         super.delete(categoryId);
         
     }

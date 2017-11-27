@@ -50,7 +50,7 @@ public interface IMdaSysTableColService extends BaseService<MdaSysTableColumn, S
      * @return
      * @throws BaseException
      */
-    public Page<MdaSysTableColumn> findMdaSysTableColPageList(Page<MdaSysTableColumn> page,
+    public Page<MdaSysTableColumn> selectMdaSysTableColPageList(Page<MdaSysTableColumn> page,
             MdaSysTableColumnVo mdaSysTableColumnVo) throws BaseException;
 
     /**
@@ -60,7 +60,7 @@ public interface IMdaSysTableColService extends BaseService<MdaSysTableColumn, S
      * @return
      * @throws BaseException
      */
-    public List<MdaSysTableColumn> findMdaSysTableColList(MdaSysTableColumnVo mdaSysTableColumnVo) throws BaseException;
+    public List<MdaSysTableColumn> selectMdaSysTableColList(MdaSysTableColumnVo mdaSysTableColumnVo) throws BaseException;
 
     /**
      * Description:根据列id得到一个实体
@@ -68,7 +68,7 @@ public interface IMdaSysTableColService extends BaseService<MdaSysTableColumn, S
      * @param columnId
      * @return
      */
-    public MdaSysTableColumn getById(String columnId) throws BaseException;
+    public MdaSysTableColumn selectMdaSysTableColumnById(String columnId) throws BaseException;
 
     /**
      * Description:新增一个实体
@@ -76,14 +76,14 @@ public interface IMdaSysTableColService extends BaseService<MdaSysTableColumn, S
      * @param mdaSysTableColumn
      * @throws BaseException
      */
-    public void saveT(MdaSysTableColumn mdaSysTableColumn) throws BaseException;
+    public void addMdaSysTableColumn(MdaSysTableColumn mdaSysTableColumn) throws BaseException;
 
     /**
      * Description:修改
      *
      * @param mdaSysTableColumn
      */
-    public void updateT(MdaSysTableColumn mdaSysTableColumn) throws BaseException;
+    public void modifyMdaSysTableColumn(MdaSysTableColumn mdaSysTableColumn) throws BaseException;
 
     /**
      * Description: 通过Id删除一个实体
@@ -91,5 +91,5 @@ public interface IMdaSysTableColService extends BaseService<MdaSysTableColumn, S
      * @param columnId
      * @throws BaseException
      */
-    public void deleteById(String columnId) throws BaseException;
+    public void deleteMdaSysTableColumnById(String columnId) throws BaseException;
 }

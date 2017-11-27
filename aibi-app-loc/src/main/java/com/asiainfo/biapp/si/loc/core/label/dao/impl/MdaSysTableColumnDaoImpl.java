@@ -49,47 +49,22 @@ import com.asiainfo.biapp.si.loc.core.label.vo.MdaSysTableColumnVo;
 public class MdaSysTableColumnDaoImpl extends BaseDaoImpl<MdaSysTableColumn, String> implements IMdaSysTableColumnDao {
 
     @Override
-    public Page<MdaSysTableColumn> findMdaSysTableColPageList(Page<MdaSysTableColumn> page,
+    public Page<MdaSysTableColumn> selectMdaSysTableColPageList(Page<MdaSysTableColumn> page,
             MdaSysTableColumnVo mdaSysTableColumnVo) {
-        Map<String, Object> params = new HashMap<>();
-        StringBuffer hql = new StringBuffer("from MdaSysTableColumn m where 1=1");
-        if (StringUtils.isNotBlank(mdaSysTableColumnVo.getLabelId())) {
-            hql.append(" and m.lableId = :lableId");
-            params.put("lableId", mdaSysTableColumnVo.getLabelId());
-        }
-        if (null != mdaSysTableColumnVo.getTableId()) {
-            hql.append(" and m.tableId = :tableId");
-            params.put("tableId", mdaSysTableColumnVo.getTableId());
-        }
-        if (StringUtils.isNotBlank(mdaSysTableColumnVo.getColumnName())) {
-            hql.append(" and m.columnName = :columnName");
-            params.put("columnName", mdaSysTableColumnVo.getColumnName());
-        }
-        if (StringUtils.isNotBlank(mdaSysTableColumnVo.getColumnCnName())) {
-            hql.append(" and m.columnCnName = :columnCnName");
-            params.put("columnCnName", mdaSysTableColumnVo.getColumnCnName());
-        }
-        if (null != mdaSysTableColumnVo.getColumnDataTypeId()) {
-            hql.append(" and m.columnDataTypeId = :columnDataTypeId");
-            params.put("columnDataTypeId", mdaSysTableColumnVo.getColumnDataTypeId());
-        }
-        if (StringUtils.isNotBlank(mdaSysTableColumnVo.getDimTransId())) {
-            hql.append(" and m.dimTransId = :dimTransId");
-            params.put("dimTransId", mdaSysTableColumnVo.getDimTransId());
-        }
-        if (StringUtils.isNotBlank(mdaSysTableColumnVo.getUnit())) {
-            hql.append(" and m.unit = :unit");
-            params.put("unit", mdaSysTableColumnVo.getUnit());
-        }
-        if (StringUtils.isNotBlank(mdaSysTableColumnVo.getDataType())) {
-            hql.append(" and m.dataType = :dataType");
-            params.put("datatype", mdaSysTableColumnVo.getDataType());
-        }
-        return super.findPageByHql(page, hql.toString(), params);
+        Map<String, Object> reMap = fromBean(mdaSysTableColumnVo);
+        Map<String, Object> params = (Map<String, Object>) reMap.get("params");
+        return super.findPageByHql(page, reMap.get("hql").toString(), params);
     }
 
     @Override
-    public List<MdaSysTableColumn> findMdaSysTableColList(MdaSysTableColumnVo mdaSysTableColumnVo) {
+    public List<MdaSysTableColumn> selectMdaSysTableColList(MdaSysTableColumnVo mdaSysTableColumnVo) {
+        Map<String, Object> reMap = fromBean(mdaSysTableColumnVo);
+        Map<String, Object> params = (Map<String, Object>) reMap.get("params");
+        return super.findListByHql(reMap.get("hql").toString(), params);
+    }
+
+    public Map<String, Object> fromBean(MdaSysTableColumnVo mdaSysTableColumnVo){
+        Map<String, Object> reMap = new HashMap<>();
         Map<String, Object> params = new HashMap<>();
         StringBuffer hql = new StringBuffer("from MdaSysTableColumn m where 1=1");
         if (StringUtils.isNotBlank(mdaSysTableColumnVo.getLabelId())) {
@@ -124,7 +99,8 @@ public class MdaSysTableColumnDaoImpl extends BaseDaoImpl<MdaSysTableColumn, Str
             hql.append(" and m.dataType = :dataType");
             params.put("datatype", mdaSysTableColumnVo.getDataType());
         }
-        return super.findListByHql(hql.toString(), params);
+        reMap.put("hql", hql);
+        reMap.put("params", params);
+        return reMap;
     }
-
 }

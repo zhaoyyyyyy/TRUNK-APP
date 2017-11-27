@@ -63,32 +63,32 @@ public class MdaSysTableServiceImpl extends BaseServiceImpl<MdaSysTable, String>
     }
 
     @Override
-    public Page<MdaSysTable> findMdaSysTablePageList(Page<MdaSysTable> page, MdaSysTableVo mdaSysTableVo)
+    public Page<MdaSysTable> selectMdaSysTablePageList(Page<MdaSysTable> page, MdaSysTableVo mdaSysTableVo)
             throws BaseException {
-        return iMdaSysTableDao.findMdaSysTablePageList(page, mdaSysTableVo);
+        return iMdaSysTableDao.selectMdaSysTablePageList(page, mdaSysTableVo);
     }
 
     @Override
-    public List<MdaSysTable> findMdaSysTableList(MdaSysTableVo mdaSysTableVo) throws BaseException {
-        return iMdaSysTableDao.findMdaSysTableList(mdaSysTableVo);
+    public List<MdaSysTable> selectMdaSysTableList(MdaSysTableVo mdaSysTableVo) throws BaseException {
+        return iMdaSysTableDao.selectMdaSysTableList(mdaSysTableVo);
     }
 
-    public MdaSysTable getById(String tableId) throws BaseException {
+    public MdaSysTable selectMdaSysTableById(String tableId) throws BaseException {
         if (StringUtils.isBlank(tableId)) {
             throw new ParamRequiredException("Id不能为空");
         }
         return super.get(tableId);
     }
 
-    public void saveT(MdaSysTable mdaSysTable) throws BaseException {
+    public void addMdaSysTable(MdaSysTable mdaSysTable) throws BaseException {
         super.saveOrUpdate(mdaSysTable);
     }
 
-    public void updateT(MdaSysTable mdaSysTable) throws BaseException {
+    public void modifyMdaSysTable(MdaSysTable mdaSysTable) throws BaseException {
         super.saveOrUpdate(mdaSysTable);
     }
 
-    public void deleteById(String tableId) throws BaseException {
+    public void deleteMdaSysTableById(String tableId) throws BaseException {
         super.delete(tableId);
     }
 }

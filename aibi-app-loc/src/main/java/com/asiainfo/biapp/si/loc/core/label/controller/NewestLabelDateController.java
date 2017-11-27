@@ -62,10 +62,10 @@ public class NewestLabelDateController extends BaseController<NewestLabelDate>{
     
     @ApiOperation(value ="分页查询")
     @RequestMapping(value = "/newestLabelDatePage/query", method = RequestMethod.POST)
-    public Page<NewestLabelDate> queryPage(@ModelAttribute Page<NewestLabelDate> page,@ModelAttribute NewestLabelDateVo newestLabelDateVo) throws BaseException{
+    public Page<NewestLabelDate> list(@ModelAttribute Page<NewestLabelDate> page,@ModelAttribute NewestLabelDateVo newestLabelDateVo) throws BaseException{
         Page<NewestLabelDate> newestLabelDatePage = new Page<>();
         try {
-            newestLabelDatePage = iNewestLabelDateService.findNewestLabelDatePageList(page, newestLabelDateVo);
+            newestLabelDatePage = iNewestLabelDateService.selectNewestLabelDatePageList(page, newestLabelDateVo);
         } catch (BaseException e) {
             newestLabelDatePage.fail(e);
         }
@@ -74,11 +74,11 @@ public class NewestLabelDateController extends BaseController<NewestLabelDate>{
     
     @ApiOperation(value = "查询列表")
     @RequestMapping(value = "/newestLabelDate/queryList", method = RequestMethod.POST)
-    public WebResult<List<NewestLabelDate>> queryList(@ModelAttribute NewestLabelDateVo newestLabelDateVo) throws BaseException{
+    public WebResult<List<NewestLabelDate>> find(@ModelAttribute NewestLabelDateVo newestLabelDateVo) throws BaseException{
         WebResult<List<NewestLabelDate>> webRequest = new WebResult<>();
         List<NewestLabelDate> newestLabelDateList = new ArrayList<>();
         try {
-            newestLabelDateList = iNewestLabelDateService.findNewestLabelDateList(newestLabelDateVo);
+            newestLabelDateList = iNewestLabelDateService.selectNewestLabelDateList(newestLabelDateVo);
         } catch (BaseException e) {
            return webRequest.fail(e);
         }
@@ -88,11 +88,11 @@ public class NewestLabelDateController extends BaseController<NewestLabelDate>{
     @ApiOperation(value = "根据最新日数据日期查询")
     @ApiImplicitParam(name = "dayNewestDate", value = "最新日数据日期", required = true, paramType = "query", dataType = "string")
     @RequestMapping(value = "/newestLabelDate/get", method = RequestMethod.POST)
-    public WebResult<NewestLabelDate> getByDayNewestDate(String dayNewestDate) throws BaseException{
+    public WebResult<NewestLabelDate> findByDayNewestDate(String dayNewestDate) throws BaseException{
         WebResult<NewestLabelDate> webResult = new WebResult<>();
         NewestLabelDate newestLabelDate = new NewestLabelDate();
         try {
-            newestLabelDate = iNewestLabelDateService.getByDayNewestDate(dayNewestDate);
+            newestLabelDate = iNewestLabelDateService.selectNewestLabelDateByDayNewestDate(dayNewestDate);
         } catch (BaseException e) {
             webResult.fail(e);
         }
@@ -109,7 +109,7 @@ public class NewestLabelDateController extends BaseController<NewestLabelDate>{
     public WebResult<String> save(@ApiIgnore NewestLabelDate newestLabelDate) throws BaseException{
         WebResult<String> webResult = new WebResult<>();
         try {
-            iNewestLabelDateService.saveT(newestLabelDate);
+            iNewestLabelDateService.addNewestLabelDate(newestLabelDate);
         } catch (BaseException e) {
             return webResult.fail(e);
         }
@@ -123,11 +123,11 @@ public class NewestLabelDateController extends BaseController<NewestLabelDate>{
         @ApiImplicitParam(name = "dayNewestStatus", value = "是否统计过日数据", required = false, paramType = "query", dataType = "int"),
         @ApiImplicitParam(name = "monthNewestStatus", value = "是否统计过月数据", required = false, paramType = "query", dataType = "int") })
     @RequestMapping(value = "/newestLabelDate/update", method = RequestMethod.POST)
-    public WebResult<String> update(@ApiIgnore NewestLabelDate newestLabelDate) throws BaseException{
+    public WebResult<String> edit(@ApiIgnore NewestLabelDate newestLabelDate) throws BaseException{
         WebResult<String> webResult = new WebResult<>();
         NewestLabelDate oldnew = new NewestLabelDate();
         try {
-            oldnew = iNewestLabelDateService.getByDayNewestDate(newestLabelDate.getDayNewestDate());
+            oldnew = iNewestLabelDateService.selectNewestLabelDateByDayNewestDate(newestLabelDate.getDayNewestDate());
         } catch (BaseException e) {
             return webResult.fail(e);
         }
@@ -139,10 +139,10 @@ public class NewestLabelDateController extends BaseController<NewestLabelDate>{
     @ApiOperation(value = "删除")
     @ApiImplicitParam(name = "dayNewestDate", value = "最新日数据日期", required = true, paramType = "query", dataType = "string")
     @RequestMapping(value = "/newestLabelDate/delete", method = RequestMethod.POST)
-    public WebResult<String> delete(String dayNewestDate) throws BaseException{
+    public WebResult<String> del(String dayNewestDate) throws BaseException{
         WebResult<String> webResult = new WebResult<>();
         try {
-            iNewestLabelDateService.deleteByDayNewestDate(dayNewestDate);
+            iNewestLabelDateService.deleteNewestLabelDateByDayNewestDate(dayNewestDate);
         } catch (BaseException e) {
             return webResult.fail(e);
         }

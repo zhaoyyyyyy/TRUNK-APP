@@ -62,10 +62,10 @@ public class CategoryInfoController extends BaseController<CategoryInfo>{
     
     @ApiOperation(value = "分页查询")
     @RequestMapping(value = "/categoryInfoPage/query", method = RequestMethod.POST)
-    public Page<CategoryInfo> queryPage(@ModelAttribute Page<CategoryInfo> page,@ModelAttribute CategoryInfoVo categoryInfoVo) throws BaseException{
+    public Page<CategoryInfo> list(@ModelAttribute Page<CategoryInfo> page,@ModelAttribute CategoryInfoVo categoryInfoVo) throws BaseException{
         Page<CategoryInfo> categoryInfoPage = new Page<>();
         try {
-            categoryInfoPage = iCategoryInfoService.findCategoryInfoPageList(page, categoryInfoVo);
+            categoryInfoPage = iCategoryInfoService.selectCategoryInfoPageList(page, categoryInfoVo);
         } catch (BaseException e) {
             categoryInfoPage.fail(e);
         }
@@ -74,11 +74,11 @@ public class CategoryInfoController extends BaseController<CategoryInfo>{
     
     @ApiOperation(value = "查询列表")
     @RequestMapping(value = "/categoryInfo/queryList", method = RequestMethod.POST)
-    public WebResult<List<CategoryInfo>> queryList(@ModelAttribute CategoryInfoVo categoryInfoVo) throws BaseException{
+    public WebResult<List<CategoryInfo>> find(@ModelAttribute CategoryInfoVo categoryInfoVo) throws BaseException{
         WebResult<List<CategoryInfo>> webResult = new WebResult<>();
         List<CategoryInfo> categoryInfoList = new ArrayList<>();
         try {
-            categoryInfoList = iCategoryInfoService.findCategoryInfoList(categoryInfoVo);
+            categoryInfoList = iCategoryInfoService.selectCategoryInfoList(categoryInfoVo);
         } catch (BaseException e) {
             return webResult.fail(e);
         }
@@ -88,11 +88,11 @@ public class CategoryInfoController extends BaseController<CategoryInfo>{
     @ApiOperation(value = "根据ID查询")
     @ApiImplicitParam(name = "categoryId", value = "ID", required = true, paramType = "query", dataType = "string")
     @RequestMapping(value = "/categoryInfo/get",method = RequestMethod.POST)
-    public WebResult<CategoryInfo> getById(String categoryId) throws BaseException{
+    public WebResult<CategoryInfo> findById(String categoryId) throws BaseException{
         WebResult<CategoryInfo> webResult = new WebResult<>();
         CategoryInfo categoryInfo = new CategoryInfo();
         try {
-            categoryInfo = iCategoryInfoService.getById(categoryId);
+            categoryInfo = iCategoryInfoService.selectCategoryInfoById(categoryId);
         } catch (BaseException e) {
             return webResult.fail(e);
         }
@@ -116,7 +116,7 @@ public class CategoryInfoController extends BaseController<CategoryInfo>{
     public WebResult<String> save(@ApiIgnore CategoryInfo categoryInfo) throws BaseException{
             WebResult<String> webResult = new WebResult<>();
             try {
-                iCategoryInfoService.saveT(categoryInfo);
+                iCategoryInfoService.addCategoryInfo(categoryInfo);
             } catch (BaseException e) {
                 return webResult.fail(e);
             }
@@ -138,11 +138,11 @@ public class CategoryInfoController extends BaseController<CategoryInfo>{
         @ApiImplicitParam(name = "sortNum", value = "排序", required = false, paramType = "query", dataType = "int"),
         @ApiImplicitParam(name = "levelId", value = "层级", required = false, paramType = "query", dataType = "int") })
     @RequestMapping(value = "/categoryInfo/update", method = RequestMethod.POST)
-    public WebResult<String> update(@ApiIgnore CategoryInfo categoryInfo) throws BaseException{
+    public WebResult<String> edit(@ApiIgnore CategoryInfo categoryInfo) throws BaseException{
         WebResult<String> webResult = new WebResult<>();
         CategoryInfo oldCat = new CategoryInfo();
         try {
-            oldCat = iCategoryInfoService.getById(categoryInfo.getCategoryId());
+            oldCat = iCategoryInfoService.selectCategoryInfoById(categoryInfo.getCategoryId());
         } catch (BaseException e) {
             return webResult.fail(e);
         }
@@ -154,10 +154,10 @@ public class CategoryInfoController extends BaseController<CategoryInfo>{
     @ApiOperation(value = "删除")
     @ApiImplicitParam(name = "categoryId", value = "ID", required = true, paramType = "query", dataType = "string")
     @RequestMapping(value = "/categoryInfo/delete", method = RequestMethod.POST)
-    public WebResult<String> delete(String categoryId) throws BaseException{
+    public WebResult<String> del(String categoryId) throws BaseException{
         WebResult<String> webResult = new WebResult<>();
         try {
-            iCategoryInfoService.deleteById(categoryId);
+            iCategoryInfoService.deleteCategoryInfoById(categoryId);
         } catch (BaseException e) {
             return webResult.fail(e);
         }

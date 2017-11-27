@@ -63,10 +63,10 @@ public class LabelStatausController extends BaseController<LabelStatus>{
     
     @ApiOperation(value = "分页查询")
     @RequestMapping(value = "/labelStatusPage/query", method = RequestMethod.POST)
-    public Page<LabelStatus> queryPage(@ModelAttribute Page<LabelStatus> page,@ModelAttribute LabelStatusVo labelStatusVo) throws BaseException{
+    public Page<LabelStatus> list(@ModelAttribute Page<LabelStatus> page,@ModelAttribute LabelStatusVo labelStatusVo) throws BaseException{
         Page<LabelStatus> labelStatusPage = new Page <>();
         try {
-            labelStatusPage=iLabelStatusService.findLabelStatusPageList(page, labelStatusVo);
+            labelStatusPage=iLabelStatusService.selectLabelStatusPageList(page, labelStatusVo);
         } catch (BaseException e) {
             labelStatusPage.fail(e);
         }
@@ -75,11 +75,11 @@ public class LabelStatausController extends BaseController<LabelStatus>{
     
     @ApiOperation(value = "查询列表")
     @RequestMapping(value = "/labelStatus/queryList", method = RequestMethod.POST)
-    public WebResult<List<LabelStatus>> queryList(@ModelAttribute LabelStatusVo labelStatusVo) throws BaseException{
+    public WebResult<List<LabelStatus>> find(@ModelAttribute LabelStatusVo labelStatusVo) throws BaseException{
         WebResult<List<LabelStatus>> webResult = new WebResult<>();
         List<LabelStatus> labelStatusList = new ArrayList<>();
         try {
-            labelStatusList = iLabelStatusService.findLabelStatusList(labelStatusVo);
+            labelStatusList = iLabelStatusService.selectLabelStatusList(labelStatusVo);
         } catch (BaseException e) {
             return webResult.fail(e);
         }
@@ -89,11 +89,11 @@ public class LabelStatausController extends BaseController<LabelStatus>{
     @ApiOperation(value = "根据ID查询")
     @ApiImplicitParam(name = "labelId", value="ID",required = true, paramType = "query", dataType = "string")
     @RequestMapping(value = "/labelStatus/get", method = RequestMethod.POST)
-    public WebResult<LabelStatus> getById(String labelId) throws BaseException{
+    public WebResult<LabelStatus> findById(String labelId) throws BaseException{
         WebResult<LabelStatus> webResult = new WebResult<>();
         LabelStatus labelStatus = new LabelStatus();
         try {
-           labelStatus = iLabelStatusService.getById(labelId); 
+           labelStatus = iLabelStatusService.selectLabelStatusById(labelId); 
         } catch (BaseException e) {
             return webResult.fail(e);
         }
@@ -111,7 +111,7 @@ public class LabelStatausController extends BaseController<LabelStatus>{
         WebResult<String> webResult = new WebResult<>();
         labelStatus.setDataInsertTime(new Date());
         try {
-            iLabelStatusService.saveT(labelStatus);
+            iLabelStatusService.addLabelStatus(labelStatus);
         } catch (BaseException e) {
             return webResult.fail(e);
         }
@@ -126,11 +126,11 @@ public class LabelStatausController extends BaseController<LabelStatus>{
         @ApiImplicitParam(name = "exceptionDesc", value = "错误信息描述",required = false, paramType = "query", dataType = "string") 
     })
     @RequestMapping(value = "/labelStatus/update", method = RequestMethod.POST)
-    public WebResult<String> update(@ApiIgnore LabelStatus labelStatus) throws BaseException{
+    public WebResult<String> edit(@ApiIgnore LabelStatus labelStatus) throws BaseException{
         WebResult<String> webResult = new WebResult<>();
         LabelStatus oldLab = new LabelStatus();
         try {
-            oldLab = iLabelStatusService.getById(labelStatus.getLabelId());
+            oldLab = iLabelStatusService.selectLabelStatusById(labelStatus.getLabelId());
         } catch (BaseException e) {
             return webResult.fail(e);
         }
@@ -142,10 +142,10 @@ public class LabelStatausController extends BaseController<LabelStatus>{
     @ApiOperation(value = "删除")
     @ApiImplicitParam(name = "labelId", value = "ID", required = true, paramType = "query", dataType = "string")
     @RequestMapping(value = "/labelStatus/delete", method = RequestMethod.POST)
-    public WebResult<String> delete(String labelId) throws BaseException{
+    public WebResult<String> del(String labelId) throws BaseException{
         WebResult<String> webResult = new WebResult<>();
         try {
-            iLabelStatusService.deleteById(labelId);
+            iLabelStatusService.deleteLabelStatusById(labelId);
         } catch (BaseException e) {
             return webResult.fail(e);
         }

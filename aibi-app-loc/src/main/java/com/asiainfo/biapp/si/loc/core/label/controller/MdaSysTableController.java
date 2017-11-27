@@ -73,26 +73,26 @@ public class MdaSysTableController extends BaseController<MdaSysTable> {
     @Autowired
     private IMdaSysTableService iMdaSysTableService;
 
-    @ApiOperation(value = "分页查询")
+    @ApiOperation(value = "元数据表分页查询")
     @RequestMapping(value = "/mdaSysTablePage/query", method = RequestMethod.POST)
-    public Page<MdaSysTable> queryPage(@ModelAttribute Page<MdaSysTable> page,
+    public Page<MdaSysTable> listPage(@ModelAttribute Page<MdaSysTable> page,
             @ModelAttribute MdaSysTableVo mdaSysTableVo) {
         Page<MdaSysTable> mdaSysTablePage = new Page<>();
         try {
-            mdaSysTablePage = iMdaSysTableService.findMdaSysTablePageList(page, mdaSysTableVo);
+            mdaSysTablePage = iMdaSysTableService.selectMdaSysTablePageList(page, mdaSysTableVo);
         } catch (BaseException e) {
             mdaSysTablePage.fail(e);
         }
         return mdaSysTablePage;
     }
 
-    @ApiOperation(value = "查询列表(不分页)")
+    @ApiOperation(value = "元数据表查询(不分页)")
     @RequestMapping(value = "/mdaSysTable/queryList", method = RequestMethod.POST)
-    public WebResult<List<MdaSysTable>> queryList(@ModelAttribute MdaSysTableVo mdaSysTableVo) {
+    public WebResult<List<MdaSysTable>> findList(@ModelAttribute MdaSysTableVo mdaSysTableVo) {
         WebResult<List<MdaSysTable>> webResult = new WebResult<>();
         List<MdaSysTable> mdaSysTableList = new ArrayList<>();
         try {
-            mdaSysTableList = iMdaSysTableService.findMdaSysTableList(mdaSysTableVo);
+            mdaSysTableList = iMdaSysTableService.selectMdaSysTableList(mdaSysTableVo);
         } catch (BaseException e) {
             return webResult.fail(e);
         }
@@ -102,11 +102,11 @@ public class MdaSysTableController extends BaseController<MdaSysTable> {
     @ApiOperation(value = "根据id查找元数据")
     @ApiImplicitParam(name = "tableId", value = "表Id", required = true, paramType = "query", dataType = "string")
     @RequestMapping(value = "/mdaSysTable/get", method = RequestMethod.POST)
-    public WebResult<MdaSysTable> getById(String tableId) {
+    public WebResult<MdaSysTable> findById(String tableId) {
         WebResult<MdaSysTable> webResult = new WebResult<>();
         MdaSysTable mdaSysTable = new MdaSysTable();
         try {
-            mdaSysTable = iMdaSysTableService.getById(tableId);
+            mdaSysTable = iMdaSysTableService.selectMdaSysTableById(tableId);
         } catch (BaseException e) {
             return webResult.fail(e);
         }
@@ -135,7 +135,7 @@ public class MdaSysTableController extends BaseController<MdaSysTable> {
         }
         mdaSysTable.setCreateUserId(user.getUserId());
         try {
-            iMdaSysTableService.saveT(mdaSysTable);
+            iMdaSysTableService.addMdaSysTable(mdaSysTable);
         } catch (BaseException e1) {
             return webResult.fail(e1);
         }
@@ -149,7 +149,7 @@ public class MdaSysTableController extends BaseController<MdaSysTable> {
         List<MdaSysTable> mdaSysTableList = mdaSyaTableModels.getMdaSysTables();
         for (MdaSysTable mdaSysTable : mdaSysTableList) {
             try {
-                iMdaSysTableService.saveT(mdaSysTable);
+                iMdaSysTableService.addMdaSysTable(mdaSysTable);
             } catch (BaseException e) {
                 webResult.fail(e);
             }
@@ -169,17 +169,17 @@ public class MdaSysTableController extends BaseController<MdaSysTable> {
             @ApiImplicitParam(name = "tableType", value = "宽表类型", required = false, paramType = "query", dataType = "int"),
             @ApiImplicitParam(name = "updateCycle", value = "更新周期", required = false, paramType = "query", dataType = "int") })
     @RequestMapping(value = "/mdaSysTable/update", method = RequestMethod.POST)
-    public WebResult<String> update(@ApiIgnore MdaSysTable mdaSysTable) {
+    public WebResult<String> edit(@ApiIgnore MdaSysTable mdaSysTable) {
         WebResult<String> webResult = new WebResult<>();
         MdaSysTable oldMdaSysTable = new MdaSysTable();
         try {
-            oldMdaSysTable = iMdaSysTableService.getById(mdaSysTable.getTableId());
+            oldMdaSysTable = iMdaSysTableService.selectMdaSysTableById(mdaSysTable.getTableId());
         } catch (BaseException e) {
             return webResult.fail(e);
         }
         oldMdaSysTable = fromToBean(mdaSysTable, oldMdaSysTable);
         try {
-            iMdaSysTableService.updateT(oldMdaSysTable);
+            iMdaSysTableService.modifyMdaSysTable(oldMdaSysTable);
         } catch (BaseException e1) {
             return webResult.fail(e1);
         }
@@ -189,10 +189,10 @@ public class MdaSysTableController extends BaseController<MdaSysTable> {
     @ApiOperation(value = "根据表Id删除元数据")
     @ApiImplicitParam(name = "tableId", value = "表Id", required = true, paramType = "query", dataType = "string")
     @RequestMapping(value = "/mdaSysTable/delete", method = RequestMethod.POST)
-    public WebResult<String> delete(String tableId) {
+    public WebResult<String> del(String tableId) {
         WebResult<String> webResult = new WebResult<>();
         try {
-            iMdaSysTableService.deleteById(tableId);
+            iMdaSysTableService.deleteMdaSysTableById(tableId);
         } catch (BaseException e) {
             return webResult.fail(e);
         }
