@@ -42,7 +42,7 @@ public interface ILabelStatusDao extends BaseDao<LabelStatus, String>{
      * @param LabelStatus
      * @return 
      */
-    public Page<LabelStatus> findLabelStatusPageList(Page<LabelStatus> page, LabelStatusVo labelStatusVo);
+    public Page<LabelStatus> selectLabelStatusPageList(Page<LabelStatus> page, LabelStatusVo labelStatusVo);
     
     /**
      * 根据条件查询列表
@@ -50,6 +50,6 @@ public interface ILabelStatusDao extends BaseDao<LabelStatus, String>{
      * @param LabelStatus
      * @return
      */
-    public List<LabelStatus> findLabelStatusList(LabelStatusVo labelStatusVo);
+    public List<LabelStatus> selectLabelStatusList(LabelStatusVo labelStatusVo);
 
 }

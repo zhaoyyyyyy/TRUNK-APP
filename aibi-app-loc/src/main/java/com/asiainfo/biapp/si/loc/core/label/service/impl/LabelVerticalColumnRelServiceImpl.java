@@ -56,33 +56,33 @@ public class LabelVerticalColumnRelServiceImpl extends BaseServiceImpl<LabelVert
         return iLabelVerticalColumnRelDao;
     }
 
-    public Page<LabelVerticalColumnRel> findLabelVerticalColumnRelPageList(Page<LabelVerticalColumnRel> page,
+    public Page<LabelVerticalColumnRel> selectLabelVerticalColumnRelPageList(Page<LabelVerticalColumnRel> page,
             LabelVerticalColumnRelVo labelVerticalColumnRelVo) throws BaseException {
-        return iLabelVerticalColumnRelDao.findLabelVerticalColumnRelPageList(page, labelVerticalColumnRelVo);
+        return iLabelVerticalColumnRelDao.selectLabelVerticalColumnRelPageList(page, labelVerticalColumnRelVo);
     }
 
-    public List<LabelVerticalColumnRel> findLabelVerticalColumnRelList(
+    public List<LabelVerticalColumnRel> selectLabelVerticalColumnRelList(
             LabelVerticalColumnRelVo labelVerticalColumnRelVo) throws BaseException {
-        return iLabelVerticalColumnRelDao.findLabelVerticalColumnRelList(labelVerticalColumnRelVo);
+        return iLabelVerticalColumnRelDao.selectLabelVerticalColumnRelList(labelVerticalColumnRelVo);
     }
 
-    public LabelVerticalColumnRel getById(String labelId) throws BaseException {
+    public LabelVerticalColumnRel selectLabelVerticalColumnRelById(String labelId) throws BaseException {
         if(StringUtil.isBlank(labelId)){
             throw new ParamRequiredException("Id不能为空");
         }
         return super.get(labelId);
     }
 
-    public void saveT(LabelVerticalColumnRel labelVerticalColumnRel) throws BaseException {
+    public void addLabelVerticalColumnRel(LabelVerticalColumnRel labelVerticalColumnRel) throws BaseException {
         super.saveOrUpdate(labelVerticalColumnRel);
     }
 
-    public void updateT(LabelVerticalColumnRel labelVerticalColumnRel) throws BaseException {
+    public void modifyLabelVerticalColumnRel(LabelVerticalColumnRel labelVerticalColumnRel) throws BaseException {
         super.saveOrUpdate(labelVerticalColumnRel);
         
     }
 
-    public void deleteById(String labelId) throws BaseException {
+    public void deleteLabelVerticalColumnRelById(String labelId) throws BaseException {
         super.delete(labelId);
         
     }

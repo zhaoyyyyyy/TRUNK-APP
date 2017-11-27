@@ -42,7 +42,7 @@ public interface ILabelVerticalColumnRelDao extends BaseDao<LabelVerticalColumnR
      * @param LabelVerticalColumnRel
      * @return 
      */
-    public Page<LabelVerticalColumnRel> findLabelVerticalColumnRelPageList(Page<LabelVerticalColumnRel> page, LabelVerticalColumnRelVo labelVerticalColumnRelVo);
+    public Page<LabelVerticalColumnRel> selectLabelVerticalColumnRelPageList(Page<LabelVerticalColumnRel> page, LabelVerticalColumnRelVo labelVerticalColumnRelVo);
     
     /**
      * 根据条件查询列表
@@ -50,6 +50,6 @@ public interface ILabelVerticalColumnRelDao extends BaseDao<LabelVerticalColumnR
      * @param LabelVerticalColumnRel
      * @return
      */
-    public List<LabelVerticalColumnRel> findLabelVerticalColumnRelList(LabelVerticalColumnRelVo labelVerticalColumnRelVo);
+    public List<LabelVerticalColumnRel> selectLabelVerticalColumnRelList(LabelVerticalColumnRelVo labelVerticalColumnRelVo);
 
 }

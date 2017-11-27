@@ -42,7 +42,7 @@ public interface ICategoryInfoDao extends BaseDao<CategoryInfo, String>{
      * @param CategoryInfo
      * @return
      */
-    public Page<CategoryInfo> findCategoryInfoPageList(Page<CategoryInfo> page, CategoryInfoVo categoryInfoVo);
+    public Page<CategoryInfo> selectCategoryInfoPageList(Page<CategoryInfo> page, CategoryInfoVo categoryInfoVo);
 
     /**
      * 根据条件查询列表
@@ -50,5 +50,5 @@ public interface ICategoryInfoDao extends BaseDao<CategoryInfo, String>{
      * @param CategoryInfo
      * @return
      */
-    public List<CategoryInfo> findCategoryInfoList(CategoryInfoVo categoryInfoVo);
+    public List<CategoryInfo> selectCategoryInfoList(CategoryInfoVo categoryInfoVo);
 }

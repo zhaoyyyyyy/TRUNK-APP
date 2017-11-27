@@ -18,6 +18,7 @@ import com.asiainfo.biapp.si.loc.base.utils.StringUtil;
 import com.asiainfo.biapp.si.loc.core.label.dao.ICategoryInfoDao;
 import com.asiainfo.biapp.si.loc.core.label.entity.CategoryInfo;
 import com.asiainfo.biapp.si.loc.core.label.vo.CategoryInfoVo;
+import com.asiainfo.biapp.si.loc.core.label.vo.MdaSysTableVo;
 
 /**
  * Title : CategoryInfoDaoImpl
@@ -42,7 +43,20 @@ import com.asiainfo.biapp.si.loc.core.label.vo.CategoryInfoVo;
 @Repository
 public class CategoryInfoDaoImpl extends BaseDaoImpl<CategoryInfo, String> implements ICategoryInfoDao{
 
-    public Page<CategoryInfo> findCategoryInfoPageList(Page<CategoryInfo> page, CategoryInfoVo categoryInfoVo){
+    public Page<CategoryInfo> selectCategoryInfoPageList(Page<CategoryInfo> page, CategoryInfoVo categoryInfoVo){
+        Map<String, Object> reMap = fromBean(categoryInfoVo);
+        Map<String, Object> params = (Map<String, Object>)reMap.get("params");        
+        return super.findPageByHql(page, reMap.get("hql").toString(), params);
+    }
+
+    public List<CategoryInfo> selectCategoryInfoList(CategoryInfoVo categoryInfoVo){
+        Map<String, Object> reMap = fromBean(categoryInfoVo);
+        Map<String, Object> params = (Map<String, Object>)reMap.get("params");
+        return super.findListByHql(reMap.get("hql").toString(), params);
+    }
+    
+    public Map<String, Object> fromBean(CategoryInfoVo categoryInfoVo){
+        Map<String, Object> reMap = new HashMap<>();
         Map<String, Object> params = new HashMap<>();
         StringBuffer hql = new StringBuffer("from CategoryInfo c where 1=1 ");
         if (StringUtil.isNotBlank(categoryInfoVo.getCategoryId())){
@@ -89,57 +103,8 @@ public class CategoryInfoDaoImpl extends BaseDaoImpl<CategoryInfo, String> imple
             hql.append("and c.levelId = :levelId ");
             params.put("levelId", categoryInfoVo.getLevelId());
         }
-        return super.findPageByHql(page, hql.toString(), params);
+        reMap.put("hql", hql);
+        reMap.put("params",params );
+        return reMap;
     }
-
-    public List<CategoryInfo> findCategoryInfoList(CategoryInfoVo categoryInfoVo){
-        Map<String, Object> params = new HashMap<>();
-        StringBuffer hql = new StringBuffer("from CategoryInfo c where 1=1 ");
-        if (StringUtil.isNotBlank(categoryInfoVo.getCategoryId())){
-            hql.append("and c.categoryId = :categoryId ");
-            params.put("categoryId", categoryInfoVo.getCategoryId());
-        }
-        if(StringUtil.isNotBlank(categoryInfoVo.getSysId())){
-            hql.append("and c.sysId = :sysId ");
-            params.put("sysId", categoryInfoVo.getSysId());
-        }
-        if(StringUtil.isNotBlank(categoryInfoVo.getSysType())){
-            hql.append("and c.sysType = :sysType ");
-            params.put("sysType", categoryInfoVo.getSysType());
-        }
-        if(StringUtil.isNotBlank(categoryInfoVo.getCategoryDesc())){
-            hql.append("and c.categoryDesc = :categoryDesc ");
-            params.put("categoryDesc", categoryInfoVo.getCategoryDesc());
-        }
-        if(StringUtil.isNotBlank(categoryInfoVo.getCategoryName())){
-            hql.append("and c.categoryName = :categoryName ");
-            params.put("categoryName", categoryInfoVo.getCategoryName());
-        }
-        if(StringUtil.isNotBlank(categoryInfoVo.getParentId())){
-            hql.append("and c.parentId = :parentId ");
-            params.put("parentId", categoryInfoVo.getParentId());
-        }
-        if(StringUtil.isNotBlank(categoryInfoVo.getCategoryPath())){
-            hql.append("and c.categoryPath = :categoryPath ");
-            params.put("categoryPath", categoryInfoVo.getCategoryPath());
-        }
-        if(null != categoryInfoVo.getIsLeaf()){
-            hql.append("and c.isLeaf = :isLeaf ");
-            params.put("isLeaf", categoryInfoVo.getIsLeaf());
-        }
-        if(null != categoryInfoVo.getStatusId()){
-            hql.append("and c.statusId = :statusId ");
-            params.put("statusId", categoryInfoVo.getStatusId());
-        }
-        if(null != categoryInfoVo.getSortNum()){
-            hql.append("and c.sortNum = :sortNum ");
-            params.put("sortNum", categoryInfoVo.getSortNum());
-        }
-        if(null != categoryInfoVo.getLevelId()){
-            hql.append("and c.levelId = :levelId ");
-            params.put("levelId", categoryInfoVo.getLevelId());
-        }
-        return super.findListByHql(hql.toString(), params);
-    }
-
 }

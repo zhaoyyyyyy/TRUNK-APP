@@ -43,7 +43,7 @@ public interface INewestLabelDateService extends BaseService<NewestLabelDate, St
      * @param NewestLabelDateVo
      * @return 
      */
-    public Page<NewestLabelDate> findNewestLabelDatePageList(Page<NewestLabelDate> page, NewestLabelDateVo newestLabelDateVo) throws BaseException;
+    public Page<NewestLabelDate> selectNewestLabelDatePageList(Page<NewestLabelDate> page, NewestLabelDateVo newestLabelDateVo) throws BaseException;
 
     /**
      * 根据条件查询列表
@@ -51,7 +51,7 @@ public interface INewestLabelDateService extends BaseService<NewestLabelDate, St
      * @param NewestLabelDateVo
      * @return
      */
-    public List<NewestLabelDate> findNewestLabelDateList(NewestLabelDateVo newestLabelDateVo) throws BaseException;
+    public List<NewestLabelDate> selectNewestLabelDateList(NewestLabelDateVo newestLabelDateVo) throws BaseException;
     
     /**
      * 通过最新日数据日期得到一个实体类Description
@@ -60,7 +60,7 @@ public interface INewestLabelDateService extends BaseService<NewestLabelDate, St
      * @return 
      * @throws BaseException
      */
-    public NewestLabelDate getByDayNewestDate(String dayNewestDate) throws BaseException;
+    public NewestLabelDate selectNewestLabelDateByDayNewestDate(String dayNewestDate) throws BaseException;
     
     /**
      * 新增或修改一个实体 Description:
@@ -68,7 +68,7 @@ public interface INewestLabelDateService extends BaseService<NewestLabelDate, St
      * @param newestLabelDate
      * @throws BaseException
      */
-    public void saveT(NewestLabelDate newestLabelDate) throws BaseException;
+    public void addNewestLabelDate(NewestLabelDate newestLabelDate) throws BaseException;
     
     /**
      * 修改一个实体 Description:
@@ -76,7 +76,7 @@ public interface INewestLabelDateService extends BaseService<NewestLabelDate, St
      * @param newestLabelDate
      * @throws BaseException
      */
-    public void updateT(NewestLabelDate newestLabelDate) throws BaseException;
+    public void modifyNewestLabelDate(NewestLabelDate newestLabelDate) throws BaseException;
     
     /**
      * 通过最新日数据日期删除一个实体 Description:
@@ -84,5 +84,5 @@ public interface INewestLabelDateService extends BaseService<NewestLabelDate, St
      * @param dayNewestDate
      * @throws BaseException
      */
-    public void deleteByDayNewestDate(String dayNewestDate) throws BaseException;
+    public void deleteNewestLabelDateByDayNewestDate(String dayNewestDate) throws BaseException;
 }
