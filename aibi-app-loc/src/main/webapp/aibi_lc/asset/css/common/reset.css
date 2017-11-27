@@ -36,6 +36,9 @@ button,input{outline: none; border: none;}
 a ,input[type=button]{cursor: pointer}
 i{font-style:normal;}
 b{font-weight:normal;}
+a {
+    background-color: transparent;
+}
 *{
 	-webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
