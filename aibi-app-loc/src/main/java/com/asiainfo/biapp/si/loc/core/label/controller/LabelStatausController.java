@@ -120,7 +120,7 @@ public class LabelStatausController extends BaseController<LabelStatus>{
     
     @ApiOperation(value = "修改")
     @ApiImplicitParams({
-        @ApiImplicitParam(name = "labelId", value = "标签编码",required = false, paramType = "query", dataType = "string"),
+        @ApiImplicitParam(name = "labelId", value = "标签编码",required = true, paramType = "query", dataType = "string"),
         @ApiImplicitParam(name = "dataDate", value = "数据日期",required = false, paramType = "query", dataType = "string"),
         @ApiImplicitParam(name = "dataStatus", value = "数据生成状态",required = false, paramType = "query", dataType = "int"),
         @ApiImplicitParam(name = "exceptionDesc", value = "错误信息描述",required = false, paramType = "query", dataType = "string") 
