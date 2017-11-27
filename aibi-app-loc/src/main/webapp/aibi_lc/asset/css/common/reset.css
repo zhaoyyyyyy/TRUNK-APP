@@ -131,6 +131,8 @@ body{font-family: -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Robo
 	.mt30{margin: 30px 0 0;}
 	.mt40{margin: 40px 0 0;}
 	.mr10{margin:0 10px 0 0;}
+	.mr100{margin-right:100px;}
+	.mr170{margin-right:170px;}
 	.ml10{margin-left: 10px;}
 	.ml30{margin-left: 30px;}
 	.bc{margin:0 auto;}

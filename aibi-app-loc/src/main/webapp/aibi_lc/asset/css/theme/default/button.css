@@ -180,7 +180,8 @@
 	border: 1px dashed #D9D9D9;
 	border-radius: 4px;
 }
-.ui-btn-menu{
+.ui-btn-menu,
+.dropdown > .dropdown-toggle.ui-btn-menu{
 	border: 1px solid #D9D9D9;
 	border-radius: 4px;
 	padding: 5px 8px 5px 16px;
