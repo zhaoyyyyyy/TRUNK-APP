@@ -24,11 +24,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import springfox.documentation.annotations.ApiIgnore;
 
-import com.asiainfo.biapp.si.loc.auth.model.User;
-import com.asiainfo.biapp.si.loc.auth.utils.AuthUtils;
 import com.asiainfo.biapp.si.loc.base.controller.BaseController;
 import com.asiainfo.biapp.si.loc.base.exception.BaseException;
-import com.asiainfo.biapp.si.loc.base.utils.LogUtil;
 import com.asiainfo.biapp.si.loc.base.utils.WebResult;
 import com.asiainfo.biapp.si.loc.core.prefecture.entity.DataSourceInfo;
 import com.asiainfo.biapp.si.loc.core.prefecture.service.IDataSourceInfoService;
