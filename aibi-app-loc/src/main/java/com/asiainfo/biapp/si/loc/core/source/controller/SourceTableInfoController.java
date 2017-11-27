@@ -123,14 +123,12 @@ public class SourceTableInfoController extends BaseController<SourceTableInfo> {
             @ApiImplicitParam(name = "sourceTableType", value = "指标源表类型", required = false, paramType = "query", dataType = "int"),
             @ApiImplicitParam(name = "tableSuffix", value = "表/文件后缀日期", required = false, paramType = "query", dataType = "string"),
             @ApiImplicitParam(name = "readCycle", value = "读取周期", required = false, paramType = "query", dataType = "int"),
-            @ApiImplicitParam(name = "keyType", value = "标签主键标识类型", required = false, paramType = "query", dataType = "int"),
             @ApiImplicitParam(name = "idType", value = "来源主键标识类型", required = false, paramType = "query", dataType = "int"),
             @ApiImplicitParam(name = "idColumn", value = "来源主键字段名", required = false, paramType = "query", dataType = "string"),
             @ApiImplicitParam(name = "idDataType", value = "来源主键数据类型", required = false, paramType = "query", dataType = "string"),
             @ApiImplicitParam(name = "columnCaliber", value = "业务口径", required = false, paramType = "query", dataType = "string"),
             @ApiImplicitParam(name = "dataSourceId", value = "数据源ID", required = false, paramType = "query", dataType = "string"),
             @ApiImplicitParam(name = "dataSourceType", value = "数据源类型", required = false, paramType = "query", dataType = "int"),
-            @ApiImplicitParam(name = "dataExtractionType", value = "数据抽取方式", required = false, paramType = "query", dataType = "string"),
             @ApiImplicitParam(name = "dateColumnName", value = "日期分区字段", required = false, paramType = "query", dataType = "string"),
             @ApiImplicitParam(name = "whereSql", value = "过滤条件", required = false, paramType = "query", dataType = "string"),
             @ApiImplicitParam(name = "statusId", value = "状态", required = false, paramType = "query", dataType = "int") })
@@ -146,6 +144,8 @@ public class SourceTableInfoController extends BaseController<SourceTableInfo> {
         }
         sourceTableInfo.setCreateUserId(user.getUserId());
         try {
+            sourceTableInfo.setKeyType(sourceTableInfo.getIdType());
+            sourceTableInfo.setDataExtractionType(1);
             iSourceTableInfoService.addSourceTableInfo(sourceTableInfo);
         } catch (BaseException e1) {
             return webResult.fail(e1);
@@ -164,14 +164,13 @@ public class SourceTableInfoController extends BaseController<SourceTableInfo> {
             @ApiImplicitParam(name = "sourceTableType", value = "指标源表类型", required = false, paramType = "query", dataType = "int"),
             @ApiImplicitParam(name = "tableSuffix", value = "表/文件后缀日期", required = false, paramType = "query", dataType = "string"),
             @ApiImplicitParam(name = "readCycle", value = "读取周期", required = false, paramType = "query", dataType = "int"),
-            @ApiImplicitParam(name = "keyType", value = "标签主键标识类型", required = false, paramType = "query", dataType = "int"),
             @ApiImplicitParam(name = "idType", value = "来源主键标识类型", required = false, paramType = "query", dataType = "int"),
             @ApiImplicitParam(name = "idColumn", value = "来源主键字段名", required = false, paramType = "query", dataType = "string"),
             @ApiImplicitParam(name = "idDataType", value = "来源主键数据类型", required = false, paramType = "query", dataType = "string"),
             @ApiImplicitParam(name = "columnCaliber", value = "业务口径", required = false, paramType = "query", dataType = "string"),
             @ApiImplicitParam(name = "dataSourceId", value = "数据源ID", required = false, paramType = "query", dataType = "string"),
             @ApiImplicitParam(name = "dataSourceType", value = "数据源类型", required = false, paramType = "query", dataType = "int"),
-            @ApiImplicitParam(name = "dataExtractionType", value = "数据抽取方式", required = false, paramType = "query", dataType = "string"),
+            @ApiImplicitParam(name = "dataExtractionType", value = "数据抽取方式", required = false, paramType = "query", dataType = "int"),
             @ApiImplicitParam(name = "dateColumnName", value = "日期分区字段", required = false, paramType = "query", dataType = "string"),
             @ApiImplicitParam(name = "whereSql", value = "过滤条件", required = false, paramType = "query", dataType = "string"),
             @ApiImplicitParam(name = "statusId", value = "状态", required = false, paramType = "query", dataType = "int") })
@@ -243,10 +242,8 @@ public class SourceTableInfoController extends BaseController<SourceTableInfo> {
         if (null != sou.getReadCycle()) {
             oldSou.setReadCycle(sou.getReadCycle());
         }
-        if (null != sou.getKeyType()) {
-            oldSou.setKeyType(sou.getKeyType());
-        }
         if (null != sou.getIdType()) {
+            oldSou.setKeyType(sou.getIdType());
             oldSou.setIdType(sou.getIdType());
         }
         if (StringUtil.isNotBlank(sou.getIdColumn())) {

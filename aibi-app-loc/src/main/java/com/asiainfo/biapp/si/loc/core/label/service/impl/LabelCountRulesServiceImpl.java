@@ -63,31 +63,31 @@ public class LabelCountRulesServiceImpl extends BaseServiceImpl<LabelCountRules,
         return iLabelCountRulesDao;
     }
 
-    public Page<LabelCountRules> findLabelCountRulesPageList(Page<LabelCountRules> page,
+    public Page<LabelCountRules> selectLabelCountRulesPageList(Page<LabelCountRules> page,
             LabelCountRulesVo labelCountRulesVo) {
-        return iLabelCountRulesDao.findLabelCountRulesPageList(page, labelCountRulesVo);
+        return iLabelCountRulesDao.selectLabelCountRulesPageList(page, labelCountRulesVo);
     }
 
-    public List<LabelCountRules> findLabelCountRulesList(LabelCountRulesVo labelCountRulesVo) {
-        return iLabelCountRulesDao.findLabelCountRulesList(labelCountRulesVo);
+    public List<LabelCountRules> selectLabelCountRulesList(LabelCountRulesVo labelCountRulesVo) {
+        return iLabelCountRulesDao.selectLabelCountRulesList(labelCountRulesVo);
     }
 
-    public LabelCountRules getById(String countRulesCode) throws BaseException {
+    public LabelCountRules selectLabelCountRulesById(String countRulesCode) throws BaseException {
         if (StringUtils.isBlank(countRulesCode)) {
             throw new ParamRequiredException("ID不能为空");
         }
         return super.get(countRulesCode);
     }
 
-    public void saveT(LabelCountRules labelCountRules) throws BaseException {
+    public void addLabelCountRules(LabelCountRules labelCountRules) throws BaseException {
         super.saveOrUpdate(labelCountRules);
     }
 
-    public void updateT(LabelCountRules labelCountRules) throws BaseException {
+    public void modifyLabelCountRules(LabelCountRules labelCountRules) throws BaseException {
         super.saveOrUpdate(labelCountRules);
     }
 
-    public void deleteById(String countRulesCode) throws BaseException {
+    public void deleteLabelCountRules(String countRulesCode) throws BaseException {
         if (StringUtils.isBlank(countRulesCode)) {
             throw new ParamRequiredException("ID不能为空");
         }

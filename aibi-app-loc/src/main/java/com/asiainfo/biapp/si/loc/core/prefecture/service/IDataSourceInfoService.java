@@ -48,7 +48,7 @@ public interface IDataSourceInfoService extends BaseService<DataSourceInfo, Stri
      * @return
      * @throws BaseException
      */
-    public List<DataSourceInfo> findDataSourceInfoList(DataSourceInfoVo dataSourceInfoVo) throws BaseException;
+    public List<DataSourceInfo> selectDataSourceInfoList(DataSourceInfoVo dataSourceInfoVo) throws BaseException;
 
     /**
      * Description: 根据名称查询数据源
@@ -57,7 +57,7 @@ public interface IDataSourceInfoService extends BaseService<DataSourceInfo, Stri
      * @return
      * @throws BaseException
      */
-    public DataSourceInfo findOneByDataSourceName(String dataSourceName) throws BaseException;;
+    public DataSourceInfo selectOneByDataSourceName(String dataSourceName) throws BaseException;;
 
     /**
      * Description: 通过ID得到数据源
@@ -66,7 +66,7 @@ public interface IDataSourceInfoService extends BaseService<DataSourceInfo, Stri
      * @return
      * @throws BaseException
      */
-    public DataSourceInfo getById(String dataSourceId) throws BaseException;
+    public DataSourceInfo selectDataSourceInfoById(String dataSourceId) throws BaseException;
 
     /**
      * Description: 新增一个数据源
@@ -74,7 +74,7 @@ public interface IDataSourceInfoService extends BaseService<DataSourceInfo, Stri
      * @param dataSourceInfo
      * @throws BaseException
      */
-    public void saveT(DataSourceInfo dataSourceInfo) throws BaseException;
+    public void addDataSourceInfo(DataSourceInfo dataSourceInfo) throws BaseException;
 
     /**
      * Description: 修改数据源
@@ -82,7 +82,7 @@ public interface IDataSourceInfoService extends BaseService<DataSourceInfo, Stri
      * @param dataSourceInfo
      * @throws BaseException
      */
-    public void updateT(DataSourceInfo dataSourceInfo) throws BaseException;;
+    public void modifyDataSourceInfo(DataSourceInfo dataSourceInfo) throws BaseException;;
 
     /**
      * Description: 删除数据源
@@ -90,5 +90,5 @@ public interface IDataSourceInfoService extends BaseService<DataSourceInfo, Stri
      * @param dataSourceId
      * @throws BaseException
      */
-    public void deleteById(String dataSourceId) throws BaseException;
+    public void deleteDataSourceInfo(String dataSourceId) throws BaseException;
 }

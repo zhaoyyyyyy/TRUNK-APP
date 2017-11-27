@@ -50,7 +50,7 @@ public interface IPreConfigInfoService extends BaseService<PreConfigInfo, String
      * @return
      * @throws BaseException
      */
-    public Page<PreConfigInfo> findPreConfigInfoPageList(Page<PreConfigInfo> page, PreConfigInfoVo preConfigInfoVo)
+    public Page<PreConfigInfo> selectPreConfigInfoPageList(Page<PreConfigInfo> page, PreConfigInfoVo preConfigInfoVo)
             throws BaseException;
 
     /**
@@ -60,7 +60,7 @@ public interface IPreConfigInfoService extends BaseService<PreConfigInfo, String
      * @return
      * @throws BaseException
      */
-    public List<PreConfigInfo> findPreConfigInfoList(PreConfigInfoVo preConfigInfoVo) throws BaseException;
+    public List<PreConfigInfo> selectPreConfigInfoList(PreConfigInfoVo preConfigInfoVo) throws BaseException;
 
     /**
      * Description: 根据名称查询专区
@@ -69,7 +69,7 @@ public interface IPreConfigInfoService extends BaseService<PreConfigInfo, String
      * @return
      * @throws BaseException
      */
-    public PreConfigInfo findOneBySourceName(String sourceName) throws BaseException;
+    public PreConfigInfo selectOneBySourceName(String sourceName) throws BaseException;
 
     /**
      * Description: 通过ID得到专区
@@ -78,7 +78,7 @@ public interface IPreConfigInfoService extends BaseService<PreConfigInfo, String
      * @return
      * @throws BaseException
      */
-    public PreConfigInfo getById(String configId) throws BaseException;
+    public PreConfigInfo selectPreConfigInfoById(String configId) throws BaseException;
 
     /**
      * Description: 新增一个专区
@@ -86,7 +86,7 @@ public interface IPreConfigInfoService extends BaseService<PreConfigInfo, String
      * @param preConfigInfo
      * @throws BaseException
      */
-    public void saveT(PreConfigInfo preConfigInfo) throws BaseException;
+    public void addPreConfigInfo(PreConfigInfo preConfigInfo) throws BaseException;
 
     /**
      * Description: 修改专区
@@ -94,7 +94,7 @@ public interface IPreConfigInfoService extends BaseService<PreConfigInfo, String
      * @param preConfigInfo
      * @throws BaseException
      */
-    public void updateT(PreConfigInfo preConfigInfo) throws BaseException;
+    public void modifyPreConfigInfo(PreConfigInfo preConfigInfo) throws BaseException;
 
     /**
      * Description: 删除专区
@@ -102,6 +102,6 @@ public interface IPreConfigInfoService extends BaseService<PreConfigInfo, String
      * @param configId
      * @throws BaseException
      */
-    public void deleteById(String configId) throws BaseException;
+    public void deletePreConfigInfo(String configId) throws BaseException;
 
 }

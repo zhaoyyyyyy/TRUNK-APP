@@ -62,30 +62,30 @@ public class LabelInfoServiceImpl extends BaseServiceImpl<LabelInfo, String> imp
         return iLabelInfoDao;
     }
 
-    public Page<LabelInfo> findLabelInfoPageList(Page<LabelInfo> page, LabelInfoVo labelInfoVo) {
-        return iLabelInfoDao.findLabelInfoPageList(page, labelInfoVo);
+    public Page<LabelInfo> selectLabelInfoPageList(Page<LabelInfo> page, LabelInfoVo labelInfoVo) {
+        return iLabelInfoDao.selectLabelInfoPageList(page, labelInfoVo);
     }
 
-    public List<LabelInfo> findLabelInfoList(LabelInfoVo labelInfoVo) {
-        return iLabelInfoDao.findLabelInfoList(labelInfoVo);
+    public List<LabelInfo> selectLabelInfoList(LabelInfoVo labelInfoVo) {
+        return iLabelInfoDao.selectLabelInfoList(labelInfoVo);
     }
 
-    public LabelInfo getById(String labelId) throws BaseException {
+    public LabelInfo selectLabelInfoById(String labelId) throws BaseException {
         if (StringUtils.isBlank(labelId)) {
             throw new ParamRequiredException("ID不能为空");
         }
         return super.get(labelId);
     }
 
-    public void saveT(LabelInfo labelInfo) throws BaseException {
+    public void addLabelInfo(LabelInfo labelInfo) throws BaseException {
         super.saveOrUpdate(labelInfo);
     }
 
-    public void updateT(LabelInfo labelInfo) throws BaseException {
+    public void modifyLabelInfo(LabelInfo labelInfo) throws BaseException {
         super.saveOrUpdate(labelInfo);
     }
 
-    public void deleteById(String labelId) throws BaseException {
+    public void deleteLabelInfo(String labelId) throws BaseException {
         if (StringUtils.isBlank(labelId)) {
             throw new ParamRequiredException("ID不能为空");
         }

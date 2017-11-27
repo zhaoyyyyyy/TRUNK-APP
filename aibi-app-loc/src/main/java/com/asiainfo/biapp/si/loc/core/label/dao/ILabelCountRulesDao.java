@@ -48,7 +48,7 @@ public interface ILabelCountRulesDao extends BaseDao<LabelCountRules, String> {
      * @param labelCountRulesVo
      * @return
      */
-    public Page<LabelCountRules> findLabelCountRulesPageList(Page<LabelCountRules> page,
+    public Page<LabelCountRules> selectLabelCountRulesPageList(Page<LabelCountRules> page,
             LabelCountRulesVo labelCountRulesVo);
 
     /**
@@ -57,6 +57,6 @@ public interface ILabelCountRulesDao extends BaseDao<LabelCountRules, String> {
      * @param labelCountRulesVo
      * @return
      */
-    public List<LabelCountRules> findLabelCountRulesList(LabelCountRulesVo labelCountRulesVo);
+    public List<LabelCountRules> selectLabelCountRulesList(LabelCountRulesVo labelCountRulesVo);
 
 }

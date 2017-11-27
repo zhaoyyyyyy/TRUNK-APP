@@ -69,11 +69,11 @@ public class LabelCountRulesController extends BaseController<LabelCountRules> {
 
     @ApiOperation(value = "分页查询")
     @RequestMapping(value = "/labelCountRulesPage/query", method = RequestMethod.POST)
-    public Page<LabelCountRules> queryPage(@ModelAttribute Page<LabelCountRules> page,
+    public Page<LabelCountRules> list(@ModelAttribute Page<LabelCountRules> page,
             @ModelAttribute LabelCountRulesVo labelCountRulesVo) {
         Page<LabelCountRules> labelCountRulesPage = new Page<>();
         try {
-            labelCountRulesPage = iLabelCountRulesService.findLabelCountRulesPageList(page, labelCountRulesVo);
+            labelCountRulesPage = iLabelCountRulesService.selectLabelCountRulesPageList(page, labelCountRulesVo);
         } catch (BaseException e) {
             labelCountRulesPage.fail(e);
         }
@@ -86,7 +86,7 @@ public class LabelCountRulesController extends BaseController<LabelCountRules> {
         WebResult<List<LabelCountRules>> webResult = new WebResult<>();
         List<LabelCountRules> labelCountRulesList = new ArrayList<>();
         try {
-            labelCountRulesList = iLabelCountRulesService.findLabelCountRulesList(labelCountRulesVo);
+            labelCountRulesList = iLabelCountRulesService.selectLabelCountRulesList(labelCountRulesVo);
         } catch (BaseException e) {
             return webResult.fail(e);
         }
@@ -96,11 +96,11 @@ public class LabelCountRulesController extends BaseController<LabelCountRules> {
     @ApiOperation(value = "通过ID得到标签规则")
     @ApiImplicitParam(name = "countRulesCode", value = "ID", required = true, paramType = "query", dataType = "string")
     @RequestMapping(value = "/labelCountRules/get", method = RequestMethod.POST)
-    public WebResult<LabelCountRules> getById(String countRulesCode) throws BaseException {
+    public WebResult<LabelCountRules> findById(String countRulesCode) throws BaseException {
         WebResult<LabelCountRules> webResult = new WebResult<>();
         LabelCountRules labelCountRules = new LabelCountRules();
         try {
-            labelCountRules = iLabelCountRulesService.getById(countRulesCode);
+            labelCountRules = iLabelCountRulesService.selectLabelCountRulesById(countRulesCode);
         } catch (BaseException e) {
             return webResult.fail(e);
         }
@@ -117,7 +117,7 @@ public class LabelCountRulesController extends BaseController<LabelCountRules> {
     public WebResult<String> save(@ApiIgnore LabelCountRules labelCountRules) {
         WebResult<String> webResult = new WebResult<>();
         try {
-            iLabelCountRulesService.saveT(labelCountRules);
+            iLabelCountRulesService.addLabelCountRules(labelCountRules);
         } catch (BaseException e) {
             return webResult.fail(e);
         }
@@ -132,17 +132,17 @@ public class LabelCountRulesController extends BaseController<LabelCountRules> {
             @ApiImplicitParam(name = "countRulesDesc", value = "规则描述", required = false, paramType = "query", dataType = "string"),
             @ApiImplicitParam(name = "whereSql", value = "过滤条件", required = false, paramType = "query", dataType = "string") })
     @RequestMapping(value = "/labelCountRules/update", method = RequestMethod.POST)
-    public WebResult<String> update(@ApiIgnore LabelCountRules labelCountRules) {
+    public WebResult<String> edit(@ApiIgnore LabelCountRules labelCountRules) {
         WebResult<String> webResult = new WebResult<>();
         LabelCountRules oldLab = new LabelCountRules();
         try {
-            oldLab = iLabelCountRulesService.getById(labelCountRules.getCountRulesCode());
+            oldLab = iLabelCountRulesService.selectLabelCountRulesById(labelCountRules.getCountRulesCode());
         } catch (BaseException e) {
             return webResult.fail(e);
         }
         oldLab = fromToBean(labelCountRules, oldLab);
         try {
-            iLabelCountRulesService.updateT(oldLab);
+            iLabelCountRulesService.modifyLabelCountRules(oldLab);
         } catch (BaseException e1) {
             return webResult.fail(e1);
         }
@@ -152,10 +152,10 @@ public class LabelCountRulesController extends BaseController<LabelCountRules> {
     @ApiOperation(value = "删除")
     @ApiImplicitParam(name = "countRulesCode", value = "ID", required = true, paramType = "query", dataType = "string")
     @RequestMapping(value = "/labelCountRules/delete", method = RequestMethod.POST)
-    public WebResult<String> delete(String countRulesCode) {
+    public WebResult<String> del(String countRulesCode) {
         WebResult<String> webResult = new WebResult<>();
         try {
-            iLabelCountRulesService.deleteById(countRulesCode);
+            iLabelCountRulesService.deleteLabelCountRules(countRulesCode);
         } catch (BaseException e) {
             return webResult.fail(e);
         }

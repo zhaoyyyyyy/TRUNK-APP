@@ -47,7 +47,7 @@ import com.asiainfo.biapp.si.loc.core.prefecture.vo.DataSourceInfoVo;
 @Repository
 public class DataSourceInfoDaoImpl extends BaseDaoImpl<DataSourceInfo, String> implements IDataSourceInfoDao {
 
-    public List<DataSourceInfo> findDataSourceInfoList(DataSourceInfoVo dataSourceInfoVo) {
+    public List<DataSourceInfo> selectDataSourceInfoList(DataSourceInfoVo dataSourceInfoVo) {
         Map<String, Object> params = new HashMap<>();
         StringBuffer hql = new StringBuffer("from DataSourceInfo d where 1=1 ");
         if (StringUtils.isNotBlank(dataSourceInfoVo.getDataSourceId())) {
@@ -125,7 +125,7 @@ public class DataSourceInfoDaoImpl extends BaseDaoImpl<DataSourceInfo, String> i
         return super.findListByHql(hql.toString(), params);
     }
 
-    public DataSourceInfo findOneByDataSourceName(String dataSourceName) {
+    public DataSourceInfo selectOneByDataSourceName(String dataSourceName) {
         return super.findOneByHql("from DataSourceInfo d where d.dataSourceName = ?0", dataSourceName);
     }
 

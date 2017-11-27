@@ -82,7 +82,7 @@ public class PreConfigInfoController extends BaseController<PreConfigInfo> {
             @ModelAttribute PreConfigInfoVo preConfigInfoVo) {
         Page<PreConfigInfo> preConfigInfoPage = new Page<>();
         try {
-            preConfigInfoPage = iPreConfigInfoService.findPreConfigInfoPageList(page, preConfigInfoVo);
+            preConfigInfoPage = iPreConfigInfoService.selectPreConfigInfoPageList(page, preConfigInfoVo);
         } catch (BaseException e) {
             preConfigInfoPage.fail(e);
         }
@@ -101,7 +101,7 @@ public class PreConfigInfoController extends BaseController<PreConfigInfo> {
         WebResult<List<PreConfigInfo>> webResult = new WebResult<>();
         List<PreConfigInfo> preConfigInfoList = new ArrayList<>();
         try {
-            preConfigInfoList = iPreConfigInfoService.findPreConfigInfoList(preConfigInfoVo);
+            preConfigInfoList = iPreConfigInfoService.selectPreConfigInfoList(preConfigInfoVo);
         } catch (BaseException e) {
             return webResult.fail(e);
         }
@@ -121,7 +121,7 @@ public class PreConfigInfoController extends BaseController<PreConfigInfo> {
         WebResult<PreConfigInfo> webResult = new WebResult<>();
         PreConfigInfo preConfigInfo = new PreConfigInfo();
         try {
-            preConfigInfo = iPreConfigInfoService.getById(configId);
+            preConfigInfo = iPreConfigInfoService.selectPreConfigInfoById(configId);
         } catch (BaseException e) {
             return webResult.fail(e);
         }
@@ -149,7 +149,7 @@ public class PreConfigInfoController extends BaseController<PreConfigInfo> {
         WebResult<String> webResult = new WebResult<>();
         PreConfigInfo rePre = new PreConfigInfo();
         try {
-            rePre = iPreConfigInfoService.findOneBySourceName(preConfigInfo.getSourceName());
+            rePre = iPreConfigInfoService.selectOneBySourceName(preConfigInfo.getSourceName());
         } catch (BaseException e) {
             return webResult.fail(e);
         }
@@ -158,7 +158,7 @@ public class PreConfigInfoController extends BaseController<PreConfigInfo> {
         }
         preConfigInfo.setCreateTime(new Date());
         try {
-            iPreConfigInfoService.saveT(preConfigInfo);
+            iPreConfigInfoService.addPreConfigInfo(preConfigInfo);
         } catch (BaseException e1) {
             return webResult.fail(e1);
         }
@@ -183,17 +183,17 @@ public class PreConfigInfoController extends BaseController<PreConfigInfo> {
             @ApiImplicitParam(name = "invalidTime", value = "失效时间", required = false, paramType = "query", dataType = "date"),
             @ApiImplicitParam(name = "configStatus", value = "状态", required = false, paramType = "query", dataType = "int") })
     @RequestMapping(value = "/preConfigInfo/update", method = RequestMethod.POST)
-    public WebResult<String> update(@ApiIgnore PreConfigInfo preConfigInfo) {
+    public WebResult<String> edit(@ApiIgnore PreConfigInfo preConfigInfo) {
         WebResult<String> webResult = new WebResult<>();
         PreConfigInfo oldPre;
         try {
-            oldPre = iPreConfigInfoService.getById(preConfigInfo.getConfigId());
+            oldPre = iPreConfigInfoService.selectPreConfigInfoById(preConfigInfo.getConfigId());
         } catch (BaseException e) {
             return webResult.fail(e);
         }
         oldPre = fromToBean(preConfigInfo, oldPre);
         try {
-            iPreConfigInfoService.updateT(oldPre);
+            iPreConfigInfoService.modifyPreConfigInfo(oldPre);
         } catch (BaseException e1) {
             return webResult.fail(e1);
         }
@@ -211,7 +211,7 @@ public class PreConfigInfoController extends BaseController<PreConfigInfo> {
     public WebResult<String> delete(String configId) {
         WebResult<String> webResult = new WebResult<>();
         try {
-            iPreConfigInfoService.deleteById(configId);
+            iPreConfigInfoService.deletePreConfigInfo(configId);
         } catch (BaseException e) {
             return webResult.fail(e);
         }

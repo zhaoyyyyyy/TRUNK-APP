@@ -80,7 +80,7 @@ public class DataSourceInfoController extends BaseController<DataSourceInfo> {
         WebResult<List<DataSourceInfo>> webResult = new WebResult<>();
         List<DataSourceInfo> dataSourceInfoList = new ArrayList<>();
         try {
-            dataSourceInfoList = iDataSourceInfoService.findDataSourceInfoList(dataSourceInfoVo);
+            dataSourceInfoList = iDataSourceInfoService.selectDataSourceInfoList(dataSourceInfoVo);
         } catch (BaseException e) {
             return webResult.fail(e);
         }
@@ -100,7 +100,7 @@ public class DataSourceInfoController extends BaseController<DataSourceInfo> {
         WebResult<DataSourceInfo> webResult = new WebResult<>();
         DataSourceInfo dataSourceInfo = new DataSourceInfo();
         try {
-            dataSourceInfo = iDataSourceInfoService.getById(dataSourceId);
+            dataSourceInfo = iDataSourceInfoService.selectDataSourceInfoById(dataSourceId);
         } catch (BaseException e) {
             return webResult.fail(e);
         }
@@ -137,7 +137,7 @@ public class DataSourceInfoController extends BaseController<DataSourceInfo> {
         WebResult<String> webResult = new WebResult<>();
         DataSourceInfo reData = new DataSourceInfo();
         try {
-            reData = iDataSourceInfoService.findOneByDataSourceName(dataSourceInfo.getDataSourceName());
+            reData = iDataSourceInfoService.selectOneByDataSourceName(dataSourceInfo.getDataSourceName());
         } catch (BaseException e) {
             return webResult.fail(e);
         }
@@ -146,7 +146,7 @@ public class DataSourceInfoController extends BaseController<DataSourceInfo> {
         }
         dataSourceInfo.setCreateTime(new Date());
         try {
-            iDataSourceInfoService.saveT(dataSourceInfo);
+            iDataSourceInfoService.addDataSourceInfo(dataSourceInfo);
         } catch (BaseException e1) {
             return webResult.fail(e1);
         }
@@ -180,17 +180,17 @@ public class DataSourceInfoController extends BaseController<DataSourceInfo> {
             @ApiImplicitParam(name = "sortNum", value = "排序序号", required = false, paramType = "query", dataType = "int"),
             @ApiImplicitParam(name = "configStatus", value = "状态", required = false, paramType = "query", dataType = "int") })
     @RequestMapping(value = "/dataSourceInfo/update", method = RequestMethod.POST)
-    public WebResult<String> update(@ApiIgnore DataSourceInfo dataSourceInfo) {
+    public WebResult<String> edit(@ApiIgnore DataSourceInfo dataSourceInfo) {
         WebResult<String> webResult = new WebResult<>();
         DataSourceInfo oldData;
         try {
-            oldData = iDataSourceInfoService.getById(dataSourceInfo.getDataSourceId());
+            oldData = iDataSourceInfoService.selectDataSourceInfoById(dataSourceInfo.getDataSourceId());
         } catch (BaseException e) {
             return webResult.fail(e);
         }
         oldData = fromToBean(dataSourceInfo, oldData);
         try {
-            iDataSourceInfoService.updateT(oldData);
+            iDataSourceInfoService.modifyDataSourceInfo(oldData);
         } catch (BaseException e1) {
             return webResult.fail(e1);
         }
@@ -205,10 +205,10 @@ public class DataSourceInfoController extends BaseController<DataSourceInfo> {
     @ApiOperation(value = "删除")
     @ApiImplicitParam(name = "dataSourceId", value = "ID", required = true, paramType = "query", dataType = "string")
     @RequestMapping(value = "/dataSourceInfo/delete", method = RequestMethod.POST)
-    public WebResult<String> delete(String dataSourceId) {
+    public WebResult<String> del(String dataSourceId) {
         WebResult<String> webResult = new WebResult<>();
         try {
-            iDataSourceInfoService.deleteById(dataSourceId);
+            iDataSourceInfoService.deleteDataSourceInfo(dataSourceId);
         } catch (BaseException e) {
             return webResult.fail(e);
         }

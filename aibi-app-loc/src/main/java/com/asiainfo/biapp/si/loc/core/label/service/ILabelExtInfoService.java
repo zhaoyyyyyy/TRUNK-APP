@@ -50,7 +50,7 @@ public interface ILabelExtInfoService extends BaseService<LabelExtInfo, String> 
      * @return
      * @throws BaseException
      */
-    public Page<LabelExtInfo> findLabelExtInfoPageList(Page<LabelExtInfo> page, LabelExtInfoVo labelExtInfoVo)
+    public Page<LabelExtInfo> selectLabelExtInfoPageList(Page<LabelExtInfo> page, LabelExtInfoVo labelExtInfoVo)
             throws BaseException;
 
     /**
@@ -60,7 +60,7 @@ public interface ILabelExtInfoService extends BaseService<LabelExtInfo, String> 
      * @return
      * @throws BaseException
      */
-    public List<LabelExtInfo> findLabelExtInfoList(LabelExtInfoVo labelExtInfoVo) throws BaseException;
+    public List<LabelExtInfo> selectLabelExtInfoList(LabelExtInfoVo labelExtInfoVo) throws BaseException;
 
     /**
      * Description: 通过ID拿到标签扩展信息
@@ -69,7 +69,7 @@ public interface ILabelExtInfoService extends BaseService<LabelExtInfo, String> 
      * @return
      * @throws BaseException
      */
-    public LabelExtInfo getById(String labelId) throws BaseException;
+    public LabelExtInfo selectLabelExtInfoById(String labelId) throws BaseException;
 
     /**
      * Description: 新增一个标签扩展信息
@@ -77,7 +77,7 @@ public interface ILabelExtInfoService extends BaseService<LabelExtInfo, String> 
      * @param labelExtInfo
      * @throws BaseException
      */
-    public void saveT(LabelExtInfo labelExtInfo) throws BaseException;
+    public void addLabelExtInfo(LabelExtInfo labelExtInfo) throws BaseException;
 
     /**
      * Description: 修改标签扩展信息
@@ -85,7 +85,7 @@ public interface ILabelExtInfoService extends BaseService<LabelExtInfo, String> 
      * @param labelExtInfo
      * @throws BaseException
      */
-    public void updateT(LabelExtInfo labelExtInfo) throws BaseException;
+    public void modifyLabelExtInfo(LabelExtInfo labelExtInfo) throws BaseException;
 
     /**
      * Description: 删除标签扩展信息
@@ -93,6 +93,6 @@ public interface ILabelExtInfoService extends BaseService<LabelExtInfo, String> 
      * @param labelId
      * @throws BaseException
      */
-    public void deleteById(String labelId) throws BaseException;
+    public void deleteLabelExtInfo(String labelId) throws BaseException;
 
 }
