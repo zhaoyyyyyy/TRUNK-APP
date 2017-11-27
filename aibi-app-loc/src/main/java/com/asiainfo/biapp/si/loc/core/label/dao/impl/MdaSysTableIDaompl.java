@@ -48,7 +48,20 @@ import com.asiainfo.biapp.si.loc.core.label.vo.MdaSysTableVo;
 @Repository
 public class MdaSysTableIDaompl extends BaseDaoImpl<MdaSysTable, String> implements IMdaSysTableDao {
 
-    public Page<MdaSysTable> findMdaSysTablePageList(Page<MdaSysTable> page, MdaSysTableVo mdaSysTableVo) {
+    public Page<MdaSysTable> selectMdaSysTablePageList(Page<MdaSysTable> page, MdaSysTableVo mdaSysTableVo) {
+        Map<String, Object> reMap = fromBean(mdaSysTableVo);
+        Map<String, Object> params = (Map<String, Object>) reMap.get("params");       
+        return super.findPageByHql(page, reMap.get("hql").toString(), params);
+    }
+
+    public List<MdaSysTable> selectMdaSysTableList(MdaSysTableVo mdaSysTableVo) {
+        Map<String, Object> reMap = fromBean(mdaSysTableVo);
+        Map<String, Object> params = (Map<String, Object>) reMap.get("params");  
+        return super.findListByHql(reMap.get("hql").toString(), params);
+    }
+
+    public Map<String, Object> fromBean(MdaSysTableVo mdaSysTableVo){
+        Map<String, Object> reMap = new HashMap<>();
         Map<String, Object> params = new HashMap<>();
         StringBuffer hql = new StringBuffer("from MdaSysTable m where 1=1");
         if (null != mdaSysTableVo.getConfigId()) {
@@ -83,45 +96,8 @@ public class MdaSysTableIDaompl extends BaseDaoImpl<MdaSysTable, String> impleme
             hql.append(" and m.updateCycle = :updateCycle");
             params.put("updateCycle", mdaSysTableVo.getUpdateCycle());
         }
-        return super.findPageByHql(page, hql.toString(), params);
+        reMap.put("hql", hql);
+        reMap.put("params",params );
+        return reMap;
     }
-
-    public List<MdaSysTable> findMdaSysTableList(MdaSysTableVo mdaSysTableVo) {
-        Map<String, Object> params = new HashMap<>();
-        StringBuffer hql = new StringBuffer("from MdaSysTable m where 1=1");
-        if (null != mdaSysTableVo.getConfigId()) {
-            hql.append(" and m.configId = :configId");
-            params.put("configId", mdaSysTableVo.getConfigId());
-        }
-        if (StringUtils.isNotBlank(mdaSysTableVo.getTableName())) {
-            hql.append(" and m.tableName = :tableName");
-            params.put("tableName", mdaSysTableVo.getTableName());
-        }
-        if (StringUtils.isNotBlank(mdaSysTableVo.getTableCnName())) {
-            hql.append(" and m.tableCnName = :tableCnName");
-            params.put("tableCnName", mdaSysTableVo.getTableCnName());
-        }
-        if (StringUtils.isNotBlank(mdaSysTableVo.getTableDesc())) {
-            hql.append(" and m.tableDesc = :tableDesc");
-            params.put("tableDesc", mdaSysTableVo.getTableDesc());
-        }
-        if (StringUtils.isNotBlank(mdaSysTableVo.getTablePostfix())) {
-            hql.append(" and m.tablePostfix = :tablePostfix");
-            params.put("tablePostfix", mdaSysTableVo.getTablePostfix());
-        }
-        if (StringUtils.isNotBlank(mdaSysTableVo.getTableSchema())) {
-            hql.append(" and m.tableSchema = :tableSchema");
-            params.put("tableSc", mdaSysTableVo.getTableSchema());
-        }
-        if (null != mdaSysTableVo.getTableType()) {
-            hql.append(" and m.tableType = :tableType");
-            params.put("tableType", mdaSysTableVo.getTableType());
-        }
-        if (null != mdaSysTableVo.getUpdateCycle()) {
-            hql.append(" and m.updateCycle = :updateCycle");
-            params.put("updateCycle", mdaSysTableVo.getUpdateCycle());
-        }
-        return super.findListByHql(hql.toString(), params);
-    }
-
 }

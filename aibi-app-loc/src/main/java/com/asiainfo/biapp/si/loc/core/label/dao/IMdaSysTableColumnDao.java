@@ -48,7 +48,7 @@ public interface IMdaSysTableColumnDao extends BaseDao<MdaSysTableColumn, String
      * @param mdaSysTableColumnVo
      * @return
      */
-    public Page<MdaSysTableColumn> findMdaSysTableColPageList(Page<MdaSysTableColumn> page,
+    public Page<MdaSysTableColumn> selectMdaSysTableColPageList(Page<MdaSysTableColumn> page,
             MdaSysTableColumnVo mdaSysTableColumnVo);
 
     /**
@@ -57,5 +57,5 @@ public interface IMdaSysTableColumnDao extends BaseDao<MdaSysTableColumn, String
      * @param mdaSysTableColumnVo
      * @return
      */
-    public List<MdaSysTableColumn> findMdaSysTableColList(MdaSysTableColumnVo mdaSysTableColumnVo);
+    public List<MdaSysTableColumn> selectMdaSysTableColList(MdaSysTableColumnVo mdaSysTableColumnVo);
 }

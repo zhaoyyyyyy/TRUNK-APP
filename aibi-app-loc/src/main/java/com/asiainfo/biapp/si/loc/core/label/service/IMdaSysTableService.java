@@ -49,7 +49,7 @@ public interface IMdaSysTableService extends BaseService<MdaSysTable, String> {
      * @param mdaSysTableVo
      * @return
      */
-    public Page<MdaSysTable> findMdaSysTablePageList(Page<MdaSysTable> page, MdaSysTableVo mdaSysTableVo)
+    public Page<MdaSysTable> selectMdaSysTablePageList(Page<MdaSysTable> page, MdaSysTableVo mdaSysTableVo)
             throws BaseException;
 
     /**
@@ -59,7 +59,7 @@ public interface IMdaSysTableService extends BaseService<MdaSysTable, String> {
      * @param mdaSysTableVo
      * @return
      */
-    public List<MdaSysTable> findMdaSysTableList(MdaSysTableVo mdaSysTableVo) throws BaseException;
+    public List<MdaSysTable> selectMdaSysTableList(MdaSysTableVo mdaSysTableVo) throws BaseException;
 
     /**
      * @Describe 通过ID得到一个实体
@@ -67,7 +67,7 @@ public interface IMdaSysTableService extends BaseService<MdaSysTable, String> {
      * @param tableId
      * @return
      */
-    public MdaSysTable getById(String tableId) throws BaseException;
+    public MdaSysTable selectMdaSysTableById(String tableId) throws BaseException;
 
     /**
      * @Describe 新增一个实体
@@ -75,7 +75,7 @@ public interface IMdaSysTableService extends BaseService<MdaSysTable, String> {
      * @param mdaSysTableVo
      * @return
      */
-    public void saveT(MdaSysTable mdaSysTable) throws BaseException;
+    public void addMdaSysTable(MdaSysTable mdaSysTable) throws BaseException;
 
     /**
      * @Describe 修改一个实体
@@ -83,7 +83,7 @@ public interface IMdaSysTableService extends BaseService<MdaSysTable, String> {
      * @param mdaSysTableVo
      * @return
      */
-    public void updateT(MdaSysTable mdaSysTable) throws BaseException;
+    public void modifyMdaSysTable(MdaSysTable mdaSysTable) throws BaseException;
 
     /**
      * @Describe 通过Id删除一个实体
@@ -91,5 +91,5 @@ public interface IMdaSysTableService extends BaseService<MdaSysTable, String> {
      * @param tableId
      * @return
      */
-    public void deleteById(String tableId) throws BaseException;
+    public void deleteMdaSysTableById(String tableId) throws BaseException;
 }

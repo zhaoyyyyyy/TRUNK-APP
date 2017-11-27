@@ -64,19 +64,19 @@ public class MdaSysTableColServiceImpl extends BaseServiceImpl<MdaSysTableColumn
     }
 
     @Override
-    public Page<MdaSysTableColumn> findMdaSysTableColPageList(Page<MdaSysTableColumn> page,
+    public Page<MdaSysTableColumn> selectMdaSysTableColPageList(Page<MdaSysTableColumn> page,
             MdaSysTableColumnVo mdaSysTableColumnVo) throws BaseException {
-        return iMdaSysTableColumnDao.findMdaSysTableColPageList(page, mdaSysTableColumnVo);
+        return iMdaSysTableColumnDao.selectMdaSysTableColPageList(page, mdaSysTableColumnVo);
     }
 
     @Override
-    public List<MdaSysTableColumn> findMdaSysTableColList(MdaSysTableColumnVo mdaSysTableColumnVo)
+    public List<MdaSysTableColumn> selectMdaSysTableColList(MdaSysTableColumnVo mdaSysTableColumnVo)
             throws BaseException {
-        return iMdaSysTableColumnDao.findMdaSysTableColList(mdaSysTableColumnVo);
+        return iMdaSysTableColumnDao.selectMdaSysTableColList(mdaSysTableColumnVo);
     }
 
     @Override
-    public MdaSysTableColumn getById(String columnId) throws BaseException {
+    public MdaSysTableColumn selectMdaSysTableColumnById(String columnId) throws BaseException {
         if (StringUtils.isBlank(columnId)) {
             throw new ParamRequiredException("Id不能为空");
         }
@@ -84,16 +84,16 @@ public class MdaSysTableColServiceImpl extends BaseServiceImpl<MdaSysTableColumn
     }
 
     @Override
-    public void saveT(MdaSysTableColumn mdaSysTableColumn) throws BaseException {
+    public void addMdaSysTableColumn(MdaSysTableColumn mdaSysTableColumn) throws BaseException {
         super.saveOrUpdate(mdaSysTableColumn);
     }
 
-    public void updateT(MdaSysTableColumn mdaSysTableColumn) throws BaseException {
+    public void modifyMdaSysTableColumn(MdaSysTableColumn mdaSysTableColumn) throws BaseException {
         super.saveOrUpdate(mdaSysTableColumn);
     };
 
     @Override
-    public void deleteById(String columnId) throws BaseException {
+    public void deleteMdaSysTableColumnById(String columnId) throws BaseException {
         super.delete(columnId);
     }
 
