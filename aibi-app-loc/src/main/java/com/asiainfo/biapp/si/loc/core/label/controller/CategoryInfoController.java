@@ -74,7 +74,7 @@ public class CategoryInfoController extends BaseController<CategoryInfo>{
     
     @ApiOperation(value = "查询列表")
     @RequestMapping(value = "/categoryInfo/queryList", method = RequestMethod.POST)
-    public WebResult<List<CategoryInfo>> find(@ModelAttribute CategoryInfoVo categoryInfoVo) throws BaseException{
+    public WebResult<List<CategoryInfo>> findList(@ModelAttribute CategoryInfoVo categoryInfoVo) throws BaseException{
         WebResult<List<CategoryInfo>> webResult = new WebResult<>();
         List<CategoryInfo> categoryInfoList = new ArrayList<>();
         try {
