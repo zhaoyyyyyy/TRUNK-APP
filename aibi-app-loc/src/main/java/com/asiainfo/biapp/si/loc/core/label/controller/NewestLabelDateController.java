@@ -74,7 +74,7 @@ public class NewestLabelDateController extends BaseController<NewestLabelDate>{
     
     @ApiOperation(value = "查询列表")
     @RequestMapping(value = "/newestLabelDate/queryList", method = RequestMethod.POST)
-    public WebResult<List<NewestLabelDate>> find(@ModelAttribute NewestLabelDateVo newestLabelDateVo) throws BaseException{
+    public WebResult<List<NewestLabelDate>> findList(@ModelAttribute NewestLabelDateVo newestLabelDateVo) throws BaseException{
         WebResult<List<NewestLabelDate>> webRequest = new WebResult<>();
         List<NewestLabelDate> newestLabelDateList = new ArrayList<>();
         try {

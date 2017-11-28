@@ -75,7 +75,7 @@ public class LabelStatausController extends BaseController<LabelStatus>{
     
     @ApiOperation(value = "查询列表")
     @RequestMapping(value = "/labelStatus/queryList", method = RequestMethod.POST)
-    public WebResult<List<LabelStatus>> find(@ModelAttribute LabelStatusVo labelStatusVo) throws BaseException{
+    public WebResult<List<LabelStatus>> findList(@ModelAttribute LabelStatusVo labelStatusVo) throws BaseException{
         WebResult<List<LabelStatus>> webResult = new WebResult<>();
         List<LabelStatus> labelStatusList = new ArrayList<>();
         try {

@@ -75,7 +75,7 @@ public class DimTableInfoController extends BaseController<DimTableInfo>{
     
     @ApiOperation(value = "查询列表")
     @RequestMapping(value = "/dimTableInfo/queryList", method = RequestMethod.POST)
-    public WebResult<List<DimTableInfo>> find(@ModelAttribute DimTableInfoVo dimTableInfoVo) throws BaseException{
+    public WebResult<List<DimTableInfo>> findList(@ModelAttribute DimTableInfoVo dimTableInfoVo) throws BaseException{
         WebResult<List<DimTableInfo>> webResult = new WebResult<>();
         List<DimTableInfo> dimTableInfoList = new ArrayList<>();
         try {
