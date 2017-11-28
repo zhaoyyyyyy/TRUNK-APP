@@ -8,12 +8,12 @@
 }
 .ui-jqgrid .ui-jqgrid-btable .ui-state-highlight{
     border: 1px solid #efefef !important;
-    background: #EAFFF2 !important;
+    background: #FBEEEF !important;
     color: #666 !important;
 }
 .ui-jqgrid .ui-jqgrid-btable .ui-state-hover {
     border: 1px solid #ccc !important;
-    background: #3DAC6E !important;
+    background: #DB5864 !important;
     font-weight: normal !important;
     color: #fff !important;
 }
