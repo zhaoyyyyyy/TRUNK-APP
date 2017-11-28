@@ -41,7 +41,7 @@
 }
 /**返回顶部*/
 .ui-back-to-top{
-	background: #009241;
+	background:#D02433;
 	border-radius: 5px;
 	width: 34px;
 	height: 34px;
@@ -144,7 +144,7 @@
    margin: 3px 0 0;
 }
 .dropdown-menu>li:HOVER,.dropdown-menu>li.active{
-	background-color: #EEFEF3;
+	background-color:#FBEEEF;
 }
 .open .ui-btn-menu.ui-btn > .caret {
     background-position: -21px -271px ;
@@ -159,7 +159,7 @@
 	width: 32px;
 	height: 32px;
 	border-radius: 16px;
-	background: #009241 url(./images/lc-icon.png) no-repeat -429px -204px;
+	background: #D02433 url(./images/lc-icon.png) no-repeat -429px -204px;
 	display: inline-block;
 }
 .ui-app-icon .dropdown-menu{
@@ -174,7 +174,7 @@
 	background: #fff url(./images/lc-icon.png) no-repeat;
 }
 .ui-app-icon .dropdown-menu>li>a:hover{
-	background-color: #EEFEF3;
+	background-color: #FBEEEF;
 }
 .ui-app-icon .dropdown-menu>li>a.mail{
 	background-position: -411px -242px;
@@ -205,7 +205,7 @@
     margin: 0 10px;
 }
 .progress-bar.has-over{
-    border-color: #009241;
+    border-color: #D02433;
 }
 .progress .progress-label{
 	font-size: 14px;
@@ -226,9 +226,9 @@
 	
 }
 .progress .progress-label.active > i,.progress .progress-label.progress-success > i{
-	background-color: #009241;
+	background-color: #D02433 ;
 	color: #fff;
-	border-color:#009241;
+	border-color:#D02433 ;
 	border-radius: 14px;	
 }
 .progress .progress-label.success{
@@ -260,8 +260,8 @@
 	color: #f04134;
 }
 .progress .progress-label.progress-success > i{
-    border-color: #009241;
-    color:#009241;
+    border-color: #D02433;
+    color:#D02433;
     background-color:#fff;
 }
 .progress-bar.progress-mid{
@@ -318,10 +318,10 @@
 	
 }
 .tab-list>li.active a{
-	color:#009241;
+	color:#D02433;
 }
 .tab-list.tab-hor>li.active a{
-	border-bottom:2px solid #009241;
+	border-bottom:2px solid #D02433;
 }
 
 .tab-list > li.disabled > a{	
@@ -349,7 +349,7 @@
     border-bottom-color: transparent;
 }
 .tab-list.tab-list-box.tab-hor > li.active a{
-	color:#009241;
+	color:#D02433;
 	padding:6px 14px;
 	border-bottom-color:#fff;
 	background-color:transparent;
@@ -387,6 +387,6 @@
 	text-align:right;
 }
 .tab-list.tab-line > li.active > a{
-	border-right: 2px solid #009241;
+	border-right: 2px solid #D02433;
 	margin-right:-1px;	
 }

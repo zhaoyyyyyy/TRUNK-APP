@@ -95,8 +95,8 @@
     color: #fff;
 }
  .ui-radio-btn.active{
-	background-color: #009241;
-	border: 1px solid #38d75a; 
+	background-color: #D02433;
+	border: 1px solid #B72036; 
 	-webkit-transition: all 0.5s linear;
     -moz-transition: all 0.5s linear;
     -ms-transition: all 0.5s linear;
@@ -159,7 +159,7 @@ input[type=checkbox].checkbix[data-size=large]+label>span {
     height: 24px;
 }
 input[type=checkbox].checkbix:checked+label>span {
-    background: #3DAC6E;
+    background: #D02433 ;
     border: .1rem solid transparent;
     -webkit-animation: reveal .2s cubic-bezier(.4,0,.5,1);
     animation: reveal .2s cubic-bezier(.4,0,.5,1);
@@ -258,7 +258,7 @@ radio样式
     text-align: center;
 }
 .radio.success input[type='radio']:checked+label i.default:before {
-    background-color: #3DAC6E !important;
+    background-color: #D02433 !important;
     color: transparent;
 }
 .radio>input[type='radio']:checked+label>i.default:before {
@@ -299,7 +299,7 @@ radio样式
 }
 .radio.success input[type='radio']:checked+label i.default:after {
     background-color: initial !important;
-    border-color: #3DAC6E;
+    border-color: #D02433;
 }
 .radio.success input:checked+label i:after {
     border-color: #3DAC6E;
@@ -425,10 +425,10 @@ radio样式
 }
 .form-control-bubble.form-control:focus,
 .has-success > input[type="text"] {
-    border-color: #3dac6e;
+    border-color:#D02433;
     outline: 0;
-    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(61, 172, 110, 0.54);
-    box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(61, 172, 110, 0.54);
+    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(241, 65, 52, 0.54);
+    box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(241, 65, 52, 0.54);
 }
 .has-error > input[type="text"],
 .has-error > textarea{
@@ -535,7 +535,7 @@ radio样式
 	background: #eee url(./images/lc-icon.png) no-repeat -124px -132px;
 }
 .ui-advanced-sreach{
-	color: #009241;
+	color: #D02433;
 	margin: 0 10px;
 }
 .ui-expand-search{

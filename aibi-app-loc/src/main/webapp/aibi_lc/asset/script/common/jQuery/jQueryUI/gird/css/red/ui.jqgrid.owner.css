@@ -8,23 +8,23 @@
 }
 .ui-jqgrid .ui-jqgrid-btable .ui-state-highlight{
     border: 1px solid #efefef !important;
-    background: #ecf8ff !important;
+    background: #EAFFF2 !important;
     color: #666 !important;
 }
 .ui-jqgrid .ui-jqgrid-btable .ui-state-hover {
     border: 1px solid #ccc !important;
-    background: #f2f6f9 !important;
+    background: #3DAC6E !important;
     font-weight: normal !important;
-    color: #333 !important;
+    color: #fff !important;
 }
 .table>tbody>tr>td{
 	border-top: 0px;
 }
 .ui-jqgrid .ui-jqgrid-htable th.ui-th-ltr{
 	border: 0px;
-	background-color: #eef6fb;
-	border-bottom: 1px solid #eef6fb;
-	height: 48px;
+	background-color: #F7F7F7; 
+	border-bottom: 1px solid #F7F7F7;
+	height: 40px;
 }
 .ui-jqgrid .ui-jqgrid-htable th.ui-th-ltr .ui-th-div{
 	height: auto;
@@ -63,7 +63,7 @@
     z-index: 100;
 }
 .ui-jqgrid  span.ui-icon {
-    background-image: url(../../../../stylesheets/jQueryUI/images/ui-icons_444444_256x240.png) !important;
+    background-image: url(../../../../../../../css/jQueryUI/images/ui-icons_444444_256x240.png) !important;
 }
 .ui-jqgrid tr.jqgrow{
 	height: 37px !important;
@@ -149,7 +149,42 @@
 .grid-nodata-box{
 	margin:80px 0;
 }
-
-
-
-
+.ui-table-btn{
+	color: #108EEA  !important;
+    border: 1px solid  transparent!important;
+    background-color: transparent !important;
+    font-size: 12px;
+    line-height: 1;
+    border-radius: 0px;
+    margin: 0 0 0 9px;
+    padding: 6px 12px;
+    cursor: pointer;
+}
+.ui-table-btn:HOVER{
+	color: #108EEA !important;
+}
+.ui-table-static .ui-jqgrid tr.jqgrow td:not([style *="none"]){
+	border-left: 0px;
+	
+}
+.ui-table-static .ui-jqgrid tr.jqgrow td:LAST-CHILD {
+    border-right: 0px;
+}
+.table-striped>tbody>tr:nth-of-type(odd) {
+    background-color: #f9f9f9;
+}
+.ui-jqgrid .ui-jqgrid-titlebar {
+    height: 40px;
+    line-height: 40px;
+    position: relative;
+    font-size: 12px;
+    background-color: #FFF;
+}
+.ui-table-title{
+	border: 1px solid #ccc;
+	overflow: hidden;
+	border-radius:4px ;
+}
+.ui-table-static .frozen-bdiv.ui-jqgrid-bdiv{
+	top: 40px !important;
+}
