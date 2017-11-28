@@ -1,7 +1,7 @@
 @charset "utf-8"; 
 
 /**
-绿色button css
+红色button css
 */
 .ui-btn{
 	border-radius: 4px;
@@ -14,15 +14,15 @@
 主按钮
 */
 .ui-btn-default{
-	background: #009241;
+	background: #D02433;
 	color: #FFF;
-	border: 1px solid #009241;
+	border: 1px solid #D02433;
 }
 .ui-btn-default:HOVER{ 
-    background: #3DAC6E; 
+    background: #DB5864; 
 }
 .ui-btn-default:active{ 
-    background: #007F3B;
+    background: #B72036;
 }
 .ui-btn-default.disabled,
 .ui-btn-default[disabled],
@@ -50,14 +50,14 @@
 }
 .ui-btn-second:HOVER,.ui-btn-save:HOVER{
 	background: #FFFFFF;
-	border: 1px solid #3DAC6E;
+	border: 1px solid #DB5864;
 	color: #009241;
 	opacity: 0.8;
 }
 .ui-btn-second:ACTIVE,.ui-btn-save:ACTIVE{
 	background: #FFFFFF;
-	border: 1px solid #3DAC6E;
-	color:  #007F3B;
+	border: 1px solid #DB5864;
+	color:  #B72036;
 }
 .ui-btn-save > span{
 	float: left;
@@ -172,7 +172,7 @@
 	border-radius: 4px;
 }
 .ui-btn-ghost-brand{
-	border: 1px solid #3DAC6E;
+	border: 1px solid #DB5864;
 	border-radius: 4px;
 	color: #009241;
 }
@@ -190,7 +190,7 @@
 .ui-btn-menu:HOVER,
 .ui-btn-dashed:HOVER,
 .ui-btn-ghost-brand:HOVER{
-	border-color: #3DAC6E;
+	border-color: #DB5864;
 	opacity: 0.8;
 	color: #009241;
 }
@@ -198,8 +198,8 @@
 .ui-btn-dashed:ACTIVE,
 .ui-btn-menu:ACTIVE,
 .ui-btn-ghost-brand:ACTIVE{
-	border-color:#3DAC6E;
-	color: #007F3B;
+	border-color:#DB5864;
+	color: #B72036;
 }
 .ui-btn-menu.ui-btn:HOVER > .caret{
 	background-position: -21px -290px;

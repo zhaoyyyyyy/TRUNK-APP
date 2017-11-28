@@ -3,7 +3,7 @@
 body, dl, dt, dd, ul, ol, li,
 h1, h2, h3, h4, h5, h6, pre, code,
 form, fieldset, legend, input, button,
-textarea, p, blockquote, th, td{margin: 0; padding: 0;}
+textarea, p, blockquote, th, td,div{margin: 0; padding: 0;}
 fieldset, img,form{border: 0; display:block;}
 img{vertical-align: top;}
 /* remember to define focus styles! */
@@ -95,9 +95,9 @@ body{font-family: -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Robo
 	.fleft{float:left;}
 	.fright{float:right;}
 	.cb{clear:both;}
-	.clearfix:after{content:".";display:block;height:0;clear:both;visibility:hidden;zoom: 1;}
-	* html .clearfix{ height: 1%;}
 	.clearfix {display: block;}
+	.clearfix:after{content:" ";display:block;height:0;clear:both;visibility:hidden;zoom: 1;}
+	* html .clearfix{ height: 1%;}
 	.zoom{zoom:1}
 	.v-hidden{visibility:hidden}
 	.inline{display: inline-block;}

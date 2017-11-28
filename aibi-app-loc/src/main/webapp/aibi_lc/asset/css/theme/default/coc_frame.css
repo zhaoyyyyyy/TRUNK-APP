@@ -23,11 +23,11 @@
 }
 .ui-header > .ui-header-content{
 	width: 100%;
+	height: 70px;
 }
 .ui-header > .ui-header-content > div{
 	width: auto;
 	margin: 0 0 0 100px;
-	height: 70px;
 }
 .ui-header .ui-header-search{
 	width: 220px;
@@ -57,8 +57,52 @@
 .ui-container{
 	min-width: 1250px;
 }
-
-
+.ui-menu{
+	width: 100px;
+	background-color: #394557;
+	margin: 0 -100% 0 0;
+	position: relative;
+	z-index: 2;
+}
+.ui-main{
+	width: 100%;
+}
+.ui-main > div{
+	margin: 0 0 0 100px;
+	background-color: #f2f6f7;
+}
+.ui-menu-ul{
+	padding: 40px 0;
+}
+.ui-menu-ul > li{
+	border-left: 2px solid #394557;
+	border-bottom: 1px solid #4F5E74;
+}
+.ui-menu-ul > li > a{
+	text-align: center;
+	line-height: 60px;
+	font-size: 14px;
+	color: #96999F;
+	height: 60px;
+	width: 98px;
+	display: inline-block;
+}
+.ui-menu-ul > li.active{
+	border-left-color:#38B82F;
+	background-color: #2A3342;
+}
+.ui-menu-ul > li.active > a{
+	color: #2EBB38;
+}
+.ui-notic{
+	width: auto;
+}
+.ui-notic > i{
+	width: 18px;
+	height: 18px;
+	display: inline-block;
+	background: url(./images/lc-icon.png) no-repeat;
+}
 
 
 
