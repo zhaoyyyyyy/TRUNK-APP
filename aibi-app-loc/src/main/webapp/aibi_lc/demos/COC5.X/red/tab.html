@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>tab组demo</title>
+<!--[if IE]>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+<![endif]--> 
+<link href="../../asset/css/common/reset.css" rel="stylesheet"  />
+<link href="../../asset/css/theme/default/tab.css" rel="stylesheet"  />
+<link href="../../asset/css/theme/default/button.css" rel="stylesheet"  />
+<!--
+	H5兼容js CSS3 兼容JS
+-->
+<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+<!--[if lt IE 9]>
+  <script src="http://apps.bdimg.com/libs/html5shiv/3.7/html5shiv.min.js"></script>
+  <script src="http://apps.bdimg.com/libs/respond.js/1.4.2/respond.min.js"></script>
+<![endif]-->
+</head>
+<body style="margin:20px;">
+ 	<h2>面包屑</h2>
+ 	<ol class="breadcrumb clearfix">
+      <li><a href="#">一级菜单</a></li>
+      <li><a href="#">二级菜单</a></li>
+      <li class="active">三级菜单</li>
+    </ol>
+ 	<ol class="breadcrumb clearfix">
+      <li class="active">一级菜单</li>
+    </ol>
+ 	<ol class="breadcrumb icon-breadcrumb clearfix">
+      <li class="first">
+      	<a href="#">
+      		<i></i>
+      		一级菜单
+      	</a>
+      </li>
+      <li class="sec">
+      	<a href="#"><i></i>二级菜单</a>
+      </li>
+      <li class="active thr"><i class="bc-icon"></i>三级菜单</li>
+    </ol>
+    <h2>返回顶部</h2>
+    <div class="ui-back-to-top">UP</div>
+    <br/>
+    <div class="ui-back-to-top-icon"></div>
+    <h2>下拉操作</h2>
+    <div class="dropdown">
+    	<a href = "javascript:;" class="dropdown-toggle">
+    		更多操作
+    		<span class="caret"></span>
+    	</a>
+    	<ul class="dropdown-menu">
+	       <li><a href="#">Action</a></li>
+	       <li><a href="#">Another action</a></li>
+	       <li><a href="#">Something else here</a></li>
+        </ul>
+    </div>
+    <div class="dropdown open">
+    	<a href = "javascript:;" class="dropdown-toggle">
+    		更多操作
+    		<span class="caret"></span>
+    	</a>
+    	<ul class="dropdown-menu">
+	       <li class="open active">
+	       	 <a href="#">
+	       	 	选择1
+	       	 	<i></i>
+	       	 </a>
+	       	 <ul class="dropdown-menu" style="left:115px;top:0;">
+		       <li>
+		       	 <a href="#">
+		       	 	选择1
+		       	 	<i></i>
+		       	 </a>
+		       		
+		       </li>
+		       <li><a href="#">选择2</a></li>
+		       <li><a href="#">选择3</a></li>
+	        </ul>	
+	       </li>
+	       <li><a href="#">选择2</a></li>
+	       <li><a href="#">选择3</a></li>
+        </ul>
+    </div>
+	<br><br><br><br><br><br><br><br><br>
+	<div class="dropdown">
+		<button type="button" class="ui-btn ui-btn-menu ui-icon-btn">
+	     	<span class="fleft">菜单按钮</span>
+	     	<span class="caret"></span>
+	     </button>
+	     <ul class="dropdown-menu">
+	       <li><a href="#">Action</a></li>
+	       <li><a href="#">Another action</a></li>
+	       <li><a href="#">Something else here</a></li>
+        </ul>      
+	</div>
+	<br><br>
+	<div class="dropdown open">
+		<button type="button" class="ui-btn ui-btn-menu ui-icon-btn dropdown-toggle">
+	     	<span class="fleft">选择</span>
+	     	<span class="caret"></span>
+	     </button>
+	     <ul class="dropdown-menu">
+	       <li><a href="#">Action</a></li>
+	       <li><a href="#">Another action</a></li>
+	       <li><a href="#">Something else here</a></li>
+        </ul>      
+	</div>
+	<br><br><br><br><br><br><br><br><br><br><br><br>
+	<div class="dropdown open ui-app-icon">
+		<a class="ui-app-btn"></a>
+	     <ul class="dropdown-menu">
+	       <li><a href="#" class="mail"></a></li>
+	       <li><a href="#" class="screen"></a></li>
+	       <li><a href="#" class="setting"></a></li>
+        </ul>      
+	</div>
+	<br><br><br><br><br><br><br><br><br><br>
+	<h2>步骤条</h2>
+	<div class="progress clearfix">
+		<span class="progress-label fleft"><i class="fleft icon"></i>提前完成</span>
+		<div class="progress-bar has-over fleft">
+	    </div>
+	    <span class="progress-label fleft active"><i class="fleft">2</i>正在处理</span>
+		<span class="progress-bar fleft"></span>
+	    <span class="progress-label fleft success"><i class="fleft">3</i>审核通过</span>
+	</div>
+	<br>
+	<div class="progress clearfix">
+	    <span class="progress-label fleft mr100"><i class="fleft icon"></i>已经通过步骤一</span>
+	    <span class="progress-label fleft mr100"><i class="fleft icon"></i>正在处理步骤二</span>
+	    <span class="progress-label fleft active"><i class="fleft">3</i>正在处理步骤三</span>
+		<span class="progress-bar fleft progress-sm"></span> 
+	    <span class="progress-label fleft success"><i class="fleft">4</i>即将进入步骤四</span>
+	</div>
+	<br>
+	<div class="progress clearfix">
+		<span class="progress-label fleft"><i class="fleft icon"></i>已经通过步骤一</span>
+		<span class="progress-bar fleft has-over progress-sm"></span>
+	    <span class="progress-label fleft"><i class="fleft icon"></i>正在处理步骤二</span>
+		<span class="progress-bar fleft has-error progress-sm"></span>
+	    <span class="progress-label fleft progress-error"><i class="fleft icon"></i>处理步骤三错误</span>
+		<span class="progress-bar fleft progress-sm"></span>
+	    <span class="progress-label fleft success"><i class="fleft">4</i>即将进入步骤四</span>
+	</div>
+	<br>
+	<div class="progress clearfix">
+		<span class="progress-label fleft progress-success mr170"><i class="fleft">1</i>已完成</span>
+	    <span class="progress-label fleft active"><i class="fleft">2</i>正在处理</span>
+		<span class="progress-bar fleft progress-mid"></span>
+	    <span class="progress-label fleft success"><i class="fleft">3</i>已通过</span>
+	</div>
+	<br>
+	<div class="progress clearfix">
+		<span class="progress-label fleft mr170 progress-login"><i class="fleft icon"></i>登陆系统</span>
+	    <span class="progress-label fleft progress-check"><i class="fleft icon"></i>信息核对</span>
+		<span class="progress-bar fleft progress-mid"></span>
+	    <span class="progress-label fleft progress-pay"><i class="fleft icon"></i>付款成功</span>
+	</div>
+	<br>
+	<div class="progress clearfix">
+		<div class="progress-box fleft">
+			<div class="clearfix">
+				<span class="progress-label fleft mr170"><i class="fleft icon"></i>提交完成</span>
+			</div>			
+			<p class="progress-info">提交内容优点多有点多要换行换行换行换行换行换行</p>
+		</div>
+		<div class="progress-box fleft">
+			<div class="clearfix">
+				<span class="progress-label fleft active"><i class="fleft">2</i>正在处理</span>
+				<span class="progress-bar fleft progress-mid"></span>
+			</div>					
+		    <p class="progress-info">处理描述有点多要换行换行换行换行换行换行</p>
+		</div>
+	    <div class="progress-box fleft">
+	    	<div class="clearfix">
+		    	<span class="progress-label fleft success"><i class="fleft">3</i>审核通过</span>
+	    	</div>
+	    	<p class="progress-info">内容已经通过已经通过已经通过已经通过</p>
+	    </div>
+	</div>
+	<br>
+	<ul class="progress-list progress">
+		<li class="clearfix">
+			<span class="progress-label fleft"><i class="fleft icon"></i>安装协议</span>
+		</li>
+		<li class="grogress-line has-over-line"></li>
+		<li class="clearfix">
+			<span class="progress-label fleft active"><i class="fleft">2</i>安装位置</span>
+		</li>
+		<li class="grogress-line"></li>
+		<li class="clearfix">
+			<span class="progress-label fleft success"><i class="fleft">3</i>正在安装</span>
+		</li>
+		<li class="grogress-line"></li>
+		<li class="clearfix">
+			<span class="progress-label fleft success"><i class="fleft">4</i>安装完毕</span>
+		</li>
+	</ul>
+	<br>
+	<h2>标签页</h2>	
+	<ul class="tab-list tab-hor clearfix">
+		<li class="fleft active"><a href="">选中文字</a></li>
+		<li class="fleft"><a href="">可选文字</a></li>
+		<li class="fleft disabled" disabled="disabled"><a href="">不可选文字</a></li>
+	</ul>
+	<br>
+	<ul class="tab-list tab-hor tab-list-box clearfix">
+		<li class="fleft"><a href="">可选标签</a></li>
+		<li class="fleft active"><a href="">选中标签<i class="tab-icon"></i></a></li>
+		<li class="fleft"><a href="">可选标签</a></li>
+		<li class="fleft disabled" disabled="disabled"><a href="">失效标签</a></li>
+	</ul>
+	<br>
+	<ul class="tab-list tab-hor tab-list-icon clearfix">
+		<li class="fleft active"><a href=""><i class="tab-icon"></i>选中文字</a></li>
+		<li class="fleft"><a href=""><i class="tab-icon"></i>可选文字</a></li>
+		<li class="fleft disabled" disabled="disabled"><a href=""><i class="tab-icon"></i>不可选文字</a></li>
+	</ul>
+	<br>
+	<ul class="tab-list tab-hor tab-list-box clearfix">
+		<li class="fleft"><a href="">可选标签<i class="tab-icon-bubble">6</i></a></li>
+		<li class="fleft active"><a href="">选中标签<i class="tab-icon-bubble">13</i></a></li>
+		<li class="fleft"><a href="">可选标签<i class="tab-icon-bubble">99+</i></a></li>
+		<li class="fleft disabled" disabled="disabled"><a href="">失效标签</a></li>
+	</ul>
+	<br>
+	<ul class="tab-list tab-line clearfix">
+		<li class="active"><a href="">选中文字</a></li>
+		<li><a href="">可选文字</a></li>
+		<li class="disabled" disabled="disabled"><a href="">不可选文字</a></li>
+	</ul>
+</body>
+</html>

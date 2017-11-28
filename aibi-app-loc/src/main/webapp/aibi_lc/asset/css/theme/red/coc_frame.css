@@ -1,0 +1,195 @@
+@charset "utf-8"; 
+/*COC 外侧框架*/
+.ui-header{
+	background-color: #36a455;
+	height: 70px;
+	min-width:1250px;
+}
+.ui-header > .ui-header-logo{
+	width: 100px;
+	height: 70px;
+	background-color: #008038;
+	margin: 0 -100% 0 0;
+	position: relative;
+	z-index: 2;
+}
+.ui-header > .ui-header-logo > img{
+	width: 49px;
+	height: 42px;
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	margin: -21px 0 0 -28px;
+}
+.ui-header > .ui-header-content{
+	width: 100%;
+}
+.ui-header > .ui-header-content > div{
+	width: auto;
+	margin: 0 0 0 100px;
+	height: 70px;
+}
+.ui-header .ui-header-search{
+	width: 220px;
+	height: 32px;
+	margin: 19px 0 19px 19px;
+	background-color: #fff;
+	border-radius: 16px;
+}
+.ui-header .ui-header-search > div{
+	width: 220px;
+	height: 32px;
+}
+.ui-header .ui-header-search > div > input{
+	width: 220px;
+	height: 32px;
+	border-radius: 16px;
+	padding: 6px 12px 6px 32px;
+}
+.ui-header .ui-header-search > div > .glyphicon-search {
+    left: 0px;
+    background: url(./images/lc-icon.png) no-repeat -121px -134px;
+    height: 24px;
+    margin: 4px 0;
+    border-right: 1px solid #e9e9e9;
+    width: 28px;
+}
+.ui-container{
+	min-width: 1250px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
