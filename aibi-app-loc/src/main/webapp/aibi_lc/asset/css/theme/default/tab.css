@@ -303,7 +303,88 @@
     content: " ";
     position: relative;
 }
+/**标签页*/
+.tab-list.tab-hor{
+	 border-bottom: 1px solid #ddd;
+}
+.tab-list > li{
+	margin-bottom: -1px;
+}
+.tab-list > li >a{
+	font-size: 14px;
+	color: #000000;
+	display:block;
+	padding:6px 18px;
+	
+}
+.tab-list>li.active a{
+	color:#009241;
+}
 
-
-
-
+.tab-list > li.disabled > a{	
+	color: #ccc !important;
+	cursor: not-allowed !important;
+}
+.tab-list > li a > i.tab-icon{	
+	display:inline-block;	
+	text-align:center;
+	width:20px;
+	height:16px;	
+}
+.tab-list > li a > i.tab-icon{
+	background:url(./images/lc-icon.png) no-repeat -389px -80px;
+}
+/**卡片式标签***/
+.tab-list.tab-list-box > li{
+	padding:0px 2px 0 0;
+	box-sizing:border-box;
+}
+.tab-list.tab-list-box > li a{
+	background:#f7f7f7;
+	border-radius:5px 5px 0 0;	
+	border-left:1px solid #ccc;
+	border-top:1px solid #ccc;
+	border-right:1px solid #ccc;
+}
+.tab-list.tab-list-box > li.active a{
+	color:#009241;
+	padding:6px 14px;
+	border-bottom:1px solid #fff;
+	background-color:transparent;
+}
+.tab-list.tab-list-box > li.active a > i.tab-icon{
+	margin:0 0 0 6px;
+	float:right;	
+}
+.tab-list-icon.tab-list > li  a > i{	
+	float:left;
+	margin:0 6px 0 0;	
+	background-position:-25px -225px;
+}
+.tab-list-icon.tab-list > li.active a > i{	
+	background-position:-65px -225px;
+}
+/**卡片式标签+带气泡***/
+.tab-list > li a > i.tab-icon-bubble{
+	border-radius:40%;
+	border:1px solid #ccc;
+	font-size:10px;
+	color:#999;
+	padding:0 6px;
+	background-color:#fff;
+	margin:0 0 0 3px;
+}
+.tab-list.tab-line{
+	display: table;
+    content: " ";
+    position: relative;
+    border-right: 1px solid #ddd;
+}
+.tab-list.tab-line > li > a{
+	padding:16px 28px 16px 0;
+	text-align:right;
+}
+.tab-list.tab-line > li.active > a{
+	border-right: 2px solid #009241;
+	margin-right:-1px;	
+}
