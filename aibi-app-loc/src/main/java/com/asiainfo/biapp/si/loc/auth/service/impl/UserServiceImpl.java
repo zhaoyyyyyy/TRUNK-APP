@@ -118,13 +118,39 @@ public class UserServiceImpl extends BaseServiceImpl<User, String> implements IU
 		
 		//拿到数据权限
 		try{
-			List<Organization> organizationPrivaliege = new ArrayList<Organization>();
-			
-			
 			String dataJson = HttpUtil.sendGet(jauthUrl+"/api/auth/permission/data", params);
-			organizationPrivaliege = (List<Organization>) JsonUtil.json2CollectionBean(dataJson, List.class, Organization.class);
-			//TODO 把data Json 转成 orglist
-			user.setOrganizationPrivaliege(organizationPrivaliege);
+			List<Organization> organizationPrivaliege = (List<Organization>) JsonUtil.json2CollectionBean(dataJson, List.class, Organization.class);
+			
+			//组织权限
+			Map<String,List<Organization>> orgPrivaliege = new HashMap<String,List<Organization>>();
+			
+			//数据权限
+			Map<String,List<Organization>> dataPrivaliege = new HashMap<String,List<Organization>>();
+			
+			//通过组织类型来赋予用户的组织权限跟数据权限
+			for(Organization organization : organizationPrivaliege){
+				if("XZQH".equals(organization.getOrgType())){
+					String level = organization.getOrgCode().length()+"";
+					if(dataPrivaliege.containsKey(level)){
+						List<Organization> organizationList = orgPrivaliege.get(organization.getOrgCode().length());
+						organizationList.add(organization);
+						orgPrivaliege.put(level, organizationList);
+					}else{
+						List<Organization> organizationList = new ArrayList<Organization>();
+						organizationList.add(organization);
+						orgPrivaliege.put(level, organizationList);
+					}
+				}else{
+					if(orgPrivaliege.containsKey(organization.getOrgType())){
+						List<Organization> organizationList = orgPrivaliege.get(organization.getOrgType());
+						organizationList.add(organization);
+					}else{
+						List<Organization> organizationList = new ArrayList<Organization>();
+						organizationList.add(organization);
+						orgPrivaliege.put(organization.getOrgType(), organizationList);
+					}
+				}
+			}
 			
 		}catch(Exception e){
 			throw new UserAuthException("获取用户数据权限失败",e);
@@ -132,13 +158,23 @@ public class UserServiceImpl extends BaseServiceImpl<User, String> implements IU
 		
 		//拿到资源权限
 		try{
-			List<Resource> resourcePrivaliege = new ArrayList<Resource>();
-			
+			List<Resource> domResource = new ArrayList<Resource>();
+			List<Resource> menuResource = new ArrayList<Resource>();
+			List<Resource> apiResource = new ArrayList<Resource>();
 			String resourceJson = HttpUtil.sendGet(jauthUrl+"/api/auth/permission/resource", params);
-			resourcePrivaliege = (List<Resource>) JsonUtil.json2CollectionBean(resourceJson, List.class, Resource.class);
-			//TODO 把data Json 转成 orglist
-			user.setResourcePrivaliege(resourcePrivaliege);
-		
+			List<Resource> resourcePrivaliege = (List<Resource>) JsonUtil.json2CollectionBean(resourceJson, List.class, Resource.class);
+			for(Resource resource : resourcePrivaliege){
+				if(Resource.API.equals(resource.getResourceCode()) ){
+					apiResource.add(resource);
+				}else if(Resource.MENU.equals(resource.getResourceCode()) ){
+					menuResource.add(resource);
+				}else if(Resource.DOM.equals(resource.getResourceCode()) ){
+					domResource.add(resource);
+				}
+			}
+			user.setDomResource(domResource);
+			user.setMenuResource(menuResource);
+			user.setApiResource(apiResource);
 		}catch(Exception e){
 			throw new UserAuthException("获取用户资源权限失败",e);
 		}

@@ -8,6 +8,13 @@ public class Organization {
 	private String id;
 	private String simpleName;
 	private String orgCode;
+	private String orgType;
+	public String getOrgType() {
+		return orgType;
+	}
+	public void setOrgType(String orgType) {
+		this.orgType = orgType;
+	}
 	private String parentId;
 	private Set<Organization> children  = new HashSet<Organization>();
 	public String getSimpleName() {

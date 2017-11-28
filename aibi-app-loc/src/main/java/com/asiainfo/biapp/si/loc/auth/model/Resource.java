@@ -7,6 +7,11 @@ package com.asiainfo.biapp.si.loc.auth.model;
  */
 public class Resource {
 
+	public final static String MENU = "LOC_MENU";
+	public final static String DOM = "LOC_DOM";
+	public final static String API = "LOC_API";
+	
+	
 	private String resourceName;
 	private String resourceCode;
 	private String parentId;
