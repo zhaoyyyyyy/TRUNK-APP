@@ -90,6 +90,9 @@ public class SourceInfoServiceImpl extends BaseServiceImpl<SourceInfo, String> i
         if (StringUtils.isBlank(sourceId)) {
             throw new ParamRequiredException("ID不能为空");
         }
+        if (selectSourceInfoById(sourceId) == null) {
+            throw new ParamRequiredException("ID不存在");
+        }
         super.delete(sourceId);
     }
 

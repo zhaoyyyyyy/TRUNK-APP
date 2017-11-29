@@ -94,6 +94,9 @@ public class MdaSysTableColServiceImpl extends BaseServiceImpl<MdaSysTableColumn
 
     @Override
     public void deleteMdaSysTableColumnById(String columnId) throws BaseException {
+        if (selectMdaSysTableColumnById(columnId)==null){
+            throw new ParamRequiredException("ID不存在");
+        }
         super.delete(columnId);
     }
 

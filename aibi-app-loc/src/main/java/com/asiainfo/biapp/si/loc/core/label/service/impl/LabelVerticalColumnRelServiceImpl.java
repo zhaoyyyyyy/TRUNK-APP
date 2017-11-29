@@ -83,6 +83,9 @@ public class LabelVerticalColumnRelServiceImpl extends BaseServiceImpl<LabelVert
     }
 
     public void deleteLabelVerticalColumnRelById(String labelId) throws BaseException {
+        if (selectLabelVerticalColumnRelById(labelId)==null){
+            throw new ParamRequiredException("ID不存在");
+        }
         super.delete(labelId);
         
     }
