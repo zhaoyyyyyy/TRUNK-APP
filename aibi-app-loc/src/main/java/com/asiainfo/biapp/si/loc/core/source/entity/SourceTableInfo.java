@@ -8,12 +8,17 @@ package com.asiainfo.biapp.si.loc.core.source.entity;
 
 import io.swagger.annotations.ApiParam;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
@@ -208,6 +213,19 @@ public class SourceTableInfo extends BaseEntity {
     @Column(name = "STATUS_ID")
     @ApiParam(value = "状态")
     private Integer statusId;
+
+    @ApiParam(value = "指标信息列")
+    @OneToMany(cascade = CascadeType.ALL,targetEntity=SourceInfo.class)
+    @JoinColumn(name = "SOURCE_TABLE_ID", insertable = false, updatable = false)
+    private List<SourceInfo> sourceInfoList = new ArrayList<>(0);
+
+    public List<SourceInfo> getSourceInfoList() {
+        return sourceInfoList;
+    }
+
+    public void setSourceInfoList(List<SourceInfo> sourceInfoList) {
+        this.sourceInfoList = sourceInfoList;
+    }
 
     public String getSourceTableId() {
         return sourceTableId;

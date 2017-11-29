@@ -81,6 +81,9 @@ public class DimTableInfoServiceImpl extends BaseServiceImpl<DimTableInfo, Strin
     }
 
     public void deleteDimTableInfoById(String dimId) throws BaseException {
+        if (selectDimTableInfoById(dimId)==null){
+            throw new ParamRequiredException("ID不存在");
+        }
         super.delete(dimId);
     }
 

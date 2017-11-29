@@ -92,6 +92,9 @@ public class DataSourceInfoServiceImpl extends BaseServiceImpl<DataSourceInfo, S
         if (StringUtils.isBlank(dataSourceId)) {
             throw new ParamRequiredException("ID不能为空");
         }
+        if (selectDataSourceInfoById(dataSourceId)==null){
+            throw new ParamRequiredException("ID不存在");
+        }
         super.delete(dataSourceId);
     }
 

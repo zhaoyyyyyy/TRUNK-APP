@@ -82,7 +82,7 @@ public class LabelCountRulesController extends BaseController<LabelCountRules> {
 
     @ApiOperation(value = "查询列表")
     @RequestMapping(value = "/labelCountRules/query", method = RequestMethod.POST)
-    public WebResult<List<LabelCountRules>> queryList(@ModelAttribute LabelCountRulesVo labelCountRulesVo) {
+    public WebResult<List<LabelCountRules>> findList(@ModelAttribute LabelCountRulesVo labelCountRulesVo) {
         WebResult<List<LabelCountRules>> webResult = new WebResult<>();
         List<LabelCountRules> labelCountRulesList = new ArrayList<>();
         try {

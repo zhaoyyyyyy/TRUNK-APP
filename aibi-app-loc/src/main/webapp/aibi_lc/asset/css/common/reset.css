@@ -53,7 +53,7 @@ a{text-decoration: none;}
 /*************
   通用样式定义
 *************/ 
-body{font-family: -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif, .HelveticaNeueDeskInterface-Regular,Tahoma,SimSun, Helvetica Neue, Luxi Sans, DejaVu Sans,arial, Hiragino Sans GB;font-size: 12px;color:#666;}
+body{font-family: -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif, HelveticaNeueDeskInterface-Regular,Tahoma,SimSun, Helvetica Neue, Luxi Sans, DejaVu Sans,arial, Hiragino Sans GB;font-size: 12px;color:#666;}
 
 /* font size  text-align color  */
 	.f12{font-size:12px;}

@@ -82,7 +82,7 @@ public class TargetTableStatusController extends BaseController<TargetTableStatu
 
     @ApiOperation(value = "查询列表")
     @RequestMapping(value = "/TargetTableStatus/queryList", method = RequestMethod.POST)
-    public WebResult<List<TargetTableStatus>> queryList(@ModelAttribute TargetTableStatusVo targetTableStatusVo) {
+    public WebResult<List<TargetTableStatus>> findList(@ModelAttribute TargetTableStatusVo targetTableStatusVo) {
         WebResult<List<TargetTableStatus>> webResult = new WebResult<>();
         List<TargetTableStatus> TargetTableStatusList = new ArrayList<>();
         try {

@@ -89,6 +89,9 @@ public class LabelRuleServiceImpl extends BaseServiceImpl<LabelRule, String> imp
         if (StringUtils.isBlank(ruleId)) {
             throw new ParamRequiredException("ID不能为空");
         }
+        if (selectLabelRuleById(ruleId)==null){
+            throw new ParamRequiredException("ID不存在");
+        }
         super.delete(ruleId);
     }
 

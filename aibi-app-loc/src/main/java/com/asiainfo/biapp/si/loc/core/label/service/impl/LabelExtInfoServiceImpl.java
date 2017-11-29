@@ -126,6 +126,9 @@ public class LabelExtInfoServiceImpl extends BaseServiceImpl<LabelExtInfo, Strin
         if (StringUtils.isBlank(labelId)) {
             throw new ParamRequiredException("ID不能为空");
         }
+        if (selectLabelExtInfoById(labelId)==null){
+            throw new ParamRequiredException("ID不存在");
+        }
         super.delete(labelId);
     }
 

@@ -57,6 +57,7 @@ public class WebConfigBeans {
             GenericConversionService genericConversionService = (GenericConversionService) initializer
                 .getConversionService();
             genericConversionService.addConverter(new StringToDateConverter());
+            genericConversionService.addConverter(new StringToSourceInfoListConverter());
         }
 
     }
