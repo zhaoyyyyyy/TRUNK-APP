@@ -355,7 +355,7 @@ radio样式
 /**
 行内表单
 */
-.form-inline .form-group {
+.form-inline .form-group,.form-group {
     display: inline-block;
     margin-bottom: 0;
     vertical-align: middle;
@@ -531,7 +531,7 @@ radio样式
 .ui-simple-search .input-group{
 	width: 122px;
 }
-.ui-simple-search .input-group-icon{
+.ui-simple-search .input-group-icon,.input-group-icon{
 	background: #eee url(./images/lc-icon.png) no-repeat -124px -132px;
 }
 .ui-advanced-sreach{

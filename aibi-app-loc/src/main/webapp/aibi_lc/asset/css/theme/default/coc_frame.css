@@ -64,13 +64,7 @@
 	position: relative;
 	z-index: 2;
 }
-.ui-main{
-	width: 100%;
-}
-.ui-main > div{
-	margin: 0 0 0 100px;
-	background-color: #f2f6f7;
-}
+
 .ui-menu-ul{
 	padding: 40px 0;
 }
@@ -105,6 +99,7 @@
 	background: url(./images/lc-icon.png) no-repeat;
 	margin: 0 50px 0 0;
 	position: relative;
+	vertical-align: middle;
 }
 .ui-notice > i.ui-help{
 	background-position: -347px -208px;
@@ -126,9 +121,40 @@
 	height: 16px;
 	line-height: 16px;
 	padding: 0 4px;
+	top:-8px;
+	right:-6px;
 }
-
-
+.ui-login-header{
+	width: 55px;
+	height: 35px;
+	display: inline-block;
+	clear: both;
+	content: " ";
+	margin: 0 30px 0 0;
+	vertical-align: middle;
+}
+.ui-login-header > img{
+	width: 35px;
+	height: 35px;
+	display: inline-block;
+	border-radius:100%;
+}
+.ui-login-header > .ui-user-info{
+	width: 10px;
+	height: 35px;
+	display: inline-block;
+	vertical-align: middle;
+	background:url(./images/lc-icon.png) no-repeat -294px -77px;
+	margin:  0 0 0 6px;
+}
+.ui-main{
+	width: 100%;
+}
+.ui-main > div{
+	margin: 0 0 0 100px;
+	background-color: #f2f6f7;
+	padding: 15px;
+}
 
 
 
