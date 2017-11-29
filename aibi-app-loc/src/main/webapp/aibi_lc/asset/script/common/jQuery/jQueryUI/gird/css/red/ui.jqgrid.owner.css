@@ -63,8 +63,11 @@
     z-index: 100;
 }
 .ui-jqgrid  span.ui-icon {
-    background-image: url(../../../../../../../css/jQueryUI/images/ui-icons_444444_256x240.png) !important;
+    background-image: url(../../../../../../../css/jQueryUI/images/ui-icons_cc0000_256x240.png) !important;
 }
+
+
+
 .ui-jqgrid tr.jqgrow{
 	height: 37px !important;
 }
