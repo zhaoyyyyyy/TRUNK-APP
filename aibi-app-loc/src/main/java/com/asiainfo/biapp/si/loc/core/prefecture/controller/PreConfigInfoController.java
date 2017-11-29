@@ -97,7 +97,7 @@ public class PreConfigInfoController extends BaseController<PreConfigInfo> {
      */
     @ApiOperation(value = "查询列表")
     @RequestMapping(value = "/preConfigInfo/queryList", method = RequestMethod.POST)
-    public WebResult<List<PreConfigInfo>> queryList(@ModelAttribute PreConfigInfoVo preConfigInfoVo) {
+    public WebResult<List<PreConfigInfo>> findList(@ModelAttribute PreConfigInfoVo preConfigInfoVo) {
         WebResult<List<PreConfigInfo>> webResult = new WebResult<>();
         List<PreConfigInfo> preConfigInfoList = new ArrayList<>();
         try {

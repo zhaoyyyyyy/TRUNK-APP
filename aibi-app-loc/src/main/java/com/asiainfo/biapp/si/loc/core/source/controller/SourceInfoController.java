@@ -28,7 +28,6 @@ import com.asiainfo.biapp.si.loc.base.page.Page;
 import com.asiainfo.biapp.si.loc.base.utils.StringUtil;
 import com.asiainfo.biapp.si.loc.base.utils.WebResult;
 import com.asiainfo.biapp.si.loc.core.source.entity.SourceInfo;
-import com.asiainfo.biapp.si.loc.core.source.entity.SourceInfoModels;
 import com.asiainfo.biapp.si.loc.core.source.service.ISourceInfoService;
 import com.asiainfo.biapp.si.loc.core.source.vo.SourceInfoVo;
 
@@ -82,7 +81,7 @@ public class SourceInfoController extends BaseController<SourceInfo> {
 
     @ApiOperation(value = "查询列表")
     @RequestMapping(value = "/sourceInfo/queryList", method = RequestMethod.POST)
-    public WebResult<List<SourceInfo>> queryList(@ModelAttribute SourceInfoVo sourceInfoVo) {
+    public WebResult<List<SourceInfo>> findList(@ModelAttribute SourceInfoVo sourceInfoVo) {
         WebResult<List<SourceInfo>> webResult = new WebResult<>();
         List<SourceInfo> sourceInfoList = new ArrayList<>();
         try {
@@ -109,6 +108,7 @@ public class SourceInfoController extends BaseController<SourceInfo> {
 
     @ApiOperation(value = "新增")
     @ApiImplicitParams({
+            @ApiImplicitParam(name = "sourceId", value = "ID", required = false, paramType = "query", dataType = "string"),
             @ApiImplicitParam(name = "sourceName", value = "指标名称", required = false, paramType = "query", dataType = "string"),
             @ApiImplicitParam(name = "cooTableId", value = "数据ID", required = false, paramType = "query", dataType = "string"),
             @ApiImplicitParam(name = "columnName", value = "列名", required = false, paramType = "query", dataType = "string"),
@@ -123,25 +123,10 @@ public class SourceInfoController extends BaseController<SourceInfo> {
     public WebResult<String> save(@ApiIgnore SourceInfo sourceInfo) {
         WebResult<String> webResult = new WebResult<>();
         try {
+            sourceInfo.setSourceColumnRule(sourceInfo.getColumnName());
             iSourceInfoService.addSourceInfo(sourceInfo);
         } catch (BaseException e) {
             return webResult.fail(e);
-        }
-        return webResult.success("新增指标信息成功", SUCCESS);
-    }
-
-    // TODO 批量新增
-    @ApiOperation(value = "批量新增")
-    @RequestMapping(value = "/sourceInfo/saveAll", method = RequestMethod.POST)
-    public WebResult<String> saveAll(SourceInfoModels sourceInfos) {
-        WebResult<String> webResult = new WebResult<>();
-        List<SourceInfo> sourceList = sourceInfos.getSourceInfos();
-        for (SourceInfo sourceInfo : sourceList) {
-            try {
-                iSourceInfoService.addSourceInfo(sourceInfo);
-            } catch (BaseException e) {
-                return webResult.fail(e);
-            }
         }
         return webResult.success("新增指标信息成功", SUCCESS);
     }
@@ -150,7 +135,7 @@ public class SourceInfoController extends BaseController<SourceInfo> {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "sourceId", value = "ID", required = true, paramType = "query", dataType = "string"),
             @ApiImplicitParam(name = "sourceName", value = "指标名称", required = false, paramType = "query", dataType = "string"),
-            @ApiImplicitParam(name = "cooTableId", value = "数据ID", required = false, paramType = "query", dataType = "string"),
+            @ApiImplicitParam(name = "sourceTableId", value = "数据ID", required = false, paramType = "query", dataType = "string"),
             @ApiImplicitParam(name = "columnName", value = "列名", required = false, paramType = "query", dataType = "string"),
             @ApiImplicitParam(name = "sourceColumnRule", value = "列运算规则", required = false, paramType = "query", dataType = "string"),
             @ApiImplicitParam(name = "columnCnName", value = "列中文名", required = false, paramType = "query", dataType = "string"),
@@ -206,8 +191,8 @@ public class SourceInfoController extends BaseController<SourceInfo> {
         if (StringUtil.isNotBlank(sou.getSourceName())) {
             oldSou.setSourceName(sou.getSourceName());
         }
-        if (StringUtil.isNotBlank(sou.getCooTableId())) {
-            oldSou.setCooTableId(sou.getCooTableId());
+        if (StringUtil.isNotBlank(sou.getSourceTableId())) {
+            oldSou.setSourceTableId(sou.getSourceTableId());
         }
         if (StringUtil.isNotBlank(sou.getColumnName())) {
             oldSou.setColumnName(sou.getColumnName());
