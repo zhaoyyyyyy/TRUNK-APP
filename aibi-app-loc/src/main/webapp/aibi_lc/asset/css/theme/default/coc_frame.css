@@ -56,6 +56,7 @@
 }
 .ui-container{
 	min-width: 1250px;
+	overflow: hidden;
 }
 .ui-menu{
 	width: 100px;
@@ -63,6 +64,8 @@
 	margin: 0 -100% 0 0;
 	position: relative;
 	z-index: 2;
+	margin-bottom: -10000px;
+    padding-bottom: 10000px;
 }
 
 .ui-menu-ul{
@@ -154,6 +157,7 @@
 	margin: 0 0 0 100px;
 	background-color: #f2f6f7;
 	padding: 15px;
+	position: relative;
 }
 
 

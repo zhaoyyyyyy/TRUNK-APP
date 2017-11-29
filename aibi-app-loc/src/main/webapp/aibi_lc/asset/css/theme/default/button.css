@@ -141,6 +141,12 @@
 	float:left;
     background: url(./images/lc-icon.png) no-repeat -26px -247px;
 }
+.ui-btn > .create-white {
+    width: 17px;
+    height: 17px;
+    float: left;
+    background: url(./images/lc-icon.png) no-repeat -444px -133px;
+}
 .ui-icon-btn > .ui-btn{
 	padding: 5px 8px ;
 }
