@@ -97,6 +97,9 @@ public class PreConfigInfoServiceImpl extends BaseServiceImpl<PreConfigInfo, Str
         if (StringUtils.isBlank(configId)) {
             throw new ParamRequiredException("ID不能为空");
         }
+        if (selectPreConfigInfoById(configId)==null){
+            throw new ParamRequiredException("ID不存在");
+        }
         super.delete(configId);
     }
 

@@ -91,6 +91,9 @@ public class LabelCountRulesServiceImpl extends BaseServiceImpl<LabelCountRules,
         if (StringUtils.isBlank(countRulesCode)) {
             throw new ParamRequiredException("ID不能为空");
         }
+        if (selectLabelCountRulesById(countRulesCode)==null){
+            throw new ParamRequiredException("ID不存在");
+        }
         super.delete(countRulesCode);
     }
 

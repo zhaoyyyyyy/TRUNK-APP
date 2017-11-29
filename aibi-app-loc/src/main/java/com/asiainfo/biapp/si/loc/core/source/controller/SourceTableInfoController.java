@@ -88,7 +88,7 @@ public class SourceTableInfoController extends BaseController<SourceTableInfo> {
 
     @ApiOperation(value = "查询列表")
     @RequestMapping(value = "/sourceTableInfo/queryList", method = RequestMethod.POST)
-    public WebResult<List<SourceTableInfo>> queryList(@ModelAttribute SourceTableInfoVo sourceTableInfoVo) {
+    public WebResult<List<SourceTableInfo>> findList(@ModelAttribute SourceTableInfoVo sourceTableInfoVo) {
         WebResult<List<SourceTableInfo>> webResult = new WebResult<>();
         List<SourceTableInfo> sourceTableInfoList = new ArrayList<>();
         try {
@@ -131,21 +131,22 @@ public class SourceTableInfoController extends BaseController<SourceTableInfo> {
             @ApiImplicitParam(name = "dataSourceType", value = "数据源类型", required = false, paramType = "query", dataType = "int"),
             @ApiImplicitParam(name = "dateColumnName", value = "日期分区字段", required = false, paramType = "query", dataType = "string"),
             @ApiImplicitParam(name = "whereSql", value = "过滤条件", required = false, paramType = "query", dataType = "string"),
-            @ApiImplicitParam(name = "statusId", value = "状态", required = false, paramType = "query", dataType = "int") })
+            @ApiImplicitParam(name = "statusId", value = "状态", required = false, paramType = "query", dataType = "int"),
+            @ApiImplicitParam(name = "sourceInfoList", value = "指标信息列表", required = false, paramType = "query", dataType = "string")})
     @RequestMapping(value = "/sourceTableInfo/save", method = RequestMethod.POST)
     public WebResult<String> save(@ApiIgnore SourceTableInfo sourceTableInfo) {
         WebResult<String> webResult = new WebResult<>();
-        sourceTableInfo.setCreateTime(new Date());
         User user = new User();
         try {
             user = this.getLoginUser();
         } catch (BaseException e) {
             LOGGER.info("context", e);
         }
+        sourceTableInfo.setCreateTime(new Date());
         sourceTableInfo.setCreateUserId(user.getUserId());
+        sourceTableInfo.setKeyType(sourceTableInfo.getIdType());
+        sourceTableInfo.setDataExtractionType(1);
         try {
-            sourceTableInfo.setKeyType(sourceTableInfo.getIdType());
-            sourceTableInfo.setDataExtractionType(1);
             iSourceTableInfoService.addSourceTableInfo(sourceTableInfo);
         } catch (BaseException e1) {
             return webResult.fail(e1);

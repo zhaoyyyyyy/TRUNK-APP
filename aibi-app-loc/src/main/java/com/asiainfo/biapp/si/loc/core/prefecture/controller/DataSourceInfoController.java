@@ -76,7 +76,7 @@ public class DataSourceInfoController extends BaseController<DataSourceInfo> {
      */
     @ApiOperation(value = "查询列表")
     @RequestMapping(value = "/dataSourceInfo/queryList", method = RequestMethod.POST)
-    public WebResult<List<DataSourceInfo>> queryList(@ModelAttribute DataSourceInfoVo dataSourceInfoVo) {
+    public WebResult<List<DataSourceInfo>> findList(@ModelAttribute DataSourceInfoVo dataSourceInfoVo) {
         WebResult<List<DataSourceInfo>> webResult = new WebResult<>();
         List<DataSourceInfo> dataSourceInfoList = new ArrayList<>();
         try {

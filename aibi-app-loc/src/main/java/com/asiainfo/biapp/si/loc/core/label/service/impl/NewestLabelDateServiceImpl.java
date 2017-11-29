@@ -82,6 +82,9 @@ public class NewestLabelDateServiceImpl extends BaseServiceImpl<NewestLabelDate,
     }
 
     public void deleteNewestLabelDateByDayNewestDate(String dayNewestDate) throws BaseException {
+        if (selectNewestLabelDateByDayNewestDate(dayNewestDate)==null){
+            throw new ParamRequiredException("ID不存在");
+        }
         super.delete(dayNewestDate);
         
     }

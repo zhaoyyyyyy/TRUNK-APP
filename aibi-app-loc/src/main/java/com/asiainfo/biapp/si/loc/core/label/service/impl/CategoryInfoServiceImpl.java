@@ -82,6 +82,9 @@ public class CategoryInfoServiceImpl extends BaseServiceImpl<CategoryInfo, Strin
     }
 
     public void deleteCategoryInfoById(String categoryId) throws BaseException {
+        if (selectCategoryInfoById(categoryId)==null){
+            throw new ParamRequiredException("ID不存在");
+        }
         super.delete(categoryId);
         
     }

@@ -77,6 +77,9 @@ public class LabelStatusServiceImpl extends BaseServiceImpl<LabelStatus, String>
     }
 
     public void deleteLabelStatusById(String labelId) throws BaseException {
+        if (selectLabelStatusById(labelId)==null){
+            throw new ParamRequiredException("ID不存在");
+        }
         super.delete(labelId);
         
     }
