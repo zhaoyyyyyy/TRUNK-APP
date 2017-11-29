@@ -210,7 +210,6 @@
 .ui-btn-menu.ui-btn:HOVER > .caret{
 	background-position: -21px -290px;
 }
-}
 .ui-btn-menu.ui-btn:ACTIVE > .caret{
     background-position: -21px -310px;
 }
