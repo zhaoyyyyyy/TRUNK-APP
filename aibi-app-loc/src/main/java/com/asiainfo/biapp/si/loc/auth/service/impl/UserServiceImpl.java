@@ -164,11 +164,11 @@ public class UserServiceImpl extends BaseServiceImpl<User, String> implements IU
 			String resourceJson = HttpUtil.sendGet(jauthUrl+"/api/auth/permission/resource", params);
 			List<Resource> resourcePrivaliege = (List<Resource>) JsonUtil.json2CollectionBean(resourceJson, List.class, Resource.class);
 			for(Resource resource : resourcePrivaliege){
-				if(Resource.API.equals(resource.getResourceCode()) ){
+				if(Resource.API.equals(resource.getType()) ){
 					apiResource.add(resource);
-				}else if(Resource.MENU.equals(resource.getResourceCode()) ){
+				}else if(Resource.MENU.equals(resource.getType()) ){
 					menuResource.add(resource);
-				}else if(Resource.DOM.equals(resource.getResourceCode()) ){
+				}else if(Resource.DOM.equals(resource.getType()) ){
 					domResource.add(resource);
 				}
 			}
