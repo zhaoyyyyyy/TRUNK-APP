@@ -57,7 +57,7 @@ public class UserController extends BaseController<User>{
 	
 	@ApiOperation(value = "查询用户组织访问权限跟同专区权限")
 	@ApiImplicitParam(name = "token", value = "秘钥", required = false, paramType = "query", dataType = "string")
-	@RequestMapping(value="/getOrgPrivaliege", method=RequestMethod.POST, produces={ MediaType.APPLICATION_JSON_VALUE })
+	@RequestMapping(value="/orgPrivaliege/query", method=RequestMethod.POST, produces={ MediaType.APPLICATION_JSON_VALUE })
 	public WebResult<Map<String,List<Organization>>> findOrgPrivaliege(String token){
         WebResult<Map<String,List<Organization>>> webResult = new WebResult<>();
         User user = new User();
@@ -71,7 +71,7 @@ public class UserController extends BaseController<User>{
 	
 	@ApiOperation(value = "查询数据权限同行政区划权限")
     @ApiImplicitParam(name = "token", value = "秘钥", required = false, paramType = "query", dataType = "string")
-    @RequestMapping(value="/getDataPrivaliege", method=RequestMethod.POST, produces={ MediaType.APPLICATION_JSON_VALUE })
+    @RequestMapping(value="/dataPrivaliege/query", method=RequestMethod.POST, produces={ MediaType.APPLICATION_JSON_VALUE })
     public WebResult<Map<String,List<Organization>>> findDataPrivaliege(String token){
         WebResult<Map<String,List<Organization>>> webResult = new WebResult<>();
         User user = new User();
@@ -85,7 +85,7 @@ public class UserController extends BaseController<User>{
 	
 	@ApiOperation(value = "查询api访问权限")
     @ApiImplicitParam(name = "token", value = "秘钥", required = false, paramType = "query", dataType = "string")
-    @RequestMapping(value="/getApiResource", method=RequestMethod.POST, produces={ MediaType.APPLICATION_JSON_VALUE })
+    @RequestMapping(value="/apiResource/query", method=RequestMethod.POST, produces={ MediaType.APPLICATION_JSON_VALUE })
     public WebResult<List<Resource>> findApiResource(String token){
         WebResult<List<Resource>> webResult = new WebResult<>();
         User user = new User();
@@ -99,7 +99,7 @@ public class UserController extends BaseController<User>{
 	
 	@ApiOperation(value = "查询页面元素权限")
     @ApiImplicitParam(name = "token", value = "秘钥", required = false, paramType = "query", dataType = "string")
-    @RequestMapping(value="/getDomResource", method=RequestMethod.POST, produces={ MediaType.APPLICATION_JSON_VALUE })
+    @RequestMapping(value="/domResource/query", method=RequestMethod.POST, produces={ MediaType.APPLICATION_JSON_VALUE })
     public WebResult<List<Resource>> findDomResource(String token){
         WebResult<List<Resource>> webResult = new WebResult<>();
         User user = new User();
@@ -113,8 +113,8 @@ public class UserController extends BaseController<User>{
 	
 	@ApiOperation(value = "查询菜单权限")
     @ApiImplicitParam(name = "token", value = "秘钥", required = false, paramType = "query", dataType = "string")
-    @RequestMapping(value="/getMenuResource", method=RequestMethod.POST, produces={ MediaType.APPLICATION_JSON_VALUE })
-    public WebResult<List<Resource>> findMunuResource(String token){
+    @RequestMapping(value="/menuResource/query", method=RequestMethod.POST, produces={ MediaType.APPLICATION_JSON_VALUE })
+    public WebResult<List<Resource>> findMenuResource(String token){
         WebResult<List<Resource>> webResult = new WebResult<>();
         User user = new User();
         try {
