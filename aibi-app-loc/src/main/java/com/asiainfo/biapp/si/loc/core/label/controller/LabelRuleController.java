@@ -80,7 +80,7 @@ public class LabelRuleController extends BaseController<LabelRule> {
     }
 
     @ApiOperation(value = "查询列表")
-    @RequestMapping(value = "/labelRule/query", method = RequestMethod.POST)
+    @RequestMapping(value = "/labelRule/queryList", method = RequestMethod.POST)
     public WebResult<List<LabelRule>> findList(@ModelAttribute LabelRuleVo labelRuleVo) {
         WebResult<List<LabelRule>> webResult = new WebResult<>();
         List<LabelRule> labelRuleList = new ArrayList<>();

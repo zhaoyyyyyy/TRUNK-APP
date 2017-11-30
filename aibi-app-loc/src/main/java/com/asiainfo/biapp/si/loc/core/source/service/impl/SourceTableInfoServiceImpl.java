@@ -60,6 +60,7 @@ public class SourceTableInfoServiceImpl extends BaseServiceImpl<SourceTableInfo,
     @Autowired
     private ISourceTableInfoDao iSourceTableInfoDao;
     
+    @Autowired
     private ISourceInfoService iSourceInfoService;
 
     @Override
@@ -84,7 +85,7 @@ public class SourceTableInfoServiceImpl extends BaseServiceImpl<SourceTableInfo,
     }
 
     public void addSourceTableInfo(SourceTableInfo sourceTableInfo) throws BaseException {
-        if("please-format-sourceInfoList".equals(sourceTableInfo.getSourceInfoList().get(0).getSourceTableId())){
+        if(!sourceTableInfo.getSourceInfoList().isEmpty()&&"please-format-sourceInfoList".equals(sourceTableInfo.getSourceInfoList().get(0).getSourceTableId())){
             throw new ParamRequiredException("指标信息列表格式不正确");
         }
         super.saveOrUpdate(sourceTableInfo);
