@@ -132,7 +132,7 @@ public class SourceTableInfoController extends BaseController<SourceTableInfo> {
             @ApiImplicitParam(name = "dateColumnName", value = "日期分区字段", required = false, paramType = "query", dataType = "string"),
             @ApiImplicitParam(name = "whereSql", value = "过滤条件", required = false, paramType = "query", dataType = "string"),
             @ApiImplicitParam(name = "statusId", value = "状态", required = false, paramType = "query", dataType = "int"),
-            @ApiImplicitParam(name = "sourceInfoList", value = "指标信息列表", required = false, paramType = "query", dataType = "string")})
+            @ApiImplicitParam(name = "sourceInfoList", value = "指标信息列表", required = false, paramType = "query", dataType = "string") })
     @RequestMapping(value = "/sourceTableInfo/save", method = RequestMethod.POST)
     public WebResult<String> save(@ApiIgnore SourceTableInfo sourceTableInfo) {
         WebResult<String> webResult = new WebResult<>();

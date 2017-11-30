@@ -86,7 +86,7 @@ public class LabelInfoController extends BaseController<LabelInfo> {
     }
 
     @ApiOperation(value = "查询列表")
-    @RequestMapping(value = "/labelInfo/query", method = RequestMethod.POST)
+    @RequestMapping(value = "/labelInfo/queryList", method = RequestMethod.POST)
     public WebResult<List<LabelInfo>> findList(@ModelAttribute LabelInfoVo labelInfoVo) {
         WebResult<List<LabelInfo>> webResult = new WebResult<>();
         List<LabelInfo> labelInfoList = new ArrayList<>();
