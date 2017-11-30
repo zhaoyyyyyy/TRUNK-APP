@@ -217,6 +217,7 @@
 	line-height: 50px;
 	padding: 0 0 0 174px;
 	color: #fff;
+	z-index: 11;
 }
 .ui-shop-cart.nest{
 	padding: 0 0 0 74px;
@@ -237,7 +238,7 @@
 .ui-shop-cart .ui-btn{
 	margin: 0 40px 0 60px;
 }
-/*数据资源管理样式*/
+/*数据资源管理样式 gaojj3*/
 
 .ui-lc-mian > .ui-label-mes.ui-data-form .form-group{
 	width:auto;
@@ -245,13 +246,187 @@
 .ui-lc-mian > .ui-label-mes.ui-data-form .input-group{
 	width:122px;
 }
-
-
-
-
-
-
-
+/**计算中心**/
+.ui-calculate-center{
+	position: absolute;
+    /* height: 100%; */
+    left: 0px;
+    right: 0px;
+    top: 0px;
+    background: #FFFFFF;
+    border: 1px solid #DCE2E4;
+    border-radius: 4px;
+    margin: 15px 15px 0;
+    z-index: 10;
+    bottom: 48px;
+    padding: 10px 0;
+}
+.ui-calc-h3{
+	height: 40px;
+	font-size: 20px;
+	color: #000000;
+	line-height: 2;
+	text-align: left;
+	padding: 0 15px;
+	border-bottom: 1px solid #DCE2E4;
+}
+.ui-calc-h3 > span{
+	float: right;
+}
+.ui-calc-h3 > span > em,
+.ui-calc-h3 > span >i{
+	display: inline-block;
+	color: #a1a1a1;
+	width: 30px;
+	cursor: pointer;
+}
+.ui-calc-h3 > span >i{
+	background: url(./images/lc-icon.png) no-repeat -421px -271px;
+    height: 30px;
+}
+.ui-calc-content{
+	position: absolute;
+	top: 50px;
+	bottom: 10px;
+	left: 0px;
+	right: 0px;
+	z-index: 1;
+	padding: 10px;
+}
+.ui-calc-content > .ui-bracket,
+.ui-conditionCT,
+.ui-chaining{
+    display: inline-block;
+    zoom: 1;
+    vertical-align: top;
+}
+.ui-calc-content > .ui-bracket{
+    width: 38px;
+    height: 60px;
+    font-size: 50px;
+    color: #3DAC6E;
+    position: relative;
+    line-height: 50px;
+    text-align: center;
+    border: 1px dashed transparent;
+}
+.ui-calc-content > .ui-bracket > i{
+    display: none;
+}
+.ui-calc-content > .ui-bracket.right:HOVER{
+    border: 1px dashed #e9e9e9;
+}
+.ui-calc-content > .ui-bracket.right:HOVER > i{
+    width: 20px;
+    height: 20px;
+    background: url(./images/lc-icon.png) no-repeat -388px -79px;
+    cursor: pointer; 
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    display: block;
+}
+.ui-calc-content > .ui-conditionCT{
+    width: 256px;
+    height: 140px; 
+    background-color: #FFFFFF;
+	border: 1px solid #E9E9E9;
+	border-radius: 4px;
+	margin: 5px 0 20px 8px;
+	position: relative;
+}
+.ui-calc-content > .ui-conditionCT > .ui-conditionCT-h4{
+    height: 40px; 
+	border-bottom: 1px solid #E9E9E9;
+	line-height: 40px;
+	font-size: 12px;
+	text-align: left;
+	padding: 0 10px;
+	color: #000;
+	overflow: hidden;
+}
+.ui-calc-content > .ui-conditionCT > .ui-conditionCT-h4 > i{
+    width: 30px;
+    height: 36px;
+    background: url(./images/lc-icon.png) no-repeat -388px -68px;
+    float: right;
+    cursor: pointer;
+}
+.ui-calc-content > .ui-conditionCT > .ui-conditionCT-h4 > em{
+    width: 30px;
+    height: 36px;
+    background: url(./images/lc-icon.png) no-repeat -497px -17px;
+    display: inline-block;
+    vertical-align: middle;
+    cursor: pointer;
+}
+.ui-calc-content > .ui-conditionCT > .ui-conditionCT-content{
+    height: 98px;
+}
+.ui-calc-content > .ui-conditionCT > .ui-conditionCT-content .ui-nothing-icon{
+    height: 28px;
+    margin: 35px auto;
+    display: inline-block;
+    text-align: center;
+    font-size: 14px;
+	color: #108EE9;
+	cursor: pointer;
+}
+.ui-calc-content > .ui-conditionCT > .ui-conditionCT-content .ui-nothing-icon > em{
+    height: 28px;
+    display: inline-block;
+    width: 28px;
+    background: url(./images/setting.png) no-repeat;
+    vertical-align: middle;
+}
+.ui-calc-content > .ui-chaining{
+	margin: 10px 0 20px 8px;
+}
+.ui-calc-content > .ui-chaining  .dropdown-menu{
+	min-width: auto;
+}
+.ui-calc-content > .ui-conditionCT > .ui-conditionCT-content > h5{
+	font-size: 12px;
+	color: #009241;
+	height: 30px;
+	line-height: 30px;
+	text-align: left;
+	padding: 0 18px;
+}
+.ui-calc-content > .ui-conditionCT .ui-inverse{
+	background-color: #EEFEF3;
+}
+.ui-calc-content > .ui-conditionCT > .ui-conditionCT-content > div{
+	padding: 0 5px;
+	overflow: hidden;
+}
+.ui-calc-content > .ui-conditionCT > .ui-conditionCT-content > div > a{
+	display: inline-block;
+	margin: 5px 5px 0 0;
+	padding: 4px 12px;
+	background-color: #F7F7F7;
+	border: 1px solid #E9E9E9;
+	border-radius: 4px;
+	color: #666;
+}
+/**tip top*/
+.ui-conditionCT .tooltip {
+    display: inline-block;
+    opacity: 1;
+    top: -20px;
+    left: 0px;
+}
+.tooltip.top {
+    padding: 5px 0;
+    margin-top: -3px;
+} 
+.tooltip.top .tooltip-arrow {
+    bottom: 0;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px 5px 0;
+    border-top-color: #000;
+}
 
 
 
