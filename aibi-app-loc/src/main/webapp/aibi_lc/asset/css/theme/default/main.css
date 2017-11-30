@@ -245,7 +245,27 @@
 .ui-lc-mian > .ui-label-mes.ui-data-form .input-group{
 	width:122px;
 }
-
+/*指标注册高佳佳*/
+.ui-reg-search.ui-expand-search .form-group>label{
+	width:72px;
+}
+.ui-reg-search.ui-expand-search .form-group .radio{
+	margin-top:0;
+	margin-bottom:0;
+}
+.ui-reg-search.ui-expand-search .form-group .radio input[type=radio]{
+	position:absolute;
+}
+.ui-reg-table h3{
+	font-size: 18px;
+	font-weight: 400;
+	color: #000;
+}
+.ui-reg-table .ui-grid-button{
+	text-align:right;
+	border-top:1px solid #ddd;
+	padding:10px 0;
+}
 
 
 
