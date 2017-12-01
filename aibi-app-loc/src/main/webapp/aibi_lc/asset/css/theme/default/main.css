@@ -271,18 +271,32 @@
 /**计算中心**/
 .ui-calculate-center{
 	position: absolute;
-    /* height: 100%; */
+/*     height: 100%; */
     left: 0px;
     right: 0px;
-    top: 0px;
-    background: #FFFFFF;
-    border: 1px solid #DCE2E4;
-    border-radius: 4px;
-    margin: 15px 15px 0;
+    top: 2500px;
     z-index: 10;
     bottom: 48px;
-    padding: 10px 0;
+    padding: 0;
+    overflow: hidden;
+    padding:10px 0;
+	border: 1px solid #DCE2E4;
+    border-radius: 4px;
+    background: #FFFFFF;
+    margin: 15px 15px 0;
+    -moz-transition: all 3s ease-out;
+    -webkit-transition: all 3s ease-out;
+    -o-transition: all 3s ease-out;
+    transition: all 3s ease-out;
 }
+.ui-calculate-center.heightAuto{
+    top:0px;
+     -moz-transition: all 0.5s ease-out;
+    -webkit-transition: all 0.5s ease-out;
+    -o-transition: all 0.5s ease-out;
+    transition: all 0.5s ease-out;
+}
+
 .ui-calc-h3{
 	height: 40px;
 	font-size: 20px;
@@ -322,7 +336,7 @@
     zoom: 1;
     vertical-align: top;
 }
-.ui-calc-content > .ui-bracket{
+.ui-calc-content > .ui-bracket,.ui-bracket{
     width: 38px;
     height: 60px;
     font-size: 50px;
@@ -331,6 +345,8 @@
     line-height: 50px;
     text-align: center;
     border: 1px dashed transparent;
+    z-index: 100;
+    margin: 5px 0 20px 8px;
 }
 .ui-calc-content > .ui-bracket > i{
     display: none;
@@ -357,7 +373,8 @@
 	margin: 5px 0 20px 8px;
 	position: relative;
 }
-.ui-calc-content > .ui-conditionCT > .ui-conditionCT-h4{
+.ui-calc-content > .ui-conditionCT > .ui-conditionCT-h4,
+.ui-conditionCT-h4-helper{
     height: 40px; 
 	border-bottom: 1px solid #E9E9E9;
 	line-height: 40px;
@@ -366,6 +383,11 @@
 	padding: 0 10px;
 	color: #000;
 	overflow: hidden;
+}
+.ui-conditionCT-h4-helper{
+	border: 1px solid #e9e9e9;
+	background: #fff;
+	height: 40px !important;
 }
 .ui-calc-content > .ui-conditionCT > .ui-conditionCT-h4 > i{
     width: 30px;
@@ -449,6 +471,38 @@
     border-width: 5px 5px 0;
     border-top-color: #000;
 }
+.ui-state-highlight{
+	width: 50px;
+	height: 50px;
+	border: 1px dashed #009241;
+    background-color: #EEFEF3;
+    display: inline-block !important;
+    margin: 10px 0 20px 8px;
+}
+.ui-drop-highlight{
+	background-color: #669241;
+}
+/*枚举型弹框*/
+.ui-enum-content{
+	margin: 5px 0;
+	border: 1px solid #e9e9e9;
+	height: 385px;
+}
+.ui-enum-content > div{
+	height: 385px;
+	width: 50%;
+}
+.ui-enum-content > div > .ui-enum-list{
+	height: 385px;
+	border-right: 1px solid #e9e9e9;
+}
+.ui-enum-content > div .ui-enum-header{
+	height: 40px;
+	border-bottom: 1px solid #e9e9e9;
+}
+
+
+	
 
 
 
