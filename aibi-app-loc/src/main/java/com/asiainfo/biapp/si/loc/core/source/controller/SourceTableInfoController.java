@@ -88,7 +88,7 @@ public class SourceTableInfoController extends BaseController<SourceTableInfo> {
 
     @ApiOperation(value = "查询列表")
     @RequestMapping(value = "/sourceTableInfo/queryList", method = RequestMethod.POST)
-    public WebResult<List<SourceTableInfo>> queryList(@ModelAttribute SourceTableInfoVo sourceTableInfoVo) {
+    public WebResult<List<SourceTableInfo>> findList(@ModelAttribute SourceTableInfoVo sourceTableInfoVo) {
         WebResult<List<SourceTableInfo>> webResult = new WebResult<>();
         List<SourceTableInfo> sourceTableInfoList = new ArrayList<>();
         try {
@@ -123,28 +123,29 @@ public class SourceTableInfoController extends BaseController<SourceTableInfo> {
             @ApiImplicitParam(name = "sourceTableType", value = "指标源表类型", required = false, paramType = "query", dataType = "int"),
             @ApiImplicitParam(name = "tableSuffix", value = "表/文件后缀日期", required = false, paramType = "query", dataType = "string"),
             @ApiImplicitParam(name = "readCycle", value = "读取周期", required = false, paramType = "query", dataType = "int"),
-            @ApiImplicitParam(name = "keyType", value = "标签主键标识类型", required = false, paramType = "query", dataType = "int"),
             @ApiImplicitParam(name = "idType", value = "来源主键标识类型", required = false, paramType = "query", dataType = "int"),
             @ApiImplicitParam(name = "idColumn", value = "来源主键字段名", required = false, paramType = "query", dataType = "string"),
             @ApiImplicitParam(name = "idDataType", value = "来源主键数据类型", required = false, paramType = "query", dataType = "string"),
             @ApiImplicitParam(name = "columnCaliber", value = "业务口径", required = false, paramType = "query", dataType = "string"),
             @ApiImplicitParam(name = "dataSourceId", value = "数据源ID", required = false, paramType = "query", dataType = "string"),
             @ApiImplicitParam(name = "dataSourceType", value = "数据源类型", required = false, paramType = "query", dataType = "int"),
-            @ApiImplicitParam(name = "dataExtractionType", value = "数据抽取方式", required = false, paramType = "query", dataType = "string"),
             @ApiImplicitParam(name = "dateColumnName", value = "日期分区字段", required = false, paramType = "query", dataType = "string"),
             @ApiImplicitParam(name = "whereSql", value = "过滤条件", required = false, paramType = "query", dataType = "string"),
-            @ApiImplicitParam(name = "statusId", value = "状态", required = false, paramType = "query", dataType = "int") })
+            @ApiImplicitParam(name = "statusId", value = "状态", required = false, paramType = "query", dataType = "int"),
+            @ApiImplicitParam(name = "sourceInfoList", value = "指标信息列表", required = false, paramType = "query", dataType = "string") })
     @RequestMapping(value = "/sourceTableInfo/save", method = RequestMethod.POST)
     public WebResult<String> save(@ApiIgnore SourceTableInfo sourceTableInfo) {
         WebResult<String> webResult = new WebResult<>();
-        sourceTableInfo.setCreateTime(new Date());
         User user = new User();
         try {
             user = this.getLoginUser();
         } catch (BaseException e) {
             LOGGER.info("context", e);
         }
+        sourceTableInfo.setCreateTime(new Date());
         sourceTableInfo.setCreateUserId(user.getUserId());
+        sourceTableInfo.setKeyType(sourceTableInfo.getIdType());
+        sourceTableInfo.setDataExtractionType(1);
         try {
             iSourceTableInfoService.addSourceTableInfo(sourceTableInfo);
         } catch (BaseException e1) {
@@ -164,14 +165,13 @@ public class SourceTableInfoController extends BaseController<SourceTableInfo> {
             @ApiImplicitParam(name = "sourceTableType", value = "指标源表类型", required = false, paramType = "query", dataType = "int"),
             @ApiImplicitParam(name = "tableSuffix", value = "表/文件后缀日期", required = false, paramType = "query", dataType = "string"),
             @ApiImplicitParam(name = "readCycle", value = "读取周期", required = false, paramType = "query", dataType = "int"),
-            @ApiImplicitParam(name = "keyType", value = "标签主键标识类型", required = false, paramType = "query", dataType = "int"),
             @ApiImplicitParam(name = "idType", value = "来源主键标识类型", required = false, paramType = "query", dataType = "int"),
             @ApiImplicitParam(name = "idColumn", value = "来源主键字段名", required = false, paramType = "query", dataType = "string"),
             @ApiImplicitParam(name = "idDataType", value = "来源主键数据类型", required = false, paramType = "query", dataType = "string"),
             @ApiImplicitParam(name = "columnCaliber", value = "业务口径", required = false, paramType = "query", dataType = "string"),
             @ApiImplicitParam(name = "dataSourceId", value = "数据源ID", required = false, paramType = "query", dataType = "string"),
             @ApiImplicitParam(name = "dataSourceType", value = "数据源类型", required = false, paramType = "query", dataType = "int"),
-            @ApiImplicitParam(name = "dataExtractionType", value = "数据抽取方式", required = false, paramType = "query", dataType = "string"),
+            @ApiImplicitParam(name = "dataExtractionType", value = "数据抽取方式", required = false, paramType = "query", dataType = "int"),
             @ApiImplicitParam(name = "dateColumnName", value = "日期分区字段", required = false, paramType = "query", dataType = "string"),
             @ApiImplicitParam(name = "whereSql", value = "过滤条件", required = false, paramType = "query", dataType = "string"),
             @ApiImplicitParam(name = "statusId", value = "状态", required = false, paramType = "query", dataType = "int") })
@@ -243,10 +243,8 @@ public class SourceTableInfoController extends BaseController<SourceTableInfo> {
         if (null != sou.getReadCycle()) {
             oldSou.setReadCycle(sou.getReadCycle());
         }
-        if (null != sou.getKeyType()) {
-            oldSou.setKeyType(sou.getKeyType());
-        }
         if (null != sou.getIdType()) {
+            oldSou.setKeyType(sou.getIdType());
             oldSou.setIdType(sou.getIdType());
         }
         if (StringUtil.isNotBlank(sou.getIdColumn())) {

@@ -3,7 +3,7 @@
 body, dl, dt, dd, ul, ol, li,
 h1, h2, h3, h4, h5, h6, pre, code,
 form, fieldset, legend, input, button,
-textarea, p, blockquote, th, td{margin: 0; padding: 0;}
+textarea, p, blockquote, th, td,div{margin: 0; padding: 0;}
 fieldset, img,form{border: 0; display:block;}
 img{vertical-align: top;}
 /* remember to define focus styles! */
@@ -53,7 +53,7 @@ a{text-decoration: none;}
 /*************
   通用样式定义
 *************/ 
-body{font-family: -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif, .HelveticaNeueDeskInterface-Regular,Tahoma,SimSun, Helvetica Neue, Luxi Sans, DejaVu Sans,arial, Hiragino Sans GB;font-size: 12px;color:#666;}
+body{font-family: -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif, HelveticaNeueDeskInterface-Regular,Tahoma,SimSun, Helvetica Neue, Luxi Sans, DejaVu Sans,arial, Hiragino Sans GB;font-size: 12px;color:#666;}
 
 /* font size  text-align color  */
 	.f12{font-size:12px;}
@@ -95,9 +95,9 @@ body{font-family: -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Robo
 	.fleft{float:left;}
 	.fright{float:right;}
 	.cb{clear:both;}
-	.clearfix:after{content:".";display:block;height:0;clear:both;visibility:hidden;zoom: 1;}
-	* html .clearfix{ height: 1%;}
 	.clearfix {display: block;}
+	.clearfix:after{content:" ";display:block;height:0;clear:both;visibility:hidden;zoom: 1;}
+	* html .clearfix{ height: 1%;}
 	.zoom{zoom:1}
 	.v-hidden{visibility:hidden}
 	.inline{display: inline-block;}
@@ -119,10 +119,9 @@ body{font-family: -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Robo
 
 
 /* border-style */
-	.no-border{border: none !important;}
+	.not-border{border: none !important;}
 	
 /* border-style end*/
-
 
 /* margin-style */
 	.mt10{margin: 10px 0 0;}
@@ -131,10 +130,14 @@ body{font-family: -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Robo
 	.mt30{margin: 30px 0 0;}
 	.mt40{margin: 40px 0 0;}
 	.mr10{margin:0 10px 0 0;}
+	.mr100{margin-right:100px;}
+	.mr170{margin-right:170px;}
 	.ml10{margin-left: 10px;}
+	.ml20{margin-left: 20px;}
 	.ml30{margin-left: 30px;}
 	.bc{margin:0 auto;}
     .margin10{margin:0 10px;}
+    .mb50{margin-bottom: 50px !important;}
 	
 /* margin-style end*/
 

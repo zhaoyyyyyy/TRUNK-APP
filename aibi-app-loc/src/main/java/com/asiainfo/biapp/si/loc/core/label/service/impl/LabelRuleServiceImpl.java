@@ -62,32 +62,35 @@ public class LabelRuleServiceImpl extends BaseServiceImpl<LabelRule, String> imp
         return iLabelRuleDao;
     }
 
-    public Page<LabelRule> findLabelRulePageList(Page<LabelRule> page, LabelRuleVo labelRuleVo) throws BaseException {
-        return iLabelRuleDao.findLabelRulePageList(page, labelRuleVo);
+    public Page<LabelRule> selectLabelRulePageList(Page<LabelRule> page, LabelRuleVo labelRuleVo) throws BaseException {
+        return iLabelRuleDao.selectLabelRulePageList(page, labelRuleVo);
     }
 
-    public List<LabelRule> findLabelRuleList(LabelRuleVo labelRuleVo) throws BaseException {
-        return iLabelRuleDao.findLabelRuleList(labelRuleVo);
+    public List<LabelRule> selectLabelRuleList(LabelRuleVo labelRuleVo) throws BaseException {
+        return iLabelRuleDao.selectLabelRuleList(labelRuleVo);
     }
 
-    public LabelRule getById(String ruleId) throws BaseException {
+    public LabelRule selectLabelRuleById(String ruleId) throws BaseException {
         if (StringUtils.isBlank(ruleId)) {
             throw new ParamRequiredException("ID不能为空");
         }
         return super.get(ruleId);
     }
 
-    public void saveT(LabelRule labelRule) throws BaseException {
+    public void addLabelRule(LabelRule labelRule) throws BaseException {
         super.saveOrUpdate(labelRule);
     }
 
-    public void updateT(LabelRule labelRule) throws BaseException {
+    public void modifyLabelRule(LabelRule labelRule) throws BaseException {
         super.saveOrUpdate(labelRule);
     }
 
-    public void deleteById(String ruleId) throws BaseException {
+    public void deleteLabelRule(String ruleId) throws BaseException {
         if (StringUtils.isBlank(ruleId)) {
             throw new ParamRequiredException("ID不能为空");
+        }
+        if (selectLabelRuleById(ruleId)==null){
+            throw new ParamRequiredException("ID不存在");
         }
         super.delete(ruleId);
     }

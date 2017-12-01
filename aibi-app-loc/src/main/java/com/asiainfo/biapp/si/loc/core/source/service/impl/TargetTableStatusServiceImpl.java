@@ -92,6 +92,9 @@ public class TargetTableStatusServiceImpl extends BaseServiceImpl<TargetTableSta
         if (StringUtils.isBlank(tableId)) {
             throw new ParamRequiredException("ID不能为空");
         }
+        if (selectTargerTableStatusById(tableId) == null) {
+            throw new ParamRequiredException("ID不存在");
+        }
         super.delete(tableId);
     }
 

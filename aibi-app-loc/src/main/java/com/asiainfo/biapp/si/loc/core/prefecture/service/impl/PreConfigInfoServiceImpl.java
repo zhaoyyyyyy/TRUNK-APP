@@ -62,40 +62,43 @@ public class PreConfigInfoServiceImpl extends BaseServiceImpl<PreConfigInfo, Str
         return iPreConfigInfoDao;
     }
 
-    public Page<PreConfigInfo> findPreConfigInfoPageList(Page<PreConfigInfo> page, PreConfigInfoVo preConfigInfoVo)
+    public Page<PreConfigInfo> selectPreConfigInfoPageList(Page<PreConfigInfo> page, PreConfigInfoVo preConfigInfoVo)
             throws BaseException {
-        return iPreConfigInfoDao.findPreConfigInfoPageList(page, preConfigInfoVo);
+        return iPreConfigInfoDao.selectPreConfigInfoPageList(page, preConfigInfoVo);
     }
 
-    public List<PreConfigInfo> findPreConfigInfoList(PreConfigInfoVo preConfigInfoVo) throws BaseException {
-        return iPreConfigInfoDao.findPreConfigInfoList(preConfigInfoVo);
+    public List<PreConfigInfo> selectPreConfigInfoList(PreConfigInfoVo preConfigInfoVo) throws BaseException {
+        return iPreConfigInfoDao.selectPreConfigInfoList(preConfigInfoVo);
     }
 
-    public PreConfigInfo findOneBySourceName(String sourceName) throws BaseException {
+    public PreConfigInfo selectOneBySourceName(String sourceName) throws BaseException {
         if (StringUtils.isBlank(sourceName)) {
             throw new ParamRequiredException("名称不能为空");
         }
-        return iPreConfigInfoDao.findOneBySourceName(sourceName);
+        return iPreConfigInfoDao.selectOneBySourceName(sourceName);
     }
 
-    public PreConfigInfo getById(String configId) throws BaseException {
+    public PreConfigInfo selectPreConfigInfoById(String configId) throws BaseException {
         if (StringUtils.isBlank(configId)) {
             throw new ParamRequiredException("ID不能为空");
         }
         return super.get(configId);
     }
 
-    public void saveT(PreConfigInfo preConfigInfo) throws BaseException {
+    public void addPreConfigInfo(PreConfigInfo preConfigInfo) throws BaseException {
         super.saveOrUpdate(preConfigInfo);
     }
 
-    public void updateT(PreConfigInfo preConfigInfo) throws BaseException {
+    public void modifyPreConfigInfo(PreConfigInfo preConfigInfo) throws BaseException {
         super.saveOrUpdate(preConfigInfo);
     }
 
-    public void deleteById(String configId) throws BaseException {
+    public void deletePreConfigInfo(String configId) throws BaseException {
         if (StringUtils.isBlank(configId)) {
             throw new ParamRequiredException("ID不能为空");
+        }
+        if (selectPreConfigInfoById(configId)==null){
+            throw new ParamRequiredException("ID不存在");
         }
         super.delete(configId);
     }

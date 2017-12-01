@@ -50,7 +50,7 @@ public interface ILabelCountRulesService extends BaseService<LabelCountRules, St
      * @return
      * @throws BaseException
      */
-    public Page<LabelCountRules> findLabelCountRulesPageList(Page<LabelCountRules> page,
+    public Page<LabelCountRules> selectLabelCountRulesPageList(Page<LabelCountRules> page,
             LabelCountRulesVo labelCountRulesVo) throws BaseException;
 
     /**
@@ -60,7 +60,7 @@ public interface ILabelCountRulesService extends BaseService<LabelCountRules, St
      * @return
      * @throws BaseException
      */
-    public List<LabelCountRules> findLabelCountRulesList(LabelCountRulesVo labelCountRulesVo) throws BaseException;
+    public List<LabelCountRules> selectLabelCountRulesList(LabelCountRulesVo labelCountRulesVo) throws BaseException;
 
     /**
      * Description: 通过ID拿到标签规则
@@ -69,7 +69,7 @@ public interface ILabelCountRulesService extends BaseService<LabelCountRules, St
      * @return
      * @throws BaseException
      */
-    public LabelCountRules getById(String countRulesCode) throws BaseException;
+    public LabelCountRules selectLabelCountRulesById(String countRulesCode) throws BaseException;
 
     /**
      * Description: 新增一个标签规则
@@ -77,7 +77,7 @@ public interface ILabelCountRulesService extends BaseService<LabelCountRules, St
      * @param labelCountRules
      * @throws BaseException
      */
-    public void saveT(LabelCountRules labelCountRules) throws BaseException;
+    public void addLabelCountRules(LabelCountRules labelCountRules) throws BaseException;
 
     /**
      * Description: 修改标签规则
@@ -85,7 +85,7 @@ public interface ILabelCountRulesService extends BaseService<LabelCountRules, St
      * @param labelCountRules
      * @throws BaseException
      */
-    public void updateT(LabelCountRules labelCountRules) throws BaseException;
+    public void modifyLabelCountRules(LabelCountRules labelCountRules) throws BaseException;
 
     /**
      * Description: 删除标签规则
@@ -93,6 +93,6 @@ public interface ILabelCountRulesService extends BaseService<LabelCountRules, St
      * @param countRulesCode
      * @throws BaseException
      */
-    public void deleteById(String countRulesCode) throws BaseException;
+    public void deleteLabelCountRules(String countRulesCode) throws BaseException;
 
 }

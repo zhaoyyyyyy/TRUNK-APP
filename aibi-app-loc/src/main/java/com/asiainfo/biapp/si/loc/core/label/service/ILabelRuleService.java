@@ -50,7 +50,7 @@ public interface ILabelRuleService extends BaseService<LabelRule, String> {
      * @return
      * @throws BaseException
      */
-    public Page<LabelRule> findLabelRulePageList(Page<LabelRule> page, LabelRuleVo labelRuleVo) throws BaseException;
+    public Page<LabelRule> selectLabelRulePageList(Page<LabelRule> page, LabelRuleVo labelRuleVo) throws BaseException;
 
     /**
      * Description: 查询客户群规则列表
@@ -59,7 +59,7 @@ public interface ILabelRuleService extends BaseService<LabelRule, String> {
      * @return
      * @throws BaseException
      */
-    public List<LabelRule> findLabelRuleList(LabelRuleVo labelRuleVo) throws BaseException;
+    public List<LabelRule> selectLabelRuleList(LabelRuleVo labelRuleVo) throws BaseException;
 
     /**
      * Description: 根据ID拿到客户群规则
@@ -68,7 +68,7 @@ public interface ILabelRuleService extends BaseService<LabelRule, String> {
      * @return
      * @throws BaseException
      */
-    public LabelRule getById(String ruleId) throws BaseException;
+    public LabelRule selectLabelRuleById(String ruleId) throws BaseException;
 
     /**
      * Description: 新增一个客户群规则
@@ -76,7 +76,7 @@ public interface ILabelRuleService extends BaseService<LabelRule, String> {
      * @param labelRule
      * @throws BaseException
      */
-    public void saveT(LabelRule labelRule) throws BaseException;
+    public void addLabelRule(LabelRule labelRule) throws BaseException;
 
     /**
      * Description: 修改客户群规则
@@ -84,7 +84,7 @@ public interface ILabelRuleService extends BaseService<LabelRule, String> {
      * @param labelRule
      * @throws BaseException
      */
-    public void updateT(LabelRule labelRule) throws BaseException;
+    public void modifyLabelRule(LabelRule labelRule) throws BaseException;
 
     /**
      * Description: 删除客户群规则
@@ -92,6 +92,6 @@ public interface ILabelRuleService extends BaseService<LabelRule, String> {
      * @param ruleId
      * @throws BaseException
      */
-    public void deleteById(String ruleId) throws BaseException;
+    public void deleteLabelRule(String ruleId) throws BaseException;
 
 }

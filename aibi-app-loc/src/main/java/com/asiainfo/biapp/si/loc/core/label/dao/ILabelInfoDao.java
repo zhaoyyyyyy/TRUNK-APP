@@ -48,7 +48,7 @@ public interface ILabelInfoDao extends BaseDao<LabelInfo, String> {
      * @param labelInfo
      * @return
      */
-    public Page<LabelInfo> findLabelInfoPageList(Page<LabelInfo> page, LabelInfoVo labelInfoVo);
+    public Page<LabelInfo> selectLabelInfoPageList(Page<LabelInfo> page, LabelInfoVo labelInfoVo);
 
     /**
      * Description: 按条件查询列表
@@ -56,6 +56,6 @@ public interface ILabelInfoDao extends BaseDao<LabelInfo, String> {
      * @param labelInfo
      * @return
      */
-    public List<LabelInfo> findLabelInfoList(LabelInfoVo labelInfoVo);
+    public List<LabelInfo> selectLabelInfoList(LabelInfoVo labelInfoVo);
 
 }

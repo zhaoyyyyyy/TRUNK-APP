@@ -48,7 +48,7 @@ public interface ILabelRuleDao extends BaseDao<LabelRule, String> {
      * @param labelRuleVo
      * @return
      */
-    public Page<LabelRule> findLabelRulePageList(Page<LabelRule> page, LabelRuleVo labelRuleVo);
+    public Page<LabelRule> selectLabelRulePageList(Page<LabelRule> page, LabelRuleVo labelRuleVo);
 
     /**
      * Description: 查询列表
@@ -56,6 +56,6 @@ public interface ILabelRuleDao extends BaseDao<LabelRule, String> {
      * @param labelRule
      * @return
      */
-    public List<LabelRule> findLabelRuleList(LabelRuleVo labelRuleVo);
+    public List<LabelRule> selectLabelRuleList(LabelRuleVo labelRuleVo);
 
 }

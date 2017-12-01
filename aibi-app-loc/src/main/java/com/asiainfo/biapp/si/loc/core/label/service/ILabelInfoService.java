@@ -50,7 +50,7 @@ public interface ILabelInfoService extends BaseService<LabelInfo, String> {
      * @return
      * @throws BaseException
      */
-    public Page<LabelInfo> findLabelInfoPageList(Page<LabelInfo> page, LabelInfoVo labelInfoVo) throws BaseException;
+    public Page<LabelInfo> selectLabelInfoPageList(Page<LabelInfo> page, LabelInfoVo labelInfoVo) throws BaseException;
 
     /**
      * Description:查询标签信息列表
@@ -59,7 +59,7 @@ public interface ILabelInfoService extends BaseService<LabelInfo, String> {
      * @return
      * @throws BaseException
      */
-    public List<LabelInfo> findLabelInfoList(LabelInfoVo labelInfoVo) throws BaseException;
+    public List<LabelInfo> selectLabelInfoList(LabelInfoVo labelInfoVo) throws BaseException;
 
     /**
      * Description:通过ID拿到标签信息
@@ -68,7 +68,7 @@ public interface ILabelInfoService extends BaseService<LabelInfo, String> {
      * @return
      * @throws BaseException
      */
-    public LabelInfo getById(String labelId) throws BaseException;
+    public LabelInfo selectLabelInfoById(String labelId) throws BaseException;
 
     /**
      * Description:新增一个标签信息
@@ -76,7 +76,7 @@ public interface ILabelInfoService extends BaseService<LabelInfo, String> {
      * @param labelInfo
      * @throws BaseException
      */
-    public void saveT(LabelInfo labelInfo) throws BaseException;
+    public void addLabelInfo(LabelInfo labelInfo) throws BaseException;
 
     /**
      * Description:修改标签信息
@@ -84,7 +84,7 @@ public interface ILabelInfoService extends BaseService<LabelInfo, String> {
      * @param labelInfo
      * @throws BaseException
      */
-    public void updateT(LabelInfo labelInfo) throws BaseException;
+    public void modifyLabelInfo(LabelInfo labelInfo) throws BaseException;
 
     /**
      * Description:删除标签信息
@@ -92,6 +92,6 @@ public interface ILabelInfoService extends BaseService<LabelInfo, String> {
      * @param labelId
      * @throws BaseException
      */
-    public void deleteById(String labelId) throws BaseException;
+    public void deleteLabelInfo(String labelId) throws BaseException;
 
 }

@@ -8,15 +8,16 @@ package com.asiainfo.biapp.si.loc.core.source.entity;
 
 import io.swagger.annotations.ApiParam;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.GenericGenerator;
-
 import com.asiainfo.biapp.si.loc.base.entity.BaseEntity;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
  * Title : SourceInfo
@@ -55,8 +56,6 @@ public class SourceInfo extends BaseEntity {
      */
     @Id
     @Column(name = "SOURCE_ID")
-    @GenericGenerator(name = "idGenerator", strategy = "uuid")
-    @GeneratedValue(generator = "idGenerator")
     @ApiParam(value = "指标编码")
     private String sourceId;
 
@@ -70,9 +69,9 @@ public class SourceInfo extends BaseEntity {
     /**
      * 数据ID
      */
-    @Column(name = "COO_TABLE_ID")
+    @Column(name = "SOURCE_TABLE_ID")
     @ApiParam(value = "数据ID")
-    private String cooTableId;
+    private String sourceTableId;
 
     /**
      * 列名
@@ -130,6 +129,20 @@ public class SourceInfo extends BaseEntity {
     @ApiParam(value = "列序")
     private Integer columnNum;
 
+    @JsonIgnore
+    @ApiParam(value = "源配置")
+    @ManyToOne(cascade = CascadeType.ALL, targetEntity = SourceTableInfo.class)
+    @JoinColumn(name = "SOURCE_TABLE_ID", insertable = false, updatable = false)
+    private SourceTableInfo sourceTableInfo;
+
+    public SourceTableInfo getSourceTableInfo() {
+        return sourceTableInfo;
+    }
+
+    public void setSourceTableInfo(SourceTableInfo sourceTableInfo) {
+        this.sourceTableInfo = sourceTableInfo;
+    }
+
     public String getSourceId() {
         return sourceId;
     }
@@ -146,12 +159,12 @@ public class SourceInfo extends BaseEntity {
         this.sourceName = sourceName;
     }
 
-    public String getCooTableId() {
-        return cooTableId;
+    public String getSourceTableId() {
+        return sourceTableId;
     }
 
-    public void setCooTableId(String cooTableId) {
-        this.cooTableId = cooTableId;
+    public void setSourceTableId(String sourceTableId) {
+        this.sourceTableId = sourceTableId;
     }
 
     public String getColumnName() {

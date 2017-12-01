@@ -182,7 +182,7 @@ public class MdaSysTableColumnController extends BaseController<MdaSysTableColum
         if (StringUtils.isNotBlank(mda.getLabelId())) {
             oldmda.setLabelId(mda.getLabelId());
         }
-        if (null != mda.getTableId()) {
+        if (StringUtils.isNotBlank(mda.getTableId())) {
             oldmda.setTableId(mda.getTableId());
         }
         if (StringUtils.isNotBlank(mda.getColumnName())) {

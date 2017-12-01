@@ -69,10 +69,10 @@ public class LabelRuleController extends BaseController<LabelRule> {
 
     @ApiOperation(value = "分页查询")
     @RequestMapping(value = "/labelRulePage/query", method = RequestMethod.POST)
-    public Page<LabelRule> queryPage(@ModelAttribute Page<LabelRule> page, @ModelAttribute LabelRuleVo labelRuleVo) {
+    public Page<LabelRule> list(@ModelAttribute Page<LabelRule> page, @ModelAttribute LabelRuleVo labelRuleVo) {
         Page<LabelRule> labelRulePage = new Page<>();
         try {
-            labelRulePage = iLabelRuleService.findLabelRulePageList(page, labelRuleVo);
+            labelRulePage = iLabelRuleService.selectLabelRulePageList(page, labelRuleVo);
         } catch (BaseException e) {
             labelRulePage.fail(e);
         }
@@ -80,12 +80,12 @@ public class LabelRuleController extends BaseController<LabelRule> {
     }
 
     @ApiOperation(value = "查询列表")
-    @RequestMapping(value = "/labelRule/query", method = RequestMethod.POST)
-    public WebResult<List<LabelRule>> queryList(@ModelAttribute LabelRuleVo labelRuleVo) {
+    @RequestMapping(value = "/labelRule/queryList", method = RequestMethod.POST)
+    public WebResult<List<LabelRule>> findList(@ModelAttribute LabelRuleVo labelRuleVo) {
         WebResult<List<LabelRule>> webResult = new WebResult<>();
         List<LabelRule> labelRuleList = new ArrayList<>();
         try {
-            labelRuleList = iLabelRuleService.findLabelRuleList(labelRuleVo);
+            labelRuleList = iLabelRuleService.selectLabelRuleList(labelRuleVo);
         } catch (BaseException e) {
             return webResult.fail(e);
         }
@@ -95,11 +95,11 @@ public class LabelRuleController extends BaseController<LabelRule> {
     @ApiOperation(value = "通过ID得到客户群规则")
     @ApiImplicitParam(name = "ruleId", value = "ID", required = true, paramType = "query", dataType = "string")
     @RequestMapping(value = "/labelRule/get", method = RequestMethod.POST)
-    public WebResult<LabelRule> getById(String ruleId) throws BaseException {
+    public WebResult<LabelRule> findById(String ruleId) throws BaseException {
         WebResult<LabelRule> webResult = new WebResult<>();
         LabelRule labelRule = new LabelRule();
         try {
-            labelRule = iLabelRuleService.getById(ruleId);
+            labelRule = iLabelRuleService.selectLabelRuleById(ruleId);
         } catch (BaseException e) {
             return webResult.fail(e);
         }
@@ -133,7 +133,7 @@ public class LabelRuleController extends BaseController<LabelRule> {
     public WebResult<String> save(@ApiIgnore LabelRule labelRule) {
         WebResult<String> webResult = new WebResult<>();
         try {
-            iLabelRuleService.saveT(labelRule);
+            iLabelRuleService.addLabelRule(labelRule);
         } catch (BaseException e) {
             return webResult.fail(e);
         }
@@ -165,17 +165,17 @@ public class LabelRuleController extends BaseController<LabelRule> {
             @ApiImplicitParam(name = "isNeedOffset", value = "是否需要偏移", required = false, paramType = "query", dataType = "int"),
             @ApiImplicitParam(name = "virtualLabelName", value = "虚标签名称", required = false, paramType = "query", dataType = "string") })
     @RequestMapping(value = "/labelRule/update", method = RequestMethod.POST)
-    public WebResult<String> update(@ApiIgnore LabelRule labelRule) {
+    public WebResult<String> edit(@ApiIgnore LabelRule labelRule) {
         WebResult<String> webResult = new WebResult<>();
         LabelRule oldLab = new LabelRule();
         try {
-            oldLab = iLabelRuleService.getById(labelRule.getRuleId());
+            oldLab = iLabelRuleService.selectLabelRuleById(labelRule.getRuleId());
         } catch (BaseException e) {
             return webResult.fail(e);
         }
         oldLab = fromToBean(labelRule, oldLab);
         try {
-            iLabelRuleService.updateT(oldLab);
+            iLabelRuleService.modifyLabelRule(oldLab);
         } catch (BaseException e1) {
             return webResult.fail(e1);
         }
@@ -185,10 +185,10 @@ public class LabelRuleController extends BaseController<LabelRule> {
     @ApiOperation(value = "删除")
     @ApiImplicitParam(name = "ruleId", value = "ID", required = true, paramType = "query", dataType = "string")
     @RequestMapping(value = "/labelRule/delete", method = RequestMethod.POST)
-    public WebResult<String> delete(String ruleId) {
+    public WebResult<String> del(String ruleId) {
         WebResult<String> webResult = new WebResult<>();
         try {
-            iLabelRuleService.deleteById(ruleId);
+            iLabelRuleService.deleteLabelRule(ruleId);
         } catch (BaseException e) {
             return webResult.fail(e);
         }

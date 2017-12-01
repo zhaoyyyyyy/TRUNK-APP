@@ -48,7 +48,7 @@ public interface IPreConfigInfoDao extends BaseDao<PreConfigInfo, String> {
      * @param dataSourceInfo
      * @return
      */
-    public Page<PreConfigInfo> findPreConfigInfoPageList(Page<PreConfigInfo> page, PreConfigInfoVo preConfigInfoVo);
+    public Page<PreConfigInfo> selectPreConfigInfoPageList(Page<PreConfigInfo> page, PreConfigInfoVo preConfigInfoVo);
 
     /**
      * 根据条件查询专区列表
@@ -57,7 +57,7 @@ public interface IPreConfigInfoDao extends BaseDao<PreConfigInfo, String> {
      * @param dataSourceInfo
      * @return
      */
-    public List<PreConfigInfo> findPreConfigInfoList(PreConfigInfoVo preConfigInfoVo);
+    public List<PreConfigInfo> selectPreConfigInfoList(PreConfigInfoVo preConfigInfoVo);
 
     /**
      * 根据专区名称查询专区
@@ -65,6 +65,6 @@ public interface IPreConfigInfoDao extends BaseDao<PreConfigInfo, String> {
      * @param sourceName
      * @return
      */
-    public PreConfigInfo findOneBySourceName(String sourceName);
+    public PreConfigInfo selectOneBySourceName(String sourceName);
 
 }

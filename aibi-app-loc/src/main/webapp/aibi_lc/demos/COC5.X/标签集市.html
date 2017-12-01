@@ -2,13 +2,22 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>按钮组demo</title>
+<title>标签集市</title>
 <!--[if IE]>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
 <![endif]-->
 
 <link href="../../asset/css/common/reset.css" rel="stylesheet"  /> 
-<script type="text/javascript" src="../asset/script/common/jQuery/jquery-1.12.4.js"></script>
+<link href="../../asset/css/jQueryUI/jquery-ui-1.12.1.min.css" rel="stylesheet"  />
+<link href="../../asset/script/common/jQuery/jQueryUI/gird/page/page.css" rel="stylesheet"  />
+<link href="../../asset/css/theme/default/dialog.owner.css" rel="stylesheet"  /> 
+<link href="../../asset/css/theme/default/button.css" rel="stylesheet"  /> 
+<link href="../../asset/css/theme/default/form.css" rel="stylesheet"  /> 
+<link href="../../asset/css/theme/default/tab.css" rel="stylesheet"  /> 
+<link href="../../asset/css/theme/default/coc_frame.css" rel="stylesheet"  /> 
+<link href="../../asset/css/theme/default/main.css" rel="stylesheet"  /> 
+<script type="text/javascript" src="../../asset/script/common/jQuery/jquery-1.12.4.js"></script>
+<script type="text/javascript" src="../../asset/script/common/jQuery/jQueryUI/jquery-ui-1.12.1.min.js"></script>
 <!--
 	H5兼容js CSS3 兼容JS
 -->
@@ -17,8 +26,815 @@
   <script src="http://apps.bdimg.com/libs/html5shiv/3.7/html5shiv.min.js"></script>
   <script src="http://apps.bdimg.com/libs/respond.js/1.4.2/respond.min.js"></script>
 <![endif]-->
+<script type="text/javascript">
+$(function(){
+	$( "#sortable > .ui-conditionCT,.ui-calc-h3>span>em" ).draggable({
+		helper: function( event ) {
+			if($(event.target).hasClass("J-drag-bracket")){
+       	 	   return $(event.target).attr("data-attr") == "left"?$( '<span class="ui-bracket left">(</span>' ):$( '<span class="ui-bracket left">)</span>' );
+			}
+       	  return $( '<h4 class="ui-conditionCT-h4 ui-conditionCT-h4-helper">2G数据流量<em></em><i></i></h4>' );
+    	},
+    	cursor: "crosshair",
+    	start:function(event,ui){
+      	  $(".ui-chaining").hide();
+      	  var items = $("#sortable > .ui-conditionCT");
+      	  var calc= '<div class="ui-state-highlight ui-sortablr-helper J-helper"></div>';
+      	  $("#sortable > .ui-bracket.left").before(calc);
+      	  $("#sortable > .ui-bracket").after(calc);
+  		  $(items).after(calc);
+  		  $(".J-helper").droppable({
+	  	  	   hoverClass: "ui-drop-highlight",
+	  		   greedy:true,
+	  		   drop: function( event, ui ) {
+	  				var onDragTag=ui.draggable;
+	  			   if(onDragTag.hasClass("J-drag-bracket")){
+	  				 onDragTag = onDragTag.attr("data-attr") == "left"?'<span class="ui-bracket left">(</span>':'<span class="ui-bracket right">)<i></i></span>'
+	  				 $(this).after(onDragTag);
+	  				 return;
+	  			   }
+	  		        $(this).after(onDragTag);
+	  		        var chains = $("#sortable > .ui-chaining");
+	  		     	var CTitems = $("#sortable > .ui-conditionCT");
+	  		        for(var i =0,len = chains.length;i<len;i++){
+	  		        	$(CTitems[i]).after(chains[i]);
+	  		        }
+	  	       },
+	  	       over:function(){
+	  	    	   
+	  	       }
+	  	   });
+        },
+        stop:function(event,ui){
+      	  $(".ui-chaining").show();
+      	  $(".J-helper").remove();
+        }
+	});
+	$(".ui-shop-cart").click(function(){
+		$(".ui-calculate-center").addClass("heightAuto");
+	});
+	$(".J-min").click(function(){
+		$(".ui-calculate-center").removeClass("heightAuto");
+	});
+	
+	$(".ui-dialog").dialog({
+	      height: 515,
+	      width: 560,
+	      modal: true,
+	      title:"新建/修改",
+	      buttons: [
+	    	    {
+	    	      text: "取消",
+	    	      "class":"ui-btn ui-btn-second",
+	    	      click: function() {
+	    	        $( this ).dialog( "close" );
+	    	      }
+    	        },
+    	        {
+	    	      text: "确定",
+	    	      "class":"ui-btn ui-btn-default",
+	    	      click: function() {
+	    	        $( this ).dialog( "close" );
+	    	      }
+    	 
+	    	      // Uncommenting the following line would hide the text,
+	    	      // resulting in the label being used as a tooltip
+	    	      //showText: false
+	    	    }
+    	  ]
+    });
+	
+	
+	
+});
+
+</script>
 </head>
-<body  >
+<body>
+ <div class="ui-header clearfix">
+ 	<div class="ui-header-logo fleft">
+ 		<img src="../../asset/css/theme/default/images/logo.png"/>
+ 	</div>
+ 	<div class="ui-header-content fleft">
+ 		<div class="clearfix">
+ 			<div class="ui-header-search fleft">
+		        <div class="control-input has-icon">
+		          <input type="text" class="form-control" id="inputEmail4" placeholder="搜索" >
+		          <span class="glyphicon-search form-control-feedback"></span>
+		        </div>
+ 			</div>
+ 			<div class="ui-notice fright">
+ 				<i class="ui-help"></i>
+ 				<i class="ui-clock"></i>
+ 				<i class="ui-tag"></i>
+ 				<i class="ui-notice-icon">
+ 					<span>8</span>
+ 				</i>
+ 				<span class="ui-login-header">
+ 					<img alt="" src="../../asset/images/timg.jpg" />
+ 					<em class="ui-user-info"></em>
+ 				</span>
+ 			</div>
+ 		</div>
+ 	</div>
+ </div>
+ <div class="ui-container clearfix">
+ 	<div class="ui-menu fleft">
+ 		<ul class="ui-menu-ul">
+ 			<li>
+ 				<a href="javascript:;">首页</a>
+ 			</li>
+ 			<li class="active">
+ 				<a href="javascript:;">标签集市</a>
+ 			</li>
+ 			<li>
+ 				<a href="javascript:;">优秀案例</a>
+ 			</li>
+ 			<li>
+ 				<a href="javascript:;">客户群集市</a>
+ 			</li>
+ 			<li>
+ 				<a href="javascript:;">我的客户群</a>
+ 			</li>
+ 			<li>
+ 				<a href="javascript:;">营销效果评估</a>
+ 			</li>
+ 			<li>
+ 				<a href="javascript:;">标签管理</a>
+ 			</li>
+ 			<li>
+ 				<a href="javascript:;">消息管理</a>
+ 			</li>
+ 			<li>
+ 				<a href="javascript:;">其他</a>
+ 			</li>
+ 		</ul>
+ 	</div>
+ 	<div class="ui-main fleft">
+ 		<div>
+ 			<div class="ui-lc-mian">
+ 				<h3>标签集市</h3>
+ 				<div class="ui-label-mes clearfix">
+ 					<span class="fleft">标签集市 &nbsp; &nbsp;共<b>88</b>个标签</span>
+			         <div class="form-group fright">
+					      <div class="input-group">
+					          <input type="text" class="form-control" id="exampleInputAmount" placeholder="请输入标签关键字">
+					          <span class="input-group-addon input-group-icon right-child input-pointer"></span>
+					      </div>
+				      </div>
+ 				</div>
+ 				<ul class="ui-label-system">
+ 					<li class="not-border">
+ 						<div class="clearfix">
+ 							<label class="fleft">集团：</label>
+ 							<div class="fleft">
+ 								<a href="javascript:;" class="all-active"><!-- all-active 去掉非选中状态 -->
+ 									全部
+ 								</a>
+ 								<a href="javascript:;">
+ 									<em>在网状态</em>
+ 									<i></i>
+ 								</a>
+ 								<a href="javascript:;" class="active">
+ 									<em>在网状态</em>
+ 									<i></i>
+ 								</a>
+ 								<a href="javascript:;">
+ 									<em>在网状态</em>
+ 									<i></i>
+ 								</a>
+ 								<a href="javascript:;">
+ 									<em>在网状态</em>
+ 									<i></i>
+ 								</a>
+ 								<a href="javascript:;">
+ 									<em>在网状态</em>
+ 									<i></i>
+ 								</a>
+ 								<a href="javascript:;">
+ 									<em>在网状态</em>
+ 									<i></i>
+ 								</a>
+ 							</div>
+ 						</div>
+ 						<ul class="ui-label-sec ui-label-system">
+ 							<li class="clearfix">
+ 								<label class="fleft font-weight">在网状态：</label>
+	 							<div class="fleft">
+	 							</div>
+ 							</li>
+ 							<li class="clearfix not-border">
+ 								<label class="fleft font-weight">停开机状态：</label>
+	 							<div class="fleft">
+	 								<a href="javascript:;" class="all-active"><!-- all-active 去掉非选中状态 -->
+	 									催停类型
+	 								</a>
+	 								<a href="javascript:;" class="all-active"><!-- all-active 去掉非选中状态 -->
+	 									催停类型(日)
+	 								</a>
+	 							</div>
+ 							
+ 							</li>
+ 						</ul>
+ 					</li>
+ 					<li>
+ 						<div class="clearfix">
+ 							<label class="fleft">邮务：</label>
+ 							<div class="fleft">
+ 								<a href="javascript:;" class="all-active"><!-- all-active 去掉非选中状态 -->
+ 									全部
+ 								</a>
+ 								<a href="javascript:;">
+ 									<em>在网状态</em>
+ 									<i></i>
+ 								</a>
+ 								<a href="javascript:;">
+ 									<em>在网状态</em>
+ 									<i></i>
+ 								</a>
+ 								<a href="javascript:;">
+ 									<em>在网状态</em>
+ 									<i></i>
+ 								</a>
+ 								<a href="javascript:;">
+ 									<em>在网状态</em>
+ 									<i></i>
+ 								</a>
+ 								<a href="javascript:;">
+ 									<em>在网状态</em>
+ 									<i></i>
+ 								</a>
+ 								<a href="javascript:;">
+ 									<em>在网状态</em>
+ 									<i></i>
+ 								</a>
+ 							</div>
+ 						</div>
+ 					</li>
+ 					<li>
+ 						<div class="clearfix">
+ 							<label class="fleft">邮储银行：</label>
+ 							<div class="fleft">
+ 								<a href="javascript:;" class="all-active"><!-- all-active 去掉非选中状态 -->
+ 									全部
+ 								</a>
+ 								<a href="javascript:;">
+ 									<em>在网状态</em>
+ 									<i></i>
+ 								</a>
+ 								<a href="javascript:;">
+ 									<em>在网状态</em>
+ 									<i></i>
+ 								</a>
+ 								<a href="javascript:;">
+ 									<em>在网状态</em>
+ 									<i></i>
+ 								</a>
+ 								<a href="javascript:;">
+ 									<em>在网状态</em>
+ 									<i></i>
+ 								</a>
+ 								<a href="javascript:;">
+ 									<em>在网状态</em>
+ 									<i></i>
+ 								</a>
+ 								<a href="javascript:;">
+ 									<em>在网状态</em>
+ 									<i></i>
+ 								</a>
+ 							</div>
+ 						</div>
+ 					</li>
+ 					<li>
+ 						<div class="clearfix">
+ 							<label class="fleft">速递物流：</label>
+ 							<div class="fleft">
+ 								<a href="javascript:;" class="all-active"><!-- all-active 去掉非选中状态 -->
+ 									全部
+ 								</a>
+ 								<a href="javascript:;">
+ 									<em>在网状态</em>
+ 									<i></i>
+ 								</a>
+ 								<a href="javascript:;">
+ 									<em>在网状态</em>
+ 									<i></i>
+ 								</a>
+ 								<a href="javascript:;">
+ 									<em>在网状态</em>
+ 									<i></i>
+ 								</a>
+ 								<a href="javascript:;">
+ 									<em>在网状态</em>
+ 									<i></i>
+ 								</a>
+ 								<a href="javascript:;">
+ 									<em>在网状态</em>
+ 									<i></i>
+ 								</a>
+ 								<a href="javascript:;">
+ 									<em>在网状态</em>
+ 									<i></i>
+ 								</a>
+ 							</div>
+ 						</div>
+ 					</li>
+ 					<li>
+ 						<div class="clearfix">
+ 							<label class="fleft">地市：</label>
+ 							<div class="fleft">
+ 								<a href="javascript:;" class="all-active"><!-- all-active 去掉非选中状态 -->
+ 									全部
+ 								</a>
+ 								<a href="javascript:;">
+ 									<em>在网状态</em>
+ 								</a>
+ 								<a href="javascript:;">
+ 									<em>在网状态</em>
+ 								</a>
+ 								<a href="javascript:;">
+ 									<em>在网状态</em>
+ 								</a>
+ 								<a href="javascript:;">
+ 									<em>在网状态</em>
+ 								</a>
+ 								<a href="javascript:;">
+ 									<em>在网状态</em>
+ 								</a>
+ 								<a href="javascript:;">
+ 									<em>在网状态</em>
+ 								</a>
+ 							</div>
+ 						</div>
+ 					</li>
+ 					<li>
+ 						<div class="clearfix">
+ 							<label class="fleft">发布时间：</label>
+ 							<div class="fleft">
+ 								<a href="javascript:;" class="all-active fleft"><!-- all-active 去掉非选中状态 -->
+ 									全部
+ 								</a>
+ 								<a href="javascript:;" class="fleft">
+ 									<em>一天</em>
+ 								</a>
+ 								<a href="javascript:;" class="fleft">
+ 									<em>一个月</em>
+ 								</a>
+ 								<a href="javascript:;" class="fleft">
+ 									<em>三个月</em>
+ 								</a>
+ 								<div class="control-input">
+					        		<div class="control-input date-input fleft has-icon">
+							          	<input type="text" class="form-control input-pointer" id="inputEmail4" placeholder="请选择开始日期" readonly="readonly">
+							          	<span class="glyphicon-date form-control-feedback"></span>
+							        </div>
+							        <div class="control-input date-input fleft ml10 has-icon">
+							          	<input type="text" class="form-control input-pointer" id="inputEmail4" placeholder="请选择结束日期" readonly="readonly">
+							          	<span class="glyphicon-date form-control-feedback"></span>
+							        </div>
+						        </div>
+ 							</div>
+ 						</div>
+ 					</li>
+ 					<li class="not-border">
+ 						<div class="clearfix">
+ 							<label class="fleft">更新周期：</label>
+ 							<div class="fleft">
+ 								<a href="javascript:;" class="all-active"><!-- all-active 去掉非选中状态 -->
+ 									全部
+ 								</a>
+ 								<a href="javascript:;">
+ 									<em>日</em>
+ 								</a>
+ 								<a href="javascript:;">
+ 									<em>月</em>
+ 								</a>
+ 								<a href="javascript:;">
+ 									<em>周</em>
+ 								</a>
+ 								<a href="javascript:;">
+ 									<em>一次性</em>
+ 								</a>
+ 							</div>
+ 						</div>
+ 					</li>
+ 				</ul>
+ 			</div>
+ 			<div class="ui-filter-bar ui-lc-mian">
+ 				<a href="javascript:;" class="active">人气</a>
+ 				<a href="javascript:;">发布时间</a>
+ 				<a href="javascript:;">
+					<em class="fleft">新标签：</em>
+					<em class="fleft">34563</em>
+					<i class="ui-refresh fleft"></i>
+				</a>
+ 			</div>
+ 			<ul class="clearfix ui-label-list">
+ 				<li>
+ 					<div class="ui-label-info">
+ 						<h3 class="clearfix">
+ 							<span>三里屯附近用户</span>
+ 							<i></i>
+ 						</h3>
+ 						<div class="ui-label-item">
+ 							<a href="javascript:;">
+ 								<b>28,856</b>人
+ 							</a>
+ 							<a href="javascript:;" class="ui-label-time">
+ 								月
+ 							</a>
+ 							<a href="javascript:;" class="not-border ui-label-date">
+ 								2017-10
+ 							</a>
+ 						</div>
+ 						<h4 class="ui-business-caliber">
+ 							业务口径
+ 						</h4>
+ 						<p>用户当月访问互联网二级应用所产生的流量大于200，单位：MB</p>
+ 						<h4 class="ui-business-caliber">
+ 							标签路径
+ 						</h4>
+ 						<p>互联网月访问流量大于200M</p>
+ 					</div>
+ 				</li>
+ 				<li>
+ 					<div class="ui-label-info">
+ 						<h3 class="clearfix">
+ 							<span>三里屯附近用户</span>
+ 							<i></i>
+ 						</h3>
+ 						<div class="ui-label-item">
+ 							<a href="javascript:;">
+ 								<b>28,856</b>人
+ 							</a>
+ 							<a href="javascript:;" class="ui-label-time">
+ 								实时
+ 							</a>
+ 							<a href="javascript:;" class="ui-label-date not-border">
+ 								5分钟前
+ 							</a>
+ 						</div>
+ 						<h4 class="ui-business-caliber">
+ 							业务口径
+ 						</h4>
+ 						<p>暂无</p>
+ 						<h4 class="ui-business-caliber">
+ 							标签路径
+ 						</h4>
+ 						<p>
+							<span>游离状态，需要</span>
+							<a href="javascript:;" class="ui-set-label">设置标签路径</a>
+						</p>
+ 					</div>
+ 				</li>
+ 				<li>
+ 					<div class="ui-label-info">
+ 						<h3 class="clearfix">
+ 							<span>三里屯附近用户</span>
+ 							<i></i>
+ 						</h3>
+ 						<div class="ui-label-item">
+ 							<a href="javascript:;">
+ 								<b>28,856</b>人
+ 							</a>
+ 							<a href="javascript:;" class="ui-label-time">
+ 								月
+ 							</a>
+ 							<a href="javascript:;" class="not-border ui-label-date">
+ 								2017-10
+ 							</a>
+ 						</div>
+ 						<h4 class="ui-business-caliber">
+ 							业务口径
+ 						</h4>
+ 						<p>用户当月访问互联网二级应用所产生的流量大于200，单位：MB</p>
+ 						<h4 class="ui-business-caliber">
+ 							标签路径
+ 						</h4>
+ 						<p>互联网月访问流量大于200M</p>
+ 					</div>
+ 				</li>
+ 				<li class="padding0">
+ 					<div class="ui-label-info">
+ 						<h3 class="clearfix">
+ 							<span>三里屯附近用户</span>
+ 							<i></i>
+ 						</h3>
+ 						<div class="ui-label-item">
+ 							<a href="javascript:;">
+ 								<b>28,856</b>人
+ 							</a>
+ 							<a href="javascript:;" class="ui-label-time">
+ 								月
+ 							</a>
+ 							<a href="javascript:;" class="not-border ui-label-date">
+ 								2017-10
+ 							</a>
+ 						</div>
+ 						<h4 class="ui-business-caliber">
+ 							业务口径
+ 						</h4>
+ 						<p>用户当月访问互联网二级应用所产生的流量大于200，单位：MB</p>
+ 						<h4 class="ui-business-caliber">
+ 							标签路径
+ 						</h4>
+ 						<p>互联网月访问流量大于200M</p>
+ 					</div>
+ 				</li>
+ 				<li>
+ 					<div class="ui-label-info">
+ 						<h3 class="clearfix">
+ 							<span>三里屯附近用户</span>
+ 							<i></i>
+ 						</h3>
+ 						<div class="ui-label-item">
+ 							<a href="javascript:;">
+ 								<b>28,856</b>人
+ 							</a>
+ 							<a href="javascript:;" class="ui-label-time">
+ 								月
+ 							</a>
+ 							<a href="javascript:;" class="not-border ui-label-date">
+ 								2017-10
+ 							</a>
+ 						</div>
+ 						<h4 class="ui-business-caliber">
+ 							业务口径
+ 						</h4>
+ 						<p>用户当月访问互联网二级应用所产生的流量大于200，单位：MB</p>
+ 						<h4 class="ui-business-caliber">
+ 							标签路径
+ 						</h4>
+ 						<p>互联网月访问流量大于200M</p>
+ 					</div>
+ 				</li>
+ 				<li>
+ 					<div class="ui-label-info">
+ 						<h3 class="clearfix">
+ 							<span>三里屯附近用户</span>
+ 							<i></i>
+ 						</h3>
+ 						<div class="ui-label-item">
+ 							<a href="javascript:;">
+ 								<b>28,856</b>人
+ 							</a>
+ 							<a href="javascript:;" class="ui-label-time">
+ 								实时
+ 							</a>
+ 							<a href="javascript:;" class="ui-label-date not-border">
+ 								5分钟前
+ 							</a>
+ 						</div>
+ 						<h4 class="ui-business-caliber">
+ 							业务口径
+ 						</h4>
+ 						<p>暂无</p>
+ 						<h4 class="ui-business-caliber">
+ 							标签路径
+ 						</h4>
+ 						<p>
+							<span>游离状态，需要</span>
+							<a href="javascript:;" class="ui-set-label">设置标签路径</a>
+						</p>
+ 					</div>
+ 				</li>
+ 				<li>
+ 					<div class="ui-label-info">
+ 						<h3 class="clearfix">
+ 							<span>三里屯附近用户</span>
+ 							<i></i>
+ 						</h3>
+ 						<div class="ui-label-item">
+ 							<a href="javascript:;">
+ 								<b>28,856</b>人
+ 							</a>
+ 							<a href="javascript:;" class="ui-label-time">
+ 								月
+ 							</a>
+ 							<a href="javascript:;" class="not-border ui-label-date">
+ 								2017-10
+ 							</a>
+ 						</div>
+ 						<h4 class="ui-business-caliber">
+ 							业务口径
+ 						</h4>
+ 						<p>用户当月访问互联网二级应用所产生的流量大于200，单位：MB</p>
+ 						<h4 class="ui-business-caliber">
+ 							标签路径
+ 						</h4>
+ 						<p>互联网月访问流量大于200M</p>
+ 					</div>
+ 				</li>
+ 				<li class="padding0">
+ 					<div class="ui-label-info">
+ 						<h3 class="clearfix">
+ 							<span>三里屯附近用户</span>
+ 							<i></i>
+ 						</h3>
+ 						<div class="ui-label-item">
+ 							<a href="javascript:;">
+ 								<b>28,856</b>人
+ 							</a>
+ 							<a href="javascript:;" class="ui-label-time">
+ 								月
+ 							</a>
+ 							<a href="javascript:;" class="not-border ui-label-date">
+ 								2017-10
+ 							</a>
+ 						</div>
+ 						<h4 class="ui-business-caliber">
+ 							业务口径
+ 						</h4>
+ 						<p>用户当月访问互联网二级应用所产生的流量大于200，单位：MB</p>
+ 						<h4 class="ui-business-caliber">
+ 							标签路径
+ 						</h4>
+ 						<p>互联网月访问流量大于200M</p>
+ 					</div>
+ 				</li>
+ 			</ul>
+ 			<div class="ui-jqgrid-pager ui-state-default ui-corner-bottom mb50">
+ 				<div class="clearfix"><div class="fleft totalPage">
+ 					<span class="fleft">共13条记录，2页，当前第2页</span>
+ 				</div>
+ 				<div id="jsonmap1_pager" class="tcdPageCode">
+ 					<a href="javascript:;" class="prevPage">上一页</a>
+ 					<a href="javascript:;" class="tcdNumber">1</a>
+ 					<span class="current">2</span>
+					<span class="disabled">下一页</span>
+					<select class="ui-pg-selbox ui-widget-content ui-corner-all" title="每页记录数">
+						<option role="option" value="10" selected="selected">10</option>
+						<option role="option" value="20">20</option>
+						<option role="option" value="30">30</option>
+					</select>
+					<span class="inputPageNum">第<input type="text" id="jsonmap1_pageNum">页</span>
+					<a href="javascript:;" class="jumpPageNum">跳转</a>
+				</div>
+			   </div>
+		    </div>
+ 			
+ 		<!-- todo -->
+ 			<!-- 计算中心 -->
+ 			<div class="ui-calculate-center">
+ 				<h3 class="ui-calc-h3">
+ 					标签配置
+ 					<span>
+ 						<em data-attr="left" class="J-drag-bracket">(</em>
+ 						<em data-attr="right" class="J-drag-bracket">)</em>
+ 						<i class="J-min"></i>
+ 					</span>
+ 				</h3>
+ 				<div class="ui-calc-content clearfix" id="sortable">
+ 					<span class="ui-bracket left">(</span>
+ 					<div class="ui-conditionCT">
+ 						<h4 class="ui-conditionCT-h4">
+ 							2G数据流量
+ 							<em></em>
+ 							<i></i>
+ 						</h4>
+ 						<div class="ui-conditionCT-content align_center">
+ 							<i class="ui-nothing-icon">
+ 								<em></em>
+ 								请点击设置
+ 							</i>
+ 						</div>
+ 					</div>
+ 					<div class="ui-chaining">
+ 						<div class="dropdown open">
+							<button type="button" class="ui-btn ui-btn-menu ui-icon-btn">
+						     	<span class="fleft">剔除</span>
+						     	<span class="caret"></span>
+						     </button>
+						     <ul class="dropdown-menu">
+						       <li><a href="#">或</a></li>
+						       <li><a href="#">与</a></li>
+						       <li><a href="#">剔除</a></li>
+					        </ul>      
+						</div>
+ 					</div>
+ 					<div class="ui-conditionCT">
+ 						<h4 class="ui-conditionCT-h4">
+ 							2G数据流量
+ 							<em></em>
+ 							<i></i>
+ 						</h4>
+ 						<div class="ui-conditionCT-content">
+ 							<h5>已选条件：</h5>
+ 							<div class="clearfix">
+ 								<a href="javascript:;">同济大学南校</a>
+ 								<a href="javascript:;">同济大学南校</a>
+ 								<a href="javascript:;">同济大学音乐学院</a>
+ 								<a href="javascript:;">同济大学南校</a>
+ 							</div>
+ 						</div>
+ 					</div>
+ 					<span class="ui-bracket right">
+ 						)
+ 						<i></i>
+ 					</span>
+ 					<div class="ui-chaining">
+ 						<div class="dropdown">
+							<button type="button" class="ui-btn ui-btn-menu ui-icon-btn">
+						     	<span class="fleft">剔除</span>
+						     	<span class="caret"></span>
+						     </button>
+						     <ul class="dropdown-menu">
+						       <li><a href="#">或</a></li>
+						       <li><a href="#">与</a></li>
+						       <li><a href="#">剔除</a></li>
+					        </ul>      
+						</div>
+ 					</div>
+ 					<div class="ui-conditionCT">
+ 						<h4 class="ui-conditionCT-h4 ui-inverse">
+ 							2G数据流量
+ 							<em></em>
+ 							<i></i>
+ 						</h4>
+ 						<div class="ui-conditionCT-content align_center">
+ 							<i class="ui-nothing-icon">
+ 								<em></em>
+ 								请点击设置
+ 							</i>
+ 						</div>
+ 						<div class="tooltip top" role="tooltip">
+					      <div class="tooltip-arrow"></div>
+					      <div class="tooltip-inner">
+					        	鼠标点击标签反选
+					      </div>
+					    </div>
+ 					</div>
+ 					
+ 					
+ 					
+ 					
+ 					
+ 					
+ 					
+ 					
+ 					
+ 					
+ 					
+ 					
+ 					
+ 					
+ 				</div>
+ 			</div>
+ 			<!-- 购物车 -->
+			<div class="ui-shop-cart">
+				<p class="fleft ui-shop-cart-icon">
+					<i></i>
+					<span>已选择标签  1  个</span>
+				</p>
+				<p class="fright">
+					<span>客户群数：</span>
+					<span class="y-text">18,290,40</span>
+					<button type="button" class="ui-btn ui-btn-default mr10">
+                        <span class="create-white"></span>
+                       	 创建客户群
+                    </button>
+				</p>
+			</div>
+ 		</div>
+ 	</div>
+ </div>
+ <!-- 计算中心弹框 -->
+ <div class="ui-dialog">
+	<div class="clearfix ui-enum-content">
+		<div class="fleft">
+			<div class="ui-enum-list">
+				<div class="ui-enum-header"></div>
+				<ul>
+				
+				</ul>
+			</div>
+		
+		</div>
+		<div class="fleft">
+			<div class="ui-enum-header"></div>
+			<ul>
+			
+			</ul>
+		</div>
+	</div>
+ </div>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
  
  
  

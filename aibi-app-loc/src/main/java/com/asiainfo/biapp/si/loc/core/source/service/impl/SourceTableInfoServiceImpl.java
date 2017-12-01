@@ -20,7 +20,9 @@ import com.asiainfo.biapp.si.loc.base.exception.ParamRequiredException;
 import com.asiainfo.biapp.si.loc.base.page.Page;
 import com.asiainfo.biapp.si.loc.base.service.impl.BaseServiceImpl;
 import com.asiainfo.biapp.si.loc.core.source.dao.ISourceTableInfoDao;
+import com.asiainfo.biapp.si.loc.core.source.entity.SourceInfo;
 import com.asiainfo.biapp.si.loc.core.source.entity.SourceTableInfo;
+import com.asiainfo.biapp.si.loc.core.source.service.ISourceInfoService;
 import com.asiainfo.biapp.si.loc.core.source.service.ISourceTableInfoService;
 import com.asiainfo.biapp.si.loc.core.source.vo.SourceTableInfoVo;
 
@@ -57,6 +59,9 @@ public class SourceTableInfoServiceImpl extends BaseServiceImpl<SourceTableInfo,
 
     @Autowired
     private ISourceTableInfoDao iSourceTableInfoDao;
+    
+    @Autowired
+    private ISourceInfoService iSourceInfoService;
 
     @Override
     protected BaseDao<SourceTableInfo, String> getBaseDao() {
@@ -80,7 +85,17 @@ public class SourceTableInfoServiceImpl extends BaseServiceImpl<SourceTableInfo,
     }
 
     public void addSourceTableInfo(SourceTableInfo sourceTableInfo) throws BaseException {
+        if(!sourceTableInfo.getSourceInfoList().isEmpty()&&"please-format-sourceInfoList".equals(sourceTableInfo.getSourceInfoList().get(0).getSourceTableId())){
+            throw new ParamRequiredException("指标信息列表格式不正确");
+        }
         super.saveOrUpdate(sourceTableInfo);
+        if(!sourceTableInfo.getSourceInfoList().isEmpty()){
+            for(SourceInfo s : sourceTableInfo.getSourceInfoList()){
+                s.setSourceColumnRule(s.getColumnName());
+                s.setSourceTableId(sourceTableInfo.getSourceTableId());
+                iSourceInfoService.addSourceInfo(s);
+            }
+        }
     }
 
     public void modifySourceTableInfo(SourceTableInfo sourceTableInfo) throws BaseException {
@@ -90,6 +105,9 @@ public class SourceTableInfoServiceImpl extends BaseServiceImpl<SourceTableInfo,
     public void deleteSourceTableInfo(String sourceTableId) throws BaseException {
         if (StringUtils.isBlank(sourceTableId)) {
             throw new ParamRequiredException("ID不能为空");
+        }
+        if(selectSourceTableInfoById(sourceTableId)==null){
+            throw new ParamRequiredException("ID不存在");
         }
         super.delete(sourceTableId);
     }

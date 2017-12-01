@@ -62,7 +62,7 @@ public class LabelExtInfoServiceImpl extends BaseServiceImpl<LabelExtInfo, Strin
         return iLabelExtInfoDao;
     }
 
-    public Page<LabelExtInfo> findLabelExtInfoPageList(Page<LabelExtInfo> page, LabelExtInfoVo labelExtInfoVo)
+    public Page<LabelExtInfo> selectLabelExtInfoPageList(Page<LabelExtInfo> page, LabelExtInfoVo labelExtInfoVo)
             throws BaseException {
         if (labelExtInfoVo.getLabelPrecision() != null) {
             if (labelExtInfoVo.getLabelPrecision() >= 1) {
@@ -74,10 +74,10 @@ public class LabelExtInfoServiceImpl extends BaseServiceImpl<LabelExtInfo, Strin
                 throw new ParamRequiredException("标签覆盖率需要小于1");
             }
         }
-        return iLabelExtInfoDao.findLabelExtInfoPageList(page, labelExtInfoVo);
+        return iLabelExtInfoDao.selectLabelExtInfoPageList(page, labelExtInfoVo);
     }
 
-    public List<LabelExtInfo> findLabelExtInfoList(LabelExtInfoVo labelExtInfoVo) throws BaseException {
+    public List<LabelExtInfo> selectLabelExtInfoList(LabelExtInfoVo labelExtInfoVo) throws BaseException {
         if (labelExtInfoVo.getLabelPrecision() != null) {
             if (labelExtInfoVo.getLabelPrecision() >= 1) {
                 throw new ParamRequiredException("标签准确率需要小于1");
@@ -88,17 +88,17 @@ public class LabelExtInfoServiceImpl extends BaseServiceImpl<LabelExtInfo, Strin
                 throw new ParamRequiredException("标签覆盖率需要小于1");
             }
         }
-        return iLabelExtInfoDao.findLabelExtInfoList(labelExtInfoVo);
+        return iLabelExtInfoDao.selectLabelExtInfoList(labelExtInfoVo);
     }
 
-    public LabelExtInfo getById(String labelId) throws BaseException {
+    public LabelExtInfo selectLabelExtInfoById(String labelId) throws BaseException {
         if (StringUtils.isBlank(labelId)) {
             throw new ParamRequiredException("ID不能为空");
         }
         return super.get(labelId);
     }
 
-    public void saveT(LabelExtInfo labelExtInfo) throws BaseException {
+    public void addLabelExtInfo(LabelExtInfo labelExtInfo) throws BaseException {
         if (labelExtInfo.getLabelPrecision() != null) {
             if (labelExtInfo.getLabelPrecision() >= 1) {
                 throw new ParamRequiredException("标签准确率需要小于1");
@@ -112,7 +112,7 @@ public class LabelExtInfoServiceImpl extends BaseServiceImpl<LabelExtInfo, Strin
         super.saveOrUpdate(labelExtInfo);
     }
 
-    public void updateT(LabelExtInfo labelExtInfo) throws BaseException {
+    public void modifyLabelExtInfo(LabelExtInfo labelExtInfo) throws BaseException {
         if (labelExtInfo.getLabelPrecision() >= 1) {
             throw new ParamRequiredException("标签准确率需要小于1");
         }
@@ -122,9 +122,12 @@ public class LabelExtInfoServiceImpl extends BaseServiceImpl<LabelExtInfo, Strin
         super.saveOrUpdate(labelExtInfo);
     }
 
-    public void deleteById(String labelId) throws BaseException {
+    public void deleteLabelExtInfo(String labelId) throws BaseException {
         if (StringUtils.isBlank(labelId)) {
             throw new ParamRequiredException("ID不能为空");
+        }
+        if (selectLabelExtInfoById(labelId)==null){
+            throw new ParamRequiredException("ID不存在");
         }
         super.delete(labelId);
     }

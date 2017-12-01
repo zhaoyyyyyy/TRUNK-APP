@@ -75,10 +75,10 @@ public class LabelInfoController extends BaseController<LabelInfo> {
 
     @ApiOperation(value = "分页查询")
     @RequestMapping(value = "/labelInfoPage/query", method = RequestMethod.POST)
-    public Page<LabelInfo> queryPage(@ModelAttribute Page<LabelInfo> page, @ModelAttribute LabelInfoVo labelInfoVo) {
+    public Page<LabelInfo> list(@ModelAttribute Page<LabelInfo> page, @ModelAttribute LabelInfoVo labelInfoVo) {
         Page<LabelInfo> labelInfoPage = new Page<>();
         try {
-            labelInfoPage = iLabelInfoService.findLabelInfoPageList(page, labelInfoVo);
+            labelInfoPage = iLabelInfoService.selectLabelInfoPageList(page, labelInfoVo);
         } catch (BaseException e) {
             labelInfoPage.fail(e);
         }
@@ -86,12 +86,12 @@ public class LabelInfoController extends BaseController<LabelInfo> {
     }
 
     @ApiOperation(value = "查询列表")
-    @RequestMapping(value = "/labelInfo/query", method = RequestMethod.POST)
-    public WebResult<List<LabelInfo>> queryList(@ModelAttribute LabelInfoVo labelInfoVo) {
+    @RequestMapping(value = "/labelInfo/queryList", method = RequestMethod.POST)
+    public WebResult<List<LabelInfo>> findList(@ModelAttribute LabelInfoVo labelInfoVo) {
         WebResult<List<LabelInfo>> webResult = new WebResult<>();
         List<LabelInfo> labelInfoList = new ArrayList<>();
         try {
-            labelInfoList = iLabelInfoService.findLabelInfoList(labelInfoVo);
+            labelInfoList = iLabelInfoService.selectLabelInfoList(labelInfoVo);
         } catch (BaseException e) {
             return webResult.fail(e);
         }
@@ -102,11 +102,11 @@ public class LabelInfoController extends BaseController<LabelInfo> {
     @ApiOperation(value = "通过ID得到标签信息")
     @ApiImplicitParam(name = "labelId", value = "ID", required = true, paramType = "query", dataType = "string")
     @RequestMapping(value = "/labelInfo/get", method = RequestMethod.POST)
-    public WebResult<LabelInfo> getById(String labelId) throws BaseException {
+    public WebResult<LabelInfo> findById(String labelId) throws BaseException {
         WebResult<LabelInfo> webResult = new WebResult<>();
         LabelInfo labelInfo = new LabelInfo();
         try {
-            labelInfo = iLabelInfoService.getById(labelId);
+            labelInfo = iLabelInfoService.selectLabelInfoById(labelId);
         } catch (BaseException e) {
             return webResult.fail(e);
         }
@@ -149,7 +149,7 @@ public class LabelInfoController extends BaseController<LabelInfo> {
         }
         labelInfo.setCreateUserId(user.getUserId());
         try {
-            iLabelInfoService.saveT(labelInfo);
+            iLabelInfoService.addLabelInfo(labelInfo);
         } catch (BaseException e) {
             return webResult.fail(e);
         }
@@ -182,17 +182,17 @@ public class LabelInfoController extends BaseController<LabelInfo> {
             @ApiImplicitParam(name = "groupType", value = "群类型", required = false, paramType = "query", dataType = "int"),
             @ApiImplicitParam(name = "sortNum", value = "排序字段", required = false, paramType = "query", dataType = "int") })
     @RequestMapping(value = "/labelInfo/update", method = RequestMethod.POST)
-    public WebResult<String> update(@ApiIgnore LabelInfo labelInfo) {
+    public WebResult<String> edit(@ApiIgnore LabelInfo labelInfo) {
         WebResult<String> webResult = new WebResult<>();
         LabelInfo oldLab = new LabelInfo();
         try {
-            oldLab = iLabelInfoService.getById(labelInfo.getLabelId());
+            oldLab = iLabelInfoService.selectLabelInfoById(labelInfo.getLabelId());
         } catch (BaseException e) {
             return webResult.fail(e);
         }
         oldLab = fromToBean(labelInfo, oldLab);
         try {
-            iLabelInfoService.updateT(oldLab);
+            iLabelInfoService.modifyLabelInfo(oldLab);
         } catch (BaseException e1) {
             return webResult.fail(e1);
         }
@@ -202,10 +202,10 @@ public class LabelInfoController extends BaseController<LabelInfo> {
     @ApiOperation(value = "删除")
     @ApiImplicitParam(name = "labelId", value = "ID", required = true, paramType = "query", dataType = "string")
     @RequestMapping(value = "/labelInfo/delete", method = RequestMethod.POST)
-    public WebResult<String> delete(String labelId) {
+    public WebResult<String> del(String labelId) {
         WebResult<String> webResult = new WebResult<>();
         try {
-            iLabelInfoService.deleteById(labelId);
+            iLabelInfoService.deleteLabelInfo(labelId);
         } catch (BaseException e) {
             return webResult.fail(e);
         }

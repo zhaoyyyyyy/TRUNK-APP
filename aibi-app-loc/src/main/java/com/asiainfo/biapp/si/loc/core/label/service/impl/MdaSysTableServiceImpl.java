@@ -89,6 +89,9 @@ public class MdaSysTableServiceImpl extends BaseServiceImpl<MdaSysTable, String>
     }
 
     public void deleteMdaSysTableById(String tableId) throws BaseException {
+        if (selectMdaSysTableById(tableId)==null){
+            throw new ParamRequiredException("ID不存在");
+        }
         super.delete(tableId);
     }
 }

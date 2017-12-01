@@ -15,7 +15,7 @@
 */
 .ui-btn-default{
 	background: #009241;
-	color: #FFF;
+	color: #FFF !important;
 	border: 1px solid #009241;
 }
 .ui-btn-default:HOVER{ 
@@ -44,7 +44,7 @@
 次按钮
 */
 .ui-btn-second,.ui-btn-save{
-	background: #FFFFFF;
+	background: #FFFFFF !important;
 	border: 1px solid #D9D9D9;
 	color: #000;
 }
@@ -141,6 +141,12 @@
 	float:left;
     background: url(./images/lc-icon.png) no-repeat -26px -247px;
 }
+.ui-btn > .create-white {
+    width: 17px;
+    height: 17px;
+    float: left;
+    background: url(./images/lc-icon.png) no-repeat -444px -133px;
+}
 .ui-icon-btn > .ui-btn{
 	padding: 5px 8px ;
 }
@@ -180,7 +186,8 @@
 	border: 1px dashed #D9D9D9;
 	border-radius: 4px;
 }
-.ui-btn-menu{
+.ui-btn-menu,
+.dropdown > .dropdown-toggle.ui-btn-menu{
 	border: 1px solid #D9D9D9;
 	border-radius: 4px;
 	padding: 5px 8px 5px 16px;
@@ -202,7 +209,6 @@
 }
 .ui-btn-menu.ui-btn:HOVER > .caret{
 	background-position: -21px -290px;
-}
 }
 .ui-btn-menu.ui-btn:ACTIVE > .caret{
     background-position: -21px -310px;

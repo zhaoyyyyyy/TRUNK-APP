@@ -46,7 +46,7 @@ public interface IDataSourceInfoDao extends BaseDao<DataSourceInfo, String> {
      * @param dataSourceInfo
      * @return
      */
-    public List<DataSourceInfo> findDataSourceInfoList(DataSourceInfoVo dataSourceInfoVo);
+    public List<DataSourceInfo> selectDataSourceInfoList(DataSourceInfoVo dataSourceInfoVo);
 
     /**
      * 根据数据源名称查询一个数据源
@@ -54,6 +54,6 @@ public interface IDataSourceInfoDao extends BaseDao<DataSourceInfo, String> {
      * @param dataSourceName
      * @return
      */
-    public DataSourceInfo findOneByDataSourceName(String dataSourceName);
+    public DataSourceInfo selectOneByDataSourceName(String dataSourceName);
 
 }

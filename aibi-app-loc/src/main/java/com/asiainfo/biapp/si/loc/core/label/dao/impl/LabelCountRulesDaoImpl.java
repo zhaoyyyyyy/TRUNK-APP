@@ -48,34 +48,21 @@ import com.asiainfo.biapp.si.loc.core.label.vo.LabelCountRulesVo;
 @Repository
 public class LabelCountRulesDaoImpl extends BaseDaoImpl<LabelCountRules, String> implements ILabelCountRulesDao {
 
-    public Page<LabelCountRules> findLabelCountRulesPageList(Page<LabelCountRules> page,
+    public Page<LabelCountRules> selectLabelCountRulesPageList(Page<LabelCountRules> page,
             LabelCountRulesVo labelCountRulesVo) {
-        Map<String, Object> params = new HashMap<>();
-        StringBuffer hql = new StringBuffer("from LabelCountRules l where 1=1 ");
-        if (StringUtil.isNotBlank(labelCountRulesVo.getCountRulesCode())) {
-            hql.append("and l.countRulesCode = :countRulesCode ");
-            params.put("countRulesCode", labelCountRulesVo.getCountRulesCode());
-        }
-        if (null != labelCountRulesVo.getDependIndex()) {
-            hql.append("and l.dependIndex = :dependIndex ");
-            params.put("dependIndex", labelCountRulesVo.getDependIndex());
-        }
-        if (null != labelCountRulesVo.getCountRules()) {
-            hql.append("and l.countRules = :countRules ");
-            params.put("countRules", labelCountRulesVo.getCountRules());
-        }
-        if (null != labelCountRulesVo.getCountRulesDesc()) {
-            hql.append("and l.countRulesDesc = :countRulesDesc ");
-            params.put("countRulesDesc", labelCountRulesVo.getCountRulesDesc());
-        }
-        if (null != labelCountRulesVo.getWhereSql()) {
-            hql.append("and l.whereSql = :whereSql ");
-            params.put("whereSql", labelCountRulesVo.getWhereSql());
-        }
-        return super.findPageByHql(page, hql.toString(), params);
+        Map<String, Object> reMap = fromBean(labelCountRulesVo);
+        Map<String, Object> params = (Map<String, Object>) reMap.get("params");
+        return super.findPageByHql(page, reMap.get("hql").toString(), params);
     }
 
-    public List<LabelCountRules> findLabelCountRulesList(LabelCountRulesVo labelCountRulesVo) {
+    public List<LabelCountRules> selectLabelCountRulesList(LabelCountRulesVo labelCountRulesVo) {
+        Map<String, Object> reMap = fromBean(labelCountRulesVo);
+        Map<String, Object> params = (Map<String, Object>) reMap.get("params");
+        return super.findListByHql(reMap.get("hql").toString(), params);
+    }
+
+    public Map<String, Object> fromBean(LabelCountRulesVo labelCountRulesVo) {
+        Map<String, Object> reMap = new HashMap<>();
         Map<String, Object> params = new HashMap<>();
         StringBuffer hql = new StringBuffer("from LabelCountRules l where 1=1 ");
         if (StringUtil.isNotBlank(labelCountRulesVo.getCountRulesCode())) {
@@ -98,7 +85,9 @@ public class LabelCountRulesDaoImpl extends BaseDaoImpl<LabelCountRules, String>
             hql.append("and l.whereSql = :whereSql ");
             params.put("whereSql", labelCountRulesVo.getWhereSql());
         }
-        return super.findListByHql(hql.toString(), params);
+        reMap.put("hql", hql);
+        reMap.put("params", params);
+        return reMap;
     }
 
 }
