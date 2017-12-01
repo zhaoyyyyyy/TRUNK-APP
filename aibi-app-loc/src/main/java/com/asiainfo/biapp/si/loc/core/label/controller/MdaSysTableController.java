@@ -207,7 +207,7 @@ public class MdaSysTableController extends BaseController<MdaSysTable> {
      * @return
      */
     private MdaSysTable fromToBean(MdaSysTable mda, MdaSysTable oldMda) {
-        if (null != mda.getConfigId()) {
+        if (StringUtils.isNotBlank(mda.getConfigId())) {
             oldMda.setConfigId(mda.getConfigId());
         }
         if (StringUtils.isNotBlank(mda.getTableName())) {

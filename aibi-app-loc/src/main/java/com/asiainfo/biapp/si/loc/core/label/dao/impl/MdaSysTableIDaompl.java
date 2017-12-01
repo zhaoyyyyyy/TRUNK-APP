@@ -64,7 +64,7 @@ public class MdaSysTableIDaompl extends BaseDaoImpl<MdaSysTable, String> impleme
         Map<String, Object> reMap = new HashMap<>();
         Map<String, Object> params = new HashMap<>();
         StringBuffer hql = new StringBuffer("from MdaSysTable m where 1=1");
-        if (null != mdaSysTableVo.getConfigId()) {
+        if (StringUtils.isNotBlank(mdaSysTableVo.getConfigId())) {
             hql.append(" and m.configId = :configId");
             params.put("configId", mdaSysTableVo.getConfigId());
         }

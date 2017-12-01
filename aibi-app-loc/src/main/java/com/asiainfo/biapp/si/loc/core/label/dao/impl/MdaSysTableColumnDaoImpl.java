@@ -71,7 +71,7 @@ public class MdaSysTableColumnDaoImpl extends BaseDaoImpl<MdaSysTableColumn, Str
             hql.append(" and m.lableId = :lableId");
             params.put("lableId", mdaSysTableColumnVo.getLabelId());
         }
-        if (null != mdaSysTableColumnVo.getTableId()) {
+        if (StringUtils.isNotBlank(mdaSysTableColumnVo.getTableId())) {
             hql.append(" and m.tableId = :tableId");
             params.put("tableId", mdaSysTableColumnVo.getTableId());
         }

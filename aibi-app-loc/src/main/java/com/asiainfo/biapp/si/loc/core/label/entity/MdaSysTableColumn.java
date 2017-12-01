@@ -73,7 +73,7 @@ public class MdaSysTableColumn extends BaseEntity {
      */
     @Column(name = "TABLE_ID")
     @ApiParam(value = "所属表id")
-    private Integer tableId;
+    private String tableId;
 
     /**
      * 列名
@@ -140,11 +140,11 @@ public class MdaSysTableColumn extends BaseEntity {
         this.labelId = labelId;
     }
 
-    public Integer getTableId() {
+    public String getTableId() {
         return tableId;
     }
 
-    public void setTableId(Integer tableId) {
+    public void setTableId(String tableId) {
         this.tableId = tableId;
     }
 
