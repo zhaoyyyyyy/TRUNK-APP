@@ -59,7 +59,7 @@ import com.asiainfo.biapp.si.loc.core.prefecture.vo.PreConfigInfoVo;
  * @version 1.0.0.2017年11月7日
  */
 
-@Api(value = "专区信息管理")
+@Api(value = "专区信息管理",description="张楠")
 @RequestMapping("api/prefecture")
 @RestController
 public class PreConfigInfoController extends BaseController<PreConfigInfo> {
@@ -76,7 +76,7 @@ public class PreConfigInfoController extends BaseController<PreConfigInfo> {
      * @param preConfigInfo
      * @return
      */
-    @ApiOperation(value = "分页查询")
+    @ApiOperation(value = "分页查询专区信息")
     @RequestMapping(value = "/preConfigInfoPage/query", method = RequestMethod.POST)
     public Page<PreConfigInfo> queryPage(@ModelAttribute Page<PreConfigInfo> page,
             @ModelAttribute PreConfigInfoVo preConfigInfoVo) {
@@ -95,7 +95,7 @@ public class PreConfigInfoController extends BaseController<PreConfigInfo> {
      * @param preConfigInfo
      * @return
      */
-    @ApiOperation(value = "查询列表")
+    @ApiOperation(value = "不分页查询专区信息列表")
     @RequestMapping(value = "/preConfigInfo/queryList", method = RequestMethod.POST)
     public WebResult<List<PreConfigInfo>> findList(@ModelAttribute PreConfigInfoVo preConfigInfoVo) {
         WebResult<List<PreConfigInfo>> webResult = new WebResult<>();
@@ -114,7 +114,7 @@ public class PreConfigInfoController extends BaseController<PreConfigInfo> {
      * @param configId
      * @return
      */
-    @ApiOperation(value = "根据ID查询")
+    @ApiOperation(value = "根据ID查询专区信息")
     @ApiImplicitParam(name = "configId", value = "ID", required = true, paramType = "query", dataType = "string")
     @RequestMapping(value = "/preConfigInfo/get", method = RequestMethod.POST)
     public WebResult<PreConfigInfo> getById(String configId) throws BaseException {
@@ -134,7 +134,7 @@ public class PreConfigInfoController extends BaseController<PreConfigInfo> {
      * @param preConfigInfo
      * @return
      */
-    @ApiOperation(value = "新增")
+    @ApiOperation(value = "新增专区信息")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "orgId", value = "组织编码", required = false, paramType = "query", dataType = "string"),
             @ApiImplicitParam(name = "dataAccessType", value = "专区类型", required = false, paramType = "query", dataType = "int"),
@@ -171,7 +171,7 @@ public class PreConfigInfoController extends BaseController<PreConfigInfo> {
      * @param preConfigInfo
      * @return
      */
-    @ApiOperation(value = "修改")
+    @ApiOperation(value = "修改专区信息")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "configId", value = "专区ID", required = true, paramType = "query", dataType = "string"),
             @ApiImplicitParam(name = "orgId", value = "组织编码", required = false, paramType = "query", dataType = "string"),
@@ -205,7 +205,7 @@ public class PreConfigInfoController extends BaseController<PreConfigInfo> {
      * 
      * @param id
      */
-    @ApiOperation(value = "删除")
+    @ApiOperation(value = "删除专区信息")
     @ApiImplicitParam(name = "configId", value = "ID", required = true, paramType = "query", dataType = "string")
     @RequestMapping(value = "/preConfigInfo/delete", method = RequestMethod.POST)
     public WebResult<String> delete(String configId) {

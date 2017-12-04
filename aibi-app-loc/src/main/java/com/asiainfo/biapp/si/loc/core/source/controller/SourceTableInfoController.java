@@ -61,7 +61,7 @@ import com.asiainfo.biapp.si.loc.core.source.vo.SourceTableInfoVo;
  * @author zhangnan7
  * @version 1.0.0.2017年11月15日
  */
-@Api(value = "指标数据源信息配置管理")
+@Api(value = "指标数据源信息配置管理",description="张楠")
 @RequestMapping("api/source")
 @RestController
 public class SourceTableInfoController extends BaseController<SourceTableInfo> {
@@ -73,7 +73,7 @@ public class SourceTableInfoController extends BaseController<SourceTableInfo> {
 
     private static final String SUCCESS = "success";
 
-    @ApiOperation(value = "分页查询")
+    @ApiOperation(value = "分页查询指标数据源信息配置")
     @RequestMapping(value = "/sourceTableInfoPage/query", method = RequestMethod.POST)
     public Page<SourceTableInfo> list(@ModelAttribute Page<SourceTableInfo> page,
             @ModelAttribute SourceTableInfoVo sourceTableInfoVo) {
@@ -86,7 +86,7 @@ public class SourceTableInfoController extends BaseController<SourceTableInfo> {
         return sourceTableInfoPage;
     }
 
-    @ApiOperation(value = "查询列表")
+    @ApiOperation(value = "不分页查询指标数据源信息配置列表")
     @RequestMapping(value = "/sourceTableInfo/queryList", method = RequestMethod.POST)
     public WebResult<List<SourceTableInfo>> findList(@ModelAttribute SourceTableInfoVo sourceTableInfoVo) {
         WebResult<List<SourceTableInfo>> webResult = new WebResult<>();
@@ -99,7 +99,7 @@ public class SourceTableInfoController extends BaseController<SourceTableInfo> {
         return webResult.success("获取指标数据源信息配置成功.", sourceTableInfoList);
     }
 
-    @ApiOperation(value = "根据ID查询")
+    @ApiOperation(value = "根据ID查询指标数据源信息配置")
     @ApiImplicitParam(name = "sourceTableId", value = "ID", required = true, paramType = "query", dataType = "string")
     @RequestMapping(value = "/sourceTableInfo/get", method = RequestMethod.POST)
     public WebResult<SourceTableInfo> findById(String sourceTableId) throws BaseException {
@@ -113,7 +113,7 @@ public class SourceTableInfoController extends BaseController<SourceTableInfo> {
         return webResult.success("获取指标数据源信息配置成功.", sourceTableInfo);
     }
 
-    @ApiOperation(value = "新增")
+    @ApiOperation(value = "新增指标数据源信息配置")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "configId", value = "专区ID", required = false, paramType = "query", dataType = "string"),
             @ApiImplicitParam(name = "sourceFileName", value = "指标源表文件名", required = false, paramType = "query", dataType = "string"),
@@ -154,7 +154,7 @@ public class SourceTableInfoController extends BaseController<SourceTableInfo> {
         return webResult.success("新增指标数据源信息配置成功", SUCCESS);
     }
 
-    @ApiOperation(value = "修改")
+    @ApiOperation(value = "修改指标数据源信息配置")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "sourceTableId", value = "ID", required = true, paramType = "query", dataType = "string"),
             @ApiImplicitParam(name = "configId", value = "专区ID", required = false, paramType = "query", dataType = "string"),
@@ -198,7 +198,7 @@ public class SourceTableInfoController extends BaseController<SourceTableInfo> {
      * 
      * @param id
      */
-    @ApiOperation(value = "删除")
+    @ApiOperation(value = "删除指标数据源信息配置")
     @ApiImplicitParam(name = "sourceTableId", value = "ID", required = true, paramType = "query", dataType = "string")
     @RequestMapping(value = "/sourceTableInfo/delete", method = RequestMethod.POST)
     public WebResult<String> del(String sourceTableId) {

@@ -50,7 +50,7 @@ import springfox.documentation.annotations.ApiIgnore;
  * @author  wangrd
  * @version 1.0.0.2017年11月22日
  */
-@Api(value = "最新标签数据时间管理")
+//@Api(value = "最新标签数据时间管理")
 @RequestMapping("api/label")
 @RestController
 public class NewestLabelDateController extends BaseController<NewestLabelDate>{

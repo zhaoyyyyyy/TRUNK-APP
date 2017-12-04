@@ -58,7 +58,7 @@ import com.asiainfo.biapp.si.loc.core.prefecture.vo.DataSourceInfoVo;
  * @version 1.0.0.2017年11月7日
  */
 
-@Api(value = "专区数据源信息管理")
+@Api(value = "专区数据源信息管理",description="张楠")
 @RequestMapping("api/prefecture")
 @RestController
 public class DataSourceInfoController extends BaseController<DataSourceInfo> {
@@ -74,7 +74,7 @@ public class DataSourceInfoController extends BaseController<DataSourceInfo> {
      * @param dataSourceInfo
      * @return
      */
-    @ApiOperation(value = "查询列表")
+    @ApiOperation(value = "不分页查询专区数据源信息列表")
     @RequestMapping(value = "/dataSourceInfo/queryList", method = RequestMethod.POST)
     public WebResult<List<DataSourceInfo>> findList(@ModelAttribute DataSourceInfoVo dataSourceInfoVo) {
         WebResult<List<DataSourceInfo>> webResult = new WebResult<>();
@@ -93,7 +93,7 @@ public class DataSourceInfoController extends BaseController<DataSourceInfo> {
      * @param dataSourceId
      * @return
      */
-    @ApiOperation(value = "根据ID查询")
+    @ApiOperation(value = "根据ID查询专区数据源信息")
     @ApiImplicitParam(name = "dataSourceId", value = "ID", required = true, paramType = "query", dataType = "string")
     @RequestMapping(value = "/dataSourceInfo/get", method = RequestMethod.POST)
     public WebResult<DataSourceInfo> getById(String dataSourceId) throws BaseException {
@@ -113,7 +113,7 @@ public class DataSourceInfoController extends BaseController<DataSourceInfo> {
      * @param dataSourceInfo
      * @return
      */
-    @ApiOperation(value = "新增")
+    @ApiOperation(value = "新增专区数据源信息")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "configId", value = "专区ID", required = false, paramType = "query", dataType = "string"),
             @ApiImplicitParam(name = "dataSourceName", value = "数据源名称", required = false, paramType = "query", dataType = "string"),
@@ -159,7 +159,7 @@ public class DataSourceInfoController extends BaseController<DataSourceInfo> {
      * @param dataSourceInfo
      * @return
      */
-    @ApiOperation(value = "修改")
+    @ApiOperation(value = "修改专区数据源信息")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "dataSourceId", value = "数据源ID", required = true, paramType = "query", dataType = "string"),
             @ApiImplicitParam(name = "configId", value = "专区ID", required = false, paramType = "query", dataType = "string"),
@@ -202,7 +202,7 @@ public class DataSourceInfoController extends BaseController<DataSourceInfo> {
      * 
      * @param id
      */
-    @ApiOperation(value = "删除")
+    @ApiOperation(value = "删除专区数据源信息")
     @ApiImplicitParam(name = "dataSourceId", value = "ID", required = true, paramType = "query", dataType = "string")
     @RequestMapping(value = "/dataSourceInfo/delete", method = RequestMethod.POST)
     public WebResult<String> del(String dataSourceId) {
