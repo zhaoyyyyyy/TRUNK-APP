@@ -57,7 +57,7 @@ import com.asiainfo.biapp.si.loc.core.label.vo.LabelRuleVo;
  * @author zhangnan7
  * @version 1.0.0.2017年11月22日
  */
-@Api(value = "客户群规则管理",description="张楠")
+//@Api(value = "客户群规则管理",description="张楠")
 @RequestMapping("api/label")
 @RestController
 public class LabelRuleController extends BaseController<LabelRule> {
@@ -67,7 +67,7 @@ public class LabelRuleController extends BaseController<LabelRule> {
 
     private static final String SUCCESS = "success";
 
-    @ApiOperation(value = "分页查询")
+    @ApiOperation(value = "分页查询客户群规则")
     @RequestMapping(value = "/labelRulePage/query", method = RequestMethod.POST)
     public Page<LabelRule> list(@ModelAttribute Page<LabelRule> page, @ModelAttribute LabelRuleVo labelRuleVo) {
         Page<LabelRule> labelRulePage = new Page<>();
@@ -79,7 +79,7 @@ public class LabelRuleController extends BaseController<LabelRule> {
         return labelRulePage;
     }
 
-    @ApiOperation(value = "查询列表")
+    @ApiOperation(value = "不分页查询客户群规则列表")
     @RequestMapping(value = "/labelRule/queryList", method = RequestMethod.POST)
     public WebResult<List<LabelRule>> findList(@ModelAttribute LabelRuleVo labelRuleVo) {
         WebResult<List<LabelRule>> webResult = new WebResult<>();
@@ -106,7 +106,7 @@ public class LabelRuleController extends BaseController<LabelRule> {
         return webResult.success("获取客户群规则成功.", labelRule);
     }
 
-    @ApiOperation(value = "新增一个客户群规则")
+    @ApiOperation(value = "新增客户群规则")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "parentId", value = "父规则ID", required = false, paramType = "query", dataType = "string"),
             @ApiImplicitParam(name = "customId", value = "客户群标签ID", required = false, paramType = "query", dataType = "string"),
@@ -140,7 +140,7 @@ public class LabelRuleController extends BaseController<LabelRule> {
         return webResult.success("新增客户群规则成功", SUCCESS);
     }
 
-    @ApiOperation(value = "修改一个客户群规则")
+    @ApiOperation(value = "修改客户群规则")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "ruleId", value = "ID", required = true, paramType = "query", dataType = "string"),
             @ApiImplicitParam(name = "parentId", value = "父规则ID", required = false, paramType = "query", dataType = "string"),
@@ -182,7 +182,7 @@ public class LabelRuleController extends BaseController<LabelRule> {
         return webResult.success("修改客户群规则成功", SUCCESS);
     }
 
-    @ApiOperation(value = "删除")
+    @ApiOperation(value = "删除客户群规则")
     @ApiImplicitParam(name = "ruleId", value = "ID", required = true, paramType = "query", dataType = "string")
     @RequestMapping(value = "/labelRule/delete", method = RequestMethod.POST)
     public WebResult<String> del(String ruleId) {
