@@ -67,7 +67,7 @@ public class MdaSysTable extends BaseEntity {
      */
     @Column(name = "CONFIG_ID")
     @ApiParam(value = "数据源ID")
-    private Integer configId;
+    private String configId;
 
     /**
      * 表名
@@ -140,11 +140,11 @@ public class MdaSysTable extends BaseEntity {
         this.tableId = tableId;
     }
 
-    public Integer getConfigId() {
+    public String getConfigId() {
         return configId;
     }
-
-    public void setConfigId(Integer configId) {
+    
+    public void setConfigId(String configId) {
         this.configId = configId;
     }
 

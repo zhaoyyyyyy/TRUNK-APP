@@ -74,7 +74,7 @@ public class DimTableInfo extends BaseEntity{
      * 维表主键列名
      */
     @Column(name = "DIM_CODE_COL")
-    @ApiParam(value = "维表主键列明")
+    @ApiParam(value = "维表主键列名")
     private String dimCodeCol;
     
     /**
