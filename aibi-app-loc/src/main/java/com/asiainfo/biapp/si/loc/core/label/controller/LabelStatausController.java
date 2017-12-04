@@ -51,7 +51,7 @@ import springfox.documentation.annotations.ApiIgnore;
  * @author   wangrd
  * @version 1.0.0.2017年11月21日
  */
-@Api("标签状态管理")
+//@Api("标签状态管理")
 @RequestMapping("api/label")
 @RestController
 public class LabelStatausController extends BaseController<LabelStatus>{

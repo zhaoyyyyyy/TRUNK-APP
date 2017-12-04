@@ -57,7 +57,7 @@ import com.asiainfo.biapp.si.loc.core.label.vo.LabelRuleVo;
  * @author zhangnan7
  * @version 1.0.0.2017年11月22日
  */
-@Api(value = "客户群规则管理")
+@Api(value = "客户群规则管理",description="张楠")
 @RequestMapping("api/label")
 @RestController
 public class LabelRuleController extends BaseController<LabelRule> {

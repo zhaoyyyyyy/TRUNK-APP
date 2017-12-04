@@ -61,7 +61,7 @@ import com.asiainfo.biapp.si.loc.core.label.vo.LabelInfoVo;
  * @author zhangnan7
  * @version 1.0.0.2017年11月16日
  */
-@Api(value = "标签信息管理")
+@Api(value = "标签信息管理",description="张楠")
 @RequestMapping("api/label")
 @RestController
 public class LabelInfoController extends BaseController<LabelInfo> {
@@ -73,11 +73,12 @@ public class LabelInfoController extends BaseController<LabelInfo> {
 
     private static final String SUCCESS = "success";
 
-    @ApiOperation(value = "分页查询")
+    @ApiOperation(value = "分页查询标签信息")
     @RequestMapping(value = "/labelInfoPage/query", method = RequestMethod.POST)
     public Page<LabelInfo> list(@ModelAttribute Page<LabelInfo> page, @ModelAttribute LabelInfoVo labelInfoVo) {
         Page<LabelInfo> labelInfoPage = new Page<>();
         try {
+            page.setPageSize(12);
             labelInfoPage = iLabelInfoService.selectLabelInfoPageList(page, labelInfoVo);
         } catch (BaseException e) {
             labelInfoPage.fail(e);
@@ -85,7 +86,7 @@ public class LabelInfoController extends BaseController<LabelInfo> {
         return labelInfoPage;
     }
 
-    @ApiOperation(value = "查询列表")
+    @ApiOperation(value = "不分页查询标签信息列表")
     @RequestMapping(value = "/labelInfo/queryList", method = RequestMethod.POST)
     public WebResult<List<LabelInfo>> findList(@ModelAttribute LabelInfoVo labelInfoVo) {
         WebResult<List<LabelInfo>> webResult = new WebResult<>();
@@ -113,7 +114,7 @@ public class LabelInfoController extends BaseController<LabelInfo> {
         return webResult.success("获取标签信息成功.", labelInfo);
     }
 
-    @ApiOperation(value = "新增一个标签信息")
+    @ApiOperation(value = "新增标签信息")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "keyType", value = "主键标识类型", required = false, paramType = "query", dataType = "int"),
             @ApiImplicitParam(name = "configId", value = "专区ID", required = false, paramType = "query", dataType = "string"),
@@ -156,7 +157,7 @@ public class LabelInfoController extends BaseController<LabelInfo> {
         return webResult.success("新增标签信息成功", SUCCESS);
     }
 
-    @ApiOperation(value = "修改一个标签信息")
+    @ApiOperation(value = "修改标签信息")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "labelId", value = "ID", required = true, paramType = "query", dataType = "string"),
             @ApiImplicitParam(name = "keyType", value = "主键标识类型", required = false, paramType = "query", dataType = "int"),
@@ -199,7 +200,7 @@ public class LabelInfoController extends BaseController<LabelInfo> {
         return webResult.success("修改标签信息成功", SUCCESS);
     }
 
-    @ApiOperation(value = "删除")
+    @ApiOperation(value = "删除标签信息")
     @ApiImplicitParam(name = "labelId", value = "ID", required = true, paramType = "query", dataType = "string")
     @RequestMapping(value = "/labelInfo/delete", method = RequestMethod.POST)
     public WebResult<String> del(String labelId) {

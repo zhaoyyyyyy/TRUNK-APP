@@ -44,7 +44,7 @@ import springfox.documentation.annotations.ApiIgnore;
  * @author  zhougz3
  * @version 1.0.0.2017年11月5日
  */
-@Api(value = "字典获取")
+@Api(value = "公用->-字典获取")
 @RequestMapping("api/dicData")
 @RestController
 public class DicDataController extends BaseController<DicData>{

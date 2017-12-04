@@ -51,7 +51,7 @@ import springfox.documentation.annotations.ApiIgnore;
  * @author  wangrd
  * @version 1.0.0.2017年11月27日
  */
-@Api(value = "维表信息管理")
+@Api(value = "维表信息管理",description="王瑞冬")
 @RequestMapping("api/dimtable")
 @RestController
 public class DimTableInfoController extends BaseController<DimTableInfo>{
@@ -61,7 +61,7 @@ public class DimTableInfoController extends BaseController<DimTableInfo>{
     
     private static final String SUCCESS = "success";
     
-    @ApiOperation(value = "分页查询")
+    @ApiOperation(value = "分页查询维表信息")
     @RequestMapping(value = "/dimTableInfoPage/query", method = RequestMethod.POST)
     public Page<DimTableInfo> list(@ModelAttribute Page<DimTableInfo> page,@ModelAttribute DimTableInfoVo dimTableInfoVo) throws BaseException{
         Page<DimTableInfo> dimTableInfoPage = new Page<>();
@@ -73,7 +73,7 @@ public class DimTableInfoController extends BaseController<DimTableInfo>{
         return dimTableInfoPage;
     }
     
-    @ApiOperation(value = "查询列表")
+    @ApiOperation(value = "不分页查询维表信息列表")
     @RequestMapping(value = "/dimTableInfo/queryList", method = RequestMethod.POST)
     public WebResult<List<DimTableInfo>> findList(@ModelAttribute DimTableInfoVo dimTableInfoVo) throws BaseException{
         WebResult<List<DimTableInfo>> webResult = new WebResult<>();
@@ -86,7 +86,7 @@ public class DimTableInfoController extends BaseController<DimTableInfo>{
         return webResult.success("获取维表信息成功.", dimTableInfoList);
     }
     
-    @ApiOperation(value = "根据ID查询")
+    @ApiOperation(value = "根据ID查询维表信息")
     @ApiImplicitParam(name = "dimId", value = "ID", required = true, paramType = "query", dataType = "string")
     @RequestMapping(value = "/dimTableInfo/get",method = RequestMethod.POST)
     public WebResult<DimTableInfo> findById(String dimId) throws BaseException{
@@ -100,7 +100,7 @@ public class DimTableInfoController extends BaseController<DimTableInfo>{
         return webResult.success("获取维表信息成功", dimTableInfo);
     }
     
-    @ApiOperation(value = "新增")
+    @ApiOperation(value = "新增维表信息")
     @ApiImplicitParams({
         @ApiImplicitParam(name = "dimId", value = "维表主键", required = false, paramType = "query", dataType = "string"),
         @ApiImplicitParam(name = "dimTableName", value = "维表表名", required = false, paramType = "query", dataType = "string"),
@@ -123,7 +123,7 @@ public class DimTableInfoController extends BaseController<DimTableInfo>{
             return webResult.success("新增维表信息成功", SUCCESS);
     }
     
-    @ApiOperation(value = "修改")
+    @ApiOperation(value = "修改维表信息")
     @ApiImplicitParams({
         @ApiImplicitParam(name = "dimId", value = "维表主键", required = true, paramType = "query", dataType = "string"),
         @ApiImplicitParam(name = "dimTableName", value = "维表表名", required = false, paramType = "query", dataType = "string"),
@@ -148,7 +148,7 @@ public class DimTableInfoController extends BaseController<DimTableInfo>{
         return webResult.success("修改维表信息成功", SUCCESS);
     }
     
-    @ApiOperation(value = "删除")
+    @ApiOperation(value = "删除维表信息")
     @ApiImplicitParam(name = "dimId", value = "ID", required = true, paramType = "query", dataType = "string")
     @RequestMapping(value = "/dimTableInfo/delete", method = RequestMethod.POST)
     public WebResult<String> del(String dimId) throws BaseException{

@@ -26,7 +26,7 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 
-@Api(value = "用户权限相关接口")
+@Api(value = "公用->-用户权限相关接口")
 @RequestMapping("api/user")
 @RestController
 public class UserController extends BaseController<User>{

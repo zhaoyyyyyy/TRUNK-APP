@@ -57,7 +57,7 @@ import com.asiainfo.biapp.si.loc.core.label.vo.LabelCountRulesVo;
  * @author zhangnan7
  * @version 1.0.0.2017年11月20日
  */
-@Api(value = "标签规则管理")
+//@Api(value = "标签规则管理")
 @RequestMapping("api/label")
 @RestController
 public class LabelCountRulesController extends BaseController<LabelCountRules> {
