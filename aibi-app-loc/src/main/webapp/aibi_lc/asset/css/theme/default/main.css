@@ -247,14 +247,14 @@
 	width:122px;
 }
 /*指标注册高佳佳*/
-.ui-reg-search.ui-expand-search .form-group>label{
+.ui-reg-search.ui-expand-search .form-group > label{
 	width:72px;
 }
-.ui-reg-search.ui-expand-search .form-group .radio{
+.form-group.tag-radio .radio{
 	margin-top:0;
 	margin-bottom:0;
 }
-.ui-reg-search.ui-expand-search .form-group .radio input[type=radio]{
+.form-group.tag-radio .radio input[type=radio]{
 	position:absolute;
 }
 .ui-reg-table h3{
@@ -262,7 +262,7 @@
 	font-weight: 400;
 	color: #000;
 }
-.ui-reg-table .ui-grid-button{
+.ui-grid-button{
 	text-align:right;
 	border-top:1px solid #ddd;
 	padding:10px 0;
@@ -449,11 +449,58 @@
     border-width: 5px 5px 0;
     border-top-color: #000;
 }
+/*创建标签-单指标*/
+.create-main{
+	background: #fff;
+	border: 1px solid #E9E9E9;
+	border-radius: 6px;
+}
+.create-main:hover,.create-main:active{
+	border-radius: 6px;
+	border-color: #009241;
 
-
-
-
-
+}
+.create-main > .progress{
+	width:46px;
+	height: 166px;
+	text-align:center;
+	background:#f7f7f7;
+	margin:0 -100% 0px 0;
+	line-height:166px;
+}
+.create-main:hover > .progress  > .progress-label > i{
+	background-position: -458px -258px;
+}
+.create-main > .progress  > .progress-label > i{
+	 background-position: -458px -294px;
+	 width:24px;
+	 height:24px;
+	 background-color:transparent;
+ }
+.create-main > .ui-main > div{
+	margin:0 0 0 46px;
+	padding:0;
+	background:#fff;
+	height:166px;
+}
+.create-main > .ui-main > div > .ui-form{
+	width:33.3333333%;
+	border-right:1px solid #ddd;
+	padding:20px 10px 20px 15px;
+	height:inherit;
+}
+.create-main > .ui-main > div > .ui-form:last-child{
+	border-right-color:transparent;
+}
+.create-main > .ui-main > div > .ui-form > .ui-form-group{
+	width:100%;
+}
+.create-main > .ui-main > div > .ui-form > .ui-form-group > .control-label{
+	min-width: 60px;
+}
+.create-main > .ui-main > div > .ui-form  > .ui-form-group > .control-input{
+	width:70%;
+}
 
 
 
