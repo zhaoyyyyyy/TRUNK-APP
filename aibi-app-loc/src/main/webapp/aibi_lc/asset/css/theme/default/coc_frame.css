@@ -63,7 +63,7 @@
 	background-color: #394557;
 	margin: 0 -100% 0 0;
 	position: relative;
-	z-index: 2;
+	z-index: 12;
 	margin-bottom: -10000px;
     padding-bottom: 10000px;
 }
