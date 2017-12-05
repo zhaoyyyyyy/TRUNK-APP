@@ -11,7 +11,6 @@ import java.util.List;
 import com.asiainfo.biapp.si.loc.base.exception.BaseException;
 import com.asiainfo.biapp.si.loc.base.page.Page;
 import com.asiainfo.biapp.si.loc.base.service.BaseService;
-import com.asiainfo.biapp.si.loc.core.label.entity.LabelStatus;
 import com.asiainfo.biapp.si.loc.core.label.entity.LabelVerticalColumnRel;
 import com.asiainfo.biapp.si.loc.core.label.vo.LabelVerticalColumnRelVo;
 

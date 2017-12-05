@@ -8,11 +8,7 @@ package com.asiainfo.biapp.si.loc.core.label.service;
 
 import java.util.List;
 
-
-
-
 import com.asiainfo.biapp.si.loc.base.exception.BaseException;
-import com.asiainfo.biapp.si.loc.base.page.Page;
 import com.asiainfo.biapp.si.loc.base.service.BaseService;
 import com.asiainfo.biapp.si.loc.core.label.entity.CategoryInfo;
 import com.asiainfo.biapp.si.loc.core.label.vo.CategoryInfoVo;
@@ -39,15 +35,6 @@ import com.asiainfo.biapp.si.loc.core.label.vo.CategoryInfoVo;
  */
 public interface ICategoryInfoService extends BaseService<CategoryInfo, String>{
 
-    /**
-     * 根据条件分页查询
-     *
-     * @param page
-     * @param categoryInfoVo
-     * @return
-     */
-    public Page<CategoryInfo> selectCategoryInfoPageList(Page<CategoryInfo> page, CategoryInfoVo categoryInfoVo) throws BaseException;
-    
     /**
      * 根据条件查询列表
      *

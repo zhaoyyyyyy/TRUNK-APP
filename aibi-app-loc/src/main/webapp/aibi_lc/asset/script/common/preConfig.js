@@ -31,9 +31,9 @@
 			$.AIPost({
 				type:options.type,
 				url:options.url,
-				success:function(result){
+				onSuccess:function(result){
 					var ssg = window.sessionStorage;
-					if(ssg){
+					if(ssg && result.data){
 					  ssg.setItem("preConfigData",JSON.stringify(result));
 					  $("#preConfig_list > .dropdown-toggle > .pre-config-name").html(result.data[0].sourceName).attr("configId",result.data[0].configId);
 				  	  options.create(result.data[0]);

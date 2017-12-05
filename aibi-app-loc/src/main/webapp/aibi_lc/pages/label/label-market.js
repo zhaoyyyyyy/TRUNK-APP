@@ -117,7 +117,7 @@ var labelMarket = (function (model){
 			  url: $.ctx + "/api/label/categoryInfo/queryList",
 			  cache:false,
 			  data:option,
-			  success: function(returnObj){
+			  onSuccess: function(returnObj){
 			  	var labelSysApp = new Vue({
 				  el: '#labelSysList',
 			  	  data:returnObj
@@ -130,7 +130,7 @@ var labelMarket = (function (model){
         };
         
         model.setClacCenter= function(){
-        	$( "#sortable > .ui-conditionCT,.ui-calc-h3>span>em" ).draggable({
+        		$( "#sortable > .ui-conditionCT,.ui-calc-h3>span>em" ).draggable({
 				helper: function( event ) {
 					if($(event.target).hasClass("J-drag-bracket")){
 		       	 	   return $(event.target).attr("data-attr") == "left"?$( '<span class="ui-bracket left">(</span>' ):$( '<span class="ui-bracket left">)</span>' );

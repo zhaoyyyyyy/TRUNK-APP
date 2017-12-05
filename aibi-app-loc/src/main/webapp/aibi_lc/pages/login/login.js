@@ -48,7 +48,7 @@ function COCLogin(){
 					  ssg.setItem("token",data.token);
 					  ssg.setItem("refreshToken",data.refreshToken);
 				  }
-				  location.href = $.loginURL;
+				  location.href = $.forward;
 			  }else{
 				  alert(returnObj.msg);
 			  }

@@ -18,8 +18,12 @@
 <link href="../../asset/css/theme/default/main.css" rel="stylesheet"  /> 
 <script type="text/javascript" src="../../asset/script/common/vue/vue.min.js"></script>
 <script type="text/javascript" src="../../asset/script/common/jQuery/jquery-1.12.4.js"></script>
-<script type="text/javascript" src="../../asset/script/common/jQuery/jQueryUI/jquery-ui-1.12.1.min.js"></script>
+<script type="text/javascript" src="../../asset/script/common/jQuery/jQueryUI/jquery-ui-1.12.1.js"></script>
+ <!--<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>-->
+<!--<script type="text/javascript" src="../../asset/extend/utils/date/i18n/jquery-ui-timepicker-zh-CN.js"></script>-->
 <script type="text/javascript" src="../../asset/script/common/profile.js"></script>
+<script type="text/javascript" src="../../asset/script/common/jQuery/jquery.date.extend.js"></script>
 <script type="text/javascript" src="../../asset/script/common/jQuery/jQuery.ajax.js"></script>
 <script type="text/javascript" src="../../asset/script/common/preConfig.js"></script>
 <script type="text/javascript" src="./label-market.js"></script>
@@ -201,12 +205,41 @@
  									<em>三个月</em>
  								</a>
  								<div class="control-input">
-					        		<div class="control-input date-input fleft has-icon">
-							          	<input type="text" class="form-control input-pointer" id="inputEmail4" placeholder="请选择开始日期" readonly="readonly">
+					        			<div class="control-input date-input fleft has-icon">
+							          	<input type="text" class="form-control input-pointer form-control-bubble" data-dismiss="formDatepicker#sendTime"  id="" placeholder="请选择开始日期">
 							          	<span class="glyphicon-date form-control-feedback"></span>
 							        </div>
 							        <div class="control-input date-input fleft ml10 has-icon">
-							          	<input type="text" class="form-control input-pointer" id="inputEmail4" placeholder="请选择结束日期" readonly="readonly">
+							          	<input type="text" class="form-control input-pointer form-control-bubble" data-dismiss="toDatepicker#sendTime" id="" placeholder="请选择结束日期">
+							          	<span class="glyphicon-date form-control-feedback"></span>
+							        </div>
+						        </div>
+ 							</div>
+ 						</div>
+ 					</li>
+ 					<li>
+ 						<div class="clearfix">
+ 							<label class="fleft">发布时间：</label>
+ 							<div class="fleft">
+ 								<a href="javascript:;" class="all-active fleft"><!-- all-active 去掉非选中状态 -->
+ 									全部
+ 								</a>
+ 								<a href="javascript:;" class="fleft">
+ 									<em>一天</em>
+ 								</a>
+ 								<a href="javascript:;" class="fleft">
+ 									<em>一个月</em>
+ 								</a>
+ 								<a href="javascript:;" class="fleft">
+ 									<em>三个月</em>
+ 								</a>
+ 								<div class="control-input">
+					        			<div class="control-input date-input fleft has-icon">
+							          	<input type="text" class="form-control input-pointer form-control-bubble" data-dismiss="formDatepicker#sendTime1"  id="" placeholder="请选择开始日期">
+							          	<span class="glyphicon-date form-control-feedback"></span>
+							        </div>
+							        <div class="control-input date-input fleft ml10 has-icon">
+							          	<input type="text" class="form-control input-pointer form-control-bubble" data-dismiss="toDatepicker#sendTime1" id="" placeholder="请选择结束日期">
 							          	<span class="glyphicon-date form-control-feedback"></span>
 							        </div>
 						        </div>

@@ -16,6 +16,14 @@
 					   "Content-Type": "application/x-www-form-urlencoded;charset=utf-8"
 				   },
 				   success: function(data){
+					    if(data.status == 50000){
+						   alert(data.msg);
+						   window.location.href= $.loginURL;
+						   return;
+					   }
+					    option.onSuccess(data);
+				   },
+				   onSuccess: function(data){
 					   
 				   },
 				   beforeSend:function (XMLHttpRequest) {
@@ -62,7 +70,7 @@
 					   dataType:"json",
 					   type:"POST",
 					   stringify:false,
-					   success: function(data){
+					   onSuccess: function(data){
 						   
 					   } 
 				  };
@@ -83,7 +91,7 @@
 					async:true,
 					dataType:"json",
 					type:"DELETE",
-					success: function(data){
+					onSuccess: function(data){
 						
 					} 
 			};
@@ -104,7 +112,7 @@
 					async:true,
 					dataType:"json",
 					type:"PUT",
-					success: function(data){
+					onSuccess: function(data){
 						
 					} 
 			};
@@ -125,7 +133,7 @@
 					async:true,
 					dataType:"json",
 					type:"GET",
-					success: function(data){
+					onSuccess: function(data){
 						
 					} 
 			};
@@ -140,7 +148,7 @@
 				url:$.ctx + "/api/log",
 				datatype:"json",
 				data:option,
-				success:function(result){
+				onSuccess:function(result){
 					//console.log('记录日志成功')
 				}
 			})
