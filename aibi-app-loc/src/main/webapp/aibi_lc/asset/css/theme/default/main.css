@@ -16,7 +16,7 @@
 	margin: 15px 0;
 }
 .ui-lc-mian > h3 >.dropdown >.dropdown-menu{
-	left: -44px;
+	right: 0px;
 }
 .ui-lc-mian > .ui-label-mes{
 	text-align: left;
