@@ -1,5 +1,5 @@
 
-package com.asiainfo.biapp.si.loc.base.utils;
+package com.asiainfo.biapp.si.loc.base.filter;
 
 import java.util.Arrays;
 
@@ -21,7 +21,7 @@ public class CustomCorsFilter extends CorsFilter {
         config.addAllowedOrigin("*");
         config.addAllowedHeader("*");
         config.setMaxAge(36000L);
-        config.setAllowedMethods(Arrays.asList("GET", "HEAD", "POST", "PUT", "DELETE", "OPTIONS"));
+        config.setAllowedMethods(Arrays.asList("GET", "HEAD", "POST", "PUT", "DELETE"));
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/api/**", config);
         return source;
