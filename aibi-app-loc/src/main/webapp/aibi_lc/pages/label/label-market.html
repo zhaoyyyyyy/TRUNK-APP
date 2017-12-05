@@ -16,6 +16,7 @@
 <link href="../../asset/css/theme/default/tab.css" rel="stylesheet"  /> 
 <link href="../../asset/css/theme/default/coc_frame.css" rel="stylesheet"  /> 
 <link href="../../asset/css/theme/default/main.css" rel="stylesheet"  /> 
+<script type="text/javascript" src="../../asset/script/common/vue/vue.min.js"></script>
 <script type="text/javascript" src="../../asset/script/common/jQuery/jquery-1.12.4.js"></script>
 <script type="text/javascript" src="../../asset/script/common/jQuery/jQueryUI/jquery-ui-1.12.1.min.js"></script>
 <script type="text/javascript" src="../../asset/script/common/profile.js"></script>
@@ -122,39 +123,19 @@
  				</div>
  				<ul class="ui-label-system">
  					<li class="not-border">
- 						<div class="clearfix">
- 							<label class="fleft">集团：</label>
+ 						<div class="clearfix"  id="labelSysList">
+ 							<label class="fleft">标签体系：</label>
  							<div class="fleft">
  								<a href="javascript:;" class="all-active"><!-- all-active 去掉非选中状态 -->
  									全部
  								</a>
- 								<a href="javascript:;">
- 									<em>在网状态</em>
- 									<i></i>
- 								</a>
- 								<a href="javascript:;" class="active">
- 									<em>在网状态</em>
- 									<i></i>
- 								</a>
- 								<a href="javascript:;">
- 									<em>在网状态</em>
- 									<i></i>
- 								</a>
- 								<a href="javascript:;">
- 									<em>在网状态</em>
- 									<i></i>
- 								</a>
- 								<a href="javascript:;">
- 									<em>在网状态</em>
- 									<i></i>
- 								</a>
- 								<a href="javascript:;">
- 									<em>在网状态</em>
- 									<i></i>
+ 								<a href="javascript:;" v-for="labelSys in data" :sysId="labelSys.sysId">
+ 									<em >{{labelSys.categoryName}}</em>
+ 									<i v-if="labelSys.sysId"></i>
  								</a>
  							</div>
  						</div>
- 						<ul class="ui-label-sec ui-label-system">
+ 						<ul class="ui-label-sec ui-label-system hidden">
  							<li class="clearfix">
  								<label class="fleft font-weight">在网状态：</label>
 	 							<div class="fleft">
@@ -174,108 +155,7 @@
  							</li>
  						</ul>
  					</li>
- 					<li>
- 						<div class="clearfix">
- 							<label class="fleft">邮务：</label>
- 							<div class="fleft">
- 								<a href="javascript:;" class="all-active"><!-- all-active 去掉非选中状态 -->
- 									全部
- 								</a>
- 								<a href="javascript:;">
- 									<em>在网状态</em>
- 									<i></i>
- 								</a>
- 								<a href="javascript:;">
- 									<em>在网状态</em>
- 									<i></i>
- 								</a>
- 								<a href="javascript:;">
- 									<em>在网状态</em>
- 									<i></i>
- 								</a>
- 								<a href="javascript:;">
- 									<em>在网状态</em>
- 									<i></i>
- 								</a>
- 								<a href="javascript:;">
- 									<em>在网状态</em>
- 									<i></i>
- 								</a>
- 								<a href="javascript:;">
- 									<em>在网状态</em>
- 									<i></i>
- 								</a>
- 							</div>
- 						</div>
- 					</li>
- 					<li>
- 						<div class="clearfix">
- 							<label class="fleft">邮储银行：</label>
- 							<div class="fleft">
- 								<a href="javascript:;" class="all-active"><!-- all-active 去掉非选中状态 -->
- 									全部
- 								</a>
- 								<a href="javascript:;">
- 									<em>在网状态</em>
- 									<i></i>
- 								</a>
- 								<a href="javascript:;">
- 									<em>在网状态</em>
- 									<i></i>
- 								</a>
- 								<a href="javascript:;">
- 									<em>在网状态</em>
- 									<i></i>
- 								</a>
- 								<a href="javascript:;">
- 									<em>在网状态</em>
- 									<i></i>
- 								</a>
- 								<a href="javascript:;">
- 									<em>在网状态</em>
- 									<i></i>
- 								</a>
- 								<a href="javascript:;">
- 									<em>在网状态</em>
- 									<i></i>
- 								</a>
- 							</div>
- 						</div>
- 					</li>
- 					<li>
- 						<div class="clearfix">
- 							<label class="fleft">速递物流：</label>
- 							<div class="fleft">
- 								<a href="javascript:;" class="all-active"><!-- all-active 去掉非选中状态 -->
- 									全部
- 								</a>
- 								<a href="javascript:;">
- 									<em>在网状态</em>
- 									<i></i>
- 								</a>
- 								<a href="javascript:;">
- 									<em>在网状态</em>
- 									<i></i>
- 								</a>
- 								<a href="javascript:;">
- 									<em>在网状态</em>
- 									<i></i>
- 								</a>
- 								<a href="javascript:;">
- 									<em>在网状态</em>
- 									<i></i>
- 								</a>
- 								<a href="javascript:;">
- 									<em>在网状态</em>
- 									<i></i>
- 								</a>
- 								<a href="javascript:;">
- 									<em>在网状态</em>
- 									<i></i>
- 								</a>
- 							</div>
- 						</div>
- 					</li>
+ 					 
  					<li>
  						<div class="clearfix">
  							<label class="fleft">地市：</label>
