@@ -13,7 +13,6 @@ import com.asiainfo.biapp.si.loc.base.page.Page;
 import com.asiainfo.biapp.si.loc.base.service.BaseService;
 import com.asiainfo.biapp.si.loc.core.dimtable.entity.DimTableInfo;
 import com.asiainfo.biapp.si.loc.core.dimtable.vo.DimTableInfoVo;
-import com.asiainfo.biapp.si.loc.core.label.entity.CategoryInfo;
 
 /**
  * Title : IDimTableInfoService

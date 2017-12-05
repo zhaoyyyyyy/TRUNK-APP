@@ -17,7 +17,6 @@ import org.springframework.stereotype.Service;
 import com.asiainfo.biapp.si.loc.base.dao.BaseDao;
 import com.asiainfo.biapp.si.loc.base.exception.BaseException;
 import com.asiainfo.biapp.si.loc.base.exception.ParamRequiredException;
-import com.asiainfo.biapp.si.loc.base.page.Page;
 import com.asiainfo.biapp.si.loc.base.service.impl.BaseServiceImpl;
 import com.asiainfo.biapp.si.loc.core.label.dao.ICategoryInfoDao;
 import com.asiainfo.biapp.si.loc.core.label.entity.CategoryInfo;
@@ -57,11 +56,13 @@ public class CategoryInfoServiceImpl extends BaseServiceImpl<CategoryInfo, Strin
         return iCategoryInfoDao;
     }
 
-    public Page<CategoryInfo> selectCategoryInfoPageList(Page<CategoryInfo> page, CategoryInfoVo categoryInfoVo) throws BaseException{
-        return iCategoryInfoDao.selectCategoryInfoPageList(page, categoryInfoVo);
-    }
-
     public List<CategoryInfo> selectCategoryInfoList(CategoryInfoVo categoryInfoVo) throws BaseException{
+        if(categoryInfoVo.getSysId()==null){
+            throw new ParamRequiredException("专区ID不能为空");
+        }
+//        if(categoryInfoVo.getSysType()==null){
+//            throw new ParamRequiredException("专区类型不能为空");
+//        }
         return iCategoryInfoDao.selectCategoryInfoList(categoryInfoVo);
     }
 

@@ -6,29 +6,30 @@
 
 package com.asiainfo.biapp.si.loc.core.label.controller;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import springfox.documentation.annotations.ApiIgnore;
+
 import com.asiainfo.biapp.si.loc.base.controller.BaseController;
 import com.asiainfo.biapp.si.loc.base.exception.BaseException;
-import com.asiainfo.biapp.si.loc.base.page.Page;
 import com.asiainfo.biapp.si.loc.base.utils.StringUtil;
 import com.asiainfo.biapp.si.loc.base.utils.WebResult;
 import com.asiainfo.biapp.si.loc.core.label.entity.CategoryInfo;
 import com.asiainfo.biapp.si.loc.core.label.service.ICategoryInfoService;
 import com.asiainfo.biapp.si.loc.core.label.vo.CategoryInfoVo;
-
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
-import springfox.documentation.annotations.ApiIgnore;
 
 /**
  * Title : CategoryInfoController
@@ -60,20 +61,8 @@ public class CategoryInfoController extends BaseController<CategoryInfo>{
     
     private static final String SUCCESS = "success";
     
-    @ApiOperation(value = "分页查询标签分类")
-    @RequestMapping(value = "/categoryInfoPage/query", method = RequestMethod.POST)
-    public Page<CategoryInfo> list(@ModelAttribute Page<CategoryInfo> page,@ModelAttribute CategoryInfoVo categoryInfoVo) throws BaseException{
-        Page<CategoryInfo> categoryInfoPage = new Page<>();
-        try {
-            categoryInfoPage = iCategoryInfoService.selectCategoryInfoPageList(page, categoryInfoVo);
-        } catch (BaseException e) {
-            categoryInfoPage.fail(e);
-        }
-        return categoryInfoPage;
-    }
-    
-    @ApiOperation(value = "不分页查询标签分类列表")
-    @RequestMapping(value = "/categoryInfo/queryList", method = RequestMethod.POST)
+    @ApiOperation(value = "不分页查询标签分类")
+    @RequestMapping(value = "/categoryInfo/queryList", method = RequestMethod.POST, produces={ MediaType.APPLICATION_JSON_VALUE })
     public WebResult<List<CategoryInfo>> findList(@ModelAttribute CategoryInfoVo categoryInfoVo) throws BaseException{
         WebResult<List<CategoryInfo>> webResult = new WebResult<>();
         List<CategoryInfo> categoryInfoList = new ArrayList<>();
@@ -82,7 +71,7 @@ public class CategoryInfoController extends BaseController<CategoryInfo>{
         } catch (BaseException e) {
             return webResult.fail(e);
         }
-        return webResult.success("获取标签信息成功.", categoryInfoList);
+        return webResult.success("获取标签分类成功.", categoryInfoList);
     }
     
     @ApiOperation(value = "根据ID查询标签分类")
@@ -96,7 +85,7 @@ public class CategoryInfoController extends BaseController<CategoryInfo>{
         } catch (BaseException e) {
             return webResult.fail(e);
         }
-        return webResult.success("获取标签信息成功", categoryInfo);
+        return webResult.success("获取标签分类成功", categoryInfo);
     }
     
     @ApiOperation(value = "新增标签分类")
@@ -120,7 +109,7 @@ public class CategoryInfoController extends BaseController<CategoryInfo>{
             } catch (BaseException e) {
                 return webResult.fail(e);
             }
-            return webResult.success("新增标签信息成功", SUCCESS);
+            return webResult.success("新增标签分类成功", SUCCESS);
     }
     
     
@@ -148,7 +137,7 @@ public class CategoryInfoController extends BaseController<CategoryInfo>{
         }
         oldCat = fromToBean(categoryInfo, oldCat);
         iCategoryInfoService.update(oldCat);
-        return webResult.success("修改标签信息成功", SUCCESS);
+        return webResult.success("修改标签分类成功", SUCCESS);
     }
     
     @ApiOperation(value = "删除标签分类")
@@ -161,7 +150,7 @@ public class CategoryInfoController extends BaseController<CategoryInfo>{
         } catch (BaseException e) {
             return webResult.fail(e);
         }
-        return webResult.success("删除标签信息成功", SUCCESS);
+        return webResult.success("删除标签分类成功", SUCCESS);
     }
 
 

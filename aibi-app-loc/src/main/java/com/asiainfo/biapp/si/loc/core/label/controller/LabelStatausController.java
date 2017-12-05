@@ -6,6 +6,10 @@
 
 package com.asiainfo.biapp.si.loc.core.label.controller;
 
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -16,6 +20,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import springfox.documentation.annotations.ApiIgnore;
+
 import com.asiainfo.biapp.si.loc.base.controller.BaseController;
 import com.asiainfo.biapp.si.loc.base.exception.BaseException;
 import com.asiainfo.biapp.si.loc.base.page.Page;
@@ -24,12 +30,6 @@ import com.asiainfo.biapp.si.loc.base.utils.WebResult;
 import com.asiainfo.biapp.si.loc.core.label.entity.LabelStatus;
 import com.asiainfo.biapp.si.loc.core.label.service.ILabelStatusService;
 import com.asiainfo.biapp.si.loc.core.label.vo.LabelStatusVo;
-
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
-import springfox.documentation.annotations.ApiIgnore;
 
 /**
  * Title : LabelStatausController
@@ -62,7 +62,7 @@ public class LabelStatausController extends BaseController<LabelStatus>{
     private static final String SUCCESS = "success";
     
     @ApiOperation(value = "分页查询")
-    @RequestMapping(value = "/labelStatusPage/query", method = RequestMethod.POST)
+    @RequestMapping(value = "/labelStatus/queryPage", method = RequestMethod.POST)
     public Page<LabelStatus> list(@ModelAttribute Page<LabelStatus> page,@ModelAttribute LabelStatusVo labelStatusVo) throws BaseException{
         Page<LabelStatus> labelStatusPage = new Page <>();
         try {

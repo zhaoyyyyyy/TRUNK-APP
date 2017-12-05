@@ -65,7 +65,7 @@ public class CoConfigController {
      * @param token
      * @return
      */
-    @ApiOperation(value = "通过配置编码取子配置项")
+    @ApiOperation(value = "通过编码取子配置项")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "parentCode", value = "编码", required = true, paramType = "query", dataType = "string"),
             @ApiImplicitParam(name = "token", value = "token", required = true, paramType = "query", dataType = "string") })

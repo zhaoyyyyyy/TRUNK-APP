@@ -74,7 +74,7 @@ public class LabelInfoController extends BaseController<LabelInfo> {
     private static final String SUCCESS = "success";
 
     @ApiOperation(value = "分页查询标签信息")
-    @RequestMapping(value = "/labelInfoPage/query", method = RequestMethod.POST)
+    @RequestMapping(value = "/labelInfo/queryPage", method = RequestMethod.POST)
     public Page<LabelInfo> list(@ModelAttribute Page<LabelInfo> page, @ModelAttribute LabelInfoVo labelInfoVo) {
         Page<LabelInfo> labelInfoPage = new Page<>();
         try {

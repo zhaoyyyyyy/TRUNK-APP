@@ -68,7 +68,7 @@ public class SourceInfoController extends BaseController<SourceInfo> {
     private static final String SUCCESS = "success";
 
     @ApiOperation(value = "分页查询指标信息")
-    @RequestMapping(value = "/sourceInfoPage/query", method = RequestMethod.POST)
+    @RequestMapping(value = "/sourceInfo/queryPage", method = RequestMethod.POST)
     public Page<SourceInfo> list(@ModelAttribute Page<SourceInfo> page, @ModelAttribute SourceInfoVo sourceInfoVo) {
         Page<SourceInfo> sourceInfoPage = new Page<>();
         try {
@@ -79,7 +79,7 @@ public class SourceInfoController extends BaseController<SourceInfo> {
         return sourceInfoPage;
     }
 
-    @ApiOperation(value = "不分页查询指标信息列表")
+    @ApiOperation(value = "不分页查询指标信息")
     @RequestMapping(value = "/sourceInfo/queryList", method = RequestMethod.POST)
     public WebResult<List<SourceInfo>> findList(@ModelAttribute SourceInfoVo sourceInfoVo) {
         WebResult<List<SourceInfo>> webResult = new WebResult<>();
