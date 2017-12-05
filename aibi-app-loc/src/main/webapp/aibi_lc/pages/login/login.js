@@ -38,6 +38,7 @@ function COCLogin(){
 		  url: $.ctx + "/api/user/login",
 		  cache:false,
 		  data :data,
+//		  type:"post",
 //		data:{"username":"admin","password":"test1234"},
 		  success: function(returnObj){
 			  if(returnObj && returnObj.status == '200'){
@@ -47,7 +48,7 @@ function COCLogin(){
 					  ssg.setItem("token",data.token);
 					  ssg.setItem("refreshToken",data.refreshToken);
 				  }
-				  location.href = $.context+$.loginURL;
+				  location.href = $.loginURL;
 			  }else{
 				  alert(returnObj.msg);
 			  }

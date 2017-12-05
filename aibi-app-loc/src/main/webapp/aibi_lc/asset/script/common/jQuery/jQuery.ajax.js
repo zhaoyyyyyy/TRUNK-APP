@@ -12,8 +12,8 @@
 				   async:true,
 				   dataType:"json",
 				   headers:{
-					   "Content-Type": "application/json; charset=utf-8",
 					   'Access-Control-Allow-Origin': '*',
+					   "Content-Type": "application/x-www-form-urlencoded;charset=utf-8"
 				   },
 				   success: function(data){
 					   
@@ -61,13 +61,14 @@
 					   async:true,
 					   dataType:"json",
 					   type:"POST",
+					   stringify:false,
 					   success: function(data){
 						   
 					   } 
 				  };
 			  option = $.extend(defaults,option);
-			  var data = option.data;
-			  if($.type(data) != "string"){
+			  if(option.stringify){
+			  	  var data = option.data;
 				  option.data = JSON.stringify(data);
 			  }
 			$.fetch(option);
@@ -87,10 +88,10 @@
 					} 
 			};
 			option = $.extend(defaults,option);
-			 var data = option.data;
-			  if($.type(data) != "string"){
-				  option.data = JSON.stringify(data);
-			  }
+//			 var data = option.data;
+//			  if($.type(data) != "string"){
+//				  option.data = JSON.stringify(data);
+//			  }
 			$.fetch(option);
 		} ,
 		/****
@@ -107,10 +108,10 @@
 						
 					} 
 			};
-			var data = option.data;
-			  if($.type(data) != "string"){
-				  option.data = JSON.stringify(data);
-			  }
+//			var data = option.data;
+//			  if($.type(data) != "string"){
+//				  option.data = JSON.stringify(data);
+//			  }
 			option = $.extend(defaults,option);
 			$.fetch(option);
 		},
