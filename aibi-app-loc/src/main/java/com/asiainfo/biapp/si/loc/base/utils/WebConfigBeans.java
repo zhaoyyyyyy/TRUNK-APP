@@ -47,7 +47,7 @@ public class WebConfigBeans {
     private RequestMappingHandlerAdapter handlerAdapter;
 
     /**
-     * 增加字符串转日期的功能
+     * 增加字符串转换功能
      */
     @PostConstruct
     public void initEditableValidation() {
