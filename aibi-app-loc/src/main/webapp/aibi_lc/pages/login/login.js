@@ -33,13 +33,12 @@ function rememb(){
 	
 }
 function COCLogin(){
+	var data = formFmt.formToObj($("#login"));
 	$.AIPost({
 		  url: $.ctx + "/api/user/login",
 		  cache:false,
-		  data :{
-			  "username": $("#username").val(),
-			  "password": $("#pwd").val()
-		  },
+		  data :data,
+//		data:{"username":"admin","password":"test1234"},
 		  success: function(returnObj){
 			  if(returnObj && returnObj.status == '200'){
 				  var data = returnObj.data;
@@ -48,9 +47,9 @@ function COCLogin(){
 					  ssg.setItem("token",data.token);
 					  ssg.setItem("refreshToken",data.refreshToken);
 				  }
-				  location.href = jQuery.ctx+"/aibi_lc/pages/label/label-market.html";
+				  location.href = $.context+$.loginURL;
 			  }else{
-				  alert(returnObj.message);
+				  alert(returnObj.msg);
 			  }
 		   },
 		   error: function(req){
