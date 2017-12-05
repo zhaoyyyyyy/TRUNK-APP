@@ -77,7 +77,7 @@ public class PreConfigInfoController extends BaseController<PreConfigInfo> {
      * @return
      */
     @ApiOperation(value = "分页查询专区信息")
-    @RequestMapping(value = "/preConfigInfoPage/query", method = RequestMethod.POST)
+    @RequestMapping(value = "/preConfigInfo/queryPage", method = RequestMethod.POST)
     public Page<PreConfigInfo> queryPage(@ModelAttribute Page<PreConfigInfo> page,
             @ModelAttribute PreConfigInfoVo preConfigInfoVo) {
         Page<PreConfigInfo> preConfigInfoPage = new Page<>();
@@ -95,7 +95,7 @@ public class PreConfigInfoController extends BaseController<PreConfigInfo> {
      * @param preConfigInfo
      * @return
      */
-    @ApiOperation(value = "不分页查询专区信息列表")
+    @ApiOperation(value = "不分页查询专区信息")
     @RequestMapping(value = "/preConfigInfo/queryList", method = RequestMethod.POST)
     public WebResult<List<PreConfigInfo>> findList(@ModelAttribute PreConfigInfoVo preConfigInfoVo) {
         WebResult<List<PreConfigInfo>> webResult = new WebResult<>();

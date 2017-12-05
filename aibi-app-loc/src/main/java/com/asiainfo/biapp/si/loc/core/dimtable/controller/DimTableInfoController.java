@@ -62,7 +62,7 @@ public class DimTableInfoController extends BaseController<DimTableInfo>{
     private static final String SUCCESS = "success";
     
     @ApiOperation(value = "分页查询维表信息")
-    @RequestMapping(value = "/dimTableInfoPage/query", method = RequestMethod.POST)
+    @RequestMapping(value = "/dimTableInfo/queryPage", method = RequestMethod.POST)
     public Page<DimTableInfo> list(@ModelAttribute Page<DimTableInfo> page,@ModelAttribute DimTableInfoVo dimTableInfoVo) throws BaseException{
         Page<DimTableInfo> dimTableInfoPage = new Page<>();
         try {

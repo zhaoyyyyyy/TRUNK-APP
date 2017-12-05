@@ -6,7 +6,6 @@
 
 package com.asiainfo.biapp.si.loc.core.label.controller;
 
-import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
@@ -68,7 +67,7 @@ public class LabelCountRulesController extends BaseController<LabelCountRules> {
     private static final String SUCCESS = "success";
 
     @ApiOperation(value = "分页查询")
-    @RequestMapping(value = "/labelCountRulesPage/query", method = RequestMethod.POST)
+    @RequestMapping(value = "/labelCountRules/queryPage", method = RequestMethod.POST)
     public Page<LabelCountRules> list(@ModelAttribute Page<LabelCountRules> page,
             @ModelAttribute LabelCountRulesVo labelCountRulesVo) {
         Page<LabelCountRules> labelCountRulesPage = new Page<>();

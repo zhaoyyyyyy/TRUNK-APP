@@ -68,7 +68,7 @@ public class TargetTableStatusController extends BaseController<TargetTableStatu
     private static final String SUCCESS = "success";
 
     @ApiOperation(value = "分页查询指标源表状态")
-    @RequestMapping(value = "/TargetTableStatusPage/query", method = RequestMethod.POST)
+    @RequestMapping(value = "/TargetTableStatus/queryPage", method = RequestMethod.POST)
     public Page<TargetTableStatus> list(@ModelAttribute Page<TargetTableStatus> page,
             @ModelAttribute TargetTableStatusVo targetTableStatusVo) {
         Page<TargetTableStatus> TargetTableStatusPage = new Page<>();
@@ -80,7 +80,7 @@ public class TargetTableStatusController extends BaseController<TargetTableStatu
         return TargetTableStatusPage;
     }
 
-    @ApiOperation(value = "不分页查询指标源表状态列表")
+    @ApiOperation(value = "不分页查询指标源表状态")
     @RequestMapping(value = "/TargetTableStatus/queryList", method = RequestMethod.POST)
     public WebResult<List<TargetTableStatus>> findList(@ModelAttribute TargetTableStatusVo targetTableStatusVo) {
         WebResult<List<TargetTableStatus>> webResult = new WebResult<>();

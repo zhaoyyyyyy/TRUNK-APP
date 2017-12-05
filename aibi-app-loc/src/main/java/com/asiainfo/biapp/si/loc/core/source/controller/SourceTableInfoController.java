@@ -74,7 +74,7 @@ public class SourceTableInfoController extends BaseController<SourceTableInfo> {
     private static final String SUCCESS = "success";
 
     @ApiOperation(value = "分页查询指标数据源信息配置")
-    @RequestMapping(value = "/sourceTableInfoPage/query", method = RequestMethod.POST)
+    @RequestMapping(value = "/sourceTableInfo/queryPage", method = RequestMethod.POST)
     public Page<SourceTableInfo> list(@ModelAttribute Page<SourceTableInfo> page,
             @ModelAttribute SourceTableInfoVo sourceTableInfoVo) {
         Page<SourceTableInfo> sourceTableInfoPage = new Page<>();
@@ -86,7 +86,7 @@ public class SourceTableInfoController extends BaseController<SourceTableInfo> {
         return sourceTableInfoPage;
     }
 
-    @ApiOperation(value = "不分页查询指标数据源信息配置列表")
+    @ApiOperation(value = "不分页查询指标数据源信息配置")
     @RequestMapping(value = "/sourceTableInfo/queryList", method = RequestMethod.POST)
     public WebResult<List<SourceTableInfo>> findList(@ModelAttribute SourceTableInfoVo sourceTableInfoVo) {
         WebResult<List<SourceTableInfo>> webResult = new WebResult<>();

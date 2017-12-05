@@ -74,7 +74,7 @@ public class DataSourceInfoController extends BaseController<DataSourceInfo> {
      * @param dataSourceInfo
      * @return
      */
-    @ApiOperation(value = "不分页查询专区数据源信息列表")
+    @ApiOperation(value = "不分页查询专区数据源信息")
     @RequestMapping(value = "/dataSourceInfo/queryList", method = RequestMethod.POST)
     public WebResult<List<DataSourceInfo>> findList(@ModelAttribute DataSourceInfoVo dataSourceInfoVo) {
         WebResult<List<DataSourceInfo>> webResult = new WebResult<>();
