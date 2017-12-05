@@ -57,7 +57,7 @@ import com.asiainfo.biapp.si.loc.core.source.vo.SourceInfoVo;
  * @author zhangnan7
  * @version 1.0.0.2017年11月15日
  */
-@Api(value = "指标信息管理")
+@Api(value = "指标信息管理",description="张楠")
 @RequestMapping("api/source")
 @RestController
 public class SourceInfoController extends BaseController<SourceInfo> {
@@ -67,7 +67,7 @@ public class SourceInfoController extends BaseController<SourceInfo> {
 
     private static final String SUCCESS = "success";
 
-    @ApiOperation(value = "分页查询")
+    @ApiOperation(value = "分页查询指标信息")
     @RequestMapping(value = "/sourceInfoPage/query", method = RequestMethod.POST)
     public Page<SourceInfo> list(@ModelAttribute Page<SourceInfo> page, @ModelAttribute SourceInfoVo sourceInfoVo) {
         Page<SourceInfo> sourceInfoPage = new Page<>();
@@ -79,7 +79,7 @@ public class SourceInfoController extends BaseController<SourceInfo> {
         return sourceInfoPage;
     }
 
-    @ApiOperation(value = "查询列表")
+    @ApiOperation(value = "不分页查询指标信息列表")
     @RequestMapping(value = "/sourceInfo/queryList", method = RequestMethod.POST)
     public WebResult<List<SourceInfo>> findList(@ModelAttribute SourceInfoVo sourceInfoVo) {
         WebResult<List<SourceInfo>> webResult = new WebResult<>();
@@ -92,7 +92,7 @@ public class SourceInfoController extends BaseController<SourceInfo> {
         return webResult.success("获取指标信息成功.", sourceInfoList);
     }
 
-    @ApiOperation(value = "根据ID查询")
+    @ApiOperation(value = "根据ID查询指标信息")
     @ApiImplicitParam(name = "sourceId", value = "ID", required = true, paramType = "query", dataType = "string")
     @RequestMapping(value = "/sourceInfo/get", method = RequestMethod.POST)
     public WebResult<SourceInfo> findById(String sourceId) {
@@ -106,7 +106,7 @@ public class SourceInfoController extends BaseController<SourceInfo> {
         return webResult.success("获取指标信息成功", sourceInfo);
     }
 
-    @ApiOperation(value = "新增")
+    @ApiOperation(value = "新增指标信息")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "sourceId", value = "ID", required = false, paramType = "query", dataType = "string"),
             @ApiImplicitParam(name = "sourceName", value = "指标名称", required = false, paramType = "query", dataType = "string"),
@@ -131,7 +131,7 @@ public class SourceInfoController extends BaseController<SourceInfo> {
         return webResult.success("新增指标信息成功", SUCCESS);
     }
 
-    @ApiOperation(value = "修改")
+    @ApiOperation(value = "修改指标信息")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "sourceId", value = "ID", required = true, paramType = "query", dataType = "string"),
             @ApiImplicitParam(name = "sourceName", value = "指标名称", required = false, paramType = "query", dataType = "string"),
@@ -167,7 +167,7 @@ public class SourceInfoController extends BaseController<SourceInfo> {
      * 
      * @param id
      */
-    @ApiOperation(value = "删除")
+    @ApiOperation(value = "删除指标信息")
     @ApiImplicitParam(name = "sourceId", value = "ID", required = true, paramType = "query", dataType = "string")
     @RequestMapping(value = "/sourceInfo/delete", method = RequestMethod.POST)
     public WebResult<String> del(String sourceId) {

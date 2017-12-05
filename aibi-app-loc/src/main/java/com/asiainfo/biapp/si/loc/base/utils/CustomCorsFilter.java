@@ -3,10 +3,12 @@ package com.asiainfo.biapp.si.loc.base.utils;
 
 import java.util.Arrays;
 
+import org.springframework.context.annotation.Configuration;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 
+@Configuration
 public class CustomCorsFilter extends CorsFilter {
 
     public CustomCorsFilter() {

@@ -50,7 +50,7 @@ import springfox.documentation.annotations.ApiIgnore;
  * @author   wangrd
  * @version 1.0.0.2017年11月20日
  */
-@Api(value = "标签分类管理")
+@Api(value = "标签分类管理",description="王瑞冬")
 @RequestMapping("api/label")
 @RestController
 public class CategoryInfoController extends BaseController<CategoryInfo>{
@@ -60,7 +60,7 @@ public class CategoryInfoController extends BaseController<CategoryInfo>{
     
     private static final String SUCCESS = "success";
     
-    @ApiOperation(value = "分页查询")
+    @ApiOperation(value = "分页查询标签分类")
     @RequestMapping(value = "/categoryInfoPage/query", method = RequestMethod.POST)
     public Page<CategoryInfo> list(@ModelAttribute Page<CategoryInfo> page,@ModelAttribute CategoryInfoVo categoryInfoVo) throws BaseException{
         Page<CategoryInfo> categoryInfoPage = new Page<>();
@@ -72,7 +72,7 @@ public class CategoryInfoController extends BaseController<CategoryInfo>{
         return categoryInfoPage;
     }
     
-    @ApiOperation(value = "查询列表")
+    @ApiOperation(value = "不分页查询标签分类列表")
     @RequestMapping(value = "/categoryInfo/queryList", method = RequestMethod.POST)
     public WebResult<List<CategoryInfo>> findList(@ModelAttribute CategoryInfoVo categoryInfoVo) throws BaseException{
         WebResult<List<CategoryInfo>> webResult = new WebResult<>();
@@ -85,7 +85,7 @@ public class CategoryInfoController extends BaseController<CategoryInfo>{
         return webResult.success("获取标签信息成功.", categoryInfoList);
     }
     
-    @ApiOperation(value = "根据ID查询")
+    @ApiOperation(value = "根据ID查询标签分类")
     @ApiImplicitParam(name = "categoryId", value = "ID", required = true, paramType = "query", dataType = "string")
     @RequestMapping(value = "/categoryInfo/get",method = RequestMethod.POST)
     public WebResult<CategoryInfo> findById(String categoryId) throws BaseException{
@@ -99,7 +99,7 @@ public class CategoryInfoController extends BaseController<CategoryInfo>{
         return webResult.success("获取标签信息成功", categoryInfo);
     }
     
-    @ApiOperation(value = "新增")
+    @ApiOperation(value = "新增标签分类")
     @ApiImplicitParams({
         @ApiImplicitParam(name = "categoryId", value = "分类ID", required = false, paramType = "query", dataType = "string"),
         @ApiImplicitParam(name = "sysId", value = "系统ID", required = false, paramType = "query", dataType = "string"),
@@ -124,7 +124,7 @@ public class CategoryInfoController extends BaseController<CategoryInfo>{
     }
     
     
-    @ApiOperation( value = "修改")
+    @ApiOperation( value = "修改标签分类")
     @ApiImplicitParams({
         @ApiImplicitParam(name = "categoryId", value = "分类ID", required = true, paramType = "query", dataType = "string"),
         @ApiImplicitParam(name = "sysId", value = "系统ID", required = false, paramType = "query", dataType = "string"),
@@ -151,7 +151,7 @@ public class CategoryInfoController extends BaseController<CategoryInfo>{
         return webResult.success("修改标签信息成功", SUCCESS);
     }
     
-    @ApiOperation(value = "删除")
+    @ApiOperation(value = "删除标签分类")
     @ApiImplicitParam(name = "categoryId", value = "ID", required = true, paramType = "query", dataType = "string")
     @RequestMapping(value = "/categoryInfo/delete", method = RequestMethod.POST)
     public WebResult<String> del(String categoryId) throws BaseException{

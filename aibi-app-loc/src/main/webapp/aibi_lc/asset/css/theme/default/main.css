@@ -15,6 +15,9 @@
 	padding: 0 10px;
 	margin: 15px 0;
 }
+.ui-lc-mian > h3 >.dropdown >.dropdown-menu{
+	left: -44px;
+}
 .ui-lc-mian > .ui-label-mes{
 	text-align: left;
 	color: #9b9b9b;
@@ -471,8 +474,7 @@
     border-width: 5px 5px 0;
     border-top-color: #000;
 }
-
-.ui-state-highlight{
+.ui-calculate-center .ui-state-highlight{
 	width: 50px;
 	height: 50px;
 	border: 1px dashed #009241;
@@ -480,12 +482,12 @@
     display: inline-block !important;
     margin: 10px 0 20px 8px;
 }
-.ui-drop-highlight{
+.ui-calculate-center .ui-drop-highlight{
 	background-color: #669241;
 }
 /*枚举型弹框*/
 .ui-enum-content{
-	margin: 5px 0;
+	margin: 5px 0 0;
 	border: 1px solid #e9e9e9;
 	height: 385px;
 }
@@ -502,9 +504,7 @@
 	border-bottom: 1px solid #e9e9e9;
 }
 
-
-
-/*创建标签-单指标*/
+/*创建标签-单指标高佳佳*/
 .create-main{
 	background: #fff;
 	border: 1px solid #E9E9E9;
@@ -539,52 +539,57 @@
 	height:166px;
 	border-radius:0 6px 6px 0;
 }
-.create-main > .ui-main > div > .ui-form{
+.create-main .ui-form{
 	width:33.3333333%;
 	border-right:1px solid #ddd;
-	padding:20px 10px 20px 15px;
+	padding:20px 10px 0px 15px;
 	height:inherit;
 }
-.create-main > .ui-main > div > .ui-form:last-child{
+.create-main .ui-form:last-child{
 	border-right-color:transparent;
 }
-.create-main > .ui-main > div > .ui-form > .ui-form-group{
+.create-main .ui-form-group{
 	width:100%;
 }
-.create-main > .ui-main > div > .ui-form > .ui-form-group > .control-label{
+.create-main .ui-form > .ui-form-group > .control-label{
 	min-width: 60px;
 }
-.create-main > .ui-main > div > .ui-form  > .ui-form-group > .control-input{
+.create-main .ui-form  > .ui-form-group > .control-input{
 	width:70%;
 }
-/*创建标签-多指标*/
-.create-main > .ui-expand-search{
+/*创建标签-多指标高佳佳*/
+
+.ui-create{
 	padding:8px 0 5px;
-	border-color:transparent;
 	border-radius:6px 6px 0 0;
+	background-color:#F7F7F7;
 }
-.create-main > .ui-expand-search > .ui-form-group{
+.ui-create > .ui-form-group{
 	margin-bottom:0;
-	width:100%;
 }
-.create-main > .ui-expand-search > .ui-form-group > .control-input{
+.ui-create > .ui-form-group > .control-label{
+	float: left;
+	padding: 5px 10px 0;
+	text-align: right;
+	position: relative;
+	min-width:60px;
+}
+.ui-create > .ui-form-group > .control-input{
 	width:76%;
 }
-.create-main > .ui-expand-search > .ui-form-group  span.del-btn > i{
+i.del-btn-icon{
 	display:inline-block;
-	width:10px;
+	width:12px;
 	height:10px;
-	background:url(./images/lc-icon.png) no-repeat -224px -106px;
-	border-color: transparent;
-	padding:0 5px;
-
+	background:url(./images/lc-icon.png) no-repeat -223px -106px;
+	cursor:pointer;
 }
-.create-main > .ui-expand-search > .ui-form-group > .control-input > .label-lists{
+.ui-create .label-lists{
 	position:absolute;
 	top:4px;
 	left:5px;
 }
-.create-main > .ui-expand-search > .ui-form-group > .control-input > .label-lists .del-btn{
+span.del-btn{
 	color: #666666;
 	background:#F3F3F3;
 	line-height:20px;
@@ -593,29 +598,6 @@
 	border-radius:5px;
 	cursor:pointer;
 }
-.create-main > .ui-expand-search > .ui-form-group > .control-label{
-	float: left;
-	padding: 5px 10px 0;
-	text-align: right;
-	position: relative;
-	min-width: 90px;
-}
-.create-main > .ui-form{
-	width:33.333333%;
-	border-right:1px solid #ddd;
-	padding:15px 0 0;
-}
-.create-main > .ui-form:last-child{
-	border-right-color:transparent;
-}
-.create-main > .ui-form > .ui-form-group{
-	width:100%;
-}
-.create-main > .ui-form > .ui-form-group > .control-input{
-	width:65%;
-}
-
-
 
 
 

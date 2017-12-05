@@ -70,7 +70,7 @@ public class LogAspectAdvice {
     // 第一个* 代表返回值类型,需要加空格
     // 如果要设置多个切点可以使用 || 拼接
     @Pointcut("execution(* com.asiainfo.biapp.si.loc.*.controller.*Controller.*(..))")
-    public void saveLog() {
+    public void saveLog(Object[] args, String method, String targetName, Object result) {
         // http保存日志
         System.out.println("saveLog");
      Map<String, Object> params = new HashMap<>();
@@ -78,23 +78,23 @@ public class LogAspectAdvice {
         params.put("userId", "admin");
         params.put("ipAddr", "127.0.0.1");
         params.put("opTime", new Date());
-          
+        
         params.put("sysId", nodeName);
-        params.put("nodeName", nodeName);
-        /*
-        params.put("levelId", level);
-        params.put("threadName", threadName);
-        params.put("interfaceUrl", interfaceUrl + "/" + method);
-        params.put("errorMsg", msg);
-        HttpUtil.sendPost(jauthUrl + "/api/loginterdetail/save", params);
-*/
+        
+        params.put("interfaceName", targetName);
+        params.put("interfaceUrl", targetName + "/" + method);
+        params.put("inputParams", args[0]);
+        params.put("outputParams", result);
+        
+        HttpUtil.sendPost(jauthUrl + "/api/interface/save", params);
+
        
     }
 
     // 环绕通知（##环绕通知的方法中一定要有ProceedingJoinPoint 参数,与
     // Filter中的 doFilter方法类似）
 
-    @Around("execution(* com.asiainfo.biapp.si.loc.*.controller.*.*(..))")
+ //   @Around("execution(* com.asiainfo.biapp.si.loc.*.controller.*.*(..))")
     public Object doAround(ProceedingJoinPoint pjp) throws Throwable {
         System.out.println("===========进入around环绕方法！=========== \n");
         // 调用方法的参数
@@ -107,9 +107,9 @@ public class LogAspectAdvice {
         String targetName = pjp.getTarget().getClass().getName();
         // 执行完方法的返回值：调用proceed()方法，就会触发切入点方法执行
         Object result = pjp.proceed();// result的值就是被拦截方法的返回值
-
         System.out.println("输出：" + args[0] + ";" + method + ";" + target + ";" + result + "\n");
-        this.saveLog();
+        if(!"setReqAndRes".equals(method)){
+        this.saveLog(args, method, targetName, result);}
         System.out.println("调用方法结束：之后执行！\n");
         return result;
     }

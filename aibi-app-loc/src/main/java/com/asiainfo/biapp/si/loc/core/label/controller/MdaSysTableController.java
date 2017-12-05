@@ -61,7 +61,7 @@ import springfox.documentation.annotations.ApiIgnore;
  * @author lilin7
  * @version 1.0.0.2017年11月20日
  */
-@Api(value = "元数据表管理")
+//@Api(value = "元数据表管理")
 @RequestMapping("api/label")
 @RestController
 public class MdaSysTableController extends BaseController<MdaSysTable> {

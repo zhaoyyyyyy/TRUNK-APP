@@ -57,7 +57,7 @@ import com.asiainfo.biapp.si.loc.core.source.vo.TargetTableStatusVo;
  * @author zhangnan7
  * @version 1.0.0.2017年11月15日
  */
-@Api(value = "指标源表状态管理")
+@Api(value = "指标源表状态管理",description="张楠")
 @RequestMapping("api/source")
 @RestController
 public class TargetTableStatusController extends BaseController<TargetTableStatus> {
@@ -67,7 +67,7 @@ public class TargetTableStatusController extends BaseController<TargetTableStatu
 
     private static final String SUCCESS = "success";
 
-    @ApiOperation(value = "分页查询")
+    @ApiOperation(value = "分页查询指标源表状态")
     @RequestMapping(value = "/TargetTableStatusPage/query", method = RequestMethod.POST)
     public Page<TargetTableStatus> list(@ModelAttribute Page<TargetTableStatus> page,
             @ModelAttribute TargetTableStatusVo targetTableStatusVo) {
@@ -80,7 +80,7 @@ public class TargetTableStatusController extends BaseController<TargetTableStatu
         return TargetTableStatusPage;
     }
 
-    @ApiOperation(value = "查询列表")
+    @ApiOperation(value = "不分页查询指标源表状态列表")
     @RequestMapping(value = "/TargetTableStatus/queryList", method = RequestMethod.POST)
     public WebResult<List<TargetTableStatus>> findList(@ModelAttribute TargetTableStatusVo targetTableStatusVo) {
         WebResult<List<TargetTableStatus>> webResult = new WebResult<>();
@@ -93,7 +93,7 @@ public class TargetTableStatusController extends BaseController<TargetTableStatu
         return webResult.success("获取指标源表状态成功.", TargetTableStatusList);
     }
 
-    @ApiOperation(value = "根据ID查询")
+    @ApiOperation(value = "根据ID查询指标源表状态")
     @ApiImplicitParam(name = "tableId", value = "ID", required = true, paramType = "query", dataType = "string")
     @RequestMapping(value = "/TargetTableStatus/get", method = RequestMethod.POST)
     public WebResult<TargetTableStatus> findById(String tableId) throws BaseException {
@@ -107,7 +107,7 @@ public class TargetTableStatusController extends BaseController<TargetTableStatu
         return webResult.success("获取指标源表状态成功.", targetTableStatus);
     }
 
-    @ApiOperation(value = "新增")
+    @ApiOperation(value = "新增指标源表状态")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "cooTableName", value = "数据表名", required = false, paramType = "query", dataType = "string"),
             @ApiImplicitParam(name = "cooTableType", value = "指标源表类型", required = false, paramType = "query", dataType = "int"),
@@ -128,7 +128,7 @@ public class TargetTableStatusController extends BaseController<TargetTableStatu
         return webResult.success("新增指标源表状态成功", SUCCESS);
     }
 
-    @ApiOperation(value = "修改")
+    @ApiOperation(value = "修改指标源表状态")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "labelId", value = "ID", required = true, paramType = "query", dataType = "string"),
             @ApiImplicitParam(name = "cooTableName", value = "数据表名", required = false, paramType = "query", dataType = "string"),
@@ -162,7 +162,7 @@ public class TargetTableStatusController extends BaseController<TargetTableStatu
      * 
      * @param id
      */
-    @ApiOperation(value = "删除")
+    @ApiOperation(value = "删除指标源表状态")
     @ApiImplicitParam(name = "tableId", value = "ID", required = true, paramType = "query", dataType = "string")
     @RequestMapping(value = "/TargetTableStatus/delete", method = RequestMethod.POST)
     public WebResult<String> del(String tableId) {

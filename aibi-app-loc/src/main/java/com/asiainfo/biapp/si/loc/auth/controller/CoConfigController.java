@@ -9,6 +9,7 @@ package com.asiainfo.biapp.si.loc.auth.controller;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -64,6 +65,7 @@ public class CoConfigController {
      * @param token
      * @return
      */
+    @ApiOperation(value = "通过配置编码取子配置项")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "parentCode", value = "编码", required = true, paramType = "query", dataType = "string"),
             @ApiImplicitParam(name = "token", value = "token", required = true, paramType = "query", dataType = "string") })
@@ -86,6 +88,7 @@ public class CoConfigController {
      * @param token
      * @return
      */
+    @ApiOperation(value = "通过配置编码取配置项值")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "code", value = "编码", required = true, paramType = "query", dataType = "string"),
             @ApiImplicitParam(name = "token", value = "token", required = true, paramType = "query", dataType = "string") })
