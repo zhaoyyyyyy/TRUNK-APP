@@ -6,7 +6,7 @@
 		 var defaults={        
 			   	url:'./grid.json',
 				datatype: "json",
-				mtype:"GET",
+				mtype:"POST",
 			   	colNames:[ ],
 			   	colModel:[ ],
 			   	rowNum:10,
@@ -38,7 +38,8 @@
 				loadBeforeSend:function(){
 				},
 				loadComplete:function(data){
-					var pageBox = '<div class="clearfix"><div class="fleft totalPage"><span class="fleft">共'+data.records+'条记录，'+data.total+'页，当前第'+data.page+'页</span></div><div id="'+thisId+'_pager" class="tcdPageCode"></div></div>';
+					console.log(data)
+					var pageBox = '<div class="clearfix"><div class="fleft totalPage"><span class="fleft">共'+data.totalCount+'条记录，'+data.totalPageCount+'页，当前第'+data.page+'页</span></div><div id="'+thisId+'_pager" class="tcdPageCode"></div></div>';
 					$(opts.pager).html(pageBox);
 					$(opts.pager).find("#"+thisId+"_pager").createPage({
 				        pageCount:data.total,
@@ -115,7 +116,8 @@
 				headers:{
 					'X-Authorization':token,
 					'Access-Control-Allow-Origin': '*',
-					"Content-Type": "application/json; charset=utf-8",
+					"Content-Type": "application/x-www-form-urlencoded;charset=utf-8"
+					//,"Content-Type": "application/json; charset=utf-8",
 				},
 				beforeSend :function(){
 					$("#load_"+thisId).show()//.removeClass("preloader_2").addClass("preloader_2").html('<span></span><span></span><span></span><span></span>');

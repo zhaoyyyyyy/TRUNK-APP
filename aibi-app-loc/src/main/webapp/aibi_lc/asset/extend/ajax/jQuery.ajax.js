@@ -12,7 +12,7 @@
 				   async:true,
 				   dataType:"json",
 				   headers:{
-					   "Content-Type": "application/json; charset=utf-8",
+					   "Content-Type": "application/x-www-form-urlencoded;charset=utf-8",
 					   'Access-Control-Allow-Origin': '*',
 				   },
 				   success: function(data){

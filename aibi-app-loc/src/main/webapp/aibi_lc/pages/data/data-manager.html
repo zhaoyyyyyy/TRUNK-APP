@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <title>专区管理</title>
+    <title>data-manager</title>
     <!--[if IE]>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
     <![endif]-->
@@ -22,6 +22,7 @@
     <script src="../../asset/script/common/jQuery/jQueryUI/gird/js/jquery.jqGrid.min.js"></script>
     <script src="../../asset/script/common/jQuery/jQueryUI/gird/js/i18n/grid.locale-cn.js"></script>
     <script src="../../asset/script/common/jQuery/jQueryUI/gird/jquery.jqGrid.extend.js"></script>
+    <script  src="data-manager.js"></script>
 
     <!--
         H5兼容js CSS3 兼容JS
@@ -95,28 +96,13 @@
     <div class="ui-main fleft">
         <div>
             <div class="ui-lc-mian">
-                <h3>专区管理</h3>
-                <div class="ui-label-mes clearfix ui-data-form">
-                    <div class="fleft">
-                        <button type="button" class="ui-btn ui-btn-default mr10">
-                            <span class="create-white"></span>
-                            新增
-                        </button>
-                    </div>
-                    <form class="form-inline data-form fright">
-                        <div class="form-group">
-                            <div class="control-input has-icon">
-                                <input type="text" class="form-control input-pointer" id="inputEmail4" placeholder="全部数据状态" readonly="readonly">
-                                <span class="glyphicon-select form-control-feedback"></span>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <div class="input-group">
-                                <input type="text" class="form-control" id="exampleInputAmount" placeholder="模糊查询">
-                                <div class="input-group-addon input-group-icon right-child"></div>
-                            </div>
-                        </div>
-                    </form>
+                <h3>数据资源管理</h3>
+                <div>
+                    <button type="button" class="ui-btn ui-btn-default mr10">
+                        <span class="create-white"></span>
+                        新增
+                    </button>
+                    <button type="button" class="ui-btn ui-btn-second">删除</button>
                 </div>
                 <div class="ui-table-static mt10">
                     <table id="jsonmap1"  class="table"></table>
@@ -124,61 +110,11 @@
                 </div>
             </div>
             <!-- todo -->
+
         </div>
     </div>
 
 </div>
-
-
-<script type="text/javascript">
-    $(function(){
-        $("#jsonmap1").AIGrid({
-            url:'../grid.json',
-            datatype: "json",
-            colNames:['序号','专区ID', '专区英文名称', '地市名称','创建时间','数据状态','操作'],
-            colModel:[
-                {name:'id',index:'id', width:30, sortable:true,frozen : true ,align:"center"},//frozen : true固定列
-                {name:'invdate',index:'invdate', width:60, jsonmap:"invdate",align:"center"},
-                {name:'name',index:'name asc, invdate',sortable:false, width:60,align:"center"},
-                {name:'amount',index:'amount', width:60,align:"center"},
-                {name:'tax',index:'tax', width:80,align:"center"	},
-                {name:'total',index:'total', width:100,align:"center"},
-                {name:'op',index:'op', width:160, sortable:false,formatter:del,align:"center"}
-            ],
-            rowNum:10,
-            rowList:[10,20,30],
-            pager: '#pjmap1',//分页的id
-            sortname: '',//排序的字段名称 不需要的话可置为空  取值取自colModel中的index字段
-            viewrecords: true,
-            multiselect:false,
-            rownumbers:false,//是否展示行号
-            sortorder: "desc",//排序方式
-            jsonReader: {
-                repeatitems : false,
-                id: "0"
-            },
-            height: '100%'
-        });
-
-
-
-
-        function setColor(cellvalue, options, rowObject){
-            if(rowObject.total > 700){
-                return '<span class="appMonitor" style="color:#faa918;">草稿</span>';
-            }
-            return cellvalue;
-        }
-        function del(){
-            var html='<button type="button" class="btn btn-default  ui-table-btn ui-table-btn">停用</button><button type="button" class="btn btn-default  ui-table-btn ui-table-btn">修改</button><button type="button" class="btn btn-default  ui-table-btn ui-table-btn">修改授权用户</button><button type="button" class="btn btn-default ui-table-btn">标签授权</button>';
-            return html;
-        }
-    });
-
-
-
-
-</script>
 
 </body>
 </html>
