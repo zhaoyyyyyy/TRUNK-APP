@@ -123,6 +123,7 @@ public class Page<T> implements Serializable {
 	}
 
 	public int getCurrentPageNo() {
+		this.pageStart = this.getEnd() / this.getPageSize();
 		return this.pageStart;
 	}
 
@@ -177,10 +178,12 @@ public class Page<T> implements Serializable {
 		return getCurrentPageNo() > 1;
 	}
 
-	public List<T> getData() {
+//	public List<T> getData() {
+//		return this.data;
+//	}
+	public List<T> getRows() {
 		return this.data;
 	}
-
 	public boolean isAutoCount() {
 		return this.autoCount;
 	}
