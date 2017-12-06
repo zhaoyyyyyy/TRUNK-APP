@@ -9,15 +9,18 @@
 
 <link href="../../asset/css/common/reset.css" rel="stylesheet"  /> 
 <link href="../../asset/css/jQueryUI/jquery-ui-1.12.1.min.css" rel="stylesheet"  />
-<link href="../../asset/script/common/jQuery/jQueryUI/gird/page/page.css" rel="stylesheet"  />
-<link href="../../asset/css/theme/default/dialog.owner.css" rel="stylesheet"  /> 
-<link href="../../asset/css/theme/default/button.css" rel="stylesheet"  /> 
-<link href="../../asset/css/theme/default/form.css" rel="stylesheet"  /> 
-<link href="../../asset/css/theme/default/tab.css" rel="stylesheet"  /> 
-<link href="../../asset/css/theme/default/coc_frame.css" rel="stylesheet"  /> 
-<link href="../../asset/css/theme/default/main.css" rel="stylesheet"  /> 
+<link href="../../asset/script/common/jQuery/jQueryUI/gird/page/page.css" rel="stylesheet"  theme="default"/>
+<link href="../../asset/extend/tree/css/zTreeStyle/zTreeStyle.css" rel="stylesheet"  />
+<link href="../../asset/css/theme/default/dialog.owner.css" rel="stylesheet"  theme="default"/> 
+<link href="../../asset/css/theme/default/button.css" rel="stylesheet"  theme="default"/> 
+<link href="../../asset/css/theme/default/form.css" rel="stylesheet"  theme="default"/> 
+<link href="../../asset/css/theme/default/tab.css" rel="stylesheet"  theme="default"/> 
+<link href="../../asset/css/theme/default/coc_frame.css" rel="stylesheet" theme="default"/> 
+<link href="../../asset/css/theme/default/main.css" rel="stylesheet" theme="default"/> 
 <script type="text/javascript" src="../../asset/script/common/jQuery/jquery-1.12.4.js"></script>
 <script type="text/javascript" src="../../asset/script/common/jQuery/jQueryUI/jquery-ui-1.12.1.min.js"></script>
+<script type="text/javascript" src="../../asset/extend/tree/jquery.ztree.all.min.js"></script>
+<script type="text/javascript" src=""></script>
 <!--
 	H5兼容js CSS3 兼容JS
 -->
@@ -84,6 +87,9 @@ $(function(){
 	      width: 560,
 	      modal: true,
 	      title:"新建/修改",
+	      open:function(){
+	      	ztreeFunc();
+	      },
 	      buttons: [
 	    	    {
 	    	      text: "取消",
@@ -105,11 +111,41 @@ $(function(){
 	    	    }
     	  ]
     });
-	
+	$( "#accordion" ).accordion({
+	  heightStyle: "content",
+	  icons:false
+	});
 	
 	
 });
-
+function ztreeFunc(){
+	var zTreeObj,
+	setting = {
+		view: {
+			selectedMulti: false
+		}
+	},
+	zTreeNodes = [
+		{"name":"网站导航", open:true, children: [
+			{ "name":"google", "url":"http://g.cn", "target":"_blank"},
+			{ "name":"baidu", "url":"http://baidu.com", "target":"_blank"},
+			{ "name":"sina", "url":"http://www.sina.com.cn", "target":"_blank"}
+			]
+		}
+	];
+	zTreeObj = $.fn.zTree.init($("#ztree"), setting, zTreeNodes);
+}
+function setTheme(){
+	var links = '<link href="../../asset/css/theme/red/dialog.owner.css" rel="stylesheet"  theme="red"/> '
+				+'<link href="../../asset/css/theme/red/button.css" rel="stylesheet"  theme="red"/>' 
+				+'<link href="../../asset/css/theme/red/form.css" rel="stylesheet"  theme="red"/>' 
+				+'<link href="../../asset/css/theme/red/tab.css" rel="stylesheet"  theme="red"/> '
+				+'<link href="../../asset/css/theme/red/coc_frame.css" rel="stylesheet" theme="red"/>'
+				+'<link href="../../asset/css/theme/red/main.css" rel="stylesheet" theme="red"/>'
+				+'<link href="../../asset/script/common/jQuery/jQueryUI/gird/page/red.page.css" rel="stylesheet"  theme="red"/>';
+	$('link[theme="default"]').attr("disabled",true).remove();			
+	$("head > link").last().after(links);			
+}
 </script>
 </head>
 <body>
@@ -126,6 +162,7 @@ $(function(){
 		        </div>
  			</div>
  			<div class="ui-notice fright">
+ 				<button type="button" class="ui-btn ui-btn-default" onclick="setTheme()">红色主题</button>
  				<i class="ui-help"></i>
  				<i class="ui-clock"></i>
  				<i class="ui-tag"></i>
@@ -142,18 +179,48 @@ $(function(){
  </div>
  <div class="ui-container clearfix">
  	<div class="ui-menu fleft">
- 		<ul class="ui-menu-ul">
- 			<li>
+ 		<ul class="ui-menu-ul" id="accordion">
+ 			<li >
  				<a href="javascript:;">首页</a>
+ 				<div>
+ 					<ul class="ui-menu-ul">
+ 						<li class="active">
+ 							<a href="javascript:;">标签管理</a>
+ 						</li>
+ 						<li>
+ 							<a href="javascript:;">标签管理</a>
+ 						</li>
+ 					</ul>
+ 				</div>
  			</li>
- 			<li class="active">
+ 			<li>
  				<a href="javascript:;">标签集市</a>
+ 				<div>
+ 					<ul class="ui-menu-ul">
+ 						<li>
+ 							<a href="javascript:;">标签管理</a>
+ 						</li>
+ 						<li>
+ 							<a href="javascript:;">客户群管理</a>
+ 						</li>
+ 					</ul>
+ 				</div>
  			</li>
  			<li>
  				<a href="javascript:;">优秀案例</a>
  			</li>
  			<li>
  				<a href="javascript:;">客户群集市</a>
+ 				<div>
+ 					<ul class="ui-menu-ul">
+ 						<li>
+ 							<a href="javascript:;">标签管理</a>
+ 						</li>
+ 						<li>
+ 							<a href="javascript:;">客户群管理</a>
+ 						</li>
+ 					</ul>
+ 				</div>
  			</li>
  			<li>
  				<a href="javascript:;">我的客户群</a>
@@ -184,8 +251,8 @@ $(function(){
 					    	</a>
 				     	<ul class="dropdown-menu">
 					       <li><a href="#">Action</a></li>
-					       <li><a href="#">Another action</a></li>
-					       <li><a href="#">Something else here</a></li>
+					       <li><a href="#">Another</a></li>
+					       <li><a href="#">Something</a></li>
 				        </ul>    
 				    </div>
 			    </h3>
@@ -399,7 +466,7 @@ $(function(){
  									<em>三个月</em>
  								</a>
  								<div class="control-input">
-					        		<div class="control-input date-input fleft has-icon">
+					        			<div class="control-input date-input fleft has-icon">
 							          	<input type="text" class="form-control input-pointer" id="inputEmail4" placeholder="请选择开始日期" readonly="readonly">
 							          	<span class="glyphicon-date form-control-feedback"></span>
 							        </div>
@@ -819,7 +886,7 @@ $(function(){
 		<div class="fleft">
 			<div class="ui-enum-list">
 				<div class="ui-enum-header"></div>
-				<ul>
+				<ul id="ztree" class="ztree">
 				
 				</ul>
 			</div>

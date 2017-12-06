@@ -89,24 +89,69 @@ html,body{height: 100%;}
 	padding: 40px 0;
 }
 .ui-menu-ul > li{
-	border-left: 2px solid #394557;
 	border-bottom: 1px solid #4F5E74;
 }
 .ui-menu-ul > li > a{
-	text-align: center;
+	text-align: left;
 	line-height: 60px;
-	font-size: 14px;
+	font-size: 14px !important;
 	color: #96999F;
 	height: 60px;
 	width: 98px;
-	display: inline-block;
+	display: inline-block !important;
+    cursor: pointer;
+    position: relative;
+    margin:  0 !important;
+    padding: 0 0 0 10px!important;
+    border: 1px solid transparent;
+    background: #394557;
+    border-left:2px solid #323d4d;
+    font-weight: 100;
 }
-.ui-menu-ul > li.active{
-	border-left-color:#38B82F;
+.ui-menu-ul > li.active,
+.ui-menu-ul > li > .ui-accordion-header-active.ui-state-active{
+	border-left:2px solid #38B82F;
 	background-color: #2A3342;
 }
-.ui-menu-ul > li.active > a{
+.ui-menu-ul > li.active > a,
+.ui-menu-ul > li > .ui-accordion-header-active.ui-state-active{
 	color: #2EBB38;
+}
+.ui-menu-ul.ui-accordion > li >  .ui-accordion-content{
+	background: #323d4d;
+	border-radius: 0px;
+	border: 0px;
+	color: #96999F;
+	padding: 0;
+}
+.ui-menu-ul.ui-accordion > li >  .ui-accordion-content >.ui-menu-ul{
+	margin: 0;
+	padding:0;
+	overflow: hidden;
+}
+.ui-accordion-content >.ui-menu-ul > li >a{
+	width: auto;
+	font-size: 12px !important;
+	height: 40px;
+	line-height: 40px;
+	background: #323d4d;
+	padding: 0 0 0 20px!important;
+	color:#99a1ad;
+}
+.ui-accordion-content >.ui-menu-ul > li{
+	border-bottom-color: #3b4a5f;
+}
+.ui-accordion-content >.ui-menu-ul > li.active{
+	background: #323d4d;
+	border-left:2px solid #323d4d;
+}
+.ui-accordion-content >.ui-menu-ul > li.active > a{
+	color:#1d8b4d;
+}
+.ui-accordion-content >.ui-menu-ul > li:last-child >a,
+.ui-accordion-content >.ui-menu-ul > li:last-child{
+	border:0px !important;
+	border-left:2px solid #323d4d !important;
 }
 .ui-notice{
 	width: auto;
@@ -266,9 +311,17 @@ html,body{height: 100%;}
     background: #009241;
     color: #fff !important;
 }
-
-
-
+/**ztree css style*/
+.ztree li a span.button{
+	background:url(./images/lc-icon.png) no-repeat;
+}
+.ztree li span.button.ico_open,
+.ztree li span.button.ico_close{
+    background-position: -126px -74px ;
+}
+.ztree li span.button.ico_docu{
+	 background-position: -129px -102px;
+}
 
 
 
