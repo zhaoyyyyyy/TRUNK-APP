@@ -8,6 +8,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import com.asiainfo.biapp.si.loc.base.exception.BaseException;
 import com.asiainfo.biapp.si.loc.base.utils.WebResult;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import io.swagger.annotations.ApiParam;
 
@@ -177,10 +178,10 @@ public class Page<T> implements Serializable {
 	public boolean hasPreviousPage() {
 		return getCurrentPageNo() > 1;
 	}
-
-//	public List<T> getData() {
-//		return this.data;
-//	}
+	@JsonIgnore  
+	public List<T> getData() {
+		return this.data;
+	}
 	public List<T> getRows() {
 		return this.data;
 	}
