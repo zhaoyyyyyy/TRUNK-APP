@@ -8,7 +8,7 @@ $(function(){
     }
     $("#jsonmap1").AIGrid({
         //url:'../../demos/grid.json',
-        url:'http://10.1.48.18:8441/api/prefecture/dataSourceInfo/queryList',
+        url: $.ctx + "/api/prefecture/preConfigInfo/queryPage?autoCount=true",
         datatype: "json",
         colNames:['元数据名称','创建时间', '标签类型','操作'],
         colModel:[
