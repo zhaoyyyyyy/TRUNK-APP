@@ -1,10 +1,11 @@
+
 body{
 	width: 100%;
 	height: 100%;
 	background-color: #f8fafc;
 	margin:0px auto;
 	overflow: hidden;
-	background-image: url('../images/login/login-bg.png');
+	background-image: url('../../images/login/login-bg.png');
 	background-position:center -30px;
 	}
 .userLogin-box{
@@ -40,7 +41,7 @@ body{
 .loginLeft-box{
 	width:529px;
 	height:454px;
-	background-image: url('../images/login/login-left.png');
+	background-image: url('../../images/login/login-left.png');
 }
 .psd-li{
 	overflow:hidden;
@@ -85,7 +86,7 @@ input.btn-loginSubmit{
 	display:inline-block;
 	width:30px;
 	height:34px;
-	background:url('../images/login/login-icon.png');
+	background:url('../../images/login/login-icon.png');
 	position:absolute;
 	left:12px;
 }

@@ -13,11 +13,27 @@
 			   	rowList:[],
 			   	pager: '#pager_'+Math.random()*100,
 			   	sortname: 'id',
-			    viewrecords: true,
+			    //viewrecords: true,
 			    sortorder: "desc",
 				jsonReader: {
 					repeatitems : false,
 					id: "0"
+				},
+				prmNames: {
+					page:"pageStart",
+					rows:"pageSize", 
+					sort: "sortOrder",
+					order: "sortOrder", 
+					search:"_search", 
+					nd:"nd", 
+					id:"id",
+					oper:"oper",
+					editoper:"edit",
+					addoper:"add",
+					deloper:"del", 
+					subgridid:"id", 
+					npage: null, 
+					totalrows:"totalCount"
 				},
 				height: '100%',
 				multiselect:true,
@@ -39,16 +55,16 @@
 				},
 				loadComplete:function(data){
 					console.log(data)
-					var pageBox = '<div class="clearfix"><div class="fleft totalPage"><span class="fleft">共'+data.totalCount+'条记录，'+data.totalPageCount+'页，当前第'+data.page+'页</span></div><div id="'+thisId+'_pager" class="tcdPageCode"></div></div>';
+					var pageBox = '<div class="clearfix"><div class="fleft totalPage"><span class="fleft">共'+data.totalCount+'条记录，'+data.totalPageCount+'页，当前第'+data.currentPageNo+'页</span></div><div id="'+thisId+'_pager" class="tcdPageCode"></div></div>';
 					$(opts.pager).html(pageBox);
 					$(opts.pager).find("#"+thisId+"_pager").createPage({
-				        pageCount:data.total,
-				        current:data.page,
+				        pageCount:data.totalPageCount,
+				        current: data.currentPageNo,
 				        gridId:thisId,
 				        backFn:function(current){
-				        	$(_self).jqGrid('setGridParam',{ 
-				                page:current 
-				            }).trigger("reloadGrid");
+				            $(_self).jqGrid('setGridParam',{    
+				                page:current   
+				            }).trigger("reloadGrid");  
 				        }
 				   });
 					var rowList = opts.rowList;
@@ -63,7 +79,7 @@
 					$('.grid-nodata-box').remove();
 					//showNoResult为true时调用展示无结果图片
 					if(opts.showNoResult){
-						if(data.status=='203' || (data.status=='200' && data.rows.length<=0) || (data.status=='200' && !data.rows)){//203表不存在时  目前只适用于一经和二经监控
+						if(data.status !='200' || (data.status=='200' && data.data.length<=0) || (data.status=='200' && !data.data)){
 							var message = data.message ? data.message : "暂无数据&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
 							$('.grid-nodata-box').remove();
 							$(opts.pager).before('<div class="grid-nodata-box"><p class="no-data-icon"></p><div class="no-data-msg text-center color-666">'+message+'</div></div>');
