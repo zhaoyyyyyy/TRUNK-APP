@@ -3,5 +3,4 @@
 *.rej
 /bin/
 /target/
-.classpath
 /.settings/
