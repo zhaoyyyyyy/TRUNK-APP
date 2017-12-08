@@ -33,26 +33,24 @@ function rememb(){
 	
 }
 function COCLogin(){
-	//svlada@gmail.com
-	var node = JSON.stringify({
-		    "username": $("#username").val(),
-		    "password": $("#pwd").val()
-	});
-	$.ajax({
-		  url: jQuery.ctx + "/api/auth/login",
-		  type:'post',
+	var data = formFmt.formToObj($("#login"));
+	$.AIPost({
+		  url: $.ctx + "/api/user/login",
 		  cache:false,
-		  contentType:'application/json',
-		  dataType:'json',
-		  data:node,
-		  success: function(data){
-			  if(data && data.token){
+		  data :data,
+//		  type:"post",
+//		data:{"username":"admin","password":"test1234"},
+		  success: function(returnObj){
+			  if(returnObj && returnObj.status == '200'){
+				  var data = returnObj.data;
 				  var ssg = window.sessionStorage;
-				  ssg.setItem("token",data.token);
-				  ssg.setItem("refreshToken",data.refreshToken);
-				  location.href = jQuery.ctx+"/aibi_lc/demos/index.html";
+				  if(ssg){
+					  ssg.setItem("token",data.token);
+					  ssg.setItem("refreshToken",data.refreshToken);
+				  }
+				  location.href = $.forward;
 			  }else{
-				  alert('用户名/密码错误');
+				  alert(returnObj.msg);
 			  }
 		   },
 		   error: function(req){
@@ -62,7 +60,6 @@ function COCLogin(){
 				} catch (e) {
 					obj = req.responseText;
 				}
-				alert(obj.message)
 		   }
 	  });
 }

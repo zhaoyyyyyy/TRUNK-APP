@@ -11,6 +11,7 @@ import java.util.Map;
 
 import org.springframework.data.repository.NoRepositoryBean;
 
+import com.asiainfo.biapp.si.loc.base.exception.BaseException;
 import com.asiainfo.biapp.si.loc.base.page.Page;
 
 /**
@@ -71,7 +72,7 @@ public interface BaseDao<M,  ID extends Serializable> {
      * @param args
      * @return
      */
-    public List<M> findListByHql(String hql,Object... args);
+    public List<M> findListByHql(String hql,Object... args) throws BaseException;
     
     /**
      * 通过HQL查询集合

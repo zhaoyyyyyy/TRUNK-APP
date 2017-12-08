@@ -8,9 +8,9 @@ spring:
     name: loc
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:mysql://182.92.105.202:3306/jauth
-    username: jauth
-    password: jauth
+    url: jdbc:mysql://10.1.245.175:3306/cocdev
+    username: cocdev
+    password: cocdev
   jpa:
     hibernate:
       ddl-auto: none
@@ -24,7 +24,7 @@ eureka:
     healthcheck:
       enabled: true
     serviceUrl:
-      defaultZone: "http://${jauth-url}/eureka/"
+      defaultZone: "${jauth-url}/eureka/"
   instance:
     leaseExpirationDurationInSeconds: 1
     leaseRenewalIntervalInSeconds: 1

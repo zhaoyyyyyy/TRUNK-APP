@@ -1,0 +1,392 @@
+@charset "utf-8"; 
+/*面包屑*/
+
+.breadcrumb {
+    padding: 8px 15px;
+    margin-bottom: 20px;
+    list-style: none;
+    background-color: #f5f5f5;
+    border-radius: 4px;
+}
+.breadcrumb>li {
+    float: left;
+}
+.breadcrumb>li >a {
+    color: #666;
+    text-decoration: none;
+}
+.breadcrumb>.active {
+    color: #000;
+}
+.breadcrumb>li+li:before {
+    padding: 0 5px;
+    color: #ccc;
+    content: "/\00a0";
+}
+.icon-breadcrumb.breadcrumb>li >a>i ,
+.bc-icon{
+	width: 17px;
+	height: 12px;
+	background: url(./images/lc-icon.png) no-repeat;
+	display: inline-block;
+}
+.icon-breadcrumb.breadcrumb>li.first >a>i {
+	background-position: -233px -269px;
+}
+.icon-breadcrumb.breadcrumb>li.sec >a>i {
+	background-position:  -259px -268px;
+}
+.icon-breadcrumb.breadcrumb>li.active >i {
+	background-position:  -284px -269px;
+}
+/**返回顶部*/
+.ui-back-to-top{
+	background:#D02433;
+	border-radius: 5px;
+	width: 34px;
+	height: 34px;
+	line-height:34px;
+	color: #fff;
+	font-size: 16px;
+	text-align: center;
+	cursor: pointer;
+}
+.ui-back-to-top-icon{
+	cursor: pointer;
+	width: 34px;
+	height: 34px;
+	border-radius:100%;
+	background: #B3B3B3 url(./images/lc-icon.png) no-repeat -211px -182px;
+}
+/**下拉菜单*/
+.dropdown, .dropup {
+    position: relative;
+}
+.dropdown > .dropdown-toggle{
+    display: inline-block;
+    color:#333;
+    padding: 6px 12px;
+    margin-bottom: 0;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.42857143;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    -ms-touch-action: manipulation;
+    touch-action: manipulation;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    background-image: none;
+    border: 1px solid transparent;
+    border-radius: 4px;
+}
+ .dropdown-toggle > .caret{
+	width:17px;
+	height:17px;
+	float:right;
+    background: url(./images/lc-icon.png) no-repeat -26px -268px;
+    margin: 0 0 0 5px;
+}
+.open>.dropdown-menu {
+    display: block;
+}
+.open > .dropdown-toggle > .caret{
+    background-position: -26px -272px;
+    transform:rotate(180deg);
+	-ms-transform:rotate(180deg); 	/* IE 9 */
+	-moz-transform:rotate(180deg); 	/* Firefox */
+	-webkit-transform:rotate(180deg); /* Safari 和 Chrome */
+	-o-transform:rotate(180deg); 	/* Opera */
+}
+.dropdown-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    z-index: 1000;
+    display: none;
+    float: left;
+    min-width: 110px;
+    padding: 5px 0;
+    margin: 2px 0 0;
+    font-size: 14px;
+    text-align: left;
+    list-style: none;
+    background-color: #fff;
+    -webkit-background-clip: padding-box;
+    background-clip: padding-box;
+    border: 1px solid #ccc;
+    border: 1px solid rgba(0,0,0,.15);
+    border-radius: 4px;
+    -webkit-box-shadow: 0 6px 12px rgba(0,0,0,.175);
+    box-shadow: 0 6px 12px rgba(0,0,0,.175);
+}
+.dropdown-menu>li{
+	position: relative;
+}
+.dropdown-menu>li>a {
+    display: block;
+    padding: 6px 20px;
+    clear: both;
+    font-weight: 400;
+    line-height: 1.42857143;
+    color: #333;
+    white-space: nowrap;
+}
+.dropdown-menu>li>a>i {
+   float:right;
+   width: 12px;
+   height: 12px;
+   background:  url(./images/lc-icon.png) no-repeat -269px -224px;
+   margin: 3px 0 0;
+}
+.dropdown-menu>li:HOVER,.dropdown-menu>li.active{
+	background-color:#FBEEEF;
+}
+.open .ui-btn-menu.ui-btn > .caret {
+    background-position: -21px -271px ;
+}
+.open .ui-btn-menu.ui-btn:HOVER > .caret {
+    background-position: -21px -292px;
+}
+.ui-app-icon{
+	position: relative;
+}
+.ui-app-btn{
+	width: 32px;
+	height: 32px;
+	border-radius: 16px;
+	background: #D02433 url(./images/lc-icon.png) no-repeat -429px -204px;
+	display: inline-block;
+}
+.ui-app-icon .dropdown-menu{
+	min-width: 40px;
+	padding: 3px 0;
+}
+.ui-app-icon .dropdown-menu>li>a{
+	padding: 0;
+	height: 40px;
+	width: 40px;
+	display: block;
+	background: #fff url(./images/lc-icon.png) no-repeat;
+}
+.ui-app-icon .dropdown-menu>li>a:hover{
+	background-color: #FBEEEF;
+}
+.ui-app-icon .dropdown-menu>li>a.mail{
+	background-position: -411px -242px;
+}
+.ui-app-icon .dropdown-menu>li>a.mail:HOVER{
+	background-position: -375px -242px;
+}
+.ui-app-icon .dropdown-menu>li>a.screen{
+	background-position: -411px -274px;
+}
+.ui-app-icon .dropdown-menu>li>a.screen:HOVER{
+	background-position: -375px -274px;
+}
+.ui-app-icon .dropdown-menu>li>a.setting{
+	background-position: -411px -305px;
+}
+.ui-app-icon .dropdown-menu>li>a.setting:HOVER{
+	background-position: -375px -305px;
+}
+/**步骤条*/
+.progress-bar{
+    width: 259px;
+    height: 16px;
+    font-size: 12px;
+    color: #fff;
+    text-align: center;
+    border-bottom: 2px solid #e9e9e9;
+    margin: 0 10px;
+}
+.progress-bar.has-over{
+    border-color: #D02433;
+}
+.progress .progress-label{
+	font-size: 14px;
+	color: #666;
+	display:inline-block;
+}
+.progress .progress-label>i{
+	display:inline-block;
+	width:30px;
+	height:30px;
+	color: #999;
+	text-align: center;
+	margin: 0 5px 0 0 ;
+	border: 1px solid #ccc;
+}
+.progress .progress-label.active{
+	color: #000;
+	
+}
+.progress .progress-label.active > i,.progress .progress-label.progress-success > i{
+	background-color: #D02433 ;
+	color: #fff;
+	border-color:#D02433 ;
+	border-radius: 14px;	
+}
+.progress .progress-label.success{
+	color: #999;
+}
+.progress .progress-label.success > i{
+	background-color: #fff;
+	border-color:#ccc;
+	border-radius: 14px;	
+}
+.progress .progress-label > i.icon{
+	background: #fff url(./images/lc-icon.png) no-repeat -382px -166px;
+	border-color: transparent;
+	
+}
+.progress{
+	line-height: 2;
+}
+.progress-bar.progress-sm{
+	width:65px;
+}
+.progress-bar.has-error{
+    border-color: #f04134;
+}
+.progress .progress-label.progress-error > i.icon{
+	background-position:-433px -166px;
+}
+.progress .progress-label.progress-error{
+	color: #f04134;
+}
+.progress .progress-label.progress-success > i{
+    border-color: #D02433;
+    color:#D02433;
+    background-color:#fff;
+}
+.progress-bar.progress-mid{
+	width:145px;
+}
+.progress .progress-label.progress-login > i.icon{
+	background-position:-381px -127px;
+}
+.progress .progress-label.progress-check > i.icon{
+	background-position:-507px -127px;
+}
+.progress .progress-label.progress-pay > i.icon{
+	background-position:-466px -127px;
+}
+.progress .progress-box p.progress-info{
+	color: #999999;
+    line-height: 18px;
+    padding: 0 0 0 35px;
+    max-width: 155px;
+}
+.progress-list .progress-label > i.icon{
+	background-position:-383px -207px;
+}
+.progress-list.progress .progress-label > i{
+	width: 24px;
+    height: 24px;
+    line-height:24px;
+}
+.progress-list .grogress-line{
+	height:20px;
+	border-left:1px solid #ccc;
+	margin:5px 0 5px 12px;
+}
+.progress-list .grogress-line.has-over-line{
+	border-color: transparent;
+}
+.progress-list {
+    display: table;
+    content: " ";
+    position: relative;
+}
+/**标签页*/
+.tab-list.tab-hor{
+	 border-bottom: 1px solid #ddd;
+}
+.tab-list > li{
+	margin-bottom: -1px;
+}
+.tab-list > li >a{
+	font-size: 14px;
+	color: #000000;
+	display:block;
+	padding:6px 18px;
+	
+}
+.tab-list>li.active a{
+	color:#D02433;
+}
+.tab-list.tab-hor>li.active a{
+	border-bottom:2px solid #D02433;
+}
+
+.tab-list > li.disabled > a{	
+	color: #ccc !important;
+	cursor: not-allowed !important;
+}
+.tab-list > li a > i.tab-icon{	
+	display:inline-block;	
+	text-align:center;
+	width:20px;
+	height:16px;	
+}
+.tab-list > li a > i.tab-icon{
+	background:url(./images/lc-icon.png) no-repeat -389px -80px;
+}
+/**卡片式标签***/
+.tab-list.tab-list-box > li{
+	padding:0px 2px 0 0;
+	box-sizing:border-box;
+}
+.tab-list.tab-list-box > li a{
+	background:#f7f7f7;
+	border-radius:5px 5px 0 0;	
+	border:1px solid #ccc;
+    border-bottom-color: transparent;
+}
+.tab-list.tab-list-box.tab-hor > li.active a{
+	color:#D02433;
+	padding:6px 14px;
+	border-bottom-color:#fff;
+	background-color:transparent;
+}
+.tab-list.tab-list-box > li.active a > i.tab-icon{
+	margin:0 0 0 6px;
+	float:right;	
+}
+.tab-list-icon.tab-list > li  a > i{	
+	float:left;
+	margin:0 6px 0 0;	
+	background-position:-25px -225px;
+}
+.tab-list-icon.tab-list > li.active a > i{	
+	background-position:-65px -225px;
+}
+/**卡片式标签+带气泡***/
+.tab-list > li a > i.tab-icon-bubble{
+	border-radius:40%;
+	border:1px solid #ccc;
+	font-size:10px;
+	color:#999;
+	padding:0 6px;
+	background-color:#fff;
+	margin:0 0 0 3px;
+}
+.tab-list.tab-line{
+	display: table;
+    content: " ";
+    position: relative;
+    border-right: 1px solid #ddd;
+}
+.tab-list.tab-line > li > a{
+	padding:16px 28px 16px 0;
+	text-align:right;
+}
+.tab-list.tab-line > li.active > a{
+	border-right: 2px solid #D02433;
+	margin-right:-1px;	
+}

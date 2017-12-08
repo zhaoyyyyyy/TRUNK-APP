@@ -1,0 +1,225 @@
+@charset "utf-8"; 
+
+/**
+绿色button css
+*/
+.ui-btn{
+	border-radius: 4px;
+	font-size: 12px;
+	padding: 5px 16px;
+	cursor: pointer;
+	background-color: #fff;
+}
+/**
+主按钮
+*/
+.ui-btn-default{
+	background: #009241;
+	color: #FFF !important;
+	border: 1px solid #009241;
+}
+.ui-btn-default:HOVER{ 
+    background: #3DAC6E; 
+}
+.ui-btn-default:active{ 
+    background: #007F3B;
+}
+.ui-btn-default.disabled,
+.ui-btn-default[disabled],
+.ui-btn-second.disabled,.ui-btn-second[disabled],
+.ui-btn-save.disabled,.ui-btn-save[disabled],
+.ui-btn-ghost-brand.disabled,.ui-btn-ghost-brand[disabled],
+.ui-btn-dashed.disabled,.ui-btn-dashed[disabled],
+.ui-btn-menu.disabled,.ui-btn-menu[disabled],
+.ui-btn-ghost.disabled,.ui-btn-ghost[disabled]{ 
+    background: #F7F7F7 !important;
+	border: 1px solid #D9D9D9 !important;
+	color: #ccc !important;
+	cursor: not-allowed !important;
+}
+.ui-btn-menu.ui-btn.disabled > .caret , .ui-btn-menu.ui-btn[disabled] > .caret{
+	background-position: -21px -269px !important;
+}
+/**
+次按钮
+*/
+.ui-btn-second,.ui-btn-save{
+	background: #FFFFFF !important;
+	border: 1px solid #D9D9D9;
+	color: #000;
+}
+.ui-btn-second:HOVER,.ui-btn-save:HOVER{
+	background: #FFFFFF;
+	border: 1px solid #3DAC6E;
+	color: #009241;
+	opacity: 0.8;
+}
+.ui-btn-second:ACTIVE,.ui-btn-save:ACTIVE{
+	background: #FFFFFF;
+	border: 1px solid #3DAC6E;
+	color:  #007F3B;
+}
+.ui-btn-save > span{
+	float: left;
+}
+.ui-btn-save  > .save-icon{
+	width: 17px;
+    height: 17px;
+    background: url(./images/lc-icon.png) no-repeat -29px -225px;
+}
+.ui-btn-save:HOVER  > .save-icon{
+	background-position: -69px -225px;
+}
+.ui-btn-save:ACTIVE  > .save-icon{
+	background-position: -106px -225px;
+}
+.ui-btn-save.disabled > .save-icon,.ui-btn-save[disabled] > .save-icon{
+	background-position: -145px -225px;
+}
+.ui-btn-lg{
+	padding: 10px 28px;
+	font-size: 16px !important;
+}
+.ui-btn-sm{
+	padding: 2px 8px;
+	font-size: 12px !important;
+}
+.ui-btn-group{
+    position: relative;
+    display: inline-block;
+    vertical-align: middle;
+    display: block\9;
+    float: left\9;
+    margin:0 5px\9;
+}
+.ui-btn-group > .btn-default{
+	color: #333;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    position: relative;
+    float: left;
+    border-bottom-right-radius:0px; 
+    border-top-right-radius:0px;
+    padding: 5px 8px 5px 16px;
+    cursor: pointer;
+}
+.ui-btn-group > .btn-default-right{
+	color: #333;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    position: relative;
+    float: left;
+    border-bottom-left-radius:0px; 
+    border-top-left-radius:0px;
+    padding: 5px 16px 5px  8px ;
+    cursor: pointer;
+    
+    border-left: 0px;
+}
+.ui-btn-group > .btn-icon{
+    border: 1px solid #ccc;
+    position: relative;
+    float: left;
+    border-left: 0px;
+    border-bottom-left-radius:0px; 
+    border-top-left-radius:0px;
+    padding: 5px;
+    cursor: pointer;
+}
+.ui-btn-group > .btn-icon > .caret,
+.ui-btn-group > .ui-btn > .caret,
+.ui-more-btn > .ui-btn > span,
+ .ui-btn > .caret{
+	width:17px;
+	height:17px;
+	float:left;
+    background: url(./images/lc-icon.png) no-repeat -26px -269px;
+}
+.ui-btn-group > .ui-btn > .create{
+	width:22px;
+	height:17px;
+	float:left;
+    background: url(./images/lc-icon.png) no-repeat -26px -247px;
+}
+.ui-btn > .create-white {
+    width: 17px;
+    height: 17px;
+    float: left;
+    background: url(./images/lc-icon.png) no-repeat -444px -133px;
+}
+.ui-icon-btn > .ui-btn{
+	padding: 5px 8px ;
+}
+.ui-btn-group.ui-icon-btn > .ui-btn > .caret,
+.ui-btn-menu.ui-btn > .caret{
+	width: 22px;
+	background-position: -21px -269px;
+}
+.ui-more-btn > .btn-default-center{
+	border-radius: 0px;
+	float: left;
+	border:  1px solid #ccc;
+	border-left:  0px;
+	padding: 5px;
+}
+
+.ui-more-btn > .ui-btn > .prev{
+	background-position: -77px -269px;
+}
+.ui-more-btn > .ui-btn > .stop{
+	background-position: -108px -269px;
+}
+.ui-more-btn > .ui-btn > .next{
+	background-position: -137px -269px;
+}
+/**幽灵按钮*/
+.ui-btn-ghost{
+	border: 1px solid #E4E4E4;
+	border-radius: 4px;
+}
+.ui-btn-ghost-brand{
+	border: 1px solid #3DAC6E;
+	border-radius: 4px;
+	color: #009241;
+}
+.ui-btn-dashed{
+	border: 1px dashed #D9D9D9;
+	border-radius: 4px;
+}
+.ui-btn-menu,
+.dropdown > .dropdown-toggle.ui-btn-menu{
+	border: 1px solid #D9D9D9;
+	border-radius: 4px;
+	padding: 5px 8px 5px 16px;
+}
+.ui-btn-ghost:HOVER,
+.ui-btn-menu:HOVER,
+.ui-btn-dashed:HOVER,
+.ui-btn-ghost-brand:HOVER{
+	border-color: #3DAC6E;
+	opacity: 0.8;
+	color: #009241;
+}
+.ui-btn-ghost:ACTIVE,
+.ui-btn-dashed:ACTIVE,
+.ui-btn-menu:ACTIVE,
+.ui-btn-ghost-brand:ACTIVE{
+	border-color:#3DAC6E;
+	color: #007F3B;
+}
+.ui-btn-menu.ui-btn:HOVER > .caret{
+	background-position: -21px -290px;
+}
+.ui-btn-menu.ui-btn:ACTIVE > .caret{
+    background-position: -21px -310px;
+}
+.ui-btn-dashed.disabled,.ui-btn-dashed[disabled]{ 
+	border: 1px dashed #D9D9D9 !important;
+}
+
+
+
+
+
+
+

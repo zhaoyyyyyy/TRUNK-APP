@@ -32,8 +32,12 @@ import com.asiainfo.biapp.si.loc.base.exception.BaseException;
  * @author  haozf
  * @version 1.0.0.2015-3-12
  */
-public class WebResult {
+public class WebResult<T extends Object> {
 
+	private String status ;
+	private String msg ;
+	private T data;
+	
     /**
      * Title : Code 
      * <p/>
@@ -87,34 +91,89 @@ public class WebResult {
         int INTERNAL_SERVER_ERROR = 500;
     }
     
-    /**
-     * 返回数据Key
-     * @author haozf
+//    /**
+//     * 返回数据Key
+//     * @author haozf
+//     *
+//     */
+//    public interface Result{
+//    	/** 返回状态 */
+//        String STATUS = "status";
+//
+//        /** 返回列表数据 */
+//        String LIST = "data";
+//        
+//        /** 返回分页数据 */
+//        String MSG = "message";
+//        
+//    }
+
+    
+
+
+	public String getStatus() {
+		return status;
+	}
+
+
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
+
+
+	public String getMsg() {
+		return msg;
+	}
+
+	public void setMsg(String msg) {
+		this.msg = msg;
+	}
+
+	public T getData() {
+		return data;
+	}
+
+	public void setData(T data) {
+		this.data = data;
+	}
+
+	/**
+     * Description: JSON返回失败
      *
+     * @return
      */
-    public interface Result{
-    	/** 返回状态 */
-        String STATUS = "status";
-
-        /** 返回列表数据 */
-        String LIST = "data";
-        
-        /** 返回分页数据 */
-        String MSG = "message";
-        
+    public WebResult<T> fail(String message){
+//    	 Map<String, Object> result = new HashMap<String, Object>();
+//         result.put(WebResult.Result.STATUS, WebResult.Code.FAIL);
+//         result.put(WebResult.Result.MSG, message);
+//         result.put(WebResult.Result.LIST, null);
+//         return result;
+    	
+    	 //WebResult<T> webResult = new WebResult<T>();
+    	 this.setData(null);
+    	 this.setMsg(message);
+    	 this.setStatus(WebResult.Code.FAIL+"");
+         return this;
     }
-
+    
     /**
      * Description: JSON返回成功
      *
      * @return 成功的JSON map
      */
-    public static Map<String ,Object> success(String message,Object obj){
-    	 Map<String, Object> result = new HashMap<String, Object>();
-         result.put(WebResult.Result.STATUS, WebResult.Code.OK);
-         result.put(WebResult.Result.MSG, message);
-         result.put(WebResult.Result.LIST, obj);
-         return result;
+    public WebResult<T> success(String message,T obj){
+//    	 Map<String, Object> result = new HashMap<String, Object>();
+//       result.put(WebResult.Result.STATUS, WebResult.Code.OK);
+//       result.put(WebResult.Result.MSG, message);
+//       result.put(WebResult.Result.LIST, obj);
+    	 
+    	 //WebResult<T> webResult = new WebResult<>();
+    	 this.setData(obj);
+    	 this.setStatus(WebResult.Code.OK+"");
+    	 this.setMsg(message);
+         return this;
     }
     
     /**
@@ -122,24 +181,17 @@ public class WebResult {
      *
      * @return
      */
-    public static Map<String ,Object> fail(String message){
-    	 Map<String, Object> result = new HashMap<String, Object>();
-         result.put(WebResult.Result.STATUS, WebResult.Code.FAIL);
-         result.put(WebResult.Result.MSG, message);
-         result.put(WebResult.Result.LIST, null);
-         return result;
-    }
-    /**
-     * Description: JSON返回失败
-     *
-     * @return
-     */
-    public static Map<String ,Object> fail(BaseException baseException){
-    	 Map<String, Object> result = new HashMap<String, Object>();
-         result.put(WebResult.Result.STATUS, baseException.getErrorCode());
-         result.put(WebResult.Result.MSG, baseException.getMessage());
-         result.put(WebResult.Result.LIST, null);
-         return result;
+    public WebResult<T> fail(BaseException baseException){
+//    	 Map<String, Object> result = new HashMap<String, Object>();
+//         result.put(WebResult.Result.STATUS, baseException.getErrorCode());
+//         result.put(WebResult.Result.MSG, baseException.getMessage());
+//         result.put(WebResult.Result.LIST, null);
+//         return result;
+    	 //WebResult<T> webResult = new WebResult<>();
+    	 this.setData(null);
+    	 this.setMsg(baseException.getMessage());
+    	 this.setStatus(baseException.getErrorCode());
+    	 return this;
     }  
 
 }

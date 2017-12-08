@@ -1,0 +1,8 @@
+aibi-app-loc/.classpath
+/target/
+/.classpath
+/.project
+/.settings/
+/.gitignore
+*.rej
+aibi-app-jauth/target/

@@ -9,6 +9,7 @@ import com.asiainfo.biapp.si.loc.auth.model.User;
 import com.asiainfo.biapp.si.loc.auth.utils.AuthUtils;
 import com.asiainfo.biapp.si.loc.base.exception.BaseException;
 import com.asiainfo.biapp.si.loc.base.exception.UserAuthException;
+import com.asiainfo.biapp.si.loc.base.utils.WebResult;
 
 /**
  * Title : 基础控制层
@@ -34,10 +35,6 @@ public abstract class BaseController<T>  {
 
 	private static final long serialVersionUID = -42856136017302010L;
 
-	
-
-	// 分页器
-	protected Class<T> entityClass;
 	// 列表头
 	protected String cols;
 
@@ -64,6 +61,8 @@ public abstract class BaseController<T>  {
 		return this.getRequest().getContextPath();
 	}
 	
+	   
+	
 	protected HttpServletRequest request;
 	protected HttpServletResponse response;
 	
@@ -72,7 +71,6 @@ public abstract class BaseController<T>  {
        this.request = request;
        this.response = response;
     }
-	   
 
 	
 	/**

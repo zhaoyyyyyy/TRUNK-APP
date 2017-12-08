@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>data-manager</title>
+    <!--[if IE]>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <![endif]-->
+    <link href="../../asset/css/common/reset.css" rel="stylesheet"  />
+    <link href="../../asset/css/jQueryUI/jquery-ui-1.12.1.min.css" rel="stylesheet"  />
+    <link href="../../asset/script/common/jQuery/jQueryUI/gird/page/page.css" rel="stylesheet"  />
+    <link href="../../asset/script/common/jQuery/jQueryUI/gird/css/ui.jqgrid.css" rel="stylesheet"  />
+    <link href="../../asset/script/common/jQuery/jQueryUI/gird/css/ui.jqgrid.owner.css" rel="stylesheet"  />
+    <link href="../../asset/css/theme/default/button.css" rel="stylesheet"  />
+    <link href="../../asset/css/theme/default/form.css" rel="stylesheet"  />
+    <link href="../../asset/css/theme/default/tab.css" rel="stylesheet"  />
+    <link href="../../asset/css/theme/default/coc_frame.css" rel="stylesheet"  />
+    <link href="../../asset/css/theme/default/main.css" rel="stylesheet"  />
+    <script type="text/javascript" src="../../asset/script/common/jQuery/jquery-1.12.4.js"></script>
+    <script src="../../asset/script/common/jQuery/jQueryUI/jquery-ui-1.12.1.min.js"></script>
+    <script src="../../asset/script/common/jQuery/jQueryUI/gird/page/jquery.page.js"></script>
+    <script src="../../asset/script/common/jQuery/jQueryUI/gird/js/jquery.jqGrid.min.js"></script>
+    <script src="../../asset/script/common/jQuery/jQueryUI/gird/js/i18n/grid.locale-cn.js"></script>
+    <script src="../../asset/script/common/jQuery/jQueryUI/gird/jquery.jqGrid.extend.js"></script>
+    <script type="text/javascript" src="../../asset/script/common/profile.js"></script>
+    <script type="text/javascript" src="../../asset/script/common/jQuery/jQuery.ajax.js"></script>
+    <script type="text/javascript" src="../../asset/script/common/preConfig.js"></script>
+    <script  src="data-manager.js"></script>
+
+    <!--
+        H5兼容js CSS3 兼容JS
+    -->
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="http://apps.bdimg.com/libs/html5shiv/3.7/html5shiv.min.js"></script>
+    <script src="http://apps.bdimg.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+<div class="ui-header clearfix">
+    <div class="ui-header-logo fleft">
+        <img src="../../asset/css/theme/default/images/logo.png"/>
+    </div>
+    <div class="ui-header-content fleft">
+        <div class="clearfix">
+            <div class="ui-header-search fleft">
+                <div class="control-input has-icon">
+                    <input type="text" class="form-control" id="inputEmail4" placeholder="搜索" >
+                    <span class="glyphicon-search form-control-feedback"></span>
+                </div>
+            </div>
+            <div class="ui-notice fright">
+                <i class="ui-help"></i>
+                <i class="ui-clock"></i>
+                <i class="ui-tag"></i>
+                <i class="ui-notice-icon">
+                    <span>8</span>
+                </i>
+ 				<span class="ui-login-header">
+ 					<img alt="" src="../../asset/images/timg.jpg" />
+ 					<em class="ui-user-info"></em>
+ 				</span>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="ui-container clearfix">
+    <div class="ui-menu fleft">
+        <ul class="ui-menu-ul">
+            <li>
+                <a href="javascript:;">首页</a>
+            </li>
+            <li class="active">
+                <a href="javascript:;">标签集市</a>
+            </li>
+            <li>
+                <a href="javascript:;">优秀案例</a>
+            </li>
+            <li>
+                <a href="javascript:;">客户群集市</a>
+            </li>
+            <li>
+                <a href="javascript:;">我的客户群</a>
+            </li>
+            <li>
+                <a href="javascript:;">营销效果评估</a>
+            </li>
+            <li>
+                <a href="javascript:;">标签管理</a>
+            </li>
+            <li>
+                <a href="javascript:;">消息管理</a>
+            </li>
+            <li>
+                <a href="javascript:;">其他</a>
+            </li>
+        </ul>
+    </div>
+    <div class="ui-main fleft">
+        <div>
+            <div class="ui-lc-mian">
+                <h3>数据资源管理</h3>
+                <div>
+                    <button type="button" class="ui-btn ui-btn-default mr10">
+                        <span class="create-white"></span>
+                        新增
+                    </button>
+                    <button type="button" class="ui-btn ui-btn-second">删除</button>
+                </div>
+                <div class="ui-table-static mt10">
+                    <table id="jsonmap1"  class="table"></table>
+                    <div id="pjmap1"></div>
+                </div>
+            </div>
+            <!-- todo -->
+
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>

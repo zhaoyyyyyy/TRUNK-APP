@@ -9,13 +9,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.asiainfo.biapp.si.loc.base.dao.BaseDao;
+import com.asiainfo.biapp.si.loc.base.exception.BaseException;
 import com.asiainfo.biapp.si.loc.base.page.Page;
 import com.asiainfo.biapp.si.loc.base.service.BaseService;
 
 public abstract class BaseServiceImpl<M,ID> implements BaseService<M,String> {
-	
-public Logger logger = LoggerFactory.getLogger(super.getClass());
-	
 	
 	protected abstract BaseDao<M,String> getBaseDao();
     
@@ -67,9 +65,10 @@ public Logger logger = LoggerFactory.getLogger(super.getClass());
      * @return
      */
     @Override
-    public List<M> findListByHql(String hql,Object... args){
+    public List<M> findListByHql(String hql,Object... args) throws BaseException {
     	return getBaseDao().findListByHql(hql, args);
     }
+    
     @Override
     public List<M> findListByHql(String hql,Map<String,Object> params){
     	return getBaseDao().findListByHql(hql, params);

@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import com.asiainfo.biapp.si.loc.base.exception.BaseException;
 import com.asiainfo.biapp.si.loc.base.page.Page;
 
 public interface BaseService<T,String> {
@@ -80,7 +81,7 @@ public interface BaseService<T,String> {
      * @param args
      * @return
      */
-    public List<T> findListByHql(String hql,Object... args);
+    public List<T> findListByHql(String hql,Object... args) throws BaseException;
     
     /**
      * @describe 得到系统时间

@@ -1,2 +1,2 @@
 jauth-url: 
-  127.0.0.1:8440/jauth
+  http://127.0.0.1:8440/jauth
