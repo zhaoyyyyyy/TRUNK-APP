@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>标签集市</title>
+    <!--[if IE]>
+    	<meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <![endif]-->
+    <link rel="stylesheet" theme="default" href="../../asset/css/theme/default/coc_frame.css"/> 
+	<link rel="stylesheet" theme="default" href="../../asset/css/theme/default/main.css"/> 
+   	<script type="text/javascript" src="../../asset/script/common/include.js"></script>
+   	<script type="text/javascript" src="prefecture_mgr.js"></script>
+    <!--[if lt IE 9]>
+	    <script src="../../asset/script/component/h5compatibility/html5shiv.min.js"></script>
+	    <script src="../../asset/script/component/h5compatibility/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+        <div class="iframe-nest">
+            <div class="ui-lc-mian">
+                <h3>专区管理</h3>
+                <div class="ui-label-mes clearfix ui-data-form">
+                    <div class="fleft">
+                        <button type="button" class="ui-btn ui-btn-default mr10">
+                            <span class="create-white"></span>
+                            新增
+                        </button>
+                    </div>
+                    <form class="form-inline data-form fright">
+                        <div class="form-group">
+                            <div class="control-input has-icon">
+                                <input type="text" class="form-control input-pointer" id="inputEmail4" placeholder="全部数据状态" readonly="readonly">
+                                <span class="glyphicon-select form-control-feedback"></span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="input-group">
+                                <input type="text" class="form-control" id="exampleInputAmount" placeholder="模糊查询" id="txt_name">
+                                <div class="input-group-addon input-group-icon right-child" id="btn_search"></div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="ui-table-static mt10">
+                    <table id="jsonmap1"  class="table"></table>
+                    <div id="pjmap1"></div>
+                </div>
+            </div>
+            <!-- todo -->
+        </div>
+
+
+</body>
+</html>
