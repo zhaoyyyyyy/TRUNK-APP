@@ -1,4 +1,4 @@
-package com.asiainfo.biapp.si.common.util;
+package com.asiainfo.biapp.si.loc.util;
 
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
