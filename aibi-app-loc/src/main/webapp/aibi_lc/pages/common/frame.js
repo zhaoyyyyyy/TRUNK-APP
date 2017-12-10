@@ -1,5 +1,5 @@
-//加载页面
-loc_loadPage = function(){
+//加载页面方法
+function loc_loadPage(){
 	var hash = window.location.hash; 
 	if(hash){
 		$('iframe').attr('src',"../"+hash.split("#")[1]+".html");
@@ -19,6 +19,7 @@ window.loc_onload = function(){
 		icons:false
 	});
 	
+	//点击菜单
 	$('#accordion a').click(function(){
 		var href = $(this).attr("href");
 		if(href.indexOf("#") > -1){
@@ -29,5 +30,7 @@ window.loc_onload = function(){
 			$('#accordion li').removeClass("active");
 			$(this).parent().addClass("active");
 		}
-	})
+	});
+	
+	
 }

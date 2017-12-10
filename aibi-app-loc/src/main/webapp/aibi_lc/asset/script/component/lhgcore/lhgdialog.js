@@ -204,7 +204,7 @@ J.dialog = function( opts, elem )
 					'<td class="lhgdig_leftTop"></td>',
 					'<td id="lhgdig_drag" class="lhgdig_top">',
 						'<div class="lhgdig_title"><span id="lhgdig_icon" class="lhgdig_icon"></span>', r.title, '</div>'+
-							(r.xButton ? ('<a class="lhgdig_xbtn" id="lhgdig_xbtn' + r.id + '" href="###"></a>') : '') + '</div>',
+							(r.xButton ? ('<a class="lhgdig_xbtn" id="lhgdig_xbtn' + r.id + '" href="javascript:void(0);"></a>') : '') + '</div>',
 					'</td>',
 					'<td class="lhgdig_rightTop"></td>',
 				'</tr>',
@@ -291,8 +291,8 @@ J.dialog = function( opts, elem )
 	    if( !cover )
 		{
 			var html = [ '<div style="position:absolute;top:0px;left:0px;',
-					'background-color:#ccc;filter:alpha(opacity =50);opacity:0.5">', iframeTpl, '</div>' ].join('');
-			cover = J(html,doc).css({'opacity':0.5}).appendTo(doc.body)[0];
+					'background-color:#ccc;filter:alpha(opacity =0);opacity:0.">', iframeTpl, '</div>' ].join('');
+			cover = J(html,doc).css({'opacity':0.0}).appendTo(doc.body)[0];
 		}
 		
 		J(top).bind( 'resize', reSizeHdl );
@@ -674,8 +674,7 @@ J.dialog = function( opts, elem )
 	
 	this.addBtn = function( id, txt, fn )
 	{
-		var c = J('<div id="'+ id + '_lhgbtn" class="left newButton"><div><input class="'
-					+ id + '" type="button" value="' + txt + '" /></div></div>' , doc)[0];
+		var c = J('<div id="'+ id + '_lhgbtn" ><div><input  class="ui-btn ui-btn-default" type="button" value="' + txt + '" /></div></div>' , doc)[0];
 		J("input", c).click(fn);
 		
 		J("#lhgdig_bDiv", this.dg).append(c);

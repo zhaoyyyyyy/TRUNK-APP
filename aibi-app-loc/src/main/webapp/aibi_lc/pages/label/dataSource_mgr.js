@@ -6,7 +6,7 @@ window.loc_onload = function(){
         var html='<button type="button" class="btn btn-default  ui-table-btn ui-table-btn">删除</button><button type="button" class="btn btn-default ui-table-btn">修改</button>';
         return html;
     }
-    $("#jsonmap1").AIGrid({
+    $("#jsonmap1").jqGrid({
         url: $.ctx + "/api/prefecture/preConfigInfo/queryPage?autoCount=true",
         datatype: "json",
         colNames:['元数据名称','创建时间', '标签类型','操作'],

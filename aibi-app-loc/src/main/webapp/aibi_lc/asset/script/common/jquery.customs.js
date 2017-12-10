@@ -13,16 +13,22 @@ $.extend({
 	//键值操作-得到value
 	kvGet : function(key){
 		var ssg = window.sessionStorage;
-		if(ssg){
+		if(ssg && ssg.getItem(key)){
 			return ssg.getItem(key);
+		}else{
+			return false;
 		}
+	},
+	//拿到当前专区编码
+	getToken : function(){
+		return $.kvGet("token");
 	},
 	//拿到当前专区编码
 	getCurrentConfigId : function(){
 		return $.kvGet("CurrentConfigId");
 	},
 	//根据维度编码，拿到维度描述
-	getCodeDesc : function(dic, code) {
+	getCodeDesc : function(codeClass, code) {
 		var codes = $.getDicData(codeClass);
 		if (codes) {
 			for (var i = 0 ; i < codes.length; i++) {
@@ -31,10 +37,13 @@ $.extend({
 				}
 			}
 		}
-		return "字典["+codeClass+"]中的编码["+code+"]不存在对应描述";
+		return "字典无法对应["+codeClass+"]["+code+"]";
 	},
 	// 根据状态获取数据
 	getDicData : function(code) {
+		if($.kvGet(code)){
+			return eval($.kvGet(code));
+		}
 		var codes;
 		$.commAjax({
 			url : $.ctx + '/api/dicData/queryList',
@@ -45,6 +54,7 @@ $.extend({
 			onSuccess : function(data) {
 				if(data.status == 200){
 					codes = data.data;
+					$.kvSet(code,JSON.stringify(codes));
 				}
 			}
 		});

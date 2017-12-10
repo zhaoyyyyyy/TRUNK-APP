@@ -34,12 +34,12 @@ function rememb(){
 }
 function COCLogin(){
 	var data = $("#login").formToJson();
-	console.log(data);
-	$.commAjax({
+	$.ajax({
 		  url: $.ctx + "/api/user/login",
 		  cache:false,
-		  postData :data,
-		  onSuccess: function(returnObj){
+		  type: 'post',
+		  data :data,
+		  success: function(returnObj){
 			  if(returnObj && returnObj.status == '200'){
 				  var data = returnObj.data;
 				  var ssg = window.sessionStorage;

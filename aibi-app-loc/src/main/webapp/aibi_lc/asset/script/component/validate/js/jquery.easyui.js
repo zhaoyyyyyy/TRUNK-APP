@@ -3,25 +3,6 @@ String.prototype.length2 = function() {
 	return this.length + (cArr == null ? 0 : cArr.length);
 };
 
-//(function($) {
-//	$.parser = {
-//		parse	: function(context) {
-//			if ($.parser.defaults.auto) {
-//				var r = $(".easyui-validatebox", context);
-//				if (r.length)
-//					r.validatebox();
-//			}
-//		}
-//	};
-//	
-//	$.parser.defaults = {
-//		auto	: true
-//	};
-//	
-//	$(function() {
-//		$.parser.parse();
-//	});
-//})(jQuery);
 
 /**
  * validatebox - jQuery EasyUI
@@ -149,10 +130,12 @@ String.prototype.length2 = function() {
 	 */
 	function validate(target) {
 		if ($(target).hasClass("easyui-validatebox")) {
+			
 			var box = $.data(target, 'validatebox');
 			if (!box) {
 				return;
 			}
+			
 			try{
                 box.removeClass('validatebox-invalid');
             }catch(e){
@@ -297,11 +280,10 @@ String.prototype.length2 = function() {
 			} else {
 				init(this);
 				var t = $(this);
+				alert(t.attr('required') )
 				state = $.data(this, 'validatebox', {
 					options	: $.extend({}, $.fn.validatebox.defaults, {
-						required		: (t.attr('required') ? (t
-						        .attr('required') == 'true' || t
-						        .attr('required') == true) : undefined),
+						required		: (t.attr('required') ? (t.attr('required') == 'true' || t.attr('required') == true || t.attr('required') == 'required') : undefined),
 						validType		: (t.attr('validType') || undefined),
 						maxlength		: (t.attr('maxlength') || undefined),
 /** 新增长度验证add by qiuj 2012-06-26 end * */

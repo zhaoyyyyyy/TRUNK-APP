@@ -3,90 +3,6 @@
  * 
  */
 
-// var alertDG;
-$.fn.extend({
-	
-	/*
-	 * function: 确认窗口 parameter: 确认信息文本， 确认后执行的方法， 取消后执行的方法，窗口宽度， 窗口高度，
-	 * 触发确认窗口的事件
-	 * 
-	 */
-
-	confirm	: function(content, callback, cancel, width, height, event, cfg) {
-		
-		// 设置参数
-		content = content || '确定继续吗？'; // 确认信息文本
-		callback = callback || $.noop; // 确认后执行的方法
-		cancel = cancel || $.noop; // 取消后执行的方法
-		width = width || 300; // 窗口宽度
-		height = getHeight(content, height); // 窗口高度
-		event = event || 'click'; // 触发确认窗口的事件
-		
-		cfg = $.extend({
-			sureText	: "确定",
-			cancelText	: "取消"
-		}, cfg);
-		
-		// 绑定弹出窗口事件
-		$(this).live(event, function() {
-			var obj = this;
-			obj.callback = callback;
-			obj.cancel = cancel;
-			
-			var dg = frameElement;
-		if (parent.frameElement != null && frameElement.lhgDG == undefined) {
-			dg = parent.frameElement.lhgDG;
-		} else {
-			dg = frameElement ? frameElement.lhgDG : null;
-		}
-			var confirmDG;
-			var id = getDgId('confirm');
-			
-			if (dg) {
-				confirmDG = new dg.curWin.J.dialog({
-					        id		: id,
-					        title	: '确认信息',
-					        width	: width,
-					        height	: height,
-					        html	: '<div class="alert-question">' + content
-					                + '</div>',
-					        resize	: false,
-					        cover	: true,
-					        rang	: true,
-					        btns	: true,
-					        parent	: dg
-				        });
-			} else {
-				confirmDG = new J.dialog({
-					        id		: 'confirmDG',
-					        title	: '确认信息',
-					        width	: width,
-					        height	: height,
-					        html	: '<div class="alert-question">' + content
-					                + '</div>',
-					        resize	: false,
-					        cover	: true,
-					        rang	: true,
-					        btns	: true
-				        });
-			}
-			
-			confirmDG.ShowDialog();
-			confirmDG.addBtn('confirm', cfg.sureText, function() {
-				confirmDG.cancel();
-				obj.callback();
-			});
-			confirmDG.addBtn('cancel', cfg.cancelText, function() {
-				confirmDG.cancel();
-				obj.cancel();
-			});
-			
-			// 取消链接的跳转事件
-			return false;
-		}
-		);
-	}
-});
 
 jQuery.extend({
 	
@@ -95,9 +11,12 @@ jQuery.extend({
 	 * 
 	 */
 
-	dialog	: function(title, url, width, height, otherParams, manualOpenDialog) {
+	window	: function(title, url, width, height, otherParams, manualOpenDialog) {
 		var dg = frameElement;
-		if (parent.frameElement != null && frameElement.lhgDG == undefined) {
+		
+
+		var setTopWindow = $.hasTopWin();
+		if (setTopWindow && parent.frameElement != null && frameElement.lhgDG == undefined) {
 			dg = parent.frameElement.lhgDG;
 		} else {
 			dg = frameElement ? frameElement.lhgDG : null;
@@ -123,7 +42,7 @@ jQuery.extend({
 			btns			: true,
 			xButton			: true,
 			onXclick		: null,
-			SetTopWindow	: top.window
+			SetTopWindow	: setTopWindow
 			
 		}, otherParams);
 		
@@ -182,8 +101,12 @@ jQuery.extend({
 
 	confirm	: function(content, callback, cancel, width, height, cfg) {
 		$("body").focus();
+		
+		
+		var setTopWindow = $.hasTopWin();
+		
 		var dg = frameElement;
-		if (parent.frameElement != null && frameElement.lhgDG == undefined) {
+		if (setTopWindow && parent.frameElement != null && frameElement.lhgDG == undefined) {
 			dg = parent.frameElement.lhgDG;
 		} else {
 			dg = frameElement ? frameElement.lhgDG : null;
@@ -215,7 +138,7 @@ jQuery.extend({
 				        rang			: true,
 				        btns			: true,
 				        xButton			: false,
-				        SetTopWindow	: top.window,
+				        SetTopWindow	: setTopWindow,
 				        parent			: dg
 			        });
 		} else {
@@ -230,7 +153,7 @@ jQuery.extend({
 				        cover			: true,
 				        rang			: true,
 				        xButton			: false,
-				        SetTopWindow	: top.window,
+				        SetTopWindow	: setTopWindow,
 				        btns			: true
 			        });
 		}
@@ -254,8 +177,12 @@ jQuery.extend({
 
 	alert	: function(content, width, height, callback, type) {
 		$("body").focus();
+		
+		
+		var setTopWindow = $.hasTopWin();
+		
 		var dg = frameElement;
-		if (parent.frameElement != null && frameElement.lhgDG == undefined) {
+		if (setTopWindow  && parent.frameElement != null && frameElement.lhgDG == undefined) {
 			dg = parent.frameElement.lhgDG;
 		} else {
 			dg = frameElement ? frameElement.lhgDG : null;
@@ -300,7 +227,7 @@ jQuery.extend({
 				        rang			: true,
 				        btns			: true,
 				        xButton			: false,
-				        SetTopWindow	: top.window,
+				        SetTopWindow	: setTopWindow,
 				        parent			: dg
 			        });
 		} else {
@@ -314,7 +241,7 @@ jQuery.extend({
 				        cover			: true,
 				        rang			: true,
 				        xButton			: false,
-				        SetTopWindow	: top.window,
+				        SetTopWindow	: setTopWindow,
 				        btns			: true
 			        });
 		}
@@ -326,9 +253,6 @@ jQuery.extend({
 			alertDG.cancel();
 			callback();
 		});
-		
-		// 关闭按钮也执行回调函数
-		$('#' + id, top.document).find('#lhgdig_xbtn').click(callback);
 	},
 	message	: function(title, content, width, height, callback, type) {
 		var dg = frameElement;
@@ -417,8 +341,25 @@ jQuery.extend({
 	success	: function(content, width, height, callback) {
 		$("body").focus();
 		$.alert(content, width, height, callback, 'alert-success');
-	}
+	},
 	
+	/** 解决跨域问题，是否有父窗口 **/
+	hasTopWin: function(){
+		var setTopWindow = false;	 //true
+		try {
+		　	var t = parent.frameElement;
+		　	if(!t){
+		　		　setTopWindow = false;
+				　window.parent = window.self;
+				  window.top = window.self;
+		　	}
+		} catch(error) {
+		　 setTopWindow = false;
+		　  window.parent = window.self;
+		  window.top = window.self;
+		}
+		return setTopWindow;
+	}
 }
 );
 

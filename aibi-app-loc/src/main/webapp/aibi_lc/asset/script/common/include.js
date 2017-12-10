@@ -122,34 +122,40 @@ var  mainPage={
  * @author  wangsen3
  */
 (function(){
-	var theme = "red";
-	Scripts.loadStyle({src:"../../asset/css/common/reset.css"});
-	Scripts.loadStyle({src:"../../asset/css/jQueryUI/jquery-ui-1.12.1.min.css"});
-	Scripts.loadStyle({src:"../../asset/script/component/jQueryUI/gird/page/page.css"});
-	Scripts.loadStyle({src:"../../asset/script/component/tree/css/zTreeStyle/zTreeStyle.css"});
-	Scripts.loadStyle({src:"../../asset/script/component/jQueryUI/gird/css/ui.jqgrid.css" });
-	Scripts.loadStyle({src:"../../asset/script/component/jQueryUI/gird/css/ui.jqgrid.owner.css"});
-	Scripts.loadStyle({src:"../../asset/css/theme/"+theme+"/button.css"});
-	Scripts.loadStyle({src:"../../asset/css/theme/"+theme+"/form.css"});
-	Scripts.loadStyle({src:"../../asset/css/theme/"+theme+"/tab.css"});
-	Scripts.loadStyle({src:"../../asset/css/theme/"+theme+"/coc_frame.css"});
-	Scripts.loadStyle({src:"../../asset/css/theme/"+theme+"/main.css"});
 	Scripts.loadScript({
-		src:["../../asset/script/component/jquery-1.12.4.js","../../asset/script/component/vue/vue.min.js"],
+		src:["../../asset/script/component/jquery-1.12.4.js","../../asset/script/component/vue/vue.min.js","../../asset/script/config.js"],
 		callback:function(){
+			var theme = $.theme;
+			Scripts.loadStyle({src:"../../asset/css/common/reset.css"});
+			Scripts.loadStyle({src:"../../asset/css/jQueryUI/jquery-ui-1.12.1.min.css"});
+			Scripts.loadStyle({src:"../../asset/script/component/jQueryUI/gird/page/page.css"});
+			Scripts.loadStyle({src:"../../asset/script/component/tree/css/zTreeStyle/zTreeStyle.css"});
+			Scripts.loadStyle({src:"../../asset/script/component/jQueryUI/gird/css/ui.jqgrid.css" });
+			Scripts.loadStyle({src:"../../asset/script/component/jQueryUI/gird/css/ui.jqgrid.owner.css"});
+			Scripts.loadStyle({src:"../../asset/script/component/validate/css/jquery.easyui.css"});
+			Scripts.loadStyle({src:"../../asset/css/lhgcore/lhgdialog.css"});
+			Scripts.loadStyle({src:"../../asset/css/lhgcore/alertWindow.css"});
+			Scripts.loadStyle({src:"../../asset/css/theme/"+theme+"/button.css"});
+			Scripts.loadStyle({src:"../../asset/css/theme/"+theme+"/form.css"});
+			Scripts.loadStyle({src:"../../asset/css/theme/"+theme+"/tab.css"});
+			Scripts.loadStyle({src:"../../asset/css/theme/"+theme+"/coc_frame.css"});
+			Scripts.loadStyle({src:"../../asset/css/theme/"+theme+"/main.css"});
+			
 			Scripts.loadScript({src:[
-			        "../../asset/script/config.js",
+			        "../../asset/script/common/jquery.customs.js",
+			        "../../asset/script/common/jquery.util.js",
+			        "../../asset/script/component/form/jquery.form.js",
+			        "../../asset/script/component/validate/js/jquery.easyui.js",
                     "../../asset/script/component/jQueryUI/jquery-ui-1.12.1.min.js",
+ 			        "../../asset/script/component/lhgcore/lhgcore.min.js","../../asset/script/component/lhgcore/lhgdialog.js","../../asset/script/component/lhgcore/lhgdialogExtend.js",
  			        "../../asset/script/component/jQueryUI/gird/page/jquery.page.js",
  			        "../../asset/script/component/jQueryUI/gird/js/jquery.jqGrid.min.js",
  			        "../../asset/script/component/jQueryUI/gird/js/i18n/grid.locale-cn.js",
- 			        "../../asset/script/component/jQueryUI/gird/jquery.jqGrid.extend.js",
- 			        "../../asset/script/component/tree/jquery.ztree.all.min.js"
+ 			        "../../asset/script/component/jQueryUI/gird/jquery.jqGrid.custom.js",
+ 			        "../../asset/script/component/tree/jquery.ztree.all.min.js",
 			        ],
 			        callback:function(){
 			        	Scripts.loadScript({src:[
-    	     			        "../../asset/script/common/jquery.customs.js",
-    	     			        "../../asset/script/common/jquery.util.js",
     	     			        "../../asset/script/common/init.js"
     	     			        ],
     	     			        callback:function(){

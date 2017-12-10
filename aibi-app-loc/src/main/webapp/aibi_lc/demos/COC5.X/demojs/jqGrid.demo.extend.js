@@ -124,10 +124,9 @@
 				}
 			};
 		 var opts = $.extend(defaults, options);
-		 var ssg = window.sessionStorage;
-		 var token =null;
-		if(ssg){
-			token = ssg.getItem("token");
+		 
+		 var token ;
+		if(token){
 			var ajaxOption ={
 				headers:{
 					'X-Authorization':token,
@@ -136,7 +135,7 @@
 					//,"Content-Type": "application/json; charset=utf-8",
 				},
 				beforeSend :function(){
-					$("#load_"+thisId).show()//.removeClass("preloader_2").addClass("preloader_2").html('<span></span><span></span><span></span><span></span>');
+					$("#load_"+thisId).show();
 				}
 		    };
 			opts.ajaxGridOptions = ajaxOption;

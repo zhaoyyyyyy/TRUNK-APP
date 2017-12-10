@@ -177,9 +177,7 @@ public class HttpUtil {
 	                result += line;
 	            }
 	        } catch (Exception e) {
-	        	e.printStackTrace();
-	        	throw new IOException();
-//	            System.out.println("发送GET请求出现异常！" + e);
+	        	throw e;
 	        }
 	        // 使用finally块来关闭输入流
 	        finally {
@@ -205,7 +203,7 @@ public class HttpUtil {
 	     *               是否使用代理模式
 	     * @return 所代表远程资源的响应结果
 	     */
-	    public static String sendPost(String url, Map<String,Object> paramMap) {
+	    public static String sendPost(String url, Map<String,Object> paramMap)  throws Exception{
 	    	StringBuilder paramStrSb = new StringBuilder();
 	    	if(paramMap != null && paramMap.size() > 0){
 	    		//paramStrSb.append("?");
@@ -233,7 +231,7 @@ public class HttpUtil {
 	     *               是否使用代理模式
 	     * @return 所代表远程资源的响应结果
 	     */
-	    public static String sendPost(String url, String param,boolean isproxy) {
+	    public static String sendPost(String url, String param,boolean isproxy)  throws Exception{
 	        OutputStreamWriter out = null;
 	        BufferedReader in = null;
 	        String result = "";
@@ -287,8 +285,7 @@ public class HttpUtil {
 	                result += line;
 	            }
 	        } catch (Exception e) {
-//	            System.out.println("发送 POST 请求出现异常！"+e);
-	            e.printStackTrace();
+	        	throw e;
 	        }
 	        //使用finally块来关闭输出流、输入流
 	        finally{

@@ -9,7 +9,6 @@ $.browser.msie = false;
 $.browser.version = '9.0';
 // 第一部分。
 $.extend({
-	
 	//拿到地址栏里面的参数
 	getUrlParam : function(name){
 	     var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
@@ -39,12 +38,16 @@ $.extend({
 		}
 		
 		var ssg = window.sessionStorage;
-		var tokenStr = "token_null";
+		var tokenStr;
 		if(ssg){
 			var token = ssg.getItem("token");
 			if(token){
 				tokenStr = token;
 			}
+		}
+		if(!tokenStr){
+			alert('token失效，请重新登录');
+			window.location.href = $.loginURL;
 		}
 		$.ajax({
 			headers 	: {'X-Authorization': tokenStr},
@@ -75,8 +78,9 @@ $.extend({
 								$.alert("系统无法响应请求，请联系管理员");
 							}
 						} else if (obj.msg) {
-							//$.alert(obj.msg);
-							alert(obj.msg);
+							$.alert(obj.msg,function(){
+								window.location.href = $.ctx ==""?"/":$.ctx;
+							});
 						}
 					} else {
 						if ($.isFunction(options.onSuccess))
@@ -87,7 +91,7 @@ $.extend({
 						$.alert('未找到对应请求。');
 					}else if(req.status == "401"){
 						$.alert('登录超时，点击确认重新登录。',function(){
-							 location.href = jQuery.ctx;
+							 location.href = $.ctx ==""?"/":$.ctx;
 						});
 					}
 				} else if (st == 'timeout') {
@@ -217,160 +221,6 @@ $.extend({
 	   			   		$("#"+thisId+"_popover").hide();
 		       },500)
 		  });
-	},
-	//初始化自定义下拉框
-	initCodeComboCustom : function(target, data, type, options) {
-		if (!target || !data) {
-			return;
-		}
-		
-		var initFunc = function(target, data) {
-			var codeHtml = "";
-			if ($.isArray(data)) {
-				codeHtml = $.parseHTMLForTree(data);
-			} else {
-				codeHtml = data;
-			}
-			
-			var $self = target;
-			var _showIcon = $self.attr("showIcon");
-			_showIcon = _showIcon == "true" ? true : false;
-			
-			var _showClear = $self.attr("showClear");
-			_showClear = _showClear == "false" ? false : true;
-			
-			options = options || {};
-			var opts = $.extend({
-				multiSelected	: $self.attr('multiSelect') || false,
-				treeHtml		: codeHtml,
-				async			: false,
-				showIcon		: _showIcon,
-				showClear		: _showClear,
-				ignoreValues	: $self.attr('ignoreValues') || false
-			}, options);
-			
-			var $treeCombo = $self.treecombo(opts);
-			
-			// 是否冻结
-			if ($self.attr('disable')) {
-				$treeCombo.triggerfield('disable');
-			}
-			
-			$('body').trigger('initComboOver');
-		};
-		
-		if (type == "local") {
-			initFunc(target, data);
-		} else if (type == "code") {
-			initFunc(target, $.getDicData(data));
-		} 
-	},
-	//初始化多选框
-	initCodeComponents : function() {
-		$("input[dataDic]").each(function() {
-			var $self = $(this);
-			var codeClass = $self.attr("dataDic");
-			$self.removeAttr("dataDic");
-			
-			var _codes = [];
-			_codes = $.getDicData(codeClass);
-			if (!_codes) {
-				$.alert(codeClass + "未指定");
-				return;
-			}
-			
-			if ($self.is(":text")) {
-				initText($self, _codes);
-			} else if ($self.is(":radio")) {
-				initRadio($self, _codes);
-			} else if ($self.is(":checkbox")) {
-				initCheckbox($self, _codes);
-			}
-			
-		});
-		
-		$('body').trigger('initComboOver');
-		
-		// 初始text输入框
-		function initText($el, codes) {
-			var codeHtml = $.parseHTMLForTree(codes);
-			
-			var _showClear = $el.attr("showClear");
-			_showClear = _showClear == "false" ? false : true;
-			$el.removeAttr("dataDic");
-			
-			var $treeCombo = $el.treecombo({
-				multiSelected	: $el.attr('multiSelect') || false,
-				treeHtml		: codeHtml,
-				async			: false,
-				showClear		: _showClear,
-				ignoreValues	: $el.attr('ignoreValues') || false
-			});
-			// 是否冻结
-			if ($el.attr('disable')) {
-				$treeCombo.triggerfield('disable');
-			}
-			if($el.attr('checkBoxDisable')){
-				var disVal=$el.attr('checkBoxDisable').split(",")
-				for(var i=0;i<disVal.length;i++){
-					$("#"+disVal[i]).attr("disabled","true");
-				}
-			}
-		}
-		
-		// 初始radio输入框
-		function initRadio($el, codes) {
-			var _name = $el.attr("name");
-			var defValue = $el.attr("defValue");
-			var id = $el.attr("id");
-			var ignoreValues = $el.attr("ignoreValues");
-			ignoreValues = ',' + ignoreValues + ',';
-			
-			$.each(codes, function(index, key_value) {
-				var key = key_value.code;
-				var value = key_value.dataName;
-				if (ignoreValues.indexOf(',' + key + ',') > -1)
-					return true;
-				
-				// clone一个新的checkbox模板
-				var _newInput = $el.clone();
-				_newInput.attr("name", _name);
-				_newInput.attr("value", key);
-				_newInput.attr("id", id + "_" + index);
-				if (key == defValue) {
-					_newInput.attr("checked", true);
-				}
-				$el.before(_newInput);
-				$el.before("<label for='" + id + "_" + index + "'>&nbsp;"  + value + "&nbsp;&nbsp;</label>");
-			});
-			
-			// 删除原来的。
-			$el.remove();
-		}
-		
-		// 初始checkbox输入框
-		function initCheckbox($el, codes) {
-			var _name = $el.attr("name");
-			var defValue = "," + $el.attr("defValue") + ",";
-			var id = $el.id;
-			
-			$.each(codes, function(index, key_value) {
-				var key = key_value.code;
-				var value = key_value.dataName;
-				// clone一个新的checkbox模板
-				var _newInput = $el.clone();
-				_newInput.attr("name", _name);
-				_newInput.attr("value", key);
-				_newInput.attr("id", id + "_" + index);
-				if (defValue.indexOf("," + key + ",") > -1) {
-					_newInput.attr("checked", true);
-				}
-				$el.before(_newInput);
-				$el.before("<label for='" + id + "_" + index + "'>&nbsp;" + value + "&nbsp;&nbsp;</label>");
-			});
-			// 删除原来的。
-			$el.remove();
-		}
 	}
 });
 
@@ -416,14 +266,7 @@ $.fn.extend({
 				if (uploadingFileNum1 > 0) {
 					returnStr = returnStr + "当前有正在上传的文件，请稍后提交。" + '<br>';
 				}
-//				var dg;
-//				if (frameElement != null) {
-//					dg = frameElement.lhgDG;
-//				}
 				if (returnStr != '') {
-//					try {
-//						$dp.hide();// 日期控件全局变量 将日期控件隐藏
-//					} catch (e) {}
 					if (dg == undefined) {
 						parent.$.alert(returnStr, function() {
 							if ($('.validatebox-invalid', form).first()[0]
