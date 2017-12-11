@@ -96,7 +96,6 @@ public class LabelInfoController extends BaseController<LabelInfo> {
         } catch (BaseException e) {
             return webResult.fail(e);
         }
-        System.out.println(labelInfoList.get(0).getEffecTime());
         return webResult.success("获取标签信息成功.", labelInfoList);
     }
 

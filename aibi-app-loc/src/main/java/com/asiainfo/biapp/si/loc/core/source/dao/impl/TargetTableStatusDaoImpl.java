@@ -65,17 +65,17 @@ public class TargetTableStatusDaoImpl extends BaseDaoImpl<TargetTableStatus, Str
         Map<String, Object> reMap = new HashMap<>();
         Map<String, Object> params = new HashMap<>();
         StringBuffer hql = new StringBuffer("from TargetTableStatus d where 1=1 ");
-        if (StringUtils.isNotBlank(targetTableStatusVo.getTableId())) {
+        if (StringUtils.isNotBlank(targetTableStatusVo.getSourceTableId())) {
             hql.append("and d.tableId = :tableId ");
-            params.put("tableId", targetTableStatusVo.getTableId());
+            params.put("tableId", targetTableStatusVo.getSourceTableId());
         }
-        if (StringUtils.isNotBlank(targetTableStatusVo.getCooTableName())) {
+        if (StringUtils.isNotBlank(targetTableStatusVo.getSourceTableName())) {
             hql.append("and d.cooTableName = :cooTableName ");
-            params.put("cooTableName", targetTableStatusVo.getCooTableName());
+            params.put("cooTableName", targetTableStatusVo.getSourceTableName());
         }
-        if (null != targetTableStatusVo.getCooTableType()) {
+        if (null != targetTableStatusVo.getSourceTableType()) {
             hql.append("and d.cooTableType = :cooTableType ");
-            params.put("cooTableType", targetTableStatusVo.getCooTableType());
+            params.put("cooTableType", targetTableStatusVo.getSourceTableType());
         }
         if (null != targetTableStatusVo.getManualExecution()) {
             hql.append("and d.manualExecution = :manualExecution ");

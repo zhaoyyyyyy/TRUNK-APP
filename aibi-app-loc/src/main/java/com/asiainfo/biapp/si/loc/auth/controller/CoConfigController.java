@@ -50,7 +50,7 @@ import com.asiainfo.biapp.si.loc.base.utils.WebResult;
  * @author zhangnan7
  * @version 1.0.0.2017年11月9日
  */
-@Api(value = "配置管理")
+@Api(value = "003->-配置管理")
 @RequestMapping("api/config")
 @RestController
 public class CoConfigController {

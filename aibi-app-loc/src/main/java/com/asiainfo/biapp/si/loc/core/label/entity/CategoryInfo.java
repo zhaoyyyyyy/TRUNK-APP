@@ -8,10 +8,17 @@ package com.asiainfo.biapp.si.loc.core.label.entity;
 
 import io.swagger.annotations.ApiParam;
 
+import java.util.HashSet;
+import java.util.Set;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
@@ -129,6 +136,20 @@ public class CategoryInfo extends BaseEntity {
     @Column(name = "LEVEL_ID")
     @ApiParam(value = "层次")
     private Integer levelId;
+    
+    @ApiParam(value = "子分类")
+    @OrderBy(value = "SORT_NUM")
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "PARENT_ID", insertable = false, updatable = false)
+    private Set<CategoryInfo> children = new HashSet<>();
+
+    public Set<CategoryInfo> getChildren() {
+        return children;
+    }
+
+    public void setChildren(Set<CategoryInfo> children) {
+        this.children = children;
+    }
 
     public String getCategoryId() {
         return categoryId;

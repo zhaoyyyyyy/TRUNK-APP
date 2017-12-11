@@ -1,5 +1,10 @@
 package com.asiainfo.biapp.si.loc.auth.controller;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
+
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,17 +16,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.asiainfo.biapp.si.loc.auth.model.DicData;
 import com.asiainfo.biapp.si.loc.auth.service.IDicDataService;
-import com.asiainfo.biapp.si.loc.auth.utils.AuthUtils;
 import com.asiainfo.biapp.si.loc.base.controller.BaseController;
 import com.asiainfo.biapp.si.loc.base.exception.BaseException;
 import com.asiainfo.biapp.si.loc.base.page.Page;
 import com.asiainfo.biapp.si.loc.base.utils.WebResult;
-
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
-import springfox.documentation.annotations.ApiIgnore;
 
 /**
  * 
@@ -44,7 +42,7 @@ import springfox.documentation.annotations.ApiIgnore;
  * @author  zhougz3
  * @version 1.0.0.2017年11月5日
  */
-@Api(value = "字典获取")
+@Api(value = "002->-字典获取")
 @RequestMapping("api/dicData")
 @RestController
 public class DicDataController extends BaseController<DicData>{
@@ -66,7 +64,7 @@ public class DicDataController extends BaseController<DicData>{
 	})
 	@RequestMapping(value="/queryList", method=RequestMethod.POST, produces={ MediaType.APPLICATION_JSON_VALUE })
 	public WebResult<List<DicData>> findDataListByCode(String code){
-		WebResult<List<DicData>> webResult = new WebResult<List<DicData>>();
+		WebResult<List<DicData>> webResult = new WebResult<>();
 		
 		List<DicData> dicDataList = null;
 		try {
@@ -93,7 +91,7 @@ public class DicDataController extends BaseController<DicData>{
 	@RequestMapping(value="/dicdataPage/query", method=RequestMethod.POST, produces={ MediaType.APPLICATION_JSON_VALUE })
 	public Page<DicData> findDicDataPageByParams(@ModelAttribute Page<DicData> page,String dicCode){
 		
-		Page<DicData> dicDataPage = new Page<DicData>();
+		Page<DicData> dicDataPage = new Page<>();
 		try {
 			dicDataPage = dicDataService.findDicDataList(page, dicCode);
 		} catch (BaseException e) {

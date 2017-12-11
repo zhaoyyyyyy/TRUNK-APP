@@ -54,25 +54,25 @@ public class TargetTableStatus extends BaseEntity {
      * 表ID
      */
     @Id
-    @Column(name = "TABLE_ID")
+    @Column(name = "SOURCE_TABLE_ID")
     @GenericGenerator(name = "idGenerator", strategy = "uuid")
     @GeneratedValue(generator = "idGenerator")
     @ApiParam(value = "表ID")
-    private String tableId;
+    private String sourceTableId;
 
     /**
      * 数据表名
      */
-    @Column(name = "COO_TABLE_NAME")
+    @Column(name = "SOURCE_TABLE_NAME")
     @ApiParam(value = "数据表名")
-    private String cooTableName;
+    private String sourceTableName;
 
     /**
      * 指标源表类型
      */
-    @Column(name = "COO_TABLE_TYPE")
+    @Column(name = "SOURCE_TABLE_TYPE")
     @ApiParam(value = "指标源表类型")
-    private Integer cooTableType;
+    private Integer sourceTableType;
 
     /**
      * 是否手动执行
@@ -116,28 +116,28 @@ public class TargetTableStatus extends BaseEntity {
     @ApiParam(value = "错误信息描述")
     private String exceptionDesc;
 
-    public String getTableId() {
-        return tableId;
+    public String getSourceTableId() {
+        return sourceTableId;
     }
 
-    public void setTableId(String tableId) {
-        this.tableId = tableId;
+    public void setSourceTableId(String sourceTableId) {
+        this.sourceTableId = sourceTableId;
     }
 
-    public String getCooTableName() {
-        return cooTableName;
+    public String getSourceTableName() {
+        return sourceTableName;
     }
 
-    public void setCooTableName(String cooTableName) {
-        this.cooTableName = cooTableName;
+    public void setSourceTableName(String sourceTableName) {
+        this.sourceTableName = sourceTableName;
     }
 
-    public Integer getCooTableType() {
-        return cooTableType;
+    public Integer getSourceTableType() {
+        return sourceTableType;
     }
 
-    public void setCooTableType(Integer cooTableType) {
-        this.cooTableType = cooTableType;
+    public void setSourceTableType(Integer sourceTableType) {
+        this.sourceTableType = sourceTableType;
     }
 
     public Integer getManualExecution() {
