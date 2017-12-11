@@ -50,10 +50,14 @@ public class HttpUtil {
 	     * @return 
 	     */  
 	    public static String httpRequest(String req_url) {
-	        StringBuffer buffer = new StringBuffer();  
+	        StringBuffer buffer = new StringBuffer(); 
+	        InputStream inputStream = null;
+	        InputStreamReader inputStreamReader = null;
+	        HttpURLConnection httpUrlConn = null;
+	        BufferedReader bufferedReader = null;
 	        try {  
 	            URL url = new URL(req_url);  
-	            HttpURLConnection httpUrlConn = (HttpURLConnection) url.openConnection();  
+	            httpUrlConn = (HttpURLConnection) url.openConnection();  
 
 	            httpUrlConn.setDoOutput(false);  
 	            httpUrlConn.setDoInput(true);  
@@ -63,24 +67,36 @@ public class HttpUtil {
 	            httpUrlConn.connect();  
 
 	            // 将返回的输入流转换成字符串  
-	            InputStream inputStream = httpUrlConn.getInputStream();  
-	            InputStreamReader inputStreamReader = new InputStreamReader(inputStream, "utf-8");  
-	            BufferedReader bufferedReader = new BufferedReader(inputStreamReader);  
+	            inputStream = httpUrlConn.getInputStream();  
+	            inputStreamReader = new InputStreamReader(inputStream, "utf-8");  
+	            bufferedReader = new BufferedReader(inputStreamReader);  
 
 	            String str = null;  
 	            while ((str = bufferedReader.readLine()) != null) {  
 	                buffer.append(str);  
 	            }  
-	            bufferedReader.close();  
-	            inputStreamReader.close();  
-	            // 释放资源  
-	            inputStream.close();  
-	            inputStream = null;  
-	            httpUrlConn.disconnect();  
 
 	        } catch (Exception e) {  
-	            System.out.println(e.getStackTrace());  
-	        }  
+	            LogUtil.error("发起http请求获取返回结果失败" , e);
+	        }finally {
+				if(bufferedReader != null){
+					try {
+						bufferedReader.close();
+					} catch (IOException e) {
+						LogUtil.error("http请求,关闭输入流事变" , e);
+					}  
+				}
+				if(inputStreamReader != null){
+					try {
+						inputStreamReader.close();
+					} catch (IOException e) {
+						LogUtil.error("http请求,关闭输入流失败" , e);
+					}  
+				}
+				if(httpUrlConn != null){
+					httpUrlConn.disconnect();  
+				}
+			}
 	        return buffer.toString();  
 	    }  
 
