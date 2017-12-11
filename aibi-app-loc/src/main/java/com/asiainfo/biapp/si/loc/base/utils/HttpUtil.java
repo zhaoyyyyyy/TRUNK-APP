@@ -1,20 +1,18 @@
 package com.asiainfo.biapp.si.loc.base.utils;
-import java.io.BufferedReader;  
+import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;  
-import java.io.InputStreamReader;  
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-import java.io.UnsupportedEncodingException;  
-import java.net.HttpURLConnection;  
+import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
 import java.net.InetSocketAddress;
 import java.net.Proxy;
-import java.net.URL; 
+import java.net.URL;
 import java.net.URLConnection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-
-import antlr.Token;
 
 
 public class HttpUtil {
@@ -31,7 +29,7 @@ public class HttpUtil {
 	        try {  
 	            result = java.net.URLEncoder.encode(source,encode);  
 	        } catch (UnsupportedEncodingException e) {  
-	            e.printStackTrace();  
+	        	LogUtil.error("请求URL转码异常:"+source, e);
 	            return "0";  
 	        }  
 	        return result;  
@@ -41,7 +39,7 @@ public class HttpUtil {
 	        try {  
 	            result = java.net.URLEncoder.encode(source,"GBK");  
 	        } catch (UnsupportedEncodingException e) {  
-	            e.printStackTrace();  
+	        	LogUtil.error("URL到GBK编码转换异常", e);
 	            return "0";  
 	        }  
 	        return result;  
@@ -102,7 +100,7 @@ public class HttpUtil {
 	            // 获得返回的输入流  
 	            inputStream = httpUrlConn.getInputStream();  
 	        } catch (Exception e) {  
-	            e.printStackTrace();  
+	        	LogUtil.error("发送http请求取得返回的输入流"+requestUrl,e);
 	        }  
 	        return inputStream;  
 	    }
@@ -186,7 +184,7 @@ public class HttpUtil {
 	                    in.close();
 	                }
 	            } catch (Exception e2) {
-	                e2.printStackTrace();
+	            	throw e2;
 	            }
 	        }
 	        return result;
@@ -298,7 +296,7 @@ public class HttpUtil {
 	                }
 	            }
 	            catch(IOException ex){
-	                ex.printStackTrace();
+	            	throw ex;
 	            }
 	        }
 	        return result;
