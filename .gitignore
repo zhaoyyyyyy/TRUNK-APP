@@ -6,3 +6,9 @@ aibi-app-loc/.classpath
 /.gitignore
 *.rej
 aibi-app-jauth/target/
+aibi-tool-bd/.classpath
+aibi-tool-bd/.project
+aibi-tool-bd/.settings/
+aibi-common/.classpath
+aibi-common/.project
+aibi-common/.settings/

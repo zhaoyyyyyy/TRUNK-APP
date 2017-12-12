@@ -8,6 +8,7 @@
   <modules>
     <module>aibi-app-loc</module>
     <module>aibi-tool-gateway</module>
+    <module>aibi-common</module>
   </modules>
   
   <parent>

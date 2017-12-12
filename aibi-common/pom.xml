@@ -3,9 +3,9 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>com.asiainfo.biapp</groupId>
-	<artifactId>aibi-tool-bd</artifactId>
+	<artifactId>aibi-common</artifactId>
 	<version>1.0.0</version>
-	<name>aibi-tool-bd</name>
+	<name>aibi-common</name>
 	<url>http://maven.apache.org</url>
 
 	<properties>
