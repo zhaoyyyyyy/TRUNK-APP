@@ -1,9 +1,13 @@
 //加载页面方法
 function loc_loadPage(){
-	var hash = window.location.hash; 
+	var hash = window.location.hash;
+	var href = "";
 	if(hash){
-		$('iframe').attr('src',"../"+hash.split("#")[1]+".html");
+		href = hash.split("#")[1];
+	}else{
+		href = $('#accordion a:eq(0)').attr('href').split("#")[1];
 	}
+	$('iframe').attr('src',"../"+href+".html");
 }
 
 //在页面hash改变时加载页面
@@ -18,6 +22,8 @@ window.loc_onload = function(){
 		heightStyle: "content",
 		icons:false
 	});
+	$("#accordion").show();
+	
 	
 	//点击菜单
 	$('#accordion a').click(function(){

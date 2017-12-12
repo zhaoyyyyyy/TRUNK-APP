@@ -80,12 +80,20 @@ $.fn.extend({
 			url:"/api/prefecture/preConfigInfo/queryList",
 			onSuccess:function(result){
 				if(result.data){
-				  $("#preConfig_list > .dropdown-toggle > .pre-config-name").html(result.data[0].sourceName).attr("configId",result.data[0].configId);
-				  
-				  if(!$.kvGet("CurrentConfigId")){
+				  //已经选择过了
+				  var currentConfigId = $.kvGet("CurrentConfigId");
+				  if(currentConfigId){
+					  $.each(result.data,function(i){
+						  if(result.data[i].configId == currentConfigId){
+							  $("#preConfig_list > .dropdown-toggle > .pre-config-name").html(result.data[i].sourceName).attr("configId",result.data[i].configId);
+							  return false;
+						  }
+					  });
+				  }else{
 					  $.kvSet("CurrentConfigId",result.data[0].configId);
+					  $("#preConfig_list > .dropdown-toggle > .pre-config-name").html(result.data[0].sourceName).attr("configId",result.data[0].configId);
+//					 
 				  }
-				  
 				  $("#preConfig_list > a.dropdown-toggle").on("click",function(ev){
 						var e = ev||event ;
 						e.stopPropagation?e.stopPropagation():e.cancelBubble=true;
@@ -104,11 +112,8 @@ $.fn.extend({
 								var e = ev||event ;
 								e.stopPropagation?e.stopPropagation():e.cancelBubble=true;
 								var $this = $(this);
-								$("#preConfig_list > .dropdown-toggle > .pre-config-name").html($this.text()).attr("configId",$this.attr("configId"));
-								$dropToggle.removeClass("open");
-								//options.select($this);
 								$.kvSet("CurrentConfigId",$this.attr("configId"));
-								 window.location.reload();
+								window.location.reload();
 							});
 						}
 					});
