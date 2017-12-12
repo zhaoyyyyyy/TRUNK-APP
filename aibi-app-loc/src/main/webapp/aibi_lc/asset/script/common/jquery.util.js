@@ -78,9 +78,7 @@ $.extend({
 								$.alert("系统无法响应请求，请联系管理员");
 							}
 						} else if (obj.msg) {
-							$.alert(obj.msg,function(){
-								window.location.href = $.ctx ==""?"/":$.ctx;
-							});
+							$.alert(obj.msg);
 						}
 					} else {
 						if ($.isFunction(options.onSuccess))
