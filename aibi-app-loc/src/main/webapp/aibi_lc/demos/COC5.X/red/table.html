@@ -8,17 +8,17 @@
 <![endif]--> 
 <link href="../../../asset/css/common/reset.css" rel="stylesheet"  />
 <link href="../../../asset/css/jQueryUI/jquery-ui-1.12.1.min.css" rel="stylesheet"  />
-<link href="../../../asset/script/common/jQuery/jQueryUI/gird/page/page.css" rel="stylesheet"  />
-<link href="../../../asset/script/common/jQuery/jQueryUI/gird/page/red.page.css" rel="stylesheet"  />
-<link href="../../../asset/script/common/jQuery/jQueryUI/gird/css/ui.jqgrid.css" rel="stylesheet"  />
-<link href="../../../asset/script/common/jQuery/jQueryUI/gird/css/red/ui.jqgrid.owner.css" rel="stylesheet"  />
+<link href="../../../asset/script/component/jQueryUI/gird/page/page.css" rel="stylesheet"  />
+<link href="../../../asset/script/component/jQueryUI/gird/page/red.page.css" rel="stylesheet"  />
+<link href="../../../asset/script/component/jQueryUI/gird/css/ui.AIGrid.css" rel="stylesheet"  />
+<link href="../../../asset/script/component/jQueryUI/gird/css/red/ui.AIGrid.owner.css" rel="stylesheet"  />
 <link href="../../../asset/css/theme/default/button.css" rel="stylesheet"  />
-<script src="../../../asset/script/common/jQuery/jquery-1.12.4.js"></script>
-<script src="../../../asset/script/common/jQuery/jQueryUI/jquery-ui-1.12.1.min.js"></script>
-<script src="../../../asset/script/common/jQuery/jQueryUI/gird/page/jquery.page.js"></script>
-<script src="../../../asset/script/common/jQuery/jQueryUI/gird/js/jquery.jqGrid.min.js"></script>
-<script src="../../../asset/script/common/jQuery/jQueryUI/gird/js/i18n/grid.locale-cn.js"></script>
-<script src="../../../asset/script/common/jQuery/jQueryUI/gird/jquery.jqGrid.extend.js"></script>
+<script src="../../../asset/script/component/jquery-1.12.4.js"></script>
+<script src="../../../asset/script/component/jQueryUI/jquery-ui-1.12.1.min.js"></script>
+<script src="../../../asset/script/component/jQueryUI/gird/page/jquery.page.js"></script>
+<script src="../../../asset/script/component/jQueryUI/gird/js/jquery.AIGrid.min.js"></script>
+<script src="../../../asset/script/component/jQueryUI/gird/js/i18n/grid.locale-cn.js"></script>
+<script src="../../demojs/AIGrid.demo.extend.js"></script>
 <!--
 	H5兼容js CSS3 兼容JS
 -->
@@ -76,7 +76,7 @@
 		   	rowNum:10,
 		   	cellEdit: true,//单个编辑 去掉行编辑
 			onSelectRow: function(id){debugger
-				$('#jsonmap').jqGrid('editRow',id,true);
+				$('#jsonmap').AIGrid('editRow',id,true);
 		},
 		   	rowList:[10,20,30],
 		   	pager: '#pjmap',//分页的id
@@ -188,7 +188,7 @@
 					id: "0"
 				},
 				height: '100%' 
-			}).jqGrid('setFrozenColumns');
+			}).AIGrid('setFrozenColumns');
 			$("#jsonmap10").AIGrid({        
 			   	url:'../../treeGrid.xml',
 				treedatatype: "xml",

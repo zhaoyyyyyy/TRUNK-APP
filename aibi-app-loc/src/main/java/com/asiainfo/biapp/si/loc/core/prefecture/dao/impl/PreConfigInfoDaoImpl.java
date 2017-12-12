@@ -81,12 +81,12 @@ public class PreConfigInfoDaoImpl extends BaseDaoImpl<PreConfigInfo, String> imp
             params.put("dataAccessType", preConfigInfoVo.getDataAccessType());
         }
         if (StringUtils.isNotBlank(preConfigInfoVo.getSourceName())) {
-            hql.append("and p.sourceName = :sourceName ");
-            params.put("sourceName", preConfigInfoVo.getSourceName());
+            hql.append("and p.sourceName LIKE :sourceName ");
+            params.put("sourceName","%" + preConfigInfoVo.getSourceName() + "%");
         }
         if (StringUtils.isNotBlank(preConfigInfoVo.getSourceEnName())) {
-            hql.append("and p.sourceEnName = :sourceEnName ");
-            params.put("sourceEnName", preConfigInfoVo.getSourceEnName());
+            hql.append("and p.sourceEnName LIKE :sourceEnName ");
+            params.put("sourceEnName","%" + preConfigInfoVo.getSourceEnName() + "%");
         }
         if (StringUtils.isNotBlank(preConfigInfoVo.getContractName())) {
             hql.append("and p.contractName = :contractName ");

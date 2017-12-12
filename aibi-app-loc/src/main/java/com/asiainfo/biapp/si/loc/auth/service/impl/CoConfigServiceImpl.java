@@ -15,11 +15,13 @@ import net.sf.json.JSONNull;
 import net.sf.json.JSONObject;
 
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.aop.ThrowsAdvice;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.asiainfo.biapp.si.loc.auth.service.ICoConfigService;
 import com.asiainfo.biapp.si.loc.base.exception.BaseException;
+import com.asiainfo.biapp.si.loc.base.exception.JauthServerException;
 import com.asiainfo.biapp.si.loc.base.exception.ParamRequiredException;
 import com.asiainfo.biapp.si.loc.base.utils.HttpUtil;
 
@@ -69,7 +71,13 @@ public class CoConfigServiceImpl implements ICoConfigService {
         Map<String, Object> map = new HashMap<>();
         map.put("parentCode", parentCode);
         map.put("token", token);
-        String config = HttpUtil.sendPost(jauthUrl + "/api/config/getChild", map);
+        String config = "";
+        try {
+        	config = HttpUtil.sendPost(jauthUrl + "/api/config/getChild", map);
+		} catch (Exception e) {
+			throw new JauthServerException("批量获取配置信息异常");
+		}
+       
         Map<String, String> returnMap = new HashMap<>();
         String str1 = config.replaceAll("\\[", "").replaceAll("\\]", "");
         String[] strs = str1.split("},");
@@ -96,7 +104,13 @@ public class CoConfigServiceImpl implements ICoConfigService {
         Map<String, Object> map = new HashMap<>();
         map.put("coKey", code);
         map.put("token", token);
-        String configValue = HttpUtil.sendPost(jauthUrl + "/api/config/get", map);
+        String configValue = "";
+        try {
+        	configValue = HttpUtil.sendPost(jauthUrl + "/api/config/get", map);
+		} catch (Exception e) {
+			throw new JauthServerException("批量配置信息异常");
+		}
+        
         String value = "";
         Object returna = JSONObject.fromObject(configValue).get("config");
         if (!(returna instanceof JSONNull)) {

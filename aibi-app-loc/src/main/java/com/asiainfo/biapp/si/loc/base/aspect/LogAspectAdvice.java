@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import com.asiainfo.biapp.si.loc.base.utils.HttpUtil;
+import com.asiainfo.biapp.si.loc.base.utils.LogUtil;
 
 /**
  * Title : LogAspectAdvice
@@ -52,6 +53,7 @@ import com.asiainfo.biapp.si.loc.base.utils.HttpUtil;
 @Aspect // 声明为切面类，底层使用动态代理实现AOP
 public class LogAspectAdvice {
     
+	
     private static String jauthUrl;
     private static String nodeName;
 
@@ -85,8 +87,12 @@ public class LogAspectAdvice {
         params.put("interfaceUrl", targetName + "/" + method);
         params.put("inputParams", args[0]);
         params.put("outputParams", result);
-        
-        HttpUtil.sendPost(jauthUrl + "/api/interface/save", params);
+        try {
+        	 HttpUtil.sendPost(jauthUrl + "/api/interface/save", params);
+		} catch (Exception e) {
+			LogUtil.error("同步给JAUTH异常数据失败", e);
+		}
+       
 
        
     }

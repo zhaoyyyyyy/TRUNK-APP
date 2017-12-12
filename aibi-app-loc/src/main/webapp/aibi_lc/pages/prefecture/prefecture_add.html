@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<title>新增专区</title>
+	<!--[if IE]>
+    	<meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <![endif]-->
+    <link rel="stylesheet" theme="default" href="../../asset/css/theme/default/coc_frame.css"/> 
+	<link rel="stylesheet" theme="default" href="../../asset/css/theme/default/main.css"/> 
+   	<script type="text/javascript" src="../../asset/script/common/include.js"></script>
+   	<script type="text/javascript" src="prefecture_add.js"></script>
+    <!--[if lt IE 9]>
+	    <script src="../../asset/script/component/h5compatibility/html5shiv.min.js"></script>
+	    <script src="../../asset/script/component/h5compatibility/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+	<div class="iframe-nest">
+		<div class="ui-reg-main">
+			<div class="ui-lc-mian">
+				<h3>新增专区</h3>
+				<form id="saveDataForm">
+					<div class="ui-expand-search ui-reg-search">
+						<div class="form-inline ui-form">
+							<div class="clearfix">
+								<div class="form-group">
+									<label for="exampleInputEmail3">专区名称</label> <input type="text" class="form-control mr10 ml10" id="exampleInputEmail3" placeholder="" />
+								</div>
+								<div class="form-group ml30">
+									<label class="fleft mt5" for="exampleInputEmail3">专区英文名</label>
+									<div class="control-input has-icon">
+										<input type="text" class="form-control ml10" id="inputEmail4" />
+									</div>
+								</div>
+							</div>
+							<div class="clearfix mt30">
+								<div class="form-group">
+									<label for="exampleInputEmail3">地市名称</label> <input type="text" class="form-control mr10 ml10" id="exampleInputEmail3" placeholder="" />
+								</div>
+								<div class="form-group ml30">
+									<label class="fleft mt5" for="exampleInputEmail3">专区类型</label>
+									<div class="control-input has-icon">
+										<select dicCode="ZQLXZD" class="form-control ml10 input-pointer"></select>
+									</div>
+								</div>
+							</div>
+							<div class="clearfix mt30">
+								<div class="form-group">
+									<label for="exampleInputEmail3">合同名称</label> <input type="text" class="form-control mr10 ml10" id="exampleInputEmail3" placeholder="" />
+								</div>
+								<div class="form-group ml30">
+									<label class="fleft mt5" for="exampleInputEmail3">失效时间</label>
+									<div class="ml10 control-input date-input fleft has-icon">
+										<input type="text" class="form-control input-pointer form-control-bubble" data-dismiss="formDatepicker#sendTime" id="" placeholder="请选择失效日期">
+										<span class="glyphicon-date form-control-feedback"></span>
+									</div>
+								</div>
+								<div class="clearfix mt30">
+									<div class="form-group">
+										<label for="exampleInputEmail3">专区描述</label>
+										<textarea class="form-control ml10"></textarea>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div>
+							<div class="ui-reg-grid">
+								<div class="ui-grid-button clearfix mt20">
+									<button type="button" class="ui-btn ui-btn-second">取消</button>
+									<button onclick="fun_to_save()" type="button" class="ui-btn ui-btn-default">保存</button>
+								</div>
+							</div>
+						</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

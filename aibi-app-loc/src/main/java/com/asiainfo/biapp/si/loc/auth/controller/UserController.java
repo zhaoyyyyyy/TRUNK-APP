@@ -1,6 +1,10 @@
 package com.asiainfo.biapp.si.loc.auth.controller;
 
-import java.util.HashMap;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
+
 import java.util.List;
 import java.util.Map;
 
@@ -8,10 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.asiainfo.biapp.si.loc.auth.model.DicData;
 import com.asiainfo.biapp.si.loc.auth.model.Organization;
 import com.asiainfo.biapp.si.loc.auth.model.Resource;
 import com.asiainfo.biapp.si.loc.auth.model.User;
@@ -21,12 +23,7 @@ import com.asiainfo.biapp.si.loc.base.controller.BaseController;
 import com.asiainfo.biapp.si.loc.base.exception.BaseException;
 import com.asiainfo.biapp.si.loc.base.utils.WebResult;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
-
-@Api(value = "用户权限相关接口")
+@Api(value = "001->-用户权限相关接口")
 @RequestMapping("api/user")
 @RestController
 public class UserController extends BaseController<User>{
@@ -44,7 +41,7 @@ public class UserController extends BaseController<User>{
 	})
 	@RequestMapping(value="/login", method=RequestMethod.POST, produces={ MediaType.APPLICATION_JSON_VALUE })
 	public WebResult<TokenModel> login(String username,String password){
-		WebResult<TokenModel> webResult = new WebResult<TokenModel>();
+		WebResult<TokenModel> webResult = new WebResult<>();
 		
 		TokenModel token = null;
 		try {
@@ -57,7 +54,7 @@ public class UserController extends BaseController<User>{
 	
 	@ApiOperation(value = "查询用户组织访问权限跟同专区权限")
 	@ApiImplicitParam(name = "token", value = "秘钥", required = false, paramType = "query", dataType = "string")
-	@RequestMapping(value="/orgPrivaliege/query", method=RequestMethod.POST, produces={ MediaType.APPLICATION_JSON_VALUE })
+	@RequestMapping(value="/privaliegeOrg/query", method=RequestMethod.POST, produces={ MediaType.APPLICATION_JSON_VALUE })
 	public WebResult<Map<String,List<Organization>>> findOrgPrivaliege(String token){
         WebResult<Map<String,List<Organization>>> webResult = new WebResult<>();
         User user = new User();
@@ -71,7 +68,7 @@ public class UserController extends BaseController<User>{
 	
 	@ApiOperation(value = "查询数据权限同行政区划权限")
     @ApiImplicitParam(name = "token", value = "秘钥", required = false, paramType = "query", dataType = "string")
-    @RequestMapping(value="/dataPrivaliege/query", method=RequestMethod.POST, produces={ MediaType.APPLICATION_JSON_VALUE })
+    @RequestMapping(value="/privaliegeData/query", method=RequestMethod.POST, produces={ MediaType.APPLICATION_JSON_VALUE })
     public WebResult<Map<String,List<Organization>>> findDataPrivaliege(String token){
         WebResult<Map<String,List<Organization>>> webResult = new WebResult<>();
         User user = new User();
@@ -85,7 +82,7 @@ public class UserController extends BaseController<User>{
 	
 	@ApiOperation(value = "查询api访问权限")
     @ApiImplicitParam(name = "token", value = "秘钥", required = false, paramType = "query", dataType = "string")
-    @RequestMapping(value="/apiResource/query", method=RequestMethod.POST, produces={ MediaType.APPLICATION_JSON_VALUE })
+    @RequestMapping(value="/resourceApi/query", method=RequestMethod.POST, produces={ MediaType.APPLICATION_JSON_VALUE })
     public WebResult<List<Resource>> findApiResource(String token){
         WebResult<List<Resource>> webResult = new WebResult<>();
         User user = new User();
@@ -99,7 +96,7 @@ public class UserController extends BaseController<User>{
 	
 	@ApiOperation(value = "查询页面元素权限")
     @ApiImplicitParam(name = "token", value = "秘钥", required = false, paramType = "query", dataType = "string")
-    @RequestMapping(value="/domResource/query", method=RequestMethod.POST, produces={ MediaType.APPLICATION_JSON_VALUE })
+    @RequestMapping(value="/resourceDom/query", method=RequestMethod.POST, produces={ MediaType.APPLICATION_JSON_VALUE })
     public WebResult<List<Resource>> findDomResource(String token){
         WebResult<List<Resource>> webResult = new WebResult<>();
         User user = new User();
@@ -113,7 +110,7 @@ public class UserController extends BaseController<User>{
 	
 	@ApiOperation(value = "查询菜单权限")
     @ApiImplicitParam(name = "token", value = "秘钥", required = false, paramType = "query", dataType = "string")
-    @RequestMapping(value="/menuResource/query", method=RequestMethod.POST, produces={ MediaType.APPLICATION_JSON_VALUE })
+    @RequestMapping(value="/resourceMenu/query", method=RequestMethod.POST, produces={ MediaType.APPLICATION_JSON_VALUE })
     public WebResult<List<Resource>> findMenuResource(String token){
         WebResult<List<Resource>> webResult = new WebResult<>();
         User user = new User();

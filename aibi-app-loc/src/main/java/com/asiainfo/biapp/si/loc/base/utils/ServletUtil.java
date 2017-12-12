@@ -2,11 +2,9 @@ package com.asiainfo.biapp.si.loc.base.utils;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
 
-import com.asiainfo.biapp.si.loc.auth.model.DicData;
 import com.asiainfo.biapp.si.loc.base.exception.BaseException;
 
 import net.sf.json.JSONObject;
@@ -32,7 +30,7 @@ public class ServletUtil {
 			out = response.getWriter();
 			out.append(JSONObject.fromObject(webResult.fail(baseException)).toString() );
 		} catch (IOException e) {
-			e.printStackTrace();
+			LogUtil.error("响应接口信息日常",e);
 		} finally {
 			if (out != null) {
 				out.close();

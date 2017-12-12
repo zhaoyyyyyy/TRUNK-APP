@@ -144,7 +144,7 @@ public class TargetTableStatusController extends BaseController<TargetTableStatu
         WebResult<String> webResult = new WebResult<>();
         TargetTableStatus oldTar = new TargetTableStatus();
         try {
-            oldTar = iTargetTableStatusService.selectTargerTableStatusById(targetTableStatus.getTableId());
+            oldTar = iTargetTableStatusService.selectTargerTableStatusById(targetTableStatus.getSourceTableId());
         } catch (BaseException e) {
             return webResult.fail(e);
         }
@@ -183,11 +183,11 @@ public class TargetTableStatusController extends BaseController<TargetTableStatu
      * @return
      */
     public TargetTableStatus fromToBean(TargetTableStatus tar, TargetTableStatus oldTar) {
-        if (StringUtil.isNotBlank(tar.getCooTableName())) {
-            oldTar.setCooTableName(tar.getCooTableName());
+        if (StringUtil.isNotBlank(tar.getSourceTableName())) {
+            oldTar.setSourceTableName(tar.getSourceTableName());
         }
-        if (null != tar.getCooTableType()) {
-            oldTar.setCooTableType(tar.getCooTableType());
+        if (null != tar.getSourceTableType()) {
+            oldTar.setSourceTableType(tar.getSourceTableType());
         }
         if (null != tar.getManualExecution()) {
             oldTar.setManualExecution(tar.getManualExecution());

@@ -1,5 +1,7 @@
 package com.asiainfo.biapp.si.loc.base.exception;
 
+import com.asiainfo.biapp.si.loc.base.utils.LogUtil;
+
 /**
  * 用户权限异常
  * @author zhougz3
@@ -15,7 +17,7 @@ public class UserAuthException extends BaseException{
 	}
 	
 	public UserAuthException(String message,Exception e){
-		e.printStackTrace();
+		LogUtil.error("获取用户权限异常",e);
 		super.setMsg(message);
 		super.setCode(errorCode);
 	}

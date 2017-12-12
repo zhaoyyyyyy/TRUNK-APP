@@ -27,6 +27,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.asiainfo.biapp.si.loc.base.exception.BaseException;
 import com.asiainfo.biapp.si.loc.base.exception.SqlRunException;
 import com.asiainfo.biapp.si.loc.base.page.Page;
+import com.asiainfo.biapp.si.loc.base.utils.LogUtil;
 
 /**
  * @describe Hibernate持久层实现类
@@ -141,7 +142,7 @@ public class BaseDaoImpl<T, ID extends Serializable>  implements BaseDao<T,ID> {
 			query = this.addParametersForArr(query, args);
 			return query.getResultList();
 		}catch(Exception e){
-			e.printStackTrace();
+			LogUtil.error("HQL执行出错"+hql,e);
 			throw new SqlRunException();
 		}
 	}

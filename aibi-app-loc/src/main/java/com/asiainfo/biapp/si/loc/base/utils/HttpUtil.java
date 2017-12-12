@@ -1,20 +1,18 @@
 package com.asiainfo.biapp.si.loc.base.utils;
-import java.io.BufferedReader;  
+import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;  
-import java.io.InputStreamReader;  
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-import java.io.UnsupportedEncodingException;  
-import java.net.HttpURLConnection;  
+import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
 import java.net.InetSocketAddress;
 import java.net.Proxy;
-import java.net.URL; 
+import java.net.URL;
 import java.net.URLConnection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-
-import antlr.Token;
 
 
 public class HttpUtil {
@@ -31,7 +29,7 @@ public class HttpUtil {
 	        try {  
 	            result = java.net.URLEncoder.encode(source,encode);  
 	        } catch (UnsupportedEncodingException e) {  
-	            e.printStackTrace();  
+	        	LogUtil.error("请求URL转码异常:"+source, e);
 	            return "0";  
 	        }  
 	        return result;  
@@ -41,7 +39,7 @@ public class HttpUtil {
 	        try {  
 	            result = java.net.URLEncoder.encode(source,"GBK");  
 	        } catch (UnsupportedEncodingException e) {  
-	            e.printStackTrace();  
+	        	LogUtil.error("URL到GBK编码转换异常", e);
 	            return "0";  
 	        }  
 	        return result;  
@@ -52,10 +50,14 @@ public class HttpUtil {
 	     * @return 
 	     */  
 	    public static String httpRequest(String req_url) {
-	        StringBuffer buffer = new StringBuffer();  
+	        StringBuffer buffer = new StringBuffer(); 
+	        InputStream inputStream = null;
+	        InputStreamReader inputStreamReader = null;
+	        HttpURLConnection httpUrlConn = null;
+	        BufferedReader bufferedReader = null;
 	        try {  
 	            URL url = new URL(req_url);  
-	            HttpURLConnection httpUrlConn = (HttpURLConnection) url.openConnection();  
+	            httpUrlConn = (HttpURLConnection) url.openConnection();  
 
 	            httpUrlConn.setDoOutput(false);  
 	            httpUrlConn.setDoInput(true);  
@@ -65,24 +67,36 @@ public class HttpUtil {
 	            httpUrlConn.connect();  
 
 	            // 将返回的输入流转换成字符串  
-	            InputStream inputStream = httpUrlConn.getInputStream();  
-	            InputStreamReader inputStreamReader = new InputStreamReader(inputStream, "utf-8");  
-	            BufferedReader bufferedReader = new BufferedReader(inputStreamReader);  
+	            inputStream = httpUrlConn.getInputStream();  
+	            inputStreamReader = new InputStreamReader(inputStream, "utf-8");  
+	            bufferedReader = new BufferedReader(inputStreamReader);  
 
 	            String str = null;  
 	            while ((str = bufferedReader.readLine()) != null) {  
 	                buffer.append(str);  
 	            }  
-	            bufferedReader.close();  
-	            inputStreamReader.close();  
-	            // 释放资源  
-	            inputStream.close();  
-	            inputStream = null;  
-	            httpUrlConn.disconnect();  
 
 	        } catch (Exception e) {  
-	            System.out.println(e.getStackTrace());  
-	        }  
+	            LogUtil.error("发起http请求获取返回结果失败" , e);
+	        }finally {
+				if(bufferedReader != null){
+					try {
+						bufferedReader.close();
+					} catch (IOException e) {
+						LogUtil.error("http请求,关闭输入流事变" , e);
+					}  
+				}
+				if(inputStreamReader != null){
+					try {
+						inputStreamReader.close();
+					} catch (IOException e) {
+						LogUtil.error("http请求,关闭输入流失败" , e);
+					}  
+				}
+				if(httpUrlConn != null){
+					httpUrlConn.disconnect();  
+				}
+			}
 	        return buffer.toString();  
 	    }  
 
@@ -102,7 +116,7 @@ public class HttpUtil {
 	            // 获得返回的输入流  
 	            inputStream = httpUrlConn.getInputStream();  
 	        } catch (Exception e) {  
-	            e.printStackTrace();  
+	        	LogUtil.error("发送http请求取得返回的输入流"+requestUrl,e);
 	        }  
 	        return inputStream;  
 	    }
@@ -177,9 +191,7 @@ public class HttpUtil {
 	                result += line;
 	            }
 	        } catch (Exception e) {
-	        	e.printStackTrace();
-	        	throw new IOException();
-//	            System.out.println("发送GET请求出现异常！" + e);
+	        	throw e;
 	        }
 	        // 使用finally块来关闭输入流
 	        finally {
@@ -188,7 +200,7 @@ public class HttpUtil {
 	                    in.close();
 	                }
 	            } catch (Exception e2) {
-	                e2.printStackTrace();
+	            	throw e2;
 	            }
 	        }
 	        return result;
@@ -205,7 +217,7 @@ public class HttpUtil {
 	     *               是否使用代理模式
 	     * @return 所代表远程资源的响应结果
 	     */
-	    public static String sendPost(String url, Map<String,Object> paramMap) {
+	    public static String sendPost(String url, Map<String,Object> paramMap)  throws Exception{
 	    	StringBuilder paramStrSb = new StringBuilder();
 	    	if(paramMap != null && paramMap.size() > 0){
 	    		//paramStrSb.append("?");
@@ -233,7 +245,7 @@ public class HttpUtil {
 	     *               是否使用代理模式
 	     * @return 所代表远程资源的响应结果
 	     */
-	    public static String sendPost(String url, String param,boolean isproxy) {
+	    public static String sendPost(String url, String param,boolean isproxy)  throws Exception{
 	        OutputStreamWriter out = null;
 	        BufferedReader in = null;
 	        String result = "";
@@ -287,8 +299,7 @@ public class HttpUtil {
 	                result += line;
 	            }
 	        } catch (Exception e) {
-//	            System.out.println("发送 POST 请求出现异常！"+e);
-	            e.printStackTrace();
+	        	throw e;
 	        }
 	        //使用finally块来关闭输出流、输入流
 	        finally{
@@ -301,7 +312,7 @@ public class HttpUtil {
 	                }
 	            }
 	            catch(IOException ex){
-	                ex.printStackTrace();
+	            	throw ex;
 	            }
 	        }
 	        return result;

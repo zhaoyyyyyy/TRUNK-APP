@@ -1,0 +1,45 @@
+input.validatebox-invalid,textarea.validatebox-invalid {
+    background: url('../images/invalid_line.gif') repeat-x scroll center bottom;
+    border: 1px #CC3300 solid !important;
+}
+
+.validatebox-tip {
+    position: absolute;
+    width: 120px !important;
+    height: auto;
+    display: none;
+    z-index: 99;
+}
+
+.validatebox-tip-content {
+    display: inline-block;
+    position: absolute;
+    top: 0px;
+    
+    padding: 3px 5px;
+    border: 1px solid #CC9933;
+    background: #FFFFCC;
+    z-index: 99;
+    font-size: 12px;
+}
+
+.validatebox-tip-pointer {
+    background: url('../images/validatebox_pointer.gif') no-repeat left top;
+    display: inline-block;
+    width: 10px;
+    height: 19px;
+    position: absolute;
+    left: 1px;
+    top: 0px;
+    z-index: 99;
+}
+.validatebox-tip-pointer1 {
+    background: url('../images/validatebox_pointer1.gif') no-repeat right top ;
+    display: inline-block;
+    width: 10px;
+    height: 19px;
+    position: absolute;
+    right: 1px;
+    top: 0px;
+    z-index: 99;
+}

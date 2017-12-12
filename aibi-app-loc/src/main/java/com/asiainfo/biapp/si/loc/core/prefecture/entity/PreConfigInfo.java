@@ -8,6 +8,7 @@ package com.asiainfo.biapp.si.loc.core.prefecture.entity;
 
 import io.swagger.annotations.ApiParam;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -182,8 +183,9 @@ public class PreConfigInfo extends BaseEntity {
         this.configDesc = configDesc;
     }
 
-    public Date getCreateTime() {
-        return createTime;
+    public String getCreateTime() {
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss");
+        return formatter.format(createTime);
     }
 
     public void setCreateTime(Date createTime) {

@@ -129,7 +129,7 @@ public class LogUtil {
                 log = Logger.getLogger(Class.forName(className));
                 loggerMap.put(className, log);
             } catch (ClassNotFoundException e) {
-                e.printStackTrace();
+            	LogUtil.error("日志记录反射类异常",e);
             }
         }
         return log;
@@ -163,7 +163,7 @@ public class LogUtil {
 
             HttpUtil.sendPost(jauthUrl + "/api/monitor/save", params);
         } catch (Exception e) {
-            e.printStackTrace();
+        	LogUtil.error("给JAUTH同步日志出错",e);
         }
     }
 

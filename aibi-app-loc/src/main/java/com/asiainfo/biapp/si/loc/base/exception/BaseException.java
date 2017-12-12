@@ -10,6 +10,10 @@ public class BaseException extends Exception{
 
 	//SQL运营异常
 	public final String SQL_RUN_CODE = "50002";
+	
+	//调用JAUTH服务异常
+	public final String SERVER_JAUTH_CODE = "50003";
+		
 	private String msg ;
 	private String code ;
 	

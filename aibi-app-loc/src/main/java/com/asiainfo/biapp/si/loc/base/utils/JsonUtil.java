@@ -14,10 +14,10 @@ import org.codehaus.jackson.JsonGenerator;
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.annotate.JsonAutoDetect.Visibility;
 import org.codehaus.jackson.annotate.JsonMethod;
+import org.codehaus.jackson.map.DeserializationConfig;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.map.SerializationConfig;
-import org.codehaus.jackson.map.DeserializationConfig;
 import org.codehaus.jackson.type.JavaType;
 
 import net.sf.json.JSONException;
@@ -85,7 +85,7 @@ public class JsonUtil {
             String json = sw.toString();
             return json;
         } catch (Exception e) {
-            e.printStackTrace();
+        	LogUtil.error("对象转JSON异常",e);
         }
         return "{}";
 
@@ -110,7 +110,7 @@ public class JsonUtil {
         try {
             return mapper.readValue(json, cls);
         } catch (Exception e) {
-            e.printStackTrace();
+        	LogUtil.error("JSON到实习反射转换异常"+json,e);
         }
         return null;
     }
