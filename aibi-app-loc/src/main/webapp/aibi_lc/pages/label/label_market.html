@@ -52,7 +52,7 @@
 								全部
 							</a>
 							<a href="javascript:;" v-for="labelSys in data" :sysId="labelSys.sysId">
-								<em >{{labelSys.categoryName}}</em>
+								<em v-text="labelSys.categoryName"></em>
 								<i v-if="labelSys.sysId"></i>
 							</a>
 						</div>
@@ -441,7 +441,6 @@
 	   </div>
 	   </div>
 		
-	<!-- todo -->
 		<!-- 计算中心 -->
 		<div class="ui-calculate-center">
 			<h3 class="ui-calc-h3">

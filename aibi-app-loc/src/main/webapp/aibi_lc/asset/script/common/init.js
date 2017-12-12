@@ -15,6 +15,13 @@ window.loc_common_init = function (){
 		});
 	})
 	
+	//点击查询
+	$('#formSearch').keyup(function(event){
+	  if(event.keyCode == 13){
+	  	$("#btnSearch").click();
+	  } 
+	});
+	
 	//初始化校验组件
 	$.parser = {
 			defaults:{
