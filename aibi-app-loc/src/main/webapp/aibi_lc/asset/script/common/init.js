@@ -16,9 +16,9 @@ window.loc_common_init = function (){
 	})
 	
 	//点击查询
-	$('#formSearch').keyup(function(event){
+	$('#form_search').keyup(function(event){
 	  if(event.keyCode == 13){
-	  	$("#btnSearch").click();
+	  	$("#btn_search").click();
 	  } 
 	});
 	
