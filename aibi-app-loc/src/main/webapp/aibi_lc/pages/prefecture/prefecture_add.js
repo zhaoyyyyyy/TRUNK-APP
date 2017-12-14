@@ -1,6 +1,6 @@
 var model = {
-		showHyx : false,
 		showCpx : false,
+		showHyx : false,
 		showXzqh : false,
 		zqlxList : [],
 		hyxList : [],
@@ -54,9 +54,9 @@ window.loc_onload = function() {
 					for(var f=0; f<orgobj[i].length; f++){
 						if(orgobj[i][f].parentId == "999"){
 							model.zqlxList.push(orgobj[i][f]);
-						}else if(orgobj[i][f].orgType == "1"){
-							model.hyxList.push(orgobj[i][f]);
 						}else if(orgobj[i][f].orgType == "2"){
+							model.hyxList.push(orgobj[i][f]);
+						}else if(orgobj[i][f].orgType == "1"){
 							model.cpxList.push(orgobj[i][f]);
 						}
 					}
@@ -89,17 +89,17 @@ window.loc_onload = function() {
 	
 }
 function changeStatus(obj){
-	if(obj.value == "1"){
-		model.showHyx = true;
-		model.showCpx = false;
-		model.showXzqh = false;
-	}
-	if(obj.value == "2"){
-		model.showHyx = false;
+	if(obj.id == "type1"){
 		model.showCpx = true;
+		model.showHyx = false;
 		model.showXzqh = false;
 	}
-	if(obj.value == "3"){
+	if(obj.id == "type2"){
+		model.showCpx = false;
+		model.showHyx = true;
+		model.showXzqh = false;
+	}
+	if(obj.id == "type3"){
 		model.showHyx = false;
 		model.showCpx = false;
 		model.showXzqh = true;

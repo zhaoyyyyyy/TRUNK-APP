@@ -27,9 +27,26 @@
 				<h3>专区详情</h3>
 			</div>
 			<div class="clearfix">
-				<div class="form-group form-control">
-					<div class="form-group"><label for="exampleInputEmail3">专区名称</label><span class="ml30">{{data.sourceName}}</span></div>
-				</div>
+				<table border="0" width="100%" cellpadding="0" cellspacing="0">
+					<tbody>
+						<tr>
+							<th>专区名称</th>
+							<td>{{data.sourceName}}</td>
+						</tr>
+						<tr>
+							<th>失效日期</th>
+							<td>{{data.invalidTime}}</td>
+						</tr>
+						<tr>
+							<th>专区描述</th>
+							<td>{{data.configDesc}}</td>
+						</tr>
+						<tr>
+							<th>备注</th>
+							<td>{{data.configDesc}}</td>
+						</tr>
+					</tbody>
+				</table>
 			</div>
 		</div>
 	</div>

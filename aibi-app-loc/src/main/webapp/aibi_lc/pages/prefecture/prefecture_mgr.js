@@ -102,7 +102,7 @@ window.loc_onload = function() {
             name: 'configId',
             index: 'configId',
             sortable: false,
-            width: 150,
+            width: 120,
             align: "center",
             formatter: function(value, opts, data) {
             	var html = '';
@@ -113,12 +113,11 @@ window.loc_onload = function() {
                     	html += '<button onclick="fun_to_start(\''+data.configId+'\')" type="button" class="btn btn-default  ui-table-btn ui-table-btn">启用</button>';
                     }
                 	if (data.configStatus != 3) {
-                		html += '<button onclick="fun_to_edit(\''+data.configId+'\')" type="button" class="btn btn-default ui-table-btn ui-table-btn">修改</button>' 
-                        + '<button type="button" class="btn btn-default ui-table-btn ui-table-btn">修改授权用户</button>'
-                        + '<button type="button" class="btn btn-default ui-table-btn">标签授权</button>';
-                	}else{
-                		html += '<button onclick="fun_to_delete(\''+data.configId+'\')" type="button" class="btn btn-default  ui-table-btn ui-table-btn">删除</button>';
+                		html += '<button onclick="fun_to_edit(\''+data.configId+'\')" type="button" class="btn btn-default ui-table-btn ui-table-btn">修改</button>'; 
                 	}
+//                	else{
+//                		html += '<button onclick="fun_to_delete(\''+data.configId+'\')" type="button" class="btn btn-default  ui-table-btn ui-table-btn">删除</button>';
+//                	}
                     if (data.configStatus == 2) {
                         html += '<button onclick="fun_to_down(\''+data.configId+'\')" type="button" class="btn btn-default  ui-table-btn ui-table-btn">下线</button>';
                     }
