@@ -1,52 +1,63 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <title>标签集市</title>
-    <!--[if IE]>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>标签集市</title>
+<!--[if IE]>
     	<meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
     <![endif]-->
-    <link rel="stylesheet" theme="default" href="../../asset/css/theme/default/coc_frame.css"/> 
-	<link rel="stylesheet" theme="default" href="../../asset/css/theme/default/main.css"/> 
-   	<script type="text/javascript" src="../../asset/script/common/include.js"></script>
-   	<script type="text/javascript" src="prefecture_mgr.js"></script>
-    <!--[if lt IE 9]>
+<link rel="stylesheet" theme="default" href="../../asset/css/theme/default/coc_frame.css" />
+<link rel="stylesheet" theme="default" href="../../asset/css/theme/default/main.css" />
+<script type="text/javascript" src="../../asset/script/common/include.js"></script>
+<script type="text/javascript" src="prefecture_mgr.js"></script>
+<!--[if lt IE 9]>
 	    <script src="../../asset/script/component/h5compatibility/html5shiv.min.js"></script>
 	    <script src="../../asset/script/component/h5compatibility/respond.min.js"></script>
     <![endif]-->
 </head>
 <body>
-        <div class="iframe-nest">
-            <div class="ui-lc-mian">
-                <h3>专区管理</h3>
-                <div class="ui-label-mes clearfix ui-data-form">
-                    <div class="fleft">
-                        <button onclick="window.location='prefecture_add.html'" type="button" class="ui-btn ui-btn-default mr10">
-                            <span class="create-white"></span>
-                            新增
-                        </button>
-                    </div>
-                    <form class="form-inline data-form fright">
-                        <div class="form-group">
-                            <div class="control-input has-icon">
-                                <select id="changeStatus" dicCode="ZQZTZD" type="text" class="form-control input-pointer"></select>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <div class="input-group">
-                                <input id="txt_name" type="text" class="form-control" placeholder="模糊查询" >
-                                <div class="input-group-addon input-group-icon right-child" id="btn_search"></div>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-                <div class="ui-table-static mt10">
-                    <table id="mainGrid"  class="table"></table>
-                    <div id="mainGridPager"></div>
-                </div>
-            </div>
-        </div>
-
-
+	<div class="iframe-nest">
+		<div class="ui-lc-mian">
+			<h3>专区管理</h3>
+			<div class="ui-label-mes clearfix ui-data-form">
+				<div class="fleft">
+					<button onclick="window.location='prefecture_add.html'" type="button" class="ui-btn ui-btn-default mr10">
+						<span class="create-white"></span> 新增
+					</button>
+				</div>
+				<form id="formSearch" class="form-inline data-form fright">
+					<div class="form-group">
+						<div class="control-input has-icon">
+							<select id="changeStatus" dicCode="ZQZTZD" type="text" class="form-control input-pointer" value="全部数据状态"></select>
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="input-group">
+						<input name="sourceName" id="txt_name" type="text" class="form-control input-pointer" placeholder="专区名称" />
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="input-group">
+						<input name="sourceEnName" id="txt_name" type="text" class="form-control input-pointer" placeholder="专区英文名称" />
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="input-group">
+						<input name="configDesc" id="txt_name" type="text" class="form-control input-pointer" placeholder="专区描述" />
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="input-group">
+						<div class="input-group-addon input-group-icon right-child" id="btn_search"></div>
+						</div>
+					</div>
+				</form>
+			</div>
+			<div class="ui-table-static mt10">
+				<table id="mainGrid" class="table"></table>
+				<div id="mainGridPager"></div>
+			</div>
+		</div>
+	</div>
 </body>
 </html>

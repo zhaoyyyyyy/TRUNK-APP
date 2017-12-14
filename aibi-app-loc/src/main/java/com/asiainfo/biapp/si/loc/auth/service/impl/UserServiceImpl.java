@@ -117,44 +117,46 @@ public class UserServiceImpl extends BaseServiceImpl<User, String> implements IU
 		user.setUserId(userId);
 		
 		//拿到数据权限
-		try{
-			String dataJson = HttpUtil.sendGet(jauthUrl+"/api/auth/permission/data", params);
-			List<Organization> organizationPrivaliege = (List<Organization>) JsonUtil.json2CollectionBean(dataJson, List.class, Organization.class);
-			
-			//组织权限
-			Map<String,List<Organization>> orgPrivaliege = new HashMap<String,List<Organization>>();
-			
-			//数据权限
-			Map<String,List<Organization>> dataPrivaliege = new HashMap<String,List<Organization>>();
-			
-			//通过组织类型来赋予用户的组织权限跟数据权限
-			for(Organization organization : organizationPrivaliege){
-				if("XZQH".equals(organization.getOrgType())){
-					String level = organization.getOrgCode().length()+"";
-					if(dataPrivaliege.containsKey(level)){
-						List<Organization> organizationList = orgPrivaliege.get(organization.getOrgCode().length());
-						organizationList.add(organization);
-						orgPrivaliege.put(level, organizationList);
-					}else{
-						List<Organization> organizationList = new ArrayList<Organization>();
-						organizationList.add(organization);
-						orgPrivaliege.put(level, organizationList);
+				try{
+					String dataJson = HttpUtil.sendGet(jauthUrl+"/api/auth/permission/data", params);
+					List<Organization> organizationPrivaliege = (List<Organization>) JsonUtil.json2CollectionBean(dataJson, List.class, Organization.class);
+					
+					//组织权限
+					Map<String,List<Organization>> orgPrivaliege = new HashMap<String,List<Organization>>();
+					
+					//数据权限
+					Map<String,List<Organization>> dataPrivaliege = new HashMap<String,List<Organization>>();
+					
+					//通过组织类型来赋予用户的组织权限跟数据权限
+					for(Organization organization : organizationPrivaliege){
+						if("3".equals(organization.getOrgType())){
+							String level = organization.getOrgCode().length()+"";
+							if(dataPrivaliege.containsKey(level)){
+								List<Organization> organizationList = dataPrivaliege.get(level);
+								organizationList.add(organization);
+								dataPrivaliege.put(level, organizationList);
+							}else{
+								List<Organization> organizationList = new ArrayList<Organization>();
+								organizationList.add(organization);
+								dataPrivaliege.put(level, organizationList);
+							}
+						}else{
+							if(orgPrivaliege.containsKey(organization.getOrgType())){
+								List<Organization> organizationList = orgPrivaliege.get(organization.getOrgType());
+								organizationList.add(organization);
+								orgPrivaliege.put(organization.getOrgType(), organizationList);
+							}else{
+								List<Organization> organizationList = new ArrayList<Organization>();
+								organizationList.add(organization);
+								orgPrivaliege.put(organization.getOrgType(), organizationList);
+							}
+						}
 					}
-				}else{
-					if(orgPrivaliege.containsKey(organization.getOrgType())){
-						List<Organization> organizationList = orgPrivaliege.get(organization.getOrgType());
-						organizationList.add(organization);
-					}else{
-						List<Organization> organizationList = new ArrayList<Organization>();
-						organizationList.add(organization);
-						orgPrivaliege.put(organization.getOrgType(), organizationList);
-					}
+					user.setOrgPrivaliege(orgPrivaliege);
+		            user.setDataPrivaliege(dataPrivaliege);
+				}catch(Exception e){
+					throw new UserAuthException("获取用户数据权限失败",e);
 				}
-			}
-			
-		}catch(Exception e){
-			throw new UserAuthException("获取用户数据权限失败",e);
-		}
 		
 		//拿到资源权限
 		try{

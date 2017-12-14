@@ -1,56 +1,17 @@
 window.loc_onload = function() {
 
-    $("#btn_search").click(function() {
-    	var txtValue = $("#txt_name").val();
-    	if(txtValue == null){
-    		$("#mainGrid").setGridParam({
-                postData: {
-                	"sourceName": null ,
-                    "sourceEnName": null,
-                    "configDesc": null
-                }
-            }).trigger("reloadGrid", [{
-                page: 1
-            }]);
-    	}else{
-    		var sourceName_rows = 0;
-    		var sourceEnName_rows = 0;
-    		for(var i=0;i<3;i++){
-    			if(i==0){
-    				$("#mainGrid").setGridParam({
-    	                postData: {
-    	                	"sourceName": txtValue ,
-    	                    "sourceEnName": null,
-    	                    "configDesc": null
-    	                }
-    	            }).trigger("reloadGrid", [{
-    	                page: 1
-    	            }]);
-    				sourceName_rows = $("#mainGrid").jqGrid('getGridParam', 'rows');
-    			}else if(i==1&&sourceName_rows==null){
-    				$("#mainGrid").setGridParam({
-                        postData: {
-                        	"sourceName": null ,
-                            "sourceEnName": txtValue,
-                            "configDesc": null
-                        }
-                    }).trigger("reloadGrid", [{
-                        page: 1
-                    }]);
-                    sourceEnName_rows = $("#mainGrid").jqGrid('getGridParam', 'rows');
-    			}else if(i==2&&sourceEnName_rows==null){
-    				$("#mainGrid").setGridParam({
-                        postData: {
-                        	"sourceName": null ,
-                            "sourceEnName": null,
-                            "configDesc": txtValue
-                        }
-                    }).trigger("reloadGrid", [{
-                        page: 1
-                    }]);
-    			}
-    		}
+	$('#formSearch').keyup(function(event){
+    	if(event.keyCode == 13){
+    		$("#btn_search").click();
     	}
+    })
+	
+    $("#btn_search").click(function() {
+		$("#mainGrid").setGridParam({
+            postData:$('#formSearch').formToJson()
+        }).trigger("reloadGrid", [{
+            page: 1
+        }]);
     })
 
     $("#changeStatus").change(function() {
@@ -64,13 +25,25 @@ window.loc_onload = function() {
     })
 
     $("#mainGrid").jqGrid({
-        // url:'../../demos/grid.json',
         url: $.ctx + "/api/prefecture/preConfigInfo/queryPage",
         datatype: "json",
-        colNames: ['专区名', '专区英文名', '地市名称', '创建时间', '专区类型', '专区描述', '数据状态', '操作'],
+        colNames: ['专区名','专区ID', '专区英文名', '地市名称', '创建时间', '专区类型', '专区描述', '数据状态', '操作'],
         colModel: [{
             name: 'sourceName',
             index: 'sourceName',
+            width: 30,
+            sortable: true,
+            frozen: true,
+            align: "center",
+            formatter : function(value, opts, data) {
+    			return "<a href='###' onclick='fun_to_detail(\"" + data.configId
+    			+ "\")' ><font color='blue'>" + data.sourceName
+    			+ "</font></a>";
+    		}
+        },
+        {
+            name: 'configId',
+            index: 'configId',
             width: 30,
             sortable: true,
             frozen: true,
@@ -129,13 +102,27 @@ window.loc_onload = function() {
             name: 'configId',
             index: 'configId',
             sortable: false,
-            width: 120,
+            width: 150,
             align: "center",
             formatter: function(value, opts, data) {
-                var html = '<button  type="button" class="btn btn-default  ui-table-btn ui-table-btn">修改</button>' + '<button type="button" class="btn btn-default  ui-table-btn ui-table-btn">修改授权用户</button>' + '<button type="button" class="btn btn-default ui-table-btn">标签授权</button>';
-                if (data.configStatus != 2) {
-                    html += '<button type="button" class="btn btn-default  ui-table-btn ui-table-btn">停用</button>';
-                }
+            	var html = '';
+            	if(data.configStatus != 4){
+            		if (data.configStatus == 1) {
+                        html += '<button onclick="fun_to_over(\''+data.configId+'\')" type="button" class="btn btn-default  ui-table-btn ui-table-btn">停用</button>';
+                    } else if(data.configStatus != 3){
+                    	html += '<button onclick="fun_to_start(\''+data.configId+'\')" type="button" class="btn btn-default  ui-table-btn ui-table-btn">启用</button>';
+                    }
+                	if (data.configStatus != 3) {
+                		html += '<button onclick="fun_to_edit(\''+data.configId+'\')" type="button" class="btn btn-default ui-table-btn ui-table-btn">修改</button>' 
+                        + '<button type="button" class="btn btn-default ui-table-btn ui-table-btn">修改授权用户</button>'
+                        + '<button type="button" class="btn btn-default ui-table-btn">标签授权</button>';
+                	}else{
+                		html += '<button onclick="fun_to_delete(\''+data.configId+'\')" type="button" class="btn btn-default  ui-table-btn ui-table-btn">删除</button>';
+                	}
+                    if (data.configStatus == 2) {
+                        html += '<button onclick="fun_to_down(\''+data.configId+'\')" type="button" class="btn btn-default  ui-table-btn ui-table-btn">下线</button>';
+                    }
+            	}
                 return html;
             }
         }],
@@ -150,4 +137,104 @@ function setColor(cellvalue, options, rowObject) {
         return '<span class="appMonitor" style="color:#faa918;">草稿</span>';
     }
     return cellvalue;
+}
+function fun_to_edit(id){
+	window.location='prefecture_add.html?configId='+id;
+}
+function fun_to_detail(id){
+	var wd = $.window('专区详情', $.ctx
+			+ '/aibi_lc/pages/prefecture/prefecture_detail.html?configId=' + id, 800, 600);
+	wd.reload = function() {
+		$("#mainGrid").setGridParam({
+			postData : $("#formSearch").formToJson()
+		}).trigger("reloadGrid", [ {
+			page : 1
+		} ]);
+	}
+}
+function fun_to_over(id){
+	$.confirm('确定停用该专区？', function() {
+		$.confirm('真的确定要停用该专区？', function() {
+			$.commAjax({
+				url : $.ctx + '/api/prefecture/preConfigInfo/update',
+				postData : {
+					"configId" : id,
+					"configStatus" : 2
+				},
+				onSuccess : function(data) {
+					$.success('停用成功。', function() {
+						$("#mainGrid").setGridParam({
+							postData : $("#formSearch").formToJson()
+						}).trigger("reloadGrid", [ {
+							page : 1
+						} ]);
+					});
+				}
+			});
+		})
+	})
+}
+function fun_to_start(id){
+	$.confirm('确定启用该专区？', function() {
+		$.commAjax({
+			url : $.ctx + '/api/prefecture/preConfigInfo/update',
+			postData : {
+				"configId" : id,
+				"configStatus" : 1
+			},
+			onSuccess : function(data) {
+				$.success('启用成功。', function() {
+					$("#mainGrid").setGridParam({
+						postData : $("#formSearch").formToJson()
+					}).trigger("reloadGrid", [ {
+						page : 1
+					} ]);
+				});
+			}
+		});
+	})
+}
+function fun_to_down(id){
+	$.confirm('确定要下线该专区吗？', function() {
+		$.confirm('真的确定要下线该专区？', function() {
+			$.commAjax({
+				url : $.ctx + '/api/prefecture/preConfigInfo/update',
+				postData : {
+					"configId" : id,
+					"configStatus" : 3
+				},
+				onSuccess : function(data) {
+					$.success('启用成功。', function() {
+						$("#mainGrid").setGridParam({
+							postData : $("#formSearch").formToJson()
+						}).trigger("reloadGrid", [ {
+							page : 1
+						} ]);
+					});
+				}
+			});
+		})
+	})
+}
+function fun_to_delete(id){
+	$.confirm('确定要删除该专区吗？', function() {
+		$.confirm('真的确定要删除该专区？', function() {
+			$.commAjax({
+				url : $.ctx + '/api/prefecture/preConfigInfo/update',
+				postData : {
+					"configId" : id,
+					"configStatus" : 4
+				},
+				onSuccess : function(data) {
+					$.success('启用成功。', function() {
+						$("#mainGrid").setGridParam({
+							postData : $("#formSearch").formToJson()
+						}).trigger("reloadGrid", [ {
+							page : 1
+						} ]);
+					});
+				}
+			});
+		})
+	})
 }

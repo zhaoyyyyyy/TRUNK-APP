@@ -1,22 +1,27 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-	<title>新增专区</title>
-	<!--[if IE]>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>新增专区</title>
+<!--[if IE]>
     	<meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
     <![endif]-->
-    <link rel="stylesheet" theme="default" href="../../asset/css/theme/default/coc_frame.css"/> 
-	<link rel="stylesheet" theme="default" href="../../asset/css/theme/default/main.css"/> 
-   	<script type="text/javascript" src="../../asset/script/common/include.js"></script>
-   	<script type="text/javascript" src="prefecture_add.js"></script>
-    <!--[if lt IE 9]>
+<link rel="stylesheet" theme="default" href="../../asset/css/theme/default/coc_frame.css" />
+<link rel="stylesheet" theme="default" href="../../asset/css/theme/default/main.css" />
+<script type="text/javascript" src="../../asset/script/common/include.js"></script>
+<script type="text/javascript" src="prefecture_add.js"></script>
+<style  type="text/css">  
+    [v-cloak] {  
+        display: none;  
+    }  
+</style>
+<!--[if lt IE 9]>
 	    <script src="../../asset/script/component/h5compatibility/html5shiv.min.js"></script>
 	    <script src="../../asset/script/component/h5compatibility/respond.min.js"></script>
     <![endif]-->
 </head>
 <body>
-	<div class="iframe-nest">
+	<div id="dataD" class="iframe-nest" v-cloak>
 		<div class="ui-reg-main">
 			<div class="ui-lc-mian">
 				<h3>新增专区</h3>
@@ -25,41 +30,58 @@
 						<div class="form-inline ui-form">
 							<div class="clearfix">
 								<div class="form-group">
-									<label for="exampleInputEmail3">专区名称</label> <input type="text" class="form-control mr10 ml10" id="exampleInputEmail3" placeholder="" />
+									<label for="exampleInputEmail3">专区名称</label> 
+									<input :value="sourceName" name="sourceName" type="text" class="form-control mr10 ml10" placeholder="专区名称" />
 								</div>
 								<div class="form-group ml30">
 									<label class="fleft mt5" for="exampleInputEmail3">专区英文名</label>
 									<div class="control-input has-icon">
-										<input type="text" class="form-control ml10" id="inputEmail4" />
+										<input :value="sourceEnName" name="sourceEnName" type="text" class="form-control ml10" id="inputEmail4" placeholder="专区英文名称" />
 									</div>
 								</div>
 							</div>
 							<div class="clearfix mt30">
 								<div class="form-group">
-									<label for="exampleInputEmail3">地市名称</label> <input type="text" class="form-control mr10 ml10" id="exampleInputEmail3" placeholder="" />
-								</div>
-								<div class="form-group ml30">
 									<label class="fleft mt5" for="exampleInputEmail3">专区类型</label>
-									<div class="control-input has-icon">
-										<select dicCode="ZQLXZD" class="form-control ml10 input-pointer"></select>
-									</div>
+									<div class="ml20 control-input has-icon mt5">
+									<ul><li v-for="z in zqlxList" style="display:inline"><input :value="z.orgType" onclick="changeStatus(this)" id="dataAccessType" name="dataAccessType" type="radio" /><span>{{z.fullName}}</span></li></ul></div>
 								</div>
 							</div>
 							<div class="clearfix mt30">
+								<div v-if="showHyx==true" class="form-group">
+									<label for="exampleInputEmail3">行业线</label>
+									<select name="contractName" class="form-control ml10 input-pointer">
+										<option>请选择行业线</option>
+										<option v-for="h in hyxList" :value="h.fullName">{{h.fullName}}</option>
+									</select>
+								</div>
+								<div v-if="showCpx==true" class="form-group">
+									<label for="exampleInputEmail3">产品线</label>
+									<select name="contractName" class="form-control ml10 input-pointer">
+										<option>请选择产品线</option>
+										<option v-for="c in cpxList" :value="c.fullName">{{c.fullName}}</option>
+									</select>
+								</div>
+								<div v-if="showXzqh==true" class="form-group">
+									<label for="exampleInputEmail3">行政区划</label>
+									<select name="contractName" class="form-control ml10 input-pointer">
+										<option>请选择行政区划</option>
+										<option v-for="x in xzqhList" :value="x.fullName">{{x.fullName}}</option>
+									</select>
+								</div>
+							</div>	
+							<div class="clearfix mt30">
 								<div class="form-group">
-									<label for="exampleInputEmail3">合同名称</label> <input type="text" class="form-control mr10 ml10" id="exampleInputEmail3" placeholder="" />
+									<label for="exampleInputEmail3">失效时间</label>
+										<input :value="invalidTime" name="invalidTime" type="text" class="ml10 date-input form-control input-pointer form-control-bubble" data-dismiss="formDatepicker#sendTime" id=""
+											placeholder="请选择失效日期" />
 								</div>
-								<div class="form-group ml30">
-									<label class="fleft mt5" for="exampleInputEmail3">失效时间</label>
-									<div class="ml10 control-input date-input fleft has-icon">
-										<input type="text" class="form-control input-pointer form-control-bubble" data-dismiss="formDatepicker#sendTime" id="" placeholder="请选择失效日期">
-										<span class="glyphicon-date form-control-feedback"></span>
-									</div>
-								</div>
+							</div>
+							<div>
 								<div class="clearfix mt30">
 									<div class="form-group">
 										<label for="exampleInputEmail3">专区描述</label>
-										<textarea class="form-control ml10"></textarea>
+										<textarea :value="configDesc" name="configDesc" class="form-control ml10"></textarea>
 									</div>
 								</div>
 							</div>
@@ -67,11 +89,12 @@
 						<div>
 							<div class="ui-reg-grid">
 								<div class="ui-grid-button clearfix mt20">
-									<button type="button" class="ui-btn ui-btn-second">取消</button>
+									<button onclick="window.location='prefecture_mgr.html'" type="button" class="ui-btn ui-btn-second">取消</button>
 									<button onclick="fun_to_save()" type="button" class="ui-btn ui-btn-default">保存</button>
 								</div>
 							</div>
 						</div>
+					</div>
 				</form>
 			</div>
 		</div>
