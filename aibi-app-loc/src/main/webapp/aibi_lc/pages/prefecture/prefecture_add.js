@@ -119,23 +119,31 @@ function changeStatus(obj){
 	}
 }
 function fun_to_save(){
-	var id = $("#configId").val();
 	var url_ = "";
 	var msss = "";
-	if(id!=null){
+	if(model.configId!=null && model.configId!=undefined && model.configId!= ""){
 		url_ = $.ctx + '/api/prefecture/preConfigInfo/update';
 		msss = "修改成功";
 	}else{
+		$("#configId").removeAttr("name");;
 		url_ = $.ctx + '/api/prefecture/preConfigInfo/save';
 		msss = "保存成功";
 	}
-	$.commAjax({
-		url : url_,
-		postData : $('#saveDataForm').formToJson(),
-		onSuccess : function(data) {
-			$.success(msss, function() {
-				window.location='prefecture_mgr.html';
-			});
-		}
-	})
+//	if($("#saveDataForm").validateForm){
+		$.commAjax({
+			url : url_,
+			postData : $('#saveDataForm').formToJson(),
+			onSuccess : function(data) {
+				if(data.data == "success"){
+					$.success(msss, function() {
+						window.location='prefecture_mgr.html';
+					});
+				}
+				
+			}
+		})
+//	}else{
+//		$.alert("表单校验失败");
+//	}
+	
 }
