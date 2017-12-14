@@ -10,7 +10,7 @@ window.loc_onload = function(){
 	 $("#mainGrid").jqGrid({
 	    	url: $.ctx + "/api/label/labelInfo/queryPage",
 	        datatype: "json",
-	        postData : params,
+	        //postData : params,
 	        colNames:['标签名称','标签类型','创建时间','更新周期','数据状态','标签审批状态','操作'],
 	        colModel:[
 	            {name:'labelName',index:'labelName', width:30, align:"center"},

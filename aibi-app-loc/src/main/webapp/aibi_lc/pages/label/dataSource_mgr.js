@@ -11,9 +11,9 @@ window.loc_onload = function(){
         datatype: "json",
         colNames:['元数据名称','创建时间', '标签类型','操作'],
         colModel:[
-            {name:'id',index:'id', width:20, sortable:false,frozen : true,align:"center"},//frozen : true固定列
-            {name:'invdate',index:'invdate', width:80, jsonmap:"invdate",align:"center"},
-            {name:'name',index:'name asc, invdate', width:100,align:"center"},
+            {name:'contractName',index:'contractName', width:20, sortable:false,frozen : true,align:"center"},//frozen : true固定列
+            {name:'invalidTime',index:'invalidTime', width:80, jsonmap:"invdate",align:"center"},
+            {name:'dataAccessType',index:'name asc, invdate', width:100,align:"center"},
             {name:'op',index:'op', width:40, sortable:false,formatter:del,align:"right"}
         ],
         rowNum:10,
