@@ -27,7 +27,7 @@ window.loc_onload = function() {
     $("#mainGrid").jqGrid({
         url: $.ctx + "/api/prefecture/preConfigInfo/queryPage",
         datatype: "json",
-        colNames: ['专区名','专区ID', '专区英文名', '地市名称', '创建时间', '专区类型', '专区描述', '数据状态', '操作'],
+        colNames: ['专区名','专区ID', '专区英文名', '组织名称', '创建时间', '专区类型', '数据状态', '操作'],
         colModel: [{
             name: 'sourceName',
             index: 'sourceName',
@@ -79,15 +79,8 @@ window.loc_onload = function() {
             width: 30,
             align: "center",
             formatter: function(v) {
-                return $.getCodeDesc('ZQLXZD', v)
+                return $.getCodeDesc('ZZLXZD', v)
             }
-        },
-        {
-            name: 'configDesc',
-            index: 'configDesc',
-            sortable: false,
-            width: 60,
-            align: "center"
         },
         {
             name: 'configStatus',
@@ -102,7 +95,7 @@ window.loc_onload = function() {
             name: 'configId',
             index: 'configId',
             sortable: false,
-            width: 120,
+            width: 60,
             align: "center",
             formatter: function(value, opts, data) {
             	var html = '';
@@ -112,7 +105,7 @@ window.loc_onload = function() {
                     } else if(data.configStatus != 3){
                     	html += '<button onclick="fun_to_start(\''+data.configId+'\')" type="button" class="btn btn-default  ui-table-btn ui-table-btn">启用</button>';
                     }
-                	if (data.configStatus != 3) {
+                	if (data.configStatus != 3 && data.configStatus != 0) {
                 		html += '<button onclick="fun_to_edit(\''+data.configId+'\')" type="button" class="btn btn-default ui-table-btn ui-table-btn">修改</button>'; 
                 	}
 //                	else{
@@ -142,7 +135,7 @@ function fun_to_edit(id){
 }
 function fun_to_detail(id){
 	var wd = $.window('专区详情', $.ctx
-			+ '/aibi_lc/pages/prefecture/prefecture_detail.html?configId=' + id, 800, 600);
+			+ '/aibi_lc/pages/prefecture/prefecture_detail.html?configId=' + id, 500, 500);
 	wd.reload = function() {
 		$("#mainGrid").setGridParam({
 			postData : $("#formSearch").formToJson()

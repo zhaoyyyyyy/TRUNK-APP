@@ -11,11 +11,13 @@ var model = {
 		dataAccessType : 0,
 		sourceName : "",
 		sourceEnName : "",
-		invalidTime : ""
+		invalidTime : "",
+		configId : ""
 }
 window.loc_onload = function() {
 	var configId = $.getUrlParam("configId");
 	if (configId != null && configId != "" && configId != undefined) {
+		model.configId = configId;
 		$.commAjax({
 			url : $.ctx + '/api/prefecture/preConfigInfo/get',
 			postData : {
@@ -40,7 +42,19 @@ window.loc_onload = function() {
 	}
 	new Vue({
 		el : '#dataD',
-		data : model
+		data : model,
+		updated : function(){
+			$("#type"+model.dataAccessType).click();
+			if(model.showCpx && configId != null && configId != "" && configId != undefined){
+				$("#contractName").val(model.contractName);
+			}
+			if(model.showHyx && configId != null && configId != "" && configId != undefined){
+				$("#contractName").val(model.contractName);
+			}
+			if(model.showXzqh && configId != null && configId != "" && configId != undefined){
+				$("#contractName").val(model.contractName);
+			}
+		}
 	})
 	$.commAjax({
 		url : $.ctx + '/api/user/privaliegeOrg/query',
@@ -52,12 +66,13 @@ window.loc_onload = function() {
 						continue;
 					}
 					for(var f=0; f<orgobj[i].length; f++){
-						if(orgobj[i][f].parentId == "999"){
-							model.zqlxList.push(orgobj[i][f]);
-						}else if(orgobj[i][f].orgType == "2"){
-							model.hyxList.push(orgobj[i][f]);
-						}else if(orgobj[i][f].orgType == "1"){
-							model.cpxList.push(orgobj[i][f]);
+						var ob = orgobj[i][f];
+						if(ob.parentId == "999"){
+							model.zqlxList.push(ob);
+						}else if(ob.orgType == "2"){
+							model.hyxList.push(ob);
+						}else if(ob.orgType == "1"){
+							model.cpxList.push(ob);
 						}
 					}
 				}
@@ -72,10 +87,11 @@ window.loc_onload = function() {
 								continue;
 							}
 							for(var l=0 ; l<dataobj[e].length ; l++){
-								if(dataobj[e][l].parentId == "999"){
-									model.zqlxList.push(dataobj[e][l]);
-								}else if(dataobj[e][l].orgType == "3"){
-									model.xzqhList.push(dataobj[e][l]);
+								var od = dataobj[e][l];
+								if(od.parentId == "999"){
+									model.zqlxList.push(od);
+								}else if(od.orgType == "3"){
+									model.xzqhList.push(od);
 								}
 							}
 						}
@@ -84,9 +100,6 @@ window.loc_onload = function() {
 			})
 		}
 	});
-	
-	
-	
 }
 function changeStatus(obj){
 	if(obj.id == "type1"){
@@ -106,14 +119,23 @@ function changeStatus(obj){
 	}
 }
 function fun_to_save(){
-		$.commAjax({
-			url : $.ctx + '/api/prefecture/preConfigInfo/save',
-			postData : $('#saveDataForm').formToJson(),
-			onSuccess : function(data) {
-				if (data.data == "success") {
-					$.alert("保存成功");
-					window.location='prefecture_mgr.html';
-				}
-			}
-		})
+	var id = $("#configId").val();
+	var url_ = "";
+	var msss = "";
+	if(id!=null){
+		url_ = $.ctx + '/api/prefecture/preConfigInfo/update';
+		msss = "修改成功";
+	}else{
+		url_ = $.ctx + '/api/prefecture/preConfigInfo/save';
+		msss = "保存成功";
+	}
+	$.commAjax({
+		url : url_,
+		postData : $('#saveDataForm').formToJson(),
+		onSuccess : function(data) {
+			$.success(msss, function() {
+				window.location='prefecture_mgr.html';
+			});
+		}
+	})
 }
