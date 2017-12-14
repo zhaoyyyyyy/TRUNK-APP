@@ -26,27 +26,35 @@
 			<div class="ui-lc-mian">
 				<h3>专区详情</h3>
 			</div>
-			<div class="clearfix">
-				<table border="0" width="100%" cellpadding="0" cellspacing="0">
-					<tbody>
-						<tr>
-							<th>专区名称</th>
-							<td>{{data.sourceName}}</td>
-						</tr>
-						<tr>
-							<th>失效日期</th>
-							<td>{{data.invalidTime}}</td>
-						</tr>
-						<tr>
-							<th>专区描述</th>
-							<td>{{data.configDesc}}</td>
-						</tr>
-						<tr>
-							<th>备注</th>
-							<td>{{data.configDesc}}</td>
-						</tr>
-					</tbody>
-				</table>
+			<div class="ui-expand-search ui-reg-search">
+				<div class="form-inline ui-form">
+					<div class="clearfix">
+						<div class="form-group">
+							<label>专区名称</label> <input :value="data.sourceName" name="sourceName" type="text" class="form-control ml10"
+								readonly="readonly" />
+						</div>
+					</div>
+					<div class="clearfix mt30">
+						<div class="form-group">
+							<label>专区英文名</label> <input :value="data.sourceEnName" name="sourceEnName" type="text"
+								class="form-control ml10" id="inputEmail4" readonly="readonly" />
+						</div>
+					</div>
+					<div class="clearfix mt30">
+						<div class="form-group">
+							<label>失效时间</label> <input :value="data.invalidTime" name="invalidTime" type="text" class="ml10 form-control"
+								readonly="readonly" />
+						</div>
+					</div>
+					<div>
+						<div class="clearfix mt30">
+							<div class="form-group">
+								<label>专区描述</label>
+								<textarea :value="data.configDesc" name="configDesc" class="form-control ml10" readonly="readonly"></textarea>
+							</div>
+						</div>
+					</div>
+				</div>
 			</div>
 		</div>
 	</div>
