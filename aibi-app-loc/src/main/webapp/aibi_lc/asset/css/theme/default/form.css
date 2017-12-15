@@ -407,7 +407,7 @@ radio样式
     width: auto;
     vertical-align: middle;
 }
-.form-inline .input-group-addon.right-child{
+.form-inline .form-group > .input-group-addon.right-child{
 	display:inline-block;
 	width:auto;
 	border: 1px solid #ccc;
