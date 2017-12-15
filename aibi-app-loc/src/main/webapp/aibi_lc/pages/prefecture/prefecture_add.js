@@ -12,7 +12,8 @@ var model = {
 		sourceName : "",
 		sourceEnName : "",
 		invalidTime : "",
-		configId : ""
+		configId : "",
+		num : 0
 }
 window.loc_onload = function() {
 	var configId = $.getUrlParam("configId");
@@ -33,26 +34,27 @@ window.loc_onload = function() {
 			}
 		})
 	}else{
-		model.configDesc = null;
-		model.contractName = null;
-		model.dataAccessType = null;
-		model.sourceName = null;
-		model.sourceEnName = null;
-		model.invalidTime = null;
+		model.configDesc = "";
+		model.contractName = "";
+		model.dataAccessType = "";
+		model.sourceName = "";
+		model.sourceEnName = "";
+		model.invalidTime = "";
 	}
 	new Vue({
 		el : '#dataD',
 		data : model,
-		updated : function(){
-			$("#type"+model.dataAccessType).click();
-			if(model.showCpx && configId != null && configId != "" && configId != undefined){
-				$("#contractName").val(model.contractName);
-			}
-			if(model.showHyx && configId != null && configId != "" && configId != undefined){
-				$("#contractName").val(model.contractName);
-			}
-			if(model.showXzqh && configId != null && configId != "" && configId != undefined){
-				$("#contractName").val(model.contractName);
+		watch : {
+			zqlxList : function(){
+				this.$nextTick(function(){
+					$("#type"+model.dataAccessType).click();
+					var val = $('input:radio[name="dataAccessType"]:checked').val();
+					if(val != null){
+						if(configId != null && configId != "" && configId != undefined && model.contractName != ""){
+							$("#contractName").val(model.contractName);
+						}
+					}
+				})
 			}
 		}
 	})
@@ -103,16 +105,19 @@ window.loc_onload = function() {
 }
 function changeStatus(obj){
 	if(obj.id == "type1"){
+		model.dataAccessType = obj.value;
 		model.showCpx = true;
 		model.showHyx = false;
 		model.showXzqh = false;
 	}
 	if(obj.id == "type2"){
+		model.dataAccessType = obj.value;
 		model.showCpx = false;
 		model.showHyx = true;
 		model.showXzqh = false;
 	}
 	if(obj.id == "type3"){
+		model.dataAccessType = obj.value;
 		model.showHyx = false;
 		model.showCpx = false;
 		model.showXzqh = true;
