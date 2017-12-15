@@ -108,9 +108,6 @@ window.loc_onload = function() {
                 	if (data.configStatus != 3 && data.configStatus != 0) {
                 		html += '<button onclick="fun_to_edit(\''+data.configId+'\')" type="button" class="btn btn-default ui-table-btn ui-table-btn">修改</button>'; 
                 	}
-//                	else{
-//                		html += '<button onclick="fun_to_delete(\''+data.configId+'\')" type="button" class="btn btn-default  ui-table-btn ui-table-btn">删除</button>';
-//                	}
                     if (data.configStatus == 2) {
                         html += '<button onclick="fun_to_down(\''+data.configId+'\')" type="button" class="btn btn-default  ui-table-btn ui-table-btn">下线</button>';
                     }

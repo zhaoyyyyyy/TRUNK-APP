@@ -30,19 +30,19 @@
 				<div class="form-inline ui-form">
 					<div class="clearfix">
 						<div class="form-group">
-							<label>专区名称</label> <input :value="data.sourceName" name="sourceName" type="text" class="form-control ml10"
+							<label>专区名称</label> <input v-model="data.sourceName" name="sourceName" type="text" class="form-control ml10"
 								readonly="readonly" />
 						</div>
 					</div>
 					<div class="clearfix mt30">
 						<div class="form-group">
-							<label>专区英文名</label> <input :value="data.sourceEnName" name="sourceEnName" type="text"
+							<label>专区英文名</label> <input v-model="data.sourceEnName" name="sourceEnName" type="text"
 								class="form-control ml10" id="inputEmail4" readonly="readonly" />
 						</div>
 					</div>
 					<div class="clearfix mt30">
 						<div class="form-group">
-							<label>失效时间</label> <input :value="data.invalidTime" name="invalidTime" type="text" class="ml10 form-control"
+							<label>失效时间</label> <input v-model="data.invalidTime" name="invalidTime" type="text" class="ml10 form-control"
 								readonly="readonly" />
 						</div>
 					</div>
@@ -50,7 +50,7 @@
 						<div class="clearfix mt30">
 							<div class="form-group">
 								<label>专区描述</label>
-								<textarea :value="data.configDesc" name="configDesc" class="form-control ml10" readonly="readonly"></textarea>
+								<textarea v-model="data.configDesc" name="configDesc" class="form-control ml10" readonly="readonly"></textarea>
 							</div>
 						</div>
 					</div>

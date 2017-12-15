@@ -30,7 +30,11 @@ window.loc_onload = function() {
 				model.dataAccessType = data.data.dataAccessType;
 				model.sourceName = data.data.sourceName;
 				model.sourceEnName = data.data.sourceEnName;
-				model.invalidTime = data.data.invalidTime;
+				var time = new Date(data.data.invalidTime);
+				var y = time.getFullYear();//年
+				var m = time.getMonth() + 1;//月
+				var d = time.getDate();//日
+				model.invalidTime = y+"-"+m+"-"+d;
 			}
 		})
 	}else{
