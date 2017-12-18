@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>新增维表</title>
+<!--[if IE]>
+    	<meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <![endif]-->
+<link rel="stylesheet" theme="default" href="../../asset/css/theme/default/coc_frame.css" />
+<link rel="stylesheet" theme="default" href="../../asset/css/theme/default/main.css" />
+<script type="text/javascript" src="../../asset/script/common/include.js"></script>
+<script type="text/javascript" src="dimtable_detail.js"></script>
+<style type="text/css">
+[v-cloak] {
+	display: none;
+}
+</style>
+<!--[if lt IE 9]>
+	    <script src="../../asset/script/component/h5compatibility/html5shiv.min.js"></script>
+	    <script src="../../asset/script/component/h5compatibility/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+	<div id="dataD" class="iframe-nest" v-cloak>
+		<div class="ui-reg-main">
+			<div class="ui-lc-mian">
+				<h3>维表详情</h3>
+			</div>
+			<div class="ui-expand-search ui-reg-search">
+				<div class="form-inline ui-form">
+					<div class="clearfix">
+						<div class="form-group">
+							<label>维表名称</label> <input :value="data.dimTableName" name="dimTableName" type="text" class="form-control ml10"
+								readonly="readonly" />
+						</div>
+					</div>
+					<div class="clearfix mt30">
+						<div class="form-group">
+							<label>维表描述</label> <input :value="data.dimValueCol" name="dimValueCol" type="text"
+								class="form-control ml10" id="inputEmail4" readonly="readonly" />
+						</div>
+					</div>
+					<div class="clearfix mt30">
+						<div class="form-group">
+							<label>主键类型</label> <input :value="data.codeColType" name="codeColType" type="text" class="ml10 form-control"
+								readonly="readonly" />
+						</div>
+					</div>
+					<div>
+						<div class="clearfix mt30">
+							<div class="form-group">
+								<label>主键字段名</label>
+								<input :value="data.dimCodeCol" name="dimCodeCol" type="text" class="ml10 form-control"
+								readonly="readonly" />
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

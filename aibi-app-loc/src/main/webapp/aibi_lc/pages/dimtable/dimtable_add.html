@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>标签集市</title>
+<link rel="stylesheet" theme="default"
+	href="../../asset/css/theme/default/coc_frame.css" />
+<link rel="stylesheet" theme="default"
+	href="../../asset/css/theme/default/main.css" />
+<script type="text/javascript"
+	src="../../asset/script/common/include.js"></script>
+<script type="text/javascript" src="dimtable_add.js"></script>
+<!--[if lt IE 9]>
+	    <script src="../../asset/script/component/h5compatibility/html5shiv.min.js"></script>
+	    <script src="../../asset/script/component/h5compatibility/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+	<div class="iframe-nest">
+		<div class="ui-lc-mian">
+			<h3>维表新增</h3>
+			<form id="saveDataForm">
+				<div class="clearfix">
+					<div class="form-group ml30">
+						<label class="fleft mt5" for="exampleInputEmail3" >*&nbsp;表名:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+						<div class="control-input ml20 has-icon">
+							<input  name = "dimTableName" type="text" class="form-control " id="inputEmail4"
+								maxlength="28" placeholder="请输入表名"/>
+						</div>
+					</div>
+				</div>
+				<div class="clearfix">
+					<div class="form-group ml30 mt20">
+						<label class="fleft mt5"  for="exampleInputEmail3">*主键类型:</label>
+						<div class="control-input  ml20 has-icon" >
+							<select  name = "codeColType" class="form-control" id="inputEmail4" >
+								<option>---请选择---</option>
+								<option>数字</option>
+								<option>字符串</option>
+							</select>
+						</div>
+					</div>
+				</div>
+				<div class="clearfix">
+					<div class="form-group ml30 mt20">
+						<label class="fleft mt5" for="exampleInputEmail3">*主键字段名:</label>
+						<div class="control-input has-icon">
+							<input  name = "dimCodeCol" type="text" class="form-control ml10" id="inputEmail4"
+								maxlength="28" placeholder="请输入主键字段名"/>
+						</div>
+						<span id="dimCodeColTxtTip" class="fleft columnGreenTip" title="主键字段名只能以英文字母开头,包含数字、字母、下划线">&nbsp;</span>
+					</div>
+				</div>
+				<div class="clearfix">
+					<div class="form-group ml30 mt20">
+						<label class="fleft mt5" for="exampleInputEmail3">*描述字段名:</label>
+						<div class="control-input has-icon">
+							<input name= "dimValueCol" type="text" class="form-control ml10" id="inputEmail4"
+								maxlength="28" placeholder="请输入描述字段名"/>
+						</div>
+					</div>
+				</div>
+				<div>
+					<div class="ui-reg-grid">
+						<div class="ui-grid-button clearfix mt20">
+							<button onclick="fun_to_save()" type="button" class="ui-btn ui-btn-default">保存</button>
+							<button onclick="window.location='dimtable_mgr.html'" type="button" class="ui-btn ui-btn-second " >返回维表管理</button>						
+						</div>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+
+
+</body>
+</html>
