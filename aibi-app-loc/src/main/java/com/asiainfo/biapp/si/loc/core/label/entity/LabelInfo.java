@@ -8,18 +8,25 @@ package com.asiainfo.biapp.si.loc.core.label.entity;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
 
 import com.asiainfo.biapp.si.loc.base.entity.BaseEntity;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import io.swagger.annotations.ApiParam;
 
@@ -233,11 +240,34 @@ public class LabelInfo extends BaseEntity {
     @ApiParam(value = "排序字段")
     private Integer sortNum;
 
-    @ManyToOne
+	@OneToMany
+	@JoinColumn(name="label_id")
+    private List<MdaSysTableColumn> mdaSysTableColumns;  
+    
+	@ManyToMany(fetch=FetchType.LAZY)  
+	@JoinTable(name="loc_label_vertical_column_rel",  
+	joinColumns={@JoinColumn(name="LABEL_ID")},inverseJoinColumns={@JoinColumn(name="COLUMN_ID")})  
+    private List<MdaSysTableColumn> vertialColumns;
+	
+    @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name="LABEL_ID",referencedColumnName="RESOURCE_ID",insertable=false,updatable=false)
     private ApproveInfo approveInfo;
 
-    public ApproveInfo getApproveInfo() {
+    @JsonIgnore
+    @ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name="LABEL_ID",referencedColumnName="LABEL_ID",insertable=false,updatable=false)
+    private LabelExtInfo labelExtInfo;
+    
+    
+    public LabelExtInfo getLabelExtInfo() {
+		return labelExtInfo;
+	}
+
+	public void setLabelExtInfo(LabelExtInfo labelExtInfo) {
+		this.labelExtInfo = labelExtInfo;
+	}
+
+	public ApproveInfo getApproveInfo() {
         return approveInfo;
     }
 
@@ -446,4 +476,20 @@ public class LabelInfo extends BaseEntity {
         this.sortNum = sortNum;
     }
 
+
+	public List<MdaSysTableColumn> getMdaSysTableColumns() {
+		return mdaSysTableColumns;
+	}
+
+	public void setMdaSysTableColumns(List<MdaSysTableColumn> mdaSysTableColumns) {
+		this.mdaSysTableColumns = mdaSysTableColumns;
+	}
+
+	public List<MdaSysTableColumn> getVertialColumns() {
+		return vertialColumns;
+	}
+
+	public void setVertialColumns(List<MdaSysTableColumn> vertialColumns) {
+		this.vertialColumns = vertialColumns;
+	}
 }

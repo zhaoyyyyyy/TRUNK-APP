@@ -17,6 +17,7 @@ import javax.persistence.Table;
 import org.hibernate.annotations.GenericGenerator;
 
 import com.asiainfo.biapp.si.loc.base.entity.BaseEntity;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
  * Title : ILabelExtInfoDao
