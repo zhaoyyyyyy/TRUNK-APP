@@ -53,5 +53,7 @@ public interface ICoConfigService {
      * @return
      */
     public String getProperties(String code, String token) throws BaseException;
+    
+    public Map<String, String> selectAll(String token) throws BaseException;
 
 }

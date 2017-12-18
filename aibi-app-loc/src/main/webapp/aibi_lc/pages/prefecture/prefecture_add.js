@@ -9,6 +9,7 @@ var model = {
 		configDesc : "",
 		contractName : "",
 		dataAccessType : 0,
+		dataAccessType0 : 0,
 		sourceName : "",
 		sourceEnName : "",
 		invalidTime : "",
@@ -28,6 +29,7 @@ window.loc_onload = function() {
 				model.configDesc = data.data.configDesc;
 				model.contractName = data.data.contractName;
 				model.dataAccessType = data.data.dataAccessType;
+				model.dataAccessType0 = data.data.dataAccessType;
 				model.sourceName = data.data.sourceName;
 				model.sourceEnName = data.data.sourceEnName;
 				var time = new Date(data.data.invalidTime);
@@ -41,6 +43,7 @@ window.loc_onload = function() {
 		model.configDesc = "";
 		model.contractName = "";
 		model.dataAccessType = "";
+		model.dataAccessType0 = "";
 		model.sourceName = "";
 		model.sourceEnName = "";
 		model.invalidTime = "";
@@ -48,17 +51,17 @@ window.loc_onload = function() {
 	new Vue({
 		el : '#dataD',
 		data : model,
-		watch : {
-			zqlxList : function(){
-				this.$nextTick(function(){
-					$("#type"+model.dataAccessType).click();
-					var val = $('input:radio[name="dataAccessType"]:checked').val();
-					if(val != null){
-						if(configId != null && configId != "" && configId != undefined && model.contractName != ""){
-							$("#contractName").val(model.contractName);
-						}
-					}
-				})
+		updated : function(){
+			var val = $('input:radio[name="dataAccessType"]:checked').val();
+			if(model.num != 0 && $("#contractName").val() != "" && $("#contractName").val() != null && $("#contractName").val() != undefined){
+				model.contractName = $("#contractName").val();
+			}
+			$("#type"+model.dataAccessType).click();
+			if(configId != null && configId != "" && configId != undefined){
+				$("#contractName").val(model.contractName);
+				if($("#contractName").val() == "" || $("#contractName").val() == null){
+					$("#contractName").val(1);
+				}
 			}
 		}
 	})
@@ -109,22 +112,24 @@ window.loc_onload = function() {
 }
 function changeStatus(obj){
 	if(obj.id == "type1"){
-		model.dataAccessType = obj.value;
 		model.showCpx = true;
 		model.showHyx = false;
 		model.showXzqh = false;
 	}
 	if(obj.id == "type2"){
-		model.dataAccessType = obj.value;
 		model.showCpx = false;
 		model.showHyx = true;
 		model.showXzqh = false;
 	}
 	if(obj.id == "type3"){
-		model.dataAccessType = obj.value;
 		model.showHyx = false;
 		model.showCpx = false;
 		model.showXzqh = true;
+	}
+	if(model.dataAccessType != obj.value){
+		model.dataAccessType = obj.value;
+		model.num = 1;
+		$("#contractName").val(1);
 	}
 }
 function fun_to_save(){

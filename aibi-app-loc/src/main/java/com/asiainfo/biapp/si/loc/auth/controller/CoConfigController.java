@@ -106,5 +106,20 @@ public class CoConfigController {
         }
         return webResult.success("获取VALUE成功", value);
     }
+    
+    @ApiOperation(value = "取所有配置项")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "token", value = "token", required = true, paramType = "query", dataType = "string") })
+    @RequestMapping(value = "/queryList", method = RequestMethod.POST)
+    public WebResult<Map<String, String>> getAll(String token) {
+        WebResult<Map<String, String>> webResult = new WebResult<>();
+        Map<String, String> map = new HashMap<>();
+        try {
+            map = iCoConfigService.selectAll(token);
+        } catch (BaseException e) {
+            webResult.fail(e);
+        }
+        return webResult.success("获取VALUE成功", map);
+    }
 
 }

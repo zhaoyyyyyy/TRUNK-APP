@@ -22,3 +22,15 @@ window.loc_onload = function() {
 		wd.cancel();
 	});
 }
+
+function ssssss(){
+	var wd = $.window('专区详情', $.ctx
+			+ '/aibi_lc/pages/prefecture/prefecture_detail.html', 800, 800);
+	wd.reload = function() {
+		$("#mainGrid").setGridParam({
+			postData : $("#formSearch").formToJson()
+		}).trigger("reloadGrid", [ {
+			page : 1
+		} ]);
+	}
+}

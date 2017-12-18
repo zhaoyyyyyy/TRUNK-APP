@@ -15,7 +15,6 @@ import net.sf.json.JSONNull;
 import net.sf.json.JSONObject;
 
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.aop.ThrowsAdvice;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -120,6 +119,29 @@ public class CoConfigServiceImpl implements ICoConfigService {
             value = null;
         }
         return value;
+    }
+    
+    public Map<String, String> selectAll(String token) throws BaseException {
+        Map<String, Object> map = new HashMap<>();
+        map.put("token", token);
+        String config = "";
+        try {
+            config = HttpUtil.sendPost(jauthUrl + "/api/config/queryList", map);
+        } catch (Exception e) {
+            throw new JauthServerException("批量获取配置信息异常");
+        }
+       
+        Map<String, String> returnMap = new HashMap<>();
+        String str1 = config.replaceAll("\\[", "").replaceAll("\\]", "");
+        String[] strs = str1.split("},");
+        for (int i = 0; i < strs.length; i++) {
+            if (StringUtils.isBlank(strs[i])) {
+                continue;
+            }
+            JSONObject jsobj = JSONObject.fromObject(strs[i] += "}");
+            returnMap.put(jsobj.getString("configKey"), jsobj.getString("configVal"));
+        }
+        return returnMap;
     }
 
 }

@@ -31,11 +31,11 @@
 						<div class="form-inline ui-form">
 							<div class="clearfix">
 								<div class="form-group">
-									<label for="exampleInputEmail3">专区名称</label> <input v-model="sourceName" name="sourceName" type="text"  class=" form-control mr10 ml10"
+									<label>专区名称</label> <input v-model="sourceName" name="sourceName" type="text"  class=" form-control mr10 ml10"
 										placeholder="专区名称" />
 								</div>
 								<div class="form-group ml30">
-									<label class="fleft mt5" for="exampleInputEmail3">专区英文名</label>
+									<label class="fleft mt5">专区英文名</label>
 									<div class="control-input has-icon">
 										<input v-model="sourceEnName" name="sourceEnName" type="text"  class=" form-control ml10" id="inputEmail4" placeholder="专区英文名称" />
 									</div>
@@ -43,10 +43,10 @@
 							</div>
 							<div class="clearfix mt30">
 								<div class="form-group">
-									<label class="fleft mt5" for="exampleInputEmail3">专区类型</label>
+									<label class="fleft mt5">专区类型</label>
 									<div class="ml20 control-input has-icon mt5">
 										<ul>
-											<li class=""  v-for="z in zqlxList" style="display: inline"><input :value="z.orgType" :id="'type'+z.orgType" onclick="changeStatus(this)"
+											<li class="" v-for="z in zqlxList" style="display: inline"><input :value="z.orgType" :id="'type'+z.orgType" onclick="changeStatus(this)"
 												name="dataAccessType" type="radio" /><span>{{z.fullName}}</span></li>
 										</ul>
 									</div>
@@ -54,19 +54,19 @@
 							</div>
 							<div class="clearfix mt30">
 								<div v-if="showHyx==true" class="form-group">
-									<label for="exampleInputEmail3">行业线</label> <select id="contractName" name="contractName" class="form-control ml10 input-pointer " >
+									<label>行业线</label> <select id="contractName" name="contractName" class="form-control ml10 input-pointer " >
 										<option value="1">请选择行业线</option>
 										<option v-for="h in hyxList" :value="h.fullName">{{h.fullName}}</option>
 									</select>
 								</div>
 								<div v-if="showCpx==true" class="form-group">
-									<label for="exampleInputEmail3">产品线</label> <select id="contractName" name="contractName" class="form-control ml10 input-pointer " >
+									<label>产品线</label> <select id="contractName" name="contractName" class="form-control ml10 input-pointer " >
 										<option value="1">请选择产品线</option>
 										<option v-for="c in cpxList" :value="c.fullName">{{c.fullName}}</option>
 									</select>
 								</div>
 								<div v-if="showXzqh==true" class="form-group">
-									<label for="exampleInputEmail3">行政区划</label> <select id="contractName" name="contractName" class="form-control ml10 input-pointer " >
+									<label>行政区划</label> <select id="contractName" name="contractName" class="form-control ml10 input-pointer " >
 										<option value="1">请选择行政区划</option>
 										<option v-for="x in xzqhList" :value="x.fullName">{{x.fullName}}</option>
 									</select>
