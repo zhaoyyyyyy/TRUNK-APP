@@ -76,8 +76,8 @@ public class DimTableInfoDaoImpl extends BaseDaoImpl<DimTableInfo, String> imple
             params.put("dimId", dimTableInfoVo.getDimId());
         }
         if(StringUtil.isNoneBlank(dimTableInfoVo.getDimTableName())){
-            hql.append("and d.dimTableName = :dimTableName ");
-            params.put("dimTableName", dimTableInfoVo.getDimTableName());
+            hql.append("and d.dimTableName LIKE :dimTableName ");
+            params.put("dimTableName","%" + dimTableInfoVo.getDimTableName()+"%");
         }
         if(StringUtil.isNoneBlank(dimTableInfoVo.getDimComment())){
             hql.append("and d.dimComment = :dimComment ");

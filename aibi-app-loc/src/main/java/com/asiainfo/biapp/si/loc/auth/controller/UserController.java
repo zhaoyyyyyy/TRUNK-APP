@@ -53,13 +53,12 @@ public class UserController extends BaseController<User>{
 	}
 	
 	@ApiOperation(value = "查询用户组织访问权限跟同专区权限")
-	@ApiImplicitParam(name = "token", value = "秘钥", required = false, paramType = "query", dataType = "string")
 	@RequestMapping(value="/privaliegeOrg/query", method=RequestMethod.POST, produces={ MediaType.APPLICATION_JSON_VALUE })
-	public WebResult<Map<String,List<Organization>>> findOrgPrivaliege(String token){
+	public WebResult<Map<String,List<Organization>>> findOrgPrivaliege(){
         WebResult<Map<String,List<Organization>>> webResult = new WebResult<>();
-        User user = new User();
+        User user;
         try {
-            user = userService.getUserByToken(token);
+            user = super.getLoginUser();
         } catch (BaseException e) {
             return webResult.fail(e);
         }
@@ -67,13 +66,12 @@ public class UserController extends BaseController<User>{
     }
 	
 	@ApiOperation(value = "查询数据权限同行政区划权限")
-    @ApiImplicitParam(name = "token", value = "秘钥", required = false, paramType = "query", dataType = "string")
     @RequestMapping(value="/privaliegeData/query", method=RequestMethod.POST, produces={ MediaType.APPLICATION_JSON_VALUE })
-    public WebResult<Map<String,List<Organization>>> findDataPrivaliege(String token){
+    public WebResult<Map<String,List<Organization>>> findDataPrivaliege(){
         WebResult<Map<String,List<Organization>>> webResult = new WebResult<>();
-        User user = new User();
+        User user;
         try {
-            user = userService.getUserByToken(token);
+            user = super.getLoginUser();
         } catch (BaseException e) {
             return webResult.fail(e);
         }
@@ -81,13 +79,12 @@ public class UserController extends BaseController<User>{
     }
 	
 	@ApiOperation(value = "查询api访问权限")
-    @ApiImplicitParam(name = "token", value = "秘钥", required = false, paramType = "query", dataType = "string")
     @RequestMapping(value="/resourceApi/query", method=RequestMethod.POST, produces={ MediaType.APPLICATION_JSON_VALUE })
-    public WebResult<List<Resource>> findApiResource(String token){
+    public WebResult<List<Resource>> findApiResource(){
         WebResult<List<Resource>> webResult = new WebResult<>();
-        User user = new User();
+        User user;
         try {
-            user = userService.getUserByToken(token);
+            user = super.getLoginUser();
         } catch (BaseException e) {
             return webResult.fail(e);
         }
@@ -95,13 +92,12 @@ public class UserController extends BaseController<User>{
     }
 	
 	@ApiOperation(value = "查询页面元素权限")
-    @ApiImplicitParam(name = "token", value = "秘钥", required = false, paramType = "query", dataType = "string")
     @RequestMapping(value="/resourceDom/query", method=RequestMethod.POST, produces={ MediaType.APPLICATION_JSON_VALUE })
-    public WebResult<List<Resource>> findDomResource(String token){
+    public WebResult<List<Resource>> findDomResource(){
         WebResult<List<Resource>> webResult = new WebResult<>();
-        User user = new User();
+        User user;
         try {
-            user = userService.getUserByToken(token);
+            user = super.getLoginUser();
         } catch (BaseException e) {
             return webResult.fail(e);
         }
@@ -109,13 +105,12 @@ public class UserController extends BaseController<User>{
     }
 	
 	@ApiOperation(value = "查询菜单权限")
-    @ApiImplicitParam(name = "token", value = "秘钥", required = false, paramType = "query", dataType = "string")
     @RequestMapping(value="/resourceMenu/query", method=RequestMethod.POST, produces={ MediaType.APPLICATION_JSON_VALUE })
-    public WebResult<List<Resource>> findMenuResource(String token){
+    public WebResult<List<Resource>> findMenuResource(){
         WebResult<List<Resource>> webResult = new WebResult<>();
-        User user = new User();
+        User user;
         try {
-            user = userService.getUserByToken(token);
+            user = super.getLoginUser();
         } catch (BaseException e) {
             return webResult.fail(e);
         }

@@ -407,6 +407,14 @@ radio样式
     width: auto;
     vertical-align: middle;
 }
+.form-inline .form-group > .input-group-addon.right-child{
+	display:inline-block;
+	width:auto;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	padding:12px;
+	cursor:pointer;
+}
 .form-inline .form-group label {
     display: inline-block;
     max-width: 100%;
@@ -544,6 +552,7 @@ radio样式
 	border-radius: 6px;
 	padding:15px 10px 10px;
 }
+
 
 
 

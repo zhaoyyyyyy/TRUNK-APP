@@ -157,6 +157,7 @@ public class PreConfigInfoController extends BaseController<PreConfigInfo> {
             return webResult.fail("专区名称已存在");
         }
         preConfigInfo.setCreateTime(new Date());
+        preConfigInfo.setConfigStatus(0);
         try {
             iPreConfigInfoService.addPreConfigInfo(preConfigInfo);
         } catch (BaseException e1) {
