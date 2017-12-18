@@ -150,7 +150,7 @@ function fun_to_save(){
 			onSuccess : function(data) {
 				if(data.data == "success"){
 					$.success(msss, function() {
-						window.location='prefecture_mgr.html';
+						history.back(-1);
 					});
 				}
 				

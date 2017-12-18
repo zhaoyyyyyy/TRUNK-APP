@@ -104,6 +104,7 @@ public class PreConfigInfoDaoImpl extends BaseDaoImpl<PreConfigInfo, String> imp
             hql.append("and p.configStatus = :configStatus ");
             params.put("configStatus", preConfigInfoVo.getConfigStatus());
         }
+        hql.append("order by p.createTime desc");
         reMap.put("hql", hql);
         reMap.put("params", params);
         return reMap;

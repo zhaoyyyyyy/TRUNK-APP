@@ -108,12 +108,13 @@ public class CoConfigController {
     }
     
     @ApiOperation(value = "取所有配置项")
+    @ApiImplicitParam(name = "token", value = "token", required = true, paramType = "query", dataType = "string")
     @RequestMapping(value = "/queryList", method = RequestMethod.POST)
-    public WebResult<Map<String, String>> getAll() {
+    public WebResult<Map<String, String>> getAll(String token) {
         WebResult<Map<String, String>> webResult = new WebResult<>();
         Map<String, String> map = new HashMap<>();
         try {
-            map = iCoConfigService.selectAll();
+            map = iCoConfigService.selectAll(token);
         } catch (BaseException e) {
             webResult.fail(e);
         }

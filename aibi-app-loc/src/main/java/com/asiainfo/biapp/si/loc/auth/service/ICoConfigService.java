@@ -59,6 +59,6 @@ public interface ICoConfigService {
      * @param code
      * @return
      */
-    public Map<String, String> selectAll() throws BaseException;
+    public Map<String, String> selectAll(String token) throws BaseException;
 
 }

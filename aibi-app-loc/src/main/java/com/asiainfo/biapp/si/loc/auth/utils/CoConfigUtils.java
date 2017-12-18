@@ -70,5 +70,11 @@ public class CoConfigUtils {
         ICoConfigService coConfigService = (ICoConfigService) SpringContextHolder.getBean("coConfigService");
         return coConfigService.getProperties(code, token);
     }
+    
+    
+    public Map<String, String> getAll(String token) throws BaseException {
+        ICoConfigService coConfigService = (ICoConfigService) SpringContextHolder.getBean("coConfigService");
+        return coConfigService.selectAll(token);
+    }
 
 }
