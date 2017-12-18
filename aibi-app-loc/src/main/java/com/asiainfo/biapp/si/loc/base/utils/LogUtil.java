@@ -163,7 +163,7 @@ public class LogUtil {
 
             HttpUtil.sendPost(jauthUrl + "/api/monitor/save", params);
         } catch (Exception e) {
-        	LogUtil.error("给JAUTH同步日志出错",e);
+        	//LogUtil.error("给JAUTH同步日志出错",e);
         }
     }
 

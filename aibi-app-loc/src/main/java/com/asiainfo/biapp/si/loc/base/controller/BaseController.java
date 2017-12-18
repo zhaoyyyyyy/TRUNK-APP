@@ -57,6 +57,35 @@ public abstract class BaseController<T>  {
 	}
 	
 	
+	/**
+	 * 从session缓存里面拿到数据（模拟）
+	 * @return
+	 * @throws UserAuthException
+	 */
+	protected Object getSessionAttribute(String key) throws BaseException{
+		String token = AuthUtils.getTokenByRequest(request);
+		
+		return null; //TODO
+	}
+	
+	/**
+	 * 向session缓存里面放入数据（模拟）
+	 * @return
+	 * @throws UserAuthException
+	 */
+	protected void setSessionAttribute(String key,Object object) throws BaseException{
+		
+		String token = AuthUtils.getTokenByRequest(request);
+	}
+	
+	
+	
+	/**
+	 * 得到应用程序上下文
+	 * Description: 
+	 *
+	 * @return
+	 */
 	public String getCtx(){
 		return this.getRequest().getContextPath();
 	}

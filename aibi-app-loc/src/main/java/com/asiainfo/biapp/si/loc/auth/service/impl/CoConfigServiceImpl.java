@@ -121,9 +121,9 @@ public class CoConfigServiceImpl implements ICoConfigService {
         return value;
     }
     
-    public Map<String, String> selectAll(String token) throws BaseException {
+    
+    public Map<String, String> selectAll() throws BaseException {
         Map<String, Object> map = new HashMap<>();
-        map.put("token", token);
         String config = "";
         try {
             config = HttpUtil.sendPost(jauthUrl + "/api/config/queryList", map);
