@@ -3,26 +3,16 @@ package com.asiainfo.biapp.si.bd.cache;
 import com.asiainfo.biapp.si.bd.cache.impl.CocJavaCache;
 import com.asiainfo.biapp.si.bd.cache.impl.CocRedisCache;
 
-public class CocCacheProxy{
+public class CocCacheProxy {
 	
 	private static volatile CocCacheAble instance = null;
 	
-	public enum CacheSelect {
-	        redisCache(1), javaCache(2), otherCache(888);
-		
-			public int cacheCode;
-			
-			private CacheSelect(int code){
-				this.cacheCode=code;
-			}
-	    }
-	
-	public static CocCacheAble getCacheProxy(CacheSelect cacheEnum){
+	public static CocCacheAble getCacheProxy(){
 		
 		if(instance == null) {
 			synchronized(CocCacheProxy.class){
 	            if(instance == null) {
-	               new CocCacheProxy(cacheEnum);
+	               new CocCacheProxy();
 	            }
 	         }
 	      }
@@ -30,8 +20,10 @@ public class CocCacheProxy{
 	}
 
 	 
-	public CocCacheProxy(CacheSelect cacheEnum){
-		switch (cacheEnum.cacheCode) { 
+	public CocCacheProxy(){
+		// 改code 赋值 需要
+		int cacheCode = 2;
+		switch (cacheCode) { 
 			case  1:
 				System.out.println("cache is redisCache");
 				instance = new CocRedisCache();
@@ -43,14 +35,14 @@ public class CocCacheProxy{
 			case 888:
 				System.out.println("sorry , unfitting otherCache now !");
 				break;
-			}
+		}
 			
 	}
 	
 
 	public static void main(String[] args) {
-		CocCacheProxy.getCacheProxy(CacheSelect.javaCache).setCache("testuser", "wanghf5");
-		String nn = CocCacheProxy.getCacheProxy(CacheSelect.javaCache).getValueByKey("testuser");
+		CocCacheProxy.getCacheProxy().setCache("testuser", "wanghf5");
+		String nn = CocCacheProxy.getCacheProxy().getValueByKey("testuser");
 		System.out.println(nn);
 
 	}
