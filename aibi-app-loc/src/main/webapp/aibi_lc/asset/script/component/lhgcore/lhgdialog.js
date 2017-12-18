@@ -74,10 +74,17 @@ reSizeHdl = function()
 {
     var rel = compat( doc );
 	
+//	J(cover).css({
+//	    width: Math.max( 3000 || 0 ) - 1 + 'px',
+//		height: Math.max( 3000 || 0 ) - 1 + 'px'
+//	});
+	
 	J(cover).css({
-	    width: Math.max( 3000 || 0 ) - 1 + 'px',
-		height: Math.max( 3000 || 0 ) - 1 + 'px'
-	});
+    width: document.body.clientWidth - 1 + 'px',
+	height: document.body.clientHeight - 1 + 'px'
+});
+	
+	
 },
 
 getAbsoultePath = function()
@@ -685,7 +692,7 @@ J.dialog = function( opts, elem )
 		if (id) {
 	    	J("#" + id + "_lhgbtn", this.dg)[0] && J("#" + id + "_lhgbtn", this.dg).remove();
 		} else {
-			J("#lhgdig_btns div div.newButton", this.dg).remove();
+			J("#lhgdig_btns div div[id=ok_lhgbtn]", this.dg).remove();
 		}
 	};
 	
