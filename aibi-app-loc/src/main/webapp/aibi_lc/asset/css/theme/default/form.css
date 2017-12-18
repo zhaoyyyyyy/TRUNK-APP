@@ -29,6 +29,9 @@
     width: 360px;
     position: relative;
 }
+ .control-input .columnGreenTip{
+ 	right:-36px;
+ }
  .date-input{
     width: 175px;
 }
@@ -552,6 +555,22 @@ radio样式
 	border-radius: 6px;
 	padding:15px 10px 10px;
 }
+.columnGreenTip{
+	position:absolute;
+	right:-0px;
+	top:4px;
+	display:block;
+	height:20px;
+	line-height:20px;
+	width:20px;
+	color:#fff;
+	font-size:14px;
+	background:#009241;
+	text-align:center;
+	border-radius:50%;
+	cursor:pointer;
+}
+
 
 
 
