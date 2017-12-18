@@ -69,8 +69,8 @@ public class SourceInfoDaoImpl extends BaseDaoImpl<SourceInfo, String> implement
             params.put("sourceId", sourceInfoVo.getSourceId());
         }
         if (StringUtil.isNotBlank(sourceInfoVo.getSourceName())) {
-            hql.append("and s.sourceName = :sourceName ");
-            params.put("sourceName", sourceInfoVo.getSourceName());
+            hql.append("and s.sourceName LIKE :sourceName ");
+            params.put("sourceName", "%"+sourceInfoVo.getSourceName()+"%");
         }
         if (StringUtil.isNotBlank(sourceInfoVo.getSourceTableId())) {
             hql.append("and s.sourceTableId = :sourceTableId ");

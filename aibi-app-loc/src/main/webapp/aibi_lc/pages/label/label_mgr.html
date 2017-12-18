@@ -18,26 +18,27 @@
 <body>
 	  <div class="iframe-nest">
             <div class="ui-lc-mian">
-                <h3>专区管理</h3>
+                <h3>标签管理</h3>
                 <div class="ui-label-mes clearfix ui-data-form">
                     <div class="fleft">
-                        <button type="button" class="ui-btn ui-btn-default mr10">
+                        <button id="btn_add" name="btn_add" type="button" class="ui-btn ui-btn-default mr10">
                             <span class="create-white"></span>
                             新增
                         </button>
+                        <button id="btn_batch_del" type="button" class="ui-btn ui-btn-second">删除</button>
                     </div>
                     <form id="formSearch" class="form-inline data-form fright">
                         <div class="form-group">
                             <div class="control-input has-icon">
                                 
-                                <select dicCode="BQZTZD" class="form-control input-pointer" name="dataStatusId" ></select>
+                                <select id="dataStatusId" dicCode="BQZTZD" class="form-control input-pointer" name="dataStatusId"></select>
                                 
                                 <span class="glyphicon-select form-control-feedback"></span>
                             </div>
                         </div>
                         <div class="form-group">
                             <div class="input-group">
-                                <input type="text" class="form-control" id="exampleInputAmount" placeholder="模糊查询" id="txt_name" >
+                                <input type="text" class="form-control" placeholder="标签名称" id="form_search" >
                                 <div class="input-group-addon input-group-icon right-child" id="btn_search"></div>
                             </div>
                         </div>
@@ -48,6 +49,9 @@
                     <div id="mainGridPager"></div>
                 </div>
             </div>
-        </div>
+       </div>
+     
+     
+ 
 </body>
 </html>

@@ -37,5 +37,19 @@ import com.asiainfo.biapp.si.loc.core.label.entity.LabelInfo;
 public class LabelInfoVo extends LabelInfo {
 
     private static final long serialVersionUID = 2035013017939483936L;
+    
+    /**
+     * 审批状态
+     */
+    private String approveStatusId;
+    
+    public String getApproveStatusId() {
+        return approveStatusId;
+    }
+
+    public void setApproveStatusId(String approveStatusId) {
+        this.approveStatusId = approveStatusId;
+    }
+    
 
 }

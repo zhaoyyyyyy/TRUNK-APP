@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>创建标签-单指标</title>
+    <!--[if IE]>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <![endif]-->
+    <link href="../../asset/css/common/reset.css" rel="stylesheet"  />
+    <link href="../../asset/css/theme/default/button.css" rel="stylesheet"  />
+    <link href="../../asset/css/theme/default/form.css" rel="stylesheet"  />
+    <link href="../../asset/css/theme/default/tab.css" rel="stylesheet"  />
+    <link href="../../asset/css/theme/default/coc_frame.css" rel="stylesheet"  />
+    <link href="../../asset/css/theme/default/main.css" rel="stylesheet"  />
+    <script type="text/javascript" src="../../asset/script/common/include.js"></script>
+    <script type="text/javascript" src="label_single_add.js"></script>
+
+    <!--
+        H5兼容js CSS3 兼容JS
+    -->
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="http://apps.bdimg.com/libs/html5shiv/3.7/html5shiv.min.js"></script>
+    <script src="http://apps.bdimg.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+        <div>
+            <form id="saveDataForm">
+                <div class="ui-lc-mian">
+                    <h3>创建标签</h3>
+                    <ul class="tab-list tab-hor clearfix">
+                        <li class="fleft active"><a href="">单指标</a></li>
+                        <li class="fleft"><a href="label_multi_add.html">多指标</a></li>
+                    </ul>
+                    <div class="ui-expand-search mt10">
+                        <div class="form-inline ui-form">
+                            <div class="clearfix">
+                                <div class="form-group">
+                                    <label class="fleft mt5" for="exampleInputEmail4">选择指标数据</label>
+                                    <div class="control-input has-icon ml10">
+                                        <input type="text" class="form-control input-pointer" id="inputEmail4" placeholder="coco.cadade" readonly="readonly">
+                                        <span class="glyphicon-select form-control-feedback"></span>
+                                    </div>
+                                    <div class="fleft clearfix">
+                                        <a href="javascript:;" class="ui-advanced-sreach fleft mt5">没有元数据?</a>
+                                        <a href="javascript:;" class="file-up-btn">
+                                            <span>点击创建</span>
+                                        </a>
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="clearfix create-main mt10">
+                        <div class="progress fleft">
+                            <span class="progress-label">
+                                <i class="icon"></i>
+                            </span>
+                        </div>
+                        <div class="ui-main fleft">
+                            <div class="clearfix">
+                                <div class="form-horizontal fleft ui-form">
+                                    <div class="ui-form-group">
+                                        <label for="labelName" class="control-label">标签名称</label>
+                                        <div class="control-input">
+                                            <input type="text" class="form-control" id="labelName" name="labelName">
+                                        </div>
+                                    </div>
+                                    <div class="ui-form-group mt20 tag-radio clearfix">
+                                        <label class="control-label fleft">标签列表</label>
+                                        <div class="control-input">
+                                            <div class="radio circle success">
+                                                <input type="radio" name="labelTypeId" id="myr3" value="5" checked="checked">
+                                                <label for="myr3"><i class="default"></i>枚举</label>
+                                            </div>
+                                            <div class="radio circle success">
+                                                <input type="radio" name="labelTypeId"  id="myr4" value="4">
+                                                <label  for="myr4"><i class="default"></i>指标</label>
+                                            </div>
+                                            <div class="radio circle success">
+                                                <input type="radio" name="labelTypeId"  id="myr5" value="7">
+                                                <label  for="myr5"><i class="default"></i>文本</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="ui-form-group">
+                                        <label for="categoryId" class="control-label">标签分类</label>
+                                        <div class="control-input">
+                                            <input type="text" class="form-control" id="categoryId" name="categoryId" placeholder="cust1">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-horizontal fleft ui-form">
+                                    <div class="ui-form-group">
+                                        <label for="countRulesCode" class="control-label">抽取规则</label>
+                                        <div class="control-input">
+                                            <textarea rows="6" name="countRulesCode" class="form-control form-control-textarea">retegertsghrtjjjytkweqdadhtyikwertssdgths</textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-horizontal fleft ui-form">
+                                    <div class="ui-form-group">
+                                        <label for="busiCaliber" class="control-label">业务口径</label>
+                                        <div class="control-input">
+                                            <input type="text" class="form-control" id="busiCaliber" name="busiCaliber" placeholder="cust1">
+                                        </div>
+                                    </div>
+                                    <div class="ui-form-group">
+                                        <label for="inputEmail4" class="control-label">维表选择</label>
+                                        <div class="control-input has-icon">
+                                            <input type="text" class="form-control input-pointer" id="inputEmail4" placeholder="wb1" readonly="readonly">
+                                            <span class="glyphicon-select form-control-feedback"></span>
+                                        </div>
+                                        <a href="javascript:;" class="file-up-btn ml10">
+                                            <span>详情</span>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="clearfix create-main mt10">
+                        <div class="progress fleft">
+                            <span class="progress-label">
+                                <i class="icon"></i>
+                            </span>
+                        </div>
+                        <div class="ui-main fleft">
+                            <div class="clearfix">
+                                <div class="form-horizontal fleft ui-form">
+                                    <div class="ui-form-group">
+                                        <label for="inputEmail3" class="control-label">标签名称</label>
+                                        <div class="control-input">
+                                            <input type="text" class="form-control" id="inputEmail3" placeholder="cust1">
+                                        </div>
+                                    </div>
+                                    <div class="ui-form-group mt20 tag-radio clearfix">
+                                        <label for="inputEmail4" class="control-label fleft">标签列表</label>
+                                        <div class="control-input">
+                                            <div class="radio circle success">
+                                                <input type="radio" name="radio19" id="myr3" value="5" checked="checked">
+                                                <label for="myr3"><i class="default"></i>枚举</label>
+                                            </div>
+                                            <div class="radio circle success">
+                                                <input type="radio" name="radio19"  id="myr4" value="4">
+                                                <label  for="myr4"><i class="default"></i>指标</label>
+                                            </div>
+                                            <div class="radio circle success">
+                                                <input type="radio" name="radio19"  id="myr4" value="7">
+                                                <label  for="myr4"><i class="default"></i>文本</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="ui-form-group">
+                                        <label for="inputEmail3" class="control-label">标签分类</label>
+                                        <div class="control-input">
+                                            <input type="text" class="form-control" id="inputEmail3" placeholder="cust1">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-horizontal fleft ui-form">
+                                    <div class="ui-form-group">
+                                        <label for="inputEmail4" class="control-label">抽取规则</label>
+                                        <div class="control-input">
+                                            <textarea rows="6"  class="form-control form-control-textarea">retegertsghrtjjjytkweqdadhtyikwertssdgths</textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-horizontal fleft ui-form">
+                                    <div class="ui-form-group">
+                                        <label for="inputEmail3" class="control-label">业务口径</label>
+                                        <div class="control-input">
+                                            <input type="text" class="form-control" id="inputEmail3" placeholder="cust1">
+                                        </div>
+                                    </div>
+                                    <div class="ui-form-group">
+                                        <label for="inputEmail4" class="control-label">维表选择</label>
+                                        <div class="control-input has-icon">
+                                            <input type="text" class="form-control input-pointer" id="inputEmail4" placeholder="wb1" readonly="readonly">
+                                            <span class="glyphicon-select form-control-feedback"></span>
+                                        </div>
+                                        <a href="javascript:;" class="file-up-btn ml10">
+                                            <span>详情</span>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="ui-reg-grid mt40">
+                        <div class=" ui-table-title mt10">
+                            <table id="jsonmap"  class="table table-striped"></table>
+                        </div>
+                        <button type="button" class="ui-btn ui-btn-sm ui-btn-second mt10">添加一行</button>
+                        <!-- <div class="ui-grid-button clearfix mt20">
+                            <button type="button" class="ui-btn ui-btn-second">取消</button>
+                            <button type="button" class="ui-btn ui-btn-default">验证并创建</button>
+                        </div> -->
+                    </div>
+                </div>
+            </form>
+
+            <!-- todo -->
+
+        </div>
+
+</body>
+</html>

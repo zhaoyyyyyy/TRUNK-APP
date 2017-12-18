@@ -85,8 +85,8 @@ public class LabelInfoDaoImpl extends BaseDaoImpl<LabelInfo, String> implements 
             params.put("countRulesCode", labelInfoVo.getCountRulesCode());
         }
         if (StringUtil.isNotBlank(labelInfoVo.getLabelName())) {
-            hql.append("and l.labelName = :labelName ");
-            params.put("labelName", labelInfoVo.getLabelName());
+            hql.append("and l.labelName Like :labelName ");
+            params.put("labelName", "%"+labelInfoVo.getLabelName()+"%");
         }
         if (null != labelInfoVo.getUpdateCycle()) {
             hql.append("and l.updateCycle = :updateCycle ");
@@ -155,6 +155,10 @@ public class LabelInfoDaoImpl extends BaseDaoImpl<LabelInfo, String> implements 
         if (null != labelInfoVo.getSortNum()) {
             hql.append("and l.sortNum = :sortNum ");
             params.put("sortNum", labelInfoVo.getSortNum());
+        }
+        if (StringUtil.isNotBlank(labelInfoVo.getApproveStatusId())) {
+            hql.append("and approveInfo.approveStatusId = :approveStatusId");
+            params.put("approveStatusId", labelInfoVo.getApproveStatusId());
         }
         reMap.put("hql", hql);
         reMap.put("params", params);

@@ -6,19 +6,22 @@
 
 package com.asiainfo.biapp.si.loc.core.label.entity;
 
-import io.swagger.annotations.ApiParam;
-
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
 
 import com.asiainfo.biapp.si.loc.base.entity.BaseEntity;
+
+import io.swagger.annotations.ApiParam;
 
 /**
  * Title : LabelInfo
@@ -230,6 +233,18 @@ public class LabelInfo extends BaseEntity {
     @ApiParam(value = "排序字段")
     private Integer sortNum;
 
+    @ManyToOne
+    @JoinColumn(name="LABEL_ID",referencedColumnName="RESOURCE_ID",insertable=false,updatable=false)
+    private ApproveInfo approveInfo;
+
+    public ApproveInfo getApproveInfo() {
+        return approveInfo;
+    }
+
+    public void setApproveInfo(ApproveInfo approveInfo) {
+        this.approveInfo = approveInfo;
+    }
+
     public String getLabelId() {
         return labelId;
     }
@@ -358,8 +373,9 @@ public class LabelInfo extends BaseEntity {
         this.createUserId = createUserId;
     }
 
-    public Date getCreateTime() {
-        return createTime;
+    public String getCreateTime() {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        return dateFormat.format(createTime);
     }
 
     public void setCreateTime(Date createTime) {

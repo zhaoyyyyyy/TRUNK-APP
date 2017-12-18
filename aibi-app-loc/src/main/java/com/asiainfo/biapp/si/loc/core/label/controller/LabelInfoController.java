@@ -31,7 +31,9 @@ import com.asiainfo.biapp.si.loc.base.exception.BaseException;
 import com.asiainfo.biapp.si.loc.base.page.Page;
 import com.asiainfo.biapp.si.loc.base.utils.StringUtil;
 import com.asiainfo.biapp.si.loc.base.utils.WebResult;
+import com.asiainfo.biapp.si.loc.core.label.entity.ApproveInfo;
 import com.asiainfo.biapp.si.loc.core.label.entity.LabelInfo;
+import com.asiainfo.biapp.si.loc.core.label.service.IApproveInfoService;
 import com.asiainfo.biapp.si.loc.core.label.service.ILabelInfoService;
 import com.asiainfo.biapp.si.loc.core.label.vo.LabelInfoVo;
 
@@ -61,13 +63,16 @@ import com.asiainfo.biapp.si.loc.core.label.vo.LabelInfoVo;
  * @author zhangnan7
  * @version 1.0.0.2017年11月16日
  */
-@Api(value = "标签信息管理",description="张楠")
+@Api(value = "标签信息管理", description = "张楠")
 @RequestMapping("api/label")
 @RestController
 public class LabelInfoController extends BaseController<LabelInfo> {
 
     @Autowired
     private ILabelInfoService iLabelInfoService;
+    
+    @Autowired 
+    private IApproveInfoService iApproveInfoService;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(LabelInfoController.class);
 
@@ -79,7 +84,7 @@ public class LabelInfoController extends BaseController<LabelInfo> {
         Page<LabelInfo> labelInfoPage = new Page<>();
         try {
             page.setPageSize(12);
-            labelInfoPage = iLabelInfoService.selectLabelInfoPageList(page, labelInfoVo);
+            labelInfoPage = iLabelInfoService.selectLabelInfoPageList(page, labelInfoVo);           
         } catch (BaseException e) {
             labelInfoPage.fail(e);
         }
@@ -141,18 +146,26 @@ public class LabelInfoController extends BaseController<LabelInfo> {
     public WebResult<String> save(@ApiIgnore LabelInfo labelInfo) {
         WebResult<String> webResult = new WebResult<>();
         labelInfo.setCreateTime(new Date());
+        labelInfo.setDataStatusId(1);
         User user = new User();
         try {
             user = this.getLoginUser();
         } catch (BaseException e) {
             LOGGER.info("context", e);
         }
-        labelInfo.setCreateUserId(user.getUserId());
+        labelInfo.setCreateUserId(user.getUserId());  
         try {
             iLabelInfoService.addLabelInfo(labelInfo);
         } catch (BaseException e) {
             return webResult.fail(e);
         }
+        //封装审批信息
+        ApproveInfo approveInfo = new ApproveInfo();
+        approveInfo.setResourceId(labelInfo.getLabelId());
+        approveInfo.setApproveStatusId("1");
+        approveInfo.setApproveUserId(user.getUserId());
+        labelInfo.setApproveInfo(approveInfo); 
+        iApproveInfoService.addApproveInfo(approveInfo);
         return webResult.success("新增标签信息成功", SUCCESS);
     }
 
@@ -210,6 +223,23 @@ public class LabelInfoController extends BaseController<LabelInfo> {
             return webResult.fail(e);
         }
         return webResult.success("删除标签信息成功", SUCCESS);
+    }
+
+    @ApiOperation(value = "批量删除标签信息")
+    @ApiImplicitParam(name = "Ids", value = "Ids", required = true, paramType = "query", dataType = "string")
+    @RequestMapping(value = "/labelInfo/batchdelete", method = RequestMethod.POST)
+    public WebResult<String> batchdel(String Ids) {
+        Ids = request.getParameter("Ids");
+        WebResult<String> webResult = new WebResult<>();
+        String[] labelIds = Ids.split(",");
+        for (String labelId : labelIds) {
+            try {
+                iLabelInfoService.deleteLabelInfo(labelId);
+            } catch (BaseException e) {
+                return webResult.fail(e);
+            }
+        }
+        return webResult.success("批量删除标签信息成功", SUCCESS);
     }
 
     public LabelInfo fromToBean(LabelInfo lab, LabelInfo oldLab) {

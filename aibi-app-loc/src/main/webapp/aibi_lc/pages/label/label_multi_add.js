@@ -1,7 +1,7 @@
 window.loc_onload = function(){
-	//新增标签
-	$('#btn_add').click(function() {
-		var win = $.window('新增', $.ctx + '/aibi_lc/pages/label/label_single_add.html', 1100, 600);
+	//指标选择
+	$('#btn_index_select').click(function() {
+		var win = $.window('指标配置', $.ctx + '/aibi_lc/pages/label/sourceInfo_mgr.html', 1100, 600);
 		win.reload = function() {
 			$("#mainGrid").setGridParam({
 				postData : $("#formSearch").formToJson()
@@ -100,11 +100,9 @@ window.loc_onload = function(){
 	            {name:'createTime',index:'createTime', width:30, align:"center"},
 	            {name:'labelId',index:'labelId', width:30, align:"center",
 	            	formatter : function(value, opts, data) {
-	            		var html = '';
-	            		if(data.approveInfo.approveStatusId==1){
-	            			html+= '<button onclick="fun_to_publish(\''+data.labelId+'\')" type="button" class="btn btn-default  ui-table-btn ui-table-btn" >标签审批发布</button>';
-	            		}
-	            		return html;
+	            		return "<a onclick='fun_to_information(\"" + data.labelId+ "\")' >发布</a>"
+	            		      +"<a onclick='fun_update(\"" + data.labelId+ "\")' >修改</a>"
+	            		      +"<a onclick='fun_del(\"" + data.labelId+ "\")' >删除</a>";
 	            	}
 	            },
 	        ],
@@ -115,18 +113,6 @@ window.loc_onload = function(){
 	        pager: '#mainGridPager'  
 	    });
 }
-
-function fun_to_publish(id){
-	$.confirm('确定发布此标签？',function(){
-		$.commAjax({
-			url : $.ctx + 'api/label/labelInfo/update',
-			
-		});
-	});
-}
-
-
-
 function fun_del(id){
 	$.confirm('您确定要继续删除吗？',function(){
 		$.commAjax({
