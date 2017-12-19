@@ -240,9 +240,9 @@ public class LabelInfo extends BaseEntity {
     @ApiParam(value = "排序字段")
     private Integer sortNum;
 
-	@OneToMany
-	@JoinColumn(name="label_id")
-    private List<MdaSysTableColumn> mdaSysTableColumns;  
+    @ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name="LABEL_ID",referencedColumnName="LABEL_ID",insertable=false,updatable=false)
+    private MdaSysTableColumn mdaSysTableColumn;  
     
 	@ManyToMany(fetch=FetchType.LAZY)  
 	@JoinTable(name="loc_label_vertical_column_rel",  
@@ -476,13 +476,12 @@ public class LabelInfo extends BaseEntity {
         this.sortNum = sortNum;
     }
 
-
-	public List<MdaSysTableColumn> getMdaSysTableColumns() {
-		return mdaSysTableColumns;
+	public MdaSysTableColumn getMdaSysTableColumn() {
+		return mdaSysTableColumn;
 	}
 
-	public void setMdaSysTableColumns(List<MdaSysTableColumn> mdaSysTableColumns) {
-		this.mdaSysTableColumns = mdaSysTableColumns;
+	public void setMdaSysTableColumn(MdaSysTableColumn mdaSysTableColumn) {
+		this.mdaSysTableColumn = mdaSysTableColumn;
 	}
 
 	public List<MdaSysTableColumn> getVertialColumns() {
