@@ -1,4 +1,9 @@
 window.loc_onload = function() {
+	$('#formSearch').keyup(function(event) {
+		if (event.keyCode == 13) {
+			$("#btn_search").click();
+		}
+	})
 	$("#btn_search").click(function() {
 		var txtValue = $("#txt_name").val();
 		if (txtValue == null) {
@@ -42,12 +47,13 @@ window.loc_onload = function() {
 									frozen : true,
 									align : "center",
 									formatter : function(value, opts, data) {
-						    			return "<a href='###' onclick='fun_to_detail(\"" + data.dimId
-						    			+ "\")' ><font color='blue'>" + data.dimTableName
-						    			+ "</font></a>";
-						    		}
-									
-										
+										return "<a href='###' onclick='fun_to_detail(\""
+												+ data.dimId
+												+ "\")' ><font color='blue'>"
+												+ data.dimTableName
+												+ "</font></a>";
+									}
+
 								},
 								{
 									name : 'dimId',
@@ -56,7 +62,9 @@ window.loc_onload = function() {
 									sortable : false,
 									align : "center",
 									formatter : function(v) {
-										return "<button type='button' class='btn btn-default  ui-table-btn ui-table-btn' id='btnSearch'>查看</button> "
+										return "<button type='button' class='btn btn-default  ui-table-btn ui-table-btn' onclick='fun_to_edit(\""
+												+ v
+												+ "\")'>修改</button> "
 												+ "<button type='button' class='btn btn-default ui-table-btn' onclick='del( \""
 												+ v + "\" )'>删除</button>"
 									}
@@ -83,9 +91,10 @@ function del(dimId) {
 		});
 	});
 }
-function fun_to_detail(id){
+function fun_to_detail(id) {
 	var wd = $.window('维表详情', $.ctx
-			+ '/aibi_lc/pages/dimtable/dimtable_detail.html?dimId=' + id, 800, 600);
+			+ '/aibi_lc/pages/dimtable/dimtable_detail.html?dimId=' + id, 800,
+			600);
 	wd.reload = function() {
 		$("#mainGrid").setGridParam({
 			postData : $("#formSearch").formToJson()
@@ -93,4 +102,7 @@ function fun_to_detail(id){
 			page : 1
 		} ]);
 	}
+}
+function fun_to_edit(dimId){
+	window.location='dimtable_add.html?dimId='+dimId;
 }

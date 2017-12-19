@@ -20,11 +20,12 @@
 		<div class="ui-lc-mian">
 			<h3>维表新增</h3>
 			<form id="saveDataForm">
+			<input type="hidden" id="dimId" name="dimId" />
 				<div class="clearfix">
 					<div class="form-group ml30">
 						<label class="fleft mt5" for="exampleInputEmail3" >*&nbsp;表名:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
 						<div class="control-input ml20 has-icon">
-							<input  name = "dimTableName" type="text" class="form-control " id="inputEmail4"
+							<input name = "dimTableName" type="text" class="form-control " id="dimTablename"
 								maxlength="28" placeholder="请输入表名"/>
 						</div>
 					</div>
@@ -33,8 +34,8 @@
 					<div class="form-group ml30 mt20">
 						<label class="fleft mt5"  for="exampleInputEmail3">*主键类型:</label>
 						<div class="control-input  ml20 has-icon" >
-							<select  name = "codeColType" class="form-control" id="inputEmail4" >
-								<option>---请选择---</option>
+							<select name = "codeColType" class="form-control" id="dimCodeColType" >
+								<option>请选择主键类型</option>
 								<option>数字</option>
 								<option>字符串</option>
 							</select>
@@ -45,7 +46,7 @@
 					<div class="form-group ml30 mt20">
 						<label class="fleft mt5" for="exampleInputEmail3">*主键字段名:</label>
 						<div class="control-input has-icon">
-							<input  name = "dimCodeCol" type="text" class="form-control ml10" id="inputEmail4"
+							<input name = "dimCodeCol" type="text" class="form-control ml10" id="dimCodeCol"
 								maxlength="28" placeholder="请输入主键字段名"/>
 								<span id="dimCodeColTxtTip" class="fleft columnGreenTip" title="主键字段名只能以英文字母开头,包含数字、字母、下划线">?</span>
 						</div>	
@@ -55,8 +56,10 @@
 					<div class="form-group ml30 mt20">
 						<label class="fleft mt5" for="exampleInputEmail3">*描述字段名:</label>
 						<div class="control-input has-icon">
-							<input name= "dimValueCol" type="text" class="form-control ml10" id="inputEmail4"
-								maxlength="28" placeholder="请输入描述字段名"/>					
+							<input name= "dimValueCol" type="text" class="form-control ml10" id="dimValueCol"
+								maxlength="28" placeholder="请输入描述字段名"/>	
+								<span id="dimCodeColTxtTip" class="fleft columnGreenTip" title="主键字段名只能以英文字母开头,包含数字、字母、下划线">?</span>
+												
 						</div>
 					</div>
 				</div>
