@@ -1,9 +1,9 @@
 window.loc_onload = function() {
-	$('#formSearch').keyup(function(event) {
-		if (event.keyCode == 13) {
-			$("#btn_search").click();
-		}
-	})
+	$('#form_search').keyup(function(event){
+    	if(event.keyCode == 13){
+    		$("#btn_search").click();
+    	}
+    })
 	$("#btn_search").click(function() {
 		var txtValue = $("#txt_name").val();
 		if (txtValue == null) {
