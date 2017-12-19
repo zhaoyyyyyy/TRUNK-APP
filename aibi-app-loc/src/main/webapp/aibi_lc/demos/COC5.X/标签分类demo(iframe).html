@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>标签分类demo开发</title>
+    <!--[if IE]>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <![endif]-->
+    <link href="../../asset/css/common/reset.css" rel="stylesheet"  />
+    <link href="../../asset/script/component/tree/css/zTreeStyle/zTreeStyle.css" rel="stylesheet"  />
+    <link href="../../asset/css/theme/default/button.css" rel="stylesheet"  />
+    <link href="../../asset/css/theme/default/form.css" rel="stylesheet"  />
+    <link href="../../asset/css/theme/default/tab.css" rel="stylesheet"  />
+    <link href="../../asset/css/theme/default/coc_frame.css" rel="stylesheet"  />
+    <link href="../../asset/css/theme/default/main.css" rel="stylesheet"  />
+    <script type="text/javascript" src="../../asset/script/component/jquery-1.12.4.js"></script>
+<script type="text/javascript" src="../../asset/script/component/jQueryUI/jquery-ui-1.12.1.min.js"></script>
+    <script type="text/javascript" src="../../asset/script/component/tree/jquery.ztree.all.min.js"></script>
+
+    <!--
+        H5兼容js CSS3 兼容JS
+    -->
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="http://apps.bdimg.com/libs/html5shiv/3.7/html5shiv.min.js"></script>
+    <script src="http://apps.bdimg.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <script type="text/javascript">
+    	$(function(){
+    		ztreeFunc();
+    		labeltree();
+    		function ztreeFunc(){
+				var zTreeObj,
+				setting = {
+					view: {
+						selectedMulti: false,
+						addHoverDom: addHoverDom,
+						removeHoverDom: removeHoverDom,
+					}
+				},
+				zTreeNodes = [
+					{"name":"在网用户状态", open:false, children: [
+						{ "name":"google", "url":"http://g.cn", "target":"_blank"},
+						{ "name":"baidu", "url":"http://baidu.com", "target":"_blank"},
+						{ "name":"sina", "url":"http://www.sina.com.cn", "target":"_blank"}
+						]
+					},
+					{"name":"在网状态", open:true, children: [
+						{ "name":"停开机状态", open:true,children:[
+							{ "name":"催停类型", "url":"http://g.cn", "target":"_blank"},
+							{ "name":"测试", "url":"http://baidu.com", "target":"_blank"}
+						]
+						},
+						]
+					}
+				];
+				zTreeObj = $.fn.zTree.init($("#ztree"), setting, zTreeNodes);
+			}
+    		function labeltree(){
+				var zTreeObj,
+				setting = {
+					view: {
+						selectedMulti: false
+					}
+				},
+				zTreeNodes = [
+					{"name":"在网用户状态", open:false, children: [
+						{ "name":"google", "url":"http://g.cn", "target":"_blank"},
+						{ "name":"baidu", "url":"http://baidu.com", "target":"_blank"},
+						{ "name":"sina", "url":"http://www.sina.com.cn", "target":"_blank"}
+						]
+					},
+					{"name":"在网状态", open:true, children: [
+						{ "name":"停开机状态", open:true,children:[
+							{ "name":"催停类型", "url":"http://g.cn", "target":"_blank"},
+							{ "name":"测试", "url":"http://baidu.com", "target":"_blank"}
+						]
+						},
+						]
+					}
+				];
+				zTreeObj = $.fn.zTree.init($("#labeltree"), setting, zTreeNodes);
+			}
+
+
+			function addHoverDom(treeId, treeNode) {
+				var aObj = $("#" + treeNode.tId + "_a");
+				if ($("#diyBtn_space_"+treeNode.id).length>0) return;
+				var editStr = "<div class='label-handles' id='diyBtn_space_" +treeNode.id+ "' ><a class='setting'></a><a class='del'></a><a class='add'></a></div>";
+				aObj.append(editStr);
+				var btn = $("#diyBtn_space_"+treeNode.id);
+				if (btn) btn.bind("click", function(){alert("diy Button for " + treeNode.name);});
+			};
+			function removeHoverDom(treeId, treeNode) {
+				$("#diyBtn_space_" +treeNode.id).unbind().remove();
+			};
+				
+			$("#selectAll").click(function(){				
+				$(".label-select-main ul li").find("input").each(function(){
+					$(this).attr("checked",true);					
+				})
+			})
+				
+			$("#ui-move").click(function(){
+				$(".label-dialog").addClass("active");
+			});
+			$("#dialog-del").click(function(){
+				$(".label-dialog").removeClass("active");
+			});
+    	})
+    </script>
+</head>
+<body>
+      <div class="iframe-nest">
+      	<div class="ui-lc-mian">                
+               <div class="ui-label-mes clearfix">
+ 					<span class="fleft">标签管理&nbsp; > &nbsp;标签体系管理&nbsp;共<b>88</b>个标签</span>			         
+ 				</div>
+ 				<div class="clearfix">
+ 					<div class="label-ztree fleft">
+ 						<div class="form-group">
+					      <div class="input-group fleft mr10">
+					          <input type="text" class="form-control" id="exampleInputAmount" placeholder="搜索">
+					          <span class="input-group-addon input-group-icon right-child input-pointer"></span>
+					      </div>
+			        		<a href="javascript:;" class="file-up-btn">
+				       	   		<input type="file" class="input-pointer">
+				       	   		<span><i>+</i>导入</span>
+				       	   	</a>					      
+				      	</div>
+						<ul id="ztree" class="ztree">
+				
+						</ul>
+						
+ 					</div>
+ 					<div class="lable-select fleft">
+ 						<div>
+ 							<div class="label-select-head clearfix">
+ 								<button id="ui-move" type="button" class="ui-btn ui-btn-default">移动到</button>
+ 								<button id="selectAll" type="button" class="ui-btn ui-btn-second" data-check="">全选</button>
+ 								<div class="form-group fright">
+									<div class="radio circle success"> 
+									   <input type="radio" name="radio19" id="myr3" checked="checked"> 
+									   <label for="myr3"><i class="default"></i> 全部分类</label>
+									</div>
+								    <div class="radio circle success">
+									   <input type="radio" name="radio19"  id="myr4"> 
+									   <label  for="myr4"><i class="default"></i> 当前分类</label>
+									</div>			
+								    <div class="input-group fright">
+							            <input type="text" class="form-control" id="exampleInputAmount" placeholder="请输入标签关键字">
+							            <span class="input-group-addon input-group-icon right-child input-pointer"></span>
+								    </div>
+							    </div>
+ 							</div>
+							<div class="label-select-main">
+								<ul class="clearfix">
+									<li>
+										<div class="checkbox">
+										    <input id="mycheckbox12" type="checkbox" class="checkbix">
+										    <label aria-label="" role="checkbox" for="mycheckbox12" class="checkbix">
+										    		<span class="large"></span>美食/餐厅线上活动
+										    </label>
+										</div>
+									</li>
+									<li>
+										<div class="checkbox">
+										    <input id="mycheckbox13" type="checkbox" class="checkbix">
+										    <label aria-label="" role="checkbox" for="mycheckbox13" class="checkbix">
+										    		<span class="large"></span>美食/餐厅线上活动
+										    </label>
+										</div>
+									</li>
+									<li>
+										<div class="checkbox">
+										    <input id="mycheckbox14" type="checkbox" class="checkbix" checked="checked">
+										    <label aria-label="" role="checkbox" for="mycheckbox14" class="checkbix">
+										    		<span class="large"></span>美食/餐厅线上活动
+										    </label>
+										</div>
+									</li>
+									<li>
+										<div class="checkbox">
+										    <input id="mycheckbox15" type="checkbox" class="checkbix" checked="checked">
+										    <label aria-label="" role="checkbox" for="mycheckbox15" class="checkbix">
+										    		<span class="large"></span>美食/餐厅线上活动
+										    </label>
+										</div>
+									</li>
+									<li>
+										<div class="checkbox">
+										    <input id="mycheckbox16" type="checkbox" class="checkbix" checked="checked">
+										    <label aria-label="" role="checkbox" for="mycheckbox16" class="checkbix">
+										    		<span class="large"></span>美食/餐厅线上活动
+										    </label>
+										</div>
+									</li>
+								</ul>
+							</div>
+ 						</div>
+ 					</div>
+ 				</div>
+
+            </div>           
+            <!-- todo -->
+      </div>      
+            
+
+
+<div class="label-dialog">
+	<h3>将所选标签移动到</h3>
+	<div class="form-group">			
+	    <div class="input-group fright">
+            <input type="text" class="form-control" id="exampleInputAmount" placeholder="请输入标签关键字">
+            <span class="input-group-addon input-group-icon right-child input-pointer"></span>
+	    </div>
+	</div>
+	<ul id="labeltree" class="ztree mt10">
+				
+	</ul>
+	<p>
+		<button type="button" class="ui-btn ui-btn-default">确定</button>
+ 		<button id="dialog-del" type="button" class="ui-btn ui-btn-second">取消</button>
+	</p>
+</div>
+</body>
+</html>

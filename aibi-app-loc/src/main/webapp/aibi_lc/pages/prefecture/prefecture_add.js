@@ -18,6 +18,7 @@ var model = {
 }
 window.loc_onload = function() {
 	var configId = $.getUrlParam("configId");
+	console.log(configId)
 	if (configId != null && configId != "" && configId != undefined) {
 		model.configId = configId;
 		$.commAjax({
