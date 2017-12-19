@@ -20,6 +20,7 @@ import com.asiainfo.biapp.si.loc.base.exception.ParamRequiredException;
 import com.asiainfo.biapp.si.loc.base.page.Page;
 import com.asiainfo.biapp.si.loc.base.service.impl.BaseServiceImpl;
 import com.asiainfo.biapp.si.loc.core.label.dao.ILabelInfoDao;
+import com.asiainfo.biapp.si.loc.core.label.entity.ApproveInfo;
 import com.asiainfo.biapp.si.loc.core.label.entity.LabelInfo;
 import com.asiainfo.biapp.si.loc.core.label.service.IApproveInfoService;
 import com.asiainfo.biapp.si.loc.core.label.service.ILabelInfoService;
@@ -58,6 +59,9 @@ public class LabelInfoServiceImpl extends BaseServiceImpl<LabelInfo, String> imp
     @Autowired
     private ILabelInfoDao iLabelInfoDao;
     
+    @Autowired 
+    private IApproveInfoService iApproveInfoService;
+    
     @Override
     protected BaseDao<LabelInfo, String> getBaseDao() {
         return iLabelInfoDao;
@@ -80,6 +84,13 @@ public class LabelInfoServiceImpl extends BaseServiceImpl<LabelInfo, String> imp
 
     public void addLabelInfo(LabelInfo labelInfo) throws BaseException {
         super.saveOrUpdate(labelInfo);
+        //封装审批信息
+        ApproveInfo approveInfo = new ApproveInfo();
+        approveInfo.setResourceId(labelInfo.getLabelId());
+        approveInfo.setApproveStatusId("1");
+        approveInfo.setApproveUserId(labelInfo.getCreateUserId());
+        labelInfo.setApproveInfo(approveInfo); 
+        iApproveInfoService.addApproveInfo(approveInfo);
     }
 
     public void modifyLabelInfo(LabelInfo labelInfo) throws BaseException {
@@ -94,6 +105,7 @@ public class LabelInfoServiceImpl extends BaseServiceImpl<LabelInfo, String> imp
             throw new ParamRequiredException("ID不存在");
         }
         super.delete(labelId);
+        iApproveInfoService.deleteApproveInfo(labelId);
     }
 
 }

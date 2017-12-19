@@ -1,81 +1,43 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>数据源管理</title>
-<!--[if IE]>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>数据源管理</title>
+    <!--[if IE]>
     	<meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
     <![endif]-->
-<link rel="stylesheet" theme="default" href="../../asset/css/theme/default/coc_frame.css" />
-<link rel="stylesheet" theme="default" href="../../asset/css/theme/default/main.css" />
-<script type="text/javascript" src="../../asset/script/common/include.js"></script>
-<script type="text/javascript" src="sourceInfo_mgr.js"></script>
-<!--[if lt IE 9]>
+    <link rel="stylesheet" theme="default" href="../../asset/css/theme/default/coc_frame.css"/> 
+	<link rel="stylesheet" theme="default" href="../../asset/css/theme/default/main.css"/> 
+   	<script type="text/javascript" src="../../asset/script/common/include.js"></script>
+   	<script type="text/javascript" src="sourceInfo_mgr.js"></script>
+    <!--[if lt IE 9]>
 	    <script src="../../asset/script/component/h5compatibility/html5shiv.min.js"></script>
 	    <script src="../../asset/script/component/h5compatibility/respond.min.js"></script>
     <![endif]-->
 </head>
 <body>
-	<div class="iframe-nest">
-		<div class="ui-reg-main">
-			<div class="ui-lc-mian">
-				<h3>指标注册</h3>
-				<form>
-					<div class="ui-expand-search ui-reg-search">
-						<div class="form-inline ui-form">
-							<div class="clearfix">
-								<div class="form-group">
-									<label for="exampleInputEmail3">表名称</label> <input type="text" class="form-control mr10 ml10" id="exampleInputEmail3" placeholder="">
-									<button type="button" class="ui-btn ui-btn-default fright">解析</button>
-								</div>
-								<div class="form-group ml30">
-									<label class="fleft mt5" for="exampleInputEmail3">客户唯一标识</label>
-									<div class="control-input has-icon">
-										<input type="text" class="form-control input-pointer ml10" id="inputEmail4" placeholder="客户唯一标识" readonly="readonly"> <span
-											class="glyphicon-select form-control-feedback"></span>
-									</div>
-								</div>
-							</div>
-							<div class="clearfix mt30">
-								<div class="form-group fleft mr100">
-									<label for="exampleInputEmail3">时间区分字段</label> <input type="text" class="form-control ml10" id="exampleInputEmail3" placeholder="">
-								</div>
-								<div class="form-group fleft tag-radio">
-									<label for="inputEmail4" class="control-label fleft mt5">数据更新周期</label>
-									<div class="control-input ml10">
-										<div class="radio circle success">
-											<input type="radio" name="radio19" id="myr3" checked="checked"> <label for="myr3"><i class="default"></i> 日</label>
-										</div>
-										<div class="radio circle success">
-											<input type="radio" name="radio19" id="myr4"> <label for="myr4"><i class="default"></i> 月</label>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-					<div class="ui-reg-table mt20">
-						<div class="clearfix">
-							<h3 class="fleft ml20">字段描述</h3>
-							<button type="button" class="ui-btn ui-btn-sm ui-btn-default fleft ml20">导入</button>
-							<button type="button" class="ui-btn ui-btn-sm ui-btn-second fleft ml10">模版下载</button>
-						</div>
-						<div class="ui-reg-grid">
-							<div class=" ui-table-title mt10">
-								<table id="jsonmap" class="table table-striped"></table>
-							</div>
-							<button type="button" class="ui-btn ui-btn-sm ui-btn-second mt10">添加一行</button>
-							<div class="ui-grid-button clearfix mt20">
-								<button onclick="window.location='dataSource_mgr.html'" type="button" class="ui-btn ui-btn-second">取消</button>
-								<button type="button" class="ui-btn ui-btn-default">保存</button>
-							</div>
-						</div>
-					</div>
-				</form>
-			</div>
-			<!-- todo -->
+      <div class="iframe-nest">
+          <div class="ui-lc-mian">
+              <!-- <div>
+                  <button type="button" class="ui-btn ui-btn-default mr10">
+                      <span class="create-white"></span>
+                      	新增
+                  </button>
+                  <button type="button" class="ui-btn ui-btn-second">删除</button>
+              </div> -->
+              <div class="form-group">
+                  <div class="input-group">
+                      <input type="text" class="form-control" placeholder="标签名称" id="form_search" >
+                      <div class="input-group-addon input-group-icon right-child" id="btn_search"></div>
+                  </div>
+              </div>
+              <div class="ui-table-static mt10">
+                  <table id="mainGrid"  class="table"></table>
+                  <div id="mainGridPager"></div>
+              </div>
+          </div>
+          <!-- todo -->
 
-		</div>
-	</div>
+      </div>
 </body>
 </html>

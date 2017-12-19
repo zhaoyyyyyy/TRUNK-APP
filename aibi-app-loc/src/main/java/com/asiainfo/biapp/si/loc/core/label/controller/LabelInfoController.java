@@ -156,16 +156,10 @@ public class LabelInfoController extends BaseController<LabelInfo> {
         labelInfo.setCreateUserId(user.getUserId());  
         try {
             iLabelInfoService.addLabelInfo(labelInfo);
+            
         } catch (BaseException e) {
             return webResult.fail(e);
         }
-        //封装审批信息
-        ApproveInfo approveInfo = new ApproveInfo();
-        approveInfo.setResourceId(labelInfo.getLabelId());
-        approveInfo.setApproveStatusId("1");
-        approveInfo.setApproveUserId(user.getUserId());
-        labelInfo.setApproveInfo(approveInfo); 
-        iApproveInfoService.addApproveInfo(approveInfo);
         return webResult.success("新增标签信息成功", SUCCESS);
     }
 
@@ -211,23 +205,25 @@ public class LabelInfoController extends BaseController<LabelInfo> {
         }
         return webResult.success("修改标签信息成功", SUCCESS);
     }
-
+    /*
     @ApiOperation(value = "删除标签信息")
     @ApiImplicitParam(name = "labelId", value = "ID", required = true, paramType = "query", dataType = "string")
     @RequestMapping(value = "/labelInfo/delete", method = RequestMethod.POST)
     public WebResult<String> del(String labelId) {
         WebResult<String> webResult = new WebResult<>();
+        LabelInfo labelInfo = iLabelInfoService.get(labelId);
+        labelInfo.setDataStatusId(6);
         try {
             iLabelInfoService.deleteLabelInfo(labelId);
         } catch (BaseException e) {
             return webResult.fail(e);
         }
         return webResult.success("删除标签信息成功", SUCCESS);
-    }
+    }*/
 
     @ApiOperation(value = "批量删除标签信息")
     @ApiImplicitParam(name = "Ids", value = "Ids", required = true, paramType = "query", dataType = "string")
-    @RequestMapping(value = "/labelInfo/batchdelete", method = RequestMethod.POST)
+    @RequestMapping(value = "/labelInfo/delete", method = RequestMethod.POST)
     public WebResult<String> batchdel(String Ids) {
         Ids = request.getParameter("Ids");
         WebResult<String> webResult = new WebResult<>();
@@ -242,6 +238,40 @@ public class LabelInfoController extends BaseController<LabelInfo> {
         return webResult.success("批量删除标签信息成功", SUCCESS);
     }
 
+    @ApiOperation(value="发布标签")
+    @ApiImplicitParams({
+        @ApiImplicitParam(name = "labelId", value = "ID", required = true, paramType = "query", dataType = "string"),
+        @ApiImplicitParam(name = "dataStatusId", value = "数据状态ID", required = false, paramType = "query", dataType = "int"),
+        @ApiImplicitParam(name = "approveStatusId",value = "标签审批状态id" ,required = false, paramType = "query",dataType = "int") })
+    @RequestMapping(value = "/labelInfo/publish", method = RequestMethod.POST)
+    public WebResult<String> publish(@ApiIgnore LabelInfo labelInfo){
+        String approveStatusId = request.getParameter("approveStatusId");
+        WebResult<String> webResult = new WebResult<>();
+        LabelInfo oldLab = new LabelInfo();
+        try {
+            oldLab = iLabelInfoService.selectLabelInfoById(labelInfo.getLabelId());
+        } catch (BaseException e) {
+            return webResult.fail(e);
+        }
+        oldLab = fromToBean(labelInfo, oldLab);
+        if (StringUtil.isNotEmpty(approveStatusId)) {
+            try {
+                ApproveInfo approveInfo = iApproveInfoService.selectApproveInfo(labelInfo.getLabelId());
+                approveInfo.setApproveStatusId(approveStatusId);
+                approveInfo.setApproveTime(new Date());
+                oldLab.setApproveInfo(approveInfo);
+            } catch (BaseException e) {
+                e.printStackTrace();
+            }     
+        }  
+        try {
+            iLabelInfoService.modifyLabelInfo(oldLab);
+        } catch (BaseException e1) {
+            return webResult.fail(e1);
+        }
+        return webResult.success("发布标签信息成功", SUCCESS);
+    }
+    
     public LabelInfo fromToBean(LabelInfo lab, LabelInfo oldLab) {
         if (null != lab.getKeyType()) {
             oldLab.setKeyType(lab.getKeyType());

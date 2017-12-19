@@ -21,6 +21,7 @@ import javax.persistence.Table;
 import org.hibernate.annotations.GenericGenerator;
 
 import com.asiainfo.biapp.si.loc.base.entity.BaseEntity;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import io.swagger.annotations.ApiParam;
 
@@ -140,6 +141,7 @@ public class MdaSysTable extends BaseEntity {
     /**
      * 列信息
      */
+    @JsonIgnore
     @OneToMany(mappedBy = "mdaSysTable", cascade = CascadeType.ALL,fetch=FetchType.LAZY)  
     private List<MdaSysTableColumn> columns;
     

@@ -42,5 +42,20 @@ public interface IApproveInfoService extends BaseService<ApproveInfo, String>{
      */
     public ApproveInfo selectApproveInfo(String resourceId) throws BaseException;
 
+    /**
+     * 
+     * Description: 通过资源Id删除审批信息
+     *
+     * @param resourceId
+     * @throws BaseException 
+     */
+    public void deleteApproveInfo(String resourceId) throws BaseException;
+  
+    /**
+     * 
+     * Description: 新增一条审批信息
+     *
+     * @param approveInfo
+     */
     public void addApproveInfo(ApproveInfo approveInfo);
 }

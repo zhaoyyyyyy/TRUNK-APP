@@ -38,5 +38,5 @@ public class ApproveInfoDaoImpl extends BaseDaoImpl<ApproveInfo, String> impleme
     @Override
     public ApproveInfo selectApproveInfo(String resourceId) {
         return super.findOneByHql("from ApproveInfo a where a.resourceId = ?0 ",resourceId);
-    } 
+    }
 }

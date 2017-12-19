@@ -47,10 +47,12 @@ public class ApproveInfoController extends BaseController<ApproveInfo>{
     
     @Autowired
     private IApproveInfoService iApproveInfoService;
+    
+    private static final String SUCCESS = "success";
 
     @ApiOperation(value = "得到标签信息")
     @ApiImplicitParam(name="resourceId",value="资源Id",required=false,paramType="query",dataType="string")
-    @RequestMapping(value = "ApproevInfo/")
+    @RequestMapping(value = "ApproveInfo/")
     public WebResult<ApproveInfo> findByresourceId(String resourceId){
         WebResult<ApproveInfo> webResult = new WebResult<>();
         ApproveInfo approveInfo = new ApproveInfo();
@@ -61,4 +63,18 @@ public class ApproveInfoController extends BaseController<ApproveInfo>{
         }
         return webResult.success("获取标签信息成功", approveInfo);
     }
+    
+    @ApiOperation(value = "根据资源Id删除标签信息")
+    @ApiImplicitParam(name="resourceId",value="资源Id",required=false,paramType="query",dataType="string")
+    @RequestMapping(value = "ApproveInfo/delete")
+    public WebResult<String> del(String resourceId){
+        WebResult<String> webResult = new WebResult<>();
+        try {
+            iApproveInfoService.deleteApproveInfo(resourceId);
+        } catch (BaseException e) {
+            return webResult.fail(e);
+        }
+        return webResult.success("删除审批信息成功",SUCCESS);
+    }
+    
 }

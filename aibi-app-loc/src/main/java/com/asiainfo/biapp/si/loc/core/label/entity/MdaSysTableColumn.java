@@ -25,6 +25,7 @@ import org.hibernate.annotations.GenericGenerator;
 
 import com.asiainfo.biapp.si.loc.base.entity.BaseEntity;
 import com.asiainfo.biapp.si.loc.core.dimtable.entity.DimTableInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import io.swagger.annotations.ApiParam;
 
@@ -147,6 +148,7 @@ public class MdaSysTableColumn extends BaseEntity {
 		this.labelId = labelId;
 	}
 
+	@JsonIgnore
 	@ManyToMany(fetch=FetchType.LAZY)  
 	@JoinTable(name="loc_label_vertical_column_rel",  
 	joinColumns={@JoinColumn(name="COLUMN_ID")},inverseJoinColumns={@JoinColumn(name="LABEL_ID")})  

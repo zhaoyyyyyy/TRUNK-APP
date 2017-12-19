@@ -6,7 +6,6 @@
 
 package com.asiainfo.biapp.si.loc.core.label.dao.impl;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -14,9 +13,7 @@ import java.util.Map;
 import org.springframework.stereotype.Repository;
 
 import com.asiainfo.biapp.si.loc.base.dao.BaseDaoImpl;
-import com.asiainfo.biapp.si.loc.base.exception.BaseException;
 import com.asiainfo.biapp.si.loc.base.page.Page;
-import com.asiainfo.biapp.si.loc.base.utils.LogUtil;
 import com.asiainfo.biapp.si.loc.base.utils.StringUtil;
 import com.asiainfo.biapp.si.loc.core.label.dao.ILabelInfoDao;
 import com.asiainfo.biapp.si.loc.core.label.entity.LabelInfo;
@@ -51,16 +48,6 @@ import com.asiainfo.biapp.si.loc.core.label.vo.LabelInfoVo;
 @Repository
 public class LabelInfoDaoImpl extends BaseDaoImpl<LabelInfo, String> implements ILabelInfoDao {
 
-    public List<LabelInfo> selectEffectiveCiLabelInfo(){
-        List<LabelInfo> labelInfoList = new ArrayList<>();
-        try {
-            labelInfoList = super.findListByHql("from LabelInfo l where l.dataStatusId = ?0", 2);
-        } catch (BaseException e) {
-            LogUtil.error(e);
-        }
-        return labelInfoList;
-    }
-    
     public Page<LabelInfo> selectLabelInfoPageList(Page<LabelInfo> page, LabelInfoVo labelInfoVo) {
         Map<String, Object> reMap = fromBean(labelInfoVo);
         Map<String, Object> params = (Map<String, Object>) reMap.get("params");
@@ -106,8 +93,8 @@ public class LabelInfoDaoImpl extends BaseDaoImpl<LabelInfo, String> implements 
             params.put("updateCycle", labelInfoVo.getUpdateCycle());
         }
         if (null != labelInfoVo.getLabelTypeId()) {
-            hql.append("and l.labelTypeId = :labelTypeId ");
-            params.put("labelTypeId", labelInfoVo.getLabelTypeId());
+            hql.append("and l.labelTypeId LIKE :labelTypeId ");
+            params.put("labelTypeId","%"+labelInfoVo.getLabelTypeId()+"%");
         }
         if (StringUtil.isNotBlank(labelInfoVo.getCategoryId())) {
             hql.append("and l.categoryId = :categoryId ");
@@ -170,12 +157,17 @@ public class LabelInfoDaoImpl extends BaseDaoImpl<LabelInfo, String> implements 
             params.put("sortNum", labelInfoVo.getSortNum());
         }
         if (StringUtil.isNotBlank(labelInfoVo.getApproveStatusId())) {
-            hql.append("and approveInfo.approveStatusId = :approveStatusId");
-            params.put("approveStatusId", labelInfoVo.getApproveStatusId());
+            hql.append("and approveInfo.approveStatusId LIKE :approveStatusId");
+            params.put("approveStatusId", "%"+labelInfoVo.getApproveStatusId()+"%");
         }
         reMap.put("hql", hql);
         reMap.put("params", params);
         return reMap;
+    }
+
+    @Override
+    public List<LabelInfo> selectEffectiveCiLabelInfo() {
+        return null;
     }
 
 }
