@@ -74,7 +74,11 @@ public class CoConfigController {
         WebResult<Map<String, String>> webResult = new WebResult<>();
         Map<String, String> map = new HashMap<>();
         try {
-            map = iCoConfigService.getPropertiesByParentCode(parentCode, token);
+            if("getALLKV".equals(token)){
+            	map = iCoConfigService.getPropertiesByParentCode(parentCode, token);
+	      	}else{
+	      		 return webResult.fail("输入token有误！");
+	      	}
         } catch (BaseException e) {
             webResult.fail(e);
         }
@@ -97,7 +101,11 @@ public class CoConfigController {
         WebResult<String> webResult = new WebResult<>();
         String value = "";
         try {
-            value = iCoConfigService.getProperties(code, token);
+        	if("getALLKV".equals(token)){
+        		 value = iCoConfigService.getProperties(code, token);
+	      	}else{
+	      		 return webResult.fail("输入token有误！");
+	      	}
             if (StringUtils.isBlank(value)) {
                 return webResult.fail("不存在的编码");
             }
@@ -114,7 +122,11 @@ public class CoConfigController {
         WebResult<Map<String, String>> webResult = new WebResult<>();
         Map<String, String> map = new HashMap<>();
         try {
-            map = iCoConfigService.selectAll(token);
+        	if("getALLKV".equals(token)){
+        		  map = iCoConfigService.selectAll(token);
+        	}else{
+        		 return webResult.fail("输入token有误！");
+        	}
         } catch (BaseException e) {
             webResult.fail(e);
         }

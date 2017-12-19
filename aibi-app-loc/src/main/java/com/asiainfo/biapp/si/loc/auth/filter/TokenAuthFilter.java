@@ -31,7 +31,7 @@ public class TokenAuthFilter implements Filter {
     Log log = LogFactory.getLog(TokenAuthFilter.class);
 
     //忽略权限过滤的方法
-    private final String ignoreUrls = "/api/user/login;/api/config/queryList";
+    private final String ignoreUrls = "/api/user/login;/api/config/*";
     
     private String[] excludedPageArray;
     /**
