@@ -58,4 +58,11 @@ public interface ILabelInfoDao extends BaseDao<LabelInfo, String> {
      */
     public List<LabelInfo> selectLabelInfoList(LabelInfoVo labelInfoVo);
 
+    /**
+     * Description: 取得所有已生效标签
+     *
+     * @return
+     */
+    public List<LabelInfo> selectEffectiveCiLabelInfo();
+
 }
