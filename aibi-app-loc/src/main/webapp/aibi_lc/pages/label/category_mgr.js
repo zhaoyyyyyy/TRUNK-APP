@@ -1,6 +1,7 @@
 window.loc_onload = function() {
 	ztreeFunc();
 	labeltree();
+	
 	function ztreeFunc(){
 		var zTreeObj,
 		setting = {
@@ -9,24 +10,39 @@ window.loc_onload = function() {
 				addHoverDom: addHoverDom,
 				removeHoverDom: removeHoverDom,
 			}
-		},
-		zTreeNodes = [
-			{"name":"在网用户状态", open:false, children: [
-				{ "name":"google", "url":"http://g.cn", "target":"_blank"},
-				{ "name":"baidu", "url":"http://baidu.com", "target":"_blank"},
-				{ "name":"sina", "url":"http://www.sina.com.cn", "target":"_blank"}
-				]
-			},
-			{"name":"在网状态", open:true, children: [
-				{ "name":"停开机状态", open:true,children:[
-					{ "name":"催停类型", "url":"http://g.cn", "target":"_blank"},
-					{ "name":"测试", "url":"http://baidu.com", "target":"_blank"}
-				]
+		}
+		var obj = $("#preConfig_list").find("span");
+		var labelId =obj.attr("configId");		
+		 $.commAjax({  
+		    url : $.ctx+'/api/label/categoryInfo/queryList',  		    
+		    dataType : 'json', 
+		    postData : {
+					"sysId" :labelId,
 				},
-				]
-			}
-		];
-		zTreeObj = $.fn.zTree.init($("#ztree"), setting, zTreeNodes);
+		    onSuccess: function(res){  
+		        zTreeNodes = res;
+		        console.log(res)
+		        //$.fn.zTree.init($("#tree"), setting, treeNodes);  
+		        //zTreeObj = $.fn.zTree.init($("#ztree"), setting, zTreeNodes);
+		    }  
+		    });  
+//		zTreeNodes = [
+//			{"name":"在网用户状态", open:false, children: [
+//				{ "name":"google", "url":"http://g.cn", "target":"_blank"},
+//				{ "name":"baidu", "url":"http://baidu.com", "target":"_blank"},
+//				{ "name":"sina", "url":"http://www.sina.com.cn", "target":"_blank"}
+//				]
+//			},
+//			{"name":"在网状态", open:true, children: [
+//				{ "name":"停开机状态", open:true,children:[
+//					{ "name":"催停类型", "url":"http://g.cn", "target":"_blank"},
+//					{ "name":"测试", "url":"http://baidu.com", "target":"_blank"}
+//				]
+//				},
+//				]
+//			}
+//		];
+//		zTreeObj = $.fn.zTree.init($("#ztree"), setting, zTreeNodes);
 	}
 	function labeltree(){
 		var zTreeObj,
