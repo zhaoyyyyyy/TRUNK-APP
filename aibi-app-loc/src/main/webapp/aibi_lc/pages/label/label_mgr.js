@@ -1,4 +1,5 @@
 window.loc_onload = function(){
+	/*
 	//新增标签
 	$('#btn_add').click(function() {
 		var win = $.window('新增', $.ctx + '/aibi_lc/pages/label/label_single_add.html', 1100, 600);
@@ -10,7 +11,7 @@ window.loc_onload = function(){
 			}]);
 		}
 	});
-		
+	*/	
 	//批量删除标签
 	$('#btn_batch_del').click(function(){
 		var ids = $('#mainGrid').jqGrid('getGridParam', 'selarrrow');
@@ -39,6 +40,7 @@ window.loc_onload = function(){
     	}
     })
     
+    //根据标签名模糊查询
 	$("#btn_search").click(function(){
 		var txtValue = $("#form_search").val();
 		if(txtValue == null){
@@ -60,6 +62,7 @@ window.loc_onload = function(){
 		}
 	})
 	
+	//根据标签数据状态筛选标签
 	$("#dataStatusId").change(function(){
 		$("#mainGrid").setGridParam({
 			postData:{
@@ -69,7 +72,7 @@ window.loc_onload = function(){
 			page:1
 		}]);
 	})
-	
+	//根据标签审批状态筛选标签
 	$("#approveStatusId").change(function(){
 		$("#mainGrid").setGridParam({
 			postData:{

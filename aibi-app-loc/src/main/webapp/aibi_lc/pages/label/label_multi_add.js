@@ -33,6 +33,7 @@ window.loc_onload = function(){
 		});
 	});
 	
+	//根据标签名模糊查询
 	$("#btn_search").click(function(){
 		var txtValue = $("#form_search").val();
 		if(txtValue == null){

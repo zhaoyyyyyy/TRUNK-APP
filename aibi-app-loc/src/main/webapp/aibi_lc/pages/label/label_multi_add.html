@@ -25,9 +25,8 @@
     <![endif]-->
 </head>
 <body>
-
-        <div>
-            <form>
+     <div class="iframe-nest">
+            <form id="saveDataForm">
                 <div class="ui-lc-mian">
                     <h3>创建标签</h3>
                     <ul class="tab-list tab-hor clearfix">
@@ -194,7 +193,7 @@
                         </div>
                         <button type="button" class="ui-btn ui-btn-sm ui-btn-second mt10">添加一行</button>
                         <div class="ui-grid-button clearfix mt20">
-                            <button type="button" class="ui-btn ui-btn-second">取消</button>
+                            <button onclick="window.location='label_mgr.html'" type="button" class="ui-btn ui-btn-second">取消</button>
                             <button type="button" class="ui-btn ui-btn-default">验证并创建</button>
                         </div>
                     </div>
@@ -204,8 +203,6 @@
             <!-- todo -->
 
         </div>
-
-
 
 </body>
 </html>

@@ -25,7 +25,7 @@
     <![endif]-->
 </head>
 <body>
-        <div>
+      <div class="iframe-nest">
             <form id="saveDataForm">
                 <div class="ui-lc-mian">
                     <h3>创建标签</h3>
@@ -36,11 +36,13 @@
                     <div class="ui-expand-search mt10">
                         <div class="form-inline ui-form">
                             <div class="clearfix">
-                                <div class="form-group">
+                                <div id="dataSource" class="form-group">
                                     <label class="fleft mt5" for="exampleInputEmail4">选择指标数据</label>
-                                    <div class="control-input has-icon ml10">
-                                        <input type="text" class="form-control input-pointer" id="inputEmail4" placeholder="coco.cadade" readonly="readonly">
-                                        <span class="glyphicon-select form-control-feedback"></span>
+                                    <div class="control-input has-icon">
+                                        <select id="sourceTableName" name="sourceTableName" class="form-control ml10 input-pointer ">
+                                        <option>请选择指标</option>
+                                        <option v-for ="source in sourceInfolist" :value="source.sourceTableName">{{source.sourceTableName}}</option>
+                                        </select>
                                     </div>
                                     <div class="fleft clearfix">
                                         <a href="javascript:;" class="ui-advanced-sreach fleft mt5">没有元数据?</a>
@@ -83,11 +85,15 @@
                                             </div>
                                             <div class="radio circle success">
                                                 <input type="radio" name="labelTypeId"  id="myr5" value="1">
-                                                <label  for="myr4"><i class="default"></i>标识</label>
+                                                <label  for="myr5"><i class="default"></i>标识</label>
                                             </div>
                                             <div class="radio circle success">
                                                 <input type="radio" name="labelTypeId"  id="myr6" value="7">
-                                                <label  for="myr5"><i class="default"></i>文本</label>
+                                                <label  for="myr6"><i class="default"></i>文本</label>
+                                            </div>
+                                            <div class="radio circle success">
+                                                <input type="radio" name="labelTypeId"  id="myr7" value="6">
+                                                <label  for="myr7"><i class="default"></i>日期</label>
                                             </div>
                                         </div>
                                     </div>
@@ -111,6 +117,12 @@
                                         <label for="busiCaliber" class="control-label">业务口径</label>
                                         <div class="control-input">
                                             <input type="text" class="form-control" id="busiCaliber" name="busiCaliber" placeholder="cust1">
+                                        </div>
+                                    </div>
+                                    <div class="ui-form-group">
+                                        <label for="dataType" class="control-label">数据类型</label>
+                                        <div class="control-input">
+                                            <input type="text" dicCode="ZDLXZD" class="form-control" id="dataType" name="dataType"/>
                                         </div>
                                     </div>
                                     <div id="dataD" class="ui-form-group">
@@ -149,20 +161,20 @@
                                         <label for="inputEmail4" class="control-label fleft">标签列表</label>
                                         <div class="control-input">
                                             <div class="radio circle success">
-                                                <input type="radio" name="labelTypeId" id="myr3" value="5" checked="checked">
-                                                <label for="myr3"><i class="default"></i>枚举</label>
+                                                <input type="radio" name="labelTypeId1" id="myr8" value="5" checked="checked">
+                                                <label for="myr8"><i class="default"></i>枚举</label>
                                             </div>
                                             <div class="radio circle success">
-                                                <input type="radio" name="labelTypeId"  id="myr4" value="4">
-                                                <label  for="myr4"><i class="default"></i>指标</label>
+                                                <input type="radio" name="labelTypeId1"  id="myr9" value="4">
+                                                <label  for="myr9"><i class="default"></i>指标</label>
                                             </div>
                                              <div class="radio circle success">
-                                                <input type="radio" name="labelTypeId"  id="myr5" value="1">
-                                                <label  for="myr4"><i class="default"></i>标识</label>
+                                                <input type="radio" name="labelTypeId1"  id="myr10" value="1">
+                                                <label  for="myr10"><i class="default"></i>标识</label>
                                             </div>
                                             <div class="radio circle success">
-                                                <input type="radio" name="labelTypeId"  id="myr6" value="7">
-                                                <label  for="myr4"><i class="default"></i>文本</label>
+                                                <input type="radio" name="labelTypeId1"  id="myr11" value="7">
+                                                <label  for="myr11"><i class="default"></i>文本</label>
                                             </div>
                                         </div>
                                     </div>
@@ -207,10 +219,10 @@
                             <table id="jsonmap"  class="table table-striped"></table>
                         </div>
                         <button type="button" class="ui-btn ui-btn-sm ui-btn-second mt10">添加一行</button>
-                        <!-- <div class="ui-grid-button clearfix mt20">
-                            <button type="button" class="ui-btn ui-btn-second">取消</button>
-                            <button type="button" class="ui-btn ui-btn-default">验证并创建</button>
-                        </div> -->
+                        <div class="ui-grid-button clearfix mt20">
+                            <button onclick="window.location='label_mgr.html'" type="button" class="ui-btn ui-btn-second">取消</button>
+                            <button id="btn_save" type="button" class="ui-btn ui-btn-default">验证并创建</button>
+                        </div>
                     </div>
                 </div>
             </form>
@@ -218,6 +230,5 @@
             <!-- todo -->
 
         </div>
-
 </body>
 </html>

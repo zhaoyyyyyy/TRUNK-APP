@@ -4,6 +4,7 @@
 window.loc_onload = function(){
 	var frWin = frameElement.lhgDG;
 	frWin.removeBtn();
+	//获取选定的指标名称
 	frWin.addBtn("ok", "确定", function() {
 		var id = $('#mainGrid').jqGrid('getGridParam', 'selarrrow');
 		if(id.length<1){
