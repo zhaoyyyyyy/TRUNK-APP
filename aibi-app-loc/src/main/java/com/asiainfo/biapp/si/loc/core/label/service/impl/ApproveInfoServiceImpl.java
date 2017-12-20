@@ -67,7 +67,7 @@ public class ApproveInfoServiceImpl extends BaseServiceImpl<ApproveInfo, String>
             throw new ParamRequiredException("id不能为空");
         }
         ApproveInfo approveInfo = iApproveInfoDao.selectApproveInfo(resourceId);
-        super.deleteObject(approveInfo);
+        iApproveInfoDao.deleteObject(approveInfo);
     }
     
     @Override

@@ -82,7 +82,11 @@
                                                 <label  for="myr4"><i class="default"></i>指标</label>
                                             </div>
                                             <div class="radio circle success">
-                                                <input type="radio" name="labelTypeId"  id="myr5" value="7">
+                                                <input type="radio" name="labelTypeId"  id="myr5" value="1">
+                                                <label  for="myr4"><i class="default"></i>标识</label>
+                                            </div>
+                                            <div class="radio circle success">
+                                                <input type="radio" name="labelTypeId"  id="myr6" value="7">
                                                 <label  for="myr5"><i class="default"></i>文本</label>
                                             </div>
                                         </div>
@@ -109,15 +113,18 @@
                                             <input type="text" class="form-control" id="busiCaliber" name="busiCaliber" placeholder="cust1">
                                         </div>
                                     </div>
-                                    <div class="ui-form-group">
+                                    <div id="dataD" class="ui-form-group">
                                         <label for="inputEmail4" class="control-label">维表选择</label>
                                         <div class="control-input has-icon">
-                                            <input type="text" class="form-control input-pointer" id="inputEmail4" placeholder="wb1" readonly="readonly">
-                                            <span class="glyphicon-select form-control-feedback"></span>
+                                            <select id="dimtableName" name="dimtableName" class="form-control ml10 input-pointer ">
+                                            <option>请选择维表</option>
+                                            <option v-for = "dim in dimtableInfoList" :value="dim.dimTableName">{{dim.dimTableName}}</option>
+                                            </select>
                                         </div>
-                                        <a href="javascript:;" class="file-up-btn ml10">
-                                            <span>详情</span>
-                                        </a>
+                                        <!-- <a href="javascript:;" class="file-up-btn ml10">
+                                            <span>详情</span> 
+                                            </a>-->
+                                        <button id="btn_dimdetail" class="btn btn-default  ui-table-btn ui-table-btn" >详情</button>
                                     </div>
                                 </div>
                             </div>
@@ -142,15 +149,19 @@
                                         <label for="inputEmail4" class="control-label fleft">标签列表</label>
                                         <div class="control-input">
                                             <div class="radio circle success">
-                                                <input type="radio" name="radio19" id="myr3" value="5" checked="checked">
+                                                <input type="radio" name="labelTypeId" id="myr3" value="5" checked="checked">
                                                 <label for="myr3"><i class="default"></i>枚举</label>
                                             </div>
                                             <div class="radio circle success">
-                                                <input type="radio" name="radio19"  id="myr4" value="4">
+                                                <input type="radio" name="labelTypeId"  id="myr4" value="4">
                                                 <label  for="myr4"><i class="default"></i>指标</label>
                                             </div>
+                                             <div class="radio circle success">
+                                                <input type="radio" name="labelTypeId"  id="myr5" value="1">
+                                                <label  for="myr4"><i class="default"></i>标识</label>
+                                            </div>
                                             <div class="radio circle success">
-                                                <input type="radio" name="radio19"  id="myr4" value="7">
+                                                <input type="radio" name="labelTypeId"  id="myr6" value="7">
                                                 <label  for="myr4"><i class="default"></i>文本</label>
                                             </div>
                                         </div>
@@ -177,7 +188,7 @@
                                             <input type="text" class="form-control" id="inputEmail3" placeholder="cust1">
                                         </div>
                                     </div>
-                                    <div class="ui-form-group">
+                                    <div id='dataD' class="ui-form-group">
                                         <label for="inputEmail4" class="control-label">维表选择</label>
                                         <div class="control-input has-icon">
                                             <input type="text" class="form-control input-pointer" id="inputEmail4" placeholder="wb1" readonly="readonly">
