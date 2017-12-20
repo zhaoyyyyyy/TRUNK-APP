@@ -13,6 +13,18 @@ window.loc_onload = function() {
             page: 1
         }]);
     })
+    
+    $("#btn_to_add").click(function(){
+    	var wd = $.window('新增专区', $.ctx
+			+ '/aibi_lc/pages/prefecture/prefecture_add.html', 500, 500);
+    	wd.reload = function() {
+			$("#mainGrid").setGridParam({
+				postData : $("#formSearch").formToJson()
+			}).trigger("reloadGrid", [ {
+				page : 1
+			} ]);
+    	}
+    })
 
     $("#changeStatus").change(function() {
         $("#mainGrid").setGridParam({
@@ -115,9 +127,11 @@ window.loc_onload = function() {
                 return html;
             }
         }],
+        rowList: [10, 20, 30],
         pager: '#mainGridPager',
         // 分页的id
         viewrecords: true,
+        
     });
 
 }
@@ -128,7 +142,15 @@ function setColor(cellvalue, options, rowObject) {
     return cellvalue;
 }
 function fun_to_edit(id){
-	window.location='prefecture_add.html?configId='+id;
+	var wd = $.window('编辑专区', $.ctx
+			+ '/aibi_lc/pages/prefecture/prefecture_add.html?configId=' + id, 500, 500);
+	wd.reload = function() {
+		$("#mainGrid").setGridParam({
+			postData : $("#formSearch").formToJson()
+		}).trigger("reloadGrid", [ {
+			page : 1
+		} ]);
+	}
 }
 function fun_to_detail(id){
 	var wd = $.window('专区详情', $.ctx

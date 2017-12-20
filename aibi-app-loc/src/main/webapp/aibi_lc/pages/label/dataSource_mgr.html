@@ -20,11 +20,22 @@
           <div class="ui-lc-mian">
               <h3>数据源管理</h3>
               <div>
-                  <button onclick="window.location = 'sourceInfo_mgr.html'" type="button" class="ui-btn ui-btn-default mr10">
+                  <button onclick="window.location = 'dataSource_add.html'" type="button" class="ui-btn ui-btn-default mr10">
                       <span class="create-white"></span>
                       	新增
                   </button>
-                  <button type="button" class="ui-btn ui-btn-second">删除</button>
+                  <button onclick="fun_to_delAll()" type="button" class="ui-btn ui-btn-second">删除</button>
+                  <form id="formSearch" class="form-inline data-form fright">
+					<div class="form-group">
+						<input name="sourceTableName" id="txt_name" type="text"
+							class="form-control input-pointer" placeholder="模糊查询" />
+						<input id="hiddeninput" type="text" style="display:none" /> 
+					</div>
+					 <div class="form-group">
+						<div class="input-group-addon input-group-icon right-child"
+							id="btn_search"></div>
+					</div>
+				</form>
               </div>
               <div class="ui-table-static mt10">
                   <table id="jsonmap1"  class="table"></table>

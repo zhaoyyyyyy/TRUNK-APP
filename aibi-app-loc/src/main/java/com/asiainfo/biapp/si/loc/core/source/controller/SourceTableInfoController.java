@@ -203,10 +203,13 @@ public class SourceTableInfoController extends BaseController<SourceTableInfo> {
     @RequestMapping(value = "/sourceTableInfo/delete", method = RequestMethod.POST)
     public WebResult<String> del(String sourceTableId) {
         WebResult<String> webResult = new WebResult<>();
-        try {
-            iSourceTableInfoService.deleteSourceTableInfo(sourceTableId);
-        } catch (BaseException e) {
-            return webResult.fail(e);
+        String[] ids = sourceTableId.split(",");
+        for(String id : ids){
+            try {
+                iSourceTableInfoService.deleteSourceTableInfo(id);
+            } catch (BaseException e) {
+                return webResult.fail(e);
+            }
         }
         return webResult.success("删除指标数据源信息配置成功", SUCCESS);
     }

@@ -18,7 +18,7 @@ var model = {
 }
 window.loc_onload = function() {
 	var configId = $.getUrlParam("configId");
-	console.log(configId)
+	var wd = frameElement.lhgDG;
 	if (configId != null && configId != "" && configId != undefined) {
 		model.configId = configId;
 		$.commAjax({
@@ -110,6 +110,39 @@ window.loc_onload = function() {
 			})
 		}
 	});
+	
+	wd.addBtn("ok", "保存", function() {
+		var url_ = "";
+		var msss = "";
+		if(model.configId!=null && model.configId!=undefined && model.configId!= ""){
+			url_ = $.ctx + '/api/prefecture/preConfigInfo/update';
+			msss = "修改成功";
+		}else{
+			$("#configId").removeAttr("name");;
+			url_ = $.ctx + '/api/prefecture/preConfigInfo/save';
+			msss = "保存成功";
+		}
+//		if($("#saveDataForm").validateForm){
+			$.commAjax({
+				url : url_,
+				postData : $('#saveDataForm').formToJson(),
+				onSuccess : function(data) {
+					if(data.data == "success"){
+						$.success(msss, function() {
+							history.back(-1);
+						});
+					}
+					
+				}
+			})
+//		}else{
+//			$.alert("表单校验失败");
+//		}
+	});
+	
+	wd.addBtn("cancel", "取消", function() {
+		wd.cancel();
+	});
 }
 function changeStatus(obj){
 	if(obj.id == "type1"){
@@ -132,33 +165,4 @@ function changeStatus(obj){
 		model.num = 1;
 		$("#contractName").val(1);
 	}
-}
-function fun_to_save(){
-	var url_ = "";
-	var msss = "";
-	if(model.configId!=null && model.configId!=undefined && model.configId!= ""){
-		url_ = $.ctx + '/api/prefecture/preConfigInfo/update';
-		msss = "修改成功";
-	}else{
-		$("#configId").removeAttr("name");;
-		url_ = $.ctx + '/api/prefecture/preConfigInfo/save';
-		msss = "保存成功";
-	}
-//	if($("#saveDataForm").validateForm){
-		$.commAjax({
-			url : url_,
-			postData : $('#saveDataForm').formToJson(),
-			onSuccess : function(data) {
-				if(data.data == "success"){
-					$.success(msss, function() {
-						history.back(-1);
-					});
-				}
-				
-			}
-		})
-//	}else{
-//		$.alert("表单校验失败");
-//	}
-	
 }
