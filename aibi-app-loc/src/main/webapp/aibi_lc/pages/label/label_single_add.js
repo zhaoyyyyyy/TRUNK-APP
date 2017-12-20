@@ -29,17 +29,22 @@ window.loc_onload = function() {
 	
 	//创建并发布单指标
 	$('#btn_save').click(function(){
-		$.commAjax({
-			url : $.ctx+'/api/label/labelInfo/save',
-			postData:$('#saveDataForm').formToJson(),
-			onSuccess:function(data){
-				if (data.data == 'success') {
-					$.success("创建成功", function() {
-						history.back(-1);
-					});
-				} 
-			}
-		});
+		var labelName = $.trim($("#labelName").val());
+		if(labelName==""){
+			$.alert("标签名称不许为空");
+		}else{
+			$.commAjax({
+				url : $.ctx+'/api/label/labelInfo/save',
+				postData:$('#saveDataForm').formToJson(),
+				onSuccess:function(data){
+					if (data.data == 'success') {
+						$.success("创建成功", function() {
+							history.back(-1);
+						});
+					} 
+				}
+			});
+		}	
 	});
 	
 	//获取维表信息
