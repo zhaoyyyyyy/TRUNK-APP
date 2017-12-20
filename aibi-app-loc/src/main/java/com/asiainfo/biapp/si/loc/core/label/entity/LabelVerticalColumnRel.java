@@ -8,11 +8,11 @@ package com.asiainfo.biapp.si.loc.core.label.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
-
-import org.hibernate.annotations.GenericGenerator;
 
 import com.asiainfo.biapp.si.loc.base.entity.BaseEntity;
 
@@ -47,19 +47,24 @@ public class LabelVerticalColumnRel extends BaseEntity{
     /**
      * 标签ID
      */
-    @Id
     @Column(name = "LABEL_ID")
-    @GenericGenerator(name = "idGenerator", strategy = "uuid")
-    @GeneratedValue(generator = "idGenerator")
     @ApiParam(value = "标签ID")
     private String labelId;
     
     /**
      * 列ID
      */
+    @Id
     @Column(name = "COLUMN_ID")
     @ApiParam(value = "列ID")
-    private Integer columnId;
+    private String columnId;
+    
+    /**
+     * 纵表LOC_MDA_SYS_TABLE_COLUMN表里面LABEL_ID为空
+     */
+    @OneToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name="COLUMN_ID",referencedColumnName="COLUMN_ID",insertable=false,updatable=false)
+    private MdaSysTableColumn mdaSysTableColumn;  
     
     /**
      * 列对应标签类型ID
@@ -93,17 +98,17 @@ public class LabelVerticalColumnRel extends BaseEntity{
     }
 
     
-    public Integer getColumnId() {
-        return columnId;
-    }
+    public String getColumnId() {
+		return columnId;
+	}
 
-    
-    public void setColumnId(Integer columnId) {
-        this.columnId = columnId;
-    }
 
-    
-    public Integer getLabelTypeId() {
+	public void setColumnId(String columnId) {
+		this.columnId = columnId;
+	}
+
+
+	public Integer getLabelTypeId() {
         return labelTypeId;
     }
 
@@ -131,7 +136,15 @@ public class LabelVerticalColumnRel extends BaseEntity{
     public void setSortNum(Integer sortNum) {
         this.sortNum = sortNum;
     }
-    
-    
+
+
+	public MdaSysTableColumn getMdaSysTableColumn() {
+		return mdaSysTableColumn;
+	}
+
+
+	public void setMdaSysTableColumn(MdaSysTableColumn mdaSysTableColumn) {
+		this.mdaSysTableColumn = mdaSysTableColumn;
+	}
 
 }

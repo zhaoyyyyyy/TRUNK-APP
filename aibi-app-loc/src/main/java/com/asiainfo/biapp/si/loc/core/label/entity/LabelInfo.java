@@ -9,24 +9,22 @@ package com.asiainfo.biapp.si.loc.core.label.entity;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
 
 import com.asiainfo.biapp.si.loc.base.entity.BaseEntity;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import io.swagger.annotations.ApiParam;
 
@@ -244,17 +242,15 @@ public class LabelInfo extends BaseEntity {
     @JoinColumn(name="LABEL_ID",referencedColumnName="LABEL_ID",insertable=false,updatable=false)
     private MdaSysTableColumn mdaSysTableColumn;  
     
-	@ManyToMany(fetch=FetchType.LAZY)  
-	@JoinTable(name="loc_label_vertical_column_rel",  
-	joinColumns={@JoinColumn(name="LABEL_ID")},inverseJoinColumns={@JoinColumn(name="COLUMN_ID")})  
-    private List<MdaSysTableColumn> vertialColumns;
+    @OneToMany(fetch=FetchType.LAZY)  
+    @JoinColumn(name="LABEL_ID",referencedColumnName="LABEL_ID",insertable=false,updatable=false)
+    private List<LabelVerticalColumnRel> verticalColumnRels;
 	
     @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name="LABEL_ID",referencedColumnName="RESOURCE_ID",insertable=false,updatable=false)
     private ApproveInfo approveInfo;
 
-    @JsonIgnore
-    @ManyToOne(fetch=FetchType.LAZY)
+    @OneToOne(fetch=FetchType.LAZY)
     @JoinColumn(name="LABEL_ID",referencedColumnName="LABEL_ID",insertable=false,updatable=false)
     private LabelExtInfo labelExtInfo;
     
@@ -484,11 +480,13 @@ public class LabelInfo extends BaseEntity {
 		this.mdaSysTableColumn = mdaSysTableColumn;
 	}
 
-	public List<MdaSysTableColumn> getVertialColumns() {
-		return vertialColumns;
+	public List<LabelVerticalColumnRel> getVerticalColumnRels() {
+		return verticalColumnRels;
 	}
 
-	public void setVertialColumns(List<MdaSysTableColumn> vertialColumns) {
-		this.vertialColumns = vertialColumns;
+	public void setVerticalColumnRels(List<LabelVerticalColumnRel> verticalColumnRels) {
+		this.verticalColumnRels = verticalColumnRels;
 	}
+
+
 }

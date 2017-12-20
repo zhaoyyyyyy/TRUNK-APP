@@ -6,17 +6,12 @@
 
 package com.asiainfo.biapp.si.loc.core.label.entity;
 
-import java.util.List;
-
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
@@ -25,7 +20,6 @@ import org.hibernate.annotations.GenericGenerator;
 
 import com.asiainfo.biapp.si.loc.base.entity.BaseEntity;
 import com.asiainfo.biapp.si.loc.core.dimtable.entity.DimTableInfo;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import io.swagger.annotations.ApiParam;
 
@@ -133,8 +127,6 @@ public class MdaSysTableColumn extends BaseEntity {
     @ApiParam(value = "列状态")
     private Integer columnStatus;
 
-//    @ManyToOne(cascade = CascadeType.REFRESH, optional = false)  
-//    @JoinColumn(name="lABEL_ID")
     @Column(name = "LABEL_ID")
     private String labelId;   
     
@@ -148,28 +140,6 @@ public class MdaSysTableColumn extends BaseEntity {
 		this.labelId = labelId;
 	}
 
-	@JsonIgnore
-	@ManyToMany(fetch=FetchType.LAZY)  
-	@JoinTable(name="loc_label_vertical_column_rel",  
-	joinColumns={@JoinColumn(name="COLUMN_ID")},inverseJoinColumns={@JoinColumn(name="LABEL_ID")})  
-	private List<LabelInfo> labelInfos;
-	
-	
-    public List<LabelInfo> getLabelInfos() {
-		return labelInfos;
-	}
-
-	public void setLabelInfos(List<LabelInfo> labelInfos) {
-		this.labelInfos = labelInfos;
-	}
-
-//	public LabelInfo getLabelInfo() {
-//		return labelInfo;
-//	}
-//
-//	public void setLabelInfo(LabelInfo labelInfo) {
-//		this.labelInfo = labelInfo;
-//	}
     
     @ManyToOne(cascade = CascadeType.REFRESH, optional = false)  
     @JoinColumn(name="TABLE_ID",insertable=false,updatable=false)  
