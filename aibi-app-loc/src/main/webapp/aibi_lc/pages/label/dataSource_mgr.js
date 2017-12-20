@@ -24,7 +24,7 @@ window.loc_onload = function() {
 		colModel: [{
 			name: 'sourceTableName',
 			index: 'sourceTableName',
-			width: 40,
+			width: 60,
 			sortable: false,
 			frozen: true,
 			align: "center"
@@ -34,13 +34,13 @@ window.loc_onload = function() {
 			name: 'createTime',
 			index: 'createTime',
 			sortable: false,
-			width: 40,
+			width: 60,
 			align: "center"
 		},
 		{
 			name: 'sourceTableType',
 			index: 'sourceTableType',
-			width: 40,
+			width: 60,
 			sortable: false,
 			align: "center",
 			formatter: function(v) {
@@ -50,9 +50,9 @@ window.loc_onload = function() {
 		{
 			name: 'sourceTableId',
 			index: 'sourceTableId',
-			width: 50,
+			width: 40,
 			sortable: false,
-			align: "center",
+			align: "left",
 			key:true,
 			formatter: function(v) {
 				var html = '<button onclick="fun_to_up(\'' + v + '\')" type="button" class="btn btn-default ui-table-btn">修改</button>' + '<button onclick="fun_to_del(\'' + v + '\')" type="button" class="btn btn-default  ui-table-btn ui-table-btn">删除</button>';

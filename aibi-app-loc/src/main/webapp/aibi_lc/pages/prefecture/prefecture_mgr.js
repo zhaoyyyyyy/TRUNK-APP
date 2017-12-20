@@ -108,7 +108,7 @@ window.loc_onload = function() {
             index: 'configId',
             sortable: false,
             width: 60,
-            align: "center",
+            align: "left",
             formatter: function(value, opts, data) {
             	var html = '';
             	if(data.configStatus != 4){
