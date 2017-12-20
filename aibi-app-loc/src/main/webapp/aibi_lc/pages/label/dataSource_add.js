@@ -111,7 +111,6 @@ window.loc_onload = function() {
 		onSelectRow: function(id) {
 			$('#jsonmap').jqGrid('editRow', id, true);
 		},
-		rowList: [10, 20, 30],
 		// pager: '#pjmap',//分页的id
 		// sortname: 'invdate',//排序的字段名称 不需要的话可置为空
 		// 取值取自colModel中的index字段
@@ -136,7 +135,8 @@ window.loc_onload = function() {
 		"op": ""
 	}
 	$("#btn_addRow").click(function() {
-		$("#jsonmap").jqGrid("addRowData", 5, dataRow, "last");
+		var rows = $("#jsonmap").jqGrid('getRowData').length;
+		$("#jsonmap").jqGrid("addRowData", rows+1, dataRow, "last");
 	})
 }
 function setColor(cellvalue, options, rowObject) {
