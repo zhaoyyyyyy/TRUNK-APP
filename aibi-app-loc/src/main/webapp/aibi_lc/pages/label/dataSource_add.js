@@ -57,7 +57,10 @@ window.loc_onload = function() {
 			width: 80,
 			sortable: false,
 			frozen: true,
-			editable: true
+			editable: true,
+			formatter: function(data){
+				return '<input value="'+data+'" name="sourceName" class="form-control" />';
+			}
 		},
 		// frozen : true固定列
 		{
@@ -77,7 +80,10 @@ window.loc_onload = function() {
 			width: 110,
 			align: "center",
 			sortable: false,
-			editable: true
+			editable: true,
+			formatter: function(data){
+				return '<input value="'+data+'" name="columnCnName" class="form-control" />';
+			}
 		},
 		{
 			name: 'columnUnit',
@@ -85,7 +91,10 @@ window.loc_onload = function() {
 			width: 120,
 			align: "center",
 			editable: true,
-			sortable: true
+			sortable: true,
+			formatter: function(data){
+				return '<input value="'+data+'" name="columnUnit" class="form-control" />';
+			}
 		},
 		{
 			name: 'op',
@@ -107,9 +116,9 @@ window.loc_onload = function() {
 		// sortname: 'invdate',//排序的字段名称 不需要的话可置为空
 		// 取值取自colModel中的index字段
 		viewrecords: true,
+		rownumbers: true,
 		multiselect: false,
 		// caption:"标题",
-		rownumbers: false,
 		// 是否展示行号
 		sortorder: "desc",
 		// 排序方式
@@ -120,11 +129,11 @@ window.loc_onload = function() {
 		height: '100%'
 	});
 	var dataRow = {
-		"sourceName": null,
-		"invdate": null,
-		"columnCnName": null,
-		"tax": null,
-		"op": null
+		"sourceName": "",
+		"cooColumnType": "",
+		"columnCnName": "",
+		"columnUnit": "",
+		"op": ""
 	}
 	$("#btn_addRow").click(function() {
 		$("#jsonmap").jqGrid("addRowData", 5, dataRow, "last");

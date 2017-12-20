@@ -35,8 +35,7 @@
 								<div class="form-group fleft ml20">
 									<label class="control-label fleft mt5" for="exampleInputEmail3">源表类型</label>
 									<div class="control-input has-icon">
-										<input type="text" class="form-control input-pointer ml10" id="inputEmail4" placeholder="源表类型" readonly="readonly"> <span
-											class="glyphicon-select form-control-feedback"></span>
+										<select v-model="sourceTableType" name="sourceTableType" dicCode="SJYBLX" type="text" class="form-control input-pointer"></select>
 									</div>
 								</div>
 							</div>
@@ -54,16 +53,14 @@
 									<label for="inputEmail4" class="control-label fleft mt5">数据更新周期</label>
 									<div class="control-input ml10">
 										<div class="radio circle success">
-											<input type="radio" name="radio19" id="myr3" checked="checked"> <label for="myr3"><i class="default"></i> 日</label>
+											<input type="radio" name="readCycle" id="myr3" checked="checked"> <label for="myr3"><i class="default"></i> 日</label>
 										</div>
 										<div class="radio circle success">
-											<input type="radio" name="radio19" id="myr4"> <label for="myr4"><i class="default"></i> 月</label>
+											<input type="radio" name="readCycle" id="myr4"> <label for="myr4"><i class="default"></i> 月</label>
 										</div>
 									</div>
 								</div>
-								
 							</div>
-							
 							<div class="clearfix mt30">
 								<div class="form-group fleft mr100">
 									<label for="exampleInputEmail3">字段名称</label> <input v-model="idColumn" name="idColumn" type="text" class="form-control ml10" id="exampleInputEmail3" placeholder="来源主键字段名称">
@@ -71,15 +68,13 @@
 								<div class="form-group fleft mr100">
 									<label class="control-label fleft mt5" for="exampleInputEmail3">标识类型</label>
 									<div class="control-input has-icon">
-										<input type="text" class="form-control input-pointer ml10" id="inputEmail4" placeholder="来源主键标识类型" readonly="readonly"> <span
-											class="glyphicon-select form-control-feedback"></span>
+										<select v-model="idType" name="idType" dicCode="SJYBLX" type="text" class="ml10 fleft form-control input-pointer"></select>
 									</div>
 								</div>
-								<div class="form-group fleft">
+								<div class="form-group fleft ml30">
 									<label class="control-label fleft mt5" for="exampleInputEmail3">字段类型</label>
 									<div class="control-input has-icon">
-										<input type="text" class="form-control input-pointer ml10" id="inputEmail4" placeholder="来源主键数据类型" readonly="readonly"> <span
-											class="glyphicon-select form-control-feedback"></span>
+										<select v-model="idDataType" name="idDataType" dicCode="ZDLXZD" type="text" class="ml10 fleft form-control input-pointer"></select>
 									</div>
 								</div>
 							</div>

@@ -24,7 +24,7 @@ window.loc_onload = function() {
 		colModel: [{
 			name: 'sourceTableName',
 			index: 'sourceTableName',
-			width: 20,
+			width: 40,
 			sortable: false,
 			frozen: true,
 			align: "center"
@@ -33,22 +33,24 @@ window.loc_onload = function() {
 		{
 			name: 'createTime',
 			index: 'createTime',
-			width: 80,
+			sortable: false,
+			width: 40,
 			align: "center"
 		},
 		{
 			name: 'sourceTableType',
 			index: 'sourceTableType',
-			width: 100,
+			width: 40,
+			sortable: false,
 			align: "center",
 			formatter: function(v) {
-				return $.getCodeDesc('SJYBLXZD', v)
-			}
+                return $.getCodeDesc('SJYBLX', v)
+            }
 		},
 		{
 			name: 'sourceTableId',
 			index: 'sourceTableId',
-			width: 40,
+			width: 50,
 			sortable: false,
 			align: "center",
 			key:true,
