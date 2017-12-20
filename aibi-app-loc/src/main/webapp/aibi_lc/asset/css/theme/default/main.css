@@ -517,11 +517,11 @@
 }
 .create-main > .progress{
 	width:46px;
-	height: 166px;
+	height: 186px;
 	text-align:center;
 	background:#f7f7f7;
 	margin:0 -100% 0px 0;
-	line-height:166px;
+	line-height:186px;
 	border-radius:6px 0 0 6px;
 }
 .create-main:hover > .progress  > .progress-label > i{
@@ -537,7 +537,7 @@
 	margin:0 0 0 46px;
 	padding:0;
 	background:#fff;
-	height:166px;
+	height:186px;
 	border-radius:0 6px 6px 0;
 }
 .create-main .ui-form{
