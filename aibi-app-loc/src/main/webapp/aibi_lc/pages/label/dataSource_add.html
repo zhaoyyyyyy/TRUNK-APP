@@ -26,6 +26,7 @@
 			<div class="ui-lc-mian">
 				<h3>指标注册</h3>
 				<form id="formData">
+				<input id="sourceTableId" name="sourceTableId" v-model="sourceTableId" type="hidden" />
 					<div class="ui-expand-search ui-reg-search">
 						<div class="form-inline ui-form">
 							<div class="clearfix">
@@ -97,7 +98,7 @@
 							</div>
 							<button id="btn_addRow" type="button" class="ui-btn ui-btn-sm ui-btn-second mt10">添加一行</button>
 							<div class="ui-grid-button clearfix mt20">
-								<button onclick="window.location='dataSource_mgr.html'" type="button" class="ui-btn ui-btn-second">取消</button>
+								<button onclick="history.back(-1)" type="button" class="ui-btn ui-btn-second">取消</button>
 								<button onclick="fun_to_save()" type="button" class="ui-btn ui-btn-default">保存</button>
 							</div>
 						</div>

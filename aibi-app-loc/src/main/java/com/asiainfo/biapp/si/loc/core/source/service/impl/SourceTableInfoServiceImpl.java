@@ -24,6 +24,7 @@ import com.asiainfo.biapp.si.loc.core.source.entity.SourceInfo;
 import com.asiainfo.biapp.si.loc.core.source.entity.SourceTableInfo;
 import com.asiainfo.biapp.si.loc.core.source.service.ISourceInfoService;
 import com.asiainfo.biapp.si.loc.core.source.service.ISourceTableInfoService;
+import com.asiainfo.biapp.si.loc.core.source.vo.SourceInfoVo;
 import com.asiainfo.biapp.si.loc.core.source.vo.SourceTableInfoVo;
 
 /**
@@ -99,7 +100,20 @@ public class SourceTableInfoServiceImpl extends BaseServiceImpl<SourceTableInfo,
     }
 
     public void modifySourceTableInfo(SourceTableInfo sourceTableInfo) throws BaseException {
+        SourceInfoVo sourceInfoVo = new SourceInfoVo();
+        sourceInfoVo.setSourceTableId(sourceTableInfo.getSourceTableId());
+        List<SourceInfo> oldList = iSourceInfoService.selectSourceInfoList(sourceInfoVo);
+        for(SourceInfo s : oldList){
+            iSourceInfoService.deleteSourceInfo(s.getSourceId());
+        }
         super.saveOrUpdate(sourceTableInfo);
+        if(!sourceTableInfo.getSourceInfoList().isEmpty()){
+            for(SourceInfo s : sourceTableInfo.getSourceInfoList()){
+                s.setSourceColumnRule(s.getColumnName());
+                s.setSourceTableId(sourceTableInfo.getSourceTableId());
+                iSourceInfoService.addSourceInfo(s);
+            }
+        }
     }
 
     public void deleteSourceTableInfo(String sourceTableId) throws BaseException {

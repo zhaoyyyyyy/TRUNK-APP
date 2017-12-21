@@ -13,6 +13,7 @@ var model = {
 	idDataType : "",
 	sortNum : 0,
 	gxzq : [],
+	sourceTableId : "",
 }
 window.loc_onload = function() {
 	var dicGxzq = $.getDicData("GXZQZD");
@@ -22,6 +23,7 @@ window.loc_onload = function() {
 	var isEdit = $.getUrlParam("isEdit");
 	var id = $.getUrlParam("sourceTableId");
 	if (id != null && id != "" && id != undefined) {
+		model.sourceTableId = id;
 		$.commAjax({
 			url : $.ctx + '/api/source/sourceTableInfo/get',
 			postData : {
@@ -163,9 +165,9 @@ function fun_to_del(id) {
 }
 function fun_to_save() {
 	
-	var rows = $("#jsonmap").jqGrid('getRowData').length;
-    for (var i = 1; i <= rows; i++) {
-        $("#jsonmap").jqGrid("saveRow", i);
+	var ids = $("#jsonmap").jqGrid('getDataIDs');
+    for (var i = 0; i <= ids.length; i++) {
+        $("#jsonmap").jqGrid("saveRow", ids[0]);
     }
 	
 	var list = $("#jsonmap").jqGrid("getRowData");
@@ -182,14 +184,13 @@ function fun_to_save() {
 	}
 	$("#sourceInfoList").val(sourceInfoList);
 	
-	
 	var url_ = "";
 	var msss = "";
-	if(model.configId!=null && model.configId!=undefined && model.configId!= ""){
+	if(model.sourceTableId!=null && model.sourceTableId!=undefined && model.sourceTableId!= ""){
 		url_ = $.ctx + '/api/source/sourceTableInfo/update';
 		msss = "修改成功";
 	}else{
-		$("#configId").removeAttr("name");;
+		$("#sourceTableId").removeAttr("name");
 		url_ = $.ctx + '/api/source/sourceTableInfo/save';
 		msss = "保存成功";
 	}
