@@ -15,119 +15,130 @@
 	    <script src="../../asset/script/component/h5compatibility/html5shiv.min.js"></script>
 	    <script src="../../asset/script/component/h5compatibility/respond.min.js"></script>
     <![endif]-->
+    <style>
+    	.label-addBox{
+    		position:absolute;
+    		width:300px;
+    		height:200px;
+    		top:50%;
+    		left:50%;
+    		margin-left:-150px;
+    		margin-top:-100px;
+    		background:#fff;
+    		border:1px solid #ccc;
+    		z-index:999;
+    		display:none;
+    	}
+    </style>
 </head>
 <body>
-      <div class="iframe-nest">
+    <div class="iframe-nest">
       	<div class="ui-lc-mian"> 
-      	<h3 id="labelMktHeader">
-				<span>标签体系</span>
-				<!--<div class="dropdown fright">
-			    	<a href = "javascript:;" class="dropdown-toggle">
-			    		专区管理
-			    		<span class="caret"></span>
-			    	</a>
-		     	<ul class="dropdown-menu">
-			       <li><a href="#">Action</a></li>
-			       <li><a href="#">Another action</a></li>
-			       <li><a href="#">Something else here</a></li>
-		        </ul>    
-		    </div>-->
-	    </h3>               
-               <div class="ui-label-mes clearfix">
- 					<span class="fleft">标签管理&nbsp; > &nbsp;标签体系管理&nbsp;共<b>88</b>个标签</span>			         
- 				</div>
- 				<div class="clearfix">
- 					<div class="label-ztree fleft">
- 						<div class="form-group">
-					      <div class="input-group fleft mr10">
-					          <input type="text" class="form-control" id="exampleInputAmount" placeholder="搜索">
-					          <span class="input-group-addon input-group-icon right-child input-pointer"></span>
-					      </div>
-			        		<a href="javascript:;" class="file-up-btn">
-				       	   		<input type="file" class="input-pointer">
-				       	   		<span><i>+</i>导入</span>
-				       	   	</a>					      
-				      	</div>
-						<ul id="ztree" class="ztree">
-				
-						</ul>
-						
- 					</div>
- 					<div class="lable-select fleft">
- 						<div>
- 							<div class="label-select-head clearfix">
- 								<button id="ui-move" type="button" class="ui-btn ui-btn-default">移动到</button>
- 								<button id="selectAll" type="button" class="ui-btn ui-btn-second" data-check="">全选</button>
- 								<div class="form-group fright">
-									<div class="radio circle success"> 
-									   <input type="radio" name="radio19" id="myr3" checked="checked"> 
-									   <label for="myr3"><i class="default"></i> 全部分类</label>
-									</div>
-								    <div class="radio circle success">
-									   <input type="radio" name="radio19"  id="myr4"> 
-									   <label  for="myr4"><i class="default"></i> 当前分类</label>
-									</div>			
-								    <div class="input-group fright">
-							            <input type="text" class="form-control" id="exampleInputAmount" placeholder="请输入标签关键字">
-							            <span class="input-group-addon input-group-icon right-child input-pointer"></span>
-								    </div>
+	      	<h3 id="labelMktHeader">
+					<span>标签体系</span>
+					<!--<div class="dropdown fright">
+				    	<a href = "javascript:;" class="dropdown-toggle">
+				    		专区管理
+				    		<span class="caret"></span>
+				    	</a>
+			     	<ul class="dropdown-menu">
+				       <li><a href="#">Action</a></li>
+				       <li><a href="#">Another action</a></li>
+				       <li><a href="#">Something else here</a></li>
+			        </ul>    
+			    </div>-->
+		    </h3>               
+	        <div class="ui-label-mes clearfix">
+				<span class="fleft">标签管理&nbsp; > &nbsp;标签体系管理&nbsp;共<b>88</b>个标签</span>			         
+			</div>
+			<div class="clearfix">
+				<div class="label-ztree fleft">
+					<div class="form-group">
+				      <div class="input-group fleft mr10">
+				          <input type="text" class="form-control" id="exampleInputAmount" placeholder="搜索">
+				          <span class="input-group-addon input-group-icon right-child input-pointer"></span>
+				      </div>
+		        		<a href="javascript:;" class="file-up-btn">
+			       	   		<input type="file" class="input-pointer">
+			       	   		<span><i>+</i>导入</span>
+			       	   	</a>					      
+			      	</div>
+					<ul id="ztree" class="ztree">
+			
+					</ul>
+					
+				</div>
+				<div class="lable-select fleft">
+					<div>
+						<div class="label-select-head clearfix">
+							<button id="ui-move" type="button" class="ui-btn ui-btn-default">移动到</button>
+							<button id="selectAll" type="button" class="ui-btn ui-btn-second" data-check="">全选</button>
+							<div class="form-group fright">
+								<div class="radio circle success"> 
+								   <input type="radio" name="radio19" id="myr3" checked="checked"> 
+								   <label for="myr3"><i class="default"></i> 全部分类</label>
+								</div>
+							    <div class="radio circle success">
+								   <input type="radio" name="radio19"  id="myr4"> 
+								   <label  for="myr4"><i class="default"></i> 当前分类</label>
+								</div>			
+							    <div class="input-group fright">
+						            <input type="text" class="form-control" id="exampleInputAmount" placeholder="请输入标签关键字">
+						            <span class="input-group-addon input-group-icon right-child input-pointer"></span>
 							    </div>
- 							</div>
-							<div class="label-select-main">
-								<ul class="clearfix">
-									<li>
-										<div class="checkbox">
-										    <input id="mycheckbox12" type="checkbox" class="checkbix">
-										    <label aria-label="" role="checkbox" for="mycheckbox12" class="checkbix">
-										    		<span class="large"></span>美食/餐厅线上活动
-										    </label>
-										</div>
-									</li>
-									<li>
-										<div class="checkbox">
-										    <input id="mycheckbox13" type="checkbox" class="checkbix">
-										    <label aria-label="" role="checkbox" for="mycheckbox13" class="checkbix">
-										    		<span class="large"></span>美食/餐厅线上活动
-										    </label>
-										</div>
-									</li>
-									<li>
-										<div class="checkbox">
-										    <input id="mycheckbox14" type="checkbox" class="checkbix" checked="checked">
-										    <label aria-label="" role="checkbox" for="mycheckbox14" class="checkbix">
-										    		<span class="large"></span>美食/餐厅线上活动
-										    </label>
-										</div>
-									</li>
-									<li>
-										<div class="checkbox">
-										    <input id="mycheckbox15" type="checkbox" class="checkbix" checked="checked">
-										    <label aria-label="" role="checkbox" for="mycheckbox15" class="checkbix">
-										    		<span class="large"></span>美食/餐厅线上活动
-										    </label>
-										</div>
-									</li>
-									<li>
-										<div class="checkbox">
-										    <input id="mycheckbox16" type="checkbox" class="checkbix" checked="checked">
-										    <label aria-label="" role="checkbox" for="mycheckbox16" class="checkbix">
-										    		<span class="large"></span>美食/餐厅线上活动
-										    </label>
-										</div>
-									</li>
-								</ul>
-							</div>
- 						</div>
- 					</div>
- 				</div>
-
-            </div>           
+						    </div>
+						</div>
+						<div class="label-select-main">
+							<ul class="clearfix">
+								<li>
+									<div class="checkbox">
+									    <input id="mycheckbox12" type="checkbox" class="checkbix">
+									    <label aria-label="" role="checkbox" for="mycheckbox12" class="checkbix">
+									    		<span class="large"></span>美食/餐厅线上活动
+									    </label>
+									</div>
+								</li>
+								<li>
+									<div class="checkbox">
+									    <input id="mycheckbox13" type="checkbox" class="checkbix">
+									    <label aria-label="" role="checkbox" for="mycheckbox13" class="checkbix">
+									    		<span class="large"></span>美食/餐厅线上活动
+									    </label>
+									</div>
+								</li>
+								<li>
+									<div class="checkbox">
+									    <input id="mycheckbox14" type="checkbox" class="checkbix" checked="checked">
+									    <label aria-label="" role="checkbox" for="mycheckbox14" class="checkbix">
+									    		<span class="large"></span>美食/餐厅线上活动
+									    </label>
+									</div>
+								</li>
+								<li>
+									<div class="checkbox">
+									    <input id="mycheckbox15" type="checkbox" class="checkbix" checked="checked">
+									    <label aria-label="" role="checkbox" for="mycheckbox15" class="checkbix">
+									    		<span class="large"></span>美食/餐厅线上活动
+									    </label>
+									</div>
+								</li>
+								<li>
+									<div class="checkbox">
+									    <input id="mycheckbox16" type="checkbox" class="checkbix" checked="checked">
+									    <label aria-label="" role="checkbox" for="mycheckbox16" class="checkbix">
+									    		<span class="large"></span>美食/餐厅线上活动
+									    </label>
+									</div>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+        </div>           
             <!-- todo -->
       </div>      
-            
-
-
-<div class="label-dialog">
+	<div class="label-dialog">
 	<h3>将所选标签移动到</h3>
 	<div class="form-group">			
 	    <div class="input-group fright">
@@ -143,5 +154,22 @@
  		<button id="dialog-del" type="button" class="ui-btn ui-btn-second">取消</button>
 	</p>
 </div>
+	<div class="label-addBox">
+		<form id="">
+				<input type="hidden" v-model="configId" id="configId" name="configId" />
+				<div class="ui-expand-search ui-reg-search">
+					<div class="form-inline ui-form">
+						<div class="clearfix">
+							<div class="form-group">
+								<label class="fleft mt5">标签分类名称</label> <input v-model="sourceName" name="sourceName" type="text"  class="fleft form-control mr10 ml10"
+									placeholder="标签分类名称" />
+							</div>
+						</div>
+					</div>
+				</div>
+				<button type="button" class="ui-btn ui-btn-default">保存</button>
+ 				<button id="label-delBox" type="button" class="ui-btn ui-btn-second">取消</button>
+			</form>
+	</div>
 </body>
 </html>
