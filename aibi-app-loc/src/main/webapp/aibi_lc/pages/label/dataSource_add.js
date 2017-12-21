@@ -166,8 +166,8 @@ function fun_to_del(id) {
 function fun_to_save() {
 	
 	var ids = $("#jsonmap").jqGrid('getDataIDs');
-    for (var i = 0; i <= ids.length; i++) {
-        $("#jsonmap").jqGrid("saveRow", ids[0]);
+    for (var i = 0; i < ids.length; i++) {
+        $("#jsonmap").jqGrid("saveRow", ids[i]);
     }
 	
 	var list = $("#jsonmap").jqGrid("getRowData");
@@ -205,10 +205,5 @@ function fun_to_save() {
 			}
 		}
 	})
-	
-	
-    for (var j = 1; j <= rows; j++) {
-        $("#jsonmap").jqGrid("editRow", j);
-    }
 	
 }
