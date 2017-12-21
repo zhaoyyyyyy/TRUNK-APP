@@ -96,6 +96,7 @@ jQuery.extend(jQuery.jgrid.defaults, {
 				$(opts.pager).before('<div class="grid-nodata-box"><p class="no-data-icon"></p><div class="no-data-msg text-center color-666">'+message+'</div></div>');
 			}
 		}
+		opts.afterGridLoad(data);
 	},
 	gridComplete:function(){
 		
@@ -139,7 +140,6 @@ jQuery.extend(jQuery.jgrid.defaults, {
 			 var width = $(_self).parents(".ui-grid-box").width(); 
 			 $(_self).setGridWidth(width);
 		 });
-		opts.afterGridLoad();
 	},
 	getSelectedJsonArray : function(){
 		var _self = this;
