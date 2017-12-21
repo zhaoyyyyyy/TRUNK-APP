@@ -48,7 +48,7 @@ import com.asiainfo.biapp.si.loc.core.label.vo.LabelInfoVo;
  * @author zhangnan7
  * @version 1.0.0.2017年11月16日
  */
-@Repository
+@Repository("labelInfoDaoImpl")
 public class LabelInfoDaoImpl extends BaseDaoImpl<LabelInfo, String> implements ILabelInfoDao {
 
     public Page<LabelInfo> selectLabelInfoPageList(Page<LabelInfo> page, LabelInfoVo labelInfoVo) {
