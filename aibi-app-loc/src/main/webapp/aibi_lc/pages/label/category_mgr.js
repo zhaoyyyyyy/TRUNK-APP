@@ -1,48 +1,43 @@
 window.loc_onload = function() {
 	ztreeFunc();
-	labeltree();
-	
+	labeltree();	
 	function ztreeFunc(){
-		var zTreeObj,
+		var zTreeNodes;	 
 		setting = {
 			view: {
 				selectedMulti: false,
 				addHoverDom: addHoverDom,
 				removeHoverDom: removeHoverDom,
+				simpleData: {  
+                    enable: true,   //设置是否使用简单数据模式(Array)  
+                    idKey: "treeId",    //设置节点唯一标识属性名称  
+                    pIdKey: "parentId"      //设置父节点唯一标识属性名称  
+                },  
+                key: {  
+                    name:'name',//zTree 节点数据保存节点名称的属性名称  
+                    title: "categoryName"//zTree 节点数据保存节点提示信息的属性名称        
+                }  
 			}
-		}
+		}		
 		var obj = $("#preConfig_list").find("span");
 		var labelId =obj.attr("configId");		
 		 $.commAjax({  
 		    url : $.ctx+'/api/label/categoryInfo/queryList',  		    
 		    dataType : 'json', 
+		    async:false,
 		    postData : {
 					"sysId" :labelId,
 				},
-		    onSuccess: function(res){  
-		        zTreeNodes = res;
-		        console.log(res)
-		        //$.fn.zTree.init($("#tree"), setting, treeNodes);  
-		        //zTreeObj = $.fn.zTree.init($("#ztree"), setting, zTreeNodes);
-		    }  
-		    });  
-//		zTreeNodes = [
-//			{"name":"在网用户状态", open:false, children: [
-//				{ "name":"google", "url":"http://g.cn", "target":"_blank"},
-//				{ "name":"baidu", "url":"http://baidu.com", "target":"_blank"},
-//				{ "name":"sina", "url":"http://www.sina.com.cn", "target":"_blank"}
-//				]
-//			},
-//			{"name":"在网状态", open:true, children: [
-//				{ "name":"停开机状态", open:true,children:[
-//					{ "name":"催停类型", "url":"http://g.cn", "target":"_blank"},
-//					{ "name":"测试", "url":"http://baidu.com", "target":"_blank"}
-//				]
-//				},
-//				]
-//			}
-//		];
-//		zTreeObj = $.fn.zTree.init($("#ztree"), setting, zTreeNodes);
+		    onSuccess: function(data){ 		    	
+		    	//treeN = data.data[0].categoryName;
+		    	zTreeNodes = data.data;
+		    	for(var i=0;i<zTreeNodes.length;i++){
+		    		var nodeName=zTreeNodes[i].categoryName;
+		    	}
+		        console.log(nodeName);		      
+		    	}  
+		    });
+		$.fn.zTree.init($("#ztree"), setting, zTreeNodes);
 	}
 	function labeltree(){
 		var zTreeObj,
