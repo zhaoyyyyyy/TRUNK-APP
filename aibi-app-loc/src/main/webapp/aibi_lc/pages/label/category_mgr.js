@@ -4,7 +4,7 @@ window.loc_onload = function() {
 	function ztreeFunc(){
 		var zTreeNodes;	 
 		setting = {
-			view: {
+			data: {
 				selectedMulti: false,
 				addHoverDom: addHoverDom,
 				removeHoverDom: removeHoverDom,
@@ -14,7 +14,7 @@ window.loc_onload = function() {
                     pIdKey: "parentId"      //设置父节点唯一标识属性名称  
                 },  
                 key: {  
-                    name:'name',//zTree 节点数据保存节点名称的属性名称  
+                    name:'categoryName',//zTree 节点数据保存节点名称的属性名称  
                     title: "categoryName"//zTree 节点数据保存节点提示信息的属性名称        
                 }  
 			}
@@ -30,11 +30,8 @@ window.loc_onload = function() {
 				},
 		    onSuccess: function(data){ 		    	
 		    	//treeN = data.data[0].categoryName;
-		    	zTreeNodes = data.data;
-		    	for(var i=0;i<zTreeNodes.length;i++){
-		    		var nodeName=zTreeNodes[i].categoryName;
-		    	}
-		        console.log(nodeName);		      
+		    	zTreeNodes = data.data;	 
+		    	//console.log(zTreeNodes[0].categoryName);
 		    	}  
 		    });
 		$.fn.zTree.init($("#ztree"), setting, zTreeNodes);
