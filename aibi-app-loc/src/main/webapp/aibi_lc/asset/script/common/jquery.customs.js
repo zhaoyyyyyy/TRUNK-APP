@@ -79,7 +79,7 @@ $.fn.extend({
 			async : false,
 			url:"/api/prefecture/preConfigInfo/queryList",
 			onSuccess:function(result){
-				if(result.data){
+				if(result.data && result.data.length > 0){
 				  //已经选择过了
 				  var currentConfigId = $.kvGet("CurrentConfigId");
 				  if(currentConfigId){
