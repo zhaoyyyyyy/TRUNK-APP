@@ -10,9 +10,15 @@ var model = {
 	readCycle : "",
 	idType : "",
 	idColumn : "",
-	idDataType : ""
+	idDataType : "",
+	sortNum : 0,
+	gxzq : [],
 }
 window.loc_onload = function() {
+	var dicGxzq = $.getDicData("GXZQZD");
+	for(var i=0; i<dicGxzq.length; i++){
+		model.gxzq.push(dicGxzq[i]);
+	}
 	var isEdit = $.getUrlParam("isEdit");
 	var id = $.getUrlParam("sourceTableId");
 	if (id != null && id != "" && id != undefined) {
@@ -31,6 +37,7 @@ window.loc_onload = function() {
 				model.idType = data.data.idType;
 				model.idColumn = data.data.idColumn;
 				model.idDataType = data.data.idDataType;
+				$("#code"+data.data.readCycle).click();
 			}
 		})
 	}
@@ -49,9 +56,9 @@ window.loc_onload = function() {
 	
 	var dic = $.getDicData("ZDLXZD");
 	var dicCode = "";
-	for(var i=0; i<dic.length; i++){
-		dicCode += dic[i].code + ":" + dic[i].dataName;
-		var j = i+1;
+	for(var k=0; k<dic.length; k++){
+		dicCode += dic[k].code + ":" + dic[k].dataName;
+		var j = k+1;
 		if(j != dic.length){
 			dicCode += ";";
 		}
@@ -59,6 +66,7 @@ window.loc_onload = function() {
 	
 	$("#jsonmap").jqGrid({
 	    url: url,
+	    editurl: $.ctx +"/api/source/sourceInfo/save",
 	    postData: pD,
 	    datatype: "json",
 	    colNames: ['字段名称', '字段类型', '指标中文名', '描述', '操作'],
@@ -103,8 +111,8 @@ window.loc_onload = function() {
 	        width: 40,
 	        sortable: false,
 	        align: "center",
-	        formatter: function() {
-	            return '<button onclick="fun_to_del()" type="button" class="btn btn-default  ui-table-btn ui-table-btn">删除</button>';
+	        formatter: function(value, opts, data) {
+	            return '<button onclick="fun_to_del('+opts.rowId+')" type="button" class="btn btn-default  ui-table-btn ui-table-btn">删除</button>';
 	        }
 	    }],
 	    cellEdit: true,
@@ -113,6 +121,7 @@ window.loc_onload = function() {
 	        for (var i = 1; i <= rows; i++) {
 	            $("#jsonmap").jqGrid('editRow', i);
 	        }
+	        model.sortNum += rows;
 	    },
 	    // pager: '#pjmap',//分页的id
 	    // sortname: 'invdate',//排序的字段名称 不需要的话可置为空
@@ -138,9 +147,9 @@ window.loc_onload = function() {
 		"op" : ""
 	}
 	$("#btn_addRow").click(function() {
-		var rows = $("#jsonmap").jqGrid('getRowData').length;
-		$("#jsonmap").jqGrid("addRowData", rows + 1, dataRow, "last");
-		$("#jsonmap").jqGrid('editRow', rows + 1);
+		model.sortNum += 1;
+		$("#jsonmap").jqGrid("addRowData", model.sortNum, dataRow, "last");
+		$("#jsonmap").jqGrid("editRow", model.sortNum);
 	})
 }
 function setColor(cellvalue, options, rowObject) {
@@ -149,15 +158,21 @@ function setColor(cellvalue, options, rowObject) {
 	}
 	return cellvalue;
 }
-function fun_to_del() {
-	var id = $('#jsonmap').jqGrid('getGridParam', 'selrow');
-	if (id == null || id == "" || id == undefined) {
-		$.alert("请选中要删除的行");
-	}
+function fun_to_del(id) {
 	$("#jsonmap").jqGrid("delRowData", id);
 }
 function fun_to_save() {
+	
+	var rows = $("#jsonmap").jqGrid('getRowData').length;
+    for (var i = 1; i <= rows; i++) {
+        $("#jsonmap").jqGrid("saveRow", i);
+    }
+	
 	var list = $("#jsonmap").jqGrid("getRowData");
-	var obj=list[0].sourceName;
 	debugger;
+	
+    for (var j = 1; j <= rows; j++) {
+        $("#jsonmap").jqGrid("editRow", j);
+    }
+	
 }
