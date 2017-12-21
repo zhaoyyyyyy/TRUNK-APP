@@ -344,7 +344,7 @@
     width: 38px;
     height: 60px;
     font-size: 50px;
-    color: #3DAC6E;
+    color: #D02433;
     position: relative;
     line-height: 50px;
     text-align: center;
@@ -814,7 +814,7 @@ span.del-btn{
 	width:260px;
 	height:546px;
 	background:#fff;
-	border-left: 1px solid #d02433;
+	border-left: 1px solid #2EA658;
 	transition:all 0.2s linear;
 }
 .label-dialog.active{
@@ -825,7 +825,7 @@ span.del-btn{
 	padding:10px;
 	font-size: 14px;
 	color: #FFFFFF;
-	background:#d02433;
+	background:#d02433;;
 }
 .label-dialog .ztree{
 	padding:10px;
