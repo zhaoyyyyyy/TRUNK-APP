@@ -11,10 +11,13 @@ import io.swagger.annotations.ApiParam;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+
+import org.hibernate.annotations.GenericGenerator;
 
 import com.asiainfo.biapp.si.loc.base.entity.BaseEntity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -56,6 +59,8 @@ public class SourceInfo extends BaseEntity {
      */
     @Id
     @Column(name = "SOURCE_ID")
+    @GenericGenerator(name = "idGenerator", strategy = "uuid")
+    @GeneratedValue(generator = "idGenerator")
     @ApiParam(value = "指标编码")
     private String sourceId;
 

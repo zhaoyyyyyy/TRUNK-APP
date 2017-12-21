@@ -1,24 +1,30 @@
 window.loc_onload = function() {
 	ztreeFunc();
-	labeltree();	
+	labeltree();
+	
 	function ztreeFunc(){
-		var zTreeNodes;	 
+		var ztreeObj,zTreeNodes;	 		
 		setting = {
-			data: {
-				selectedMulti: false,
-				addHoverDom: addHoverDom,
-				removeHoverDom: removeHoverDom,
-				simpleData: {  
-                    enable: true,   //设置是否使用简单数据模式(Array)  
-                    idKey: "treeId",    //设置节点唯一标识属性名称  
-                    pIdKey: "parentId"      //设置父节点唯一标识属性名称  
-                },  
-                key: {  
-                    name:'categoryName',//zTree 节点数据保存节点名称的属性名称  
-                    title: "categoryName"//zTree 节点数据保存节点提示信息的属性名称        
-                }  
+				view: {
+					selectedMulti: false,
+					addHoverDom: addHoverDom,
+					removeHoverDom: removeHoverDom,
+				},
+				data: {
+					selectedMulti: false,			
+					simpleData: {  
+	                    enable: true,   //设置是否使用简单数据模式(Array)  	                    
+	                },  
+	                key: {  
+	                	
+	                	idKey: "categoryId",    //设置节点唯一标识属性名称  
+	                    pIdKey: "parentId" ,     //设置父节点唯一标识属性名称  
+	                    name:'categoryName',//zTree 节点数据保存节点名称的属性名称  
+	                    title: "categoryName"//zTree 节点数据保存节点提示信息的属性名称        
+	                }  
+				}
 			}
-		}		
+		
 		var obj = $("#preConfig_list").find("span");
 		var labelId =obj.attr("configId");		
 		 $.commAjax({  
@@ -29,13 +35,52 @@ window.loc_onload = function() {
 					"sysId" :labelId,
 				},
 		    onSuccess: function(data){ 		    	
-		    	//treeN = data.data[0].categoryName;
+		    	
 		    	zTreeNodes = data.data;	 
-		    	//console.log(zTreeNodes[0].categoryName);
+		    	
 		    	}  
 		    });
-		$.fn.zTree.init($("#ztree"), setting, zTreeNodes);
+		 
+		 ztreeObj=$.fn.zTree.init($("#ztree"), setting, zTreeNodes);
+			
+			function addHoverDom(categoryId, treeNode) {				
+				var aObj = $("#" + treeNode.tId + "_a");
+				
+				if ($("#diyBtn_space_"+treeNode.id).length>0) return;
+				var editStr = "<div class='label-handles' id='diyBtn_space_" +treeNode.id+ "' ><a class='setting'></a><a class='del'></a><a class='add' onclick='addTreeNode()'></a></div>";
+				aObj.append(editStr);
+				var btn = $("#diyBtn_space_"+treeNode.id);
+//				if (btn) btn.bind("click", function(){
+//					
+//					alert("diy Button for " + treeNode.tId);
+//					
+////					var wd = $.window('新增标签', $.ctx
+////							+ '/aibi_lc/pages/label/category_add.html', 500, 500);
+////				    	wd.reload = function() {
+////							
+////				    	}
+//
+//					
+//				});
+				
+				
+//				$("#label-delBox").click(function(){
+//					$(".label-addBox").hide();
+//				})
+			};
+			
+			
+			function removeHoverDom(treeId, treeNode) {
+				$("#diyBtn_space_" +treeNode.id).unbind().remove();
+			};
+		
 	}
+	function addTreeNode(){
+		alert(1)
+		//$(".label-addBox").show();
+	}
+	
+	
 	function labeltree(){
 		var zTreeObj,
 		setting = {
@@ -63,17 +108,7 @@ window.loc_onload = function() {
 	}
 
 
-	function addHoverDom(treeId, treeNode) {
-		var aObj = $("#" + treeNode.tId + "_a");
-		if ($("#diyBtn_space_"+treeNode.id).length>0) return;
-		var editStr = "<div class='label-handles' id='diyBtn_space_" +treeNode.id+ "' ><a class='setting'></a><a class='del'></a><a class='add'></a></div>";
-		aObj.append(editStr);
-		var btn = $("#diyBtn_space_"+treeNode.id);
-		if (btn) btn.bind("click", function(){alert("diy Button for " + treeNode.name);});
-	};
-	function removeHoverDom(treeId, treeNode) {
-		$("#diyBtn_space_" +treeNode.id).unbind().remove();
-	};
+
 		
 	$("#selectAll").click(function(){				
 		$(".label-select-main ul li").find("input").each(function(){

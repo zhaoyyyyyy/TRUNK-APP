@@ -169,7 +169,42 @@ function fun_to_save() {
     }
 	
 	var list = $("#jsonmap").jqGrid("getRowData");
-	debugger;
+	var sourceInfoList = "sourceInfoList{";
+	for(var k = 0; k<list.length; k++){
+		delete list[k].op;
+		sourceInfoList += JSON.stringify(list[k]); 
+		var l = k+1;
+		if(l!=list.length){
+			sourceInfoList += ",";
+		}else{
+			sourceInfoList += "}";
+		}
+	}
+	$("#sourceInfoList").val(sourceInfoList);
+	
+	
+	var url_ = "";
+	var msss = "";
+	if(model.configId!=null && model.configId!=undefined && model.configId!= ""){
+		url_ = $.ctx + '/api/source/sourceTableInfo/update';
+		msss = "修改成功";
+	}else{
+		$("#configId").removeAttr("name");;
+		url_ = $.ctx + '/api/source/sourceTableInfo/save';
+		msss = "保存成功";
+	}
+	$.commAjax({
+		url : url_,
+		postData : $('#formData').formToJson(),
+		onSuccess : function(data) {
+			if(data.data == "success"){
+				$.success(msss, function() {
+					history.back(-1);
+				});
+			}
+		}
+	})
+	
 	
     for (var j = 1; j <= rows; j++) {
         $("#jsonmap").jqGrid("editRow", j);
