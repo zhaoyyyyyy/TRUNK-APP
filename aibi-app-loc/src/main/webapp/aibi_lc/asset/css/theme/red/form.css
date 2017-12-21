@@ -29,6 +29,9 @@
     width: 360px;
     position: relative;
 }
+ .control-input .columnGreenTip{
+ 	right:-36px;
+ }
  .date-input{
     width: 175px;
 }
@@ -36,7 +39,7 @@
     display: block;
     width: 100%;
     height: 28px;
-    padding: 6px 12px;
+    padding: 5px 12px;
     font-size: 12px;
     line-height: 1.42857143;
     color: #555;
@@ -49,6 +52,9 @@
     -webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
     -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
     transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+}
+.form-control[disabled]{
+	    background: #F7F7F7 !important;
 }
 .has-icon .form-control{
 	padding-right: 30px;
@@ -95,8 +101,8 @@
     color: #fff;
 }
  .ui-radio-btn.active{
-	background-color: #D02433;
-	border: 1px solid #B72036; 
+	background-color: #009241;
+	border: 1px solid #38d75a; 
 	-webkit-transition: all 0.5s linear;
     -moz-transition: all 0.5s linear;
     -ms-transition: all 0.5s linear;
@@ -159,7 +165,7 @@ input[type=checkbox].checkbix[data-size=large]+label>span {
     height: 24px;
 }
 input[type=checkbox].checkbix:checked+label>span {
-    background: #D02433 ;
+    background: #d02433;
     border: .1rem solid transparent;
     -webkit-animation: reveal .2s cubic-bezier(.4,0,.5,1);
     animation: reveal .2s cubic-bezier(.4,0,.5,1);
@@ -258,7 +264,7 @@ radio样式
     text-align: center;
 }
 .radio.success input[type='radio']:checked+label i.default:before {
-    background-color: #D02433 !important;
+    background-color: #d02433 !important;
     color: transparent;
 }
 .radio>input[type='radio']:checked+label>i.default:before {
@@ -299,11 +305,11 @@ radio样式
 }
 .radio.success input[type='radio']:checked+label i.default:after {
     background-color: initial !important;
-    border-color: #D02433;
+    border-color: #d02433;
 }
 .radio.success input:checked+label i:after {
-    border-color: #3DAC6E;
-    background-color: #3DAC6E !important;
+    border-color: #d02433;
+    background-color: #d02433 !important;
 }
 
 .radio.circle label i:after, .radio.circle label i:before {
@@ -355,7 +361,7 @@ radio样式
 /**
 行内表单
 */
-.form-inline .form-group {
+.form-inline .form-group,.form-group {
     display: inline-block;
     margin-bottom: 0;
     vertical-align: middle;
@@ -407,6 +413,14 @@ radio样式
     width: auto;
     vertical-align: middle;
 }
+.form-inline .form-group > .input-group-addon.right-child{
+	display:inline-block;
+	width:auto;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	padding:12px;
+	cursor:pointer;
+}
 .form-inline .form-group label {
     display: inline-block;
     max-width: 100%;
@@ -425,10 +439,10 @@ radio样式
 }
 .form-control-bubble.form-control:focus,
 .has-success > input[type="text"] {
-    border-color:#D02433;
+    border-color: #3dac6e;
     outline: 0;
-    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(241, 65, 52, 0.54);
-    box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(241, 65, 52, 0.54);
+    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(61, 172, 110, 0.54);
+    box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(61, 172, 110, 0.54);
 }
 .has-error > input[type="text"],
 .has-error > textarea{
@@ -531,11 +545,11 @@ radio样式
 .ui-simple-search .input-group{
 	width: 122px;
 }
-.ui-simple-search .input-group-icon{
+.ui-simple-search .input-group-icon,.input-group-icon{
 	background: #eee url(./images/lc-icon.png) no-repeat -124px -132px;
 }
 .ui-advanced-sreach{
-	color: #D02433;
+	color: #009241;
 	margin: 0 10px;
 }
 .ui-expand-search{
@@ -544,6 +558,23 @@ radio样式
 	border-radius: 6px;
 	padding:15px 10px 10px;
 }
+.columnGreenTip{
+	position:absolute;
+	right:-0px;
+	top:4px;
+	display:block;
+	height:20px;
+	line-height:20px;
+	width:20px;
+	color:#fff;
+	font-size:14px;
+	background:#D02433;
+	text-align:center;
+	border-radius:50%;
+	cursor:pointer;
+}
+
+
 
 
 

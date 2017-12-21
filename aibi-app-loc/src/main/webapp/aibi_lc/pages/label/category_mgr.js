@@ -52,13 +52,13 @@ window.loc_onload = function() {
 				var btn = $("#diyBtn_space_"+treeNode.id);
 //				if (btn) btn.bind("click", function(){
 //					
-//					alert("diy Button for " + treeNode.tId);
-//					
-////					var wd = $.window('新增标签', $.ctx
-////							+ '/aibi_lc/pages/label/category_add.html', 500, 500);
-////				    	wd.reload = function() {
-////							
-////				    	}
+					//alert("diy Button for " + treeNode.tId);
+					
+//					var wd = $.window('新增标签', $.ctx
+//							+ '/aibi_lc/pages/label/category_add.html', 500, 500);
+//				    	wd.reload = function() {
+//							
+//				    	}
 //
 //					
 //				});
@@ -75,10 +75,21 @@ window.loc_onload = function() {
 			};
 		
 	}
-	function addTreeNode(){
-		alert(1)
-		//$(".label-addBox").show();
-	}
+//	function addTreeNode(){
+//		alert(1)
+//		//$(".label-addBox").show();
+//	}
+var addCount = 1;
+		function addTreeNode() {
+			hideRMenu();
+			var newNode = { name:"增加" + (addCount++)};
+			if (zTree.getSelectedNodes()[0]) {
+				newNode.checked = zTree.getSelectedNodes()[0].checked;
+				zTree.addNodes(zTree.getSelectedNodes()[0], newNode);
+			} else {
+				zTree.addNodes(null, newNode);
+			}
+		}
 	
 	
 	function labeltree(){
