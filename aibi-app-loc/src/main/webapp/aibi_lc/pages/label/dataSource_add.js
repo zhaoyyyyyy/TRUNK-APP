@@ -18,6 +18,7 @@ var model = {
 window.loc_onload = function() {
 	var dicGxzq = $.getDicData("GXZQZD");
 	for(var i=0; i<dicGxzq.length; i++){
+		
 		model.gxzq.push(dicGxzq[i]);
 	}
 	var isEdit = $.getUrlParam("isEdit");
