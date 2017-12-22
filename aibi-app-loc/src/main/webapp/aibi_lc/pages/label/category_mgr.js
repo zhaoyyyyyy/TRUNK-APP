@@ -44,7 +44,6 @@ window.loc_onload = function() {
 		 ztreeObj=$.fn.zTree.init($("#ztree"), setting, zTreeNodes);
 			
 			function addHoverDom(treeId, treeNode) {
-				
 				var sObj = $("#" + treeNode.tId + "_span");
 		        if (treeNode.editNameFlag || $("#addBtn_" + treeNode.tId).length > 0)
 		            return;
@@ -64,11 +63,13 @@ window.loc_onload = function() {
                     var param ="&sysId="+ labelId + "&name=" + Ppname; 
                     
                     console.log(param)
+                    debugger
                     var zTree = $.fn.zTree.getZTreeObj("#ztree");
                     $.commAjax({
-							url : $.ctx + '/api/label/categoryInfo/queryList',
+							url : $.ctx + '/api/label/categoryInfo/save',
 							postData : {
 								"sysId" :labelId,
+								"categoryName":Ppname,
 							},
 							onSuccess : function(data) {
 								$.success('启用成功。', function() {
