@@ -17,7 +17,7 @@ window.loc_onload = function() {
 	                },  
 	                key: {  
 	                	
-	                	idKey: "categoryId",    //设置节点唯一标识属性名称  
+	                	idKey: "id",    //设置节点唯一标识属性名称  
 	                    pIdKey: "parentId" ,     //设置父节点唯一标识属性名称  
 	                    name:'categoryName',//zTree 节点数据保存节点名称的属性名称  
 	                    title: "categoryName"//zTree 节点数据保存节点提示信息的属性名称        
@@ -43,53 +43,72 @@ window.loc_onload = function() {
 		 
 		 ztreeObj=$.fn.zTree.init($("#ztree"), setting, zTreeNodes);
 			
-			function addHoverDom(categoryId, treeNode) {				
-				var aObj = $("#" + treeNode.tId + "_a");
-				
-				if ($("#diyBtn_space_"+treeNode.id).length>0) return;
-				var editStr = "<div class='label-handles' id='diyBtn_space_" +treeNode.id+ "' ><a class='setting'></a><a class='del'></a><a class='add' onclick='addTreeNode()'></a></div>";
-				aObj.append(editStr);
-				var btn = $("#diyBtn_space_"+treeNode.id);
-//				if (btn) btn.bind("click", function(){
-//					
-					//alert("diy Button for " + treeNode.tId);
-					
-//					var wd = $.window('新增标签', $.ctx
-//							+ '/aibi_lc/pages/label/category_add.html', 500, 500);
-//				    	wd.reload = function() {
-//							
-//				    	}
-//
-//					
-//				});
-				
-				
-//				$("#label-delBox").click(function(){
-//					$(".label-addBox").hide();
-//				})
+			function addHoverDom(treeId, treeNode) {
+				console.log(treeNode.categoryId);
+				var sObj = $("#" + treeNode.tId + "_span");
+		        if (treeNode.editNameFlag || $("#addBtn_" + treeNode.tId).length > 0)
+		            return;
+		        var addStr = "<div class='button add label-handles' id='addBtn_" + treeNode.tId
+		                + "' title='add node'><a class='setting'></a><a class='del'></a><a class='add'></a></div>";
+		        sObj.after(addStr);
+		        var btn = $("#addBtn_" + treeNode.tId).find(".add");				
+				if (btn) btn.bind("click", function(){
+ 				var Ppname = prompt("请输入新节点名称");
+ 				
+                if (Ppname == null) {
+                    return;
+                } else if (Ppname == "") {
+                    alert("节点名称不能为空");
+                } else {
+                	
+                    var param ="&sysId="+ labelId + "&name=" + Ppname; 
+                    
+                    console.log(param)
+                    var zTree = $.fn.zTree.getZTreeObj("#ztree");
+                    $.commAjax({
+							url : $.ctx + '/api/label/categoryInfo/save',
+							postData : {
+								"sysId" :labelId,
+								"categoryName":Ppname,
+								"parentId":treeNode.categoryId,
+							},
+							onSuccess : function(data) {
+								$.success('启用成功。', function() {
+									if ($.trim(data) != null) {
+                                    var treenode = $.trim(data);
+                                    ztreeObj.addNodes(treeNode, {
+                                        categoryId : labelId,
+                                        name : Ppname
+                                    }, true);
+                                }
+								});
+							}
+						});                                     
+                	}	
+
+				});
+
 			};
 			
 			
+			var addCount = 1;
+			function addNodes() {
+//				hideRMenu();
+				var newNode = { name:"增加" + (addCount++)};
+				if (zTree.getSelectedNodes()[0]) {
+					newNode.checked = zTree.getSelectedNodes()[0].checked;
+					zTree.addNodes(zTree.getSelectedNodes()[0], newNode);
+				} else {
+					zTree.addNodes(null, newNode);
+				}
+			}
+			
 			function removeHoverDom(treeId, treeNode) {
-				$("#diyBtn_space_" +treeNode.id).unbind().remove();
+				$("#addBtn_" + treeNode.tId).unbind().remove();
 			};
 		
 	}
-//	function addTreeNode(){
-//		alert(1)
-//		//$(".label-addBox").show();
-//	}
-var addCount = 1;
-		function addTreeNode() {
-			hideRMenu();
-			var newNode = { name:"增加" + (addCount++)};
-			if (zTree.getSelectedNodes()[0]) {
-				newNode.checked = zTree.getSelectedNodes()[0].checked;
-				zTree.addNodes(zTree.getSelectedNodes()[0], newNode);
-			} else {
-				zTree.addNodes(null, newNode);
-			}
-		}
+
 	
 	
 	function labeltree(){
