@@ -69,6 +69,7 @@ window.loc_onload = function() {
 
 }
 function changeStatus(obj){
+	console.log(obj)
 	if(obj.value == 5){
 		model.showdimDetail = true;
 	}else{
