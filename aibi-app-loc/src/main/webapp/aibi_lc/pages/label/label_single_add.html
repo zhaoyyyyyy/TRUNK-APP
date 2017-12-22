@@ -125,7 +125,7 @@
                                             <option v-for = "dim in dimtableInfoList" :value="dim.dimId">{{dim.dimTableName}}</option>
                                             </select>
                                         </div>
-                                        <button id="btn_dimdetail" type="button" class="btn btn-default  ui-table-btn ui-table-btn" >详情</button>
+                                        <button type="button" onclick="fun_to_dimdetail()" class="btn btn-default  ui-table-btn ui-table-btn" >详情</button>
                                     </div>
                                 </div>
                             </div>
@@ -142,9 +142,10 @@
                         </div>
                     </div>
                 </div>
-            </form>
+            </form> 
 
             <!-- todo -->
+
         </div>
 </body>
 </html>

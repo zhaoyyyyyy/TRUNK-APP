@@ -42,21 +42,6 @@ window.loc_onload = function() {
 			model.sourcetableInfoList = data.data
 		}
 	});	
-	//显示维表详情
-	$('#btn_dimdetail').click(function(){
-		var dimId = $("#dimTableName").val();
-		console.log(dimId)
-		var win = $.window('维表详情',$.ctx + '/aibi_lc/pages/dimtable/dimtable_detail.html?dimId='+dimId, 800,
-				600);
-		win.reload = function(){
-			$("mainGrid").setGridParam({
-				postData : $("#formSearch").formToJson()
-			}).trigger("reloadGrid",[{
-				page : 1
-			}]);
-		}
-	});
-	
 	$('#sourceTableName').change(function(){
 		var sourceTableId = $("#sourceTableName").val();
 		$.commAjax({
@@ -68,6 +53,19 @@ window.loc_onload = function() {
 	});
 
 }
+function fun_to_dimdetail(){
+	var dimId = $("#dimTableName").val();
+	var win = $.window('维表详情',$.ctx + '/aibi_lc/pages/dimtable/dimtable_detail.html?dimId='+dimId, 800,
+			600);
+	win.reload = function(){
+		$("mainGrid").setGridParam({
+			postData : $("#formSearch").formToJson()
+		}).trigger("reloadGrid",[{
+			page : 1
+		}]);
+	}
+}
+
 function changeStatus(obj){
 	console.log(obj)
 	if(obj.value == 5){
@@ -76,4 +74,3 @@ function changeStatus(obj){
 		model.showdimDetail = false;
 	}
 }
-
