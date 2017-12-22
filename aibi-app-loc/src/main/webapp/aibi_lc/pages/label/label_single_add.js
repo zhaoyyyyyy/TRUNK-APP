@@ -2,7 +2,7 @@ var model = {
 		dimtableInfoList:[],
 		sourcetableInfoList:[],
 		sourceInfoList:[],
-		showdimDetail: false
+		showdimDetail: ""
 }
 
 window.loc_onload = function() {	
@@ -67,10 +67,9 @@ function fun_to_dimdetail(){
 }
 
 function changeStatus(obj){
-	console.log(obj)
 	if(obj.value == 5){
-		model.showdimDetail = true;
+		model.showdimDetail = obj.id;
 	}else{
-		model.showdimDetail = false;
+		model.showdimDetail = "false";
 	}
 }

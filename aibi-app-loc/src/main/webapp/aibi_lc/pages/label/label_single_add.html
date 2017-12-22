@@ -14,7 +14,11 @@
     <link href="../../asset/css/theme/default/main.css" rel="stylesheet"  />
     <script type="text/javascript" src="../../asset/script/common/include.js"></script>
     <script type="text/javascript" src="label_single_add.js"></script>
-
+    <style type="text/css">
+    [v-clock]{
+       display: none; 
+    }
+    </style>
     <!--
         H5兼容js CSS3 兼容JS
     -->
@@ -72,9 +76,9 @@
                                     </div>
                                     <div class="ui-form-group mt20 tag-radio clearfix">
                                         <label class="control-label fleft">标签列表</label>
-                                        <div class="control-input">
+                                        <div class="control-input">  
                                             <div class="radio circle success">
-                                                <input type="radio" :name="'lableTableId_'+index" id="myr3" value="5" onclick="changeStatus(this)">
+                                                <input type="radio" :name="'lableTableId_'+index" :id="index" value="5" onclick="changeStatus(this)">
                                                 <label for="myr3"><i class="default"></i>枚举</label>
                                             </div>
                                             <div class="radio circle success">
@@ -117,7 +121,7 @@
                                             <input type="text" class="form-control" id="busiCaliber" name="busiCaliber" placeholder="cust1">
                                         </div>
                                     </div>
-                                    <div v-if="showdimDetail==true" class="ui-form-group">
+                                    <div v-if="showdimDetail==index" class="ui-form-group">
                                         <label for="dimTableName" class="control-label">维表选择</label>
                                         <div class="control-input has-icon">
                                             <select id="dimTableName" name="dimTableName" class="form-control ml10 input-pointer ">
