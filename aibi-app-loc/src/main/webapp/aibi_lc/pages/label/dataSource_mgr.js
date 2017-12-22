@@ -52,7 +52,8 @@ window.loc_onload = function() {
 			index: 'sourceTableId',
 			width: 40,
 			sortable: false,
-			align: "left",
+			align: "center",
+			autowidth:false,
 			key:true,
 			formatter: function(v) {
 				var html = '<button onclick="fun_to_up(\'' + v + '\')" type="button" class="btn btn-default ui-table-btn">修改</button>' + '<button onclick="fun_to_del(\'' + v + '\')" type="button" class="btn btn-default  ui-table-btn ui-table-btn">删除</button>';

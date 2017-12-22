@@ -78,7 +78,10 @@ window.loc_onload = function() {
 	        width: 80,
 	        sortable: false,
 	        frozen: true,
-	        editable: true
+	        editable: true,
+	        editrules: {
+	        	required: true,
+	        }
 	    },
 	    // frozen : true固定列
 	    {
@@ -91,6 +94,9 @@ window.loc_onload = function() {
 	        editable: true,
 	        editoptions: {
 	            value: dicCode
+	        },
+	        editrules: {
+	        	required: true,
 	        }
 	    },
 	    {
@@ -98,7 +104,12 @@ window.loc_onload = function() {
 	        index: 'columnCnName',
 	        width: 110,
 	        editable: true,
-	        align: "center"
+	        align: "center",
+	        editrules: {
+	        	required: true,
+	        	custom: true,
+	        	custom_func: fun_cnName
+	        }
 	    },
 	    {
 	        name: 'columnUnit',
@@ -166,8 +177,8 @@ function fun_to_del(id) {
 function fun_to_save() {
 	
 	var ids = $("#jsonmap").jqGrid('getDataIDs');
-    for (var i = 0; i <= ids.length; i++) {
-        $("#jsonmap").jqGrid("saveRow", ids[0]);
+    for (var i = 0; i < ids.length; i++) {
+        $("#jsonmap").jqGrid("saveRow", ids[i]);
     }
 	
 	var list = $("#jsonmap").jqGrid("getRowData");
@@ -205,10 +216,13 @@ function fun_to_save() {
 			}
 		}
 	})
-	
-	
-    for (var j = 1; j <= rows; j++) {
-        $("#jsonmap").jqGrid("editRow", j);
-    }
-	
+}
+function fun_cnName(value,colName){
+	var patrn= /[\u4E00-\u9FA5]|[\uFE30-\uFFA0]/gi; 
+	if (!patrn.exec(value)) 
+	{ 
+	return [false,"请在["+colName+"]列输入中文"];
+	}else{ 
+	return true; 
+	} 
 }
