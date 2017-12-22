@@ -102,7 +102,7 @@ window.loc_onload = function() {
 			}
 			
 			function removeHoverDom(treeId, treeNode) {
-				 $("#addBtn_" + treeNode.tId).unbind().remove();
+				$("#addBtn_" + treeNode.tId).unbind().remove();
 			};
 		
 	}
