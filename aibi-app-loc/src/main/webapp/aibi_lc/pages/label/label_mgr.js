@@ -123,7 +123,7 @@ window.loc_onload = function(){
 	            	}
 	            },
 	            {name:'createTime',index:'createTime', width:20, align:"center"},
-	            {name:'labelId',index:'labelId', width:30, align:"center",key:true,
+	            {name:'labelId',index:'labelId', width:30, text_aling:"left", key:true,
 	            	formatter : function(value, opts, data) {
 	            		var html = '';
 	            		if(data.dataStatusId !=6){

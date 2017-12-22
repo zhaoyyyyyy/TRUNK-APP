@@ -25,7 +25,7 @@
     <![endif]-->
 </head>
 <body>
-      <div class="iframe-nest">
+      <div id="dataD" class="iframe-nest" v-clock>
             <form id="saveDataForm">
                 <div class="ui-lc-mian">
                     <h3>创建标签</h3>
@@ -36,19 +36,17 @@
                     <div class="ui-expand-search mt10">
                         <div class="form-inline ui-form">
                             <div class="clearfix">
-                                <div id="dataSource" class="form-group">
+                                <div  class="form-group">
                                     <label class="fleft mt5" for="exampleInputEmail4">选择指标数据</label>
                                     <div class="control-input has-icon">
                                         <select id="sourceTableName" name="sourceTableName" class="form-control ml10 input-pointer ">
                                         <option>请选择指标</option>
-                                        <option v-for ="source in sourceInfolist" :value="source.sourceTableName">{{source.sourceTableName}}</option>
+                                        <option v-for ="source in sourcetableInfoList" :value="source.sourceTableId">{{source.sourceTableName}}</option>
                                         </select>
                                     </div>
                                     <div class="fleft clearfix">
                                         <a href="javascript:;" class="ui-advanced-sreach fleft mt5">没有元数据?</a>
-                                        <a href="javascript:;" class="file-up-btn">
-                                            <span>点击创建</span>
-                                        </a>
+                                        <button onclick="window.location='dataSource_add.html'" type="button" class="btn btn-default  ui-table-btn ui-table-btn" >点击创建</button>
                                     </div>
 
                                 </div>
@@ -57,7 +55,7 @@
 
                         </div>
                     </div>
-                    <div class="clearfix create-main mt10">
+                    <div class="clearfix create-main mt10"  v-for="(sourceInfo,index) in sourceInfoList">
                         <div class="progress fleft">
                             <span class="progress-label">
                                 <i class="icon"></i>
@@ -69,30 +67,30 @@
                                     <div class="ui-form-group">
                                         <label for="labelName" class="control-label">标签名称</label>
                                         <div class="control-input">
-                                            <input type="text" class="form-control" id="labelName" name="labelName">
+                                            <input :value="sourceInfo.sourceId" type="text" class="form-control" id="labelName" name="labelName">
                                         </div>
                                     </div>
                                     <div class="ui-form-group mt20 tag-radio clearfix">
                                         <label class="control-label fleft">标签列表</label>
                                         <div class="control-input">
                                             <div class="radio circle success">
-                                                <input type="radio" name="labelTypeId" id="myr3" value="5" checked="checked">
+                                                <input type="radio" :name="'lableTableId_'+index" id="myr3" value="5" onclick="changeStatus(this)">
                                                 <label for="myr3"><i class="default"></i>枚举</label>
                                             </div>
                                             <div class="radio circle success">
-                                                <input type="radio" name="labelTypeId"  id="myr4" value="4">
+                                                <input type="radio" :name="'lableTableId_'+index" id="myr4" value="4" onclick="changeStatus(this)" checked="checked">
                                                 <label  for="myr4"><i class="default"></i>指标</label>
                                             </div>
                                             <div class="radio circle success">
-                                                <input type="radio" name="labelTypeId"  id="myr5" value="1">
+                                                <input type="radio" :name="'lableTableId_'+index" id="myr5" value="1" onclick="changeStatus(this)">
                                                 <label  for="myr5"><i class="default"></i>标识</label>
                                             </div>
                                             <div class="radio circle success">
-                                                <input type="radio" name="labelTypeId"  id="myr6" value="7">
+                                                <input type="radio" :name="'lableTableId_'+index" id=myr6 value="7" onclick="changeStatus(this)">
                                                 <label  for="myr6"><i class="default"></i>文本</label>
                                             </div>
                                             <div class="radio circle success">
-                                                <input type="radio" name="labelTypeId"  id="myr7" value="6">
+                                                <input type="radio" :name="'lableTableId_'+index" id="myr7" value="6" onclick="changeStatus(this)">
                                                 <label  for="myr7"><i class="default"></i>日期</label>
                                             </div>
                                         </div>
@@ -106,9 +104,9 @@
                                 </div>
                                 <div class="form-horizontal fleft ui-form">
                                     <div class="ui-form-group">
-                                        <label for="countRulesCode" class="control-label">抽取规则</label>
+                                        <label for="sourceColumnRule" class="control-label">抽取规则</label>
                                         <div class="control-input">
-                                            <textarea rows="6" name="countRulesCode" class="form-control form-control-textarea">retegertsghrtjjjytkweqdadhtyikwertssdgths</textarea>
+                                            <textarea rows="6" name="sourceColumnRule" class="form-control form-control-textarea">{{sourceInfo.sourceColumnRule}}</textarea>
                                         </div>
                                     </div>
                                 </div>
@@ -119,96 +117,15 @@
                                             <input type="text" class="form-control" id="busiCaliber" name="busiCaliber" placeholder="cust1">
                                         </div>
                                     </div>
-                                    <div class="ui-form-group">
-                                        <label for="dataType" class="control-label">数据类型</label>
-                                        <div class="control-input">
-                                            <input type="text" dicCode="ZDLXZD" class="form-control" id="dataType" name="dataType"/>
-                                        </div>
-                                    </div>
-                                    <div id="dataD" class="ui-form-group">
-                                        <label for="inputEmail4" class="control-label">维表选择</label>
+                                    <div v-if="showdimDetail==true" class="ui-form-group">
+                                        <label for="dimTableName" class="control-label">维表选择</label>
                                         <div class="control-input has-icon">
-                                            <select id="dimtableName" name="dimtableName" class="form-control ml10 input-pointer ">
+                                            <select id="dimTableName" name="dimTableName" class="form-control ml10 input-pointer ">
                                             <option>请选择维表</option>
-                                            <option v-for = "dim in dimtableInfoList" :value="dim.dimTableName">{{dim.dimTableName}}</option>
+                                            <option v-for = "dim in dimtableInfoList" :value="dim.dimId">{{dim.dimTableName}}</option>
                                             </select>
                                         </div>
-                                        <!-- <a href="javascript:;" class="file-up-btn ml10">
-                                            <span>详情</span> 
-                                            </a>-->
-                                        <button id="btn_dimdetail" class="btn btn-default  ui-table-btn ui-table-btn" >详情</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="clearfix create-main mt10">
-                        <div class="progress fleft">
-                            <span class="progress-label">
-                                <i class="icon"></i>
-                            </span>
-                        </div>
-                        <div class="ui-main fleft">
-                            <div class="clearfix">
-                                <div class="form-horizontal fleft ui-form">
-                                    <div class="ui-form-group">
-                                        <label for="inputEmail3" class="control-label">标签名称</label>
-                                        <div class="control-input">
-                                            <input type="text" class="form-control" id="inputEmail3" placeholder="cust1">
-                                        </div>
-                                    </div>
-                                    <div class="ui-form-group mt20 tag-radio clearfix">
-                                        <label for="inputEmail4" class="control-label fleft">标签列表</label>
-                                        <div class="control-input">
-                                            <div class="radio circle success">
-                                                <input type="radio" name="labelTypeId1" id="myr8" value="5" checked="checked">
-                                                <label for="myr8"><i class="default"></i>枚举</label>
-                                            </div>
-                                            <div class="radio circle success">
-                                                <input type="radio" name="labelTypeId1"  id="myr9" value="4">
-                                                <label  for="myr9"><i class="default"></i>指标</label>
-                                            </div>
-                                             <div class="radio circle success">
-                                                <input type="radio" name="labelTypeId1"  id="myr10" value="1">
-                                                <label  for="myr10"><i class="default"></i>标识</label>
-                                            </div>
-                                            <div class="radio circle success">
-                                                <input type="radio" name="labelTypeId1"  id="myr11" value="7">
-                                                <label  for="myr11"><i class="default"></i>文本</label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="ui-form-group">
-                                        <label for="inputEmail3" class="control-label">标签分类</label>
-                                        <div class="control-input">
-                                            <input type="text" class="form-control" id="inputEmail3" placeholder="cust1">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="form-horizontal fleft ui-form">
-                                    <div class="ui-form-group">
-                                        <label for="inputEmail4" class="control-label">抽取规则</label>
-                                        <div class="control-input">
-                                            <textarea rows="6"  class="form-control form-control-textarea">retegertsghrtjjjytkweqdadhtyikwertssdgths</textarea>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="form-horizontal fleft ui-form">
-                                    <div class="ui-form-group">
-                                        <label for="inputEmail3" class="control-label">业务口径</label>
-                                        <div class="control-input">
-                                            <input type="text" class="form-control" id="inputEmail3" placeholder="cust1">
-                                        </div>
-                                    </div>
-                                    <div id='dataD' class="ui-form-group">
-                                        <label for="inputEmail4" class="control-label">维表选择</label>
-                                        <div class="control-input has-icon">
-                                            <input type="text" class="form-control input-pointer" id="inputEmail4" placeholder="wb1" readonly="readonly">
-                                            <span class="glyphicon-select form-control-feedback"></span>
-                                        </div>
-                                        <a href="javascript:;" class="file-up-btn ml10">
-                                            <span>详情</span>
-                                        </a>
+                                        <button id="btn_dimdetail" type="button" class="btn btn-default  ui-table-btn ui-table-btn" >详情</button>
                                     </div>
                                 </div>
                             </div>
