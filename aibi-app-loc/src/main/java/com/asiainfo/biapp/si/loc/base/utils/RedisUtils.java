@@ -3,14 +3,12 @@ package com.asiainfo.biapp.si.loc.base.utils;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
-import com.asiainfo.biapp.si.loc.auth.utils.CoConfigUtils;
+import com.asiainfo.biapp.si.loc.auth.utils.LocConfigUtil;
+import com.asiainfo.biapp.si.loc.base.BaseConstants;
 import com.asiainfo.biapp.si.loc.base.exception.BaseException;
-
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
@@ -24,7 +22,7 @@ public class RedisUtils {
     
     private static final Object lock = new Object();
     
-    private static final int DEFAULT_TIME_OUT = 30000;
+    public static final int DEFAULT_TIME_OUT = 30000;
     
     private static String redisIp = null;
     
@@ -50,9 +48,9 @@ public class RedisUtils {
     public static JedisPool getJedisPool() throws BaseException {
         if (jedisPool == null) {
             synchronized (lock) {
-            	log.debug("redis server IP = " + CoConfigUtils.getInstance().getProperties("SYSConfig_REDIS_IP","getALLKV") + "; port = " + CoConfigUtils.getInstance().getProperties("SYSConfig_REDIS_PORT","getALLKV"));
-                redisIp = CoConfigUtils.getInstance().getProperties("SYSConfig_REDIS_IP","getALLKV");
-                redisPort = Integer.valueOf(CoConfigUtils.getInstance().getProperties("SYSConfig_REDIS_PORT","getALLKV"));
+            	log.debug("redis server IP = " + LocConfigUtil.getInstance(BaseConstants.JAUTH_URL).getProperties("SYSConfig_REDIS_IP") + "; port = " + LocConfigUtil.getInstance(BaseConstants.JAUTH_URL).getProperties("SYSConfig_REDIS_PORT"));
+                redisIp = LocConfigUtil.getInstance(BaseConstants.JAUTH_URL).getProperties("SYSConfig_REDIS_IP");
+                redisPort = Integer.valueOf(LocConfigUtil.getInstance(BaseConstants.JAUTH_URL).getProperties("SYSConfig_REDIS_PORT"));
                 
                 if (jedisPool == null) {
                     JedisPoolConfig config = new JedisPoolConfig();
@@ -308,6 +306,32 @@ public class RedisUtils {
             // 返还到连接池
             returnJedisResource(jedis);
         }
+    }
+    
+    /**
+     * 设置 redis map 得 field value 
+     * @param key
+     * @param field
+     * @param value
+     * @param expTime
+     */
+    public static void setHashMapFeild(String key,String field,String value,int expTime){
+    	JedisPool pool = null;
+        Jedis jedis = null;
+        try {
+            pool = getJedisPool();
+            jedis = pool.getResource();
+            jedis.hset(key, field, value);
+            if(expTime!=RedisUtils.NO_Expire){
+                jedis.expire(key, expTime);
+            }
+        } catch (Exception e) {
+            log.error(e);
+        } finally {
+            // 返还到连接池
+            returnJedisResource(jedis);
+        }
+        
     }
 
     

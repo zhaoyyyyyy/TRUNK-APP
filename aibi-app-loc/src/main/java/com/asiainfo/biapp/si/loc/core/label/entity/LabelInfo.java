@@ -238,19 +238,19 @@ public class LabelInfo extends BaseEntity {
     @ApiParam(value = "排序字段")
     private Integer sortNum;
 
-    @ManyToOne(fetch=FetchType.LAZY)
+    @ManyToOne(fetch=FetchType.EAGER)
     @JoinColumn(name="LABEL_ID",referencedColumnName="LABEL_ID",insertable=false,updatable=false)
     private MdaSysTableColumn mdaSysTableColumn;  
     
-    @OneToMany(fetch=FetchType.LAZY)  
+    @OneToMany(fetch=FetchType.EAGER)  
     @JoinColumn(name="LABEL_ID",referencedColumnName="LABEL_ID",insertable=false,updatable=false)
     private Set<LabelVerticalColumnRel> verticalColumnRels;
 	
-    @ManyToOne(fetch=FetchType.LAZY)
+    @ManyToOne(fetch=FetchType.EAGER)
     @JoinColumn(name="LABEL_ID",referencedColumnName="RESOURCE_ID",insertable=false,updatable=false)
     private ApproveInfo approveInfo;
 
-    @OneToOne(fetch=FetchType.LAZY)
+    @OneToOne(fetch=FetchType.EAGER)
     @JoinColumn(name="LABEL_ID",referencedColumnName="LABEL_ID",insertable=false,updatable=false)
     private LabelExtInfo labelExtInfo;
     

@@ -36,6 +36,7 @@ import com.asiainfo.biapp.si.loc.base.utils.RedisUtils;
  * @version 1.0.0.2016-9-12
  */
 public abstract class ICacheBase {
+	
 	private Logger log = Logger.getLogger(ICacheBase.class);
 	
 	public static boolean ifCluster = false;
@@ -117,6 +118,38 @@ public abstract class ICacheBase {
 			log.error("object to json exception:",e);
 		}
     	
+    }
+    
+    /**
+     * 5.0 session缓存 存放 接口， 默认设置为 30秒失效
+     * @param key1
+     * @param key2
+     * @param value
+     * @throws Exception
+     */
+    public void setSessionHashMap(String key1,String key2,String value) throws Exception{
+    	try {
+			if(StringUtils.isBlank(key1) || StringUtils.isBlank(key2) || value==null){
+				log.error("key1 or key2 or value is null.");
+				throw new Exception("key1 or key2 or value is null.");
+			}
+			RedisUtils.setHashMapFeild(key1,key2,value,RedisUtils.DEFAULT_TIME_OUT);
+		} catch (Exception e) {
+			throw new Exception(e);
+		}
+    }
+    
+    public String getSessionHashMap(String key1,String key2) throws Exception{
+    	
+    	try {
+			if(StringUtils.isBlank(key1) || StringUtils.isBlank(key2)){
+				log.error("key1 or key2 is null.");
+				throw new Exception("key1 or key2 or value is null.");
+			}
+			return RedisUtils.getStringFromMap(appKey + Prefix.SESSION + key1, key2);
+		} catch (Exception e) {
+			throw new Exception(e);
+		}
     }
     
     
@@ -294,6 +327,7 @@ public abstract class ICacheBase {
 		String KEY = "KEY_";
 		String CLAZZ = "CLASS_"; 
 		String CONFIG = "CONFIG_";
+		String SESSION = "SESSION_";
 		
 		String LOC = "LOC_";
 		String POC = "POC_";
@@ -386,6 +420,8 @@ public abstract class ICacheBase {
 		
 		/** 客户群清单缓存 */
 		String CI_CONFIG_INFO_MAP = "CI_CONFIG_INFO_MAP";
+		
+		String CI_SESSION_INFO_MAP = "CI_SESSION_INFO_MAP";
 		
 		/** 最热标签、客户群 */
 		String HOT_LABELS = "HOT_LABELS";

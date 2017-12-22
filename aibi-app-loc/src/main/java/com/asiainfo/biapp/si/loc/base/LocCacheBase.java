@@ -1,14 +1,14 @@
 package com.asiainfo.biapp.si.loc.base;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
-import com.asiainfo.biapp.si.loc.auth.utils.CoConfigUtils;
+import com.asiainfo.biapp.si.loc.auth.utils.LocConfigUtil;
 import com.asiainfo.biapp.si.loc.base.common.LabelInfoContants;
 import com.asiainfo.biapp.si.loc.base.exception.BaseException;
+import com.asiainfo.biapp.si.loc.base.extend.SpringContextHolder;
 import com.asiainfo.biapp.si.loc.base.utils.RedisUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.BeansException;
@@ -55,7 +55,8 @@ public class LocCacheBase extends ICacheBase implements ApplicationContextAware{
 	}
 	
 	public synchronized void init(ILabelInfoDao labelInfoDao){
-		this.iLabelInfoDao= labelInfoDao;
+//		this.iLabelInfoDao= labelInfoDao;
+		this.iLabelInfoDao = (ILabelInfoDao)SpringContextHolder.getBean("labelInfoDaoImpl");
 		this.initAllLabelInfo();
 		this.initAllConfigInfo();
 	}
@@ -70,10 +71,7 @@ public class LocCacheBase extends ICacheBase implements ApplicationContextAware{
 	 */
 	private void initAllLabelInfo(){
 		log.debug("------------------------------------ LocCacheBase -initAllLabelInfo beginning -------------------------------");
-		LabelInfo ii = iLabelInfoDao.get("4028b8816058f3c6016058f4a8ec0000");
-//		List<LabelInfo> LabelInfoTemp = iLabelInfoDao.selectEffectiveCiLabelInfo();
-		List<LabelInfo> LabelInfoTemp = new ArrayList<LabelInfo>();
-		LabelInfoTemp.add(ii);
+		List<LabelInfo> LabelInfoTemp = iLabelInfoDao.selectEffectiveCiLabelInfo();
 		log.debug("##############################   initAllLabelInfo LabelInfoTemp = " + LabelInfoTemp.size());
 		CopyOnWriteArrayList<LabelInfo> LabelInfoList = new CopyOnWriteArrayList<LabelInfo>(LabelInfoTemp);
 		log.debug("##############################   initAllLabelInfo LabelInfoList = " + LabelInfoList.size());
@@ -144,7 +142,7 @@ public class LocCacheBase extends ICacheBase implements ApplicationContextAware{
 	 */
 	public void initAllConfigInfo(){
 		try {
-			Map<String,String> configInfos = CoConfigUtils.getInstance().getAll("getALLKV");
+			Map<String,String> configInfos = LocConfigUtil.getInstance(BaseConstants.JAUTH_URL).selectAll();
 			this.setHashMap(Prefix.LOC+Prefix.CONFIG+CacheKey.CI_CONFIG_INFO_MAP, configInfos);
 		} catch (BaseException e) {
 			log.error(e.getMessage(),e);
@@ -158,7 +156,7 @@ public class LocCacheBase extends ICacheBase implements ApplicationContextAware{
 	 * @param key
 	 * @return
 	 */
-	public String getConfigInfoByKey(String key){
+	public String getSysConfigInfoByKey(String key){
 		try {
 			return this.getStringByKey(CacheKey.CI_CONFIG_INFO_MAP, key);
 		} catch (Exception e) {
@@ -166,6 +164,22 @@ public class LocCacheBase extends ICacheBase implements ApplicationContextAware{
 		}
 		return null;
 	}
+	
+	/**
+	 * 5.0 session缓存 存放 接口， 默认设置为 30秒失效
+	 * @param token
+	 * @param key
+	 * @param value
+	 * @throws Exception
+	 */
+	public void setSessionCache(String token,String key,String value) throws Exception{
+		this.setSessionHashMap(Prefix.LOC+Prefix.SESSION+token, key,value);
+	}
+	
+	public String getSessionCache(String token,String key) throws Exception{
+		return this.getSessionHashMap(Prefix.LOC+Prefix.SESSION+token, key);
+	}
+	
 
 	@Override
 	public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {

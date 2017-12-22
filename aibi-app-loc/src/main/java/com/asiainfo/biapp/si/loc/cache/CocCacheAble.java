@@ -19,11 +19,11 @@ public interface CocCacheAble {
 	public void reflashAllCache();
 	
 	/**
-	 * 根据key获取缓存中的value 接口定义
+	 * 根据key获取 系统配置数据 
 	 * @param key
 	 * @return value
 	 */
-	public String getValueByKey(String key);
+	public String getSYSConfigInfoByKey(String key);
 	
 	/**
 	 * 根据标签id获取标签信息对象 接口定义
@@ -31,5 +31,19 @@ public interface CocCacheAble {
 	 * @return
 	 */
 	public LabelInfo getLabelInfoById(String labelid);
+	
+	/**
+	 * 往java Map中写入需要缓存得东西
+	 * @param key
+	 * @param value
+	 */
+	public void addSessionValue(String token,String key,String obj);
+	
+	/**
+	 * 删除 java Map 中的 kv 数据
+	 * @param key
+	 */
+	public String getSessionvalue(String token,String key);
+	
 	
 }

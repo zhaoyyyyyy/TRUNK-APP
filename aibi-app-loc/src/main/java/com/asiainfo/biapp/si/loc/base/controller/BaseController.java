@@ -10,6 +10,7 @@ import com.asiainfo.biapp.si.loc.auth.utils.AuthUtils;
 import com.asiainfo.biapp.si.loc.base.exception.BaseException;
 import com.asiainfo.biapp.si.loc.base.exception.UserAuthException;
 import com.asiainfo.biapp.si.loc.base.utils.WebResult;
+import com.asiainfo.biapp.si.loc.cache.CocCacheProxy;
 
 /**
  * Title : 基础控制层
@@ -62,10 +63,9 @@ public abstract class BaseController<T>  {
 	 * @return
 	 * @throws UserAuthException
 	 */
-	protected Object getSessionAttribute(String key) throws BaseException{
+	protected String getSessionAttribute(String key) throws BaseException{
 		String token = AuthUtils.getTokenByRequest(request);
-		
-		return null; //TODO
+		return CocCacheProxy.getCacheProxy().getSessionvalue(token, key);
 	}
 	
 	/**
@@ -73,9 +73,10 @@ public abstract class BaseController<T>  {
 	 * @return
 	 * @throws UserAuthException
 	 */
-	protected void setSessionAttribute(String key,Object object) throws BaseException{
+	protected void setSessionAttribute(String key,String object) throws BaseException{
 		
 		String token = AuthUtils.getTokenByRequest(request);
+		CocCacheProxy.getCacheProxy().addSessionValue(token, key, object);
 	}
 	
 	

@@ -20,7 +20,7 @@ public class CocJavaCache implements CocCacheAble{
 
 
 	@Override
-	public String getValueByKey(String key) {
+	public String getSYSConfigInfoByKey(String key) {
 		return concurrentMap.get(key);
 	}
 
@@ -34,6 +34,20 @@ public class CocJavaCache implements CocCacheAble{
 	
 	public static void main(String[] args) {
 		
+	}
+
+
+	@Override
+	public void addSessionValue(String token, String key, String obj) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public String getSessionvalue(String token, String key) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 
