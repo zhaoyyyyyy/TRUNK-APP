@@ -2,20 +2,28 @@
  * Created by j on 2017/12/6.
  */
 var model = {
-		sourceTableName : "" ,
-		sourceTableCnName : "" ,
-		sourceTableType : null ,
-		dateColumnName : "" ,
-		whereSql : "" ,
-		readCycle : null ,
-		idType : null ,
-		idColumn : "" ,
-		idDataType : ""
+	sourceTableName : "",
+	sourceTableCnName : "",
+	sourceTableType : "",
+	dateColumnName : "",
+	whereSql : "",
+	readCycle : "",
+	idType : "",
+	idColumn : "",
+	idDataType : "",
+	sortNum : 0,
+	gxzq : [],
+	sourceTableId : "",
 }
 window.loc_onload = function() {
+	var dicGxzq = $.getDicData("GXZQZD");
+	for(var i=0; i<dicGxzq.length; i++){
+		model.gxzq.push(dicGxzq[i]);
+	}
 	var isEdit = $.getUrlParam("isEdit");
 	var id = $.getUrlParam("sourceTableId");
-	if(id != null && id != "" && id != undefined){
+	if (id != null && id != "" && id != undefined) {
+		model.sourceTableId = id;
 		$.commAjax({
 			url : $.ctx + '/api/source/sourceTableInfo/get',
 			postData : {
@@ -31,112 +39,119 @@ window.loc_onload = function() {
 				model.idType = data.data.idType;
 				model.idColumn = data.data.idColumn;
 				model.idDataType = data.data.idDataType;
+				$("#code"+data.data.readCycle).click();
 			}
 		})
 	}
 	new Vue({
-		el:"#dataD",
-		data:model
+		el : "#dataD",
+		data : model
 	})
 	var url = "";
 	var pD = {};
 	if (isEdit == 1) {
 		url = $.ctx + "/api/source/sourceInfo/queryPage";
 		pD = {
-			'sourceTableId': id
+			'sourceTableId' : id
 		}
 	}
+	
+	var dic = $.getDicData("ZDLXZD");
+	var dicCode = "";
+	for(var k=0; k<dic.length; k++){
+		dicCode += dic[k].code + ":" + dic[k].dataName;
+		var j = k+1;
+		if(j != dic.length){
+			dicCode += ";";
+		}
+	}
+	
 	$("#jsonmap").jqGrid({
-		url: url,
-		postData: pD,
-		datatype: "json",
-		colNames: ['字段名称', '字段类型', '指标中文名', '描述', '操作'],
-		colModel: [{
-			name: 'sourceName',
-			index: 'sourceName',
-			width: 80,
-			sortable: false,
-			frozen: true,
-			editable: true,
-			formatter: function(data){
-				return '<input value="'+data+'" name="sourceName" class="form-control" />';
-			}
-		},
-		// frozen : true固定列
-		{
-			name: 'cooColumnType',
-			index: 'cooColumnType',
-			width: 70,
-			sortable: false,
-			align: "center",
-			editable: true,
-			formatter: function() {
-				return '<select name="columnCnName" dicCode="ZDLXZD" type="text" class="form-control input-pointer"></select>';
-			}
-		},
-		{
-			name: 'columnCnName',
-			index: 'columnCnName',
-			width: 110,
-			align: "center",
-			sortable: false,
-			editable: true,
-			formatter: function(data){
-				return '<input value="'+data+'" name="columnCnName" class="form-control" />';
-			}
-		},
-		{
-			name: 'columnUnit',
-			index: 'columnUnit',
-			width: 120,
-			align: "center",
-			editable: true,
-			sortable: true,
-			formatter: function(data){
-				return '<input value="'+data+'" name="columnUnit" class="form-control" />';
-			}
-		},
-		{
-			name: 'op',
-			index: 'op',
-			width: 40,
-			sortable: false,
-			align: "center",
-			formatter: function() {
-				return '<button onclick="fun_to_del()" type="button" class="btn btn-default  ui-table-btn ui-table-btn">删除</button>';
-			}
-		}],
-		cellEdit: true,
-		// 单个编辑 去掉行编辑
-		onSelectRow: function(id) {
-			$('#jsonmap').jqGrid('editRow', id, true);
-		},
-		// pager: '#pjmap',//分页的id
-		// sortname: 'invdate',//排序的字段名称 不需要的话可置为空
-		// 取值取自colModel中的index字段
-		viewrecords: true,
-		rownumbers: true,
-		multiselect: false,
-		// caption:"标题",
-		// 是否展示行号
-		sortorder: "desc",
-		// 排序方式
-		jsonReader: {
-			repeatitems: false,
-			id: "0"
-		},
-		height: '100%'
+	    url: url,
+	    editurl: $.ctx +"/api/source/sourceInfo/save",
+	    postData: pD,
+	    datatype: "json",
+	    colNames: ['字段名称', '字段类型', '指标中文名', '描述', '操作'],
+	    colModel: [{
+	        name: 'sourceName',
+	        index: 'sourceName',
+	        width: 80,
+	        sortable: false,
+	        frozen: true,
+	        editable: true
+	    },
+	    // frozen : true固定列
+	    {
+	        name: 'cooColumnType',
+	        index: 'cooColumnType',
+	        width: 70,
+	        align: "center",
+	        edittype: 'select',
+	        formatter: 'select',
+	        editable: true,
+	        editoptions: {
+	            value: dicCode
+	        }
+	    },
+	    {
+	        name: 'columnCnName',
+	        index: 'columnCnName',
+	        width: 110,
+	        editable: true,
+	        align: "center"
+	    },
+	    {
+	        name: 'columnUnit',
+	        index: 'columnUnit',
+	        width: 120,
+	        editable: true,
+	        align: "center"
+	    },
+	    {
+	        name: 'op',
+	        index: 'op',
+	        width: 40,
+	        sortable: false,
+	        align: "center",
+	        formatter: function(value, opts, data) {
+	            return '<button onclick="fun_to_del('+opts.rowId+')" type="button" class="btn btn-default  ui-table-btn ui-table-btn">删除</button>';
+	        }
+	    }],
+	    cellEdit: true,
+	    afterGridLoad: function() {
+	        var rows = $("#jsonmap").jqGrid('getRowData').length;
+	        for (var i = 1; i <= rows; i++) {
+	            $("#jsonmap").jqGrid('editRow', i);
+	        }
+	        model.sortNum += rows;
+	    },
+	    // pager: '#pjmap',//分页的id
+	    // sortname: 'invdate',//排序的字段名称 不需要的话可置为空
+	    // 取值取自colModel中的index字段
+	    viewrecords: true,
+	    rownumbers: true,
+	    multiselect: false,
+	    // caption:"标题",
+	    // 是否展示行号
+	    sortorder: "desc",
+	    // 排序方式
+	    jsonReader: {
+	        repeatitems: false,
+	        id: "0"
+	    },
+	    height: '100%'
 	});
 	var dataRow = {
-		"sourceName": "",
-		"cooColumnType": "",
-		"columnCnName": "",
-		"columnUnit": "",
-		"op": ""
+		"sourceName" : "",
+		"cooColumnType" : "",
+		"columnCnName" : "",
+		"columnUnit" : "",
+		"op" : ""
 	}
 	$("#btn_addRow").click(function() {
-		var rows = $("#jsonmap").jqGrid('getRowData').length;
-		$("#jsonmap").jqGrid("addRowData", rows+1, dataRow, "last");
+		model.sortNum += 1;
+		$("#jsonmap").jqGrid("addRowData", model.sortNum, dataRow, "last");
+		$("#jsonmap").jqGrid("editRow", model.sortNum);
 	})
 }
 function setColor(cellvalue, options, rowObject) {
@@ -145,13 +160,50 @@ function setColor(cellvalue, options, rowObject) {
 	}
 	return cellvalue;
 }
-function fun_to_del() {
-	var id = $('#jsonmap').jqGrid('getGridParam', 'selrow');
-	if (id == null || id == "" || id == undefined) {
-		$.alert("请选中要删除的行");
-	}
+function fun_to_del(id) {
 	$("#jsonmap").jqGrid("delRowData", id);
 }
 function fun_to_save() {
-
+	
+	var ids = $("#jsonmap").jqGrid('getDataIDs');
+    for (var i = 0; i < ids.length; i++) {
+        $("#jsonmap").jqGrid("saveRow", ids[i]);
+    }
+	
+	var list = $("#jsonmap").jqGrid("getRowData");
+	var sourceInfoList = "sourceInfoList{";
+	for(var k = 0; k<list.length; k++){
+		delete list[k].op;
+		sourceInfoList += JSON.stringify(list[k]); 
+		var l = k+1;
+		if(l!=list.length){
+			sourceInfoList += ",";
+		}else{
+			sourceInfoList += "}";
+		}
+	}
+	$("#sourceInfoList").val(sourceInfoList);
+	
+	var url_ = "";
+	var msss = "";
+	if(model.sourceTableId!=null && model.sourceTableId!=undefined && model.sourceTableId!= ""){
+		url_ = $.ctx + '/api/source/sourceTableInfo/update';
+		msss = "修改成功";
+	}else{
+		$("#sourceTableId").removeAttr("name");
+		url_ = $.ctx + '/api/source/sourceTableInfo/save';
+		msss = "保存成功";
+	}
+	$.commAjax({
+		url : url_,
+		postData : $('#formData').formToJson(),
+		onSuccess : function(data) {
+			if(data.data == "success"){
+				$.success(msss, function() {
+					history.back(-1);
+				});
+			}
+		}
+	})
+	
 }

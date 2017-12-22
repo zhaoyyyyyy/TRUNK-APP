@@ -344,7 +344,7 @@
     width: 38px;
     height: 60px;
     font-size: 50px;
-    color: #3DAC6E;
+    color: #D02433;
     position: relative;
     line-height: 50px;
     text-align: center;
@@ -517,11 +517,11 @@
 }
 .create-main > .progress{
 	width:46px;
-	height: 166px;
+	height: 186px;
 	text-align:center;
 	background:#f7f7f7;
 	margin:0 -100% 0px 0;
-	line-height:166px;
+	line-height:186px;
 	border-radius:6px 0 0 6px;
 }
 .create-main:hover > .progress  > .progress-label > i{
@@ -536,8 +536,7 @@
 .create-main > .ui-main > div{
 	margin:0 0 0 46px;
 	padding:0;
-	background:#fff;
-	height:166px;
+	background:#fff;	
 	border-radius:0 6px 6px 0;
 }
 .create-main .ui-form{
@@ -599,6 +598,248 @@ span.del-btn{
 	border-radius:5px;
 	cursor:pointer;
 }
+/*弹出层 计算中心-市场集市高佳佳*/
+.ui-enum-header{
+	padding:0 10px;
+}
+.ui-enum-header > span{
+	line-height:40px;
+	color:#000;
+	margin-right:6px;
+	cursor:pointer;
+}
+.ui-enum-header > .form-group{
+	width:50%;
+	padding: 5px 0 0;
+}
+.ui-enum-item{
+	padding:6px 10px;
+}
+.ui-enum-item > li{
+	padding:4px 0;
+}
+.ui-enum-item > li > span{
+	line-height:20px;
+	display:inline-block;
+	padding:0 5px;
+	color:#666;
+	cursor:pointer;
+}
+.ui-enum-item > li.active > span{
+	border:1px dashed #ccc;
+	border-radius:4px;
+}
+.ui-enum-item > li > span.del-btn{
+	border: 1px solid #E9E9E9;
+	background: #F7F7F7;
+}
+.ui-enum-item > li.active > span > i{
+	font-size:18px;
+	color:#ccc;
+	margin:0 5px 0 0;
+}
+.ui-enum-page{
+	border-top:1px solid #e9e9e9;
+}
+.ui-enum-page > .tcdPageCode{
+	padding:10px 0;
+	float:none;
+}
+.ui-enum-page > .tcdPageCode a{
+	height:18px;
+	line-height:18px;
+	padding: 0 5px;
+	border:none;
+}
+.ui-enum-page > .tcdPageCode a.prevPage{
+	background:url(./images/lc-icon.png) no-repeat -237px -222px;
+	border:none;
+}
+.ui-enum-page > .tcdPageCode span.disabled{
+	background:url(./images/lc-icon.png) no-repeat -271px -222px;
+	height:18px;
+	line-height:18px;
+	padding: 0 5px;
+	border:none;
+}
+.ui-enum-page > .tcdPageCode span.current{
+	height:16px;
+	line-height:16px;
+	padding: 0 5px;
+}
+.ui-enum-page .inputPageNum{
+	padding:0 5px;
+}
+.ui-enum-page .inputPageNum > input{
+	width:40px;
+	padding:0 5px;
+}
+/*标签集市-点击选项卡高佳佳*/
+.ui-enum-content.ui-dialog-border{
+	border-color:transparent;
+}
+.ui-enum-content > .ui-dialog-box{
+	width:100%;
+	height:auto;
+	padding:10px;
+	background-color: #fff;
+	border: 2px solid #fff;
+	border-radius: 4px;
+	box-shadow: 0 0 6px 0 rgba(0,0,0,0.08);
+}
+.ui-dialog-box > h3{
+	height: 33px;
+	text-align: left;
+	line-height: 33px;
+	font-size: 16px;
+	color: #000;
+	padding: 0 10px;
+}
+.ui-dialog-box .del-btn{
+	color:#fff;
+	padding: 0px 8px;
+	font-size:12px;
+}
+.ui-dialog-box .del-btn.office{
+	background-color:#00A854;
+}
+.ui-dialog-box .del-btn.hot{
+	background-color:#F04134;
+}
+.ui-dialog-box .del-btn.store{
+	background-color:#FFBF00;
+}
+.ui-dialog-box .ui-label-item{
+	text-align:center;
+}
+.ui-dialog-box > p{
+	color: #666;
+}
+.ui-dialog-form .ui-form-group > .control-label{
+	min-width:80px;
+	text-align:left;
+}
+.ui-dialog-form .glyphicon-date{
+	background-position:-283px -122px;
+}
+.ui-dialog-form .ui-form-group span.tip{
+	color:#FFBD1E;
+	display:inline-block;
+	margin:0 0 0 5px;
+}
+.ui-dialog-form .ui-form-group .radio{
+	padding:0;
+}
+.ui-dialog-form .ui-business-caliber{
+	padding:0 10px;
+}
+/*标签分类demo开发  */
+.label-ztree{
+	width:242px;
+	margin:0 -100% 0 0;
+	border-right: 1px solid #e9e9e9;
+	position:relative;
+	z-index:99;
+}
+.label-ztree > .form-group {
+	padding:10px 0;
+}
+.label-ztree > .form-group > .input-group{
+	width:74%;
+}
+.lable-select{
+	width:100%;
+	height:100%;
+}
+.lable-select > div{
+	margin:0 0 0 242px;
+	padding:10px;
+}
+.label-select-head > .form-group > .input-group{
+	width:200px;
+}
+.label-handles{
+	display:inline-block;
+	margin:0 0 0 20px;
+}
+.label-handles > a{
+	display:inline-block;
+	width:15px!important;
+	height:15px!important;
+	margin:0 4px!important;
+	background:url(./images/lc-icon.png) no-repeat;
+}
+.label-handles > a.setting{
+	background-position: -423px -319px;
+}
+.label-handles > a.del{
+	background-position: -222px -104px;
+	border:1px solid #999;
+	border-radius:50%;
+}
+.label-handles > a.add{
+	background-position: -28px -249px;
+	border:1px solid #999;
+	border-radius:50%;
+}
+.label-select-head{
+	padding:0 0 10px 0;
+}
+.label-select-main{
+	padding:10px 0;
+	border-top:1px solid #e9e9e9;
+}
+.label-select-main > ul{	
+	margin:0 0 0 -2%;
+}
+.label-select-main li{
+	display:inline-block;
+	width:23%;
+	float:left;
+	margin:0 0 10px 2%;
+}
+.label-select-main li > .checkbox{
+	padding: 0 10px 10px 10px;
+	background: #FBFBFB;
+	border: 1px solid #E9E9E9;
+	border-radius: 2px;	
+	height:34px;
+	line-height:34px;
+}
+.label-dialog{
+	position:fixed;
+	bottom:0;
+	right:-260px;
+	z-index:99;
+	width:260px;
+	height:546px;
+	background:#fff;
+	border-left: 1px solid #2EA658;
+	transition:all 0.2s linear;
+}
+.label-dialog.active{
+	right:0;
+	transition:all 0.2s linear;
+}
+.label-dialog > h3{
+	padding:10px;
+	font-size: 14px;
+	color: #FFFFFF;
+	background:#d02433;;
+}
+.label-dialog .ztree{
+	padding:10px;
+}
+.label-dialog > .form-group{
+	padding:10px;
+}
+.label-dialog > p{
+	position:absolute;
+	right:0;
+	bottom:0;
+	padding:10px
+}
+
 
 
 

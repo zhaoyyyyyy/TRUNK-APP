@@ -58,8 +58,8 @@
 			<version>0.13.1</version>
 			<exclusions>
 				<exclusion>
-					<artifactId>*</artifactId>
-					<groupId>*</groupId>
+					<artifactId>org.slf4j</artifactId>
+					<groupId>slf4j-log4j12</groupId>
 				</exclusion>
 			</exclusions>
 		</dependency>

@@ -277,6 +277,9 @@ public class SourceTableInfoController extends BaseController<SourceTableInfo> {
         if (null != sou.getStatusId()) {
             oldSou.setStatusId(sou.getStatusId());
         }
+        if (null != sou.getSourceInfoList()) {
+            oldSou.setSourceInfoList(sou.getSourceInfoList());
+        }
         return oldSou;
     }
 

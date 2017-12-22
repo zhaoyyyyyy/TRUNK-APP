@@ -42,6 +42,21 @@ import com.asiainfo.biapp.si.loc.base.extend.SpringContextHolder;
  * @version 1.0.0.2017年11月9日
  */
 public class CoConfigUtils {
+	
+	private static volatile CoConfigUtils instance = null;
+	
+	public static CoConfigUtils getInstance() {
+		
+		if(instance == null) {
+			synchronized(CoConfigUtils.class){
+	            if(instance == null) {
+	               instance = new CoConfigUtils();
+	            }
+	         }
+	      }
+		return instance;
+		
+	}
 
     /**
      * 通过编码取得一组子节点 Description:
@@ -58,7 +73,7 @@ public class CoConfigUtils {
     }
 
     /**
-     * 通过编码取得值 Description:
+     * 通过编码取得值 Description: "getALLKV" 特殊token
      *
      * @param code
      * @return
@@ -71,7 +86,12 @@ public class CoConfigUtils {
         return coConfigService.getProperties(code, token);
     }
     
-    
+    /**
+     * 获取全部k-v数据，"getALLKV" 特殊token
+     * @param token
+     * @return
+     * @throws BaseException
+     */
     public Map<String, String> getAll(String token) throws BaseException {
         ICoConfigService coConfigService = (ICoConfigService) SpringContextHolder.getBean("coConfigService");
         return coConfigService.selectAll(token);

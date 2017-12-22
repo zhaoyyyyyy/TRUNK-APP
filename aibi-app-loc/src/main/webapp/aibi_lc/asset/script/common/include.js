@@ -128,14 +128,16 @@ var  mainPage={
 			var theme = $.theme;
 			Scripts.loadStyle({src:"../../asset/css/common/reset.css"});
 			Scripts.loadStyle({src:"../../asset/css/jQueryUI/jquery-ui-1.12.1.min.css"});
-			Scripts.loadStyle({src:"../../asset/script/component/jQueryUI/gird/page/page.css"});
+//			Scripts.loadStyle({src:"../../asset/script/component/jQueryUI/gird/page/page.css"});
 			Scripts.loadStyle({src:"../../asset/script/component/tree/css/zTreeStyle/zTreeStyle.css"});
 			Scripts.loadStyle({src:"../../asset/script/component/jQueryUI/gird/css/ui.jqgrid.css" });
-			Scripts.loadStyle({src:"../../asset/script/component/jQueryUI/gird/css/ui.jqgrid.owner.css"});
+//			Scripts.loadStyle({src:"../../asset/script/component/jQueryUI/gird/css/ui.jqgrid.owner.css"});
 			Scripts.loadStyle({src:"../../asset/script/component/validate/css/jquery.easyui.css"});
 			Scripts.loadStyle({src:"../../asset/css/lhgcore/lhgdialog.css"});
 			Scripts.loadStyle({src:"../../asset/css/lhgcore/alertWindow.css"});
 			Scripts.loadStyle({src:"../../asset/css/theme/"+theme+"/button.css"});
+			Scripts.loadStyle({src:"../../asset/css/theme/"+theme+"/page.css"});
+			Scripts.loadStyle({src:"../../asset/css/theme/"+theme+"/ui.jqgrid.owner.css"});
 			Scripts.loadStyle({src:"../../asset/css/theme/"+theme+"/form.css"});
 			Scripts.loadStyle({src:"../../asset/css/theme/"+theme+"/tab.css"});
 			Scripts.loadStyle({src:"../../asset/css/theme/"+theme+"/coc_frame.css"});

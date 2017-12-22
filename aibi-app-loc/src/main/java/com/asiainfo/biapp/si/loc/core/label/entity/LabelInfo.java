@@ -244,7 +244,7 @@ public class LabelInfo extends BaseEntity {
     
     @OneToMany(fetch=FetchType.LAZY)  
     @JoinColumn(name="LABEL_ID",referencedColumnName="LABEL_ID",insertable=false,updatable=false)
-    private List<LabelVerticalColumnRel> verticalColumnRels;
+    private Set<LabelVerticalColumnRel> verticalColumnRels;
 	
     @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name="LABEL_ID",referencedColumnName="RESOURCE_ID",insertable=false,updatable=false)
@@ -480,11 +480,11 @@ public class LabelInfo extends BaseEntity {
 		this.mdaSysTableColumn = mdaSysTableColumn;
 	}
 
-	public List<LabelVerticalColumnRel> getVerticalColumnRels() {
+	public Set<LabelVerticalColumnRel> getVerticalColumnRels() {
 		return verticalColumnRels;
 	}
 
-	public void setVerticalColumnRels(List<LabelVerticalColumnRel> verticalColumnRels) {
+	public void setVerticalColumnRels(Set<LabelVerticalColumnRel> verticalColumnRels) {
 		this.verticalColumnRels = verticalColumnRels;
 	}
 

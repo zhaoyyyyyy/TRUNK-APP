@@ -205,6 +205,30 @@ public class LabelInfoController extends BaseController<LabelInfo> {
         }
         return webResult.success("修改标签信息成功", SUCCESS);
     }
+    
+    @ApiOperation(value = "修改分类ID")
+    @ApiImplicitParams({
+        @ApiImplicitParam(name = "labelId", value = "ID", required = true, paramType = "query", dataType = "string"),
+        @ApiImplicitParam(name = "categoryId", value = "标签分类ID", required = true, paramType = "query", dataType = "string")
+    })
+    @RequestMapping(value = "/labelInfo/updateCategoryId", method = RequestMethod.POST)
+    public WebResult<String> editCategoryId(@ApiIgnore LabelInfo labelInfo) {
+        WebResult<String> webResult = new WebResult<>();
+        LabelInfo oldLab = new LabelInfo();
+        try {
+            oldLab = iLabelInfoService.selectLabelInfoById(labelInfo.getLabelId());
+        } catch (BaseException e) {
+            return webResult.fail(e);
+        }
+        oldLab = fromToBean(labelInfo, oldLab);
+        try {
+            iLabelInfoService.modifyLabelInfo(oldLab);
+        } catch (BaseException e1) {
+            return webResult.fail(e1);
+        }
+        return webResult.success("修改标签信息成功", SUCCESS);
+    }
+    
     /*
     @ApiOperation(value = "删除标签信息")
     @ApiImplicitParam(name = "labelId", value = "ID", required = true, paramType = "query", dataType = "string")
