@@ -15,21 +15,6 @@
 	    <script src="../../asset/script/component/h5compatibility/html5shiv.min.js"></script>
 	    <script src="../../asset/script/component/h5compatibility/respond.min.js"></script>
     <![endif]-->
-    <style>
-    	.label-addBox{
-    		position:absolute;
-    		width:300px;
-    		height:200px;
-    		top:50%;
-    		left:50%;
-    		margin-left:-150px;
-    		margin-top:-100px;
-    		background:#fff;
-    		border:1px solid #ccc;
-    		z-index:999;
-    		display:none;
-    	}
-    </style>
 </head>
 <body>
     <div class="iframe-nest">
@@ -153,23 +138,6 @@
 		<button type="button" class="ui-btn ui-btn-default">确定</button>
  		<button id="dialog-del" type="button" class="ui-btn ui-btn-second">取消</button>
 	</p>
-</div>
-	<div class="label-addBox">
-		<form id="">
-				<input type="hidden" v-model="configId" id="configId" name="configId" />
-				<div class="ui-expand-search ui-reg-search">
-					<div class="form-inline ui-form">
-						<div class="clearfix">
-							<div class="form-group">
-								<label class="fleft mt5">标签分类名称</label> <input v-model="sourceName" name="sourceName" type="text"  class="fleft form-control mr10 ml10"
-									placeholder="标签分类名称" />
-							</div>
-						</div>
-					</div>
-				</div>
-				<button type="button" class="ui-btn ui-btn-default">保存</button>
- 				<button id="label-delBox" type="button" class="ui-btn ui-btn-second">取消</button>
-			</form>
-	</div>
+</div>	
 </body>
 </html>
