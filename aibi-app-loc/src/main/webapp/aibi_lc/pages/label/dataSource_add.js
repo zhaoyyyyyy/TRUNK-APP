@@ -18,7 +18,6 @@ var model = {
 window.loc_onload = function() {
 	var dicGxzq = $.getDicData("GXZQZD");
 	for(var i=0; i<dicGxzq.length; i++){
-		
 		model.gxzq.push(dicGxzq[i]);
 	}
 	var isEdit = $.getUrlParam("isEdit");
@@ -80,9 +79,9 @@ window.loc_onload = function() {
 	        sortable: false,
 	        frozen: true,
 	        editable: true,
-	        editrules: {
-	        	required: true,
-	        }
+//	        editrules: {
+//	        	required: true,
+//	        }
 	    },
 	    // frozen : true固定列
 	    {
@@ -96,9 +95,9 @@ window.loc_onload = function() {
 	        editoptions: {
 	            value: dicCode
 	        },
-	        editrules: {
-	        	required: true,
-	        }
+//	        editrules: {
+//	        	required: true,
+//	        }
 	    },
 	    {
 	        name: 'columnCnName',
@@ -106,11 +105,11 @@ window.loc_onload = function() {
 	        width: 110,
 	        editable: true,
 	        align: "center",
-	        editrules: {
-	        	required: true,
-	        	custom: true,
-	        	custom_func: fun_cnName
-	        }
+//	        editrules: {
+//	        	required: true,
+//	        	custom: true,
+//	        	custom_func: fun_cnName
+//	        }
 	    },
 	    {
 	        name: 'columnUnit',
