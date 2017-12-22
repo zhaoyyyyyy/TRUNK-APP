@@ -133,7 +133,7 @@ public abstract class ICacheBase {
 				log.error("key1 or key2 or value is null.");
 				throw new Exception("key1 or key2 or value is null.");
 			}
-			RedisUtils.setHashMapFeild(key1,key2,value,RedisUtils.DEFAULT_TIME_OUT);
+			RedisUtils.setHashMapFeild(key1,key2,value,RedisUtils.ONE_HOUR_TIME);
 		} catch (Exception e) {
 			throw new Exception(e);
 		}
@@ -146,7 +146,7 @@ public abstract class ICacheBase {
 				log.error("key1 or key2 is null.");
 				throw new Exception("key1 or key2 or value is null.");
 			}
-			return RedisUtils.getStringFromMap(appKey + Prefix.SESSION + key1, key2);
+			return RedisUtils.getStringFromMap(key1, key2);
 		} catch (Exception e) {
 			throw new Exception(e);
 		}

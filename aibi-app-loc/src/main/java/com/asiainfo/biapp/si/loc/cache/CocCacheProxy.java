@@ -22,7 +22,7 @@ public class CocCacheProxy {
 	 
 	public CocCacheProxy(){
 		// 改code 赋值 需要
-		int cacheCode = 2;
+		int cacheCode = 1;
 		switch (cacheCode) { 
 			case  1:
 				System.out.println("cache is redisCache");
@@ -41,7 +41,7 @@ public class CocCacheProxy {
 	
 
 	public static void main(String[] args) {
-
+		
 	}
 
 

@@ -23,6 +23,7 @@ public class RedisUtils {
     private static final Object lock = new Object();
     
     public static final int DEFAULT_TIME_OUT = 30000;
+    public static final int ONE_HOUR_TIME = 600000;
     
     private static String redisIp = null;
     
