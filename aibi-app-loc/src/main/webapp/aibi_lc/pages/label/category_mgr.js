@@ -1,115 +1,148 @@
 window.loc_onload = function() {
 	ztreeFunc();
-	labeltree();
-	
+	labeltree();	
 	function ztreeFunc(){
-		var ztreeObj,zTreeNodes;	 		
-		setting = {
-				view: {
-					selectedMulti: false,
-					addHoverDom: addHoverDom,
-					removeHoverDom: removeHoverDom,
-				},
-				data: {
-					selectedMulti: false,			
-					simpleData: {  
-	                    enable: true,   //设置是否使用简单数据模式(Array)  	                    
-	                },  
-	                key: {  
-	                	
-	                	idKey: "id",    //设置节点唯一标识属性名称  
-	                    pIdKey: "parentId" ,     //设置父节点唯一标识属性名称  
-	                    name:'categoryName',//zTree 节点数据保存节点名称的属性名称  
-	                    title: "categoryName"//zTree 节点数据保存节点提示信息的属性名称        
-	                }  
-				}
-			}
-		
+		var ztreeObj;
 		var obj = $("#preConfig_list").find("span");
-		var labelId =obj.attr("configId");		
-		 $.commAjax({  
-		    url : $.ctx+'/api/label/categoryInfo/queryList',  		    
-		    dataType : 'json', 
-		    async:false,
-		    postData : {
-					"sysId" :labelId,
-				},
-		    onSuccess: function(data){ 		    	
-		    	
-		    	zTreeNodes = data.data;	 
-		    	
-		    	}  
-		    });
-		 
-		 ztreeObj=$.fn.zTree.init($("#ztree"), setting, zTreeNodes);
-			
-			function addHoverDom(treeId, treeNode) {
-				console.log(treeNode.categoryId);
-				var sObj = $("#" + treeNode.tId + "_span");
-		        if (treeNode.editNameFlag || $("#addBtn_" + treeNode.tId).length > 0)
-		            return;
-		        var addStr = "<div class='button add label-handles' id='addBtn_" + treeNode.tId
-		                + "' title='add node'><a class='setting'></a><a class='del'></a><a class='add'></a></div>";
-		        sObj.after(addStr);
-		        var btn = $("#addBtn_" + treeNode.tId).find(".add");				
-				if (btn) btn.bind("click", function(){
- 				var Ppname = prompt("请输入新节点名称");
- 				
-                if (Ppname == null) {
-                    return;
-                } else if (Ppname == "") {
-                    alert("节点名称不能为空");
-                } else {
-                	
-                    var param ="&sysId="+ labelId + "&name=" + Ppname; 
-                    
-                    console.log(param)
-                    var zTree = $.fn.zTree.getZTreeObj("#ztree");
-                    $.commAjax({
-							url : $.ctx + '/api/label/categoryInfo/save',
-							postData : {
-								"sysId" :labelId,
-								"categoryName":Ppname,
-								"parentId":treeNode.categoryId,
-							},
-							onSuccess : function(data) {
-								$.success('启用成功。', function() {
-									if ($.trim(data) != null) {
-                                    var treenode = $.trim(data);
-                                    ztreeObj.addNodes(treeNode, {
-                                        categoryId : labelId,
-                                        name : Ppname
-                                    }, true);
-                                }
-								});
-							}
-						});                                     
-                	}	
+		var labelId =obj.attr("configId");
+		var ssg=window.sessionStorage;
+		ssg.getItem("token")
+		console.log(ssg.getItem("token"));
+//		$.commAjax({			
+//		    url : $.ctx+'/api/label/categoryInfo/queryList',  		    
+//		    dataType : 'json', 
+//		    async:true,
+//		    postData : {
+//					"sysId" :labelId,
+//				},
+//		    onSuccess: function(data){ 		    			    			    	
+//			    	var ztreeObj=data.data;
+//			    	$.fn.zTree.init($("#ztree"), setting, ztreeObj)
+//		    	}  
+//	    });
 
-				});
+		setting = {
+			async: {
+				enable: true,
+				url:$.ctx+'/api/label/categoryInfo/queryList',
+				//autoParam:["categoryId"],
+				contentType: "application/json",
+				dataType:'json',
+				//otherParam:{"X-Authorization" :ssg.getItem("token")}
+								
+//				dataFilter: filter
+			},
+			view: {
+				selectedMulti: false,
+				addHoverDom: addHoverDom,
+				removeHoverDom: removeHoverDom,
+			},
+			data: {
+				selectedMulti: false,			
+				simpleData: {  
+	                enable: true,   //设置是否使用简单数据模式(Array)  	                    
+	            },  
+	            key: {             	
+	            	idKey: "sysId",    //设置节点唯一标识属性名称  
+	                pIdKey: "parentId" ,     //设置父节点唯一标识属性名称  
+	                name:'categoryName',//zTree 节点数据保存节点名称的属性名称  
+	                title: "categoryName"//zTree 节点数据保存节点提示信息的属性名称        
+	            }  
+			},
 
-			};
-			
-			
-			var addCount = 1;
-			function addNodes() {
-//				hideRMenu();
-				var newNode = { name:"增加" + (addCount++)};
-				if (zTree.getSelectedNodes()[0]) {
-					newNode.checked = zTree.getSelectedNodes()[0].checked;
-					zTree.addNodes(zTree.getSelectedNodes()[0], newNode);
-				} else {
-					zTree.addNodes(null, newNode);
-				}
-			}
-			
-			function removeHoverDom(treeId, treeNode) {
-				$("#addBtn_" + treeNode.tId).unbind().remove();
-			};
+
+	callback: {
+		onAsyncError: zTreeOnAsyncError,
+		onAsyncSuccess: zTreeOnAsyncSuccess
+	}
+}
+		$.fn.zTree.init($("#ztree"), setting)
 		
+		var newCount = 1;
+		function zTreeOnAsyncError(event, treeId, treeNode, XMLHttpRequest, textStatus, errorThrown) {
+    		console.log(XMLHttpRequest);
+		};
+		function zTreeOnAsyncSuccess(event, treeId, treeNode, msg) {
+    		console.log(treeNode);
+		};
+		function addHoverDom(treeId, treeNode) {			
+			var sObj = $("#" + treeNode.tId + "_span");
+	        if (treeNode.editNameFlag || $("#addBtn_" + treeNode.tId).length > 0)
+	            return;
+	        var addStr = "<div class='button add label-handles' id='handle_" + treeNode.tId
+	                + "'  title='add node'><a id='updBtn_" + treeNode.tId
+	                + "'  class='setting'></a><a id='delBtn_" + treeNode.tId
+	                + "'  class='del'></a><a id='addBtn_" + treeNode.tId
+	                + "'  class='add'></a></div>";
+	        sObj.after(addStr);
+	        var btnAdd = $("#addBtn_" + treeNode.tId);	
+	        
+	        //增加节点
+	        if (btnAdd) btnAdd.bind("click", function(){	        	
+	        	var Ppname = prompt("请输入新节点名称");				
+		        if (Ppname == null) {
+		            return;
+		        } else if (Ppname == "") {
+		            alert("节点名称不能为空");
+		        } else {            	
+		            var param ="&sysId="+ labelId + "&name=" + Ppname; 
+		            console.log(param)
+		            $.commAjax({						
+						url : $.ctx + '/api/label/categoryInfo/save',
+						async:true,
+						postData : {
+							"sysId" :labelId,
+							"categoryName":Ppname,
+							"parentId":treeNode.categoryId,
+						},
+						onSuccess:function(data){
+							var zTree = $.fn.zTree.getZTreeObj("ztree");
+							console.log(zTree)
+							zTree.addNodes(treeNode, {id:(100 + newCount), pId:treeNode.id, name:"new node" + (newCount++)});
+							return false;
+						}
+					});                                     
+		        }	
+			});
+
+			//删除节点
+			var delBtn = $("#delBtn_" + treeNode.tId);	
+			delBtn.click(function(){
+			
+				$.confirm('确定要删除该标签？', function() {
+					$.commAjax({
+							url : $.ctx + '/api/label/categoryInfo/delete',
+							postData : {
+								"categoryId" : treeNode.categoryId,	
+								"sysId" :labelId,								
+								"parentId":treeNode.categoryId,
+							}							
+						});
+				})
+			})
+			
+			
+			//修改按钮
+//				var updBtn = $("#updBtn_" + treeNode.tId);	
+//				updBtn.click(function(){
+//					$.commAjax({
+//								url : $.ctx + '/api/label/categoryInfo/update',
+//								postData : {
+//									"categoryId" : treeNode.categoryId,									
+//								}								
+//						});
+//				})
+//				
+		};
+		
+
+		
+		function removeHoverDom(treeId, treeNode) {
+			$("#handle_" + treeNode.tId).unbind().remove();
+		};
 	}
 
-	
+
 	
 	function labeltree(){
 		var zTreeObj,
