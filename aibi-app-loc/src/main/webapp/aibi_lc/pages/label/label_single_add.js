@@ -108,6 +108,22 @@ function fun_to_dimdetail(){
 	}
 }
 
+function fun_to_createRow(){
+	model.sourceInfoList.push({
+		columnCaliber: "",
+	    columnCnName : "",
+        columnLength : "",
+        columnName : "",
+        columnNum : "",
+        columnUnit : "",
+        cooColumnType : "",
+        sourceColumnRule : "",
+        sourceId : "",
+        sourceName : "",
+        sourceTableId : ""
+	});
+}
+
 function changeStatus(obj){
 	if(obj.value == 5){
 		model.showdimDetail = obj.id;
