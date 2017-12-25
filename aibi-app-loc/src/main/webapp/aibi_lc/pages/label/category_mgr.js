@@ -102,7 +102,6 @@ window.loc_onload = function() {
 		       		}
 	        	})	        	
 	});
-
 			//删除节点
 			var delBtn = $("#delBtn_" + treeNode.tId);	
 			delBtn.click(function(){
@@ -121,82 +120,101 @@ window.loc_onload = function() {
 						});
 				})
 			})
-			
-			
 			//修改按钮
 				var updBtn = $("#updBtn_" + treeNode.tId);
 				if (updBtn) updBtn.bind("click", function(){
-	        	 $( "#dialog" ).dialog( "open" );
+	        	 $( "#dialog" ).dialog( "open" );	        	
 	        	 $('#add-dialog-btn').click(function(){	        	 	
-	        	 	var Ppname=$( "#dialog" ).find("input").val();
+	        	 	 var Ppname=$( "#dialog" ).find("input").val();	        	 	 
 	        	 	if (Ppname == null) {
 			            return;
 				    } else if (Ppname == "") {
 				            alert("节点名称不能为空");
 				    }else {
 				        $.commAjax({						
-						url : $.ctx + '/api/label/categoryInfo/update',
-						async:true,
-						postData : {
-							"sysId" :labelId,
-							"categoryName":Ppname,
-							"categoryId":treeNode.categoryId,
-						},
-						onSuccess:function(data){
-							
-							
-							ztreeFunc();
-						}
-					});
-		       	}
+							url : $.ctx + '/api/label/categoryInfo/update',
+							async:true,
+							postData : {
+								"sysId" :labelId,
+								"categoryName":Ppname,
+								"categoryId":treeNode.categoryId,
+							},
+							onSuccess:function(data){														
+								ztreeFunc();
+							}
+						});
+		       		}
 	        	})	        	
-	});
-				
-				
-//				
+			});
 		};
-		
-		$("#btn_serach").click(function(){
-			var text = $("#exampleInputAmount").val();			
-			var zTreeNodes = ztreeObj.getNodesByParamFuzzy("categoryName", text, null);
-			$.fn.zTree.init($("#ztree"), setting, zTreeNodes);
-		});
-		
 		function removeHoverDom(treeId, treeNode) {
 			$("#handle_" + treeNode.tId).unbind().remove();
 		};
-		function zTreeOnClick(event, treeId, treeNode) {
-		    console.log(treeNode.tId + ", " + treeNode.categoryName);
-		};
-		
+		function zTreeOnClick(event, treeId, treeNode) {		    
+		    $.commAjax({			
+			    url : $.ctx+'/api/label/labelInfo/queryList',  		    
+			    dataType : 'json', 
+			    async:true,
+			    postData : {
+						"categoryId" :treeNode.categoryId,
+					},
+			    onSuccess: function(data){ 		    			    			    	
+				    	var labelList=data.data;
+				    	for(var i=0;i<labelList.length;i++){
+				    		var html="<li>"+
+				    		"<div class='checkbox'>"+
+				    		"<input type='checkbox' class='checkbix'>"+
+				    		"<label aria-label role='checkbox' class='checkbix'>"+
+				    		"<span class='large'></span>"+
+				    		labelList[i].labelName+
+				    		"</label>"+
+				    		"</div>"+
+				    		"</li>";				    					    		
+				    		$("#labelList").append(html)
+				    	}
+			    	}  
+	   		});
+		    
+		};		
 	}
 	
 	
 	function labeltree(){
-		var zTreeObj,
-		setting = {
-			view: {
-				selectedMulti: false
-			}
-		},
-		zTreeNodes = [
-			{"name":"在网用户状态", open:false, children: [
-				{ "name":"google", "url":"http://g.cn", "target":"_blank"},
-				{ "name":"baidu", "url":"http://baidu.com", "target":"_blank"},
-				{ "name":"sina", "url":"http://www.sina.com.cn", "target":"_blank"}
-				]
-			},
-			{"name":"在网状态", open:true, children: [
-				{ "name":"停开机状态", open:true,children:[
-					{ "name":"催停类型", "url":"http://g.cn", "target":"_blank"},
-					{ "name":"测试", "url":"http://baidu.com", "target":"_blank"}
-				]
+		var ztreeObj;
+		var obj = $("#preConfig_list").find("span");
+		var labelId =obj.attr("configId");
+		console.log(labelId);
+		$.commAjax({			
+		    url : $.ctx+'/api/label/categoryInfo/queryList',  		    
+		    dataType : 'json', 
+		    async:true,
+		    postData : {
+					"sysId" :labelId,
 				},
-				]
+		    onSuccess: function(data){ 		    			    			    	
+			    	var ztreeObj=data.data;
+			    	$.fn.zTree.init($("#labeltree"), install, ztreeObj)
+		    	}  
+	   });
+		install = {
+			view: {
+				selectedMulti: false,
+			},
+			data: {
+				selectedMulti: false,			
+				simpleData: {  
+	                enable: true,   //设置是否使用简单数据模式(Array)  	                    
+	            },  
+	            key: {             	
+	            	idKey: "sysId",    //设置节点唯一标识属性名称  
+	                pIdKey: "parentId" ,     //设置父节点唯一标识属性名称  
+	                name:'categoryName',//zTree 节点数据保存节点名称的属性名称  
+	                title: "categoryName"//zTree 节点数据保存节点提示信息的属性名称        
+	            }  
 			}
-		];
-		zTreeObj = $.fn.zTree.init($("#labeltree"), setting, zTreeNodes);
+		}
 	}
+
 
 
 
@@ -213,5 +231,16 @@ window.loc_onload = function() {
 	$("#dialog-del").click(function(){
 		$(".label-dialog").removeClass("active");
 	});
+	var txt;
+	$("#btn_serach").click(function(){
+		var text = $("#exampleInputAmount").val();	
+		if(txt != text){
+			var treeObj = $.fn.zTree.getZTreeObj("ztree");
+			var zTreeNodes = treeObj.getNodesByParamFuzzy("categoryName", text, null);
+			$.fn.zTree.init($("#ztree"), setting, zTreeNodes);
+			txt =text;
+		}
+	});
+
 	
 }
