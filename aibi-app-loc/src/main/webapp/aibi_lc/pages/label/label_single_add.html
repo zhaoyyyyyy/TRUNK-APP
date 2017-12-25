@@ -78,8 +78,14 @@
                                         <label class="control-label fleft">标签类型</label>
                                         <div class="control-input fleft ml10">
                                            <ul>
-											  <li class="" v-for="g in bqlx" style="display: inline"><input :value="g.code"
-												:name="'labelInfoList['+index+'].labelTypeId'" type="radio" onclick="changeStatus(this)" /><span>{{g.dataName}}</span></li>
+											  <li class="" v-for="g in bqlx" style="display: inline">
+											  	<div class="radio circle success">
+											  		<input :value="g.code"
+												:name="'labelInfoList['+index+'].labelTypeId'" type="radio" onclick="changeStatus(this)" />
+													
+													<label><i class="default"></i>{{g.dataName}}</label>
+											  	</div>											  	
+											  </li>
 										   </ul>
 										</div>
                                     </div>
@@ -87,8 +93,13 @@
                                         <label class="control-label fleft">是否正式标签</label>
                                         <div class="control-input fleft ml10">
                                            <ul>
-											  <li class="" v-for="i in isbq" style="display: inline"><input :value="i.code"
-												:name="'labelInfoList['+index+'].isRegular'" type="radio"/><span>{{i.dataName}}</span></li>
+											  <li class="" v-for="i in isbq" style="display: inline">
+											  	<div class="radio circle success">
+											  		<input :value="i.code"
+												:name="'labelInfoList['+index+'].isRegular'" type="radio"/>													
+													<label><i class="default"></i>{{i.dataName}}</label>
+											  	</div>											  	
+											  </li>
 										   </ul>
 										</div>
                                     </div>
