@@ -517,12 +517,14 @@
 }
 .create-main > .progress{
 	width:46px;
-	height: 186px;
+	height: 254px;
 	text-align:center;
 	background:#f7f7f7;
 	margin:0 -100% 0px 0;
-	line-height:186px;
+	line-height:254px;
 	border-radius:6px 0 0 6px;
+	position:relative;
+	z-index:9999;
 }
 .create-main:hover > .progress  > .progress-label > i{
 	background-position: -458px -258px;
@@ -532,18 +534,19 @@
 	 width:24px;
 	 height:24px;
 	 background-color:transparent;
+	 cursor:pointer;
  }
 .create-main > .ui-main > div{
 	margin:0 0 0 46px;
 	padding:0;
 	background:#fff;
-	height:186px;
+	height: 254px;
 	border-radius:0 6px 6px 0;
 }
 .create-main .ui-form{
 	width:33.3333333%;
 	border-right:1px solid #ddd;
-	padding:20px 10px 0px 15px;
+	padding:20px 10px 0px 0px;
 	height:inherit;
 }
 .create-main .ui-form:last-child{
@@ -552,9 +555,7 @@
 .create-main .ui-form-group{
 	width:100%;
 }
-.create-main .ui-form > .ui-form-group > .control-label{
-	min-width: 60px;
-}
+
 .create-main .ui-form  > .ui-form-group > .control-input{
 	width:70%;
 }
