@@ -1,7 +1,6 @@
 window.loc_onload = function() {
 	ztreeFunc();
 	labeltree();
-	var ztreeObj;
 	$("#dialog").dialog({
 	      height:164,
 	      width: 300,
@@ -29,7 +28,7 @@ window.loc_onload = function() {
   	  ]
   });
 	function ztreeFunc(){
-
+		var ztreeObj;
 		var obj = $("#preConfig_list").find("span");
 		var labelId =obj.attr("configId");
 		var ssg=window.sessionStorage;
@@ -185,53 +184,29 @@ window.loc_onload = function() {
 
 	
 	function labeltree(){
-		var ztreeObj;
-		var obj = $("#preConfig_list").find("span");
-		var labelId =obj.attr("configId");
-		var ssg=window.sessionStorage;
-		ssg.getItem("token")
-		//console.log(ssg.getItem("token"));
-		$.commAjax({			
-		    url : $.ctx+'/api/label/categoryInfo/queryList',  		    
-		    dataType : 'json', 
-		    async:true,
-		    postData : {
-					"sysId" :labelId,
-				},
-		    onSuccess: function(data){ 		    			    			    	
-			    	var ztreeObj=data.data;
-			    	$.fn.zTree.init($("#ztree"), setting, ztreeObj)
-		    	}  
-	    });
-
+		var zTreeObj,
 		setting = {
-//			async: {
-//				enable: true,
-//				url:$.ctx+'/api/label/categoryInfo/queryList',
-//				//autoParam:["categoryId"],
-//				contentType: "application/json",
-//				dataType:'json',
-//				//otherParam:{"X-Authorization" :ssg.getItem("token")}
-//								
-////				dataFilter: filter
-//			},
 			view: {
-				selectedMulti: false,
-			},
-			data: {
-				selectedMulti: false,			
-				simpleData: {  
-	                enable: true,   //设置是否使用简单数据模式(Array)  	                    
-	            },  
-	            key: {             	
-	            	idKey: "sysId",    //设置节点唯一标识属性名称  
-	                pIdKey: "parentId" ,     //设置父节点唯一标识属性名称  
-	                name:'categoryName',//zTree 节点数据保存节点名称的属性名称  
-	                title: "categoryName"//zTree 节点数据保存节点提示信息的属性名称        
-	            }  
+				selectedMulti: false
 			}
-}
-		$.fn.zTree.init($("#ztree"), setting)
+		},
+		zTreeNodes = [
+			{"name":"在网用户状态", open:false, children: [
+				{ "name":"google", "url":"http://g.cn", "target":"_blank"},
+				{ "name":"baidu", "url":"http://baidu.com", "target":"_blank"},
+				{ "name":"sina", "url":"http://www.sina.com.cn", "target":"_blank"}
+				]
+			},
+			{"name":"在网状态", open:true, children: [
+				{ "name":"停开机状态", open:true,children:[
+					{ "name":"催停类型", "url":"http://g.cn", "target":"_blank"},
+					{ "name":"测试", "url":"http://baidu.com", "target":"_blank"}
+				]
+				},
+				]
+			}
+		];
+		zTreeObj = $.fn.zTree.init($("#labeltree"), setting, zTreeNodes);
 	}
 
 
@@ -251,7 +226,7 @@ window.loc_onload = function() {
 	});
 	$("#btn_serach").click(function(){
 		var text = $("#exampleInputAmount").val();
-		var zTreeNodes = treeObj.getNodesByParamFuzzy("categoryName", text, null);
+		var zTreeNodes = ztreeObj.getNodesByParamFuzzy("categoryName", text, null);
 		$.fn.zTree.init($("#ztree"), setting, zTreeNodes);
 	});
 }
