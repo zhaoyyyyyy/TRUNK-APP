@@ -38,4 +38,44 @@ public class LabelRuleVo extends LabelRule {
 
     private static final long serialVersionUID = 2035013017939483936L;
 
+    //view field
+  	private Integer labelTypeId;//用于页面，非数据库属性
+  	private String customOrLabelName;//用于页面展示客户群或者标签名称
+  	
+	private Integer updateCycle;
+	private String dataDate;//数据时间字段
+	public Integer getLabelTypeId() {
+		return labelTypeId;
+	}
+	public void setLabelTypeId(Integer labelTypeId) {
+		this.labelTypeId = labelTypeId;
+	}
+	public String getCustomOrLabelName() {
+		return customOrLabelName;
+	}
+	public void setCustomOrLabelName(String customOrLabelName) {
+		this.customOrLabelName = customOrLabelName;
+	}
+	public Integer getUpdateCycle() {
+		return updateCycle;
+	}
+	public void setUpdateCycle(Integer updateCycle) {
+		this.updateCycle = updateCycle;
+	}
+	public String getDataDate() {
+		return dataDate;
+	}
+	public void setDataDate(String dataDate) {
+		this.dataDate = dataDate;
+	}
+	
+	private Integer labelOrCustomSort;//只标识客户群和标签的排序序号，用户在购物车中删除标签或者客户群
+	public Integer getLabelOrCustomSort() {
+		return labelOrCustomSort;
+	}
+	public void setLabelOrCustomSort(Integer labelOrCustomSort) {
+		this.labelOrCustomSort = labelOrCustomSort;
+	}
+	
+	
 }

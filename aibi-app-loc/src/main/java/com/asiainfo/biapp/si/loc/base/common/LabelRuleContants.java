@@ -32,6 +32,14 @@ public interface LabelRuleContants {
 	public static final String SHOP_CART_RULE_NUM = "calcElementNum";
 	
 	/**
+	 * 购物车session使用
+	 */
+	/** 标签 **/
+	public static String LABEL_INFO_CALCULATIONS_TYPEID = "1";
+	/** 客户群 **/
+	public static String CUSTOM_GROUP_INFO_CALCULATIONS_TYPEID = "2";
+	
+	/**
 	 * 元素类型
 	 */
 	/** 元素类型，运算符 */

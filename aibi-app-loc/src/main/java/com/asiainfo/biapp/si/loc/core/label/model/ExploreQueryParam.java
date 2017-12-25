@@ -29,27 +29,35 @@ package com.asiainfo.biapp.si.loc.core.label.model;
  * @version 1.0.0.2017年12月18日
  */
 public class ExploreQueryParam {
-	/**
-	 * @param monthDate
-	 *            客户群所使用的月标签的数据时间
-	 * @param dayDate
-	 *            客户群所使用的日标签的数据时间
-	 * @param userId
-	 *            获取当前Session中的用户ID
-	 * @param configId
-	 *            专区ID
-	 * @param cityId
-	 *            地市ID
-	 */
-	private String monthDate;
-	private String dayDate;
-	private String userId;
-	private Integer configId;
-	private String cityId;
+	private String dataDate;// 统计周期
+	private String monthDate;// 客户群所使用的月标签的数据时间
+	private String dayDate;// 客户群所使用的日标签的数据时间
+	private String userId;// 获取当前Session中的用户ID
+	private Integer configId;// 专区ID
+	private String cityId;// 地市ID
 
 	private Integer interval;
 	private Integer updateCycle;
 	private boolean isValidate;
+
+	public ExploreQueryParam() {
+		super();
+	}
+
+	public ExploreQueryParam(String dataDate, String monthDate, String dayDate) {
+		super();
+		this.dataDate = dataDate;
+		this.monthDate = monthDate;
+		this.dayDate = dayDate;
+	}
+
+	public String getDataDate() {
+		return dataDate;
+	}
+
+	public void setDataDate(String dataDate) {
+		this.dataDate = dataDate;
+	}
 
 	public String getMonthDate() {
 		return monthDate;

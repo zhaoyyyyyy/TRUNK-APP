@@ -20,13 +20,13 @@ import com.asiainfo.biapp.si.loc.base.common.LabelRuleContants;
 import com.asiainfo.biapp.si.loc.base.exception.BaseException;
 import com.asiainfo.biapp.si.loc.base.utils.StringUtil;
 import com.asiainfo.biapp.si.loc.core.label.entity.LabelInfo;
-import com.asiainfo.biapp.si.loc.core.label.entity.LabelRule;
 import com.asiainfo.biapp.si.loc.core.label.entity.MdaSysTable;
 import com.asiainfo.biapp.si.loc.core.label.entity.MdaSysTableColumn;
 import com.asiainfo.biapp.si.loc.core.label.model.ExploreQueryParam;
 import com.asiainfo.biapp.si.loc.core.label.model.LabelElementFactory;
 import com.asiainfo.biapp.si.loc.core.label.service.ILabelExploreService;
 import com.asiainfo.biapp.si.loc.core.label.service.ILabelInfoService;
+import com.asiainfo.biapp.si.loc.core.label.vo.LabelRuleVo;
 
 @Service
 @Transactional
@@ -36,7 +36,7 @@ public class LabelExploreServiceImpl implements ILabelExploreService {
 	private ILabelInfoService labelInfoService;
 
 	@Override
-	public String getCountSqlStr(List<LabelRule> ciLabelRuleList, ExploreQueryParam queryParam) throws BaseException {
+	public String getCountSqlStr(List<LabelRuleVo> ciLabelRuleList, ExploreQueryParam queryParam) throws BaseException {
 
 		// 判断标签探索中是否只包含and和括号
 		boolean andFlag = true;
@@ -46,23 +46,21 @@ public class LabelExploreServiceImpl implements ILabelExploreService {
 		Map<String, String> tableAlias = new LinkedHashMap<String, String>();
 		// 别名，要查询的字段集合 map
 		Map<String, Set<String>> aliasColumn = new HashMap<String, Set<String>>();
-
 		StringBuffer fromSqlSb = new StringBuffer("");
 		StringBuffer wherelabel = new StringBuffer(" (");
 		StringBuffer whereSb = new StringBuffer("where 1=1 and ");
-
+		
 		for (int i = 0; i < ciLabelRuleList.size(); i++) {
-
-			LabelRule ciLabelRule = ciLabelRuleList.get(i);
+			LabelRuleVo ciLabelRule = ciLabelRuleList.get(i);
 			int elementType = ciLabelRule.getElementType();
 			if (elementType == LabelRuleContants.ELEMENT_TYPE_LABEL_ID) {
 				String labelIdStr = ciLabelRule.getCalcuElement();
-				// TODO LabelInfo ciLabelInfo =cache.getEffectiveLabel(labelIdStr);
+				//TODO从缓存中取出    LabelInfo ciLabelInfo =cache.getEffectiveLabel(labelIdStr);
 				LabelInfo ciLabelInfo = labelInfoService.selectLabelInfoById(labelIdStr);
 				MdaSysTableColumn column = ciLabelInfo.getMdaSysTableColumn();
 				MdaSysTable table = column.getMdaSysTable();
 				String tableName = table.getTableName();
-				String alias = "t_" + table.getTableId(); // 表的别名:tabelName_tabelId
+				String alias = "t_" + table.getTableId(); // 表的别名:t_tabelId
 				String asName = alias + "." + column.getColumnName(); // 格式为：“别名.字段名”
 				Set<String> columnSet = null;
 				if (null != aliasColumn && aliasColumn.get(alias) != null) {
@@ -74,27 +72,11 @@ public class LabelExploreServiceImpl implements ILabelExploreService {
 					columnSet.add(column.getColumnName().toUpperCase());
 					aliasColumn.put(alias, columnSet);
 				}
-				// 日表、月表表名提取
-				if (LabelInfoContants.LABEL_CYCLE_TYPE_D == ciLabelInfo.getUpdateCycle()) {
-					String dayDate = queryParam.getDayDate();
-					// if (StringUtil.isEmpty(dayDate)) {
-					// dayDate = CacheBase.getInstance().getNewLabelDay();
-					// //TODO log.warn("使用日标签时，日期为空");
-					// }
-					String tablePostfix = "_" + dayDate;
-					tableName += tablePostfix;
-					// String dayTableName = tableName.toUpperCase() + " " +
-					// alias;
-					tableAlias.put(tableName.toUpperCase(), alias);
-				} else if (LabelInfoContants.LABEL_CYCLE_TYPE_M == ciLabelInfo.getUpdateCycle()) {
-					String monthDate = queryParam.getMonthDate();
-					String tablePostfix = "_" + monthDate;
-					tableName += tablePostfix;
-					tableAlias.put(tableName.toUpperCase(), alias);
-				}
+				// 日表、月表表名提取拼接
+				tableName = getTableName(queryParam, ciLabelInfo, tableName);
+				tableAlias.put(tableName.toUpperCase(), alias);
 				// 获取sql条件
-				int labelTypeId = ciLabelInfo.getLabelTypeId();
-				fac.setLabelElement(labelTypeId);
+				fac.setLabelElement(ciLabelInfo.getLabelTypeId());
 				String labelConditionSql = fac.getLabelElement().getConditionSql(ciLabelRule, column, asName,
 						queryParam.getInterval(), queryParam.getUpdateCycle(), queryParam.isValidate());
 				wherelabel.append(labelConditionSql);
@@ -116,6 +98,27 @@ public class LabelExploreServiceImpl implements ILabelExploreService {
 		fromSqlSb.append(" from ").append(leftJoinSqlStr).append(" ");
 		return fromSqlSb.toString();
 
+	}
+
+	private String getTableName(ExploreQueryParam queryParam, LabelInfo ciLabelInfo, String tableName) {
+		// 日表、月表表名提取
+		if (LabelInfoContants.LABEL_CYCLE_TYPE_D == ciLabelInfo.getUpdateCycle()) {
+			String dayDate = queryParam.getDayDate();
+			// if (StringUtil.isEmpty(dayDate)) {
+			// dayDate = CacheBase.getInstance().getNewLabelDay();
+			// //TODO log.warn("使用日标签时，日期为空");
+			// }
+			String tablePostfix = "_" + dayDate;
+			tableName += tablePostfix;
+			// String dayTableName = tableName.toUpperCase() + " " +
+			// alias;
+		} else if (LabelInfoContants.LABEL_CYCLE_TYPE_M == ciLabelInfo.getUpdateCycle()) {
+			String monthDate = queryParam.getMonthDate();
+			String tablePostfix = "_" + monthDate;
+			tableName += tablePostfix;
+			
+		}
+		return tableName;
 	}
 
 	/**
