@@ -17,8 +17,13 @@ window.loc_onload = function() {
 		}]);
 	})
 
+	var obj = $("#preConfig_list").find("span");
+	
 	$("#jsonmap1").jqGrid({
 		url: $.ctx + "/api/source/sourceTableInfo/queryPage",
+		postData: {
+			"configId" : obj.attr("configId")
+		},
 		datatype: "json",
 		colNames: ['数据源表名称', '创建时间', '数据源表类型', '操作'],
 		colModel: [{

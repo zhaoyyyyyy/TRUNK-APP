@@ -30,6 +30,8 @@
 					<div class="ui-expand-search ui-reg-search">
 						<div class="form-inline ui-form">
 							<div class="clearfix">
+							<input id="sourceInfoList" name="sourceInfoList" type="text" value="" style="display:none" class="form-control mr10 ml10" />
+							<input id="configId" name="configId" type="text" value="" class="form-control mr10 ml10" />
 								<div class="form-group fleft">
 									<label for="exampleInputEmail3">表名称</label> <input v-model="sourceTableName" name="sourceTableName" type="text" class="form-control mr10 ml10" placeholder="表名称">
 									<button type="button" class="ui-btn ui-btn-default fright">解析</button>
@@ -86,7 +88,6 @@
 						</div>
 					</div>
 					<div class="ui-reg-table mt20">
-					<input id="sourceInfoList" name="sourceInfoList" type="text" style="display:none" />
 						<div class="clearfix">
 							<h3 class="fleft ml20">字段描述</h3>
 							<button type="button" class="ui-btn ui-btn-sm ui-btn-default fleft ml20">导入</button>

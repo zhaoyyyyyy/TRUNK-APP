@@ -16,6 +16,9 @@ var model = {
 	sourceTableId : "",
 }
 window.loc_onload = function() {
+	var obj = $("#preConfig_list").find("span");
+	$("#configId").val(obj.attr("configId"));
+	
 	var dicGxzq = $.getDicData("GXZQZD");
 	for(var i=0; i<dicGxzq.length; i++){
 		model.gxzq.push(dicGxzq[i]);
@@ -50,7 +53,6 @@ window.loc_onload = function() {
 	var url = "";
 	var pD = {};
 	if (isEdit == 1) {
-		debugger;
 		url = $.ctx + "/api/source/sourceInfo/queryPage";
 		pD = {
 			'sourceTableId' : id
@@ -176,6 +178,8 @@ function fun_to_del(id) {
 	$("#jsonmap").jqGrid("delRowData", id);
 }
 function fun_to_save() {
+	
+	$.alert($("#configId").val());
 	
 	//取消所有编辑
 	var ids = $("#jsonmap").jqGrid('getDataIDs');
