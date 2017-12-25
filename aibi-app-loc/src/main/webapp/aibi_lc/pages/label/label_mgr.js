@@ -156,7 +156,7 @@ window.loc_onload = function(){
 }
 
 function fun_to_detail(id){
-	var win = $.window('标签详情',$.ctx+'/aibi_lc/pages/label/label_detail.html?labelId='+id,700,800);
+	var win = $.window('标签详情',$.ctx+'/aibi_lc/pages/label/label_detail.html?labelId='+id,500,600);
 	win.reload = function(){
 		$("#mainGrid").setGridParam({
 			postData : $("fromSearch").fromToJson()

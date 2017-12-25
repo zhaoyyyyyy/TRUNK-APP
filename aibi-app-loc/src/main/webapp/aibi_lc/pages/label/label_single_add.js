@@ -4,15 +4,13 @@ var model = {
 		sourceInfoList:[],
 		bqlx : [],
 		isbq : [],
-		showdimDetail: ""
+		showdimDetail: "",
 }
 
 window.loc_onload = function() {		
 	var dicBqlx = $.getDicData("BQLXZD");
 	for(var i = 0; i<dicBqlx.length; i++){
-		if(dicBqlx[i].code!=8&&dicBqlx[i].code!=10&&dicBqlx[i].code!=11&&dicBqlx[i].code!=12){
-			model.bqlx.push(dicBqlx[i]);
-		}  
+		model.bqlx.push(dicBqlx[i]); 
 	}
 	var dicIsbq = $.getDicData("SFZD");
 	for(var i = 0; i<dicIsbq.length; i++){
@@ -35,8 +33,8 @@ window.loc_onload = function() {
 			model.sourcetableInfoList = data.data
 		}
 	});	
-	$('#sourceTableName').change(function(){
-		var sourceTableId = $("#sourceTableName").val();
+	$('#sourceTableId').change(function(){
+		var sourceTableId = $("#sourceTableId").val();
 		$.commAjax({
 			url : $.ctx + '/api/source/sourceTableInfo/get?sourceTableId='+sourceTableId,
 			onSuccess : function(data){
@@ -46,16 +44,42 @@ window.loc_onload = function() {
 	});
 
 }
+
 function fun_to_save(){
-	var labelName = $.trim($("#labelName").val());
-	data =$('#saveDataForm').formToJson();
+	var labelName = $('#labelName').val();
+	var list =$('#saveDataForm').formToJson();
+    labellist=JSON.stringify(list);
+    labellist = JSON.parse(JSON.stringify(list));
+    const formatCode = function (data) {
+    	   const formatData = {};
+    	   const result = {};
+    	   Object.keys(data).forEach(function(key) {
+    	     if (key.indexOf('.') === -1) {
+    	       result[key] = data[key];
+    	       return;
+    	     }
+    	     const label = key.split('.')[0];
+    	     const name = key.split('.')[1];
+    	     const index = label.charAt(label.length - 2);
+    	     formatData[index] = formatData[index] || {};
+    	     formatData[index][name] = data[key];
+    	   });
+    	  const resultArray = Object.keys(formatData).map(function(item) {
+    	    return formatData[item];
+    	  })
+    	  result.dataArray = resultArray;
+    	  return result;
+    	};
+    var labelInfolist=formatCode(labellist);
     debugger
 	if(labelName==""){
 		$.alert("标签名称不许为空");
 	}else{
 		$.commAjax({
 			url : $.ctx+'/api/label/labelInfo/save',
-			postData:$('#saveDataForm').formToJson(),
+			postData:{
+				"labelInfoList":JSON.stringify(labelInfolist.dataArray)
+			},
 			onSuccess:function(data){
 				if (data.data == 'success') {
 					$.success("创建成功", function() {

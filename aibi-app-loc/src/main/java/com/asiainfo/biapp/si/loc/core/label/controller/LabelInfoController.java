@@ -15,6 +15,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.derby.impl.sql.catalog.SYSPERMSRowFactory;
+import net.sf.json.JSONArray;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -143,22 +145,17 @@ public class LabelInfoController extends BaseController<LabelInfo> {
             @ApiImplicitParam(name = "groupType", value = "群类型", required = false, paramType = "query", dataType = "int"),
             @ApiImplicitParam(name = "sortNum", value = "排序字段", required = false, paramType = "query", dataType = "int") })
     @RequestMapping(value = "/labelInfo/save", method = RequestMethod.POST)
-    public WebResult<String> save(@ApiIgnore LabelInfo labelInfo) {
+    public WebResult<String> save(String labelInfoList) {
         WebResult<String> webResult = new WebResult<>();
-        labelInfo.setCreateTime(new Date());
-        labelInfo.setDataStatusId(1);
-        User user = new User();
-        try {
-            user = this.getLoginUser();
-        } catch (BaseException e) {
-            LOGGER.info("context", e);
-        }
-        labelInfo.setCreateUserId(user.getUserId());  
-        try {
-            iLabelInfoService.addLabelInfo(labelInfo);
-            
-        } catch (BaseException e) {
-            return webResult.fail(e);
+        JSONArray array = new JSONArray();
+        array = JSONArray.fromObject(labelInfoList);
+        List<LabelInfo> labelInfos =(List<LabelInfo>) JSONArray.toCollection(array, LabelInfo.class);
+        for (LabelInfo labelInfo : labelInfos) {
+            try {
+                iLabelInfoService.addLabelInfo(labelInfo);
+            } catch (BaseException e) {
+                return webResult.fail(e);
+            }
         }
         return webResult.success("新增标签信息成功", SUCCESS);
     }

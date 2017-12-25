@@ -6,6 +6,7 @@
 
 package com.asiainfo.biapp.si.loc.core.label.service.impl;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.transaction.Transactional;
@@ -83,6 +84,8 @@ public class LabelInfoServiceImpl extends BaseServiceImpl<LabelInfo, String> imp
     }
 
     public void addLabelInfo(LabelInfo labelInfo) throws BaseException {
+        labelInfo.setCreateTime(new Date());
+        labelInfo.setDataStatusId(1);
         super.saveOrUpdate(labelInfo);
         //封装审批信息
         ApproveInfo approveInfo = new ApproveInfo();
