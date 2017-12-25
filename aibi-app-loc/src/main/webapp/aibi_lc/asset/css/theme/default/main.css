@@ -511,7 +511,7 @@
 	border: 1px solid #E9E9E9;
 	border-radius: 6px;
 }
-.create-main:hover,.create-main:active{
+.create-main.active{
 	border-radius: 6px;
 	border-color: #009241;
 }
@@ -526,7 +526,7 @@
 	position:relative;
 	z-index:9999;
 }
-.create-main:hover > .progress  > .progress-label > i{
+.create-main.active > .progress  > .progress-label > i{
 	background-position: -458px -258px;
 }
 .create-main > .progress  > .progress-label > i{

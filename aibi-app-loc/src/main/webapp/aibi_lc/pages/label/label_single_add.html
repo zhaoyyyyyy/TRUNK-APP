@@ -128,15 +128,15 @@
                                     </div>
 								    <div class="ui-form-group">
 									    <label class="control-label">失效时间</label> 
-									       <div class="control-input date-input fleft ml10 has-icon">
-					          	             <input type="text" :name="'labelInfoList['+index+'].failTime'" class="ml10 date-input form-control input-pointer form-control-bubble" data-dismiss="formDatepicker#sendTime" id="" placeholder="请选择结束日期">
+									       <div class="control-input date-input fleft has-icon">
+					          	             <input type="text" :name="'labelInfoList['+index+'].failTime'" class="date-input form-control input-pointer form-control-bubble" data-dismiss="formDatepicker#sendTime" id="" placeholder="请选择结束日期">
 					          	             <span class="glyphicon-date form-control-feedback"></span>
 					                       </div>   
 							        </div>
                                     <div v-if="showdimDetail==index" class="ui-form-group">
                                         <label for="dimTableName" class="control-label">维表选择</label>
                                         <div class="control-input has-icon">
-                                            <select id="dimTableName" :name="'labelInfoList['+index+'].dimTableName'" class="form-control ml10 input-pointer ">
+                                            <select id="dimTableName" :name="'labelInfoList['+index+'].dimTableName'" class="form-control input-pointer ">
                                             <option>请选择维表</option>
                                             <option v-for = "dim in dimtableInfoList" :value="dim.dimId">{{dim.dimTableName}}</option>
                                             </select>

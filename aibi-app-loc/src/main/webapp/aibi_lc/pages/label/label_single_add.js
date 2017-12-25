@@ -46,10 +46,7 @@ window.loc_onload = function() {
 }
 
 function fun_to_save(){
-	model.sourceInfoList.del
-	console.log(model.sourceInfoList)
 	var labelName = $('#labelName').val();
-	var countRulesCode = $('#countRulesCode').val();
 	var list =$('#saveDataForm').formToJson();
     labellist=JSON.stringify(list);
     labellist = JSON.parse(JSON.stringify(list));
@@ -77,8 +74,6 @@ function fun_to_save(){
     debugger
 	if(labelName==""){
 		$.alert("标签名称不许为空");
-	}else if(countRulesCode==""){
-	   	$.alert("抽取规则不许为空");
 	}else{
 		$.commAjax({
 			url : $.ctx+'/api/label/labelInfo/save',
@@ -106,22 +101,6 @@ function fun_to_dimdetail(){
 			page : 1
 		}]);
 	}
-}
-
-function fun_to_createRow(){
-	model.sourceInfoList.push({
-		columnCaliber: "",
-	    columnCnName : "",
-        columnLength : "",
-        columnName : "",
-        columnNum : "",
-        columnUnit : "",
-        cooColumnType : "",
-        sourceColumnRule : "",
-        sourceId : "",
-        sourceName : "",
-        sourceTableId : ""
-	});
 }
 
 function changeStatus(obj){
