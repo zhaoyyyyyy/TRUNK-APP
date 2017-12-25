@@ -103,10 +103,10 @@ public class SourceTableInfoServiceImpl extends BaseServiceImpl<SourceTableInfo,
         SourceInfoVo sourceInfoVo = new SourceInfoVo();
         sourceInfoVo.setSourceTableId(sourceTableInfo.getSourceTableId());
         List<SourceInfo> oldList = iSourceInfoService.selectSourceInfoList(sourceInfoVo);
+        super.saveOrUpdate(sourceTableInfo);
         for(SourceInfo s : oldList){
             iSourceInfoService.deleteSourceInfo(s.getSourceId());
         }
-        super.saveOrUpdate(sourceTableInfo);
         if(!sourceTableInfo.getSourceInfoList().isEmpty()){
             for(SourceInfo s : sourceTableInfo.getSourceInfoList()){
                 s.setSourceColumnRule(s.getColumnName());

@@ -50,6 +50,7 @@ window.loc_onload = function() {
 	var url = "";
 	var pD = {};
 	if (isEdit == 1) {
+		debugger;
 		url = $.ctx + "/api/source/sourceInfo/queryPage";
 		pD = {
 			'sourceTableId' : id
@@ -79,9 +80,9 @@ window.loc_onload = function() {
 	        sortable: false,
 	        frozen: true,
 	        editable: true,
-//	        editrules: {
-//	        	required: true,
-//	        }
+	        editrules: {
+	        	required: true,
+	        }
 	    },
 	    // frozen : true固定列
 	    {
@@ -95,9 +96,9 @@ window.loc_onload = function() {
 	        editoptions: {
 	            value: dicCode
 	        },
-//	        editrules: {
-//	        	required: true,
-//	        }
+	        editrules: {
+	        	required: true,
+	        }
 	    },
 	    {
 	        name: 'columnCnName',
@@ -105,11 +106,11 @@ window.loc_onload = function() {
 	        width: 110,
 	        editable: true,
 	        align: "center",
-//	        editrules: {
-//	        	required: true,
-//	        	custom: true,
-//	        	custom_func: fun_cnName
-//	        }
+	        editrules: {
+	        	required: true,
+	        	custom: true,
+	        	custom_func: fun_cnName
+	        }
 	    },
 	    {
 	        name: 'columnUnit',
@@ -176,11 +177,13 @@ function fun_to_del(id) {
 }
 function fun_to_save() {
 	
+	//取消所有编辑
 	var ids = $("#jsonmap").jqGrid('getDataIDs');
     for (var i = 0; i < ids.length; i++) {
         $("#jsonmap").jqGrid("saveRow", ids[i]);
     }
 	
+    //拼接批量信息
 	var list = $("#jsonmap").jqGrid("getRowData");
 	var sourceInfoList = "sourceInfoList{";
 	for(var k = 0; k<list.length; k++){
@@ -195,6 +198,7 @@ function fun_to_save() {
 	}
 	$("#sourceInfoList").val(sourceInfoList);
 	
+	//开始进行保存
 	var url_ = "";
 	var msss = "";
 	if(model.sourceTableId!=null && model.sourceTableId!=undefined && model.sourceTableId!= ""){
@@ -218,11 +222,10 @@ function fun_to_save() {
 	})
 }
 function fun_cnName(value,colName){
-	var patrn= /[\u4E00-\u9FA5]|[\uFE30-\uFFA0]/gi; 
-	if (!patrn.exec(value)) 
-	{ 
-	return [false,"请在["+colName+"]列输入中文"];
-	}else{ 
-	return true; 
+	var patrn=/[^\u4e00-\u9fa5]/;
+	if (patrn.test(value)) { 
+		return [false,"请在["+colName+"]列输入中文"];
+	} else { 
+		return [true,""]; 
 	} 
 }
