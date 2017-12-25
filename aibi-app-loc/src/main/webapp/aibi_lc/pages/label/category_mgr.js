@@ -1,6 +1,7 @@
 window.loc_onload = function() {
 	ztreeFunc();
 	labeltree();
+	var ztreeObj;
 	$("#dialog").dialog({
 	      height:164,
 	      width: 300,
@@ -28,7 +29,7 @@ window.loc_onload = function() {
   	  ]
   });
 	function ztreeFunc(){
-		var ztreeObj;
+
 		var obj = $("#preConfig_list").find("span");
 		var labelId =obj.attr("configId");
 		var ssg=window.sessionStorage;
@@ -91,7 +92,7 @@ window.loc_onload = function() {
 		function zTreeOnAsyncSuccess(event, treeId, treeNode, msg) {
     		console.log(msg);
 		};
-		function addHoverDom(treeId, treeNode) {			
+		function addHoverDom(treeId, treeNode) {
 			var sObj = $("#" + treeNode.tId + "_span");
 	        if (treeNode.editNameFlag || $("#addBtn_" + treeNode.tId).length > 0)
 	            return;
@@ -102,38 +103,44 @@ window.loc_onload = function() {
 	                + "'  class='add'></a></div>";
 	        sObj.after(addStr);
 	        var btnAdd = $("#addBtn_" + treeNode.tId);	
-	        
 	        //增加节点
 	        if (btnAdd) btnAdd.bind("click", function(){
 	        	var Ppname = prompt("请输入新节点名称");
-	        	
-//	        	$( "#dialog" ).dialog( "open" );
-//	        	$( "#add-dialog-btn").click(function(){
-//	        		var Ppname=$( "#dialog" ).find("input").val();
 	        		if (Ppname == null) {
 			            return;
-				        } else if (Ppname == "") {
+				    } else if (Ppname == "") {
 				            alert("节点名称不能为空");
-				        } else {            	
-				            var param ="&sysId="+ labelId + "&name=" + Ppname; 
-				            console.log(param)
-				            $.commAjax({						
-								url : $.ctx + '/api/label/categoryInfo/save',
+				    }else {
+				        $.commAjax({						
+						url : $.ctx + '/api/label/categoryInfo/save',
+						async:true,
+						postData : {
+							"sysId" :labelId,
+							"categoryName":Ppname,
+							"parentId":treeNode.categoryId,
+						},
+						onSuccess:function(data){
+							var zTree = $.fn.zTree.getZTreeObj("ztree");
+							zTree.addNodes(treeNode, {categoryName:treeNode.id, categoryName:Ppname});
+							//获取新增加的节点信息
+							$.commAjax({						
+								url : $.ctx + '/api/label/categoryInfo/queryList',
+								dataType : 'json', 
 								async:true,
 								postData : {
 									"sysId" :labelId,
 									"categoryName":Ppname,
-									"parentId":treeNode.categoryId,
+									"parentId":treeNode.categoryId
 								},
 								onSuccess:function(data){
-									var zTree = $.fn.zTree.getZTreeObj("ztree");
-									zTree.addNodes(treeNode, {id:(100 + newCount), pId:treeNode.id, name:"new node" + (newCount++)});
-									return false;
+									ztreeFunc();
 								}
-							});                                     
-		        		}	
-//	        		})     
-			});
+							});
+						}
+					});
+		       	}
+//	       	})     
+	});
 
 			//删除节点
 			var delBtn = $("#delBtn_" + treeNode.tId);	
@@ -146,7 +153,10 @@ window.loc_onload = function() {
 								"categoryId" : treeNode.categoryId,	
 								"sysId" :labelId,								
 								"parentId":treeNode.categoryId,
-							}							
+							},
+							onSuccess:function(data){
+								ztreeFunc();
+							}
 						});
 				})
 			})
@@ -175,29 +185,53 @@ window.loc_onload = function() {
 
 	
 	function labeltree(){
-		var zTreeObj,
-		setting = {
-			view: {
-				selectedMulti: false
-			}
-		},
-		zTreeNodes = [
-			{"name":"在网用户状态", open:false, children: [
-				{ "name":"google", "url":"http://g.cn", "target":"_blank"},
-				{ "name":"baidu", "url":"http://baidu.com", "target":"_blank"},
-				{ "name":"sina", "url":"http://www.sina.com.cn", "target":"_blank"}
-				]
-			},
-			{"name":"在网状态", open:true, children: [
-				{ "name":"停开机状态", open:true,children:[
-					{ "name":"催停类型", "url":"http://g.cn", "target":"_blank"},
-					{ "name":"测试", "url":"http://baidu.com", "target":"_blank"}
-				]
+		var ztreeObj;
+		var obj = $("#preConfig_list").find("span");
+		var labelId =obj.attr("configId");
+		var ssg=window.sessionStorage;
+		ssg.getItem("token")
+		//console.log(ssg.getItem("token"));
+		$.commAjax({			
+		    url : $.ctx+'/api/label/categoryInfo/queryList',  		    
+		    dataType : 'json', 
+		    async:true,
+		    postData : {
+					"sysId" :labelId,
 				},
-				]
+		    onSuccess: function(data){ 		    			    			    	
+			    	var ztreeObj=data.data;
+			    	$.fn.zTree.init($("#ztree"), setting, ztreeObj)
+		    	}  
+	    });
+
+		setting = {
+//			async: {
+//				enable: true,
+//				url:$.ctx+'/api/label/categoryInfo/queryList',
+//				//autoParam:["categoryId"],
+//				contentType: "application/json",
+//				dataType:'json',
+//				//otherParam:{"X-Authorization" :ssg.getItem("token")}
+//								
+////				dataFilter: filter
+//			},
+			view: {
+				selectedMulti: false,
+			},
+			data: {
+				selectedMulti: false,			
+				simpleData: {  
+	                enable: true,   //设置是否使用简单数据模式(Array)  	                    
+	            },  
+	            key: {             	
+	            	idKey: "sysId",    //设置节点唯一标识属性名称  
+	                pIdKey: "parentId" ,     //设置父节点唯一标识属性名称  
+	                name:'categoryName',//zTree 节点数据保存节点名称的属性名称  
+	                title: "categoryName"//zTree 节点数据保存节点提示信息的属性名称        
+	            }  
 			}
-		];
-		zTreeObj = $.fn.zTree.init($("#labeltree"), setting, zTreeNodes);
+}
+		$.fn.zTree.init($("#ztree"), setting)
 	}
 
 
@@ -214,5 +248,10 @@ window.loc_onload = function() {
 	});
 	$("#dialog-del").click(function(){
 		$(".label-dialog").removeClass("active");
+	});
+	$("#btn_serach").click(function(){
+		var text = $("#exampleInputAmount").val();
+		var zTreeNodes = treeObj.getNodesByParamFuzzy("categoryName", text, null);
+		$.fn.zTree.init($("#ztree"), setting, zTreeNodes);
 	});
 }
