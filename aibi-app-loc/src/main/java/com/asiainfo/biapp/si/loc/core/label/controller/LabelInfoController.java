@@ -15,8 +15,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import org.apache.derby.impl.sql.catalog.SYSPERMSRowFactory;
 import net.sf.json.JSONArray;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +27,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import springfox.documentation.annotations.ApiIgnore;
 
-import com.asiainfo.biapp.si.loc.auth.model.User;
 import com.asiainfo.biapp.si.loc.base.controller.BaseController;
 import com.asiainfo.biapp.si.loc.base.exception.BaseException;
 import com.asiainfo.biapp.si.loc.base.page.Page;
@@ -85,7 +84,6 @@ public class LabelInfoController extends BaseController<LabelInfo> {
     public Page<LabelInfo> list(@ModelAttribute Page<LabelInfo> page, @ModelAttribute LabelInfoVo labelInfoVo) {
         Page<LabelInfo> labelInfoPage = new Page<>();
         try {
-            page.setPageSize(12);
             labelInfoPage = iLabelInfoService.selectLabelInfoPageList(page, labelInfoVo);           
         } catch (BaseException e) {
             labelInfoPage.fail(e);

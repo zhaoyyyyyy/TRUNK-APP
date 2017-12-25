@@ -3,13 +3,34 @@
  * Date: 2017-12-04 
  */
 /**初始化*/
+var dataModel = {
+		labelSysList:[],
+		zqlxList:[],
+		xzqhList:[],
+		gxzqList:[],
+		labelList:[]
+
+}
+
 window.loc_onload = function() {
+	
+	new Vue({
+		el:"#dataDiv",
+		data:dataModel
+	})
 	
 	//初始化计算中心事件
 	labelMarket.setClacCenter();
 	
 	//初始化加载标签体系
 	labelMarket.loadLabelCategoryList();
+	
+	//初始化地市
+	labelMarket.loadOrg();
+	
+	labelMarket.loadGxzq();
+	
+	labelMarket.loadLabelList();
 	
 	//计算中心弹出/收起（下面）
 	$(".ui-shop-cart").click(function(){
@@ -78,13 +99,65 @@ var labelMarket = (function (model){
 				  sysId : configId
 			  },
 			  onSuccess: function(returnObj){
-			  	var labelSysApp = new Vue({
-				  el: '#labelSysList',
-			  	  data:returnObj
-				})
+				  dataModel.labelSysList = returnObj;
 			  }
 			});
         };
+        
+        
+        model.loadOrg = function(){
+        		$.commAjax({
+        			url: $.ctx + "/api/user/privaliegeData/query",
+        			onSuccess: function(data){
+        				if(data.data != null && data.data != undefined){
+        					var dataobj = data.data;
+							for(var e=0 ; e<4 ; e++){
+								if(dataobj[e]==undefined){
+									continue;
+								}
+								for(var l=0 ; l<dataobj[e].length ; l++){
+									var od = dataobj[e][l];
+									if(od.parentId == "999"){
+										dataModel.zqlxList.push(od);
+									}else if(od.orgType == "3"){
+										dataModel.xzqhList.push(od);
+									}
+								}
+							}
+        				}
+        			}
+        		});
+        }
+        
+        
+        model.loadGxzq = function(){
+        	var gxzqList = [];
+        	var dicGxzq = $.getDicData("GXZQZD");
+        	for(var i=0; i<dicGxzq.length; i++){
+        		gxzqList.push(dicGxzq[i]);
+        	}
+        	dataModel.gxzqList = gxzqList;
+        }
+        
+		model.loadLabelList = function(){
+			var configId = $.getCurrentConfigId();
+			$.commAjax({
+				url: $.ctx + "/api/label/labelInfo/queryPage",
+				postData:{
+					configId : configId
+				},
+				onSuccess: function(data){
+					for(var i=0 ; i<data.rows.length; i++){
+						if(data.rows[i].labelExtInfo!=undefined&&data.rows[i].labelExtInfo!=null){
+							data.rows[i].customNum = data.rows[i].labelExtInfo.customNum;
+						}else{
+							data.rows[i].customNum = "无";
+						}
+					}
+					dataModel.labelList=data.rows
+				}
+			});
+		}
         
         
         /**

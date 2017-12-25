@@ -11,6 +11,11 @@
 	<link rel="stylesheet" theme="default" href="../../asset/css/theme/default/main.css"/> 
    	<script type="text/javascript" src="../../asset/script/common/include.js"></script>
    	<script type="text/javascript" src="label_market.js"></script>
+   	<style type="text/css">
+	[v-cloak] {
+		display: none;
+	}
+	</style>
     <!--[if lt IE 9]>
 	    <script src="../../asset/script/component/h5compatibility/html5shiv.min.js"></script>
 	    <script src="../../asset/script/component/h5compatibility/respond.min.js"></script>
@@ -18,7 +23,7 @@
 </head>
 <body>
 
-	<div class="iframe-nest">
+	<div id="dataDiv" class="iframe-nest" v-cloak>
 		<div class="ui-lc-mian">
 			<h3 id="labelMktHeader">
 				<span>标签集市</span>
@@ -43,21 +48,21 @@
 			      </div>
 		      </div>
 			</div>
-			<ul class="ui-label-system">
+			<ul class="ui-label-system" >
 				<li class="not-border">
-					<div class="clearfix"  id="labelSysList">
+					<div class="clearfix"  id="labelSysList" v-cloak>
 						<label class="fleft">标签体系：</label>
 						<div class="fleft">
 							<a href="javascript:;" class="all-active"><!-- all-active 去掉非选中状态 -->
 								全部
 							</a>
-							<a href="javascript:;" v-for="labelSys in data" :sysId="labelSys.sysId">
+							<a href="javascript:;" v-for="labelSys in labelSysList" :sysId="labelSys.sysId">
 								<em v-text="labelSys.categoryName"></em>
 								<i v-if="labelSys.sysId"></i>
 							</a>
 						</div>
 					</div>
-					<ul class="ui-label-sec ui-label-system hidden">
+					<!-- <ul class="ui-label-sec ui-label-system hidden">
 						<li class="clearfix">
 							<label class="fleft font-weight">在网状态：</label>
 							<div class="fleft">
@@ -66,73 +71,51 @@
 						<li class="clearfix not-border">
 							<label class="fleft font-weight">停开机状态：</label>
 							<div class="fleft">
-								<a href="javascript:;" class="all-active"><!-- all-active 去掉非选中状态 -->
+								<a href="javascript:;" class="all-active">all-active 去掉非选中状态
 									催停类型
 								</a>
-								<a href="javascript:;" class="all-active"><!-- all-active 去掉非选中状态 -->
+								<a href="javascript:;" class="all-active">all-active 去掉非选中状态
 									催停类型(日)
 								</a>
 							</div>
 						
 						</li>
-					</ul>
+					</ul> -->
 				</li>
 				 
 				<li>
-					<div class="clearfix">
+					<div id="Org" class="clearfix" v-cloak>
 						<label class="fleft">地市：</label>
 						<div class="fleft">
-							<a href="javascript:;" class="all-active"><!-- all-active 去掉非选中状态 -->
-								全部
-							</a>
-							<a href="javascript:;">
-								<em>在网状态</em>
-							</a>
-							<a href="javascript:;">
-								<em>在网状态</em>
-							</a>
-							<a href="javascript:;">
-								<em>在网状态</em>
-							</a>
-							<a href="javascript:;">
-								<em>在网状态</em>
-							</a>
-							<a href="javascript:;">
-								<em>在网状态</em>
-							</a>
-							<a href="javascript:;">
-								<em>在网状态</em>
-							</a>
+							<a class="fleft all-active">全部</a>
+							<div class="fleft" v-for="orgC in xzqhList">
+								<a href="javascript:;" :id="orgC.id" class="ml30">{{orgC.fullName}}</a>
+							</div>
 						</div>
-					</div>
-				</li>
-				<li>
-					<div class="clearfix">
-						<label class="fleft">发布时间：</label>
+						<!-- <label class="fleft">地市：</label>
 						<div class="fleft">
-							<a href="javascript:;" class="all-active fleft"><!-- all-active 去掉非选中状态 -->
+							<a href="javascript:;" class="all-active">all-active 去掉非选中状态
 								全部
 							</a>
-							<a href="javascript:;" class="fleft">
-								<em>一天</em>
+							<a href="javascript:;">
+								<em>在网状态</em>
 							</a>
-							<a href="javascript:;" class="fleft">
-								<em>一个月</em>
+							<a href="javascript:;">
+								<em>在网状态</em>
 							</a>
-							<a href="javascript:;" class="fleft">
-								<em>三个月</em>
+							<a href="javascript:;">
+								<em>在网状态</em>
 							</a>
-							<div class="control-input">
-			        			<div class="control-input date-input fleft has-icon">
-					          	<input type="text" class="form-control input-pointer form-control-bubble" data-dismiss="formDatepicker#sendTime"  id="" placeholder="请选择开始日期">
-					          	<span class="glyphicon-date form-control-feedback"></span>
-					        </div>
-					        <div class="control-input date-input fleft ml10 has-icon">
-					          	<input type="text" class="form-control input-pointer form-control-bubble" data-dismiss="toDatepicker#sendTime" id="" placeholder="请选择结束日期">
-					          	<span class="glyphicon-date form-control-feedback"></span>
-					        </div>
-				        </div>
-						</div>
+							<a href="javascript:;">
+								<em>在网状态</em>
+							</a>
+							<a href="javascript:;">
+								<em>在网状态</em>
+							</a>
+							<a href="javascript:;">
+								<em>在网状态</em>
+							</a>
+						</div> -->
 					</div>
 				</li>
 				<li>
@@ -165,24 +148,13 @@
 					</div>
 				</li>
 				<li class="not-border">
-					<div class="clearfix">
+					<div id="Gxzq" class="clearfix" v-cloak>
 						<label class="fleft">更新周期：</label>
 						<div class="fleft">
-							<a href="javascript:;" class="all-active"><!-- all-active 去掉非选中状态 -->
-								全部
-							</a>
-							<a href="javascript:;">
-								<em>日</em>
-							</a>
-							<a href="javascript:;">
-								<em>月</em>
-							</a>
-							<a href="javascript:;">
-								<em>周</em>
-							</a>
-							<a href="javascript:;">
-								<em>一次性</em>
-							</a>
+							<a class="fleft all-active">全部</a>
+							<div class="fleft" v-for="g in gxzqList">
+								<a href="javascript:;" :id="g.code" class="ml30">{{g.dataName}}</a>
+							</div>
 						</div>
 					</div>
 				</li>
@@ -197,16 +169,16 @@
 			<i class="ui-refresh fleft"></i>
 		</a>
 		</div>
-		<ul class="clearfix ui-label-list">
-			<li>
+		<ul id="labelList" class="clearfix ui-label-list" v-cloak>
+			<li v-for="label in labelList">
 				<div class="ui-label-info">
 					<h3 class="clearfix">
-						<span>三里屯附近用户</span>
+						<span>{{label.labelName}}</span>
 						<i></i>
 					</h3>
 					<div class="ui-label-item">
 						<a href="javascript:;">
-							<b>28,856</b>人
+							<b>{{label.customNum}}</b>人
 						</a>
 						<a href="javascript:;" class="ui-label-time">
 							月
@@ -218,14 +190,14 @@
 					<h4 class="ui-business-caliber">
 						业务口径
 					</h4>
-					<p>用户当月访问互联网二级应用所产生的流量大于200，单位：MB</p>
+					<p>{{label.busiCaliber}}</p>
 					<h4 class="ui-business-caliber">
 						标签路径
 					</h4>
 					<p>互联网月访问流量大于200M</p>
 				</div>
 			</li>
-			<li>
+			<!-- <li>
 				<div class="ui-label-info">
 					<h3 class="clearfix">
 						<span>三里屯附近用户</span>
@@ -419,22 +391,21 @@
 					</h4>
 					<p>互联网月访问流量大于200M</p>
 				</div>
-			</li>
+			</li> -->
 		</ul>
 		<div class="ui-corner-bottom mb50">
 			<div class="clearfix"><div class="fleft totalPage">
-				<span class="fleft">共13条记录，2页，当前第2页</span>
+				<span class="fleft">共13条记录，2页，当前第1页</span>
 			</div>
 			<div id="jsonmap1_pager" class="tcdPageCode">
 				<a href="javascript:;" class="prevPage">上一页</a>
-				<a href="javascript:;" class="tcdNumber">1</a>
-				<span class="current">2</span>
+				<a href="javascript:;" class="current tcdNumber">1</a>
 			<span class="disabled">下一页</span>
-			<select class="ui-pg-selbox ui-widget-content ui-corner-all" title="每页记录数">
+			<!-- <select class="ui-pg-selbox ui-widget-content ui-corner-all" title="每页记录数">
 				<option role="option" value="10" selected="selected">10</option>
 				<option role="option" value="20">20</option>
 				<option role="option" value="30">30</option>
-			</select>
+			</select> -->
 			<span class="inputPageNum">第<input type="text" id="jsonmap1_pageNum">页</span>
 			<a href="javascript:;" class="jumpPageNum">跳转</a>
 		</div>
