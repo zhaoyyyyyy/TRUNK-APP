@@ -30,10 +30,7 @@ window.loc_onload = function() {
 	function ztreeFunc(){
 		var ztreeObj;
 		var obj = $("#preConfig_list").find("span");
-		var labelId =obj.attr("configId");
-		var ssg=window.sessionStorage;
-		ssg.getItem("token")
-		//console.log(ssg.getItem("token"));
+		var labelId =obj.attr("configId");				
 		$.commAjax({			
 		    url : $.ctx+'/api/label/categoryInfo/queryList',  		    
 		    dataType : 'json', 
@@ -45,19 +42,8 @@ window.loc_onload = function() {
 			    	var ztreeObj=data.data;
 			    	$.fn.zTree.init($("#ztree"), setting, ztreeObj)
 		    	}  
-	    });
-
+	   });
 		setting = {
-//			async: {
-//				enable: true,
-//				url:$.ctx+'/api/label/categoryInfo/queryList',
-//				//autoParam:["categoryId"],
-//				contentType: "application/json",
-//				dataType:'json',
-//				//otherParam:{"X-Authorization" :ssg.getItem("token")}
-//								
-////				dataFilter: filter
-//			},
 			view: {
 				selectedMulti: false,
 				addHoverDom: addHoverDom,
@@ -76,21 +62,10 @@ window.loc_onload = function() {
 	            }  
 			},
 			callback: {
-				onAsyncError: zTreeOnAsyncError,
-				onAsyncSuccess: zTreeOnAsyncSuccess
-				
+				onClick: zTreeOnClick
 			}
-}
-		$.fn.zTree.init($("#ztree"), setting)
-		
-		var newCount = 1;
-		
-		function zTreeOnAsyncError(event, treeId, treeNode, XMLHttpRequest, textStatus, errorThrown) {
-    		console.log(XMLHttpRequest);
-		};
-		function zTreeOnAsyncSuccess(event, treeId, treeNode, msg) {
-    		console.log(msg);
-		};
+		}		
+		var newCount = 1;				
 		function addHoverDom(treeId, treeNode) {
 			var sObj = $("#" + treeNode.tId + "_span");
 	        if (treeNode.editNameFlag || $("#addBtn_" + treeNode.tId).length > 0)
@@ -104,47 +79,33 @@ window.loc_onload = function() {
 	        var btnAdd = $("#addBtn_" + treeNode.tId);	
 	        //增加节点
 	        if (btnAdd) btnAdd.bind("click", function(){
-	        	var Ppname = prompt("请输入新节点名称");
-	        		if (Ppname == null) {
+	        	 $( "#dialog" ).dialog( "open" );
+	        	 $('#add-dialog-btn').click(function(){
+	        	 	var Ppname=$( "#dialog" ).find("input").val();
+	        	 	if (Ppname == null) {
 			            return;
 				    } else if (Ppname == "") {
 				            alert("节点名称不能为空");
 				    }else {
 				        $.commAjax({						
-						url : $.ctx + '/api/label/categoryInfo/save',
-						async:true,
-						postData : {
-							"sysId" :labelId,
-							"categoryName":Ppname,
-							"parentId":treeNode.categoryId,
-						},
-						onSuccess:function(data){
-							var zTree = $.fn.zTree.getZTreeObj("ztree");
-							zTree.addNodes(treeNode, {categoryName:treeNode.id, categoryName:Ppname});
-							//获取新增加的节点信息
-							$.commAjax({						
-								url : $.ctx + '/api/label/categoryInfo/queryList',
-								dataType : 'json', 
-								async:true,
-								postData : {
-									"sysId" :labelId,
-									"categoryName":Ppname,
-									"parentId":treeNode.categoryId
-								},
-								onSuccess:function(data){
-									ztreeFunc();
-								}
-							});
-						}
-					});
-		       	}
-//	       	})     
+							url : $.ctx + '/api/label/categoryInfo/save',
+							async:true,
+							postData : {
+								"sysId" :labelId,
+								"categoryName":Ppname,
+								"parentId":treeNode.categoryId,
+							},
+							onSuccess:function(data){							
+								ztreeFunc();
+							}
+						});
+		       		}
+	        	})	        	
 	});
 
 			//删除节点
 			var delBtn = $("#delBtn_" + treeNode.tId);	
 			delBtn.click(function(){
-			
 				$.confirm('确定要删除该标签？', function() {
 					$.commAjax({
 							url : $.ctx + '/api/label/categoryInfo/delete',
@@ -154,6 +115,7 @@ window.loc_onload = function() {
 								"parentId":treeNode.categoryId,
 							},
 							onSuccess:function(data){
+								
 								ztreeFunc();
 							}
 						});
@@ -162,26 +124,53 @@ window.loc_onload = function() {
 			
 			
 			//修改按钮
-//				var updBtn = $("#updBtn_" + treeNode.tId);	
-//				updBtn.click(function(){
-//					$.commAjax({
-//								url : $.ctx + '/api/label/categoryInfo/update',
-//								postData : {
-//									"categoryId" : treeNode.categoryId,									
-//								}								
-//						});
-//				})
+				var updBtn = $("#updBtn_" + treeNode.tId);
+				if (updBtn) updBtn.bind("click", function(){
+	        	 $( "#dialog" ).dialog( "open" );
+	        	 $('#add-dialog-btn').click(function(){	        	 	
+	        	 	var Ppname=$( "#dialog" ).find("input").val();
+	        	 	if (Ppname == null) {
+			            return;
+				    } else if (Ppname == "") {
+				            alert("节点名称不能为空");
+				    }else {
+				        $.commAjax({						
+						url : $.ctx + '/api/label/categoryInfo/update',
+						async:true,
+						postData : {
+							"sysId" :labelId,
+							"categoryName":Ppname,
+							"categoryId":treeNode.categoryId,
+						},
+						onSuccess:function(data){
+							
+							
+							ztreeFunc();
+						}
+					});
+		       	}
+	        	})	        	
+	});
+				
+				
 //				
 		};
 		
-
+		$("#btn_serach").click(function(){
+			var text = $("#exampleInputAmount").val();			
+			var zTreeNodes = ztreeObj.getNodesByParamFuzzy("categoryName", text, null);
+			$.fn.zTree.init($("#ztree"), setting, zTreeNodes);
+		});
 		
 		function removeHoverDom(treeId, treeNode) {
 			$("#handle_" + treeNode.tId).unbind().remove();
 		};
+		function zTreeOnClick(event, treeId, treeNode) {
+		    console.log(treeNode.tId + ", " + treeNode.categoryName);
+		};
+		
 	}
-
-
+	
 	
 	function labeltree(){
 		var zTreeObj,
@@ -224,9 +213,5 @@ window.loc_onload = function() {
 	$("#dialog-del").click(function(){
 		$(".label-dialog").removeClass("active");
 	});
-	$("#btn_serach").click(function(){
-		var text = $("#exampleInputAmount").val();
-		var zTreeNodes = ztreeObj.getNodesByParamFuzzy("categoryName", text, null);
-		$.fn.zTree.init($("#ztree"), setting, zTreeNodes);
-	});
+	
 }
