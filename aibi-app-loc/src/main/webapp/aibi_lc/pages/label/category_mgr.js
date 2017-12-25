@@ -71,14 +71,19 @@ window.loc_onload = function() {
 	        if (treeNode.editNameFlag || $("#addBtn_" + treeNode.tId).length > 0)
 	            return;
 	        var addStr = "<div class='button add label-handles' id='handle_" + treeNode.tId
-	                + "'  title='add node'><a id='updBtn_" + treeNode.tId
-	                + "'  class='setting'></a><a id='delBtn_" + treeNode.tId
+	                + "'  title='add node'><a id='updBtn_" + treeNode.tId+ "'  class='setting'></a><a id='delBtn_" + treeNode.tId
 	                + "'  class='del'></a><a id='addBtn_" + treeNode.tId
 	                + "'  class='add'></a></div>";
 	        sObj.after(addStr);
 	        var btnAdd = $("#addBtn_" + treeNode.tId);	
 	        //增加节点
-	        if (btnAdd) btnAdd.bind("click", function(){
+	        if (btnAdd) btnAdd.bind("click", function(e){	
+	        	var e=arguments.callee.caller.arguments[0]||event; 
+			    if (e && e.stopPropagation) {			     
+			    e.stopPropagation();
+			    } else if (window.event) {
+			      window.event.cancelBubble = true;
+			    }
 	        	 $( "#dialog" ).dialog( "open" );
 	        	 $('#add-dialog-btn').click(function(){
 	        	 	var Ppname=$( "#dialog" ).find("input").val();
@@ -100,11 +105,17 @@ window.loc_onload = function() {
 							}
 						});
 		       		}
-	        	})	        	
+	        	})
 	});
 			//删除节点
 			var delBtn = $("#delBtn_" + treeNode.tId);	
 			delBtn.click(function(){
+				var e=arguments.callee.caller.arguments[0]||event; 
+			    if (e && e.stopPropagation) {			     
+			    e.stopPropagation();
+			    } else if (window.event) {
+			      window.event.cancelBubble = true;
+			    }
 				$.confirm('确定要删除该标签？', function() {
 					$.commAjax({
 							url : $.ctx + '/api/label/categoryInfo/delete',
@@ -121,36 +132,43 @@ window.loc_onload = function() {
 				})
 			})
 			//修改按钮
-				var updBtn = $("#updBtn_" + treeNode.tId);
-				if (updBtn) updBtn.bind("click", function(){
-	        	 $( "#dialog" ).dialog( "open" );	        	
-	        	 $('#add-dialog-btn').click(function(){	        	 	
-	        	 	 var Ppname=$( "#dialog" ).find("input").val();	        	 	 
-	        	 	if (Ppname == null) {
-			            return;
-				    } else if (Ppname == "") {
-				            alert("节点名称不能为空");
-				    }else {
-				        $.commAjax({						
-							url : $.ctx + '/api/label/categoryInfo/update',
-							async:true,
-							postData : {
-								"sysId" :labelId,
-								"categoryName":Ppname,
-								"categoryId":treeNode.categoryId,
-							},
-							onSuccess:function(data){														
-								ztreeFunc();
-							}
-						});
-		       		}
-	        	})	        	
-			});
+			var updBtn = $("#updBtn_" + treeNode.tId);
+			if (updBtn) updBtn.bind("click", function(){
+				var e=arguments.callee.caller.arguments[0]||event; 
+			    if (e && e.stopPropagation) {			     
+			    e.stopPropagation();
+			    } else if (window.event) {
+			      window.event.cancelBubble = true;
+			    }
+        	 $( "#dialog" ).dialog( "open" );	        	
+        	 $('#add-dialog-btn').click(function(){	        	 	
+        	 	 var Ppname=$( "#dialog" ).find("input").val();	        	 	 
+        	 	if (Ppname == null) {
+		            return;
+			    } else if (Ppname == "") {
+			            alert("节点名称不能为空");
+			    }else {
+			        $.commAjax({						
+						url : $.ctx + '/api/label/categoryInfo/update',
+						async:true,
+						postData : {
+							"sysId" :labelId,
+							"categoryName":Ppname,
+							"categoryId":treeNode.categoryId,
+						},
+						onSuccess:function(data){														
+							ztreeFunc();
+						}
+					});
+	       		}
+        	})	        	
+		});
+	
 		};
 		function removeHoverDom(treeId, treeNode) {
 			$("#handle_" + treeNode.tId).unbind().remove();
 		};
-		function zTreeOnClick(event, treeId, treeNode) {		    
+		function zTreeOnClick(event, treeId, treeNode) {			
 		    $.commAjax({			
 			    url : $.ctx+'/api/label/labelInfo/queryList',  		    
 			    dataType : 'json', 
@@ -163,8 +181,8 @@ window.loc_onload = function() {
 				    	for(var i=0;i<labelList.length;i++){
 				    		var html="<li>"+
 				    		"<div class='checkbox'>"+
-				    		"<input type='checkbox' class='checkbix'>"+
-				    		"<label aria-label role='checkbox' class='checkbix'>"+
+				    		"<input type='checkbox' id='checkbox_"+i+"' class='checkbix'>"+
+				    		"<label for='checkbox_"+i+"' aria-label role='checkbox' class='checkbix'>"+
 				    		"<span class='large'></span>"+
 				    		labelList[i].labelName+
 				    		"</label>"+
@@ -183,7 +201,6 @@ window.loc_onload = function() {
 		var ztreeObj;
 		var obj = $("#preConfig_list").find("span");
 		var labelId =obj.attr("configId");
-		console.log(labelId);
 		$.commAjax({			
 		    url : $.ctx+'/api/label/categoryInfo/queryList',  		    
 		    dataType : 'json', 
