@@ -22,35 +22,35 @@
     <![endif]-->
 </head>
 <body>
-
-	<div class="iframe-nest">
+	<div class="iframe-nest" id="labelInfoListApp" v-cloak>
 		<div class="ui-lc-mian">
 			<h3 id="labelMktHeader">
-					<span>标签集市</span>				
-		    	</h3>
+				<span>标签集市</span>
+			</h3>
 		</div>
-		<div id="dataDiv" v-cloak>
-			<div class="ui-lc-mian">	
+		<div>
+			<!-------------------查询条件 begin ------------------------>
+			<div class="ui-lc-mian">
 				<div class="ui-label-mes clearfix">
 					<span class="fleft">标签集市 &nbsp; &nbsp;共<b>88</b>个标签</span>
-		         <div class="form-group fright">
-				      <div class="input-group">
-				          <input type="text" class="form-control" id="exampleInputAmount" placeholder="请输入标签关键字">
-				          <span class="input-group-addon input-group-icon right-child input-pointer"></span>
-				      </div>
-			      </div>
+					<div class="form-group fright">
+						<div class="input-group">
+							<input type="text" class="form-control" id="exampleInputAmount" placeholder="请输入标签关键字">
+							<span class="input-group-addon input-group-icon right-child input-pointer"></span>
+						</div>
+					</div>
 				</div>
 				<form>
 					<ul class="ui-label-system" >
 					<li class="not-border">
-						<div class="clearfix"  id="labelSysList" v-cloak>
+						<div class="clearfix">
 							<label class="fleft">标签体系：</label>
 							<div class="fleft">
 								<a href="javascript:;" class="all-active"><!-- all-active 去掉非选中状态 -->
 									全部
 								</a>
-								<a href="javascript:;" v-for="labelSys in labelSysList" :sysId="labelSys.sysId">
-									<em v-text="labelSys.categoryName"></em>
+								<a href="javascript:;" v-for="labelSys in categoryInfoList" :sysId="labelSys.sysId">
+									<em v-text="labelSys.categoryName" ></em>
 									<i v-if="labelSys.sysId"></i>
 								</a>
 							</div>
@@ -77,36 +77,12 @@
 					</li>
 					 
 					<li>
-						<div id="Org" class="clearfix" v-cloak>
+						<div class="clearfix">
 							<label class="fleft">地市：</label>
 							<div class="fleft">
 								<a class="fleft all-active">全部</a>
 								<a href="javascript:;" :id="orgC.id" v-for="orgC in xzqhList"><em>{{orgC.fullName}}</em></a>
 							</div>
-							<!-- <label class="fleft">地市：</label>
-							<div class="fleft">
-								<a href="javascript:;" class="all-active">all-active 去掉非选中状态
-									全部
-								</a>
-								<a href="javascript:;">
-									<em>在网状态</em>
-								</a>
-								<a href="javascript:;">
-									<em>在网状态</em>
-								</a>
-								<a href="javascript:;">
-									<em>在网状态</em>
-								</a>
-								<a href="javascript:;">
-									<em>在网状态</em>
-								</a>
-								<a href="javascript:;">
-									<em>在网状态</em>
-								</a>
-								<a href="javascript:;">
-									<em>在网状态</em>
-								</a>
-							</div> -->
 						</div>
 					</li>
 					<li>
@@ -147,264 +123,70 @@
 							</div>
 						</div>
 					</li>
-				</ul>
-		
+					</ul>
 				</form>
-				
 			</div>
+			<!-------------------查询条件 end ------------------------>
 			<div class="ui-filter-bar ui-lc-mian">
 				<a href="javascript:;" class="active">人气</a>
 				<a href="javascript:;">发布时间</a>
 				<a href="javascript:;">
-				<em class="fleft">新标签：</em>
-				<em class="fleft">34563</em>
-				<i class="ui-refresh fleft"></i>
-			</a>
+					<em class="fleft">新标签：</em> 
+					<em	class="fleft">34563</em>
+					<i class="ui-refresh fleft"></i>
+				</a>
 			</div>
-			<ul id="labelList" class="clearfix ui-label-list" v-cloak>
-				<li v-for="label in labelList">
+			<ul id="labelList" class="clearfix ui-label-list" >
+				<li v-for="(item,index) in labelInfoList" class="{padding0 : (index+1)%4 ==0 }" >
 					<div class="ui-label-info">
 						<h3 class="clearfix">
-							<span>{{label.labelName}}</span>
-							<i></i>
+							<span v-text="item.labelName"></span>
+							<i ></i>
 						</h3>
 						<div class="ui-label-item">
 							<a href="javascript:;">
-								<b>{{label.customNum}}</b>人
+								<b v-text="item.customNum" ></b>人
 							</a>
 							<a href="javascript:;" class="ui-label-time">
-								月
+								<span v-if="item.updateCycle == 1 ">日</span>
+								<span v-if="item.updateCycle == 2 ">月</span>
 							</a>
 							<a href="javascript:;" class="not-border ui-label-date">
-								2017-10
+								<span v-text="item.dataDate"></span>
 							</a>
 						</div>
 						<h4 class="ui-business-caliber">
 							业务口径
 						</h4>
-						<p>{{label.busiCaliber}}</p>
+						<p  v-text="item.busiLegend"></p>
 						<h4 class="ui-business-caliber">
 							标签路径
 						</h4>
-						<p>互联网月访问流量大于200M</p>
+						<p v-text="item.labelIdLevelDesc"></p>
 					</div>
 				</li>
-				<!-- <li>
-					<div class="ui-label-info">
-						<h3 class="clearfix">
-							<span>三里屯附近用户</span>
-							<i></i>
-						</h3>
-						<div class="ui-label-item">
-							<a href="javascript:;">
-								<b>28,856</b>人
-							</a>
-							<a href="javascript:;" class="ui-label-time">
-								实时
-							</a>
-							<a href="javascript:;" class="ui-label-date not-border">
-								5分钟前
-							</a>
-						</div>
-						<h4 class="ui-business-caliber">
-							业务口径
-						</h4>
-						<p>暂无</p>
-						<h4 class="ui-business-caliber">
-							标签路径
-						</h4>
-						<p>
-						<span>游离状态，需要</span>
-						<a href="javascript:;" class="ui-set-label">设置标签路径</a>
-					</p>
-					</div>
-				</li>
-				<li>
-					<div class="ui-label-info">
-						<h3 class="clearfix">
-							<span>三里屯附近用户</span>
-							<i></i>
-						</h3>
-						<div class="ui-label-item">
-							<a href="javascript:;">
-								<b>28,856</b>人
-							</a>
-							<a href="javascript:;" class="ui-label-time">
-								月
-							</a>
-							<a href="javascript:;" class="not-border ui-label-date">
-								2017-10
-							</a>
-						</div>
-						<h4 class="ui-business-caliber">
-							业务口径
-						</h4>
-						<p>用户当月访问互联网二级应用所产生的流量大于200，单位：MB</p>
-						<h4 class="ui-business-caliber">
-							标签路径
-						</h4>
-						<p>互联网月访问流量大于200M</p>
-					</div>
-				</li>
-				<li class="padding0">
-					<div class="ui-label-info">
-						<h3 class="clearfix">
-							<span>三里屯附近用户</span>
-							<i></i>
-						</h3>
-						<div class="ui-label-item">
-							<a href="javascript:;">
-								<b>28,856</b>人
-							</a>
-							<a href="javascript:;" class="ui-label-time">
-								月
-							</a>
-							<a href="javascript:;" class="not-border ui-label-date">
-								2017-10
-							</a>
-						</div>
-						<h4 class="ui-business-caliber">
-							业务口径
-						</h4>
-						<p>用户当月访问互联网二级应用所产生的流量大于200，单位：MB</p>
-						<h4 class="ui-business-caliber">
-							标签路径
-						</h4>
-						<p>互联网月访问流量大于200M</p>
-					</div>
-				</li>
-				<li>
-					<div class="ui-label-info">
-						<h3 class="clearfix">
-							<span>三里屯附近用户</span>
-							<i></i>
-						</h3>
-						<div class="ui-label-item">
-							<a href="javascript:;">
-								<b>28,856</b>人
-							</a>
-							<a href="javascript:;" class="ui-label-time">
-								月
-							</a>
-							<a href="javascript:;" class="not-border ui-label-date">
-								2017-10
-							</a>
-						</div>
-						<h4 class="ui-business-caliber">
-							业务口径
-						</h4>
-						<p>用户当月访问互联网二级应用所产生的流量大于200，单位：MB</p>
-						<h4 class="ui-business-caliber">
-							标签路径
-						</h4>
-						<p>互联网月访问流量大于200M</p>
-					</div>
-				</li>
-				<li>
-					<div class="ui-label-info">
-						<h3 class="clearfix">
-							<span>三里屯附近用户</span>
-							<i></i>
-						</h3>
-						<div class="ui-label-item">
-							<a href="javascript:;">
-								<b>28,856</b>人
-							</a>
-							<a href="javascript:;" class="ui-label-time">
-								实时
-							</a>
-							<a href="javascript:;" class="ui-label-date not-border">
-								5分钟前
-							</a>
-						</div>
-						<h4 class="ui-business-caliber">
-							业务口径
-						</h4>
-						<p>暂无</p>
-						<h4 class="ui-business-caliber">
-							标签路径
-						</h4>
-						<p>
-						<span>游离状态，需要</span>
-						<a href="javascript:;" class="ui-set-label">设置标签路径</a>
-					</p>
-					</div>
-				</li>
-				<li>
-					<div class="ui-label-info">
-						<h3 class="clearfix">
-							<span>三里屯附近用户</span>
-							<i></i>
-						</h3>
-						<div class="ui-label-item">
-							<a href="javascript:;">
-								<b>28,856</b>人
-							</a>
-							<a href="javascript:;" class="ui-label-time">
-								月
-							</a>
-							<a href="javascript:;" class="not-border ui-label-date">
-								2017-10
-							</a>
-						</div>
-						<h4 class="ui-business-caliber">
-							业务口径
-						</h4>
-						<p>用户当月访问互联网二级应用所产生的流量大于200，单位：MB</p>
-						<h4 class="ui-business-caliber">
-							标签路径
-						</h4>
-						<p>互联网月访问流量大于200M</p>
-					</div>
-				</li>
-				<li class="padding0">
-					<div class="ui-label-info">
-						<h3 class="clearfix">
-							<span>三里屯附近用户</span>
-							<i></i>
-						</h3>
-						<div class="ui-label-item">
-							<a href="javascript:;">
-								<b>28,856</b>人
-							</a>
-							<a href="javascript:;" class="ui-label-time">
-								月
-							</a>
-							<a href="javascript:;" class="not-border ui-label-date">
-								2017-10
-							</a>
-						</div>
-						<h4 class="ui-business-caliber">
-							业务口径
-						</h4>
-						<p>用户当月访问互联网二级应用所产生的流量大于200，单位：MB</p>
-						<h4 class="ui-business-caliber">
-							标签路径
-						</h4>
-						<p>互联网月访问流量大于200M</p>
-					</div>
-				</li> -->
 			</ul>
 			<div class="ui-corner-bottom mb50">
-				<div class="clearfix"><div class="fleft totalPage">
-					<span class="fleft">共{{page.totalCount}}条记录，共{{page.totalPageCount}}页，当前第{{page.currentPageNo}}页</span>
+				<div class="clearfix">
+					<div class="fleft totalPage">
+						<span class="fleft">共{{page.totalCount}}条记录，共{{page.totalPageCount}}页，当前第{{page.currentPageNo}}页</span>
+					</div>
+					<div id="jsonmap1_pager" class="tcdPageCode">
+						<a href="javascript:;" class="prevPage">上一页</a>
+						<a href="javascript:;" class="current tcdNumber">1</a>
+						<span class="disabled">下一页</span>
+						<!-- <select class="ui-pg-selbox ui-widget-content ui-corner-all" title="每页记录数">
+							<option role="option" value="10" selected="selected">10</option>
+							<option role="option" value="20">20</option>
+							<option role="option" value="30">30</option>
+						</select> -->
+						<span class="inputPageNum">第<input type="text" id="jsonmap1_pageNum">页</span>
+						<a href="javascript:;" class="jumpPageNum">跳转</a>
+					</div>
 				</div>
-				<div id="jsonmap1_pager" class="tcdPageCode">
-					<a href="javascript:;" class="prevPage">上一页</a>
-					<a href="javascript:;" class="current tcdNumber">1</a>
-				<span class="disabled">下一页</span>
-				<!-- <select class="ui-pg-selbox ui-widget-content ui-corner-all" title="每页记录数">
-					<option role="option" value="10" selected="selected">10</option>
-					<option role="option" value="20">20</option>
-					<option role="option" value="30">30</option>
-				</select> -->
-				<span class="inputPageNum">第<input type="text" id="jsonmap1_pageNum">页</span>
-				<a href="javascript:;" class="jumpPageNum">跳转</a>
 			</div>
-		   </div>
-		   </div>
-			
-			<!-- 计算中心 -->
+
+			<!---------------------- 计算中心 --------------->
 			<div class="ui-calculate-center">
 				<h3 class="ui-calc-h3">
 					标签配置
@@ -418,29 +200,23 @@
 					<span class="ui-bracket left">(</span>
 					<div class="ui-conditionCT">
 						<h4 class="ui-conditionCT-h4">
-							2G数据流量
-							<em></em>
-							<i></i>
+							2G数据流量 <em></em> <i></i>
 						</h4>
 						<div class="ui-conditionCT-content align_center">
-							<i class="ui-nothing-icon">
-								<em></em>
-								请点击设置
-							</i>
+							<i class="ui-nothing-icon"> <em></em> 请点击设置</i>
 						</div>
 					</div>
 					<div class="ui-chaining">
 						<div class="dropdown open">
-						<button type="button" class="ui-btn ui-btn-menu ui-icon-btn">
-					     	<span class="fleft">剔除</span>
-					     	<span class="caret"></span>
-					     </button>
-					     <ul class="dropdown-menu">
-					       <li><a href="#">或</a></li>
-					       <li><a href="#">与</a></li>
-					       <li><a href="#">剔除</a></li>
-				        </ul>      
-					</div>
+							<button type="button" class="ui-btn ui-btn-menu ui-icon-btn">
+								<span class="fleft">剔除</span> <span class="caret"></span>
+							</button>
+							<ul class="dropdown-menu">
+								<li><a href="#">或</a></li>
+								<li><a href="#">与</a></li>
+								<li><a href="#">剔除</a></li>
+							</ul>
+						</div>
 					</div>
 					<div class="ui-conditionCT">
 						<h4 class="ui-conditionCT-h4">
@@ -464,16 +240,15 @@
 					</span>
 					<div class="ui-chaining">
 						<div class="dropdown">
-						<button type="button" class="ui-btn ui-btn-menu ui-icon-btn">
-					     	<span class="fleft">剔除</span>
-					     	<span class="caret"></span>
-					     </button>
-					     <ul class="dropdown-menu">
-					       <li><a href="#">或</a></li>
-					       <li><a href="#">与</a></li>
-					       <li><a href="#">剔除</a></li>
-				        </ul>      
-					</div>
+							<button type="button" class="ui-btn ui-btn-menu ui-icon-btn">
+								<span class="fleft">剔除</span> <span class="caret"></span>
+							</button>
+							<ul class="dropdown-menu">
+								<li><a href="#">或</a></li>
+								<li><a href="#">与</a></li>
+								<li><a href="#">剔除</a></li>
+							</ul>
+						</div>
 					</div>
 					<div class="ui-conditionCT">
 						<h4 class="ui-conditionCT-h4 ui-inverse">
@@ -488,60 +263,52 @@
 							</i>
 						</div>
 						<div class="tooltip top" role="tooltip">
-				      <div class="tooltip-arrow"></div>
-				      <div class="tooltip-inner">
-				        	鼠标点击标签反选
-				      </div>
-				    </div>
+							<div class="tooltip-arrow"></div>
+							<div class="tooltip-inner">鼠标点击标签反选</div>
+						</div>
+					</div>
 				</div>
 			</div>
-		</div>
-			
-			<!-- 购物车 -->
+
+			<!----------------- 购物车 ------------>
 			<div class="ui-shop-cart nest">
 				<p class="fleft ui-shop-cart-icon">
-					<i></i>
-					<span>已选择标签  1  个</span>
+					<i></i> <span>已选择标签 {{ruleListSize}} 个</span>
 				</p>
 				<p class="fright">
-					<span>客户群数：</span>
-					<span class="y-text">18,290,40</span>
+					<span>客户群数：</span> <span class="y-text">18,290,40</span>
 					<button type="button" class="ui-btn ui-btn-default mr10">
-		                      <span class="create-white"></span>
-		                     	 创建客户群
-		                  </button>
+						<span class="create-white"></span> 创建客户群
+					</button>
 				</p>
 			</div>
-			
+
 		</div>
 
 	</div>
 
- 
- 
- 
-	 <!-- 计算中心弹框 -->
-	 <div class="ui-dialog">
+
+	<!-- 计算中心弹框 -->
+	<div class="ui-dialog">
 		<div class="clearfix ui-enum-content">
 			<div class="fleft">
 				<div class="ui-enum-list">
 					<div class="ui-enum-header"></div>
 					<ul>
-					
+
 					</ul>
 				</div>
-			
+
 			</div>
 			<div class="fleft">
 				<div class="ui-enum-header"></div>
 				<ul id="ztree" class="ztree">
-				
+
 				</ul>
 			</div>
-	 	</div>
-	 </div>
- 
- 
- 
+		</div>
+	</div>
+
+
 </body>
 </html>
