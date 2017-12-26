@@ -21,6 +21,8 @@ import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.map.SerializationConfig;
 import org.codehaus.jackson.type.JavaType;
 
+import com.asiainfo.biapp.si.loc.base.exception.BaseException;
+
 import net.sf.json.JSONException;
 import net.sf.json.JSONObject;
 
@@ -38,7 +40,7 @@ public class JsonUtil {
      * @return String 返回json串
      * @throws IOException
      */
-    public static String toJsonString(Object object) throws IOException {
+    public static String toJsonString(Object object) throws BaseException {
         // 解决hibernate延迟加载
         mapper.configure(SerializationConfig.Feature.FAIL_ON_EMPTY_BEANS, false);
         String json = getJsonStr(object);
@@ -55,7 +57,7 @@ public class JsonUtil {
      * @return String 返回json串
      * @throws IOException
      */
-    public static String toJsonString(Object object, DateFormat dateFormat) throws IOException {
+    public static String toJsonString(Object object, DateFormat dateFormat) throws BaseException {
         // 解决hibernate延迟加载
         mapper.configure(SerializationConfig.Feature.FAIL_ON_EMPTY_BEANS, false);
         if (dateFormat != null) {
@@ -77,7 +79,7 @@ public class JsonUtil {
      * @return String 返回json串
      * @throws IOException
      */
-    public static String getJsonStr(Object object) throws IOException {
+    public static String getJsonStr(Object object) throws BaseException {
         try {
             StringWriter sw = new StringWriter();
             JsonGenerator gen = new JsonFactory().createJsonGenerator(sw);
@@ -105,7 +107,7 @@ public class JsonUtil {
      * @throws IOException
      */
     public static Object json2Bean(String json, Class<?> cls)
-            throws JsonParseException, JsonMappingException, IOException {
+            throws BaseException{
         mapper.setVisibility(JsonMethod.FIELD, Visibility.ANY);
         mapper.configure(DeserializationConfig.Feature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");

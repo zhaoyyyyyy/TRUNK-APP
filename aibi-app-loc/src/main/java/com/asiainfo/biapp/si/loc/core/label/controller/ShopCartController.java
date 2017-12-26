@@ -21,9 +21,11 @@ import com.asiainfo.biapp.si.loc.base.controller.BaseController;
 import com.asiainfo.biapp.si.loc.base.exception.BaseException;
 import com.asiainfo.biapp.si.loc.base.utils.JsonUtil;
 import com.asiainfo.biapp.si.loc.base.utils.StringUtil;
+import com.asiainfo.biapp.si.loc.base.utils.WebResult;
 import com.asiainfo.biapp.si.loc.cache.CocCacheProxy;
 import com.asiainfo.biapp.si.loc.core.label.entity.LabelInfo;
 import com.asiainfo.biapp.si.loc.core.label.model.ExploreQueryParam;
+import com.asiainfo.biapp.si.loc.core.label.service.ILabelExploreService;
 import com.asiainfo.biapp.si.loc.core.label.service.impl.LabelExploreServiceImpl;
 import com.asiainfo.biapp.si.loc.core.label.vo.LabelRuleVo;
 
@@ -65,10 +67,12 @@ import io.swagger.annotations.ApiOperation;
 public class ShopCartController extends BaseController {
 
 	@Autowired
-	private LabelExploreServiceImpl exploreServiceImpl;
+	private ILabelExploreService exploreServiceImpl;
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(ShopCartController.class);
 
+	 private static final String SUCCESS = "success";
+	
 	/**
 	 * 添加(规则)到购物车
 	 * 
@@ -82,9 +86,9 @@ public class ShopCartController extends BaseController {
 			@ApiImplicitParam(name = "calculationsId", value = "标签ID", required = true, paramType = "query", dataType = "string"),
 			@ApiImplicitParam(name = "typeId", value = "类型", required = true, paramType = "query", dataType = "string") })
 	@RequestMapping(value = "/saveShopSession", method = RequestMethod.POST)
-	@ResponseBody
-	public Map<String, Object> saveShopSession(HttpServletRequest req, String calculationsId, String typeId) {
+	public	WebResult<Map<String, Object>>saveShopSession(HttpServletRequest req, String calculationsId, String typeId) {
 		Map<String, Object> result = new HashMap<String, Object>();
+		WebResult<Map<String, Object>> webResult = new WebResult<>();
 		boolean success = true;
 		String msg = "";
 		try {
@@ -113,14 +117,13 @@ public class ShopCartController extends BaseController {
 				}
 			}
 
-		} catch (Exception e) {
-			success = false;
-			msg = "加入购物车失败!";
+		} catch (BaseException e) {
 			LOGGER.error("添加(规则)到购物车异常", e);
+			return webResult.fail(e);
 		}
 		result.put("success", success);
 		result.put("msg", msg);
-		return result;
+		return webResult.success("加入购物车成功", result);
 	}
 
 	/**
@@ -128,8 +131,8 @@ public class ShopCartController extends BaseController {
 	 */
 	@ApiImplicitParam(name = "labelRuleStr", value = "规则串", required = true, paramType = "query", dataType = "string")
 	@RequestMapping(value = "/updateShopSession", method = RequestMethod.POST)
-	@ResponseBody
-	public String updateShopSession(HttpServletRequest req, String labelRuleStr) {
+	public WebResult<String> updateShopSession(HttpServletRequest req, String labelRuleStr) {
+		WebResult<String> webResult = new WebResult<>();
 		try {
 			LabelRuleVo labelRuleVo = (LabelRuleVo) JsonUtil.json2Bean(labelRuleStr, LabelRuleVo.class);
 			List<LabelRuleVo> rules = getSessionLabelRuleList();
@@ -143,11 +146,11 @@ public class ShopCartController extends BaseController {
 				updateRules.add(rule);
 			}
 			setSessionAttribute(LabelRuleContants.SHOP_CART_RULE, JsonUtil.toJsonString(updateRules));
-		} catch (Exception e) {
+		} catch (BaseException e) {
 			LOGGER.error("设置属性更新session异常", e);
+			return webResult.fail(e);
 		}
-		return null;
-
+		return webResult.success("更新购物车成功", SUCCESS);
 	}
 
 	/**
@@ -159,12 +162,12 @@ public class ShopCartController extends BaseController {
 	 * @date 2017年12月14日
 	 */
 	@RequestMapping(value = "/findShopCart", method = RequestMethod.POST)
-	@ResponseBody
-	public Map<String, Object> findShopCart(HttpServletRequest request) {
+	public WebResult<Map<String, Object>> findShopCart(HttpServletRequest request) {
+		WebResult<Map<String, Object>> webResult = new WebResult<>();
 		Map<String, Object> result = new HashMap<String, Object>();
 		List<LabelRuleVo> rules = getSessionLabelRuleList();
 		result.put("rules", rules);
-		return result;
+		return webResult.success("读取购物车数据成功", result);
 	}
 
 	/**
@@ -176,35 +179,43 @@ public class ShopCartController extends BaseController {
 	 * @author tianxy3
 	 * @date 2017年12月18日
 	 */
-	@ApiOperation(value = "测试")
 	@ApiImplicitParams({
 			@ApiImplicitParam(name = "dataDate", value = "日期", required = true, paramType = "query", dataType = "string"),
 			@ApiImplicitParam(name = "dayLabelDate", value = "数据日期(日)", required = true, paramType = "query", dataType = "string"),
 			@ApiImplicitParam(name = "monthLabelDate", value = "数据日期(月)", required = true, paramType = "query", dataType = "string") })
 	@RequestMapping(value = "/explore", method = RequestMethod.POST)
-	@ResponseBody
-	public Map<String, Object> explore(HttpServletRequest req, String dataDate, String dayLabelDate,
-			String monthLabelDate) throws Exception {
+	public WebResult<Map<String, Object>> explore(HttpServletRequest req, String dataDate, String dayLabelDate,
+			String monthLabelDate){
+		WebResult<Map<String, Object>> webResult = new WebResult<>();
 		Map<String, Object> result = new HashMap<String, Object>();
 		List<LabelRuleVo> labelRules = getSessionLabelRuleList();
 		ExploreQueryParam queryParam = new ExploreQueryParam(dataDate, monthLabelDate, dayLabelDate);
-		String countSqlStr = exploreServiceImpl.getCountSqlStr(labelRules, queryParam);
+		String countSqlStr = null;
+		try {
+			countSqlStr = exploreServiceImpl.getCountSqlStr(labelRules, queryParam);
+		} catch (BaseException e) {
+			return webResult.fail(e);
+		}
 		result.put("countSqlStr", countSqlStr);
-		return result;
+		return webResult.success("探索成功", result);
+		
+		
 	}
 
 	/**
 	 * 删除购物车的对象
 	 */
 	@RequestMapping(value = "/delShopSession", method = RequestMethod.POST)
-	@ResponseBody
-	public Map<String, Object> delShopSession(HttpServletRequest req) {
+	public WebResult<Map<String, Object>> delShopSession(HttpServletRequest req) {
+		WebResult<Map<String, Object>> webResult = new WebResult<>();
+		Map<String, Object> result = new HashMap<String, Object>();
 		try {
 			setSessionAttribute(LabelRuleContants.SHOP_CART_RULE, "");
 		} catch (BaseException e) {
 			LOGGER.error("删除购物车的对象异常", e);
+			return webResult.fail(e);
 		}
-		return null;
+		return webResult.success("删除购物车成功", result);
 	}
 
 	/**

@@ -12,6 +12,7 @@ import org.apache.commons.lang.time.StopWatch;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 
+import com.asiainfo.biapp.si.loc.base.exception.BaseException;
 import com.asiainfo.biapp.si.loc.base.utils.JsonUtil;
 import com.asiainfo.biapp.si.loc.base.utils.RedisUtils;
 
@@ -93,7 +94,7 @@ public abstract class ICacheBase {
 			    values.put(entry.getKey(), JsonUtil.toJsonString(entry.getValue()));
 			}
 			RedisUtils.setForHashObj(key, values, RedisUtils.NO_Expire);
-		} catch (IOException e) {
+		} catch (BaseException e) {
 			log.error("object to json exception:",e);
 		}
     	

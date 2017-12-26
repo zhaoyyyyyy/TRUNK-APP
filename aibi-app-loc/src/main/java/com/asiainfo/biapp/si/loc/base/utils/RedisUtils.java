@@ -54,12 +54,12 @@ public class RedisUtils {
 		if (jedisPool == null) {
 			synchronized (lock) {
 				log.debug("redis server IP = "
-						+ LocConfigUtil.getInstance(BaseConstants.JAUTH_URL).getProperties("SYSConfig_REDIS_IP")
+						+ LocConfigUtil.getInstance(BaseConstants.JAUTH_URL).getProperties(BaseConstants.REDIS_IP)
 						+ "; port = "
-						+ LocConfigUtil.getInstance(BaseConstants.JAUTH_URL).getProperties("SYSConfig_REDIS_PORT"));
-				redisIp = LocConfigUtil.getInstance(BaseConstants.JAUTH_URL).getProperties("SYSConfig_REDIS_IP");
+						+ LocConfigUtil.getInstance(BaseConstants.JAUTH_URL).getProperties(BaseConstants.REDIS_PORT));
+				redisIp = LocConfigUtil.getInstance(BaseConstants.JAUTH_URL).getProperties(BaseConstants.REDIS_IP);
 				redisPort = Integer.valueOf(
-						LocConfigUtil.getInstance(BaseConstants.JAUTH_URL).getProperties("SYSConfig_REDIS_PORT"));
+						LocConfigUtil.getInstance(BaseConstants.JAUTH_URL).getProperties(BaseConstants.REDIS_PORT));
 
 				if (jedisPool == null) {
 					JedisPoolConfig config = new JedisPoolConfig();
