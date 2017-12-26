@@ -32,7 +32,6 @@ function changeStatus(obj){
 			return false
 		});
 	}
-	console.log(model.showdimDetail);
 }
 window.loc_onload = function() {		
 	var dicBqlx = $.getDicData("BQLXZD");
