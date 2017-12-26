@@ -511,7 +511,8 @@
 	border: 1px solid #E9E9E9;
 	border-radius: 6px;
 }
-.create-main.active{
+.create-main.active,
+.create-main:hover{
 	border-radius: 6px;
 	border-color: #009241;
 }
