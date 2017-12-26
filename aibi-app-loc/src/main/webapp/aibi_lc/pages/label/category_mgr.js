@@ -106,11 +106,12 @@ window.loc_onload = function() {
 							},
 							onSuccess:function(data){							
 								ztreeFunc();
+								labeltree();
 							}
 						});
 		       		}
 	        	})
-	});
+			});
 			//删除节点
 			var delBtn = $("#delBtn_" + treeNode.tId);	
 			delBtn.click(function(){
@@ -129,8 +130,8 @@ window.loc_onload = function() {
 								"parentId":treeNode.categoryId,
 							},
 							onSuccess:function(data){
-								
 								ztreeFunc();
+								labeltree();
 							}
 						});
 				})
@@ -183,6 +184,7 @@ window.loc_onload = function() {
 						},
 						onSuccess:function(data){														
 							ztreeFunc();
+							labeltree();
 						}
 					});
 	       		}
@@ -245,11 +247,14 @@ window.loc_onload = function() {
 	$("#ui-move").click(function(){
 		$(".label-dialog").addClass("active");
 		$("#labelList label[class~=active]").each(function(){
-			console.log($(this).attr("data-id"))
+			
+			transData($(this).attr("data-id"))
 		})
-		
-		
 	});
+	var transData=function(data){
+		return data;
+	}
+	
 	
 	$("#dialog-del").click(function(){
 		$(".label-dialog").removeClass("active");
@@ -268,54 +273,65 @@ window.loc_onload = function() {
 		}
 	});
 	$("#dialog-upd").click(function(){
+		
+		console.log(transData,transToData)
 		$.commAjax({			
 		    url : $.ctx+'/api/label/labelInfo/update',  		    
 		    dataType : 'json', 
 		    postData : {
-					"labelId" :"4028b8816058f3c6016058f4a8ec0000",
-					"categoryId":"TEST11111",
+					"labelId" :transData,
+					"categoryId":transToData,
 				},
 		    onSuccess: function(data){ 
 		    	    $.alert(data.msg);
-			    	console.log(1);
+			    	//console.log(data);
 			    	zTreeOnClick();
 		    	}  
 	   });
 	});
 
 	function labeltree(){
-			var ztreeObj;
-			var obj = $("#preConfig_list").find("span");
-			var labelId =obj.attr("configId");
-			$.commAjax({			
-			    url : $.ctx+'/api/label/categoryInfo/queryList',  		    
-			    dataType : 'json', 
-			    async:true,
-			    postData : {
-						"sysId" :labelId,
-					},
-			    onSuccess: function(data){ 		    			    			    	
-				    	var ztreeObj=data.data;
-				    	$.fn.zTree.init($("#labeltree"), install, ztreeObj)
-			    	}  
-		   });
-			install = {
-				view: {
-					selectedMulti: false,
+		var ztreeObj;
+		var obj = $("#preConfig_list").find("span");
+		var labelId =obj.attr("configId");			
+		$.commAjax({			
+		    url : $.ctx+'/api/label/categoryInfo/queryList',  		    
+		    dataType : 'json', 
+		    async:true,
+		    postData : {
+					"sysId" :labelId,
 				},
-				data: {
-					selectedMulti: false,			
-					simpleData: {  
-		                enable: true,   //设置是否使用简单数据模式(Array)  	                    
-		            },  
-		            key: {             	
-		            	idKey: "sysId",    //设置节点唯一标识属性名称  
-		                pIdKey: "parentId" ,     //设置父节点唯一标识属性名称  
-		                name:'categoryName',//zTree 节点数据保存节点名称的属性名称  
-		                title: "categoryName"//zTree 节点数据保存节点提示信息的属性名称        
-		            }  
-				}
+		    onSuccess: function(data){ 		    			    			    	
+			    	var ztreeObj=data.data;
+			    	$.fn.zTree.init($("#labeltree"), install, ztreeObj)
+		    	}  
+	   });
+		install = {
+			view: {
+				selectedMulti: false,
+			},
+			data: {
+				selectedMulti: false,			
+				simpleData: {  
+	                enable: true,   //设置是否使用简单数据模式(Array)  	                    
+	            },  
+	            key: {             	
+	            	idKey: "sysId",    //设置节点唯一标识属性名称  
+	                pIdKey: "parentId" ,     //设置父节点唯一标识属性名称  
+	                name:'categoryName',//zTree 节点数据保存节点名称的属性名称  
+	                title: "categoryName"//zTree 节点数据保存节点提示信息的属性名称        
+	            }  
+			},
+			callback: {
+				onClick: dataClick
 			}
 		}
-		
 	}
+	function dataClick(event, treeId, treeNode){
+		transToData(treeNode.categoryId)
+	}
+	var transToData=function(data){
+		return data
+	}
+	
+}
