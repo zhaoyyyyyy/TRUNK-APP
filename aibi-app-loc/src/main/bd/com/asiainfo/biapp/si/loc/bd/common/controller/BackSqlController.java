@@ -27,7 +27,7 @@ public class BackSqlController {
 	    @ApiOperation(value="通过表名拿到库中的表", notes="@param datasource 数据源编码(配置文件中")
 	    @ApiImplicitParam(name = "tableName", value = "表名称（支持模糊查询）",paramType = "query", dataType = "string")
 	    @PostMapping(value = "/tables")
-	    public List<Map<String,Object>> queryTable(String tableName){
+	    public List<Map<String,String>> queryTable(String tableName){
 	        return backSqlService.queryTableLikeTableName(tableName);
 	    }
 

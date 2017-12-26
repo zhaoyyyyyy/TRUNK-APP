@@ -13,7 +13,7 @@ public interface IBackSqlService {
      * @param tableName 表名
      * @return table_name
      */
-    public List<Map<String, Object>> queryTableLikeTableName(String tableName);
+    public List<Map<String, String>> queryTableLikeTableName(String tableName);
 
     /**
      * 查询某表中的列
@@ -22,7 +22,7 @@ public interface IBackSqlService {
      * @param tableName 表名
      * @return  COLUMN_NAME, DATA_TYPE, COLUMN_COMMENT
      */
-    public List<Map<String, Object>> queryTableColumn(String tableName);
+    public List<Map<String, String>> queryTableColumn(String tableName);
 
 	
 	/**

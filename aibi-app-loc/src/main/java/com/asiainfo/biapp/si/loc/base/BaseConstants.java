@@ -26,4 +26,15 @@ public class BaseConstants {
 	 */
 	public static final String REDIS_PORT = "LOC_CONFIG_SYS_REDIS_PORT ";
 	
+	public static final String SYS_BGDB_DRIVER = "LOC_CONFIG_SYS_BGDB_DRIVER";
+	
+	public static final String SYS_BGDB_TYPE = "LOC_CONFIG_SYS_BGDB_TYPE";
+	
+	public static final String SYS_BGDB_URL = "LOC_CONFIG_SYS_BGDB_URL";
+	
+	public static final String SYS_BGDB_USERNAME = "LOC_CONFIG_SYS_BGDB_USERNAME";
+	
+	public static final String SYS_BGDB_PASSWORD = "LOC_CONFIG_SYS_BGDB_PASSWORD";
+	
+	
 }

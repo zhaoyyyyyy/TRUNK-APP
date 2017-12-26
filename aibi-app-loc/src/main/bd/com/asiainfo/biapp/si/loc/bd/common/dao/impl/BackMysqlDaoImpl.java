@@ -37,7 +37,7 @@ import com.asiainfo.biapp.si.loc.bd.common.dao.IBackSqlDao;
 public class BackMysqlDaoImpl extends BaseBackDaoImpl implements IBackSqlDao{
 	
 	@Override
-	public List<Map<String, Object>> queryTableLikeTableName(String tableName) {
+	public List<Map<String, String>> queryTableLikeTableName(String tableName) {
 		try{
             Connection connection = this.getBackConnection();
             String sql = "SELECT table_name FROM information_schema.tables WHERE table_name like '%"+tableName+"%' ORDER BY table_name DESC";
@@ -53,7 +53,7 @@ public class BackMysqlDaoImpl extends BaseBackDaoImpl implements IBackSqlDao{
 	}
 
 	@Override
-	public List<Map<String, Object>> queryTableColumn(String tableName) {
+	public List<Map<String, String>> queryTableColumn(String tableName) {
         try{
             Connection connection = this.getBackConnection();
             PreparedStatement preparedStatement = connection.prepareStatement("Select COLUMN_NAME, DATA_TYPE, COLUMN_COMMENT from INFORMATION_SCHEMA.COLUMNS Where table_name='"+tableName+"'");

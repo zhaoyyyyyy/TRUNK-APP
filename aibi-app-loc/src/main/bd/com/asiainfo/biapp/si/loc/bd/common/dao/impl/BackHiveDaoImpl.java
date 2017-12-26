@@ -12,13 +12,13 @@ import com.asiainfo.biapp.si.loc.bd.common.dao.IBackSqlDao;
 public class BackHiveDaoImpl extends BaseBackDaoImpl implements IBackSqlDao{
 
 	@Override
-	public List<Map<String, Object>> queryTableLikeTableName(String tableName) {
+	public List<Map<String, String>> queryTableLikeTableName(String tableName) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public List<Map<String, Object>> queryTableColumn(String tableName) {
+	public List<Map<String, String>> queryTableColumn(String tableName) {
 		// TODO Auto-generated method stub
 		return null;
 	}

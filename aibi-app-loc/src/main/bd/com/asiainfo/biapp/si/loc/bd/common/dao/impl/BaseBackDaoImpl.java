@@ -6,7 +6,6 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -14,6 +13,9 @@ import java.util.Map;
 import javax.sql.DataSource;
 
 import org.springframework.boot.autoconfigure.jdbc.DataSourceBuilder;
+
+import com.asiainfo.biapp.si.loc.base.BaseConstants;
+import com.asiainfo.biapp.si.loc.cache.CocCacheProxy;
 
 /**
  * 一些后台库的公共方法
@@ -48,10 +50,10 @@ public class BaseBackDaoImpl {
 	public Connection getBackConnection() throws SQLException{
 	        
 		//从配置缓存中拿到后台库的配置
-		String driverClassName = "com.mysql.jdbc.Driver";
-		String url = "jdbc:mysql://10.1.245.175:3306/cocdev";
-		String username = "cocdev";
-		String password = "cocdev";
+		String driverClassName = CocCacheProxy.getCacheProxy().getSYSConfigInfoByKey(BaseConstants.SYS_BGDB_DRIVER);
+		String url =CocCacheProxy.getCacheProxy().getSYSConfigInfoByKey(BaseConstants.SYS_BGDB_URL);
+		String username = CocCacheProxy.getCacheProxy().getSYSConfigInfoByKey(BaseConstants.SYS_BGDB_USERNAME);
+		String password = CocCacheProxy.getCacheProxy().getSYSConfigInfoByKey(BaseConstants.SYS_BGDB_PASSWORD);
 		DataSource dataSource = this.getDataSourceBuilder(driverClassName,url,username,password).build();
         return dataSource.getConnection();
     }
@@ -85,19 +87,20 @@ public class BaseBackDaoImpl {
 	 * @return
 	 * @throws java.sql.SQLException
 	 */
-    public static List resultSetToList(ResultSet rs) throws java.sql.SQLException {
+    public static List<Map<String,String>> resultSetToList(ResultSet rs) throws java.sql.SQLException {
         ResultSetMetaData md = rs.getMetaData(); //得到结果集(rs)的结构信息，比如字段数、字段名等
         int columnCount = md.getColumnCount(); //返回此 ResultSet 对象中的列数
-        List list = new ArrayList();
-        Map rowData = new LinkedHashMap();
+        List<Map<String,String>> list = new ArrayList<Map<String,String>>();
+        Map<String,String> rowData = new LinkedHashMap<String,String>(columnCount);
         while (rs.next()) {
-            rowData = new HashMap(columnCount);
             for (int i = 1; i <= columnCount; i++) {
                 Object object = rs.getObject(i);
-//                if (object != null) {
-//                    object = object.toString();
-//                }
-                rowData.put(md.getColumnName(i), rs.getObject(i));
+                if (object != null) {
+                    rowData.put(md.getColumnName(i), object.toString());
+                }else{
+                	rowData.put(md.getColumnName(i), null);
+                }
+                
             }
             list.add(rowData);
         }
