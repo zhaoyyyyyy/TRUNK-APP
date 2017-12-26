@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.StringWriter;
 import java.lang.reflect.Method;
 import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -107,6 +108,8 @@ public class JsonUtil {
             throws JsonParseException, JsonMappingException, IOException {
         mapper.setVisibility(JsonMethod.FIELD, Visibility.ANY);
         mapper.configure(DeserializationConfig.Feature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    	mapper.setDateFormat(dateFormat);
         try {
             return mapper.readValue(json, cls);
         } catch (Exception e) {

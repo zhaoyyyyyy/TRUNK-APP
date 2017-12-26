@@ -21,9 +21,9 @@ import com.asiainfo.biapp.si.loc.base.controller.BaseController;
 import com.asiainfo.biapp.si.loc.base.exception.BaseException;
 import com.asiainfo.biapp.si.loc.base.utils.JsonUtil;
 import com.asiainfo.biapp.si.loc.base.utils.StringUtil;
+import com.asiainfo.biapp.si.loc.cache.CocCacheProxy;
 import com.asiainfo.biapp.si.loc.core.label.entity.LabelInfo;
 import com.asiainfo.biapp.si.loc.core.label.model.ExploreQueryParam;
-import com.asiainfo.biapp.si.loc.core.label.service.ILabelInfoService;
 import com.asiainfo.biapp.si.loc.core.label.service.impl.LabelExploreServiceImpl;
 import com.asiainfo.biapp.si.loc.core.label.vo.LabelRuleVo;
 
@@ -65,9 +65,6 @@ import io.swagger.annotations.ApiOperation;
 public class ShopCartController extends BaseController {
 
 	@Autowired
-	private ILabelInfoService labelInfoService;
-
-	@Autowired
 	private LabelExploreServiceImpl exploreServiceImpl;
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(ShopCartController.class);
@@ -92,9 +89,7 @@ public class ShopCartController extends BaseController {
 		String msg = "";
 		try {
 			if (LabelRuleContants.LABEL_INFO_CALCULATIONS_TYPEID.equals(typeId)) {
-				// TODO 从缓存中取出
-				// LabelInfo labelInfo=LocCacheBase.getInstance().getEffectiveLabel(calculationsId);
-				LabelInfo ciLabelInfo = labelInfoService.selectLabelInfoById(calculationsId);
+				LabelInfo ciLabelInfo = CocCacheProxy.getCacheProxy().getLabelInfoById(calculationsId);
 				if (StringUtil.isEmpty(ciLabelInfo.getDataDate())) {
 					success = false;
 					msg = "抱歉，该标签数据未准备好，不能添加到收纳篮！";
@@ -102,36 +97,19 @@ public class ShopCartController extends BaseController {
 				// 校验完之后的操作
 				if (success) {
 					msg = "加入购物车成功";
-
 					List<LabelRuleVo> rules = getSessionLabelRuleList();
 					Integer sort = 0;
-					String defaultOp = "and";
-					if (StringUtil.isNotEmpty(req.getParameter("defaultOp"))) {
-						defaultOp = req.getParameter("defaultOp");
-					}
 					if (rules.size() > 0) {
 						sort = rules.get(rules.size() - 1).getSortNum();
-						sort = sort + 1;
-						rules.add(generateRule(defaultOp, LabelRuleContants.ELEMENT_TYPE_OPERATOR, sort));
+						sort = sort + 1;// 排序标号 ,默认规则为"and"
+						rules.add(generateRule("and", LabelRuleContants.ELEMENT_TYPE_OPERATOR, sort));
 					}
-					sort = sort + 1;
-
-					LabelRuleVo rule = new LabelRuleVo();
-					rule.setCalcuElement(String.valueOf(ciLabelInfo.getLabelId()));
-					rule.setCustomOrLabelName(ciLabelInfo.getLabelName());
-					rule.setMaxVal(new Double(1));
-					rule.setMinVal(new Double(0));
-					rule.setLabelFlag(1);// 取反标识，默认不取反
-					rule.setSortNum(sort);
-					rule.setLabelTypeId(ciLabelInfo.getLabelTypeId());
-					rule.setElementType(LabelRuleContants.ELEMENT_TYPE_LABEL_ID);
-					rule.setDataDate(ciLabelInfo.getDataDate());// 设置最新数据日期
-					rule.setUpdateCycle(ciLabelInfo.getUpdateCycle());// 设置标签周期性
+					sort = sort + 1;// 初始化标签规则
+					LabelRuleVo rule = initLabelRule(ciLabelInfo, sort);
 					rules.add(rule);
-					
+
 					setSessionAttribute(LabelRuleContants.SHOP_CART_RULE, JsonUtil.toJsonString(rules));
-					Integer numValue = findLabelOrCustomNum(rules);
-					setSessionAttribute(LabelRuleContants.SHOP_CART_RULE_NUM, String.valueOf(numValue));
+					setSessionAttribute(LabelRuleContants.SHOP_CART_RULE_NUM,String.valueOf(findLabelOrCustomNum(rules)));
 				}
 			}
 
@@ -200,15 +178,16 @@ public class ShopCartController extends BaseController {
 	 */
 	@ApiOperation(value = "测试")
 	@ApiImplicitParams({
-		@ApiImplicitParam(name = "dataDate", value = "日期", required = true, paramType = "query", dataType = "string"),
-		@ApiImplicitParam(name = "dayLabelDate", value = "数据日期(日)", required = true, paramType = "query", dataType = "string"),
-		@ApiImplicitParam(name = "monthLabelDate", value = "数据日期(月)", required = true, paramType = "query", dataType = "string") })
+			@ApiImplicitParam(name = "dataDate", value = "日期", required = true, paramType = "query", dataType = "string"),
+			@ApiImplicitParam(name = "dayLabelDate", value = "数据日期(日)", required = true, paramType = "query", dataType = "string"),
+			@ApiImplicitParam(name = "monthLabelDate", value = "数据日期(月)", required = true, paramType = "query", dataType = "string") })
 	@RequestMapping(value = "/explore", method = RequestMethod.POST)
 	@ResponseBody
-	public Map<String, Object> explore(HttpServletRequest req, String dataDate, String dayLabelDate, String monthLabelDate) throws Exception {
+	public Map<String, Object> explore(HttpServletRequest req, String dataDate, String dayLabelDate,
+			String monthLabelDate) throws Exception {
 		Map<String, Object> result = new HashMap<String, Object>();
 		List<LabelRuleVo> labelRules = getSessionLabelRuleList();
-		ExploreQueryParam queryParam = new ExploreQueryParam(dataDate,monthLabelDate,dayLabelDate);
+		ExploreQueryParam queryParam = new ExploreQueryParam(dataDate, monthLabelDate, dayLabelDate);
 		String countSqlStr = exploreServiceImpl.getCountSqlStr(labelRules, queryParam);
 		result.put("countSqlStr", countSqlStr);
 		return result;
@@ -273,6 +252,32 @@ public class ShopCartController extends BaseController {
 			LOGGER.error("getSessionLabelRuleList异常", e);
 		}
 		return rules;
+	}
+
+	/**
+	 * 
+	 * Description: 初始化标签规则
+	 *
+	 * @param ciLabelInfo
+	 * @param sort
+	 * @return
+	 *
+	 * @author tianxy3
+	 * @date 2017年12月26日
+	 */
+	private LabelRuleVo initLabelRule(LabelInfo ciLabelInfo, Integer sort) {
+		LabelRuleVo rule = new LabelRuleVo();
+		rule.setCalcuElement(String.valueOf(ciLabelInfo.getLabelId()));
+		rule.setCustomOrLabelName(ciLabelInfo.getLabelName());
+		rule.setMaxVal(new Double(1));
+		rule.setMinVal(new Double(0));
+		rule.setLabelFlag(1);// 取反标识，默认不取反
+		rule.setSortNum(sort);
+		rule.setLabelTypeId(ciLabelInfo.getLabelTypeId());
+		rule.setElementType(LabelRuleContants.ELEMENT_TYPE_LABEL_ID);
+		rule.setDataDate(ciLabelInfo.getDataDate());// 设置最新数据日期
+		rule.setUpdateCycle(ciLabelInfo.getUpdateCycle());// 设置标签周期性
+		return rule;
 	}
 
 	/**
