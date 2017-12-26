@@ -10,9 +10,10 @@ var dataModel = {
 		labelList:[],
 		page:[],
 		categoryInfoList : [],
-		labelInfoList : [],
+		labelInfoList : [],//标签
 		ruleListSize : 0,
-		ruleList : [],
+		ruleList : [],//规则
+		currentAddLabel : {},
 		configId : '-1'
 
 }
@@ -29,7 +30,12 @@ window.loc_onload = function() {
 
     var labelSysApp = new Vue({
     	el : '#labelInfoListApp',
-    	data : dataModel
+    	data : dataModel,
+    	methods : {
+    		select : function(index){
+    			labelMarket.addToShoppingCar(index);
+    		}
+    	}
     });
 	
 	//初始化加载标签体系
@@ -46,6 +52,7 @@ window.loc_onload = function() {
 	
 	//计算中心弹出/收起（下面）
 	$(".ui-shop-cart").click(function(){
+		labelMarket.refreshShopCart();
 		$(".ui-calculate-center").addClass("heightAuto");
 	});
 	$(".J-min").click(function(){
@@ -104,7 +111,6 @@ var labelMarket = (function (model){
          * ------------------------------------------------------------------
          */
         model.loadLabelCategoryList = function(option) {
-        	
         	$.commAjax({
 			  url: $.ctx + "/api/label/categoryInfo/queryList",
 			  postData:{
@@ -164,7 +170,8 @@ var labelMarket = (function (model){
 			$.commAjax({
 				url: $.ctx + "/api/label/labelInfo/queryPage",
 				postData:{
-					configId : ""
+					configId : "",
+					pageSize : 13
 				},
 				onSuccess: function(data){
 					dataModel.page.currentPageNo=data.currentPageNo;
@@ -190,8 +197,7 @@ var labelMarket = (function (model){
          */
 		model.addToShoppingCar = function(index){
         	var labelInfo = dataModel.labelInfoList[index];
-        	modeladdShopCart(labelInfo.labelId,1,'',0);
-        	//shopChartMain.addToShoppingCar(ev,ths,1);
+        	model.addShopCart(labelInfo.labelId,1,'',0);
         };
         /**
 		 * 加入购物车缓存
@@ -251,7 +257,6 @@ var labelMarket = (function (model){
 				  postData:para,
 				  onSuccess: function(returnObj){
 					  	var success = returnObj.success;
-					  	
 						if (success){
 							model.refreshShopCart();
 						}else{
@@ -271,7 +276,7 @@ var labelMarket = (function (model){
         	$.commAjax({
   				  url: $.ctx + "/api/shopCart/findShopCart",
   				  postData:{
-  					  sysId : configId
+  					  sysId : dataModel.configId
   				  },
   				  onSuccess: function(returnObj){
   					dataModel.ruleList = [];
