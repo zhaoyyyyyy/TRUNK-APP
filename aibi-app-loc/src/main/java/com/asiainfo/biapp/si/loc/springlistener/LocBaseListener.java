@@ -14,14 +14,14 @@ public class LocBaseListener implements ApplicationListener<ContextRefreshedEven
 	public void onApplicationEvent(ContextRefreshedEvent event) {
 		
 		System.out.println("-------------------------------------LocBaseListener--------------------------------------");
-		ILabelInfoDao iLabelInfoDao = (ILabelInfoDao)event.getApplicationContext().getBean("labelInfoDaoImpl");
+//		ILabelInfoDao iLabelInfoDao = (ILabelInfoDao)event.getApplicationContext().getBean("labelInfoDaoImpl");
 		BaseConstants.JAUTH_URL = event.getApplicationContext().getEnvironment().getProperty("jauth-url");
 //		try {
 //			RedisUtils.setAdressAndPort(LocConfigUtil.getInstance(BaseConstants.JAUTH_URL).getProperties("SYSConfig_REDIS_IP"),LocConfigUtil.getInstance(BaseConstants.JAUTH_URL).getProperties("SYSConfig_REDIS_PORT"));
 //		} catch (BaseException e) {
 //			e.printStackTrace();
 //		}
-		LocCacheBase.getInstance().init(iLabelInfoDao);
+		LocCacheBase.getInstance().init();
 		
 		
 	}

@@ -55,17 +55,17 @@ public class LocCacheBase extends ICacheBase implements ApplicationContextAware{
 		
 	}
 	
-	public synchronized void init(ILabelInfoDao labelInfoDao){
+	public synchronized void init(){
 //		this.iLabelInfoDao= labelInfoDao;
 		this.iLabelInfoDao = (ILabelInfoDao)SpringContextHolder.getBean("labelInfoDaoImpl");
 		this.initAllLabelInfo();
 		this.initAllConfigInfo();
 	}
 	
-	public synchronized void refreshCache(){
-		this.initAllLabelInfo();
-		this.initAllConfigInfo();
-	}
+//	public synchronized void refreshCache(){
+//		this.initAllLabelInfo();
+//		this.initAllConfigInfo();
+//	}
 	
 	/**
 	 * 将有效标签的相关属性类 数据刷入redis

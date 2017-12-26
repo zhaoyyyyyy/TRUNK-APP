@@ -1,21 +1,18 @@
 package com.asiainfo.biapp.si.loc.base.utils;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import com.amazonaws.util.AWSRequestMetrics.Field;
 import com.asiainfo.biapp.si.loc.auth.utils.LocConfigUtil;
 import com.asiainfo.biapp.si.loc.base.BaseConstants;
 import com.asiainfo.biapp.si.loc.base.exception.BaseException;
+
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
@@ -236,7 +233,7 @@ public class RedisUtils {
 	 * @return 根据key的顺序返回values
 	 */
 	@SuppressWarnings("unchecked")
-	public static <T extends Serializable> T mgetForHashObj(String key, String value) {
+	public static <T extends Serializable> T mgetForHashObj2(String key, String value) {
 		T result = null;
 		JedisPool pool = null;
 		Jedis jedis = null;

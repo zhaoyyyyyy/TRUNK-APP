@@ -17,7 +17,7 @@ public class CocRedisCache implements CocCacheAble{
 	
 	@Override
 	public void reflashAllCache() {
-		LocCacheBase.getInstance().refreshCache();
+		LocCacheBase.getInstance().init();
 	}
 
 	@Override

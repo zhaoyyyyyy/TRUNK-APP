@@ -148,7 +148,7 @@ public abstract class ICacheBase {
 				log.error("key1 or key2 is null.");
 				throw new Exception("key1 or key2 or value is null.");
 			}
-			return RedisUtils.mgetForHashObj(key1, key2);
+			return RedisUtils.mgetForHashObj2(key1, key2);
 		} catch (Exception e) {
 			throw new Exception(e);
 		}
