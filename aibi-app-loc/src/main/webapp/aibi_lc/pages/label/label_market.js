@@ -8,7 +8,8 @@ var dataModel = {
 		zqlxList:[],
 		xzqhList:[],
 		gxzqList:[],
-		labelList:[]
+		labelList:[],
+		page:[]
 
 }
 
@@ -99,7 +100,7 @@ var labelMarket = (function (model){
 				  sysId : configId
 			  },
 			  onSuccess: function(returnObj){
-				  dataModel.labelSysList = returnObj;
+				  dataModel.labelSysList = returnObj.data;
 			  }
 			});
         };
@@ -147,6 +148,9 @@ var labelMarket = (function (model){
 					configId : configId
 				},
 				onSuccess: function(data){
+					dataModel.page.currentPageNo=data.currentPageNo;
+					dataModel.page.totalCount=data.totalCount;
+					dataModel.page.totalPageCount=data.totalPageCount;
 					for(var i=0 ; i<data.rows.length; i++){
 						if(data.rows[i].labelExtInfo!=undefined&&data.rows[i].labelExtInfo!=null){
 							data.rows[i].customNum = data.rows[i].labelExtInfo.customNum;

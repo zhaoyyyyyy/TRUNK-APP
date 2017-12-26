@@ -30,7 +30,7 @@
 		    	</h3>
 		</div>
 		<div id="dataDiv" v-cloak>
-			<div class="ui-lc-mian">				
+			<div class="ui-lc-mian">	
 				<div class="ui-label-mes clearfix">
 					<span class="fleft">标签集市 &nbsp; &nbsp;共<b>88</b>个标签</span>
 		         <div class="form-group fright">
@@ -80,9 +80,7 @@
 							<label class="fleft">地市：</label>
 							<div class="fleft">
 								<a class="fleft all-active">全部</a>
-								<div class="fleft" v-for="orgC in xzqhList">
-									<a href="javascript:;" :id="orgC.id" class="ml30">{{orgC.fullName}}</a>
-								</div>
+								<a href="javascript:;" :id="orgC.id" v-for="orgC in xzqhList"><em>{{orgC.fullName}}</em></a>
 							</div>
 							<!-- <label class="fleft">地市：</label>
 							<div class="fleft">
@@ -144,9 +142,7 @@
 							<label class="fleft">更新周期：</label>
 							<div class="fleft">
 								<a class="fleft all-active">全部</a>
-								<div class="fleft" v-for="g in gxzqList">
-									<a href="javascript:;" :id="g.code" class="ml30">{{g.dataName}}</a>
-								</div>
+								<a href="javascript:;" :id="g.code" v-for="g in gxzqList"><em>{{g.dataName}}</em></a>
 							</div>
 						</div>
 					</li>
@@ -388,7 +384,7 @@
 			</ul>
 			<div class="ui-corner-bottom mb50">
 				<div class="clearfix"><div class="fleft totalPage">
-					<span class="fleft">共13条记录，2页，当前第1页</span>
+					<span class="fleft">共{{page.totalCount}}条记录，共{{page.totalPageCount}}页，当前第{{page.currentPageNo}}页</span>
 				</div>
 				<div id="jsonmap1_pager" class="tcdPageCode">
 					<a href="javascript:;" class="prevPage">上一页</a>
