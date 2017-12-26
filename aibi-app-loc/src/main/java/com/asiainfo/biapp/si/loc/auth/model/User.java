@@ -3,7 +3,9 @@ package com.asiainfo.biapp.si.loc.auth.model;
 import java.util.List;
 import java.util.Map;
 
-public class User {
+import com.asiainfo.biapp.si.loc.base.entity.BaseEntity;
+
+public class User extends BaseEntity {
 	
 	private String userId;
 	private String userName;

@@ -1,6 +1,7 @@
 package com.asiainfo.biapp.si.loc.base;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -120,6 +121,7 @@ public abstract class ICacheBase {
     	
     }
     
+    
     /**
      * 5.0 session缓存 存放 接口， 默认设置为 30秒失效
      * @param key1
@@ -127,7 +129,7 @@ public abstract class ICacheBase {
      * @param value
      * @throws Exception
      */
-    public void setSessionHashMap(String key1,String key2,String value) throws Exception{
+    public void setSessionHashMap(String key1,String key2,Object value) throws Exception{
     	try {
 			if(StringUtils.isBlank(key1) || StringUtils.isBlank(key2) || value==null){
 				log.error("key1 or key2 or value is null.");
@@ -139,14 +141,14 @@ public abstract class ICacheBase {
 		}
     }
     
-    public String getSessionHashMap(String key1,String key2) throws Exception{
+    public <T extends Serializable> T getSessionHashMap(String key1,String key2) throws Exception{
     	
     	try {
 			if(StringUtils.isBlank(key1) || StringUtils.isBlank(key2)){
 				log.error("key1 or key2 is null.");
 				throw new Exception("key1 or key2 or value is null.");
 			}
-			return RedisUtils.getStringFromMap(key1, key2);
+			return RedisUtils.mgetForHashObj(key1, key2);
 		} catch (Exception e) {
 			throw new Exception(e);
 		}
@@ -223,6 +225,11 @@ public abstract class ICacheBase {
             throw new Exception(e);
         }
     }
+    
+    public <T extends Serializable> T get(String key){
+      T obj = null;
+      return obj; 
+      } 
     
     /**
      * @param tableName

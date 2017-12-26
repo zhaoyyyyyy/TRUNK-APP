@@ -8,6 +8,8 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
 
+import com.asiainfo.biapp.si.loc.base.entity.BaseEntity;
+
 /**
  * @describe 字典内容
  * @author zhougz
@@ -15,7 +17,7 @@ import org.hibernate.annotations.GenericGenerator;
  */
 @Entity
 @Table(name="LOC_SYS_DIC_DATA")
-public class DicData {
+public class DicData extends BaseEntity {
 	
 	/**
 	 * 

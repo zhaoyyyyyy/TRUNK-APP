@@ -1,5 +1,7 @@
 package com.asiainfo.biapp.si.loc.base.controller;
 
+import java.io.Serializable;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -9,7 +11,6 @@ import com.asiainfo.biapp.si.loc.auth.model.User;
 import com.asiainfo.biapp.si.loc.auth.utils.AuthUtils;
 import com.asiainfo.biapp.si.loc.base.exception.BaseException;
 import com.asiainfo.biapp.si.loc.base.exception.UserAuthException;
-import com.asiainfo.biapp.si.loc.base.utils.WebResult;
 import com.asiainfo.biapp.si.loc.cache.CocCacheProxy;
 
 /**
@@ -32,7 +33,7 @@ import com.asiainfo.biapp.si.loc.cache.CocCacheProxy;
  * @author  zhougz3
  * @version 1.0.0.2017-11-02
  */
-public abstract class BaseController<T>  {
+public abstract class BaseController<T extends Serializable>  {
 
 	private static final long serialVersionUID = -42856136017302010L;
 
@@ -63,7 +64,7 @@ public abstract class BaseController<T>  {
 	 * @return
 	 * @throws UserAuthException
 	 */
-	protected String getSessionAttribute(String key) throws BaseException{
+	protected T getSessionAttribute(String key) throws BaseException{
 		String token = AuthUtils.getTokenByRequest(request);
 		return CocCacheProxy.getCacheProxy().getSessionvalue(token, key);
 	}
@@ -73,7 +74,7 @@ public abstract class BaseController<T>  {
 	 * @return
 	 * @throws UserAuthException
 	 */
-	protected void setSessionAttribute(String key,String object) throws BaseException{
+	protected void setSessionAttribute(String key,Serializable object) throws BaseException{
 		
 		String token = AuthUtils.getTokenByRequest(request);
 		CocCacheProxy.getCacheProxy().addSessionValue(token, key, object);

@@ -1,5 +1,6 @@
 package com.asiainfo.biapp.si.loc.base;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -165,6 +166,7 @@ public class LocCacheBase extends ICacheBase implements ApplicationContextAware{
 		return null;
 	}
 	
+	
 	/**
 	 * 5.0 session缓存 存放 接口， 默认设置为 30秒失效
 	 * @param token
@@ -172,11 +174,11 @@ public class LocCacheBase extends ICacheBase implements ApplicationContextAware{
 	 * @param value
 	 * @throws Exception
 	 */
-	public void setSessionCache(String token,String key,String value) throws Exception{
+	public void setSessionCache(String token,String key,Serializable value) throws Exception{
 		this.setSessionHashMap(Prefix.LOC+Prefix.SESSION+token, key,value);
 	}
 	
-	public String getSessionCache(String token,String key) throws Exception{
+	public <T extends Serializable> T getSessionCache(String token,String key) throws Exception{
 		return this.getSessionHashMap(Prefix.LOC+Prefix.SESSION+token, key);
 	}
 	

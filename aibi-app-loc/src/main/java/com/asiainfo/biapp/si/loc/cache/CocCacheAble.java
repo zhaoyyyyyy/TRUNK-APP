@@ -1,5 +1,7 @@
 package com.asiainfo.biapp.si.loc.cache;
 
+import java.io.Serializable;
+
 import com.asiainfo.biapp.si.loc.core.label.entity.LabelInfo;
 
 /**
@@ -37,13 +39,13 @@ public interface CocCacheAble {
 	 * @param key
 	 * @param value
 	 */
-	public void addSessionValue(String token,String key,String obj);
+	public void addSessionValue(String token,String key,Serializable obj);
 	
 	/**
 	 * 删除 java Map 中的 kv 数据
 	 * @param key
 	 */
-	public String getSessionvalue(String token,String key);
+	public <T extends Serializable> T getSessionvalue(String token,String key);
 	
 	
 }

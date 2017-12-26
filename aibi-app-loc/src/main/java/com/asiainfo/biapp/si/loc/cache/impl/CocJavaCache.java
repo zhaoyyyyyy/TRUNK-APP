@@ -1,5 +1,6 @@
 package com.asiainfo.biapp.si.loc.cache.impl;
 
+import java.io.Serializable;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
@@ -38,14 +39,14 @@ public class CocJavaCache implements CocCacheAble{
 
 
 	@Override
-	public void addSessionValue(String token, String key, String obj) {
+	public void addSessionValue(String token, String key, Serializable obj) {
 		// TODO Auto-generated method stub
 		
 	}
 
 
 	@Override
-	public String getSessionvalue(String token, String key) {
+	public <T extends Serializable> T getSessionvalue(String token, String key) {
 		// TODO Auto-generated method stub
 		return null;
 	}
