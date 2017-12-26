@@ -80,9 +80,8 @@
                                            <ul>
 											  <li class="" v-for="g in bqlx" style="display: inline">
 											  	<div class="radio circle success">
-											  		<input :value="g.code"
-												:name="'labelInfoList['+index+'].labelTypeId'" type="radio" onclick="changeStatus(this)" />
-													
+											  		<input :value="g.code" :id="index"
+												    :name="'labelInfoList['+index+'].labelTypeId'" type="radio" onclick="changeStatus(this)" />
 													<label><i class="default"></i>{{g.dataName}}</label>
 											  	</div>											  	
 											  </li>
@@ -133,7 +132,7 @@
 					          	             <span class="glyphicon-date form-control-feedback"></span>
 					                       </div>   
 							        </div>
-                                    <div v-if="showdimDetail==index" class="ui-form-group">
+                                    <div v-if="showdimDetail[index]&&showdimDetail[index][`showdim${index}`]" class="ui-form-group">
                                         <label for="dimTableName" class="control-label">维表选择</label>
                                         <div class="control-input has-icon">
                                             <select id="dimTableName" :name="'labelInfoList['+index+'].dimTableName'" class="form-control input-pointer ">
