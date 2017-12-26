@@ -5,6 +5,8 @@ var model = {
 		bqlx : [],
 		isbq : [],
 		showdimDetail: "",
+		isActive:false,
+	 
 }
 
 window.loc_onload = function() {		
@@ -19,8 +21,15 @@ window.loc_onload = function() {
 	
 	new Vue({
 		el : '#dataD',
-	    data : model 
+	    data : model ,
+//	    methods: {
+//	    getData: function (event) {
+//	    	console.log(event)
+//	        model.isActive=true;	      
+//	    }
+//	  }
 	})
+
 	$.commAjax({
 		url : $.ctx + '/api/dimtable/dimTableInfo/queryList',
 		onSuccess : function(data){
@@ -42,12 +51,30 @@ window.loc_onload = function() {
 			}
 		});
 	});
-
+	
+	$( '[data-dismiss="Datepicker"]' ).datepicker({
+  		changeMonth: true,
+  		changeYear: true,
+  		dateFormat:"yy-mm-dd",
+  		dayNamesMin: [ "日", "一", "二", "三", "四", "五", "六" ],
+  		monthNamesShort: [ "一月", "二月", "三月", "四月", "五月", "六月", "七月", "八月", "九月", "十月", "十一月", "十二月" ]
+  	});
+	
 }
 
+	
+
+
 function fun_to_save(){
+	$("form").each(function(){
+		if($(this).hasClass("active")){
+			console.log($(this).length)
+			
+		}
+	})
+	
 	model.sourceInfoList.del
-	console.log(model.sourceInfoList)
+	//console.log(model.sourceInfoList)
 	var labelName = $('#labelName').val();
 	var countRulesCode = $('#countRulesCode').val();
 	var list =$('#saveDataForm').formToJson();
@@ -131,3 +158,14 @@ function changeStatus(obj){
 		model.showdimDetail = "false";
 	}
 }
+function getData(tag){	
+	if($(tag).parents(".create-main").hasClass("active")){
+		$(tag).parents(".create-main").removeClass("active");
+	}else{
+		formD=$(tag).parents(".create-main").addClass("active");
+	}
+		
+}
+
+
+
