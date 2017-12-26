@@ -11,8 +11,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Repository;
 
+import com.asiainfo.biapp.si.loc.base.utils.DateUtil;
 import com.asiainfo.biapp.si.loc.base.dao.BaseDaoImpl;
 import com.asiainfo.biapp.si.loc.base.exception.BaseException;
 import com.asiainfo.biapp.si.loc.base.page.Page;
@@ -162,6 +164,14 @@ public class LabelInfoDaoImpl extends BaseDaoImpl<LabelInfo, String> implements 
         if (StringUtil.isNotBlank(labelInfoVo.getApproveStatusId())) {
             hql.append("and approveInfo.approveStatusId LIKE :approveStatusId");
             params.put("approveStatusId", "%"+labelInfoVo.getApproveStatusId()+"%");
+        }
+        if (StringUtils.isNotBlank(labelInfoVo.getPushTimeStart())) {
+            hql.append("and l.pushTime >= :pushTimeStart ");
+            params.put("pushTimeStart", DateUtil.dateFormat(labelInfoVo.getPushTimeStart()));
+        }
+        if (StringUtils.isNotBlank(labelInfoVo.getPushTimeEnd())) {
+            hql.append("and l.pushTime <= :pushTimeEnd ");
+            params.put("pushTimeEnd", DateUtil.dateFormat(labelInfoVo.getPushTimeEnd()));
         }
         if(StringUtil.isNotBlank(page.getSortCol())){
             hql.append(" order by l."+page.getSortCol()+" "+page.getSortOrder());

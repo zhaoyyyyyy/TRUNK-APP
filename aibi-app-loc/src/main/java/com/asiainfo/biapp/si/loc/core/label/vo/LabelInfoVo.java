@@ -43,12 +43,32 @@ public class LabelInfoVo extends LabelInfo {
      */
     private String approveStatusId;
     
+    private String pushTimeStart;
+    
+    private String pushTimeEnd;
+    
     public String getApproveStatusId() {
         return approveStatusId;
     }
 
     public void setApproveStatusId(String approveStatusId) {
         this.approveStatusId = approveStatusId;
+    }
+
+    public String getPushTimeStart() {
+        return pushTimeStart;
+    }
+
+    public void setPushTimeStart(String pushTimeStart) {
+        this.pushTimeStart = pushTimeStart;
+    }
+
+    public String getPushTimeEnd() {
+        return pushTimeEnd;
+    }
+
+    public void setPushTimeEnd(String pushTimeEnd) {
+        this.pushTimeEnd = pushTimeEnd;
     }
     
 

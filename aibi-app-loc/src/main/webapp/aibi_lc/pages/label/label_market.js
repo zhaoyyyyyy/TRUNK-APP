@@ -51,7 +51,7 @@ window.loc_onload = function() {
 	//初始化地市
 	labelMarket.loadOrg();
 	
-	labelMarket.loadGxzq();
+	labelMarket.loadUpdateCycle();
 	//加载标签集市
 	labelMarket.loadLabelInfoList();
 	
@@ -146,9 +146,9 @@ var labelMarket = (function (model){
 								for(var l=0 ; l<dataobj[e].length ; l++){
 									var od = dataobj[e][l];
 									if(od.parentId == "999"){
-										//dataModel.zqlxList.push(od);
+										dataModel.zqlxList.push(od);
 									}else if(od.orgType == "3"){
-										//dataModel.xzqhList.push(od);
+										dataModel.xzqhList.push(od);
 									}
 								}
 							}
@@ -158,7 +158,7 @@ var labelMarket = (function (model){
         };
         
         
-        model.loadGxzq = function(){
+        model.loadUpdateCycle = function(){
         	var gxzqList = [];
         	var dicGxzq = $.getDicData("GXZQZD");
         	for(var i=0; i<dicGxzq.length; i++){
@@ -187,7 +187,7 @@ var labelMarket = (function (model){
 						if(data.rows[i].labelExtInfo!=undefined&&data.rows[i].labelExtInfo!=null){
 							data.rows[i].customNum = data.rows[i].labelExtInfo.customNum;
 						}else{
-							data.rows[i].customNum = "无";
+							data.rows[i].customNum = "0";
 						}
 					}
 					dataModel.labelInfoList = data.rows;
@@ -254,6 +254,12 @@ var labelMarket = (function (model){
 				$("#sortOrder").val("ASC");
 			}
 			model.loadLabelInfoList();
+		}
+		
+		//更改发布时间
+		model.changePushTime = function(obj){
+			var now = $.dateFormat(new Date(),"yyyy-MM-dd HH:mm:ss");
+			console.log(now);
 		}
         
 		/**
