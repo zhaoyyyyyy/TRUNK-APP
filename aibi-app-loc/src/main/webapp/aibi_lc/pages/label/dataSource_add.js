@@ -179,8 +179,6 @@ function fun_to_del(id) {
 }
 function fun_to_save() {
 	
-	$.alert($("#configId").val());
-	
 	//取消所有编辑
 	var ids = $("#jsonmap").jqGrid('getDataIDs');
     for (var i = 0; i < ids.length; i++) {

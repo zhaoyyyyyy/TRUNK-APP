@@ -129,24 +129,24 @@ function fun_to_delAll() {
 		$.alert("请选择要删除的数据源表");
 		return;
 	}
-	var sourceTableIds = ids.join(",");
 	$.confirm("您确定要继续删除吗？该操作会同时删除数据源表下的指标信息列", function() {
-		$.commAjax({
-			url : $.ctx + '/api/source/sourceTableInfo/delete',
-			postData : {
-				"sourceTableId" : sourceTableIds
-			},
-			onSuccess : function(data) {
-				if (data.data == "success") {
-					$.success("删除成功", function() {
-						$("#jsonmap1").setGridParam({
-							postData : $("#formSearch").formToJson()
-						}).trigger("reloadGrid", [ {
-							page : 1
-						} ]);
-					})
-				}
+		for(var i=0;i<ids.length;i++){
+			$.commAjax({
+				url : $.ctx + '/api/source/sourceTableInfo/delete',
+				postData : {
+					"sourceTableId" : ids[i]
+				},
+			});
+			var k = i + 1;
+			if(k == ids.length){
+				$.success("删除成功", function() {
+					$("#jsonmap1").setGridParam({
+						postData : $("#formSearch").formToJson()
+					}).trigger("reloadGrid", [ {
+						page : 1
+					} ]);
+				})
 			}
-		});
+		}
 	});
 }
