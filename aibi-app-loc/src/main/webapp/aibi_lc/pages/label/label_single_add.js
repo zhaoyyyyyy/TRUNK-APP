@@ -66,12 +66,13 @@ window.loc_onload = function() {
 
 
 function fun_to_save(){
-	$("form").each(function(){
-		if($(this).hasClass("active")){
-			console.log($(this).length)
-			
-		}
-	})
+
+$("form[class~=active]").each(function(){
+	console.log($(this))
+})
+
+
+	
 	
 	model.sourceInfoList.del
 	//console.log(model.sourceInfoList)
