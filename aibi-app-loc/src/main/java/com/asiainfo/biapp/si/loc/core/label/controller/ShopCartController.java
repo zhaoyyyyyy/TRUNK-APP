@@ -86,9 +86,8 @@ public class ShopCartController extends BaseController {
 			@ApiImplicitParam(name = "calculationsId", value = "标签ID", required = true, paramType = "query", dataType = "string"),
 			@ApiImplicitParam(name = "typeId", value = "类型", required = true, paramType = "query", dataType = "string") })
 	@RequestMapping(value = "/saveShopSession", method = RequestMethod.POST)
-	public	WebResult<Map<String, Object>>saveShopSession(HttpServletRequest req, String calculationsId, String typeId) {
-		Map<String, Object> result = new HashMap<String, Object>();
-		WebResult<Map<String, Object>> webResult = new WebResult<>();
+	public	WebResult<String> saveShopSession(HttpServletRequest req, String calculationsId, String typeId) {
+		WebResult<String> webResult = new WebResult<>();
 		boolean success = true;
 		String msg = "";
 		try {
@@ -121,9 +120,11 @@ public class ShopCartController extends BaseController {
 			LOGGER.error("添加(规则)到购物车异常", e);
 			return webResult.fail(e);
 		}
-		result.put("success", success);
-		result.put("msg", msg);
-		return webResult.success("加入购物车成功", result);
+		if (success) {
+			return webResult.success("加入购物车成功", SUCCESS);
+		}else{
+			return webResult.fail(msg);
+		}
 	}
 
 	/**
@@ -162,12 +163,10 @@ public class ShopCartController extends BaseController {
 	 * @date 2017年12月14日
 	 */
 	@RequestMapping(value = "/findShopCart", method = RequestMethod.POST)
-	public WebResult<Map<String, Object>> findShopCart(HttpServletRequest request) {
-		WebResult<Map<String, Object>> webResult = new WebResult<>();
-		Map<String, Object> result = new HashMap<String, Object>();
+	public WebResult<List<LabelRuleVo>> findShopCart(HttpServletRequest request) {
+		WebResult<List<LabelRuleVo>> webResult = new WebResult<>();
 		List<LabelRuleVo> rules = getSessionLabelRuleList();
-		result.put("rules", rules);
-		return webResult.success("读取购物车数据成功", result);
+		return webResult.success("读取购物车数据成功", rules);
 	}
 
 	/**
@@ -184,10 +183,9 @@ public class ShopCartController extends BaseController {
 			@ApiImplicitParam(name = "dayLabelDate", value = "数据日期(日)", required = true, paramType = "query", dataType = "string"),
 			@ApiImplicitParam(name = "monthLabelDate", value = "数据日期(月)", required = true, paramType = "query", dataType = "string") })
 	@RequestMapping(value = "/explore", method = RequestMethod.POST)
-	public WebResult<Map<String, Object>> explore(HttpServletRequest req, String dataDate, String dayLabelDate,
+	public WebResult<String> explore(HttpServletRequest req, String dataDate, String dayLabelDate,
 			String monthLabelDate){
-		WebResult<Map<String, Object>> webResult = new WebResult<>();
-		Map<String, Object> result = new HashMap<String, Object>();
+		WebResult<String> webResult = new WebResult<>();
 		List<LabelRuleVo> labelRules = getSessionLabelRuleList();
 		ExploreQueryParam queryParam = new ExploreQueryParam(dataDate, monthLabelDate, dayLabelDate);
 		String countSqlStr = null;
@@ -196,8 +194,7 @@ public class ShopCartController extends BaseController {
 		} catch (BaseException e) {
 			return webResult.fail(e);
 		}
-		result.put("countSqlStr", countSqlStr);
-		return webResult.success("探索成功", result);
+		return webResult.success("探索成功", countSqlStr);
 		
 		
 	}
@@ -206,16 +203,15 @@ public class ShopCartController extends BaseController {
 	 * 删除购物车的对象
 	 */
 	@RequestMapping(value = "/delShopSession", method = RequestMethod.POST)
-	public WebResult<Map<String, Object>> delShopSession(HttpServletRequest req) {
-		WebResult<Map<String, Object>> webResult = new WebResult<>();
-		Map<String, Object> result = new HashMap<String, Object>();
+	public WebResult<String> delShopSession(HttpServletRequest req) {
+		WebResult<String> webResult = new WebResult<>();
 		try {
 			setSessionAttribute(LabelRuleContants.SHOP_CART_RULE, "");
 		} catch (BaseException e) {
 			LOGGER.error("删除购物车的对象异常", e);
 			return webResult.fail(e);
 		}
-		return webResult.success("删除购物车成功", result);
+		return webResult.success("删除购物车成功", SUCCESS);
 	}
 
 	/**
