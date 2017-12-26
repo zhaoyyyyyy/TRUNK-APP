@@ -167,12 +167,12 @@ var labelMarket = (function (model){
          * ------------------------------------------------------------------
          */
 		model.loadLabelInfoList = function(){
+			$("#configId").val($.getCurrentConfigId());
+			var obj = $("#formSearch").formToJson();
+			obj.pageSize = 12;
 			$.commAjax({
 				url: $.ctx + "/api/label/labelInfo/queryPage",
-				postData:{
-					configId : "",
-					pageSize : 13
-				},
+				postData:obj,
 				onSuccess: function(data){
 					dataModel.page.currentPageNo=data.currentPageNo;
 					dataModel.page.totalCount=data.totalCount;
@@ -188,6 +188,67 @@ var labelMarket = (function (model){
 				}
 			});
 		};
+		
+
+		//更改地市条件
+		model.orgSearch = function(obj){
+			if(obj.id == "allOrg"){
+				$("#org"+dataModel.orgId).removeClass("all-active");
+				dataModel.orgId = "";
+				$("#orgId").val("");
+				$("#allOrg").addClass("all-active");
+			}else{
+				$("#org"+dataModel.orgId).removeClass("all-active");
+				dataModel.orgId = obj.name;
+				$("#orgId").val(obj.name);
+				$("#allOrg").removeClass("all-active");
+				$("#org"+obj.name).addClass("all-active");
+			}
+			model.loadLabelInfoList();
+		}
+		
+		//更改更新周期条件
+		model.ucSearch = function(obj){
+			if(obj.id == "allUc"){
+				$("#updateCycle"+dataModel.updateCycle).removeClass("all-active");
+				dataModel.updateCycle = "";
+				$("#updateCycle").val("");
+				$("#allUc").addClass("all-active");
+			}else{
+				$("#updateCycle"+dataModel.updateCycle).removeClass("all-active");
+				dataModel.updateCycle = obj.name;
+				$("#updateCycle").val(obj.name);
+				$("#allUc").removeClass("all-active");
+				$("#updateCycle"+obj.name).addClass("all-active");
+			}
+			model.loadLabelInfoList();
+		}
+		
+		//更改排序
+		model.changeSortCol = function(obj){
+			if(obj.name == dataModel.sortCol){
+				$("#sortCol").val(obj.name);
+				if(dataModel.sortOrder == "ASC"){
+					dataModel.sortOrder = "DESC";
+					$("#sortOrder").val("DESC");
+				}else if(dataModel.sortOrder == "DESC"){
+					dataModel.sortOrder = "ASC";
+					$("#sortOrder").val("ASC");
+				}
+			}else{
+				if($("#sortPublishTime").hasClass("active")){
+					$("#sortPublishTime").removeClass("active");
+					$("#customNum").addClass("active");
+				}else{
+					$("#customNum").removeClass("active");
+					$("#sortPublishTime").addClass("active");
+				}
+				dataModel.sortCol = obj.name;
+				$("#sortCol").val(obj.name);
+				$("#sortOrder").val("ASC");
+			}
+			model.loadLabelInfoList();
+		}
         
 		/**
          * @description 标签添加缓存，购物车动画效果===true ,组装rule

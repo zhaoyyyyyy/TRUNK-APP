@@ -52,18 +52,18 @@ import com.asiainfo.biapp.si.loc.core.label.vo.LabelInfoVo;
 public class LabelInfoDaoImpl extends BaseDaoImpl<LabelInfo, String> implements ILabelInfoDao {
 
     public Page<LabelInfo> selectLabelInfoPageList(Page<LabelInfo> page, LabelInfoVo labelInfoVo) {
-        Map<String, Object> reMap = fromBean(labelInfoVo);
+        Map<String, Object> reMap = fromBean(labelInfoVo,page);
         Map<String, Object> params = (Map<String, Object>) reMap.get("params");
         return super.findPageByHql(page, reMap.get("hql").toString(), params);
     }
 
     public List<LabelInfo> selectLabelInfoList(LabelInfoVo labelInfoVo) {
-        Map<String, Object> reMap = fromBean(labelInfoVo);
+        Map<String, Object> reMap = fromBean(labelInfoVo,null);
         Map<String, Object> params = (Map<String, Object>) reMap.get("params");
         return super.findListByHql(reMap.get("hql").toString(), params);
     }
 
-    public Map<String, Object> fromBean(LabelInfoVo labelInfoVo) {
+    public Map<String, Object> fromBean(LabelInfoVo labelInfoVo,Page<LabelInfo> page) {
         Map<String, Object> reMap = new HashMap<>();
         Map<String, Object> params = new HashMap<>();
         StringBuffer hql = new StringBuffer("from LabelInfo l where 1=1 ");
@@ -162,6 +162,9 @@ public class LabelInfoDaoImpl extends BaseDaoImpl<LabelInfo, String> implements 
         if (StringUtil.isNotBlank(labelInfoVo.getApproveStatusId())) {
             hql.append("and approveInfo.approveStatusId LIKE :approveStatusId");
             params.put("approveStatusId", "%"+labelInfoVo.getApproveStatusId()+"%");
+        }
+        if(StringUtil.isNotBlank(page.getSortCol())){
+            hql.append(" order by l."+page.getSortCol()+" "+page.getSortOrder());
         }
         reMap.put("hql", hql);
         reMap.put("params", params);
