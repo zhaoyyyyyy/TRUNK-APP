@@ -30,7 +30,7 @@
 </head>
 <body>
       <div id="dataD" class="iframe-nest" v-clock>
-            <form id="saveDataForm">
+            <div id="saveDataForm">
                 <div class="ui-lc-mian">
                     <h3>创建标签</h3>
                     <ul class="tab-list tab-hor clearfix">
@@ -59,10 +59,10 @@
 
                         </div>
                     </div>
-                    <div class="clearfix create-main mt10"  v-for="(sourceInfo,index) in sourceInfoList">
+                    <form class="clearfix create-main mt10"  v-for="(sourceInfo,index) in sourceInfoList">
                         <div class="progress fleft">
                             <span class="progress-label">
-                                <i class="icon"></i>
+                                <i class="icon" onclick="getData(this)"></i>
                             </span>
                         </div>
                         <div class="ui-main fleft">
@@ -145,7 +145,7 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </form>
                     <div class="ui-reg-grid mt40">
                         <div class=" ui-table-title mt10">
                             <table id="jsonmap"  class="table table-striped"></table>
@@ -157,7 +157,7 @@
                         </div>
                     </div>
                 </div>
-            </form> 
+            </div> 
 
             <!-- todo -->
 
