@@ -14,7 +14,13 @@ var dataModel = {
 		ruleListSize : 0,
 		ruleList : [],//规则
 		currentAddLabel : {},
-		configId : '-1'
+		configId : '-1',
+		categoryId:"",
+		orgId:"",
+		publishTime:"",
+		updateCycle:"",
+		sortOrder:"ASC",
+		sortCol:"customNum"
 
 }
 
@@ -236,7 +242,7 @@ var labelMarket = (function (model){
 					$("#sortOrder").val("ASC");
 				}
 			}else{
-				if($("#sortPublishTime").hasClass("active")){
+				if(obj.id == "customNum"){
 					$("#sortPublishTime").removeClass("active");
 					$("#customNum").addClass("active");
 				}else{
