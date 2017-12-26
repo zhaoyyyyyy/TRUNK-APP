@@ -43,9 +43,9 @@ public class LabelInfoVo extends LabelInfo {
      */
     private String approveStatusId;
     
-    private String pushTimeStart;
+    private String publishTimeStart;
     
-    private String pushTimeEnd;
+    private String publishTimeEnd;
     
     public String getApproveStatusId() {
         return approveStatusId;
@@ -55,20 +55,20 @@ public class LabelInfoVo extends LabelInfo {
         this.approveStatusId = approveStatusId;
     }
 
-    public String getPushTimeStart() {
-        return pushTimeStart;
+    public String getpublishTimeStart() {
+        return publishTimeStart;
     }
 
-    public void setPushTimeStart(String pushTimeStart) {
-        this.pushTimeStart = pushTimeStart;
+    public void setpublishTimeStart(String publishTimeStart) {
+        this.publishTimeStart = publishTimeStart;
     }
 
-    public String getPushTimeEnd() {
-        return pushTimeEnd;
+    public String getpublishTimeEnd() {
+        return publishTimeEnd;
     }
 
-    public void setPushTimeEnd(String pushTimeEnd) {
-        this.pushTimeEnd = pushTimeEnd;
+    public void setpublishTimeEnd(String publishTimeEnd) {
+        this.publishTimeEnd = publishTimeEnd;
     }
     
 

@@ -257,9 +257,37 @@ var labelMarket = (function (model){
 		}
 		
 		//更改发布时间
-		model.changePushTime = function(obj){
-			var now = $.dateFormat(new Date(),"yyyy-MM-dd HH:mm:ss");
-			console.log(now);
+		model.changePublishTime = function(obj){
+			var now = new Date();
+			if(obj.id == "allDate"){
+				$("#publishTimeStart").val("");
+				$("#allDate").addClass("all-active");
+				$("#oneDay").removeClass("all-active");
+				$("#oneMonth").removeClass("all-active");
+				$("#threeMonth").removeClass("all-active");
+			}
+			if(obj.id == "oneDay"){
+				$("#publishTimeStart").val($.dateFormat(new Date(now.getTime() - 24*60*60*1000),"yyyy-MM-dd HH:mm:ss"));
+				$("#allDate").removeClass("all-active");
+				$("#oneDay").addClass("all-active");
+				$("#oneMonth").removeClass("all-active");
+				$("#threeMonth").removeClass("all-active");
+			}
+			if(obj.id == "oneMonth"){
+				$("#publishTimeStart").val($.dateFormat(new Date(now.getTime() - 30*24*60*60*1000),"yyyy-MM-dd HH:mm:ss"));
+				$("#allDate").removeClass("all-active");
+				$("#oneDay").removeClass("all-active");
+				$("#oneMonth").addClass("all-active");
+				$("#threeMonth").removeClass("all-active");
+			}
+			if(obj.id == "threeMonth"){
+				$("#publishTimeStart").val($.dateFormat(new Date(now.getTime() - 90*24*60*60*1000),"yyyy-MM-dd HH:mm:ss"));
+				$("#allDate").removeClass("all-active");
+				$("#oneDay").removeClass("all-active");
+				$("#oneMonth").removeClass("all-active");
+				$("#threeMonth").addClass("all-active");
+			}
+			model.loadLabelInfoList();
 		}
         
 		/**

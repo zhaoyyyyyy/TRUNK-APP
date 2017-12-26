@@ -6,9 +6,10 @@
 
 package com.asiainfo.biapp.si.loc.core.label.entity;
 
+import io.swagger.annotations.ApiParam;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -25,8 +26,6 @@ import javax.persistence.Table;
 import org.hibernate.annotations.GenericGenerator;
 
 import com.asiainfo.biapp.si.loc.base.entity.BaseEntity;
-
-import io.swagger.annotations.ApiParam;
 
 /**
  * Title : LabelInfo
