@@ -263,7 +263,7 @@ public class ShopCartController extends BaseController {
 	private List<LabelRuleVo> getSessionLabelRuleList() {
 		List<LabelRuleVo> rules = null;
 		try {
-			String ruleStrs = getSessionAttribute(LabelRuleContants.SHOP_CART_RULE);
+			String ruleStrs = (String) getSessionAttribute(LabelRuleContants.SHOP_CART_RULE);
 			if (StringUtil.isEmpty(ruleStrs)) {
 				rules = new ArrayList<LabelRuleVo>();
 			} else {
