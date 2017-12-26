@@ -20,8 +20,6 @@ window.loc_onload = function(){
 					var sourceName = sourceInfolist[i].sourceName;
 					console.log(sourceName)
 				}	
-				$("<span></span>").test(sourceName).attr("class","del-btn");
-				console.log($("<span></span>").test(sourceName).attr("class","del-btn"))
 			}
 		})
 	});
@@ -62,7 +60,19 @@ window.loc_onload = function(){
             {name:'sourceId',index:'sourceId', wideth:20,align:"center",hidden:true, key:true},
             {name:'sourceName',index:'sourceName', width:20, sortable:false,frozen : true,align:"center"},//frozen : true固定列
             {name:'columnName',index:'columnName', width:80, sortable:false,frozen : true,align:"center"},
-            {name:'sourceTableInfo.sourceTableName',index:'sourceTableInfo.sourceTableName', width:100,align:"center"},
+            {name:'sourceTableInfo.sourceTableName',index:'sourceTableInfo.sourceTableName', width:100,frozen : true,align:"center",
+                formatter : function(value,opts,data){
+                	$.commAjax({
+                		url : $.ctx + "/api/source/sourceTableInfo/get",
+                		postData : {
+                			sourceTableId : data.sourceTableId
+                		},
+                		onSuccess : function(data1){
+                			return data1.data.sourceTableName;
+                		}
+                	});
+                }	
+            },
             {name:'sourceTableInfo.createTime',index:'sourceTableInfo.createTime', width:40, sortable:false,align:"right"}
         ],
         rowNum:10,

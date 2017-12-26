@@ -251,6 +251,17 @@ function fun_to_offline(id){
 	});
 }
 
+function fun_to_edit(id){
+	var win = $.window('标签修改',$.ctx+'/aibi_lc/pages/label/label_edit.html?labelId='+id,500,600);
+	win.reload = function(){
+		$("#mainGrid").setGridParam({
+			postData : $("fromSearch").fromToJson()
+		}).trigger("reloadGrid",[{
+			page : 1
+		}]);
+	}
+}
+
 function fun_to_del(id){
 	$.confirm('您确定要继续删除吗？',function(){
 		$.commAjax({

@@ -1,4 +1,16 @@
+var model = {
+		dimtableInfoList:[],
+		sourcetableInfoList:[],
+		sourceInfoList:[],
+		bqlx : []
+}
+
 window.loc_onload = function(){
+	var dicBqlx = $.getDicData("BQLXZD");
+	for(var i = 0; i<dicBqlx.length; i++){
+		model.bqlx.push(dicBqlx[i]); 
+	}
+	debugger
 	//指标选择
 	$('#btn_index_select').click(function() {
 		var win = $.window('指标配置', $.ctx + '/aibi_lc/pages/label/sourceInfo_mgr.html', 1100, 600);

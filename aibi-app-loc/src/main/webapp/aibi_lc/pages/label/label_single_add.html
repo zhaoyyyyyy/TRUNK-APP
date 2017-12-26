@@ -71,7 +71,7 @@
                                     <div class="ui-form-group">
                                         <label for="labelName" class="control-label">标签名称</label>
                                         <div class="control-input">
-                                            <input :value="sourceInfo.sourceName" type="text" class="form-control" id="labelName" :name="'labelInfoList['+index+'].labelName'">
+                                            <input :value="sourceInfo.sourceName" type="text" class="form-control" id="labelName" name="labelName">
                                         </div>
                                     </div>
                                     <div class="ui-form-group mt20 tag-radio clearfix">
@@ -80,8 +80,7 @@
                                            <ul>
 											  <li class="" v-for="g in bqlx" style="display: inline">
 											  	<div class="radio circle success">
-											  		<input :value="g.code" :id="index"
-												    :name="'labelInfoList['+index+'].labelTypeId'" type="radio" onclick="changeStatus(this)" />
+											  		<input :value="g.code" :id="index" name="labelTypeId" type="radio" onclick="changeStatus(this)" />
 													<label><i class="default"></i>{{g.dataName}}</label>
 											  	</div>											  	
 											  </li>
@@ -94,8 +93,7 @@
                                            <ul>
 											  <li class="" v-for="i in isbq" style="display: inline">
 											  	<div class="radio circle success">
-											  		<input :value="i.code"
-												:name="'labelInfoList['+index+'].isRegular'" type="radio"/>													
+											  		<input :value="i.code" name="isRegular" type="radio"/>													
 													<label><i class="default"></i>{{i.dataName}}</label>
 											  	</div>											  	
 											  </li>
@@ -105,7 +103,7 @@
                                     <div class="ui-form-group">
                                         <label for="categoryId" class="control-label">标签分类</label>
                                         <div class="control-input">
-                                            <input type="text" class="form-control" id="categoryId" :name="'labelInfoList['+index+'].categoryId'" placeholder="cust1">
+                                            <input type="text" class="form-control" id="categoryId" name="categoryId" placeholder="cust1">
                                         </div>
                                     </div>
                                 </div>
@@ -113,7 +111,7 @@
                                     <div class="ui-form-group">
                                         <label for="countRulesCode" class="control-label">抽取规则</label>
                                         <div class="control-input">
-                                            <textarea rows="6" id="countRulesCode" :name="'labelInfoList['+index+'].countRulesCode'" 
+                                            <textarea rows="6" id="countRulesCode" name="countRulesCode" 
                                                 class="form-control form-control-textarea">{{sourceInfo.sourceId}}</textarea>
                                         </div>
                                     </div>
@@ -122,20 +120,20 @@
                                     <div class="ui-form-group">
                                         <label for="busiCaliber" class="control-label">业务口径</label>
                                         <div class="control-input">
-                                            <input type="text" class="form-control" id="busiCaliber" :name="'labelInfoList['+index+'].busiCaliber'" placeholder="cust1">
+                                            <input type="text" class="form-control" id="busiCaliber" name="busiCaliber" placeholder="cust1">
                                         </div>
                                     </div>
 								    <div class="ui-form-group">
 									    <label class="control-label">失效时间</label> 
 									       <div class="control-input date-input fleft has-icon">
-					          	             <input type="text" :name="'labelInfoList['+index+'].failTime'" class="date-input form-control input-pointer form-control-bubble" data-dismiss="formDatepicker#sendTime" id="" placeholder="请选择结束日期">
+					          	             <input type="text" name="failTime" class="date-input form-control input-pointer form-control-bubble" data-dismiss="formDatepicker#sendTime" id="" placeholder="请选择结束日期">
 					          	             <span class="glyphicon-date form-control-feedback"></span>
 					                       </div>   
 							        </div>
                                     <div v-if="showdimDetail[index]&&showdimDetail[index][`showdim${index}`]" class="ui-form-group">
                                         <label for="dimTableName" class="control-label">维表选择</label>
                                         <div class="control-input has-icon">
-                                            <select id="dimTableName" :name="'labelInfoList['+index+'].dimTableName'" class="form-control input-pointer ">
+                                            <select id="dimTableName" name="dimTableName" class="form-control input-pointer ">
                                             <option>请选择维表</option>
                                             <option v-for = "dim in dimtableInfoList" :value="dim.dimId">{{dim.dimTableName}}</option>
                                             </select>

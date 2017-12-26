@@ -4,11 +4,36 @@ var model = {
 		sourceInfoList:[],
 		bqlx : [],
 		isbq : [],
-		showdimDetail: "",
-		isActive:false,
-	 
+		showdimDetail: [],
+		isActive:false, 
+		arrs:[]
 }
 
+function changeStatus(obj){
+	if(obj.value==="5"){//枚举型标签字典value为5
+		const exit = model.showdimDetail.some(function(item){
+			return Object.keys(item)[0] === ('showdim'+obj.id);
+		});
+		if(!exit){
+			model.showdimDetail.push({[('showdim'+obj.id)]:true});
+		}else{
+			model.showdimDetail.forEach(function(item){
+				if(Object.keys(item)[0]===('showdim'+obj.id)){
+					item[('showdim'+obj.id)]=true
+				};
+			});
+		}
+	}else{
+		model.showdimDetail.some(function(item){
+			if(item[('showdim'+obj.id)]){
+				item[('showdim'+obj.id)]=false;
+				return true
+			}
+			return false
+		});
+	}
+	console.log(model.showdimDetail);
+}
 window.loc_onload = function() {		
 	var dicBqlx = $.getDicData("BQLXZD");
 	for(var i = 0; i<dicBqlx.length; i++){
@@ -22,12 +47,6 @@ window.loc_onload = function() {
 	new Vue({
 		el : '#dataD',
 	    data : model ,
-//	    methods: {
-//	    getData: function (event) {
-//	    	console.log(event)
-//	        model.isActive=true;	      
-//	    }
-//	  }
 	})
 
 	$.commAjax({
@@ -66,43 +85,12 @@ window.loc_onload = function() {
 
 
 function fun_to_save(){
-
-$("form[class~=active]").each(function(){
-	console.log($(this))
-})
-
-
-	
-	
-	model.sourceInfoList.del
-	//console.log(model.sourceInfoList)
+	$("form[class~=active]").each(function(){
+		var json = $(this).formToJson();
+		model.arrs.push(json);
+	})
+	var labelInfoList = JSON.stringify(model.arrs);
 	var labelName = $('#labelName').val();
-	var countRulesCode = $('#countRulesCode').val();
-	var list =$('#saveDataForm').formToJson();
-    labellist=JSON.stringify(list);
-    labellist = JSON.parse(JSON.stringify(list));
-    const formatCode = function (data) {
-    	   const formatData = {};
-    	   const result = {};
-    	   Object.keys(data).forEach(function(key) {
-    	     if (key.indexOf('.') === -1) {
-    	       result[key] = data[key];
-    	       return;
-    	     }
-    	     const label = key.split('.')[0];
-    	     const name = key.split('.')[1];
-    	     const index = label.charAt(label.length - 2);
-    	     formatData[index] = formatData[index] || {};
-    	     formatData[index][name] = data[key];
-    	   });
-    	  const resultArray = Object.keys(formatData).map(function(item) {
-    	    return formatData[item];
-    	  })
-    	  result.dataArray = resultArray;
-    	  return result;
-    	};
-    var labelInfolist=formatCode(labellist);
-    debugger
 	if(labelName==""){
 		$.alert("标签名称不许为空");
 	}else if(countRulesCode==""){
@@ -111,7 +99,7 @@ $("form[class~=active]").each(function(){
 		$.commAjax({
 			url : $.ctx+'/api/label/labelInfo/save',
 			postData:{
-				"labelInfoList":JSON.stringify(labelInfolist.dataArray)
+				"labelInfoList": labelInfoList
 			},
 			onSuccess:function(data){
 				if (data.data == 'success') {
@@ -150,14 +138,6 @@ function fun_to_createRow(){
         sourceName : "",
         sourceTableId : ""
 	});
-}
-
-function changeStatus(obj){
-	if(obj.value == 5){
-		model.showdimDetail = obj.id;
-	}else{
-		model.showdimDetail = "false";
-	}
 }
 function getData(tag){	
 	if($(tag).parents(".create-main").hasClass("active")){

@@ -18,6 +18,11 @@ window.loc_onload = function() {
 			})
 		}
 	})
+	frwin.addBtn("ok", "保存", function(){
+		$.commAjax({
+			
+		})
+	});
 	frwin.addBtn("cancel", "取消", function() {
 		frwin.cancel();
 	});

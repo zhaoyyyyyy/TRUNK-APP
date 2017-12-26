@@ -22,8 +22,10 @@ import com.asiainfo.biapp.si.loc.base.page.Page;
 import com.asiainfo.biapp.si.loc.base.service.impl.BaseServiceImpl;
 import com.asiainfo.biapp.si.loc.core.label.dao.ILabelInfoDao;
 import com.asiainfo.biapp.si.loc.core.label.entity.ApproveInfo;
+import com.asiainfo.biapp.si.loc.core.label.entity.LabelCountRules;
 import com.asiainfo.biapp.si.loc.core.label.entity.LabelInfo;
 import com.asiainfo.biapp.si.loc.core.label.service.IApproveInfoService;
+import com.asiainfo.biapp.si.loc.core.label.service.ILabelCountRulesService;
 import com.asiainfo.biapp.si.loc.core.label.service.ILabelInfoService;
 import com.asiainfo.biapp.si.loc.core.label.vo.LabelInfoVo;
 
@@ -63,6 +65,9 @@ public class LabelInfoServiceImpl extends BaseServiceImpl<LabelInfo, String> imp
     @Autowired 
     private IApproveInfoService iApproveInfoService;
     
+    @Autowired 
+    private ILabelCountRulesService iLabelCountRulesService;
+    
     @Override
     protected BaseDao<LabelInfo, String> getBaseDao() {
         return iLabelInfoDao;
@@ -84,9 +89,15 @@ public class LabelInfoServiceImpl extends BaseServiceImpl<LabelInfo, String> imp
     }
 
     public void addLabelInfo(LabelInfo labelInfo) throws BaseException {
+        labelInfo.setEffecTime(new Date());
         labelInfo.setCreateTime(new Date());
         labelInfo.setDataStatusId(1);
         super.saveOrUpdate(labelInfo);
+        
+       /* LabelCountRules labelCountRules = new LabelCountRules();
+        labelCountRules.setCountRulesCode(labelInfo.getCountRulesCode());
+        iLabelCountRulesService.addLabelCountRules(labelCountRules); */
+        
         //封装审批信息
         ApproveInfo approveInfo = new ApproveInfo();
         approveInfo.setResourceId(labelInfo.getLabelId());
@@ -97,6 +108,11 @@ public class LabelInfoServiceImpl extends BaseServiceImpl<LabelInfo, String> imp
     }
 
     public void modifyLabelInfo(LabelInfo labelInfo) throws BaseException {
+        if (labelInfo.getDataStatusId()==4 ||labelInfo.getDataStatusId()==5||labelInfo.getDataStatusId()==6) {
+            labelInfo.setFailTime(new Date());
+        }else if (labelInfo.getDataStatusId()==2) {
+            labelInfo.setEffecTime(new Date());
+        }
         super.saveOrUpdate(labelInfo);
     }
 
