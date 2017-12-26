@@ -13,6 +13,9 @@ public class BaseException extends Exception{
 	
 	//调用JAUTH服务异常
 	public final String SERVER_JAUTH_CODE = "50003";
+	
+	//数据库连接异常
+	public final String DB_CONNECT_CODE = "50004";
 		
 	private String msg ;
 	private String code ;

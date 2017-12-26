@@ -1,4 +1,4 @@
-package com.asiainfo.biapp.si.bd.util;
+package com.asiainfo.biapp.si.loc.bd.common.util;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
