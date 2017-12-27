@@ -166,7 +166,7 @@ function fun_to_publish(id){
 			postData : {
 				"labelId" : id,
 				"dataStatusId" : 2,
-				"approveStatusId": 2
+				"approveInfo.approveStatusId": 2
 			},
 			onSuccess : function(data){
 				$.success('发布成功。',function(){

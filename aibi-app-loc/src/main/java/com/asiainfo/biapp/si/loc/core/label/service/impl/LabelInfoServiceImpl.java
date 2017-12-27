@@ -117,6 +117,12 @@ public class LabelInfoServiceImpl extends BaseServiceImpl<LabelInfo, String> imp
         }else if (labelInfo.getDataStatusId()==2) {
             labelInfo.setEffecTime(new Date());
         }
+        /*else if(labelInfo.getDataStatusId()==2 &&labelInfo.getApproveInfo().getApproveStatusId()=="2"){
+            ApproveInfo approveInfo = iApproveInfoService.selectApproveInfo(labelInfo.getLabelId());
+            approveInfo.setApproveStatusId(labelInfo.getApproveInfo().getApproveStatusId());
+            approveInfo.setApproveTime(new Date());
+            labelInfo.setApproveInfo(approveInfo);
+        }*/
         super.saveOrUpdate(labelInfo);
     }
 

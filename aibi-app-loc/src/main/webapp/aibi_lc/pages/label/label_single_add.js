@@ -4,10 +4,12 @@ var model = {
 		sourceInfoList:[],
 		bqlx : [],
 		isbq : [],
+		gxzq : [],
 		showdimDetail: [],
 		isActive:false, 
 		arrs:[],
-		labelInfoList:[]
+		labelInfoList:[],
+		readCycle : ""
 }
 
 function changeStatus(obj){
@@ -39,18 +41,22 @@ function changeStatus(obj){
 window.loc_onload = function() {		
 	var dicBqlx = $.getDicData("BQLXZD");
 	for(var i = 0; i<dicBqlx.length; i++){
-		model.bqlx.push(dicBqlx[i]); 
+		if(dicBqlx[i].code!=10&&dicBqlx[i].code!=12&&dicBqlx[i].code!=8){
+			model.bqlx.push(dicBqlx[i]);
+		}		 
 	}
 	var dicIsbq = $.getDicData("SFZD");
 	for(var i = 0; i<dicIsbq.length; i++){
 		model.isbq.push(dicIsbq[i]);
 	}
-	
+	var dicgxzq = $.getDicData("GXZQZD");
+	for(var i =0 ; i<dicgxzq.length; i++){
+		model.gxzq.push(dicgxzq[i]);
+	}
 	new Vue({
 		el : '#dataD',
 	    data : model ,
 	})
-
 	$.commAjax({
 		url : $.ctx + '/api/dimtable/dimTableInfo/queryList',
 		onSuccess : function(data){
@@ -68,7 +74,15 @@ window.loc_onload = function() {
 		$.commAjax({
 			url : $.ctx + '/api/source/sourceTableInfo/get?sourceTableId='+sourceTableId,
 			onSuccess : function(data){
-				model.sourceInfoList = data.data.sourceInfoList;			
+				model.sourceInfoList = data.data.sourceInfoList;
+				model.readCycle=data.data.readCycle;
+				if(model.readCycle==3){
+					model.readCycle="日周期";
+				}else if(model.readCycle==2){
+					model.readCycle="月周期";
+				}else if(model.readCycle==1){
+					model.readCycle="一次性";
+				}
 			}
 		});
 	});
