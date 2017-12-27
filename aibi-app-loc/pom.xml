@@ -40,7 +40,7 @@
 		<dependency>
 			<artifactId>guava</artifactId>
 			<groupId>com.google.guava</groupId>
-			<!-- <version>18.0</version> -->
+			<!-- <version>11.0.2</version> -->
 		</dependency>
 
 		<dependency>
@@ -60,10 +60,10 @@
 					<artifactId>servlet-api</artifactId>
 					<groupId>org.mortbay.jetty</groupId>
 				</exclusion>
-				<exclusion>
+				<!-- <exclusion>
 					<artifactId>log4j</artifactId>
 					<groupId>log4j</groupId>
-				</exclusion>
+				</exclusion> -->
 				<exclusion>
 					<artifactId>slf4j-log4j12</artifactId>
 					<groupId>org.slf4j</groupId>
@@ -76,18 +76,22 @@
 					<artifactId>jetty-all</artifactId>
 					<groupId>org.eclipse.jetty.aggregate</groupId>
 				</exclusion>
+				<exclusion>
+					<artifactId>guava</artifactId>
+					<groupId>com.google.guava</groupId>
+				</exclusion>
 			</exclusions>
 		</dependency>
 
 		<dependency>
 			<groupId>org.apache.hive</groupId>
 			<artifactId>hive-jdbc</artifactId>
-			<version>0.13.1</version>
+			<version>1.2.1</version>
 			<exclusions>
-				<exclusion>
+				<!-- <exclusion>
 					<artifactId>log4j</artifactId>
 					<groupId>log4j</groupId>
-				</exclusion>
+				</exclusion> -->
 				<exclusion>
 					<artifactId>slf4j-log4j12</artifactId>
 					<groupId>org.slf4j</groupId>
@@ -104,10 +108,21 @@
 					<artifactId>servlet-api</artifactId>
 					<groupId>org.mortbay.jetty</groupId>
 				</exclusion>
+				<exclusion>
+					<artifactId>guava</artifactId>
+					<groupId>com.google.guava</groupId>
+				</exclusion>
 
 			</exclusions>
 		</dependency>
-		
+
+		<dependency>
+			<groupId>jdk.tools</groupId>
+			<artifactId>jdk.tools</artifactId>
+			<version>1.6</version>
+			<scope>system</scope>
+			<systemPath>${JAVA_HOME}/lib/tools.jar</systemPath>
+		</dependency>
 		<dependency>
 			<groupId>redis.clients</groupId>
 			<artifactId>jedis</artifactId>
@@ -119,7 +134,9 @@
 			<artifactId>scala-library</artifactId>
 			<version>2.11.0</version>
 		</dependency>
+
 	</dependencies>
+
 
 
 </project>

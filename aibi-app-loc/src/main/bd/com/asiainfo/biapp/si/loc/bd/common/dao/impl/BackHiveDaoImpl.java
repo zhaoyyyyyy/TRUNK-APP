@@ -280,8 +280,8 @@ public class BackHiveDaoImpl extends BaseBackDaoImpl implements IBackSqlDao{
 	    String tableName = "ci";
 //        res = dao.queryTableLikeTableName("hfb");
         
-        tableName ="ci_cus_push_task_template";
-        //res = dao.queryTableColumn(tableName);
+        tableName ="opg_iptv_label_vis_view_vodtype_201709";
+        res = dao.queryTableColumn(tableName);
         
 //        System.out.println("表：("+tableName+") 存在结果:"+dao.isExistsTable(tableName));
 
@@ -295,7 +295,7 @@ public class BackHiveDaoImpl extends BaseBackDaoImpl implements IBackSqlDao{
         
         
         tableName = "ci_cuser_20171221100651301";
-        System.out.println("在表("+tableName+") 中的数据量是:"+dao.queryCount("select * from "+tableName));
+//        System.out.println("在表("+tableName+") 中的数据量是:"+dao.queryCount("select * from "+tableName));
         
 
         System.out.println("===============================");
