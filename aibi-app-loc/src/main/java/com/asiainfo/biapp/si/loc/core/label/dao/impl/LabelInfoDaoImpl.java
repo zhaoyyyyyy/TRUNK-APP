@@ -60,7 +60,7 @@ public class LabelInfoDaoImpl extends BaseDaoImpl<LabelInfo, String> implements 
     }
 
     public List<LabelInfo> selectLabelInfoList(LabelInfoVo labelInfoVo) {
-        Map<String, Object> reMap = fromBean(labelInfoVo,null);
+        Map<String, Object> reMap = fromBean(labelInfoVo,new Page<LabelInfo>());
         Map<String, Object> params = (Map<String, Object>) reMap.get("params");
         return super.findListByHql(reMap.get("hql").toString(), params);
     }
