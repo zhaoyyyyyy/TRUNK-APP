@@ -9,7 +9,8 @@ var model = {
 		isActive:false, 
 		arrs:[],
 		labelInfoList:[],
-		readCycle : ""
+		readCycle : "",
+		read : ""
 }
 
 function changeStatus(obj){
@@ -76,12 +77,13 @@ window.loc_onload = function() {
 			onSuccess : function(data){
 				model.sourceInfoList = data.data.sourceInfoList;
 				model.readCycle=data.data.readCycle;
-				if(model.readCycle==3){
-					model.readCycle="日周期";
-				}else if(model.readCycle==2){
-					model.readCycle="月周期";
-				}else if(model.readCycle==1){
-					model.readCycle="一次性";
+				model.read = data.data.readCycle;
+				if(model.read=1){
+					model.read="一次性"
+				}else if(model.read=2){
+					model.read="月周期"
+				}else if(model.read=3){
+					model.read="月周期"
 				}
 			}
 		});
@@ -97,37 +99,6 @@ window.loc_onload = function() {
 	
 }
 
-	
-
-/*
-function fun_to_save(){
-	$("form[class~=active]").each(function(){
-		var json = $(this).formToJson();
-		model.arrs.push(json);
-	})
-	var labelInfoList = JSON.stringify(model.arrs);
-	var labelName = $('#labelName').val();
-	if(labelName==""){
-		$.alert("标签名称不许为空");
-	}else if(countRulesCode==""){
-	   	$.alert("抽取规则不许为空");
-	}else{
-		$.commAjax({
-			url : $.ctx+'/api/label/labelInfo/save',
-			postData:{
-				"labelInfoList": labelInfoList
-			},
-			onSuccess:function(data){
-				if (data.data == 'success') {
-					$.success("创建成功", function() {
-						history.back(-1);
-					});
-				} 
-			}
-		});
-	}	
-}*/
-
 function fun_to_save(){
 	if($("form[class~=active]").size()==0){
 		$.alert("请选择要保存的标签");
@@ -139,18 +110,16 @@ function fun_to_save(){
 		if(labelName==""){
 			$.alert("标签名称不许为空");
 		}else{
-			debugger
 			$.commAjax({
-			url : $.ctx + '/api/label/labelInfo/save',
-			postData : labelInfo,
-			onSuccess:function(data){
-				if(data.data == 'success' && k == $("form[class~=active]").size()){
-						$.success("创建成功",function(){
-							history.back(-1);
-						});
-					}
-				}
-			});		
+			  url : $.ctx + '/api/label/labelInfo/save',
+			  postData : labelInfo,
+			});	
+			if(k == $("form[class~=active]").size()){
+				$.success("创建成功",function(){
+					history.back(-1);
+				})
+			}
+			debugger
 		}
 		k++;
 	})

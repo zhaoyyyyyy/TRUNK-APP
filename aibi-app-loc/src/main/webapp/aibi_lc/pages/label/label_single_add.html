@@ -80,7 +80,7 @@
                                            <ul>
 											  <li class="" v-for="g in bqlx" style="display: inline">
 											  	<div class="radio circle success">
-											  		<input :value="g.code" :id="index" name="labelTypeId" type="radio" onclick="changeStatus(this)" />
+											  		<input :value="g.code" :id="index" name="labelTypeId" type="radio" checked="checked" onclick="changeStatus(this)" />
 													<label><i class="default"></i>{{g.dataName}}</label>
 											  	</div>											  	
 											  </li>
@@ -91,9 +91,9 @@
                                         <label class="control-label fleft">是否正式标签</label>
                                         <div class="control-input fleft ml10">
                                            <ul>
-											  <li class="" v-for="i in isbq" style="display: inline">
+											  <li class="" v-for="(i,index) in isbq" style="display: inline">
 											  	<div class="radio circle success">
-											  		<input :value="i.code" name="isRegular" type="radio"/>													
+											  		<input :value="i.code" name="isRegular" type="radio" checked="checked"/>													
 													<label><i class="default"></i>{{i.dataName}}</label>
 											  	</div>											  	
 											  </li>
@@ -111,8 +111,8 @@
                                     <div class="ui-form-group">
                                         <label for="dependIndex" class="control-label">规则依赖指标</label>
                                         <div class="control-input">
-                                            <textarea rows="3" id="dependIndex" name="dependIndex" 
-                                                class="form-control form-control-textarea" readonly="readonly">{{sourceInfo.sourceId}}</textarea>
+                                            <p rows="3" id="dependIndex" name="dependIndex" disabeld="disabeld"
+                                                class="form-control form-control-textarea" readonly="readonly">{{sourceInfo.sourceId}}</p>
                                         </div>
                                     </div>
                                     <div class="ui-form-group">
@@ -138,9 +138,10 @@
 					                       </div>   
 							        </div>
 							        <div class="ui-form-group">
+							            <input type="hidden" v-model="readCycle" name=updateCycle id=updateCycle>
 							            <label for="updateCycle" class="control-label">更新周期</label>
 							            <div class="control-input has-icon">
-                                        <input v-model="readCycle" name="updateCycle" type="text" class="form-control ml10"
+                                        <input v-model="read" type="text" class="form-control ml10"
 								             readonly="readonly" />
 							            </div>   
 							        </div>
