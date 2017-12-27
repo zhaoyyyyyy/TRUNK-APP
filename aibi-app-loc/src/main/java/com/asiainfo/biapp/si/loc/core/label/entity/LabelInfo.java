@@ -6,8 +6,6 @@
 
 package com.asiainfo.biapp.si.loc.core.label.entity;
 
-import io.swagger.annotations.ApiParam;
-
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Set;
@@ -22,10 +20,13 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.hibernate.annotations.GenericGenerator;
 
 import com.asiainfo.biapp.si.loc.base.entity.BaseEntity;
+
+import io.swagger.annotations.ApiParam;
 
 /**
  * Title : LabelInfo
@@ -229,6 +230,9 @@ public class LabelInfo extends BaseEntity {
     @Column(name = "GROUP_TYPE")
     @ApiParam(value = "群类型")
     private Integer groupType;
+    
+    @Transient
+    private String dependIndex;
 
     /**
      * 排序字段
@@ -486,6 +490,16 @@ public class LabelInfo extends BaseEntity {
 	public void setVerticalColumnRels(Set<LabelVerticalColumnRel> verticalColumnRels) {
 		this.verticalColumnRels = verticalColumnRels;
 	}
+
+    
+    public String getDependIndex() {
+        return dependIndex;
+    }
+
+    
+    public void setDependIndex(String dependIndex) {
+        this.dependIndex = dependIndex;
+    }
 
 
 }

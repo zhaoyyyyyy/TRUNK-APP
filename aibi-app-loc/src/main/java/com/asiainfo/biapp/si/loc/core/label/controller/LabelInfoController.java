@@ -17,6 +17,7 @@ import java.util.List;
 
 import net.sf.json.JSONArray;
 
+import org.codehaus.groovy.tools.shell.commands.SaveCommand;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -141,23 +142,19 @@ public class LabelInfoController extends BaseController<LabelInfo> {
             @ApiImplicitParam(name = "labelIdLevelDesc", value = "标签ID层级描述", required = false, paramType = "query", dataType = "string"),
             @ApiImplicitParam(name = "isRegular", value = "是否正式标签", required = false, paramType = "query", dataType = "int"),
             @ApiImplicitParam(name = "groupType", value = "群类型", required = false, paramType = "query", dataType = "int"),
-            @ApiImplicitParam(name = "sortNum", value = "排序字段", required = false, paramType = "query", dataType = "int") })
+            @ApiImplicitParam(name = "sortNum", value = "排序字段", required = false, paramType = "query", dataType = "int") ,
+            @ApiImplicitParam(name = "dependIndex", value = "规则依赖的指标",required=false,paramType = "query", dataType= "string")})
     @RequestMapping(value = "/labelInfo/save", method = RequestMethod.POST)
-    public WebResult<String> save(String labelInfoList) {
+    public WebResult<String> save(LabelInfo labelInfo){
         WebResult<String> webResult = new WebResult<>();
-        JSONArray array = new JSONArray();
-        array = JSONArray.fromObject(labelInfoList);
-        List<LabelInfo> labelInfos =(List<LabelInfo>) JSONArray.toCollection(array, LabelInfo.class);
-        for (LabelInfo labelInfo : labelInfos) {
-            try {
-                iLabelInfoService.addLabelInfo(labelInfo);
-            } catch (BaseException e) {
-                return webResult.fail(e);
-            }
+        try {
+            iLabelInfoService.addLabelInfo(labelInfo);
+        } catch (BaseException e) {
+            return webResult.fail(e);
         }
         return webResult.success("新增标签信息成功", SUCCESS);
     }
-
+    
     @ApiOperation(value = "修改标签信息")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "labelId", value = "ID", required = true, paramType = "query", dataType = "string"),
@@ -224,39 +221,21 @@ public class LabelInfoController extends BaseController<LabelInfo> {
         return webResult.success("修改标签信息成功", SUCCESS);
     }
     
-    /*
+/*    
     @ApiOperation(value = "删除标签信息")
     @ApiImplicitParam(name = "labelId", value = "ID", required = true, paramType = "query", dataType = "string")
     @RequestMapping(value = "/labelInfo/delete", method = RequestMethod.POST)
     public WebResult<String> del(String labelId) {
         WebResult<String> webResult = new WebResult<>();
         LabelInfo labelInfo = iLabelInfoService.get(labelId);
-        labelInfo.setDataStatusId(6);
         try {
             iLabelInfoService.deleteLabelInfo(labelId);
         } catch (BaseException e) {
             return webResult.fail(e);
         }
         return webResult.success("删除标签信息成功", SUCCESS);
-    }*/
-
-    @ApiOperation(value = "批量删除标签信息")
-    @ApiImplicitParam(name = "Ids", value = "Ids", required = true, paramType = "query", dataType = "string")
-    @RequestMapping(value = "/labelInfo/delete", method = RequestMethod.POST)
-    public WebResult<String> batchdel(String Ids) {
-        Ids = request.getParameter("Ids");
-        WebResult<String> webResult = new WebResult<>();
-        String[] labelIds = Ids.split(",");
-        for (String labelId : labelIds) {
-            try {
-                iLabelInfoService.deleteLabelInfo(labelId);
-            } catch (BaseException e) {
-                return webResult.fail(e);
-            }
-        }
-        return webResult.success("批量删除标签信息成功", SUCCESS);
     }
-
+  */  
     @ApiOperation(value="发布标签")
     @ApiImplicitParams({
         @ApiImplicitParam(name = "labelId", value = "ID", required = true, paramType = "query", dataType = "string"),

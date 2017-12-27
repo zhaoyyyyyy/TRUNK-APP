@@ -71,5 +71,4 @@ public class LabelInfoVo extends LabelInfo {
         this.publishTimeEnd = publishTimeEnd;
     }
     
-
 }

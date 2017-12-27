@@ -89,14 +89,18 @@ public class LabelInfoServiceImpl extends BaseServiceImpl<LabelInfo, String> imp
     }
 
     public void addLabelInfo(LabelInfo labelInfo) throws BaseException {
+        //封装标签规则维表信息
+        LabelCountRules labelCountRules = new LabelCountRules();
+        labelCountRules.setDependIndex(labelInfo.getDependIndex());
+        labelCountRules.setCountRules(labelInfo.getDependIndex());
+        iLabelCountRulesService.addLabelCountRules(labelCountRules);        
+        
+        //封装标签信息
         labelInfo.setEffecTime(new Date());
         labelInfo.setCreateTime(new Date());
         labelInfo.setDataStatusId(1);
+        labelInfo.setCountRulesCode(labelCountRules.getCountRulesCode());
         super.saveOrUpdate(labelInfo);
-        
-       /* LabelCountRules labelCountRules = new LabelCountRules();
-        labelCountRules.setCountRulesCode(labelInfo.getCountRulesCode());
-        iLabelCountRulesService.addLabelCountRules(labelCountRules); */
         
         //封装审批信息
         ApproveInfo approveInfo = new ApproveInfo();
