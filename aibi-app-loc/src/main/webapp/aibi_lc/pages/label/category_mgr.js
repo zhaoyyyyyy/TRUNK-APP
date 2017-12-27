@@ -232,14 +232,13 @@ window.loc_onload = function() {
 		    
 		};		
 	}
-		
+	//标签全部选中
 	$("#selectAll").click(function(){				
 		$(".label-select-main ul li").find("input").each(function(){
 			$(this).attr("checked",true);
 			$(this).siblings("label").addClass("active");
 		})
 	})
-	
 	$("#labelList").delegate("label","click",function(){
 		if($(this).hasClass("active")){
 			$(this).removeClass("active")
@@ -263,19 +262,21 @@ window.loc_onload = function() {
 		console.log($("#labelList").find("input[checked]"))
 	});
 	//左边树模糊查询
-	var flag =false;
+	var leftTreeInput ="";
 	$("#btn_serach").click(function(){
-		var text = $("#exampleInputAmount").val();
-		if(text == ""){ztreeFunc(); return }
-		if(!flag){
+		var text;
+		leftTreeInput = $("#exampleInputAmount").val();
+		if(leftTreeInput == ""){ztreeFunc(); return }
+		if(leftTreeInput !=text ){
 			var treeObj = $.fn.zTree.getZTreeObj("ztree");
-			var zTreeNodes = treeObj.getNodesByParamFuzzy("categoryName", text, null);
+			var zTreeNodes = treeObj.getNodesByParamFuzzy("categoryName", leftTreeInput, null);
 			$.fn.zTree.init($("#ztree"), setting, zTreeNodes);
-			flag =true;
+			text =leftTreeInput;
 		}
 	});
 	//移动事件
 	$("#dialog-upd").click(function(){
+		var flag =false;
 		for(var i=0;i<transData.length;i++){
 			$.commAjax({			
 			    url : $.ctx+'/api/label/labelInfo/update',  		    
@@ -285,10 +286,13 @@ window.loc_onload = function() {
 						"categoryId":transToData,
 					},
 			    onSuccess: function(data){ 
-			    	$.alert("移动标签成功");
-			    	$("#labelList").html("");
-			    	ztreeFunc();
-			    	labeltree();
+			    	if(!flag){
+				    	$.alert("移动标签成功");
+				    	$("#labelList").html("");
+				    	ztreeFunc();
+				    	labeltree();
+				    	flag =true;
+			    	}
 				}
 			});
 		}
@@ -335,4 +339,21 @@ window.loc_onload = function() {
 	function dataClick(event, treeId, treeNode){
 		transToData=treeNode.categoryId;
 	}
+	//标签部分的模糊查询
+	$("#btn_serach1").click(function(){
+		$.alert("暂未实现")
+	})
+	//右边树的模糊查询
+	var rightTreeInput ="";
+	$("#btn_serach2").click(function(){
+		var text;
+		rightTreeInput = $("#exampleInputAmount2").val();
+		if(rightTreeInput == ""){labeltree(); return }
+		if(rightTreeInput !=text ){
+			var treeObj = $.fn.zTree.getZTreeObj("labeltree");
+			var zTreeNodes = treeObj.getNodesByParamFuzzy("categoryName", rightTreeInput, null);
+			$.fn.zTree.init($("#labeltree"), install, zTreeNodes);
+			text =rightTreeInput;
+		}
+	});
 }
