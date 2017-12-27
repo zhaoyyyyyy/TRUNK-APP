@@ -231,8 +231,17 @@ public class LabelInfo extends BaseEntity {
     @ApiParam(value = "群类型")
     private Integer groupType;
     
+    /*
+     * 规则依赖指标
+     */
     @Transient
     private String dependIndex;
+    
+    /*
+     * 具体规则
+     */
+    @Transient
+    private String countRules;
 
     /**
      * 排序字段
@@ -499,6 +508,16 @@ public class LabelInfo extends BaseEntity {
     
     public void setDependIndex(String dependIndex) {
         this.dependIndex = dependIndex;
+    }
+
+    
+    public String getCountRules() {
+        return countRules;
+    }
+
+    
+    public void setCountRules(String countRules) {
+        this.countRules = countRules;
     }
 
 

@@ -92,7 +92,7 @@ public class LabelInfoServiceImpl extends BaseServiceImpl<LabelInfo, String> imp
         //封装标签规则维表信息
         LabelCountRules labelCountRules = new LabelCountRules();
         labelCountRules.setDependIndex(labelInfo.getDependIndex());
-        labelCountRules.setCountRules(labelInfo.getDependIndex());
+        labelCountRules.setCountRules(labelInfo.getCountRules());
         iLabelCountRulesService.addLabelCountRules(labelCountRules);        
         
         //封装标签信息

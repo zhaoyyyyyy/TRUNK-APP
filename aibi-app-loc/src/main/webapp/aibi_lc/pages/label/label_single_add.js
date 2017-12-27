@@ -132,16 +132,14 @@ function fun_to_save(){
 	if($("form[class~=active]").size()==0){
 		$.alert("请选择要保存的标签");
 	}
+	var k = 1;
 	$("form[class~=active]").each(function(){
-		var k = 1;
 		var labelInfo = $(this).formToJson();
 		var labelName = $('#labelName').val();
-		var countRulesCode = $('#countRulesCode').val();
 		if(labelName==""){
 			$.alert("标签名称不许为空");
-		}else if(countRulesCode==""){
-		   	$.alert("抽取规则不许为空");
 		}else{
+			debugger
 			$.commAjax({
 			url : $.ctx + '/api/label/labelInfo/save',
 			postData : labelInfo,
@@ -156,7 +154,6 @@ function fun_to_save(){
 		}
 		k++;
 	})
-		
 }
 
 
