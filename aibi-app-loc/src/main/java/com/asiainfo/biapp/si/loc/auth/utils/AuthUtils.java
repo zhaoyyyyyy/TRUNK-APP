@@ -10,7 +10,10 @@ import com.asiainfo.biapp.si.loc.auth.service.IUserService;
 import com.asiainfo.biapp.si.loc.base.exception.BaseException;
 import com.asiainfo.biapp.si.loc.base.exception.UserAuthException;
 import com.asiainfo.biapp.si.loc.base.extend.SpringContextHolder;
+import com.asiainfo.biapp.si.loc.base.utils.LogUtil;
 import com.asiainfo.biapp.si.loc.base.utils.StringUtil;
+import com.asiainfo.biapp.si.loc.cache.CocCacheProxy;
+import com.asiainfo.biapp.si.loc.core.label.entity.LabelInfo;
 
 /**
  * 
@@ -37,6 +40,7 @@ public class AuthUtils {
 	
 	private static final Logger logger = LoggerFactory.getLogger(AuthUtils.class);
 	
+	public static final String USER_IN_SESSION = "USER_IN_SESSION";
 	
 	public static final String JWT_TOKEN_REQUSET_PARAM = "token";
 	public static final String JWT_TOKEN_HEADER_PARAM = "X-Authorization";
@@ -65,12 +69,16 @@ public class AuthUtils {
 	 * @throws BaseException
 	 */
 	public static User getUserByToken(String token) throws BaseException {
+		//1 先判断缓存中是否存在此用户
+		User user = CocCacheProxy.getCacheProxy().getSessionvalue(token, USER_IN_SESSION);
 		
-		//1 TODO 先判断是否存在此用户
-		
-		//2  如果没有在调用用户接口去取
-	 	IUserService userService = (IUserService)SpringContextHolder.getBean("userService");
-	 	User user = userService.getUserByToken(token);
+		if(user == null){
+			//2  如果没有在调用用户接口去取
+			IUserService userService = (IUserService)SpringContextHolder.getBean("userService");
+			user = userService.getUserByToken(token);
+			
+			CocCacheProxy.getCacheProxy().addSessionValue(token, USER_IN_SESSION,user );
+		}
 		return user;
 	}
 

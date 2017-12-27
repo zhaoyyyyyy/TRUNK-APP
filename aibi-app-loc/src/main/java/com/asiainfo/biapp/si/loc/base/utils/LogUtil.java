@@ -145,8 +145,8 @@ public class LogUtil {
     private static void saveLog(String level, String threadName, String interfaceUrl, String method, Object msg) {
         try {
             // 组装http远程调用
-            System.out.println(interfaceUrl + "========method==" + method + "=========msg===" + msg + "threadName==="
-                    + threadName);
+//            System.out.println(interfaceUrl + "========method==" + method + "=========msg===" + msg + "threadName==="
+//                    + threadName);
             Map<String, Object> params = new HashMap<>();
 
             params.put("userId", "admin");
