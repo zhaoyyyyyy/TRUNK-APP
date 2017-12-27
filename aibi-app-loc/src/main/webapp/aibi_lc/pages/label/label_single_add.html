@@ -109,22 +109,20 @@
                                 </div>
                                 <div class="form-horizontal fleft ui-form">
                                     <div class="ui-form-group">
-                                        <label for="dependIndex" class="control-label">具体规则</label>
+                                        <label for="dependIndex" class="control-label">规则依赖指标</label>
                                         <div class="control-input">
-                                            <textarea rows="6" id="dependIndex" name="dependIndex" 
+                                            <textarea rows="3" id="dependIndex" name="dependIndex" 
                                                 class="form-control form-control-textarea" readonly="readonly">{{sourceInfo.sourceId}}</textarea>
+                                        </div>
+                                    </div>
+                                    <div class="ui-form-group">
+                                        <label for="countRules" class="control-label">具体规则</label>
+                                        <div class="control-input">
+                                            <textarea rows="5" id="countRules" name="countRules" 
+                                                class="form-control form-control-textarea">{{sourceInfo.sourceId}}</textarea>
                                         </div>
                                     </div>
                                 </div>
-                                <!-- <div class="form-horizontal fleft ui-form">
-                                    <div class="ui-form-group">
-                                        <label for="dependIndex" class="control-label">具体规则</label>
-                                        <div class="control-input">
-                                            <textarea rows="6" id="dependIndex" name="dependIndex" 
-                                                class="form-control form-control-textarea" readonly="readonly">{{sourceInfo.sourceId}}</textarea>
-                                        </div>
-                                    </div>
-                                </div> -->
                                 <div class="form-horizontal fleft ui-form">
                                     <div class="ui-form-group">
                                         <label for="busiCaliber" class="control-label">业务口径</label>
@@ -142,7 +140,7 @@
 							        <div class="ui-form-group">
 							            <label for="updateCycle" class="control-label">更新周期</label>
 							            <div class="control-input has-icon">
-                                        <input v-model="readCycle" name="labelName" type="text" class="form-control ml10"
+                                        <input v-model="readCycle" name="updateCycle" type="text" class="form-control ml10"
 								             readonly="readonly" />
 							            </div>   
 							        </div>
