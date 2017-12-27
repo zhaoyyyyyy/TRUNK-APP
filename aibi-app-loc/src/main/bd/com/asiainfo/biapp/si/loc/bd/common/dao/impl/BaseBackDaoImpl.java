@@ -91,8 +91,9 @@ public class BaseBackDaoImpl {
         ResultSetMetaData md = rs.getMetaData(); //得到结果集(rs)的结构信息，比如字段数、字段名等
         int columnCount = md.getColumnCount(); //返回此 ResultSet 对象中的列数
         List<Map<String,String>> list = new ArrayList<Map<String,String>>();
-        Map<String,String> rowData = new LinkedHashMap<String,String>(columnCount);
+        Map<String,String> rowData = null;
         while (rs.next()) {
+            rowData = new LinkedHashMap<String,String>(columnCount);
             for (int i = 1; i <= columnCount; i++) {
                 Object object = rs.getObject(i);
                 if (object != null) {

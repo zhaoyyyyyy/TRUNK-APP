@@ -52,19 +52,18 @@ public class BackHiveDaoImpl extends BaseBackDaoImpl implements IBackSqlDao{
 	@Override
 	public List<Map<String, String>> queryTableLikeTableName(String tableName) {
 	    List<Map<String, String>> res = new ArrayList<>();
-//        String sql = new StringBuilder("show tables '*").append(tableName).append("*'").toString();
+	    //SHOW TABLES 'page.*'
         String sql = new StringBuilder("show tables ").toString();
         List<Map<String, String>> datas = null;
         try{
             datas = this.executeResList(sql);
         }catch (Exception e){
-            LogUtil.error("查询后台库出错" ,e);
+            LogUtil.error("操作后台库出错", e);
         }
         
         if (null != datas && !datas.isEmpty()) {
-            System.out.println("There are "+datas.size()+" tables in the database."+datas.toString());
+            LogUtil.debug("There are "+datas.size()+" tables in the database."+datas.toString());
             for (Map<String, String> map : datas) {
-                System.out.println("tableName:"+ map.get("tableName"));
                 if (map.get("tableName").contains(tableName)) {
                     res.add(map);
                 }
@@ -76,15 +75,29 @@ public class BackHiveDaoImpl extends BaseBackDaoImpl implements IBackSqlDao{
 
 	@Override
 	public List<Map<String, String>> queryTableColumn(String tableName) {
+        List<Map<String, String>> res = new ArrayList<>();
         //desc tableName;
         String sql = new StringBuilder("desc ").append(tableName).toString();
-        
+
+        List<Map<String, String>> datas = null;
         try{
-            return this.executeResList(sql);
+            datas = this.executeResList(sql);
         }catch (Exception e){
-            LogUtil.error("查询后台库出错" ,e);
+            LogUtil.error("操作后台库出错" ,e);
         }
-		return null;
+        
+        if (null != datas && !datas.isEmpty()) {
+            LogUtil.debug("There are "+datas.size()+" cols in the table."+datas.toString());
+            for (Map<String, String> map : datas) {
+                if (!map.get("col_name").contains("#")) {
+                    res.add(map);
+                } else {    //在hive的rs中去掉以[#]开始的以下的列
+                    break;
+                }
+            }
+        }
+        
+		return res;
 	}
 
 	@Override
@@ -97,7 +110,7 @@ public class BackHiveDaoImpl extends BaseBackDaoImpl implements IBackSqlDao{
             }
         }catch (Exception e){
             res = false;
-            LogUtil.error("查询后台库出错" ,e);
+            LogUtil.error("操作后台库出错" ,e);
         }
         
         return res;
@@ -107,13 +120,13 @@ public class BackHiveDaoImpl extends BaseBackDaoImpl implements IBackSqlDao{
 	public boolean createTableByTemplete(String newTableName, String templeteTableName) {
         boolean res = true;
         String sql = new StringBuilder("CREATE TABLE ").append(newTableName).append(" AS select a.* from ")
-            .append(templeteTableName).append(" a where 1=2").toString();
+                .append(templeteTableName).append(" a where 1=2").toString();
         
         try{
             res = this.executeResBoolean(sql);
         }catch (Exception e){
             res = false;
-            LogUtil.error("查询后台库出错" ,e);
+            LogUtil.error("操作后台库出错" ,e);
         }
         return res;
 	}
@@ -127,7 +140,7 @@ public class BackHiveDaoImpl extends BaseBackDaoImpl implements IBackSqlDao{
             res = this.executeResBoolean(sql);
         }catch (Exception e){
             res = false;
-            LogUtil.error("查询后台库出错" ,e);
+            LogUtil.error("操作后台库出错" ,e);
         }
         
         return res;
@@ -142,7 +155,7 @@ public class BackHiveDaoImpl extends BaseBackDaoImpl implements IBackSqlDao{
             res = this.executeResBoolean(sql);
         }catch (Exception e){
             res = false;
-            LogUtil.error("查询后台库出错" ,e);
+            LogUtil.error("操作后台库出错" ,e);
         }
         
 		return res;
@@ -152,14 +165,14 @@ public class BackHiveDaoImpl extends BaseBackDaoImpl implements IBackSqlDao{
 	public boolean alterTable(String tableName, String columnName, String columnType) {
 	    //ALTER TABLE DIM_SCENE ADD columns(hfbcol int);
         boolean res = true;
-        String sql = new StringBuilder("ALTER TABLE ").append(tableName).append(" ADD columns(").append(columnName)
-                .append(" ").append(columnType).append(")").toString();
+        String sql = new StringBuilder("ALTER TABLE ").append(tableName).append(" ADD columns(")
+                .append(columnName).append(" ").append(columnType).append(")").toString();
 
         try{
             res = this.executeResBoolean(sql);
         }catch (Exception e){
             res = false;
-            LogUtil.error("查询后台库出错" ,e);
+            LogUtil.error("操作后台库出错" ,e);
         }
         
         return res;
@@ -194,7 +207,7 @@ public class BackHiveDaoImpl extends BaseBackDaoImpl implements IBackSqlDao{
         try{
             return this.executeResList(sql);
         }catch (Exception e){
-            LogUtil.error("查询后台库出错" ,e);
+            LogUtil.error("操作后台库出错" ,e);
         }
 		return null;
 	}
@@ -219,7 +232,7 @@ public class BackHiveDaoImpl extends BaseBackDaoImpl implements IBackSqlDao{
                 }
             }
         }catch (Exception e){
-            LogUtil.error("查询后台库出错" ,e);
+            LogUtil.error("操作后台库出错" ,e);
         }
 		return rows;
 	}
@@ -236,7 +249,7 @@ public class BackHiveDaoImpl extends BaseBackDaoImpl implements IBackSqlDao{
             
             return this.resultSetToList(resultSet);
         }catch (Exception e){
-            LogUtil.error("查询后台库出错:"+sql ,e);
+            LogUtil.error("操作后台库出错:"+sql ,e);
         }
         return null;
     }
@@ -254,8 +267,41 @@ public class BackHiveDaoImpl extends BaseBackDaoImpl implements IBackSqlDao{
             
         }catch (Exception e){
             res = false;
-            LogUtil.error("查询后台库出错:"+sql ,e);
+            LogUtil.error("操作后台库出错:"+sql ,e);
         }
+        return res;
+    }
+
+    @Override
+    public boolean dropTable(String tableName) {
+        boolean res = true;
+        //DROP TABLE pv_users;
+        String sql = new StringBuilder("DROP TABLE ").append(tableName).toString();
+
+        try{
+            res = this.executeResBoolean(sql);
+        }catch (Exception e){
+            res = false;
+            LogUtil.error("操作后台库出错" ,e);
+        }
+        
+        return res;
+    }
+
+    @Override
+    public boolean renameTable(String oldTableName, String newTableName) {
+        boolean res = true;
+        //ALTER TABLE oldTableName RENAME TO newTableName;
+        String sql = new StringBuilder("ALTER TABLE ").append(oldTableName)
+                .append(" RENAME TO ").append(newTableName).toString();
+
+        try{
+            res = this.executeResBoolean(sql);
+        }catch (Exception e){
+            res = false;
+            LogUtil.error("操作后台库出错" ,e);
+        }
+        
         return res;
     }
 
@@ -280,8 +326,9 @@ public class BackHiveDaoImpl extends BaseBackDaoImpl implements IBackSqlDao{
 	    String tableName = "ci";
 //        res = dao.queryTableLikeTableName("hfb");
         
-        tableName ="ci_cus_push_task_template";
-        //res = dao.queryTableColumn(tableName);
+//        tableName ="ci_cus_push_task_template";
+        tableName ="opg_iptv_label_vis_view_vodtype_201709";
+        res = dao.queryTableColumn(tableName);
         
 //        System.out.println("表：("+tableName+") 存在结果:"+dao.isExistsTable(tableName));
 
@@ -292,10 +339,9 @@ public class BackHiveDaoImpl extends BaseBackDaoImpl implements IBackSqlDao{
         
 //        res=dao.queryForPage("select * from hfb0_"+tableName,1,9);
 //        System.out.println("在表("+"hfb0_"+tableName+") 中的数据量是:"+res.size());
-        
-        
-        tableName = "ci_cuser_20171221100651301";
-        System.out.println("在表("+tableName+") 中的数据量是:"+dao.queryCount("select * from "+tableName));
+          
+//        tableName = "ci_cuser_20171221100651301";
+//        System.out.println("在表("+tableName+") 中的数据量是:"+dao.queryCount("select * from "+tableName));
         
 
         System.out.println("===============================");
@@ -303,10 +349,12 @@ public class BackHiveDaoImpl extends BaseBackDaoImpl implements IBackSqlDao{
             System.out.println("res's size:"+res.size());
             for (Map<String, String> map : res) {
                 for (String key : map.keySet()) {
-//                  LogUtil.debug(key + ":" + value);
-                  System.out.println(key + ":" + map.get(key));
+                  System.out.print(" "+key + ":" + map.get(key)+" ");
                 }
+                System.out.println();
             }
         }
     }
+	
+	
 }

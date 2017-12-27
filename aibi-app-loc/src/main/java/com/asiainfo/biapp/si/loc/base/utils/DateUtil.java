@@ -20,6 +20,7 @@ public class DateUtil {
 	public static final String FORMAT_YYYY_MM = "yyyy-MM";
 	public static final String FORMAT_YYYYMMDD = "yyyyMMdd";
 	public static final String FORMAT_YYYYMM = "yyyyMM";
+    public static final String FORMAT_YYYYMMDDHHMMSS = "yyyyMMddHHmmss";
     public static final int DATETYPE_MONTH = 0;   //日期类型：月
     public static final int DATETYPE_DAY = 1;     //日期类型：日
 	private static String TABLE_LABEL_STAT = "CI_LABEL_STAT_";
