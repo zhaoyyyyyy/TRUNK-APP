@@ -202,6 +202,7 @@ window.loc_onload = function() {
 		
 		//展示选中分类下的标签
 		function zTreeOnClick(event, treeId, treeNode) {
+			$("#labelList").html("");
 			var flag=false;
 		    $.commAjax({			
 			    url : $.ctx+'/api/label/labelInfo/queryList',  		    
@@ -250,16 +251,16 @@ window.loc_onload = function() {
 	//获取选中标签ID
 	$("#ui-move").click(function(){
 		$(".label-dialog").addClass("active");
-		var i=0;
+		transData = [];
+		var j=0;
 		$("#labelList label[class~=active]").each(function(){
-			transData[i]=$(this).attr("data-id");
-			i++;
+			transData[j]=$(this).attr("data-id");
+			j++;
 		})
 	});
 	$("#dialog-del").click(function(){
 		$(".label-dialog").removeClass("active");
 		$("#labelList").find("input[checked]");
-		console.log($("#labelList").find("input[checked]"))
 	});
 	//左边树模糊查询
 	var leftTreeInput ="";
@@ -290,6 +291,7 @@ window.loc_onload = function() {
 				    	$.alert("移动标签成功");
 				    	$("#labelList").html("");
 				    	ztreeFunc();
+				    	$("#dialog-del").click();
 				    	labeltree();
 				    	flag =true;
 			    	}
@@ -341,7 +343,35 @@ window.loc_onload = function() {
 	}
 	//标签部分的模糊查询
 	$("#btn_serach1").click(function(){
-		$.alert("暂未实现")
+		var text =$("#exampleInputAmount1").val();
+		var obj = $("#preConfig_list").find("span");
+		var configId =obj.attr("configId");
+		$.commAjax({			
+		    url : $.ctx+'/api/label/labelInfo/queryList',  		    
+		    dataType : 'json', 
+		    async:true,
+		    postData : {
+					"labelName" :text,
+					"configId" :configId,
+				},
+		    onSuccess: function(data){
+		    	$("#labelList").html("");
+		    	for(var i=0;i<data.data.length;i++){
+		    		if (! document.getElementById(data.data[i].labelId)){
+			    		var html="<li>"+
+				    		"<div class='checkbox'>"+
+				    		"<input type='checkbox' id='"+data.data[i].labelId+"' class='checkbix'>"+
+				    		"<label for='"+data.data[i].labelId+"' aria-label role='checkbox' class='checkbix' data-id='"+data.data[i].labelId+"'>"+
+				    		"<span class='large'></span>"+
+				    		data.data[i].labelName+
+				    		"</label>"+
+				    		"</div>"+
+				    		"</li>";
+				    	$("#labelList").append(html);
+		    		}
+		    	}
+		    }  
+	   });
 	})
 	//右边树的模糊查询
 	var rightTreeInput ="";
