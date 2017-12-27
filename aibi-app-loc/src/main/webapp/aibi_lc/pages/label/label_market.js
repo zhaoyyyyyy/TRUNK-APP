@@ -83,6 +83,13 @@ window.loc_onload = function() {
 	//加载标签集市
 	labelMarket.loadLabelInfoList();
 	
+	//搜索框回车
+	$('#labelNameText').keyup(function(event){
+    	if(event.keyCode == 13){
+    		$("#btn_search").click();
+    	}
+    })
+	
 	
 	//计算中心弹出/收起（下面）
 	$(".ui-shop-cart").click(function(){
@@ -155,45 +162,7 @@ var labelMarket = (function (model){
 			  }
 			});
         };
-        /**
-         * @description 获取标签体系
-         * @param  option
-         * @return  
-         * ------------------------------------------------------------------
-         */
-        model.loadOrg = function(){
-        		$.commAjax({
-        			url: $.ctx + "/api/user/privaliegeData/query",
-        			onSuccess: function(data){
-        				if(data.data != null && data.data != undefined){
-        					var dataobj = data.data;
-							for(var e=0 ; e<4 ; e++){
-								if(dataobj[e]==undefined){
-									continue;
-								}
-								for(var l=0 ; l<dataobj[e].length ; l++){
-									var od = dataobj[e][l];
-									if(od.parentId == "999"){
-										dataModel.zqlxList.push(od);
-									}else if(od.orgType == "3"){
-										dataModel.xzqhList.push(od);
-									}
-								}
-							}
-        				}
-        			}
-        		});
-        };
         
-        
-        model.loadUpdateCycle = function(){
-        	var gxzqList = [];
-        	var dicGxzq = $.getDicData("GXZQZD");
-        	for(var i=0; i<dicGxzq.length; i++){
-        		gxzqList.push(dicGxzq[i]);
-        	}
-        	dataModel.gxzqList = gxzqList;
-        };
         /**
          * @description 获取标签数据
          * @param  option
@@ -223,7 +192,41 @@ var labelMarket = (function (model){
 			});
 		};
 		
-
+		//获取地市
+		model.loadOrg = function(){
+    		$.commAjax({
+    			url: $.ctx + "/api/user/privaliegeData/query",
+    			onSuccess: function(data){
+    				if(data.data != null && data.data != undefined){
+    					var dataobj = data.data;
+						for(var e=0 ; e<4 ; e++){
+							if(dataobj[e]==undefined){
+								continue;
+							}
+							for(var l=0 ; l<dataobj[e].length ; l++){
+								var od = dataobj[e][l];
+								if(od.parentId == "999"){
+									dataModel.zqlxList.push(od);
+								}else if(od.orgType == "3"){
+									dataModel.xzqhList.push(od);
+								}
+							}
+						}
+    				}
+    			}
+    		});
+	    };
+	    
+	    //获取更新周期
+	    model.loadUpdateCycle = function(){
+	    	var gxzqList = [];
+	    	var dicGxzq = $.getDicData("GXZQZD");
+	    	for(var i=0; i<dicGxzq.length; i++){
+	    		gxzqList.push(dicGxzq[i]);
+	    	}
+	    	dataModel.gxzqList = gxzqList;
+	    };
+		
 		//更改地市条件
 		model.orgSearch = function(obj){
 			if(obj.id == "allOrg"){
@@ -315,6 +318,11 @@ var labelMarket = (function (model){
 				$("#oneMonth").removeClass("all-active");
 				$("#threeMonth").addClass("all-active");
 			}
+			model.loadLabelInfoList();
+		}
+		
+		model.btn_search = function(){
+			$("#labelName").val($("#labelNameText").val());
 			model.loadLabelInfoList();
 		}
         
