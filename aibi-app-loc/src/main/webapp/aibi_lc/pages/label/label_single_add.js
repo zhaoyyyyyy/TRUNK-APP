@@ -4,9 +4,12 @@ var model = {
 		sourceInfoList:[],
 		bqlx : [],
 		isbq : [],
+		gxzq : [],
 		showdimDetail: [],
 		isActive:false, 
-		arrs:[]
+		arrs:[],
+		labelInfoList:[],
+		readCycle : ""
 }
 
 function changeStatus(obj){
@@ -15,7 +18,9 @@ function changeStatus(obj){
 			return Object.keys(item)[0] === ('showdim'+obj.id);
 		});
 		if(!exit){
-			model.showdimDetail.push({[('showdim'+obj.id)]:true});
+			var a = {};
+			a['showdim'+obj.id] = true;
+			model.showdimDetail.push(a);
 		}else{
 			model.showdimDetail.forEach(function(item){
 				if(Object.keys(item)[0]===('showdim'+obj.id)){
@@ -36,18 +41,22 @@ function changeStatus(obj){
 window.loc_onload = function() {		
 	var dicBqlx = $.getDicData("BQLXZD");
 	for(var i = 0; i<dicBqlx.length; i++){
-		model.bqlx.push(dicBqlx[i]); 
+		if(dicBqlx[i].code!=10&&dicBqlx[i].code!=12&&dicBqlx[i].code!=8){
+			model.bqlx.push(dicBqlx[i]);
+		}		 
 	}
 	var dicIsbq = $.getDicData("SFZD");
 	for(var i = 0; i<dicIsbq.length; i++){
 		model.isbq.push(dicIsbq[i]);
 	}
-	
+	var dicgxzq = $.getDicData("GXZQZD");
+	for(var i =0 ; i<dicgxzq.length; i++){
+		model.gxzq.push(dicgxzq[i]);
+	}
 	new Vue({
 		el : '#dataD',
 	    data : model ,
 	})
-
 	$.commAjax({
 		url : $.ctx + '/api/dimtable/dimTableInfo/queryList',
 		onSuccess : function(data){
@@ -65,7 +74,15 @@ window.loc_onload = function() {
 		$.commAjax({
 			url : $.ctx + '/api/source/sourceTableInfo/get?sourceTableId='+sourceTableId,
 			onSuccess : function(data){
-				model.sourceInfoList = data.data.sourceInfoList;			
+				model.sourceInfoList = data.data.sourceInfoList;
+				model.readCycle=data.data.readCycle;
+				if(model.readCycle==3){
+					model.readCycle="日周期";
+				}else if(model.readCycle==2){
+					model.readCycle="月周期";
+				}else if(model.readCycle==1){
+					model.readCycle="一次性";
+				}
 			}
 		});
 	});
@@ -82,7 +99,7 @@ window.loc_onload = function() {
 
 	
 
-
+/*
 function fun_to_save(){
 	$("form[class~=active]").each(function(){
 		var json = $(this).formToJson();
@@ -109,7 +126,42 @@ function fun_to_save(){
 			}
 		});
 	}	
+}*/
+
+function fun_to_save(){
+	if($("form[class~=active]").size()==0){
+		$.alert("请选择要保存的标签");
+	}
+	$("form[class~=active]").each(function(){
+		var k = 1;
+		var labelInfo = $(this).formToJson();
+		var labelName = $('#labelName').val();
+		var countRulesCode = $('#countRulesCode').val();
+		if(labelName==""){
+			$.alert("标签名称不许为空");
+		}else if(countRulesCode==""){
+		   	$.alert("抽取规则不许为空");
+		}else{
+			$.commAjax({
+			url : $.ctx + '/api/label/labelInfo/save',
+			postData : labelInfo,
+			onSuccess:function(data){
+				if(data.data == 'success' && k == $("form[class~=active]").size()){
+						$.success("创建成功",function(){
+							history.back(-1);
+						});
+					}
+				}
+			});		
+		}
+		k++;
+	})
+		
 }
+
+
+
+
 function fun_to_dimdetail(){
 	var dimId = $("#dimTableName").val();
 	var win = $.window('维表详情',$.ctx + '/aibi_lc/pages/dimtable/dimtable_detail.html?dimId='+dimId, 800,

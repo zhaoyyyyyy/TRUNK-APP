@@ -118,6 +118,18 @@ public class BackMysqlDaoImpl extends BaseBackDaoImpl implements IBackSqlDao{
 		return null;
 	}
 
+    @Override
+    public boolean dropTable(String tableName) {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    @Override
+    public boolean renameTable(String oldTableName, String newTableName) {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
 
 
 

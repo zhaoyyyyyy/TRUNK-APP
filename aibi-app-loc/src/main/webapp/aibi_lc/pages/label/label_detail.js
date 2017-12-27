@@ -7,22 +7,17 @@ window.loc_onload = function() {
 			"labelId" : labelId
 		},
 		onSuccess : function(data) {
-			var time = new Date(data.data.invalidTime);
+			var time = new Date(data.data.failTime);
 			var y = time.getFullYear();//年
 			var m = time.getMonth() + 1;//月
 			var d = time.getDate();//日
-			data.data.invalidTime = y+"年"+m+"月"+d+"日 ";
+			data.data.failTime = y+"年"+m+"月"+d+"日 ";
 			new Vue({
 				el : "#dataD",
 				data : data
 			})
 		}
 	})
-	frwin.addBtn("ok", "保存", function(){
-		$.commAjax({
-			
-		})
-	});
 	frwin.addBtn("cancel", "取消", function() {
 		frwin.cancel();
 	});

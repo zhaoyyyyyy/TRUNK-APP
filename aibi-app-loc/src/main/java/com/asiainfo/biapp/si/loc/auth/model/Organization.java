@@ -5,7 +5,9 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
-public class Organization {
+import com.asiainfo.biapp.si.loc.base.entity.BaseEntity;
+
+public class Organization extends BaseEntity{
 	private String id;
 	private String simpleName;
 	private String orgCode;

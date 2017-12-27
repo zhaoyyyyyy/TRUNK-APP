@@ -23,7 +23,22 @@ var dataModel = {
 		sortCol:"customNum"
 
 }
+var tagConfig  = {
+		"4" : "#numberValueSet" , // 指标型，存具体的指标值；
+		"5" : "#itemChoose" ,   //枚举型，列的值有对应的维表，下拉展示；
+		"6" : "#dateSettings" ,   //日期型，字符串类型的日期值。
+		"7" : "#darkValueSet" ,   //模糊型，存字符串，like查询
+		"8" : "#verticalLabelSetDialog" ,   //纵表型，对应多个列，数据是纵表存储。 */
+		"9" : "#itemChoose" ,   //按位与标签
+		"11" : "#genKpiChoose" ,    //数值标签泛化设置
+		"10" : "#customerSetDialog" ,    //客户群设置
+		"13" : "#saveCustomerDialog" ,//保存客户群
+		"12" : "#positionSelect"   , //位置行标签选择基站
+		"14" : "#emptyLabelSettings" ,//虚标签弹出层
+		"4_g" : "#numberValueGroupSet" , // 指标型，存具体的指标值；
+		"5_g" : "#itemGroupChoose"   //枚举型，列的值有对应的维表，下拉展示；
 
+}
 window.loc_onload = function() {
 	//初始化参数
 	dataModel.configId = $.getCurrentConfigId();
@@ -37,9 +52,22 @@ window.loc_onload = function() {
     var labelSysApp = new Vue({
     	el : '#labelInfoListApp',
     	data : dataModel,
+    	computed: {
+            rulesClassFun : function(index){
+                var rulesClass = {
+                		'ui-bracket': true,
+                		'left' : true,
+                		'ui-conditionCT' : true
+                };
+                return rulesClass
+            }
+        },
     	methods : {
     		select : function(index){
     			labelMarket.addToShoppingCar(index);
+    		},
+    		setLabelAttr : function(index){
+    			labelMarket.setLabelAttr(index);
     		}
     	}
     });
@@ -357,8 +385,8 @@ var labelMarket = (function (model){
 				  url: $.ctx + "/api/shopCart/saveShopSession",
 				  postData:para,
 				  onSuccess: function(returnObj){
-					  	var success = returnObj.success;
-						if (success){
+					  	var status = returnObj.status;
+						if (status == '200'){
 							model.refreshShopCart();
 						}else{
 							$.alert("添加标签失败");
@@ -386,12 +414,251 @@ var labelMarket = (function (model){
   						//1.更新已选择标签数据
 	  					//2.更新计算中心的页面样式
   						dataModel.ruleList = returnObj.data;
-  						dataModel.ruleListSize = _this.ruleLis.size;
+  						dataModel.ruleListSize = dataModel.ruleList.length;
   					}
-  					   
-  				  }
+  				 }
   			});
         };
+        /**
+         * @description 标签弹出层处理
+         * @param  
+         * @return  
+         * ------------------------------------------------------------------
+         */
+        model.setLabelAttr = function(obj,labelType,name){
+        	var labelInfo = dataModel.labelInfoList[index];
+    		var dialogId = tagConfig[labelInfo.labelTypeId];
+    		var dataJson ={};
+    		var dataJsonStr = '';
+    		
+    		if(labelType == "4"){ // 指标型，存具体的指标值；
+    			
+    			var queryWay = labelInfo.attr("queryWay");
+    			var contiueMinVal = labelInfo.attr("contiueMinVal");
+    			var contiueMaxVal = labelInfo.attr("contiueMaxVal");
+    			var leftZoneSign = labelInfo.attr("leftZoneSign");
+    			var rightZoneSign = labelInfo.attr("rightZoneSign");
+    			var exactValue = labelInfo.attr("exactValue"); 
+    			var unit = labelInfo.attr("unit");
+    			unit = encodeURIComponent(encodeURIComponent(unit));
+    		
+    			var para = "?queryWay="+queryWay+"&contiueMinVal="+contiueMinVal
+    						+"&contiueMaxVal="+contiueMaxVal+"&leftZoneSign="+leftZoneSign
+    						+"&rightZoneSign="+rightZoneSign+"&exactValue="+exactValue
+    						+"&unit="+unit;
+    			var ifmUrl ="${ctx}/aibi_ci/dialog/numberValueSetDialog.jsp"+para;
+    			//样例弹出页面
+    			$(".ui-dialog").dialog({
+    			      height: 515,
+    			      width: 560,
+    			      modal: true,
+    			      title:"新建/修改",
+    			      open:function(){
+    			      	ztreeFunc();
+    			      },
+    			      buttons: [
+    			    	    {
+    			    	      text: "取消",
+    			    	      "class":"ui-btn ui-btn-second",
+    			    	      click: function() {
+    			    	        $( this ).dialog( "close" );
+    			    	      }
+    		  	        },{
+    			    	      text: "确定",
+    			    	      "class":"ui-btn ui-btn-default",
+    			    	      click: function() {
+    			    	        $( this ).dialog( "close" );
+    			    	      }
+    			    	}
+    		  	  ]
+    		  });
+    			dialogUtil.create_dialog("numberValueSet", {
+    				"title" 		: name + "-条件设置",
+    				"height"		: "auto",
+    				"width" 		: 530,
+    				"frameSrc" 		: ifmUrl,
+    				"frameHeight"	: 241,
+    				"position" 		: ['center','center'] 
+    			});
+    		}else if(labelType == "5" || labelType == "9"){  //条件选择
+    			var attrVal = mainObj.attr("attrVal");
+    			var attrName = mainObj.attr("attrName");
+    			var calcuElement = mainObj.attr("calcuElement");
+    			var para="?attrVal="+attrVal+"&attrName="+attrName+"&calcuElement="+calcuElement;
+    			$(dialogId).dialog("option","title", name+"-条件设置");
+
+    			var ifmUrl = '${ctx}/aibi_ci/dialog/itemChooseDialog.jsp';
+    			var form = '<form id="postData_form" action="' + ifmUrl + '" method="post" target="_self">' + 
+    				'<input name="attrVal" type="hidden" value="' + attrVal + '"/>' +
+    				'<input name="attrName" type="hidden" value="' + attrName + '"/>' +
+    				'<input name="calcuElement" type="hidden" value="' + calcuElement + '"/>' +
+    				'<input name="labelType" type="hidden" value="' + labelType + '"/>' +
+    				'</form>';
+    			document.getElementById('itemChooseFrame').contentWindow.document.write(form);
+    			document.getElementById('itemChooseFrame').contentWindow.document.getElementById('postData_form').submit();
+    			$(dialogId).dialog("open");
+    		}else if(labelType == "11"){  //条件选择
+                var attrVal = mainObj.attr("attrVal");
+                var attrName = mainObj.attr("attrName");
+                var calcuElement = mainObj.attr("calcuElement");
+                var para="?attrVal="+attrVal+"&attrName="+attrName+"&calcuElement="+calcuElement;
+                $(dialogId).dialog("option","title", name+"-条件设置");
+                var ifmUrl = '${ctx}/aibi_ci/dialog/genKpiChooseDialog.jsp';
+                var form = '<form id="postData_form" action="' + ifmUrl + '" method="post" target="_self">' + 
+                    '<input name="attrVal" type="hidden" value="' + attrVal + '"/>' +
+                    '<input name="attrName" type="hidden" value="' + attrName + '"/>' +
+                    '<input name="calcuElement" type="hidden" value="' + calcuElement + '"/>' +
+                    '<input name="labelType" type="hidden" value="' + labelType + '"/>' +
+                    '</form>';
+                document.getElementById('genKpiChooseFrame').contentWindow.document.write(form);
+                document.getElementById('genKpiChooseFrame').contentWindow.document.getElementById('postData_form').submit();
+                $(dialogId).dialog("open");
+            }else if(labelType == "12"){  //位置行标签选择基站
+    			var attrVal = mainObj.attr("attrVal");
+    			var attrName = mainObj.attr("attrName");
+    			var calcuElement = mainObj.attr("calcuElement");
+    			var para="?attrVal="+attrVal+"&attrName="+attrName+"&calcuElement="+calcuElement;
+    			$(dialogId).dialog("option","title", name+"-条件设置");
+
+    			var ifmUrl = '${ctx}/aibi_ci/dialog/positionValueSetDailog.jsp';
+    			var form = '<form id="postData_form" action="' + ifmUrl + '" method="post" target="_self">' + 
+    				'<input name="attrVal" type="hidden" value="' + attrVal + '"/>' +
+    				'<input name="attrName" type="hidden" value="' + attrName + '"/>' +
+    				'<input name="calcuElement" type="hidden" value="' + calcuElement + '"/>' +
+    				'<input name="labelType" type="hidden" value="' + labelType + '"/>' +
+    				'<input name="cityName" type="hidden" value="' + "${cityName}" + '"/>' +
+    				'</form>';
+    			document.getElementById('positionSelectFrame').contentWindow.document.write(form);
+    			document.getElementById('positionSelectFrame').contentWindow.document.getElementById('postData_form').submit();
+    			$(dialogId).dialog("open");
+    		}
+    		else if(labelType == "6"){//日期类型标签
+    			var startTime = "" ;
+    			var endTime ="" ;
+    			var leftZoneSign ="" ;
+    			var rightZoneSign = "" ;
+    			var isNeedOffset = mainObj.attr('isNeedOffset');
+    			startTime = mainObj.attr("startTime");
+    			endTime = mainObj.attr("endTime");
+    			leftZoneSign = mainObj.attr("leftZoneSign");
+    			rightZoneSign = mainObj.attr("rightZoneSign");
+    			queryWay = mainObj.attr("queryWay");
+    			exactValue = mainObj.attr("exactValue");
+    			
+    			var para = "?startTime="+startTime+"&endTime="+endTime+"&leftZoneSign="+leftZoneSign
+    						+"&rightZoneSign="+rightZoneSign+"&queryWay="+queryWay
+    						+"&exactValue="+exactValue + "&isNeedOffset=" + isNeedOffset;
+    			var ifmUrl ="${ctx}/aibi_ci/dialog/dateSettingsDialog.jsp"+para;
+    			dialogUtil.create_dialog("dateSettings", {
+    				"title" 		: name + "-条件设置",
+    				"height"		: "auto",
+    				"width" 		: 570,
+    				"frameSrc" 		: ifmUrl,
+    				"frameHeight"	: 290,
+    				"position" 		: ['center','center'] 
+    			});			
+    		}else if(labelType == "7"){
+    			var darkValue = "" ;
+    			darkValue = mainObj.attr("darkValue");
+    			darkValue=encodeURIComponent(encodeURIComponent(darkValue));
+
+    			var queryWay = mainObj.attr("queryWay"); 
+    			var exactValue = mainObj.attr("exactValue"); 
+    			exactValue = encodeURIComponent(encodeURIComponent(exactValue));
+    			
+    			var para = "?darkValue="+darkValue+"&exactValue="+exactValue+"&queryWay="+queryWay;
+    			var ifmUrl ="${ctx}/aibi_ci/dialog/darkValueSetDialog.jsp"+para;
+    			
+    			/* dialogUtil.create_dialog("darkValueSet", {
+    				"title" 		: name + "-条件设置",
+    				"height"		: "auto",
+    				"width" 		: 570,
+    				"frameSrc" 		: ifmUrl,
+    				"frameHeight"	: 290,
+    				"position" 		: ['center','center'] 
+    			}); */
+    			$(dialogId).dialog("option","title", name+"-条件设置");
+    			var ifmUrl ="${ctx}/aibi_ci/dialog/darkValueSetDialog.jsp"+para;
+    			$("#darkValueSetFrame").attr("src", ifmUrl).load(function(){ });
+    			$(dialogId).dialog("open");
+    			
+    		} else if(labelType == '8') {//纵表标签
+    			var calcuElement = mainObj.attr("calcuElement")
+    			var ifmUrl = "${ctx}/ciIndex/findVerticalLabel?labelId=" + calcuElement;
+    			/* dialogUtil.create_dialog("verticalLabelSetDialog", {
+    				"title" 		: name + "-条件设置",
+    				"height"		: "auto",
+    				"width" 		: 720,
+    				"frameSrc" 		: ifmUrl,
+    				"frameHeight"	: 480,
+    				"position" 		: ['center','center'] 
+    			}); */
+    			$(dialogId).dialog("option","title", name+"-条件设置");
+    			$("#verticalLabelSetFrame").attr("src", ifmUrl).load(function(){ });
+    			$(dialogId).dialog("open");
+    		} else if(labelType == '10') {//组合标签
+    			var calcuElement = mainObj.attr("calcuElement")
+    			var customorlabelname = mainObj.attr("customorlabelname")
+    			var ifmUrl = "${ctx}/ciIndex/comLabelSettingPage?labelId=" + calcuElement+"&source=" + 2;
+    			dlg=$("#comLabelSettingDialog").ajaxDialog({ 
+    				title:customorlabelname+"-条件设置",
+    				ajaxUrl:ifmUrl,
+    				width:835,
+    				height:480,
+    				buttons: [
+    							{  
+    								text: "确定",
+    								click: function() {
+    									setData();
+    								}
+    							},
+    							{
+    								text: "取消",
+    								"class":"cancelBtn",
+    								click: function() {
+    									$(this).dialog( "close" );
+    								}
+    						}],
+    						open:function(){
+    						 	$(".dateInputFmt80").focus(function(){
+    								 $(this).blur();
+    							});
+    					   },
+    					   close:function(){
+    						    $(".dateInputFmt80").focus(function(){
+    								 $(this).blur();
+    							});
+    					   }
+    			});
+    		}else if(labelType == "13"){
+    			var expandType = 0;//0、使用清单；1、使用规则
+    			var detailedListDate;//清单日期
+    			var valueId = mainObj.attr("customId");
+    			var dataDate = mainObj.attr("attrVal");
+    			var para="?valueId="+valueId+"&dataDate="+dataDate;
+
+    			var ifmUrl = $.ctx + "/ciIndex/findCustomListAndRule"+para;
+    			
+    			dialogUtil.create_dialog("customerSetDialog", {
+    				"title" 		: name + "-条件设置",
+    				"height"		: "auto",
+    				"width" 		: 765,
+    				"frameSrc" 		: ifmUrl,
+    				"frameHeight"	: 275,
+    				"position" 		: ['center','center'] 
+    			});
+    		   
+    		}else if(labelType == "14"){//虚拟标签
+    			name = mainObj.attr("customOrLabelName");
+    			var calcuelement = mainObj.attr("calcuelement"); 
+    			var ifmUrl ="${ctx}/aibi_ci/dialog/emptyLabelSetDialog.jsp?parentLabelId="+calcuelement;
+    			$(dialogId).dialog("option","title", name+"-条件设置");
+    			$("#emptyLabelSettingsFrame").attr("src", ifmUrl).load(function(){ });
+    			$(dialogId).dialog("open");
+    		} else {
+    			showAlert("计算元素类型错误！", "failed");
+    		}
+    	};
         /**
          * @description 计算中心
          * @param  

@@ -109,13 +109,22 @@
                                 </div>
                                 <div class="form-horizontal fleft ui-form">
                                     <div class="ui-form-group">
-                                        <label for="countRulesCode" class="control-label">抽取规则</label>
+                                        <label for="dependIndex" class="control-label">具体规则</label>
                                         <div class="control-input">
-                                            <textarea rows="6" id="countRulesCode" name="countRulesCode" 
-                                                class="form-control form-control-textarea">{{sourceInfo.sourceId}}</textarea>
+                                            <textarea rows="6" id="dependIndex" name="dependIndex" 
+                                                class="form-control form-control-textarea" readonly="readonly">{{sourceInfo.sourceId}}</textarea>
                                         </div>
                                     </div>
                                 </div>
+                                <!-- <div class="form-horizontal fleft ui-form">
+                                    <div class="ui-form-group">
+                                        <label for="dependIndex" class="control-label">具体规则</label>
+                                        <div class="control-input">
+                                            <textarea rows="6" id="dependIndex" name="dependIndex" 
+                                                class="form-control form-control-textarea" readonly="readonly">{{sourceInfo.sourceId}}</textarea>
+                                        </div>
+                                    </div>
+                                </div> -->
                                 <div class="form-horizontal fleft ui-form">
                                     <div class="ui-form-group">
                                         <label for="busiCaliber" class="control-label">业务口径</label>
@@ -129,6 +138,13 @@
 					          	             <input type="text" name="failTime" class="date-input form-control input-pointer form-control-bubble" data-dismiss="formDatepicker#sendTime" id="" placeholder="请选择结束日期">
 					          	             <span class="glyphicon-date form-control-feedback"></span>
 					                       </div>   
+							        </div>
+							        <div class="ui-form-group">
+							            <label for="updateCycle" class="control-label">更新周期</label>
+							            <div class="control-input has-icon">
+                                        <input v-model="readCycle" name="labelName" type="text" class="form-control ml10"
+								             readonly="readonly" />
+							            </div>   
 							        </div>
                                     <div v-if="showdimDetail[index]&&showdimDetail[index][`showdim${index}`]" class="ui-form-group">
                                         <label for="dimTableName" class="control-label">维表选择</label>

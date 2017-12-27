@@ -1,39 +1,32 @@
 window.loc_onload = function(){
-	/*
-	//新增标签
-	$('#btn_add').click(function() {
-		var win = $.window('新增', $.ctx + '/aibi_lc/pages/label/label_single_add.html', 1100, 600);
-		win.reload = function() {
-			$("#mainGrid").setGridParam({
-				postData : $("#formSearch").formToJson()
-					}).trigger("reloadGrid", [{
-						page : 1
-			}]);
-		}
-	});
-	*/	
-	//批量删除标签
+	/*//批量删除标签
 	$('#btn_batch_del').click(function(){
 		var ids = $('#mainGrid').jqGrid('getGridParam', 'selarrrow');
 		if(ids.length<1){
 			$.alert("请选择要删除的标签");
 			return;
-		}
+		}	
 		$.confirm("您确定要继续删除吗？",function(){
-			$.commAjax({
-				url : $.ctx+'/api/label/labelInfo/delete?Ids='+ids,
-				onSuccess:function(data){
+			for(var i=0; i<ids.length; i++){
+				$.commAjax({
+					url : $.ctx+'/api/label/labelInfo/delete?Ids=',
+					postData : {
+						"labelId" : ids[i]
+					},
+				});
+				var k=i+1;
+				if(k==ids.length){
 					$.success('删除成功。',function(){
-						$("#mainGrid").setGridParam().trigger(
-								"reloadGrid", [{
-									page : 1
-								}]);
+						$("mainGrid").setGridParam().trigger(
+						     		"reloadGrid",[{
+						     			page : 1
+						      }]);
 					});
 				}
-			});
+			}
 		});
 	});
-	
+	*/
 	$('#formSearch').keyup(function(event){
     	if(event.keyCode == 13){
     		$("#btn_search").click();
@@ -150,7 +143,7 @@ window.loc_onload = function(){
 	        rowNum:12,
 	        rowList:[10,20,30],
 	        viewrecords: true,
-	        multiselect:true,
+//	        multiselect:true,
 	        pager: '#mainGridPager'  
 	    });
 }
@@ -173,7 +166,7 @@ function fun_to_publish(id){
 			postData : {
 				"labelId" : id,
 				"dataStatusId" : 2,
-				"approveStatusId": 2
+				"approveInfo.approveStatusId": 2
 			},
 			onSuccess : function(data){
 				$.success('发布成功。',function(){

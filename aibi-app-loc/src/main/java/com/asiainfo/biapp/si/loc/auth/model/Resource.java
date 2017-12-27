@@ -4,12 +4,14 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.asiainfo.biapp.si.loc.base.entity.BaseEntity;
+
 /**
  * 
  * @author Administrator
  *
  */
-public class Resource {
+public class Resource  extends BaseEntity{
 
 	public final static String MENU = "LOC_MENU";
 	public final static String DOM = "LOC_DOM";
