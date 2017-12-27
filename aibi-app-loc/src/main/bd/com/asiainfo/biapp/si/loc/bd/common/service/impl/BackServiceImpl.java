@@ -21,7 +21,7 @@ public class BackServiceImpl implements IBackSqlService{
      * @return
      */
     private IBackSqlDao getBackDaoBean() {
-    	String dbType = "Mysql";
+    	String dbType = "Hive";
     	String backDaoBeanId = "back"+dbType+"DaoImpl";
     	IBackSqlDao backSqlDao = (IBackSqlDao)SpringContextHolder.getBean(backDaoBeanId);
         return backSqlDao;

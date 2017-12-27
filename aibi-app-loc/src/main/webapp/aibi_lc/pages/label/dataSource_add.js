@@ -143,6 +143,7 @@ window.loc_onload = function() {
 	    // sortname: 'invdate',//排序的字段名称 不需要的话可置为空
 	    // 取值取自colModel中的index字段
 	    viewrecords: true,
+	    rowNum:999,
 	    rownumbers: true,
 	    multiselect: false,
 	    // caption:"标题",
@@ -230,4 +231,31 @@ function fun_cnName(value,colName){
 	} else { 
 		return [true,""]; 
 	} 
+}
+function analysis(){
+	var tableName = $("#sourceTableName").val();
+	$.commAjax({
+		url:$.ctx + "/backSql/columns",
+		postData:{"tableName" : tableName},
+		onSuccess:function(data){
+			for(var i=0;i < data.data.length;i++){
+				if(data.data[i].data_type == "string"){
+					data.data[i].data_type = "2";
+				}else if(data.data[i].data_type == "integer"){
+					data.data[i].data_type = "1";
+				}
+				var dataRow = {
+					"sourceName" : data.data[i].col_name,
+					"cooColumnType" : data.data[i].data_type,
+					"columnCnName" : "",
+					"columnUnit" : data.data[i].comment,
+					"op" : ""
+				}
+				model.sortNum += 1;
+				$("#jsonmap").jqGrid("addRowData", model.sortNum, dataRow, "last");
+				debugger;
+				$("#jsonmap").jqGrid("editRow", model.sortNum);
+			}
+		}
+	})
 }

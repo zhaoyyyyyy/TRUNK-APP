@@ -31,10 +31,10 @@
 						<div class="form-inline ui-form">
 							<div class="clearfix">
 							<input id="sourceInfoList" name="sourceInfoList" type="text" value="" style="display:none" class="form-control mr10 ml10" />
-							<input id="configId" name="configId" type="text" value="" class="form-control mr10 ml10" />
+							<input id="configId" name="configId" type="text" value="" class="form-control mr10 ml10" style="display:none" />
 								<div class="form-group fleft">
-									<label for="exampleInputEmail3">表名称</label> <input v-model="sourceTableName" name="sourceTableName" type="text" class="form-control mr10 ml10" placeholder="表名称">
-									<button type="button" class="ui-btn ui-btn-default fright">解析</button>
+									<label for="exampleInputEmail3">表名称</label> <input v-model="sourceTableName" id="sourceTableName" name="sourceTableName" type="text" class="form-control mr10 ml10" placeholder="表名称">
+									<button onclick="analysis()" type="button" class="ui-btn ui-btn-default fright">解析</button>
 								</div>
 								<div class="form-group fleft ml30 mr100">
 									<label class="fleft mt5" for="exampleInputEmail3">表中文名</label>
