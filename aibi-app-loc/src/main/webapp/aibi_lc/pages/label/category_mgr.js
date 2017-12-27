@@ -1,6 +1,10 @@
 window.loc_onload = function() {
 	ztreeFunc();
 	labeltree();
+	//移动标签时所选中的节点ID
+	var transToData;
+	//移动标签时所选中的标签ID数组
+	var transData = new Array();
 	$("#dialog").dialog({
 	      height:164,
 	      width: 300,
@@ -11,6 +15,7 @@ window.loc_onload = function() {
 	      }
 	      
   });
+	//左边树
 	function ztreeFunc(){
 		var ztreeObj;
 		var obj = $("#preConfig_list").find("span");
@@ -190,13 +195,12 @@ window.loc_onload = function() {
 	       		}
         	})	        	
 		});
-	
 		};
 		function removeHoverDom(treeId, treeNode) {
 			$("#handle_" + treeNode.tId).unbind().remove();
 		};
 		
-
+		//展示选中分类下的标签
 		function zTreeOnClick(event, treeId, treeNode) {
 			var flag=false;
 		    $.commAjax({			
@@ -208,19 +212,20 @@ window.loc_onload = function() {
 					},
 			    onSuccess: function(data){ 		    			    			    	
 				    	var labelList=data.data;
-				    	
 				    	for(var i=0;i<labelList.length;i++){
-				    		var html="<li>"+
-					    		"<div class='checkbox'>"+
-					    		"<input type='checkbox' id='"+treeNode.categoryId+i+"' class='checkbix'>"+
-					    		"<label for='"+treeNode.categoryId+i+"' aria-label role='checkbox' class='checkbix' data-id='"+labelList[i].labelId+"'>"+
-					    		"<span class='large'></span>"+
-					    		labelList[i].labelName+
-					    		"</label>"+
-					    		"</div>"+
-					    		"</li>";
-					    		
-					    	$("#labelList").append(html);
+				    		checkID=treeNode.categoryId+i
+				    		if (! document.getElementById(checkID)){
+					    		var html="<li>"+
+						    		"<div class='checkbox'>"+
+						    		"<input type='checkbox' id='"+treeNode.categoryId+i+"' class='checkbix'>"+
+						    		"<label for='"+treeNode.categoryId+i+"' aria-label role='checkbox' class='checkbix' data-id='"+labelList[i].labelId+"'>"+
+						    		"<span class='large'></span>"+
+						    		labelList[i].labelName+
+						    		"</label>"+
+						    		"</div>"+
+						    		"</li>";
+						    	$("#labelList").append(html);
+				    		}
 					    }
 			    	}  
 	   		});
@@ -243,24 +248,21 @@ window.loc_onload = function() {
 		}
 	})
 	
-		
+	//获取选中标签ID
 	$("#ui-move").click(function(){
 		$(".label-dialog").addClass("active");
+		var i=0;
 		$("#labelList label[class~=active]").each(function(){
-			
-			transData($(this).attr("data-id"))
+			transData[i]=$(this).attr("data-id");
+			i++;
 		})
 	});
-	var transData=function(data){
-		return data;
-	}
-	
-	
 	$("#dialog-del").click(function(){
 		$(".label-dialog").removeClass("active");
 		$("#labelList").find("input[checked]");
 		console.log($("#labelList").find("input[checked]"))
 	});
+	//左边树模糊查询
 	var flag =false;
 	$("#btn_serach").click(function(){
 		var text = $("#exampleInputAmount").val();
@@ -272,24 +274,26 @@ window.loc_onload = function() {
 			flag =true;
 		}
 	});
+	//移动事件
 	$("#dialog-upd").click(function(){
-		
-		console.log(transData,transToData)
-		$.commAjax({			
-		    url : $.ctx+'/api/label/labelInfo/update',  		    
-		    dataType : 'json', 
-		    postData : {
-					"labelId" :transData,
-					"categoryId":transToData,
-				},
-		    onSuccess: function(data){ 
-		    	    $.alert(data.msg);
-			    	//console.log(data);
-			    	zTreeOnClick();
-		    	}  
-	   });
+		for(var i=0;i<transData.length;i++){
+			$.commAjax({			
+			    url : $.ctx+'/api/label/labelInfo/update',  		    
+			    dataType : 'json', 
+			    postData : {
+						"labelId" :transData[i],
+						"categoryId":transToData,
+					},
+			    onSuccess: function(data){ 
+			    	$.alert("移动标签成功");
+			    	$("#labelList").html("");
+			    	ztreeFunc();
+			    	labeltree();
+				}
+			});
+		}
 	});
-
+	//移动时的树
 	function labeltree(){
 		var ztreeObj;
 		var obj = $("#preConfig_list").find("span");
@@ -327,11 +331,8 @@ window.loc_onload = function() {
 			}
 		}
 	}
+	//获取移动时选中的节点
 	function dataClick(event, treeId, treeNode){
-		transToData(treeNode.categoryId)
+		transToData=treeNode.categoryId;
 	}
-	var transToData=function(data){
-		return data
-	}
-	
 }
