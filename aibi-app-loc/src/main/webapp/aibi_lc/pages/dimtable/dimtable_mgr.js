@@ -93,8 +93,8 @@ function del(dimId) {
 }
 function fun_to_detail(id) {
 	var wd = $.window('维表详情', $.ctx
-			+ '/aibi_lc/pages/dimtable/dimtable_detail.html?dimId=' + id, 800,
-			600);
+			+ '/aibi_lc/pages/dimtable/dimtable_detail.html?dimId=' + id, 500,
+			400);
 	wd.reload = function() {
 		$("#mainGrid").setGridParam({
 			postData : $("#formSearch").formToJson()
