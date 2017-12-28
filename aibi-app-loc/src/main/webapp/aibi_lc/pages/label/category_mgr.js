@@ -225,7 +225,11 @@ window.loc_onload = function() {
 	
 	//获取选中标签ID
 	$("#ui-move").click(function(){
-		$(".label-dialog").addClass("active");
+		if($(".label-dialog").hasClass("active")){
+			$(".label-dialog").removeClass("active");
+		}else{
+			$(".label-dialog").addClass("active");
+		}
 		transData = [];
 		var j=0;
 		$("#labelList label[class~=active]").each(function(){
@@ -270,6 +274,7 @@ window.loc_onload = function() {
 				    	$("#dialog-del").click();
 				    	//labeltree();
 				    	flag =true;
+				    	$(".label-dialog").removeClass("active");
 			    	}
 				}
 			});

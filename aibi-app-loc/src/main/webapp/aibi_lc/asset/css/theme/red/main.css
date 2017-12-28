@@ -852,7 +852,10 @@ span.del-btn{
 .add-dialog > .ui-form-group > .control-input{
 	width:100%;
 }
-
+/*页面最小高度*/
+.ui-table-static{
+	min-height:600px;
+}
 
 
 
