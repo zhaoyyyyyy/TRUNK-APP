@@ -32,14 +32,26 @@
 			<!-------------------查询条件 begin ------------------------>
 			<div class="ui-lc-mian">
 				<div class="ui-label-mes clearfix">
-					<span class="fleft">标签集市 &nbsp; &nbsp;共<b>88</b>个标签</span>
+					<span class="fleft">标签集市 &nbsp; &nbsp;共<b>{{page.totalCount}}</b>个标签</span>
 					<div class="form-group fright">
 						<div class="input-group">
-							<input type="text" class="form-control" id="exampleInputAmount" placeholder="请输入标签关键字">
-							<span class="input-group-addon input-group-icon right-child input-pointer"></span>
+							<input id="labelNameText" type="text" class="form-control" id="exampleInputAmount" placeholder="请输入标签关键字">
+							<span id="btn_search" onclick="labelMarket.btn_search()" class="input-group-addon input-group-icon right-child input-pointer"></span>
 						</div>
 					</div>
 				</div>
+				<form id="formSearch">
+					<input id="labelName" name="labelName" type="hidden">
+					<input id="configId" name="configId" type="hidden" />
+					<input id="categoryId" name="categoryId" type="hidden" />
+					<input id="orgId" name="orgId" type="hidden" />
+					<input id="publishTime" name="publishTime" type="hidden" />
+					<input id="updateCycle" name="updateCycle" type="hidden" />
+					<input id="sortCol" name="sortCol" type="hidden" />
+					<input id="sortOrder" name="sortOrder" type="hidden" />
+					<input id="publishTimeStart" name="publishTimeStart" type="hidden">
+					<input id="publishTimeEnd" name="publishTimeEnd" type="hidden">
+				</form>
 				<form>
 					<ul class="ui-label-system" >
 					<li class="not-border">
@@ -73,8 +85,8 @@
 						<div class="clearfix">
 							<label class="fleft">地市：</label>
 							<div class="fleft">
-								<a class="fleft all-active">全部</a>
-								<a href="javascript:;" :id="orgC.id" v-for="orgC in xzqhList"><em>{{orgC.fullName}}</em></a>
+								<a onclick="labelMarket.orgSearch(this)" id="allOrg" class="fleft all-active">全部</a>
+								<a onclick="labelMarket.orgSearch(this)" :name="orgC.id" :id="'org'+orgC.id" v-for="orgC in xzqhList"><em>{{orgC.fullName}}</em></a>
 							</div>
 						</div>
 					</li>
@@ -82,19 +94,19 @@
 						<div class="clearfix">
 							<label class="fleft">发布时间：</label>
 							<div class="fleft">
-								<a href="javascript:;" class="all-active fleft"><!-- all-active 去掉非选中状态 -->
+								<a href="javascript:;" onclick="labelMarket.changePublishTime(this)" id="allDate" class="all-active fleft"><!-- all-active 去掉非选中状态 -->
 									全部
 								</a>
-								<a href="javascript:;" class="fleft">
+								<a href="javascript:;" onclick="labelMarket.changePublishTime(this)" id="oneDay" class="fleft">
 									<em>一天</em>
 								</a>
-								<a href="javascript:;" class="fleft">
+								<a href="javascript:;" onclick="labelMarket.changePublishTime(this)" id="oneMonth" class="fleft">
 									<em>一个月</em>
 								</a>
-								<a href="javascript:;" class="fleft">
+								<a href="javascript:;" onclick="labelMarket.changePublishTime(this)" id="threeMonth" class="fleft">
 									<em>三个月</em>
 								</a>
-								<div class="control-input">
+								<!-- <div class="control-input">
 				        			<div class="control-input date-input fleft has-icon">
 						          	<input type="text" class="form-control input-pointer form-control-bubble" data-dismiss="formDatepicker#sendTime1"  id="" placeholder="请选择开始日期">
 						          	<span class="glyphicon-date form-control-feedback"></span>
@@ -103,7 +115,7 @@
 						          	<input type="text" class="form-control input-pointer form-control-bubble" data-dismiss="toDatepicker#sendTime1" id="" placeholder="请选择结束日期">
 						          	<span class="glyphicon-date form-control-feedback"></span>
 						        </div>
-					        </div>
+					        	</div> -->
 							</div>
 						</div>
 					</li>
@@ -111,8 +123,8 @@
 						<div id="Gxzq" class="clearfix" v-cloak>
 							<label class="fleft">更新周期：</label>
 							<div class="fleft">
-								<a class="fleft all-active">全部</a>
-								<a href="javascript:;" :id="g.code" v-for="g in gxzqList"><em>{{g.dataName}}</em></a>
+								<a onclick="labelMarket.ucSearch(this)" id="allUc" class="fleft all-active">全部</a>
+								<a href="javascript:;" onclick="labelMarket.ucSearch(this)" :name="g.code" :id="'updateCycle'+g.code" v-for="g in gxzqList"><em>{{g.dataName}}</em></a>
 							</div>
 						</div>
 					</li>
@@ -121,8 +133,8 @@
 			</div>
 			<!-------------------查询条件 end ------------------------>
 			<div class="ui-filter-bar ui-lc-mian">
-				<a href="javascript:;" class="active">人气</a>
-				<a href="javascript:;">发布时间</a>
+				<a onclick="labelMarket.changeSortCol(this)" id="customNum" name="labelExtInfo.customNum" class="fleft active">人气</a>
+				<a onclick="labelMarket.changeSortCol(this)" id="sortPublishTime" name="publishTime" class="fleft">发布时间</a>
 				<a href="javascript:;">
 					<em class="fleft">新标签：</em> 
 					<em	class="fleft">34563</em>
