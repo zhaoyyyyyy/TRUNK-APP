@@ -1,4 +1,6 @@
 window.loc_onload = function() {
+	var obj = $("#preConfig_list").find("span");
+	var configId =obj.attr("configId");
 	$('#form_search').keyup(function(event){
     	if(event.keyCode == 13){
     		$("#btn_search").click();
@@ -25,11 +27,13 @@ window.loc_onload = function() {
 		}
 	})
 	$("#btn_to_add").click(function(){
+		var data =$("#formSearch").formToJson();
+		data.configId =configId;
     	var wd = $.window('新增维表', $.ctx
-			+ '/aibi_lc/pages/dimtable/dimtable_add.html', 700, 400);
+			+ '/aibi_lc/pages/dimtable/dimtable_add.html?configId='+configId, 700, 400);
     	wd.reload = function() {
 			$("#mainGrid").setGridParam({
-				postData : $("#formSearch").formToJson()
+				postData : data
 			}).trigger("reloadGrid", [ {
 				page : 1
 			} ]);
@@ -40,6 +44,7 @@ window.loc_onload = function() {
 					{
 						url : $.ctx + "/api/dimtable/dimTableInfo/queryPage",
 						datatype : "json",
+						postData :{"configId": configId},
 						colNames : [ '序号', '维表表名', '操作' ],
 						colModel : [
 								{

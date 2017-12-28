@@ -7,12 +7,14 @@ var model = {
 window.loc_onload = function() {
 	var wd = frameElement.lhgDG;
 	var dimId = $.getUrlParam("dimId");
+	var configId = $.getUrlParam("configId");
 	$("#dimId").val(dimId);
 	if (dimId != null && dimId != "" && dimId != undefined) {
 		model.dimId = dimId;
 		$.commAjax({
 			postData : {
-				"dimId" : dimId
+				"dimId" : dimId,
+				"configId": configId
 			},
 			url : $.ctx + '/api/dimtable/dimTableInfo/get',
 			onSuccess : function(data) {
@@ -51,7 +53,7 @@ window.loc_onload = function() {
 		var dimValueCol = $.trim($("#dimValueCol").val());
 		if (dimTableName == "") {
 			$.alert("表名不允许为空");
-		} else if (codeColType == "请选择主键类型") {
+		} else if (codeColType == "") {
 			$.alert("请选择主键类型");
 		} else if(dimCodeCol != "" && dimValueCol == ""){$.alert("请输入描述字段名",300,30);}
 		else if(dimCodeCol == "" && dimValueCol != ""){$.alert("请输入主键字段名",300,30);}
@@ -60,9 +62,17 @@ window.loc_onload = function() {
 		} else if (dimValueCol != "" && !reg.test(dimValueCol)) {
 			$.alert("描述字段名只能以英文字母开头,包含数字、字母、下划线",300,30);
 		} else {
+			var data1 =$('#saveDataForm').formToJson();
+			data1.configId = configId;
 			$.commAjax({
 				url : url_,
-				postData : $('#saveDataForm').formToJson(),
+				postData :data1/*{
+					"dimTableName":dimTableName,
+					"codeColType":codeColType,
+					"dimCodeCol":dimCodeCol,
+					"dimValueCol":dimValueCol,
+					"configId":configId
+				}*/,
 				onSuccess : function(data) {
 					if(data.data == "success"){
 						$.success(msss, function() {

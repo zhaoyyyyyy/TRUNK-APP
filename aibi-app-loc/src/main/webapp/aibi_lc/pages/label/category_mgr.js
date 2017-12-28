@@ -243,8 +243,8 @@ window.loc_onload = function() {
 	});
 	//左边树模糊查询
 	var leftTreeInput ="";
+	var text;
 	$("#btn_serach").click(function(){
-		var text;
 		leftTreeInput = $("#exampleInputAmount").val();
 		if(leftTreeInput == ""){ztreeFunc(); return }
 		if(leftTreeInput !=text ){
