@@ -119,7 +119,6 @@ function fun_to_save(){
 					history.back(-1);
 				})
 			}
-			debugger
 		}
 		k++;
 	})
@@ -153,7 +152,10 @@ function fun_to_createRow(){
         sourceColumnRule : "",
         sourceId : "",
         sourceName : "",
-        sourceTableId : ""
+        sourceTableId : "",
+        dependIndex: false,
+        countRules : "",
+        updateCycle : ""
 	});
 }
 function getData(tag){	
@@ -164,6 +166,5 @@ function getData(tag){
 	}
 		
 }
-
 
 
