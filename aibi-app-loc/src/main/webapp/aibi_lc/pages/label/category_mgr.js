@@ -12,6 +12,7 @@ window.loc_onload = function() {
 	      autoOpen: false,
 	      open:function(){
 	      	ztreeFunc();
+	      	$(".ui-form-group ").css("display","block")
 	      }
 	      
   });

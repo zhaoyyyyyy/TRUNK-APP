@@ -844,7 +844,7 @@ span.del-btn{
 	bottom:0;
 	padding:10px
 }.add-dialog > .ui-form-group {
-	display:block;
+	display:none;
 }
 .add-dialog > .ui-form-group > .control-input{
 	width:100%;
