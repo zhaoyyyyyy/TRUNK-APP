@@ -32,8 +32,8 @@
 					<div class="ui-expand-search ui-reg-search">
 						<div class="form-inline ui-form">
 							<div class="clearfix">
-							<input id="sourceInfoList" name="sourceInfoList" type="text" value="" style="display:none" class="form-control mr10 ml10" />
-							<input id="configId" name="configId" type="text" value="" class="form-control mr10 ml10" style="display:none" />
+							<input id="sourceInfoList" name="sourceInfoList" type="hidden" class="form-control mr10 ml10" />
+							<input v-model="configId" id="configId" name="configId" type="hidden" class="form-control mr10 ml10"/>
 								<div class="form-group fleft">
 									<label for="exampleInputEmail3">表名称</label> <input v-model="sourceTableName" id="sourceTableName" name="sourceTableName" type="text" class="form-control mr10 ml10" placeholder="表名称">
 									<button onclick="analysis()" type="button" class="ui-btn ui-btn-default fright">解析</button>

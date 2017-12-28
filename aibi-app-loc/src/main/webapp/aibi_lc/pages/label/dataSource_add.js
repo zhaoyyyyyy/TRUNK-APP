@@ -14,10 +14,10 @@ var model = {
 	sortNum : 0,
 	gxzq : [],
 	sourceTableId : "",
+	configId : ""
 }
 window.loc_onload = function() {
-	var obj = $("#preConfig_list").find("span");
-	$("#configId").val(obj.attr("configId"));
+	model.configId = $.getCurrentConfigId();
 	
 	var dicGxzq = $.getDicData("GXZQZD");
 	for(var i=0; i<dicGxzq.length; i++){
