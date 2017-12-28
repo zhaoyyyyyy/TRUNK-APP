@@ -163,15 +163,15 @@ window.loc_onload = function() {
 	    	      click: function() {
 	    	        $( this ).dialog( "close" );
 	    	      }
-	        },{
+  	        },{
 	    	      text: "确定",
 	    	      "class":"ui-btn ui-btn-default",
 	    	      click: function() {
 	    	        $( this ).dialog( "close" );
 	    	      }
 	    	}
-	  ]
-});
+  	  ]
+  });
 	
 }
 
