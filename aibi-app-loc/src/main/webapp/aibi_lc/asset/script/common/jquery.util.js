@@ -79,6 +79,10 @@ $.extend({
 							}
 						} else if (obj.msg) {
 							$.alert(obj.msg);
+							try {
+								console.log(obj.execption+"1");
+							} catch (e) {
+							}
 						}
 					} else {
 						if ($.isFunction(options.onSuccess))

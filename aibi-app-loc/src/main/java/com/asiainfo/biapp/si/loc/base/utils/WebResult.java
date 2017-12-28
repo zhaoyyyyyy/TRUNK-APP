@@ -6,8 +6,9 @@
 
 package com.asiainfo.biapp.si.loc.base.utils;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.io.Writer;
 
 import com.asiainfo.biapp.si.loc.base.exception.BaseException;
 
@@ -183,20 +184,17 @@ public class WebResult<T extends Object> {
      * @return
      */
     public WebResult<T> fail(BaseException baseException){
-//    	 Map<String, Object> result = new HashMap<String, Object>();
-//         result.put(WebResult.Result.STATUS, baseException.getErrorCode());
-//         result.put(WebResult.Result.MSG, baseException.getMessage());
-//         result.put(WebResult.Result.LIST, null);
-//         return result;
-    	 //WebResult<T> webResult = new WebResult<>();
     	 this.setData(null);
-    	 this.setExecption(baseException.getStackTrace().toString());
+    	 final Writer result = new StringWriter();
+         final PrintWriter printWriter = new PrintWriter(result);
+         baseException.printStackTrace(printWriter);
     	 this.setMsg(baseException.getMessage());
     	 this.setStatus(baseException.getErrorCode());
+    	 
+    	 //记录日志
+    	 this.setExecption(result.toString());
+    	 LogUtil.error(baseException.getMessage(), baseException);
     	 return this;
     }
-
-
- 
 
 }
