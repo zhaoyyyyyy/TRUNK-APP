@@ -20,8 +20,10 @@ var dataModel = {
 		publishTime:"",
 		updateCycle:"",
 		sortOrder:"ASC",
-		sortCol:"customNum"
-
+		sortCol:"customNum",
+		isShow:false,
+		bdLsit:[],
+		childrenLabel:[],
 }
 var tagConfig  = {
 		"4" : "#numberValueSet" , // 指标型，存具体的指标值；
@@ -42,6 +44,7 @@ var tagConfig  = {
 window.loc_onload = function() {
 	//初始化参数
 	dataModel.configId = $.getCurrentConfigId();
+	var ulListId;
 	
 	/**
      * ------------------------------------------------------------------
@@ -68,6 +71,29 @@ window.loc_onload = function() {
     		},
     		setLabelAttr : function(index){
     			labelMarket.setLabelAttr(index);
+    		},
+    		toggle:function(categoryId,index){
+    			ulListId=index;
+    			$.commAjax({
+				    url: $.ctx + "/api/label/categoryInfo/queryList",
+				    postData:{
+				    	"sysId" :dataModel.configId,
+					    parentId :categoryId
+				    },
+					onSuccess: function(data){
+						dataModel.bdLsit = data.data;
+						$.commAjax({
+							url: $.ctx + "/api/label/categoryInfo/queryList",
+						    postData:{
+						    	"sysId" :dataModel.configId,
+							    parentId :dataModel.bdLsit.categoryId
+						    },
+						    onSuccess:function(data){
+						    	dataModel.childrenLabel = data.data;
+						    }
+						})
+				    }
+				});
     		}
     	}
     });
@@ -89,6 +115,24 @@ window.loc_onload = function() {
     		$("#btn_search").click();
     	}
     })
+	
+	$(".ui-label-system > li").each(function(e){
+		$(this).delegate(".labelItems","click",function(){
+			if($(this).hasClass('active')){
+				$(this).removeClass('active');
+				$(".ui-label-sec").hide();
+			}else{
+				$(this).addClass('active').siblings(".labelItems").removeClass("active");
+				var sysId=$(this).attr("sysid");
+				$(this).attr("data-id",sysId+ulListId);
+				$(".ui-label-sec").attr("data-id",sysId+ulListId);
+				if($(this).attr("data-id")==$(".ui-label-sec").attr("data-id")){
+					$(".ui-label-sec").show();
+				}
+			}
+		})
+	})
+	
 	
 	
 	//计算中心弹出/收起（下面）
