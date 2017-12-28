@@ -7,14 +7,13 @@ var model = {
 		cpxList : [],
 		xzqhList : [],
 		configDesc : "",
-		contractName : "",
 		dataAccessType : 0,
 		dataAccessType0 : 0,
 		sourceName : "",
 		sourceEnName : "",
 		invalidTime : "",
 		configId : "",
-		orgId : ""
+		num : 0
 }
 window.loc_onload = function() {
 	var configId = $.getUrlParam("configId");
@@ -28,9 +27,7 @@ window.loc_onload = function() {
 			},
 			onSuccess : function(data) {
 				model.configDesc = data.data.configDesc;
-				model.contractName = data.data.contractName;
 				model.dataAccessType = data.data.dataAccessType;
-				model.dataAccessType0 = data.data.dataAccessType;
 				model.sourceName = data.data.sourceName;
 				model.sourceEnName = data.data.sourceEnName;
 				model.orgId = data.data.orgId;
@@ -43,49 +40,25 @@ window.loc_onload = function() {
 		})
 	}else{
 		model.configDesc = "";
-		model.contractName = "";
 		model.dataAccessType = "";
-		model.dataAccessType0 = "";
 		model.sourceName = "";
 		model.sourceEnName = "";
-		model.invalidTime = "";
 		model.orgId = "";
+		model.invalidTime = "";
 	}
 	new Vue({
 		el : '#dataD',
 		data : model,
 		updated : function(){
-			$("#code"+model.orgId).click();
+			$("#type"+model.dataAccessType).click();
 			if(configId != null && configId != "" && configId != undefined){
-				$("#contractName").val(model.contractName);
-				if($("#contractName").val() == "" || $("#contractName").val() == null){
-					$("#contractName").val(1);
+				$("#orgId").val(model.orgId);
+				var value = $("#orgId").val();
+				if(value == "" || value == null){
+					$("#orgId").val(1);
 				}
 			}else{
-				$("#contractName").val(1);
-			}
-		},
-		methods : {
-			changeStatus:function(obj,orgType){
-				if(orgType == "1"){
-					model.showCpx = true;
-					model.showHyx = false;
-					model.showXzqh = false;
-				}
-				if(orgType == "2"){
-					model.showCpx = false;
-					model.showHyx = true;
-					model.showXzqh = false;
-				}
-				if(orgType == "3"){
-					model.showHyx = false;
-					model.showCpx = false;
-					model.showXzqh = true;
-				}
-				if(model.orgId != obj.value){
-					model.orgId = obj.value;
-					$("#contractName").val(1);
-				}
+				$("#orgId").val(1);
 			}
 		}
 	})
@@ -168,4 +141,25 @@ window.loc_onload = function() {
 		wd.cancel();
 	});
 }
-
+function changeStatus(obj){
+	if(obj.id == "type1"){
+		model.showCpx = true;
+		model.showHyx = false;
+		model.showXzqh = false;
+	}
+	if(obj.id == "type2"){
+		model.showCpx = false;
+		model.showHyx = true;
+		model.showXzqh = false;
+	}
+	if(obj.id == "type3"){
+		model.showHyx = false;
+		model.showCpx = false;
+		model.showXzqh = true;
+	}
+	if(model.dataAccessType != obj.value){
+		model.dataAccessType = obj.value;
+		model.num = 1;
+		$("#orgId").val(1);
+	}
+}

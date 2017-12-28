@@ -37,37 +37,31 @@
 							<div class="clearfix mt30">
 								<div class="form-group">
 									<label class="fleft mt5">专区类型</label>
-									<select v-model="dataAccessType" name="dataAccessType" dicCode="ZQLXZD" type="text" class="ml10 fleft form-control input-pointer"></select>
-								</div>
-							</div>
-							<div class="clearfix mt30">
-								<div class="form-group">
-									<label class="fleft mt5">组织</label>
 									<div class="ml20 control-input has-icon mt5">
 										<ul>
-											<li class="" v-for="z in zqlxList" style="display: inline"><input :value="z.orgCode" :orgType="z.orgType" :id="'code'+z.orgCode" @click="changeStatus(this,z.orgType)"
-												name="orgId" type="radio" /><span>{{z.fullName}}</span></li>
+											<li class="" v-for="z in zqlxList" style="display: inline"><input :value="z.orgType" :id="'type'+z.orgType" onclick="changeStatus(this)"
+												name="dataAccessType" type="radio" /><span>{{z.fullName}}</span></li>
 										</ul>
 									</div>
 								</div>
 							</div>
 							<div class="clearfix mt30">
 								<div v-if="showHyx==true" class="form-group">
-									<label>行业线</label> <select id="contractName" name="contractName" class="form-control ml10 input-pointer " >
+									<label>行业线</label> <select id="orgId" name="orgId" class="form-control ml10 input-pointer " >
 										<option value="1">请选择行业线</option>
-										<option v-for="h in hyxList" :value="h.fullName">{{h.fullName}}</option>
+										<option v-for="h in hyxList" :value="h.orgCode">{{h.fullName}}</option>
 									</select>
 								</div>
 								<div v-if="showCpx==true" class="form-group">
-									<label>产品线</label> <select id="contractName" name="contractName" class="form-control ml10 input-pointer " >
+									<label>产品线</label> <select id="orgId" name="orgId" class="form-control ml10 input-pointer " >
 										<option value="1">请选择产品线</option>
-										<option v-for="c in cpxList" :value="c.fullName">{{c.fullName}}</option>
+										<option v-for="c in cpxList" :value="c.orgCode">{{c.fullName}}</option>
 									</select>
 								</div>
 								<div v-if="showXzqh==true" class="form-group">
-									<label>行政区划</label> <select id="contractName" name="contractName" class="form-control ml10 input-pointer " >
+									<label>行政区划</label> <select id="orgId" name="orgId" class="form-control ml10 input-pointer " >
 										<option value="1">请选择行政区划</option>
-										<option v-for="x in xzqhList" :value="x.fullName">{{x.fullName}}</option>
+										<option v-for="x in xzqhList" :value="x.orgCode">{{x.fullName}}</option>
 									</select>
 								</div>
 							</div>
