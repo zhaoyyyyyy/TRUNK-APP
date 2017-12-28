@@ -5,6 +5,7 @@ window.loc_onload = function() {
 	var transToData;
 	//移动标签时所选中的标签ID数组
 	var transData = new Array();
+	var leftTreeCagyId;  //左边树选中的分类ID
 	$("#dialog").dialog({
 	      height:164,
 	      width: 300,
@@ -203,6 +204,7 @@ window.loc_onload = function() {
 		
 		//展示选中分类下的标签
 		function zTreeOnClick(event, treeId, treeNode) {
+			leftTreeCagyId =treeNode.categoryId;
 			showLabelInfo(treeNode.categoryId,2);
 		};		
 	}
@@ -260,6 +262,7 @@ window.loc_onload = function() {
 						"categoryId":transToData,
 					},
 			    onSuccess: function(data){ 
+			    	showLabelInfo(leftTreeCagyId,2)
 			    	if(!flag){
 				    	$.alert("移动标签成功");
 				    	$("#labelList").html("");
@@ -332,6 +335,7 @@ window.loc_onload = function() {
 			text =rightTreeInput;
 		}
 	});
+	//符合条件的标签的拼写
 	function showLabelInfo(labelInfo,number){
 		var obj = $("#preConfig_list").find("span");
 		var configId =obj.attr("configId");    //专区ID
