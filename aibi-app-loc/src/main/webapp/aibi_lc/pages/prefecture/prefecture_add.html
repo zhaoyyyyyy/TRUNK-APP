@@ -37,9 +37,9 @@
 							<div class="clearfix mt30">
 								<div class="form-group">
 									<label class="fleft mt5">专区类型</label>
-									<div class="ml20 control-input has-icon mt5">
+									<div class="ml10 control-input has-icon mt5">
 										<ul>
-											<li class="" v-for="z in zqlxList" style="display: inline"><input :value="z.orgType" :id="'type'+z.orgType" onclick="changeStatus(this)"
+											<li class="ml10" v-for="z in zqlxList" style="display: inline"><input :value="z.orgType" :id="'type'+z.orgType" onclick="changeStatus(this)"
 												name="dataAccessType" type="radio" /><span>{{z.fullName}}</span></li>
 										</ul>
 									</div>

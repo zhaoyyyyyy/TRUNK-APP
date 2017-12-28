@@ -110,8 +110,6 @@ window.loc_onload = function() {
 	        align: "center",
 	        editrules: {
 	        	required: true,
-	        	custom: true,
-	        	custom_func: fun_cnName
 	        }
 	    },
 	    {
@@ -224,14 +222,6 @@ function fun_to_save() {
 		}
 	})
 }
-function fun_cnName(value,colName){
-	var patrn=/[^\u4e00-\u9fa5]/;
-	if (patrn.test(value)) { 
-		return [false,"请在["+colName+"]列输入中文"];
-	} else { 
-		return [true,""]; 
-	} 
-}
 function analysis(){
 	var tableName = $("#sourceTableName").val();
 	$.commAjax({
@@ -253,7 +243,6 @@ function analysis(){
 				}
 				model.sortNum += 1;
 				$("#jsonmap").jqGrid("addRowData", model.sortNum, dataRow, "last");
-				debugger;
 				$("#jsonmap").jqGrid("editRow", model.sortNum);
 			}
 		}
