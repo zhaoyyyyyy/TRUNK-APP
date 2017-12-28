@@ -16,39 +16,35 @@
     <![endif]-->
 </head>
 <body>
-	<div class="iframe-nest">
+	<div  id="dataD" class="iframe-nest" v-cloak >
 		<div class="ui-lc-mian">
-			<h3>维表新增</h3>
 			<form id="saveDataForm">
-				<input type="hidden" id="dimId" name="dimId" />
+				<input type="hidden" id="dimId" name="dimId"  v-model="dimId"/>
 				<div class="clearfix">
 					<div class="form-group ml30">
 						<label class="fleft mt5" for="exampleInputEmail3">*&nbsp;表名:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
 						<div class="control-input ml20 has-icon">
-							<input name="dimTableName" type="text" class="form-control "
-								id="dimTablename" maxlength="28" placeholder="请输入表名" />
+							<input name="dimTableName" type="text" class="form-control " v-model="dimTableName"
+								id="dimTableName" maxlength="28" placeholder="请输入表名" />
 						</div>
 					</div>
 				</div>
 				<div class="clearfix">
 					<div class="form-group ml30 mt20">
-						<label class="fleft mt5" for="exampleInputEmail3">*主键类型:</label>
+						<label class="fleft mt5 " for="exampleInputEmail3">*主键类型:</label>
 						<div class="control-input  ml20 has-icon">
-							<select name="codeColType" class="form-control"
-								id="dimCodeColType">
-								<option>请选择主键类型</option>
-								<option>数字</option>
-								<option>字符串</option>
+							<select name="codeColType" class="form-control" dicCode="ZDLXZD"
+								id="codeColType" v-model="codeColType">
 							</select>
 						</div>
 					</div>
 				</div>
 				<div class="clearfix">
 					<div class="form-group ml30 mt20">
-						<label class="fleft mt5" for="exampleInputEmail3">*主键字段名:</label>
-						<div class="control-input has-icon">
-							<input name="dimCodeCol" type="text" class="form-control ml10"
-								id="dimCodeCol" maxlength="28" placeholder="请输入主键字段名" /> <span
+						<label class="fleft mt5" for="exampleInputEmail3">主键字段名:</label>
+						<div class="control-input has-icon ml10">
+							<input name="dimCodeCol" type="text" class="form-control "
+								id="dimCodeCol" maxlength="28" placeholder="请输入主键字段名" v-model="dimCodeCol"/> <span
 								id="dimCodeColTxtTip" class="fleft columnGreenTip"
 								title="主键字段名只能以英文字母开头,包含数字、字母、下划线">?</span>
 						</div>
@@ -56,9 +52,9 @@
 				</div>
 				<div class="clearfix">
 					<div class="form-group ml30 mt20">
-						<label class="fleft mt5" for="exampleInputEmail3">*描述字段名:</label>
-						<div class="control-input has-icon">
-							<input name="dimValueCol" type="text" class="form-control ml10"
+						<label class="fleft mt5" for="exampleInputEmail3">描述字段名:</label>
+						<div class="control-input has-icon ml10">
+							<input name="dimValueCol" type="text" class="form-control " v-model="dimValueCol"
 								id="dimValueCol" maxlength="28" placeholder="请输入描述字段名" /> <span
 								id="dimCodeColTxtTip" class="fleft columnGreenTip"
 								title="主键字段名只能以英文字母开头,包含数字、字母、下划线">?</span>
@@ -79,7 +75,7 @@
 						</a>
 					</div>
 				</div>
-				<div>
+				<!-- <div>
 					<div class="ui-reg-grid">
 						<div class="ui-grid-button clearfix mt20">
 							<button onclick="fun_to_save()" type="button"
@@ -88,7 +84,7 @@
 								type="button" class="ui-btn ui-btn-second ">返回维表管理</button>
 						</div>
 					</div>
-				</div>
+				</div> -->
 			</form>
 		</div>
 	</div>

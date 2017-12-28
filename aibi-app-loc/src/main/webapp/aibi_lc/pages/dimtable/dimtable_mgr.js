@@ -24,6 +24,17 @@ window.loc_onload = function() {
 			} ]);
 		}
 	})
+	$("#btn_to_add").click(function(){
+    	var wd = $.window('新增维表', $.ctx
+			+ '/aibi_lc/pages/dimtable/dimtable_add.html', 700, 400);
+    	wd.reload = function() {
+			$("#mainGrid").setGridParam({
+				postData : $("#formSearch").formToJson()
+			}).trigger("reloadGrid", [ {
+				page : 1
+			} ]);
+    	}
+    })
 	$("#mainGrid")
 			.jqGrid(
 					{
@@ -69,7 +80,9 @@ window.loc_onload = function() {
 												+ v + "\" )'>删除</button>"
 									}
 								} ],
-						pager : '#mainGridPager'
+								rowList: [10, 20, 30],
+						        pager: '#mainGridPager',
+						        viewrecords: true,
 					});
 }
 function del(dimId) {
@@ -94,7 +107,7 @@ function del(dimId) {
 function fun_to_detail(id) {
 	var wd = $.window('维表详情', $.ctx
 			+ '/aibi_lc/pages/dimtable/dimtable_detail.html?dimId=' + id, 500,
-			400);
+			300);
 	wd.reload = function() {
 		$("#mainGrid").setGridParam({
 			postData : $("#formSearch").formToJson()
@@ -104,5 +117,13 @@ function fun_to_detail(id) {
 	}
 }
 function fun_to_edit(dimId){
-	window.location='dimtable_add.html?dimId='+dimId;
+	var wd = $.window('编辑专区', $.ctx
+			+ '/aibi_lc/pages/dimtable/dimtable_add.html?dimId=' + dimId, 700, 400);
+	wd.reload = function() {
+		$("#mainGrid").setGridParam({
+			postData : $("#formSearch").formToJson()
+		}).trigger("reloadGrid", [ {
+			page : 1
+		} ]);
+	}
 }
