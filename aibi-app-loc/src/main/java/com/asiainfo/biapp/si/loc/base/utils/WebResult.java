@@ -36,6 +36,7 @@ public class WebResult<T extends Object> {
 
 	private String status ;
 	private String msg ;
+	private String execption ;
 	private T data;
 	
     /**
@@ -108,20 +109,20 @@ public class WebResult<T extends Object> {
 //        
 //    }
 
-    
-
+	public String getExecption() {
+		return execption;
+	}
+	public void setExecption(String execption) {
+		this.execption = execption;
+	} 
 
 	public String getStatus() {
 		return status;
 	}
 
-
-
 	public void setStatus(String status) {
 		this.status = status;
 	}
-
-
 
 	public String getMsg() {
 		return msg;
@@ -189,9 +190,13 @@ public class WebResult<T extends Object> {
 //         return result;
     	 //WebResult<T> webResult = new WebResult<>();
     	 this.setData(null);
+    	 this.setExecption(baseException.getStackTrace().toString());
     	 this.setMsg(baseException.getMessage());
     	 this.setStatus(baseException.getErrorCode());
     	 return this;
-    }  
+    }
+
+
+ 
 
 }

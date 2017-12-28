@@ -5,22 +5,32 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
+
+import com.asiainfo.biapp.si.loc.auth.model.User;
+import com.asiainfo.biapp.si.loc.auth.utils.AuthUtils;
 
 @Component
 public class LogUtil {
 
     private static Map<String, Logger> loggerMap = new HashMap<>();
 
-    private static final String LEVEL_DEBUG = "DEBUG";
-
-    private static final String LEVEL_INFO = "INFO";
-
-    private static final String LEVEL_WARN = "WARN";
-
-    private static final String LEVEL_ERROR = "ERROR";
+    private static final String LEVEL_DEBUG = "0";
+    private static final String LEVEL_ERROR = "1";
+    private static final String LEVEL_INFO = "2";
+    private static final String LEVEL_WARN = "3";
+    
+//    private static final String LEVEL_DEBUG = "DEBUG";
+//    private static final String LEVEL_INFO = "INFO";
+//    private static final String LEVEL_WARN = "WARN";
+//    private static final String LEVEL_ERROR = "ERROR";
+    
 
     private static String jauthUrl;
 
@@ -144,18 +154,19 @@ public class LogUtil {
      */
     private static void saveLog(String level, String threadName, String interfaceUrl, String method, Object msg) {
         try {
-            // 组装http远程调用
-//            System.out.println(interfaceUrl + "========method==" + method + "=========msg===" + msg + "threadName==="
-//                    + threadName);
+        	HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+        	String token = AuthUtils.getTokenByRequest(request);
+        	User user = AuthUtils.getUserByToken(token);
+           
+        	// 组装http远程调用
             Map<String, Object> params = new HashMap<>();
 
-            params.put("userId", "admin");
-            params.put("ipAddr", "127.0.0.1");
-            params.put("opTime", new Date());
-
+            params.put("userId", user.getUserId());
+            params.put("ipAddr", request.getRequestURI());
+            params.put("token", token);
+            params.put("opTime",DateUtil.date2String(new Date()));
             params.put("sysId", nodeName);
             params.put("nodeName", nodeName);
-
             params.put("levelId", level);
             params.put("threadName", threadName);
             params.put("interfaceUrl", interfaceUrl + "/" + method);
@@ -163,6 +174,7 @@ public class LogUtil {
 
             HttpUtil.sendPost(jauthUrl + "/api/monitor/save", params);
         } catch (Exception e) {
+        	e.printStackTrace();
         	//LogUtil.error("给JAUTH同步日志出错",e);
         }
     }
