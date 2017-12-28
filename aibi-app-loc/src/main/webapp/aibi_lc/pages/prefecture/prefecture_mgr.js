@@ -70,8 +70,8 @@ window.loc_onload = function() {
             align: "center"
         },
         {
-            name: 'orgId',
-            index: 'orgId',
+            name: 'contractName',
+            index: 'contractName',
             width: 30,
             sortable: true,
             frozen: true,
@@ -91,7 +91,7 @@ window.loc_onload = function() {
             width: 30,
             align: "center",
             formatter: function(v) {
-                return $.getCodeDesc('ZZLXZD', v)
+                return $.getCodeDesc('ZQLXZD', v)
             }
         },
         {
@@ -117,12 +117,10 @@ window.loc_onload = function() {
                     } else if(data.configStatus != 3){
                     	html += '<button onclick="fun_to_start(\''+data.configId+'\')" type="button" class="btn btn-default  ui-table-btn ui-table-btn">启用</button>';
                     }
-                	if (data.configStatus != 3 && data.configStatus != 0) {
-                		html += '<button onclick="fun_to_edit(\''+data.configId+'\')" type="button" class="btn btn-default ui-table-btn ui-table-btn">修改</button>'; 
-                	}
                     if (data.configStatus == 2) {
                         html += '<button onclick="fun_to_down(\''+data.configId+'\')" type="button" class="btn btn-default  ui-table-btn ui-table-btn">下线</button>';
                     }
+                    html += '<button onclick="fun_to_edit(\''+data.configId+'\')" type="button" class="btn btn-default ui-table-btn ui-table-btn">修改</button>'; 
             	}
                 return html;
             }

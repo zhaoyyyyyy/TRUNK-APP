@@ -36,17 +36,17 @@
 							</div>
 							<div class="clearfix mt30">
 								<div class="form-group">
-									<label class="fleft mt5">专区英文名</label>
-									<input v-model="sourceEnName" name="sourceEnName" type="text"  class="fleft form-control mr10 ml10" placeholder="专区英文名称" />
+									<label class="fleft mt5">专区类型</label>
+									<select v-model="dataAccessType" name="dataAccessType" dicCode="ZQLXZD" type="text" class="ml10 fleft form-control input-pointer"></select>
 								</div>
 							</div>
 							<div class="clearfix mt30">
 								<div class="form-group">
-									<label class="fleft mt5">专区类型</label>
+									<label class="fleft mt5">组织</label>
 									<div class="ml20 control-input has-icon mt5">
 										<ul>
-											<li class="" v-for="z in zqlxList" style="display: inline"><input :value="z.orgType" :id="'type'+z.orgType" onclick="changeStatus(this)"
-												name="dataAccessType" type="radio" /><span>{{z.fullName}}</span></li>
+											<li class="" v-for="z in zqlxList" style="display: inline"><input :value="z.orgCode" :orgType="z.orgType" :id="'code'+z.orgCode" @click="changeStatus(this,z.orgType)"
+												name="orgId" type="radio" /><span>{{z.fullName}}</span></li>
 										</ul>
 									</div>
 								</div>
