@@ -71,6 +71,22 @@ public class BackServiceImpl implements IBackSqlService{
 	public Integer queryCount(String selectSql) {
 		return getBackDaoBean().queryCount(selectSql);
 	}
-	
+
+    @Override
+    public boolean dropTable(String tableName) {
+        return getBackDaoBean().dropTable(tableName);
+    }
+    
+    /**
+     * 
+     * Description: 重命名表
+     *
+     * @param oldTableName 旧表名
+     * @param newTableName 新表明
+     * @return
+     */
+    public boolean renameTable(String oldTableName, String newTableName) {
+        return getBackDaoBean().renameTable(oldTableName, newTableName);
+    }
 
 }

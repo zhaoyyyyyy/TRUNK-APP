@@ -35,6 +35,23 @@ public class BaseConstants {
 	public static final String SYS_BGDB_USERNAME = "LOC_CONFIG_SYS_BGDB_USERNAME";
 	
 	public static final String SYS_BGDB_PASSWORD = "LOC_CONFIG_SYS_BGDB_PASSWORD";
+
 	
+	/**
+	 * 后台数据库类型：MYSQL、TERA、GBASE、GBASE、sparksql、vertica、gaussmpp
+	 */
+    /** MYSQL */
+    public static final String DBMS_MYSQL = "MYSQL";
+    /** TERA */
+    public static final String DBMS_TERA = "TERA";
+    /** GBASE */
+    public static final String DBMS_GBASE = "GBASE";
+    /** sparksql */
+    public static final String DBMS_SPARKSQL = "SPARKSQL";
+    /** vertica */
+    public static final String DBMS_VERTICA = "VERTICA";
+    /** gaussmpp */
+    public static final String DBMS_GAUSSMPP = "GAUSSMPP";
+    
 	
 }

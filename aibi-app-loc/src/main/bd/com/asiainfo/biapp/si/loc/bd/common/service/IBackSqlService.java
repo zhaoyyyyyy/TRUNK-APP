@@ -93,4 +93,23 @@ public interface IBackSqlService {
      * @return
      */
     public Integer queryCount(String selectSql);
+    
+    /**
+     * 
+     * Description: 删除表
+     *
+     * @param tableName 表名
+     * @return
+     */
+    public boolean dropTable(String tableName);
+    
+    /**
+     * 
+     * Description: 重命名表
+     *
+     * @param oldTableName 旧表名
+     * @param newTableName 新表明
+     * @return
+     */
+    public boolean renameTable(String oldTableName, String newTableName);
 }
