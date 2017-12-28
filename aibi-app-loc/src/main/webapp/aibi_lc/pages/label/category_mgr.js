@@ -327,6 +327,17 @@ window.loc_onload = function() {
 		var text =$("#exampleInputAmount1").val();
 		showLabelInfo(text,1);
 	})
+	//全部分类当前分类判断
+	$("#radioList .radio").each(function(){
+		$(this).on("click",function(){
+			if($(this).find("label").hasClass('active')){
+				$(this).find("label").removeClass('active');
+			}else{
+				$(this).find("label").addClass('active').parents(".radio").siblings(".radio").find("label").removeClass('active');
+			}
+		})
+		
+	})
 	//右边树的模糊查询
 	var rightTreeInput ="";
 	$("#btn_serach2").click(function(){
