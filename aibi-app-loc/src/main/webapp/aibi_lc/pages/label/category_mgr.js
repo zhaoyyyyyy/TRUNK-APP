@@ -60,9 +60,9 @@ window.loc_onload = function() {
 	        if (treeNode.editNameFlag || $("#addBtn_" + treeNode.tId).length > 0)
 	            return;
 	        var addStr = "<div class='button add label-handles' id='handle_" + treeNode.tId
-	                + "'  title='add node'><a id='updBtn_" + treeNode.tId+ "'  class='setting'></a><a id='delBtn_" + treeNode.tId
-	                + "'  class='del'></a><a id='addBtn_" + treeNode.tId
-	                + "'  class='add'></a></div>";
+	                + "'  ><a id='updBtn_" + treeNode.tId+ "'  class='setting' title='修改'></a><a id='delBtn_" + treeNode.tId
+	                + "'  class='del' title='删除'></a><a id='addBtn_" + treeNode.tId
+	                + "'  class='add' title='添加'></a></div>";
 	        sObj.after(addStr);
 	        var btnAdd = $("#addBtn_" + treeNode.tId);	
 	        //增加节点
@@ -202,35 +202,7 @@ window.loc_onload = function() {
 		
 		//展示选中分类下的标签
 		function zTreeOnClick(event, treeId, treeNode) {
-			$("#labelList").html("");
-			var flag=false;
-		    $.commAjax({			
-			    url : $.ctx+'/api/label/labelInfo/queryList',  		    
-			    dataType : 'json', 
-			    async:true,
-			    postData : {
-						"categoryId" :treeNode.categoryId,
-					},
-			    onSuccess: function(data){ 		    			    			    	
-				    	var labelList=data.data;
-				    	for(var i=0;i<labelList.length;i++){
-				    		checkID=treeNode.categoryId+i
-				    		if (! document.getElementById(checkID)){
-					    		var html="<li>"+
-						    		"<div class='checkbox'>"+
-						    		"<input type='checkbox' id='"+treeNode.categoryId+i+"' class='checkbix'>"+
-						    		"<label for='"+treeNode.categoryId+i+"' aria-label role='checkbox' class='checkbix' data-id='"+labelList[i].labelId+"'>"+
-						    		"<span class='large'></span>"+
-						    		labelList[i].labelName+
-						    		"</label>"+
-						    		"</div>"+
-						    		"</li>";
-						    	$("#labelList").append(html);
-				    		}
-					    }
-			    	}  
-	   		});
-		    
+			showLabelInfo(treeNode.categoryId,2);
 		};		
 	}
 	//标签全部选中
@@ -290,9 +262,9 @@ window.loc_onload = function() {
 			    	if(!flag){
 				    	$.alert("移动标签成功");
 				    	$("#labelList").html("");
-				    	ztreeFunc();
+				    	//ztreeFunc();
 				    	$("#dialog-del").click();
-				    	labeltree();
+				    	//labeltree();
 				    	flag =true;
 			    	}
 				}
@@ -344,8 +316,28 @@ window.loc_onload = function() {
 	//标签部分的模糊查询
 	$("#btn_serach1").click(function(){
 		var text =$("#exampleInputAmount1").val();
+		showLabelInfo(text,1);
+	})
+	//右边树的模糊查询
+	var rightTreeInput ="";
+	$("#btn_serach2").click(function(){
+		var text;
+		rightTreeInput = $("#exampleInputAmount2").val();
+		if(rightTreeInput == ""){labeltree(); return }
+		if(rightTreeInput !=text ){
+			var treeObj = $.fn.zTree.getZTreeObj("labeltree");
+			var zTreeNodes = treeObj.getNodesByParamFuzzy("categoryName", rightTreeInput, null);
+			$.fn.zTree.init($("#labeltree"), install, zTreeNodes);
+			text =rightTreeInput;
+		}
+	});
+	function showLabelInfo(labelInfo,number){
 		var obj = $("#preConfig_list").find("span");
-		var configId =obj.attr("configId");
+		var configId =obj.attr("configId");    //专区ID
+		var text;			//模糊查询时的关键字
+		var categoryId;    //标签分类ID
+		if(number == 1){text = labelInfo}		//标签的模糊查询
+		if(number == 2){categoryId = labelInfo}						//选中节点展示标签
 		$.commAjax({			
 		    url : $.ctx+'/api/label/labelInfo/queryList',  		    
 		    dataType : 'json', 
@@ -353,6 +345,7 @@ window.loc_onload = function() {
 		    postData : {
 					"labelName" :text,
 					"configId" :configId,
+					"categoryId" :categoryId,
 				},
 		    onSuccess: function(data){
 		    	$("#labelList").html("");
@@ -372,18 +365,5 @@ window.loc_onload = function() {
 		    	}
 		    }  
 	   });
-	})
-	//右边树的模糊查询
-	var rightTreeInput ="";
-	$("#btn_serach2").click(function(){
-		var text;
-		rightTreeInput = $("#exampleInputAmount2").val();
-		if(rightTreeInput == ""){labeltree(); return }
-		if(rightTreeInput !=text ){
-			var treeObj = $.fn.zTree.getZTreeObj("labeltree");
-			var zTreeNodes = treeObj.getNodesByParamFuzzy("categoryName", rightTreeInput, null);
-			$.fn.zTree.init($("#labeltree"), install, zTreeNodes);
-			text =rightTreeInput;
-		}
-	});
+	}
 }
