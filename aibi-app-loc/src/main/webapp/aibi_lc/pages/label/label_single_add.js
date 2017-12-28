@@ -14,6 +14,7 @@ var model = {
 		nodeName:"",
 		categoryName:"",
 		tagNode:"",
+		categoryId:"",
 }
 
 function changeStatus(obj){
@@ -227,9 +228,10 @@ function ztreeFunc(){
 		function zTreeOnClick(event, treeId, treeNode) {
 			model.nodeName=treeNode;
 			model.categoryName=treeNode.categoryName;
+			model.categoryId=treeNode.categoryId;
 			$(model.tagNode).val(model.categoryName);
+			$(model.tagNode).siblings("input").val(model.categoryId);
 			$(".ui-form-ztree").removeClass("open");
-			
 		};		
 	}
 
