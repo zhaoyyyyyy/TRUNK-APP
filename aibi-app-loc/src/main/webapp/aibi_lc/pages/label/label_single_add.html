@@ -102,8 +102,12 @@
                                     </div>
                                     <div class="ui-form-group">
                                         <label for="categoryId" class="control-label">标签分类</label>
-                                        <div class="control-input">
-                                            <input type="text" class="form-control" id="categoryId" name="categoryId">
+                                        <div class="control-input ui-form-ztree">
+                                            <input type="text" class="form-control" id="categoryId" name="categoryId" v-model="nodeName.categoryName" onclick="openTtee(this)" readonly>
+                                            <div class="dropdown-menu">
+                                            	<ul id="ztree" class="ztree">
+												</ul>
+                                            </div>
                                         </div>                             
                                     </div>        
                                 </div>

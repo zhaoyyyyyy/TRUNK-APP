@@ -512,6 +512,9 @@
 	border: 1px solid #E9E9E9;
 	border-radius: 6px;
 }
+.create-main .ui-main{
+	overflow:visible;
+}
 .create-main.active,
 .create-main:hover{
 	border-radius: 6px;

@@ -10,7 +10,8 @@ var model = {
 		arrs:[],
 		labelInfoList:[],
 		readCycle : "",
-		read : ""
+		read : "",
+		nodeName:"",
 }
 
 function changeStatus(obj){
@@ -96,7 +97,6 @@ window.loc_onload = function() {
   		dayNamesMin: [ "日", "一", "二", "三", "四", "五", "六" ],
   		monthNamesShort: [ "一月", "二月", "三月", "四月", "五月", "六月", "七月", "八月", "九月", "十月", "十一月", "十二月" ]
   	});
-	
 }
 
 function fun_to_save(){
@@ -166,5 +166,65 @@ function getData(tag){
 	}
 		
 }
+
+
+function openTtee(tag){
+	var e = document.all ? window.event : arguments[0] ? arguments[0] : event;
+	e.stopPropagation?e.stopPropagation():e.cancelBubble=true;
+	if($(tag).parent(".ui-form-ztree").hasClass("open")){
+		$(tag).parent(".ui-form-ztree").removeClass("open")
+	}else{
+		$(tag).parent(".ui-form-ztree").addClass("open");
+		$(tag).parent(".ui-form-ztree").find(".dropdown-menu").css("width",100+"%");
+		ztreeFunc();
+		
+	}
+}
+
+
+function ztreeFunc(){
+		var ztreeObj;
+		var obj = $("#preConfig_list").find("span");
+		var labelId =obj.attr("configId");				
+		$.commAjax({			
+		    url : $.ctx+'/api/label/categoryInfo/queryList',  		    
+		    dataType : 'json', 
+		    async:true,
+		    postData : {
+					"sysId" :labelId,
+				},
+		    onSuccess: function(data){ 		    			    			    	
+			    	var ztreeObj=data.data;
+			    	$.fn.zTree.init($("#ztree"), setting, ztreeObj)
+		    	}  
+	   });
+		setting = {
+			view: {
+				selectedMulti: false,
+			},
+			data: {
+				selectedMulti: false,			
+				simpleData: {  
+	                enable: true,   //设置是否使用简单数据模式(Array)  	                    
+	            },  
+	            key: {             	
+	            	idKey: "sysId",    //设置节点唯一标识属性名称  
+	                pIdKey: "parentId" ,     //设置父节点唯一标识属性名称  
+	                name:'categoryName',//zTree 节点数据保存节点名称的属性名称  
+	                title: "categoryName"//zTree 节点数据保存节点提示信息的属性名称        
+	            }  
+			},
+			callback: {
+				onClick: zTreeOnClick
+			}
+		}		
+		
+		//展示选中分类下的标签
+		function zTreeOnClick(event, treeId, treeNode) {
+			model.nodeName=treeNode;
+			$(".ui-form-ztree").removeClass("open");
+		};		
+	}
+
 
 
