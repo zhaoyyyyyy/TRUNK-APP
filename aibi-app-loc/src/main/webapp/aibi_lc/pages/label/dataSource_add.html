@@ -29,13 +29,15 @@
 			<div class="ui-lc-mian">
 				<form id="formData">
 				<input id="sourceTableId" name="sourceTableId" v-model="sourceTableId" type="hidden" />
-					<div class="ui-expand-search ui-reg-search">
+					
+					<!--<div class="ui-expand-search ui-reg-search">
 						<div class="form-inline ui-form">
 							<div class="clearfix">
 							<input id="sourceInfoList" name="sourceInfoList" type="hidden" class="form-control mr10 ml10" />
 							<input v-model="configId" id="configId" name="configId" type="hidden" class="form-control mr10 ml10"/>
 								<div class="form-group fleft">
-									<label for="exampleInputEmail3">表名称</label> <input v-model="sourceTableName" id="sourceTableName" name="sourceTableName" type="text" class="form-control mr10 ml10" placeholder="表名称">
+									<label for="exampleInputEmail3">表名称</label> 
+									<input v-model="sourceTableName" id="sourceTableName" name="sourceTableName" type="text" class="form-control mr10 ml10" placeholder="表名称">
 									<button onclick="analysis()" type="button" class="ui-btn ui-btn-default fright">解析</button>
 								</div>
 								<div class="form-group fleft ml30 mr100">
@@ -89,6 +91,84 @@
 							
 						</div>
 					</div>
+					-->
+					
+					<div class="clearfix create-main mt10 dataSource-tab">
+			            <div class="form-horizontal fleft ui-form">
+			                <div class="ui-form-group">
+			                	<input id="sourceInfoList" name="sourceInfoList" type="hidden" class="form-control mr10 ml10" />
+								<input v-model="configId" id="configId" name="configId" type="hidden" class="form-control mr10 ml10"/>      	
+			                    <label class="control-label" for="exampleInputEmail3">表名称</label> 
+			                        <div class="control-input">
+			                            <input v-model="sourceTableName" id="sourceTableName" name="sourceTableName" type="text" class="form-control mr10 ml10" placeholder="表名称">
+			                        </div>
+			                        <button onclick="analysis()" type="button" class="ui-btn ui-btn-default fright">解析</button>
+			                </div>
+							<div class="ui-form-group">
+			                    <label class="control-label" for="exampleInputEmail3">日期分区字段</label> 
+			                    <div class="control-input">
+			                        <input v-model="dateColumnName" name="dateColumnName" type="text" class="form-control ml10" placeholder="日期分区字段">
+			                    </div>
+			                </div>
+				            <div class="ui-form-group">
+				                    <label class="control-label" for="exampleInputEmail3">字段名称</label>
+				                    <div class="control-input">
+				                        <input v-model="idColumn" name="idColumn" type="text" class="form-control ml10" id="exampleInputEmail3" placeholder="来源主键字段名称">
+				                    </div>
+				                </div>
+				        </div>
+			            <div class="form-horizontal fleft ui-form">
+			                <div class="ui-form-group">
+			                   <label class="control-label" for="exampleInputEmail3" >表中文名</label>
+			                    <div class="control-input">
+			                        <input v-model="sourceTableCnName" name="sourceTableCnName" type="text" class="form-control ml10" id="exampleInputEmail3" placeholder="表中文名">
+			                    </div>
+			                </div>
+			                <div class="ui-form-group">
+			                   <label class="control-label" for="exampleInputEmail3">过滤条件</label>
+			                    <div class="control-input">
+			                        <input v-model="whereSql" name="whereSql" type="text" class="form-control ml10" placeholder="过滤条件">
+			                    </div>
+			                </div>
+			                <div class="ui-form-group">
+			                   <label class="control-label" for="exampleInputEmail3">标识类型</label>
+			                    <div class="control-input">
+			                        <select v-model="idType" name="idType" dicCode="BSLXZD" type="text" class="ml10 fleft form-control input-pointer"></select>
+			                    </div>
+			                </div>
+			            </div>
+			            <div class="form-horizontal fleft ui-form">
+			                <div class="ui-form-group">
+			                    <label class="control-label" for="exampleInputEmail3">源表类型</label>
+			                    <div class="control-input">
+			                        <select v-model="sourceTableType" name="sourceTableType" dicCode="SJYBLX" type="text" class="form-control input-pointer"></select>
+			                    </div>
+			                </div>
+			                <div class="ui-form-group">
+			                   	<label class="control-label" for="inputEmail4">数据更新周期</label>
+			                    <div class="control-input has-icon">
+			                        <ul>
+										<li class="" v-for="g in gxzq" style="display: inline">
+											<div class="radio circle success">
+												<input :value="g.code"  :id="'code'+g.code" name="readCycle" type="radio" />
+												<label><i class="default"></i>{{g.dataName}}</label>
+											</div>
+										</li>
+									</ul>
+			                    </div>
+			                </div>
+			            	
+			            	<div class="ui-form-group">
+			                    <label class="control-label" for="exampleInputEmail3">字段类型</label>
+			                    <div class="control-input">
+			                        <select v-model="idDataType" name="idDataType" dicCode="ZDLXZD" type="text" class=" fleft form-control input-pointer"></select>
+			                    </div>
+			                </div>
+			            
+			            
+			            
+			            </div>
+					</div>
 					<div class="ui-reg-table mt20">
 						<div class="clearfix">
 							<h3 class="fleft ml20">字段描述</h3>
@@ -109,7 +189,6 @@
 				</form>
 			</div>
 			<!-- todo -->
-
 		</div>
 	</div>
 </body>

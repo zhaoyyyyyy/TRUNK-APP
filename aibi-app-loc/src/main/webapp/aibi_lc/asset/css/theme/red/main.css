@@ -856,7 +856,16 @@ span.del-btn{
 .ui-table-static{
 	min-height:600px;
 }
-
+/*dataSource页面*/
+.dataSource-tab:hover{
+	border: 1px solid #E9E9E9 !important;
+}
+.dataSource-tab .ui-form{
+	border:none;
+}
+.dataSource-tab .ui-form  > .ui-form-group > .control-input{
+	width: 56%;
+}
 
 
 
