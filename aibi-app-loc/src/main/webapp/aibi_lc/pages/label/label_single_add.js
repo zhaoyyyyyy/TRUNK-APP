@@ -12,6 +12,8 @@ var model = {
 		readCycle : "",
 		read : "",
 		nodeName:"",
+		categoryName:"",
+		tagNode:"",
 }
 
 function changeStatus(obj){
@@ -169,8 +171,10 @@ function getData(tag){
 
 
 function openTtee(tag){
+	model.tagNode=tag;
 	var e = document.all ? window.event : arguments[0] ? arguments[0] : event;
 	e.stopPropagation?e.stopPropagation():e.cancelBubble=true;
+	
 	if($(tag).parent(".ui-form-ztree").hasClass("open")){
 		$(tag).parent(".ui-form-ztree").removeClass("open")
 	}else{
@@ -195,7 +199,7 @@ function ztreeFunc(){
 				},
 		    onSuccess: function(data){ 		    			    			    	
 			    	var ztreeObj=data.data;
-			    	$.fn.zTree.init($("#ztree"), setting, ztreeObj)
+			    	$.fn.zTree.init($(".ztree"), setting, ztreeObj)
 		    	}  
 	   });
 		setting = {
@@ -222,7 +226,10 @@ function ztreeFunc(){
 		//展示选中分类下的标签
 		function zTreeOnClick(event, treeId, treeNode) {
 			model.nodeName=treeNode;
+			model.categoryName=treeNode.categoryName;
+			$(model.tagNode).val(model.categoryName);
 			$(".ui-form-ztree").removeClass("open");
+			
 		};		
 	}
 
