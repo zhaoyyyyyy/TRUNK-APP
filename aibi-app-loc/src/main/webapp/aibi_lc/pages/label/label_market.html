@@ -142,18 +142,18 @@
 				</a>
 			</div>
 			<ul id="labelList" class="clearfix ui-label-list" >
-				<li v-for="(item,index) in labelInfoList" class="{padding0 : (index+1)%4 ==0 }" >
+				<li v-for="(item,index) in labelInfoList" :class="{padding0 : (index+1)%4 ==0 }" >
 					<div class="ui-label-info">
 						<h3 class="clearfix">
 							<span v-text="item.labelName"></span>
-							<i ></i>
+							<i v-on:click="select(index)"></i>
 						</h3>
 						<div class="ui-label-item">
 							<a href="javascript:;">
 								<b v-text="item.customNum" ></b>人
 							</a>
 							<a href="javascript:;" class="ui-label-time">
-								<span v-if="item.updateCycle == 1 ">日</span>
+								<span v-if="item.updateCycle == 3 ">日</span>
 								<span v-if="item.updateCycle == 2 ">月</span>
 							</a>
 							<a href="javascript:;" class="not-border ui-label-date">
@@ -202,7 +202,115 @@
 					</span>
 				</h3>
 				<div class="ui-calc-content clearfix" id="sortable">
+					<div v-for="(item,index) in ruleList" :class="{
+						'ui-chaining' : item.elementType ==1,
+						'ui-conditionCT' : item.elementType == 2,
+                		'ui-bracket': item.elementType == 3,
+                		'left' : item.elementType == 3 }" >
+						<!--括号 -->
+						<span v-if="item.elementType == 3" v-text="item.calcuElement"></span>
+						<!--符号 -->
+						<div  v-if="item.elementType == 1" class="dropdown">
+							<button type="button" class="ui-btn ui-btn-menu ui-icon-btn">
+								<span class="fleft" v-if="item.calcuElement == 'and'" >与</span>
+								<span class="fleft" v-if="item.calcuElement == 'or'">或</span>
+								<span class="fleft" v-if="item.calcuElement == '-'" >剔除</span>
+								<span class="caret" onclick="labelMarket.switchConnector_turn(this,event)"></span>
+							</button>
+							<ul class="dropdown-menu">
+								<li onclick="labelMarket.switchConnector(this,event)"><a href="#" >或</a></li>
+								<li onclick="labelMarket.switchConnector(this,event)"><a href="#" >与</a></li>
+								<li onclick="labelMarket.switchConnector(this,event)"><a href="#" >剔除</a></li>
+							</ul>
+						</div>
+						<!-- 标签 -->
+						<h4 class="ui-conditionCT-h4" onclick="labelMarket.againstLabel(event)" >
+							<span v-text="item.customOrLabelName"></span>
+							<em></em>
+							<i onclick="labelMarket.deleteThis(this)"></i>
+						</h4>
+						<!-- 标签体内容 -->
+						<div class="ui-conditionCT-content align_center" v-if="item.labelTypeId == 1" onclick="setLabelAttr(index)">
+							<i class="ui-nothing-icon">
+								<em></em>
+								请点击设置
+							</i>
+						</div>
+						<!-- 指标型 
+						<div class="ui-conditionCT-content" v-if="item.labelTypeId == 4" onclick="labelMarket.setLabelAttr(this)">
+							<h5>已选条件：</h5>
+							<div class="clearfix" v-if="item.queryWay == 1">
+								数值范围：
+								<span v-if="item.contiueMinVal !=''">
+									<span v-if="item.leftZoneSign eq '>='" >大于等于{{item.contiueMinVal}}</span>
+									<span v-if="item.leftZoneSign eq '>'" >大于{{item.contiueMinVal}}</span>
+								</span>
+								<span v-if="item.contiueMaxVal !=''">
+									<span v-if="item.rightZoneSign eq '<='" >小于等于{{item.contiueMaxVal}}</span>
+									<span v-if="item.rightZoneSign eq '<'" >小于{{item.contiueMaxVal}}</span>
+								</span>
+								<span v-if="item.unit !='' " v-text="item.unit"></span>
+								<span v-if="item.groupCiLabelRuleList.length >0 ">...</span>
+							</div>
+							<div class="clearfix" v-if="item.queryWay == 2">
+								精确值：
+								<span v-if="item.exactValue !=''" v-text="item.exactValue">
+								</span>
+								<span v-if="item.unit !='' " v-text="item.unit"></span>
+								<span v-if="item.groupCiLabelRuleList.length >0 ">...</span>
+							</div>
+						</div>-->
+						<!-- 枚举型  5,9,11,12-->
+						<div class="ui-conditionCT-content" v-if="item.labelTypeId == 5" onclick="labelMarket.setLabelAttr(this)">
+							<h5>已选条件：</h5>
+							<div class="clearfix" v-text="result.attrName">
+							</div>
+							<span v-if="item.groupCiLabelRuleList.length >0 ">...</span>
+						</div>
+						<!-- 日期型
+						<div class="ui-conditionCT-content" v-if="item.labelTypeId == 6" onclick="labelMarket.setLabelAttr(this)">
+							<h5>已选条件：</h5>
+							<div class="clearfix" v-if="item.queryWay == 1">
+								<span v-if="item.startTime !=''">
+									<span v-if="item.leftZoneSign eq '>='" >大于等于{{item.startTime}}</span>
+									<span v-if="item.leftZoneSign eq '>'" >大于{{item.startTime}}</span>
+								</span>
+								<span v-if="item.endTime !=''">
+									<span v-if="item.rightZoneSign eq '<='" >小于等于{{item.endTime}}</span>
+									<span v-if="item.rightZoneSign eq '<'" >小于{{item.endTime}}</span>
+								</span>
+								<span v-if="item.isNeedOffset == 1">（动态偏移更新</span>
+							</div>
+							<div class="clearfix" v-if="item.queryWay == 2">
+								精确值：
+								<span v-if="item.exactValue !=''" v-text="item.exactValue"></span>
+							</div>
+						</div>
+						 -->
+						<!-- 文本型
+						<div class="ui-conditionCT-content" v-if="item.labelTypeId == 7" onclick="labelMarket.setLabelAttr(this)">
+							<h5>已选条件：</h5>
+							<div class="clearfix" v-if="item.queryWay == 1">
+								模糊值：
+								<span v-if="item.darkValue !=''" v-text="item.darkValue"></span>
+							</div>
+							<div class="clearfix" v-if="item.queryWay == 2">
+								精确值：
+								<span v-if="item.exactValue !=''" v-text="item.exactValue"></span>
+							</div>
+						</div>
+						 -->
+						<div class="tooltip top" role="tooltip" v-if="item.labelTypeId == 1">
+							<div class="tooltip-arrow"></div>
+							<div class="tooltip-inner">鼠标点击标签反选</div>
+						</div>
+					</div>
+					<!-- 
 					<span class="ui-bracket left">(</span>
+					<span class="ui-bracket right">
+						)
+						<i></i>
+					</span>
 					<div class="ui-conditionCT">
 						<h4 class="ui-conditionCT-h4">
 							2G数据流量 <em></em> <i></i>
@@ -239,10 +347,7 @@
 							</div>
 						</div>
 					</div>
-					<span class="ui-bracket right">
-						)
-						<i></i>
-					</span>
+					
 					<div class="ui-chaining">
 						<div class="dropdown">
 							<button type="button" class="ui-btn ui-btn-menu ui-icon-btn">
@@ -272,6 +377,7 @@
 							<div class="tooltip-inner">鼠标点击标签反选</div>
 						</div>
 					</div>
+					 -->
 				</div>
 			</div>
 
@@ -281,7 +387,7 @@
 					<i></i> <span>已选择标签 {{ruleListSize}} 个</span>
 				</p>
 				<p class="fright">
-					<span>客户群数：</span> <span class="y-text">18,290,40</span>
+					<span>客户群数：</span><span class="y-text">18,290,40</span>
 					<button type="button" class="ui-btn ui-btn-default mr10">
 						<span class="create-white"></span> 创建客户群
 					</button>
