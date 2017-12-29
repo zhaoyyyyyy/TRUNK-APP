@@ -119,7 +119,7 @@
 	                            <div class="form-horizontal fleft ui-form">
 	                                <div class="ui-form-group">
 	                                    <label for="dependIndex" class="control-label">规则依赖指标</label>
-	                                    <div v-if="sourceInfo.sourceId!=false">
+	                                    <div class="control-input" v-if="sourceInfo.sourceId!=false">
 	                                        <input :value="sourceInfo.sourceId" name="dependIndex" type="hidden">
 	                                        <p>{{sourceInfo.sourceId}}</p>
 	                                    </div>
@@ -152,7 +152,7 @@
 									    <label class="control-label">失效时间</label> 
 									       <div class="control-input date-input fleft has-icon">
 					          	             <input name="failTime" type="text"
-									         class="ml10 date-input form-control input-pointer form-control-bubble" data-dismiss="formDatepicker#sendTime" id="" placeholder="请选择失效日期" />
+									         class="date-input form-control input-pointer form-control-bubble" data-dismiss="formDatepicker#sendTime" id="" placeholder="请选择失效日期" />
 					          	             <span class="glyphicon-date form-control-feedback"></span>
 					                       </div>   
 							        </div>
@@ -160,11 +160,10 @@
 							            <input type="hidden" v-model="sourceTableType" name="sourceTableType" id="sourceTableType">
 							            <input type="hidden" v-model="readCycle" name="updateCycle" id="updateCycle">
 							            <label for="updateCycle" class="control-label">更新周期</label>
-							            <!-- <div class="control-input has-icon">
-	                                    <input v-model="read" type="text" class="form-control ml10"
-								             readonly="readonly" />
-							            </div>  -->  
-							            <p>{{model.read}}</p>
+							            <div class="control-input">
+	                                    	<span class="file-up-name">{{model.read}}</span>
+							            </div>    
+							            
 							        </div>
 	                                <div v-if="showdimDetail[index]&&showdimDetail[index][`showdim${index}`]" class="ui-form-group">
 	                                    <label for="dimTableName" class="control-label">维表选择</label>

@@ -10,7 +10,7 @@ var model = {
 		arrs:[],
 		labelInfoList:[],
 		readCycle : "",
-		sourceTableType : "", 
+		sourceTableType : "",
 		read : "",
 		nodeName:"",
 		categoryName:"",
@@ -81,7 +81,6 @@ window.loc_onload = function() {
 			url : $.ctx + '/api/source/sourceTableInfo/get?sourceTableId='+sourceTableId,
 			onSuccess : function(data){
 				model.sourceInfoList = data.data.sourceInfoList;
-				model.sourceTableType = data.data.sourceTableType;
 				model.readCycle=data.data.readCycle;
 				if(model.readCycle==1){
 					model.read="一次性";
