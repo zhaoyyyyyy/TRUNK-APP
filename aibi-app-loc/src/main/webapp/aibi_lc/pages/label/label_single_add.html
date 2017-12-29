@@ -121,7 +121,7 @@
 	                                    <label for="dependIndex" class="control-label">规则依赖指标</label>
 	                                    <div class="control-input" v-if="sourceInfo.sourceId!=false">
 	                                        <input :value="sourceInfo.sourceId" name="dependIndex" type="hidden">
-	                                        <p>{{sourceInfo.sourceId}}</p>
+	                                        <span class="file-up-name">{{sourceInfo.sourceId}}</span>
 	                                    </div>
 	                                    <div v-if="sourceInfo.sourceId==false " class="control-input">
 	                                        <input class="form-control" id="dependIndex" name="dependIndex"></input>
@@ -152,7 +152,8 @@
 									    <label class="control-label">失效时间</label> 
 									       <div class="control-input date-input fleft has-icon">
 					          	             <input name="failTime" type="text"
-									         class="date-input form-control input-pointer form-control-bubble" data-dismiss="formDatepicker#sendTime" id="" placeholder="请选择失效日期" />
+									         class="date-input form-control input-pointer form-control-bubble" data-dismiss="formDatepicker#sendTime" id="" 
+									         placeholder="请选择失效日期" onfocus="getTime(this)"/>
 					          	             <span class="glyphicon-date form-control-feedback"></span>
 					                       </div>   
 							        </div>
@@ -168,12 +169,12 @@
 	                                <div v-if="showdimDetail[index]&&showdimDetail[index][`showdim${index}`]" class="ui-form-group">
 	                                    <label for="dimTableName" class="control-label">维表选择</label>
 	                                    <div class="control-input has-icon">
-	                                        <select id="dimId" name="dimId" class="form-control input-pointer ">
-	                                        <option>请选择维表</option>
-	                                        <option v-for = "dim in dimtableInfoList" :value="dim.dimId">{{dim.dimTableName}}</option>
+	                                        <select id="dimId" name="dimId" class="form-control input-pointer fleft">
+		                                        <option>请选择维表</option>
+		                                        <option v-for = "dim in dimtableInfoList" :value="dim.dimId">{{dim.dimTableName}}</option>
 	                                        </select>
+	                                        <button type="button" onclick="fun_to_dimdetail()" class="btn btn-default  ui-table-btn ui-table-btn fleft" >详情</button>
 	                                    </div>
-	                                    <button type="button" onclick="fun_to_dimdetail()" class="btn btn-default  ui-table-btn ui-table-btn" >详情</button>
 	                                </div>
 	                            </div>
 	                        </div>
