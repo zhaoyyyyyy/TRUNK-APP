@@ -18,6 +18,7 @@ add-dialog@charset "utf-8";
 .ui-lc-mian > h3 >.dropdown >.dropdown-menu{
 	z-index:999;
 	right: 0px;
+	left:auto;
 }
 .ui-lc-mian > .ui-label-mes{
 	text-align: left;
