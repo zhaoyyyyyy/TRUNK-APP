@@ -81,4 +81,15 @@ window.loc_onload = function() {
 	wd.addBtn("cancel", "取消", function() {
 		wd.cancel();
 	});
+	//是否使用默认字段
+	$("input[name='useDefaultCol']").on("click",function(){	
+		var rdoValue = $("#yes").is(":checked") ? "是":"否";
+		if(rdoValue == "否"){
+			$("#dimCodeCol").show();
+			$("#dimValueCol").show();			
+		}else{
+			$("#dimCodeCol").hide();
+			$("#dimValueCol").hide();
+		}
+	})
 }

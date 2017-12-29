@@ -39,9 +39,22 @@
 						</div>
 					</div>
 				</div>
-				<div class="clearfix">
+				<div class="clearfix" id="isDefaultLi">
 					<div class="form-group ml30 mt20">
-						<label class="fleft mt5" for="exampleInputEmail3">主键字段名:</label>
+						<label class="fleft mt5" for="exampleInputEmail3">*使用默认字段:</label>
+						<div class="control-input has-icon ml10 mt5">
+						<label class="rdoDefaultCol">
+								<input type="radio" name="useDefaultCol" id="yes"  value="是"/ checked="checked">是
+							</label>
+							<label class="rdoDefaultCol">
+								<input type="radio" name="useDefaultCol" id="no"  value="否"/>否	
+							</label>
+						</div>
+					</div>
+				</div>
+				<div class="clearfix" id="dimCodeCol" style="display:none;">
+					<div class="form-group ml30 mt20">
+						<label class="fleft mt5" for="exampleInputEmail3">*主键字段名:</label>
 						<div class="control-input has-icon ml10">
 							<input name="dimCodeCol" type="text" class="form-control "
 								id="dimCodeCol" maxlength="28" placeholder="请输入主键字段名" v-model="dimCodeCol"/> <span
@@ -50,9 +63,9 @@
 						</div>
 					</div>
 				</div>
-				<div class="clearfix">
+				<div class="clearfix" id="dimValueCol" style="display:none;">
 					<div class="form-group ml30 mt20">
-						<label class="fleft mt5" for="exampleInputEmail3">描述字段名:</label>
+						<label class="fleft mt5" for="exampleInputEmail3">*描述字段名:</label>
 						<div class="control-input has-icon ml10">
 							<input name="dimValueCol" type="text" class="form-control " v-model="dimValueCol"
 								id="dimValueCol" maxlength="28" placeholder="请输入描述字段名" /> <span

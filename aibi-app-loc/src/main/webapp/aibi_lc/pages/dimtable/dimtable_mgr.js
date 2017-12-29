@@ -30,7 +30,7 @@ window.loc_onload = function() {
 		var data =$("#formSearch").formToJson();
 		data.configId =configId;
     	var wd = $.window('新增维表', $.ctx
-			+ '/aibi_lc/pages/dimtable/dimtable_add.html?configId='+configId, 700, 400);
+			+ '/aibi_lc/pages/dimtable/dimtable_add.html?configId='+configId, 700, 450);
     	wd.reload = function() {
 			$("#mainGrid").setGridParam({
 				postData : data
@@ -123,7 +123,7 @@ function fun_to_detail(id) {
 }
 function fun_to_edit(dimId){
 	var wd = $.window('编辑维表', $.ctx
-			+ '/aibi_lc/pages/dimtable/dimtable_add.html?dimId=' + dimId, 700, 400);
+			+ '/aibi_lc/pages/dimtable/dimtable_add.html?dimId=' + dimId, 700, 450);
 	wd.reload = function() {
 		$("#mainGrid").setGridParam({
 			postData : $("#formSearch").formToJson()
