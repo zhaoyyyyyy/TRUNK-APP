@@ -13,14 +13,13 @@ window.loc_onload = function() {
 	      autoOpen: false,
 	      open:function(){
 	      	ztreeFunc();
-	      	$(".ui-form-group ").css("display","block");
+	      	$(".ui-form-group ").show();
 	      }
   });
 	//左边树
 	function ztreeFunc(){
 		var ztreeObj;
-		var obj = $("#preConfig_list").find("span");
-		var labelId =obj.attr("configId");				
+		var labelId = $.getCurrentConfigId();
 		$.commAjax({			
 		    url : $.ctx+'/api/label/categoryInfo/queryList',  		    
 		    dataType : 'json', 
@@ -54,7 +53,7 @@ window.loc_onload = function() {
 					    	}
 			  	  		],
 			  	  		open:function(){
-			  	  			$(".ui-form-group ").css("display","block");
+			  	  			$(".ui-form-group ").show();
 					      	$(".ui-form-group ").find("input").val("");
 					    }
 		        	});
@@ -154,7 +153,7 @@ window.loc_onload = function() {
 				    	}
 		  	  		],
 		  	  		open:function(){
-		  	  			$(".ui-form-group ").css("display","block");
+		  	  			$(".ui-form-group ").show();
 				      	$(".ui-form-group ").find("input").val("");
 				    }
 	        	});
@@ -236,7 +235,7 @@ window.loc_onload = function() {
 			    	}
 		  	  	],
 		  	  	open:function(){
-		  	  		$(".ui-form-group ").css("display","block");
+		  	  		$(".ui-form-group ").show();
 			      	$(".ui-form-group ").find("input").val(treeNode.categoryName);
 			    }
 	        	
