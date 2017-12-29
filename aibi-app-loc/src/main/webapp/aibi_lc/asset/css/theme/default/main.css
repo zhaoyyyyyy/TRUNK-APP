@@ -866,6 +866,13 @@ span.del-btn{
 .dataSource-tab .ui-form  > .ui-form-group > .control-input{
 	width: 56%;
 }
+/*维表管理*/
+.dimtable-table .ui-form-group > .control-label{
+	min-width:120px;
+}
+.dimtable-table .control-input{
+	width:200px;
+}
 
 
 
