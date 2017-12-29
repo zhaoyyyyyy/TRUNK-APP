@@ -29,10 +29,14 @@ window.loc_onload = function() {
 		    postData : {
 					"sysId" :labelId,
 				},
-		    onSuccess: function(data){ 		    			    			    	
-			    	var ztreeObj=data.data;
-			    	$.fn.zTree.init($("#ztree"), setting, ztreeObj)
-		    	}  
+		    onSuccess: function(data){
+		    	if(data.data.length==0){
+		    		
+		    	}else{
+				    var ztreeObj=data.data;
+				    $.fn.zTree.init($("#ztree"), setting, ztreeObj)
+			    	}  
+		    	}
 	   });
 		setting = {
 			view: {
@@ -213,7 +217,7 @@ window.loc_onload = function() {
 		//展示选中分类下的标签
 		function zTreeOnClick(event, treeId, treeNode) {
 			leftTreeCagyId =treeNode.categoryId;
-			showLabelInfo(treeNode.categoryId,2);
+			showLabelInfo();
 		};		
 	}
 	//标签全部选中
@@ -230,7 +234,6 @@ window.loc_onload = function() {
 			$(this).addClass("active")
 		}
 	})
-	
 	//获取选中标签ID
 	$("#ui-move").click(function(){
 		if($(".label-dialog").hasClass("active")){
@@ -274,7 +277,6 @@ window.loc_onload = function() {
 						"categoryId":transToData,
 					},
 			    onSuccess: function(data){ 
-			    	showLabelInfo(leftTreeCagyId,2)
 			    	if(!flag){
 				    	$.alert("移动标签成功");
 				    	$("#labelList").html("");
@@ -282,7 +284,7 @@ window.loc_onload = function() {
 				    	$("#dialog-del").click();
 				    	//labeltree();
 				    	flag =true;
-				    	$(".label-dialog").removeClass("active");
+				    	//$(".label-dialog").removeClass("active");
 			    	}
 				}
 			});
@@ -336,11 +338,14 @@ window.loc_onload = function() {
 		showLabelInfo(text,1);
 	})
 	//全部分类当前分类判断
-	function distIndex(dataId){
+	/*function distIndex(dataId){
+		var text =$("#exampleInputAmount1").val();
 		if(dataId==0){
-				alert(0)
+			alert(0)
+			//showLabelInfo(text,1);
 			}else{
-				alert(1)
+			alert(1)
+			//showLabelInfo(text,3);
 			}
 	}
 	$("#radioList .radio").each(function(e){
@@ -355,7 +360,7 @@ window.loc_onload = function() {
 				distIndex(e);
 			}
 		})
-	})
+	})*/
 	//右边树的模糊查询
 	var rightTreeInput ="";
 	$("#btn_serach2").click(function(){
@@ -374,9 +379,7 @@ window.loc_onload = function() {
 		var obj = $("#preConfig_list").find("span");
 		var configId =obj.attr("configId");    //专区ID
 		var text;			//模糊查询时的关键字
-		var categoryId;    //标签分类ID
-		if(number == 1){text = labelInfo}		//标签的模糊查询
-		if(number == 2){categoryId = labelInfo}						//选中节点展示标签
+		if(number == 1){text = labelInfo}		//标签的模糊查询	
 		$.commAjax({			
 		    url : $.ctx+'/api/label/labelInfo/queryList',  		    
 		    dataType : 'json', 
@@ -384,10 +387,11 @@ window.loc_onload = function() {
 		    postData : {
 					"labelName" :text,
 					"configId" :configId,
-					"categoryId" :categoryId,
+					"categoryId" :leftTreeCagyId,
 				},
 		    onSuccess: function(data){
 		    	$("#labelList").html("");
+		    	$("#labelLength").html(data.data.length);
 		    	for(var i=0;i<data.data.length;i++){
 		    		if (! document.getElementById(data.data[i].labelId)){
 			    		var html="<li>"+
