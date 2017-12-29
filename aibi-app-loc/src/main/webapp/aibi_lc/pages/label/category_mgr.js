@@ -13,7 +13,7 @@ window.loc_onload = function() {
 	      autoOpen: false,
 	      open:function(){
 	      	ztreeFunc();
-	      	$(".ui-form-group ").css("display","block")
+	      	$(".ui-form-group ").css("display","block");
 	      }
 	      
   });
@@ -94,7 +94,11 @@ window.loc_onload = function() {
 			    	        	$( this ).dialog( "close" );	    	        
 			    	        }
 				    	}
-		  	  		]
+		  	  		],
+		  	  		open:function(){
+		  	  			$(".ui-form-group ").css("display","block");
+				      	$(".ui-form-group ").find("input").val("");
+				    }
 	        	});
 	        	 $('#add-dialog-btn').click(function(){
 	        	 	var Ppname=$( "#dialog" ).find("input").val();
@@ -171,7 +175,11 @@ window.loc_onload = function() {
 		    	        	$( this ).dialog( "close" );	    	        
 		    	        }
 			    	}
-		  	  	]
+		  	  	],
+		  	  	open:function(){
+		  	  		$(".ui-form-group ").css("display","block");
+			      	$(".ui-form-group ").find("input").val(treeNode.categoryName);
+			    }
 	        	
         	 });
         	 $('#add-dialog-btn').click(function(){	        	 	
@@ -328,15 +336,25 @@ window.loc_onload = function() {
 		showLabelInfo(text,1);
 	})
 	//全部分类当前分类判断
-	$("#radioList .radio").each(function(){
+	function distIndex(dataId){
+		if(dataId==0){
+				alert(0)
+			}else{
+				alert(1)
+			}
+	}
+	$("#radioList .radio").each(function(e){
+		if($(this).find("label").hasClass('active')){
+			distIndex(e);
+		}
 		$(this).on("click",function(){
 			if($(this).find("label").hasClass('active')){
 				$(this).find("label").removeClass('active');
 			}else{
 				$(this).find("label").addClass('active').parents(".radio").siblings(".radio").find("label").removeClass('active');
+				distIndex(e);
 			}
 		})
-		
 	})
 	//右边树的模糊查询
 	var rightTreeInput ="";
