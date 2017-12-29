@@ -122,7 +122,7 @@ function fun_to_detail(id) {
 	}
 }
 function fun_to_edit(dimId){
-	var wd = $.window('编辑专区', $.ctx
+	var wd = $.window('编辑维表', $.ctx
 			+ '/aibi_lc/pages/dimtable/dimtable_add.html?dimId=' + dimId, 700, 400);
 	wd.reload = function() {
 		$("#mainGrid").setGridParam({

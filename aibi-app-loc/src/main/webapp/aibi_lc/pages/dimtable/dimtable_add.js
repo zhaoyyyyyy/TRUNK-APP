@@ -66,13 +66,7 @@ window.loc_onload = function() {
 			data1.configId = configId;
 			$.commAjax({
 				url : url_,
-				postData :data1/*{
-					"dimTableName":dimTableName,
-					"codeColType":codeColType,
-					"dimCodeCol":dimCodeCol,
-					"dimValueCol":dimValueCol,
-					"configId":configId
-				}*/,
+				postData :data1,
 				onSuccess : function(data) {
 					if(data.data == "success"){
 						$.success(msss, function() {
