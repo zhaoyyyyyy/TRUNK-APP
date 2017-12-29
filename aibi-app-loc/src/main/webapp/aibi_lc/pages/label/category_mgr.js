@@ -15,7 +15,6 @@ window.loc_onload = function() {
 	      	ztreeFunc();
 	      	$(".ui-form-group ").css("display","block");
 	      }
-	      
   });
 	//左边树
 	function ztreeFunc(){
@@ -31,12 +30,67 @@ window.loc_onload = function() {
 				},
 		    onSuccess: function(data){
 		    	if(data.data.length==0){
-		    		
+		    		var btn=$("<button class='ui-btn ui-btn-default'>添加标签分类</button>")
+		    		$("#ztree").append(btn)
+		    		$(btn).on("click",function(){
+			    		$( "#dialog" ).dialog({
+		        	 	title:"新增标签",
+		        	 	autoOpen: true,
+		        	 	buttons: [
+				    	    {
+				    	       text: "取消",
+				    	       "class":"ui-btn ui-btn-second",
+				    	        click: function() {
+				    	        	$( this ).dialog( "close" );
+				    	     	}
+					  	    },
+					  	    {
+				    	        text: "确定",
+				    	        "id":"add-dialog-btn",
+				    	        "class":"ui-btn ui-btn-default",
+				    	        click: function() {
+				    	        	$( this ).dialog( "close" );	    	        
+				    	        }
+					    	}
+			  	  		],
+			  	  		open:function(){
+			  	  			$(".ui-form-group ").css("display","block");
+					      	$(".ui-form-group ").find("input").val("");
+					    }
+		        	});
+			    		$('#add-dialog-btn').click(function(){
+		        	 	var Ppname=$( "#dialog" ).find("input").val();
+		        	 	if (Ppname == null) {
+				            return;
+					    } else if (Ppname == "") {
+					            alert("节点名称不能为空");
+					    }else {
+					        $.commAjax({						
+								url : $.ctx + '/api/label/categoryInfo/save',
+								async:true,
+								postData : {
+									"sysId" :labelId,
+									"categoryName":Ppname,
+									
+								},
+								onSuccess:function(data){							
+									ztreeFunc();
+									labeltree();
+								}
+							});
+			       		}
+		        	})	
+		    			
+		    			
+		    			
+		    			
+		    			
+		    		})
 		    	}else{
 				    var ztreeObj=data.data;
 				    $.fn.zTree.init($("#ztree"), setting, ztreeObj)
-			    	}  
-		    	}
+			    }  
+		    }
 	   });
 		setting = {
 			view: {
@@ -145,6 +199,7 @@ window.loc_onload = function() {
 								"parentId":treeNode.categoryId,
 							},
 							onSuccess:function(data){
+								$("#ztree").html("");
 								ztreeFunc();
 								labeltree();
 							}
