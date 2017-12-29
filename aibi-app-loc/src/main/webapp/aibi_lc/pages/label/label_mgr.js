@@ -245,7 +245,8 @@ function fun_to_offline(id){
 }
 
 function fun_to_edit(id){
-	var win = $.window('标签修改',$.ctx+'/aibi_lc/pages/label/label_edit.html?labelId='+id,500,600);
+	var configId = $.getCurrentConfigId();
+	var win = $.window('标签修改',$.ctx+'/aibi_lc/pages/label/label_edit.html?labelId='+id+"&configId="+configId,500,600);
 	win.reload = function(){
 		$("#mainGrid").setGridParam({
 			postData : $("fromSearch").fromToJson()

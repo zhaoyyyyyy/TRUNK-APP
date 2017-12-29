@@ -6,18 +6,14 @@
 
 package com.asiainfo.biapp.si.loc.core.label.entity;
 
-import io.swagger.annotations.ApiParam;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.GenericGenerator;
-
 import com.asiainfo.biapp.si.loc.base.entity.BaseEntity;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import io.swagger.annotations.ApiParam;
 
 /**
  * Title : ILabelExtInfoDao
@@ -56,8 +52,6 @@ public class LabelExtInfo extends BaseEntity {
      */
     @Id
     @Column(name = "LABEL_ID")
-    @GenericGenerator(name = "idGenerator", strategy = "uuid")
-    @GeneratedValue(generator = "idGenerator")
     @ApiParam(value = "标签ID")
     private String labelId;
 

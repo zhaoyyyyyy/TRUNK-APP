@@ -247,7 +247,17 @@ public class LabelInfo extends BaseEntity {
      */
     @Transient
     private String unit;
-
+    /**
+     * 维表主键
+     */
+    @Transient
+    private String dimId;
+    /**
+     * 指标源表类型
+     */
+    @Transient
+    private Integer sourceTableType; 
+    
     /**
      * 排序字段
      */
@@ -533,6 +543,26 @@ public class LabelInfo extends BaseEntity {
     
     public void setUnit(String unit) {
         this.unit = unit;
+    }
+
+    
+    public String getDimId() {
+        return dimId;
+    }
+
+    
+    public void setDimId(String dimId) {
+        this.dimId = dimId;
+    }
+
+    
+    public Integer getSourceTableType() {
+        return sourceTableType;
+    }
+
+    
+    public void setSourceTableType(Integer sourceTableType) {
+        this.sourceTableType = sourceTableType;
     }
 
 
