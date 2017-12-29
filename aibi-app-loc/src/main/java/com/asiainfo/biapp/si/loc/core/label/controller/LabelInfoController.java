@@ -182,6 +182,7 @@ public class LabelInfoController extends BaseController<LabelInfo> {
     @RequestMapping(value = "/labelInfo/update", method = RequestMethod.POST)
     public WebResult<String> edit(@ApiIgnore LabelInfo labelInfo) {
         WebResult<String> webResult = new WebResult<>();
+        String approveStatusId = request.getParameter("approveStatusId");
         LabelInfo oldLab = new LabelInfo();
         try {
             oldLab = iLabelInfoService.selectLabelInfoById(labelInfo.getLabelId());
@@ -189,6 +190,16 @@ public class LabelInfoController extends BaseController<LabelInfo> {
             return webResult.fail(e);
         }
         oldLab = fromToBean(labelInfo, oldLab);
+        if (StringUtil.isNotEmpty(approveStatusId)) {
+            try {
+                ApproveInfo approveInfo = iApproveInfoService.selectApproveInfo(labelInfo.getLabelId());
+                approveInfo.setApproveStatusId(approveStatusId);
+                approveInfo.setApproveTime(new Date());
+                oldLab.setApproveInfo(approveInfo);
+            } catch (BaseException e) {
+                e.printStackTrace();
+            }
+        }
         try {
             iLabelInfoService.modifyLabelInfo(oldLab);
         } catch (BaseException e1) {
@@ -204,7 +215,7 @@ public class LabelInfoController extends BaseController<LabelInfo> {
     })
     @RequestMapping(value = "/labelInfo/updateCategoryId", method = RequestMethod.POST)
     public WebResult<String> editCategoryId(@ApiIgnore LabelInfo labelInfo) {
-        WebResult<String> webResult = new WebResult<>();
+        WebResult<String> webResult = new WebResult<>(); 
         LabelInfo oldLab = new LabelInfo();
         try {
             oldLab = iLabelInfoService.selectLabelInfoById(labelInfo.getLabelId());
@@ -234,7 +245,6 @@ public class LabelInfoController extends BaseController<LabelInfo> {
         }
         return webResult.success("删除标签信息成功", SUCCESS);
     }
-  */  
     @ApiOperation(value="发布标签")
     @ApiImplicitParams({
         @ApiImplicitParam(name = "labelId", value = "ID", required = true, paramType = "query", dataType = "string"),
@@ -267,7 +277,7 @@ public class LabelInfoController extends BaseController<LabelInfo> {
             return webResult.fail(e1);
         }
         return webResult.success("发布标签信息成功", SUCCESS);
-    }
+    }*/
     
     public LabelInfo fromToBean(LabelInfo lab, LabelInfo oldLab) {
         if (null != lab.getKeyType()) {

@@ -65,10 +65,20 @@ public class MdaSysTableColumn extends BaseEntity {
     @GeneratedValue(generator = "idGenerator")
     @ApiParam(value = "列Id")
     private String columnId;
-
-
-
-
+    
+    /**
+     * 标签Id
+     */
+    @Column(name = "LABEL_ID")
+    @ApiParam(value = "标签Id")
+    private String labelId; 
+    
+    /**
+     * 所属表Id
+     */
+    @Column(name = "TABLE_ID")
+    @ApiParam(value = "所属表id")
+    private String tableId;
 
 	/**
      * 列名
@@ -92,21 +102,13 @@ public class MdaSysTableColumn extends BaseEntity {
     private Integer columnDataTypeId;
 
     /**
-     * 所属表Id
+     * 对应维表表名
      */
-    @Column(name = "TABLE_ID")
-    @ApiParam(value = "所属表id")
-    private String tableId;
-
-	public String getTableId() {
-		return tableId;
-	}
-
-	public void setTableId(String tableId) {
-		this.tableId = tableId;
-	}
-
-	/**
+    @Column(name="DIM_TRANS_ID")
+    @ApiParam(value="对应维表表名")
+    private String dimTransId;
+    
+    /**
      * 单位
      */
     @Column(name = "UNIT")
@@ -119,18 +121,28 @@ public class MdaSysTableColumn extends BaseEntity {
     @Column(name = "DATA_TYPE")
     @ApiParam(value = "数据类型")
     private String dataType;
-
+    
     /**
      * 列状态
      */
     @Column(name = "COLUMN_STATUS")
     @ApiParam(value = "列状态")
     private Integer columnStatus;
+    
+    @Transient
+    private DimTableInfo dimtableInfo;
+    
+    @ManyToOne(cascade = CascadeType.REFRESH, optional = false)  
+    @JoinColumn(name="TABLE_ID",insertable=false,updatable=false)  
+    private MdaSysTable mdaSysTable;
+    
+	public String getTableId() {
+		return tableId;
+	}
 
-    @Column(name = "LABEL_ID")
-    private String labelId;   
-    
-    
+	public void setTableId(String tableId) {
+		this.tableId = tableId;
+	}
 
 	public String getLabelId() {
 		return labelId;
@@ -140,13 +152,6 @@ public class MdaSysTableColumn extends BaseEntity {
 		this.labelId = labelId;
 	}
 
-    
-    @ManyToOne(cascade = CascadeType.REFRESH, optional = false)  
-    @JoinColumn(name="TABLE_ID",insertable=false,updatable=false)  
-    private MdaSysTable mdaSysTable;
-    
-    private String dimTransId;
-    
     public String getDimTransId() {
 		return dimTransId;
 	}
@@ -155,8 +160,7 @@ public class MdaSysTableColumn extends BaseEntity {
 		this.dimTransId = dimTransId;
 	}
 
-	@Transient
-    private DimTableInfo dimtableInfo;
+
 
 	public DimTableInfo getDimtableInfo() {
 		return dimtableInfo;
