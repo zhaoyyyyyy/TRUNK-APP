@@ -81,13 +81,12 @@ window.loc_onload = function() {
 			onSuccess : function(data){
 				model.sourceInfoList = data.data.sourceInfoList;
 				model.readCycle=data.data.readCycle;
-				model.read = data.data.readCycle;
-				if(model.read=1){
-					model.read="一次性"
-				}else if(model.read=2){
-					model.read="月周期"
-				}else if(model.read=3){
-					model.read="月周期"
+				if(model.readCycle==1){
+					model.read="一次性";
+				}else if(model.readCycle==2){
+					model.read="月周期";
+				}else if(model.readCycle==3){
+					model.read="日周期";
 				}
 			}
 		});
