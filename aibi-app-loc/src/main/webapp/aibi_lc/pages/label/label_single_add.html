@@ -157,7 +157,8 @@
 					                       </div>   
 							        </div>
 							        <div class="ui-form-group">
-							            <input type="hidden" v-model="readCycle" name=updateCycle id=updateCycle>
+							            <input type="hidden" v-model="sourceTableType" name="sourceTableType" id="sourceTableType">
+							            <input type="hidden" v-model="readCycle" name="updateCycle" id="updateCycle">
 							            <label for="updateCycle" class="control-label">更新周期</label>
 							            <!-- <div class="control-input has-icon">
 	                                    <input v-model="read" type="text" class="form-control ml10"
@@ -168,7 +169,7 @@
 	                                <div v-if="showdimDetail[index]&&showdimDetail[index][`showdim${index}`]" class="ui-form-group">
 	                                    <label for="dimTableName" class="control-label">维表选择</label>
 	                                    <div class="control-input has-icon">
-	                                        <select id="dimTableName" name="dimTableName" class="form-control input-pointer ">
+	                                        <select id="dimId" name="dimId" class="form-control input-pointer ">
 	                                        <option>请选择维表</option>
 	                                        <option v-for = "dim in dimtableInfoList" :value="dim.dimId">{{dim.dimTableName}}</option>
 	                                        </select>
