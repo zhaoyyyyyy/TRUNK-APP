@@ -106,7 +106,7 @@ public class LabelInfo extends BaseEntity {
     private String labelName;
 
     /**
-     * 更新周期 1、日 ;2、月
+     * 更新周期 :1,一次性;2,月周期;3,日周期;
      */
     @Column(name = "UPDATE_CYCLE")
     @ApiParam(value = "更新周期")
