@@ -1,3 +1,6 @@
+*.classpath
+*.project
+*.prefs
 aibi-app-loc/.classpath
 /target/
 /.classpath
