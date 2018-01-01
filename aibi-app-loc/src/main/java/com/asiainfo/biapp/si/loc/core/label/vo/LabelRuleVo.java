@@ -44,6 +44,7 @@ public class LabelRuleVo extends LabelRule {
   	
 	private Integer updateCycle;
 	private String dataDate;//数据时间字段
+	private String queryWay;//用于显示
 	public Integer getLabelTypeId() {
 		return labelTypeId;
 	}
@@ -76,6 +77,15 @@ public class LabelRuleVo extends LabelRule {
 	public void setLabelOrCustomSort(Integer labelOrCustomSort) {
 		this.labelOrCustomSort = labelOrCustomSort;
 	}
+    
+    public String getQueryWay() {
+        return queryWay;
+    }
+    
+    public void setQueryWay(String queryWay) {
+        this.queryWay = queryWay;
+    }
+	
 	
 	
 }
