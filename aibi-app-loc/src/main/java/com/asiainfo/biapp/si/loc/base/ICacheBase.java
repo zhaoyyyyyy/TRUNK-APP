@@ -426,8 +426,11 @@ public abstract class ICacheBase {
 		/** 客户群清单缓存 */
 		String CI_CUSTOM_LIST_INFO_MAP = "COC_KV_CI_CUSTOM_LIST_INFO_MAP";
 		
-		/** 客户群清单缓存 */
+		/** 配置项缓存 */
 		String CI_CONFIG_INFO_MAP = "CI_CONFIG_INFO_MAP";
+		
+		/** 数据字典缓存 */
+		String CI_DICDATA_MAP = "CI_DICDATA_MAP";
 		
 		String CI_SESSION_INFO_MAP = "CI_SESSION_INFO_MAP";
 		

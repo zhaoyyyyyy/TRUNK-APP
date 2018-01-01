@@ -1,7 +1,7 @@
 package com.asiainfo.biapp.si.loc.auth.service;
 
+import com.asiainfo.biapp.si.loc.auth.model.TokenModel;
 import com.asiainfo.biapp.si.loc.auth.model.User;
-import com.asiainfo.biapp.si.loc.auth.utils.TokenModel;
 import com.asiainfo.biapp.si.loc.base.exception.BaseException;
 
 /**

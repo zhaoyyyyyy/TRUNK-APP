@@ -1,21 +1,27 @@
 package com.asiainfo.biapp.si.loc.base;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
-import com.asiainfo.biapp.si.loc.auth.utils.LocConfigUtil;
-import com.asiainfo.biapp.si.loc.base.common.LabelInfoContants;
-import com.asiainfo.biapp.si.loc.base.exception.BaseException;
-import com.asiainfo.biapp.si.loc.base.extend.SpringContextHolder;
-import com.asiainfo.biapp.si.loc.base.utils.RedisUtils;
+
 import org.apache.log4j.Logger;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 
+import com.asiainfo.biapp.si.loc.auth.model.DicData;
+import com.asiainfo.biapp.si.loc.auth.service.IDicDataService;
+import com.asiainfo.biapp.si.loc.auth.utils.LocConfigUtil;
+import com.asiainfo.biapp.si.loc.base.common.LabelInfoContants;
+import com.asiainfo.biapp.si.loc.base.exception.BaseException;
+import com.asiainfo.biapp.si.loc.base.extend.SpringContextHolder;
+import com.asiainfo.biapp.si.loc.base.utils.JsonUtil;
+import com.asiainfo.biapp.si.loc.base.utils.RedisUtils;
 import com.asiainfo.biapp.si.loc.core.label.dao.ILabelInfoDao;
 import com.asiainfo.biapp.si.loc.core.label.entity.LabelExtInfo;
 import com.asiainfo.biapp.si.loc.core.label.entity.LabelInfo;
@@ -60,6 +66,7 @@ public class LocCacheBase extends ICacheBase implements ApplicationContextAware{
 		this.iLabelInfoDao = (ILabelInfoDao)SpringContextHolder.getBean("labelInfoDaoImpl");
 		this.initAllLabelInfo();
 		this.initAllConfigInfo();
+		this.initAllDicData();
 	}
 	
 //	public synchronized void refreshCache(){
@@ -166,6 +173,53 @@ public class LocCacheBase extends ICacheBase implements ApplicationContextAware{
 		return null;
 	}
 	
+	
+	
+	
+
+	/**
+	 * 将 全部 数据字典刷入缓存
+	 * @throws Exception
+	 */
+	public void initAllDicData(){
+		log.info("开始加载数据字典缓存");
+		try {
+			IDicDataService dataService = (IDicDataService)SpringContextHolder.getBean("dicDataService");
+			List<DicData> allDicDataList = dataService.queryAllDicData();
+			Map<String,Object> returnMap = new HashMap<String,Object>();
+			 for(DicData  dicData : allDicDataList){
+	            	if(returnMap.containsKey(dicData.getDicCode())){
+	            		List<DicData> dicDataList = (List<DicData>) returnMap.get(dicData.getDicCode());
+	            		dicDataList.add(dicData);
+	            	}else{
+	            		List<DicData> dicDataList = new ArrayList<DicData>();
+	            		dicDataList.add(dicData);
+	            		returnMap.put(dicData.getDicCode(), dicDataList);
+	            	}
+	            }
+			this.setHashObject(Prefix.LOC+Prefix.KV+CacheKey.CI_DICDATA_MAP, returnMap);
+		} catch (BaseException e) {
+			log.error(e.getMessage(),e);
+		} catch (Exception e) {
+			log.error(e.getMessage(),e);
+		}
+	}
+	/**
+	 * 根据key获取 对应 系统配置 value
+	 * @param key
+	 * @return
+	 */
+	public List<DicData> getDicDataList(String key){
+		try {
+			Map<String,String> map = RedisUtils.getForHashObjByKey(Prefix.LOC+Prefix.KV+CacheKey.CI_DICDATA_MAP);
+			String dataJson = map.get(key);
+			List<DicData> dicData = (List<DicData>) JsonUtil.json2CollectionBean(dataJson, List.class, DicData.class);
+			return dicData;
+		} catch (Exception e) {
+			log.error(e.getMessage(),e);
+		}
+		return null;
+	}
 	
 	/**
 	 * 5.0 session缓存 存放 接口， 默认设置为 30秒失效

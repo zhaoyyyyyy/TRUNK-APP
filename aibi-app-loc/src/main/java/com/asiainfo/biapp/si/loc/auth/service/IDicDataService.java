@@ -4,7 +4,6 @@ import java.util.List;
 
 import com.asiainfo.biapp.si.loc.auth.model.DicData;
 import com.asiainfo.biapp.si.loc.base.exception.BaseException;
-import com.asiainfo.biapp.si.loc.base.page.Page;
 
 public interface IDicDataService {
 
@@ -15,11 +14,14 @@ public interface IDicDataService {
 	 */
 	public List<DicData> queryDataListByCode(String code) throws BaseException;
 	
-	
 	/**
-	 * 通过字典编码拿到字典数据集合(分页)
+	 * 
+	 * Description: 查询所有生效的数据字典，给初始化缓存方法使用
+	 *
 	 * @return
+	 * @throws BaseException
 	 */
+	public List<DicData> queryAllDicData() throws BaseException ;
 	
-	public Page<DicData> findDicDataList(Page<DicData> page, String dicCode) throws BaseException;
+	
 }

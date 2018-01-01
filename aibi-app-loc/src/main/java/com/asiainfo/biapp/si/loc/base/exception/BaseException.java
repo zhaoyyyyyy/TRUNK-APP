@@ -17,6 +17,9 @@ public class BaseException extends Exception{
 	//数据库连接异常
 	public final String DB_CONNECT_CODE = "50004";
 		
+	//获取缓存失败
+	public final String LOC_CACHE_CODE = "50005";
+		
 	private String msg ;
 	private String code ;
 	
