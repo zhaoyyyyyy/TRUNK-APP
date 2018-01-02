@@ -45,7 +45,7 @@ window.loc_onload = function() {
 						url : $.ctx + "/api/dimtable/dimTableInfo/queryPage",
 						datatype : "json",
 						postData :{"configId": configId},
-						colNames : [ '序号', '维表表名', '操作' ],
+						colNames : [ '序号', '维表表名',"维表中文名", '操作' ],
 						colModel : [
 								{
 									name : 'dataName',
@@ -58,7 +58,7 @@ window.loc_onload = function() {
 								{
 									name : 'dimTableName',
 									index : 'dimTableName',
-									width : 80,
+									width : 50,
 									sortable : true,
 									frozen : true,
 									align : "center",
@@ -69,7 +69,14 @@ window.loc_onload = function() {
 												+ data.dimTableName
 												+ "</font></a>";
 									}
-
+								},
+								{
+									name : 'dimValueCol',
+									index : 'dimValueCol',
+									width : 50,
+									sortable : true,
+									frozen : true,
+									align : "center"
 								},
 								{
 									name : 'dimId',
@@ -112,7 +119,7 @@ function del(dimId) {
 function fun_to_detail(id) {
 	var wd = $.window('维表详情', $.ctx
 			+ '/aibi_lc/pages/dimtable/dimtable_detail.html?dimId=' + id, 500,
-			300);
+			350);
 	wd.reload = function() {
 		$("#mainGrid").setGridParam({
 			postData : $("#formSearch").formToJson()
