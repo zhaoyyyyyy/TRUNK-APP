@@ -68,8 +68,8 @@ public class ShopCartController extends BaseController {
 	private static final String SUCCESS = "success";
 
 	/**
-     * 查询标签是否能够加入到购物车
-     */
+	 * 查询标签是否能够加入到购物车
+	 */
 	@ApiOperation(value = "查询标签是否能够加入到购物车")
 	@ApiImplicitParam(name = "labelId", value = "标签id", required = true, paramType = "query", dataType = "string")
 	@RequestMapping(value = "/findLabelValidate", method = RequestMethod.POST)
@@ -93,8 +93,7 @@ public class ShopCartController extends BaseController {
 			return webResult.fail(msg);
 		}
 	}
-	
-	
+
 	/**
 	 * 添加(规则)到购物车
 	 * 
@@ -151,30 +150,27 @@ public class ShopCartController extends BaseController {
 	}
 
 	/**
-	 * 更新session
+	 * 更新session(计算中心每次修改之后对应重新设置session)
 	 */
+	@ApiOperation(value = "计算中心每次修改之后对应重新设置session")
 	@ApiImplicitParam(name = "labelRuleStr", value = "规则串", required = true, paramType = "query", dataType = "string")
 	@RequestMapping(value = "/updateShopSession", method = RequestMethod.POST)
 	public WebResult<String> updateShopSession(HttpServletRequest req, String labelRuleStr) {
 		WebResult<String> webResult = new WebResult<>();
 		try {
-			LabelRuleVo labelRuleVo = (LabelRuleVo) JsonUtil.json2Bean(labelRuleStr, LabelRuleVo.class);
-			List<LabelRuleVo> rules = getSessionLabelRuleList();
-			List<LabelRuleVo> updateRules = new ArrayList<LabelRuleVo>();
-			for (LabelRuleVo rule : rules) {
-				int sortNum = rule.getSortNum();
-				if (sortNum == labelRuleVo.getSortNum()) {
-					updateRules.add(labelRuleVo);
-					continue;
-				}
-				updateRules.add(rule);
+			List<LabelRuleVo> rules = (List<LabelRuleVo>) JsonUtil.json2CollectionBean(labelRuleStr, List.class, LabelRuleVo.class);
+			int numValue = 0;
+			numValue = findLabelOrCustomNum(rules);
+			if (numValue == 0) {
+				rules = null;
 			}
-			setSessionAttribute(LabelRuleContants.SHOP_CART_RULE, JsonUtil.toJsonString(updateRules));
+			setSessionAttribute(LabelRuleContants.SHOP_CART_RULE, JsonUtil.toJsonString(rules));
+			setSessionAttribute(LabelRuleContants.SHOP_CART_RULE_NUM, String.valueOf(numValue));
 		} catch (Exception e) {
-			LogUtil.error("设置属性更新session异常", e);
+			LogUtil.error("计算中心修改异常", e);
 			return webResult.fail(e.getMessage());
 		}
-		return webResult.success("更新购物车成功", SUCCESS);
+		return webResult.success("计算中心修改成功", SUCCESS);
 	}
 
 	/**
@@ -185,6 +181,7 @@ public class ShopCartController extends BaseController {
 	 * @author tianxy3
 	 * @date 2017年12月14日
 	 */
+	@ApiOperation(value = "读取购物车数据")
 	@RequestMapping(value = "/findShopCart", method = RequestMethod.POST)
 	public WebResult<Map<String, Object>> findShopCart(HttpServletRequest request) {
 		Map<String, Object> result = new HashMap<String, Object>();
@@ -210,6 +207,7 @@ public class ShopCartController extends BaseController {
 	 * @author tianxy3
 	 * @date 2017年12月18日
 	 */
+	@ApiOperation(value = "探索")
 	@ApiImplicitParams({
 			@ApiImplicitParam(name = "dataDate", value = "日期", required = true, paramType = "query", dataType = "string"),
 			@ApiImplicitParam(name = "dayLabelDate", value = "数据日期(日)", required = true, paramType = "query", dataType = "string"),
@@ -223,8 +221,9 @@ public class ShopCartController extends BaseController {
 		String countSqlStr = null;
 		try {
 			countSqlStr = exploreServiceImpl.getCountSqlStr(labelRules, queryParam);
-			//TODO 目前直接返回数据后期调用后台接口
+			// TODO 目前直接返回数据后期调用后台接口
 		} catch (Exception e) {
+			LogUtil.error("探索异常", e);
 			return webResult.fail(e.getMessage());
 		}
 		return webResult.success("探索成功", countSqlStr);
@@ -245,27 +244,32 @@ public class ShopCartController extends BaseController {
 		}
 		return webResult.success("删除购物车成功", SUCCESS);
 	}
-	
-	@ApiOperation(value = "计算中心每次修改之后对应重新设置session")
-	@RequestMapping(value = "/saveSession", method = RequestMethod.POST)
-	public WebResult<Map<String, Object>> saveSession(HttpServletRequest req, List<LabelRuleVo> rules) {
-		Map<String, Object> result = new HashMap<String, Object>();
-		WebResult<Map<String, Object>> webResult = new WebResult<>();
+
+	//"计算中心每次修改之后对应重新设置session"
+	public WebResult<String> saveSession(HttpServletRequest req) {
+		WebResult<String> webResult = new WebResult<>();
 		try {
-			int numValue = 0;
-			numValue = findLabelOrCustomNum(rules);
-			if (numValue == 0) {
-				rules = null;
+			String labelRuleStr = null;
+			LabelRuleVo labelRuleVo = (LabelRuleVo) JsonUtil.json2Bean(labelRuleStr, LabelRuleVo.class);
+			List<LabelRuleVo> rules = getSessionLabelRuleList();
+			List<LabelRuleVo> updateRules = new ArrayList<LabelRuleVo>();
+			for (LabelRuleVo rule : rules) {
+				int sortNum = rule.getSortNum();
+				if (sortNum == labelRuleVo.getSortNum()) {
+					updateRules.add(labelRuleVo);
+					continue;
+				}
+				updateRules.add(rule);
 			}
-			setSessionAttribute(LabelRuleContants.SHOP_CART_RULE, JsonUtil.toJsonString(rules));
-			setSessionAttribute(LabelRuleContants.SHOP_CART_RULE_NUM, String.valueOf(numValue));
+			setSessionAttribute(LabelRuleContants.SHOP_CART_RULE, JsonUtil.toJsonString(updateRules));
 		} catch (Exception e) {
-			LogUtil.error("计算中心修改异常", e);
+			LogUtil.error("设置属性更新session异常", e);
 			return webResult.fail(e.getMessage());
 		}
-		return webResult.success("计算中心修改成功", result);
+		return webResult.success("更新购物车成功", SUCCESS);
+
 	}
-	
+
 	/**
 	 * 计算标签和清单的总个数 并为
 	 * 
