@@ -131,19 +131,19 @@ public class BackMysqlDaoImpl extends BaseBackDaoImpl implements IBackSqlDao{
     }
 
 	@Override
-	public boolean createVerticalTable(String tableName, String columnName, String partionName) {
+	public boolean createVerticalTable(String tableName,String columnName,String partionDate,String partionID) {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
-	public boolean loadDataToTabByPartion(String sql, String tableName, String partionValue) {
+	public boolean loadDataToTabByPartion(String sql, String tableName,String partionDate,String partionID) {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
-	public boolean insertDataToTabByPartion(String sql, String tableName, String partionValue) {
+	public boolean insertDataToTabByPartion(String sql,String tableName,String partionDate,String partionID) {
 		// TODO Auto-generated method stub
 		return false;
 	}

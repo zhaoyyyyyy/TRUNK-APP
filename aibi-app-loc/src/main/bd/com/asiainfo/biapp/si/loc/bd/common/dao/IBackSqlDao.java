@@ -138,28 +138,29 @@ public interface IBackSqlDao {
      * 前台创建 纵表   一般有两个 场景 ： 1，某专区的一次性标签的存放；2，某专区临时客户群标签的存放；
      * @param tableName   纵表表名
      * @param columnName  只能是一个列名
-     * @param partionName  分区字段名
+     * @param partionDate  分区字段 1：日期分区字段名 
+     * @param partionID		分区字段2：客户群id分区字段名
      * @return
      */
-    public boolean createVerticalTable(String tableName,String columnName,String partionName);
+    public boolean createVerticalTable(String tableName,String columnName,String partionDate,String partionID);
     
     /**
      * 数据文件方式  指定分区 覆盖式导入指定 表
      * @param sql
      * @param tableName
-     * @param partionValue
+     * @param partionDate
      * @return
      */
-    public boolean loadDataToTabByPartion(String sql, String tableName,String partionValue);
+    public boolean loadDataToTabByPartion(String sql, String tableName,String partionDate,String partionID);
     
     /**
      * 表数据方式  指定分区 覆盖式导入 指定表
      * @param sql
      * @param tableName
-     * @param partionValue
+     * @param partionDate
      * @return
      */
-    public boolean insertDataToTabByPartion(String sql,String tableName,String partionValue);
+    public boolean insertDataToTabByPartion(String sql,String tableName,String partionDate,String partionID);
     
     
     
