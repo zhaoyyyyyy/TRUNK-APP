@@ -6,16 +6,9 @@
 
 package com.asiainfo.biapp.si.loc.core.label.controller;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
-import net.sf.json.JSONArray;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,8 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import springfox.documentation.annotations.ApiIgnore;
-
+import com.asiainfo.biapp.si.loc.auth.model.User;
 import com.asiainfo.biapp.si.loc.base.controller.BaseController;
 import com.asiainfo.biapp.si.loc.base.exception.BaseException;
 import com.asiainfo.biapp.si.loc.base.page.Page;
@@ -37,6 +29,12 @@ import com.asiainfo.biapp.si.loc.core.label.entity.LabelInfo;
 import com.asiainfo.biapp.si.loc.core.label.service.IApproveInfoService;
 import com.asiainfo.biapp.si.loc.core.label.service.ILabelInfoService;
 import com.asiainfo.biapp.si.loc.core.label.vo.LabelInfoVo;
+
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
+import springfox.documentation.annotations.ApiIgnore;
 
 /**
  * Title : LabelInfoController
@@ -146,6 +144,13 @@ public class LabelInfoController extends BaseController<LabelInfo> {
     @RequestMapping(value = "/labelInfo/save", method = RequestMethod.POST)
     public WebResult<String> save(LabelInfo labelInfo){
         WebResult<String> webResult = new WebResult<>();
+        User user = new User();
+        try {
+            user = this.getLoginUser();
+        } catch (BaseException e) {
+            LOGGER.info("context", e);
+        }
+        labelInfo.setCreateUserId(user.getUserId());
         try {
             iLabelInfoService.addLabelInfo(labelInfo);
         } catch (BaseException e) {

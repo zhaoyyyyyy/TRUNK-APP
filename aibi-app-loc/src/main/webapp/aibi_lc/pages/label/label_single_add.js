@@ -199,8 +199,8 @@ function openTtee(tag){
 
 function ztreeFunc(){
 		var ztreeObj;
-		var obj = $("#preConfig_list").find("span");
-		var labelId =obj.attr("configId");				
+		var labelId =$.getUrlParam("configId");	
+		alert(labelId)
 		$.commAjax({			
 		    url : $.ctx+'/api/label/categoryInfo/queryList',  		    
 		    dataType : 'json', 
