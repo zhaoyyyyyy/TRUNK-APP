@@ -289,6 +289,9 @@ html,body{height: 100%;}
 .ui-datepicker-box .ui-widget-header .ui-datepicker-prev .ui-icon{
 	background-position: -236px -224px;
 }
+.ui-datepicker-box.ui-datepicker td{
+	padding:0;
+}
 .ui-datepicker-box.ui-datepicker td span, 
 .ui-datepicker-box.ui-datepicker td a{
     display: block;
