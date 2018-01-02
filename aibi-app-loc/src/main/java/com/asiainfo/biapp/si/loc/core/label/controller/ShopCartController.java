@@ -2,7 +2,9 @@
 package com.asiainfo.biapp.si.loc.core.label.controller;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -13,7 +15,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.asiainfo.biapp.si.loc.base.common.LabelRuleContants;
 import com.asiainfo.biapp.si.loc.base.controller.BaseController;
-import com.asiainfo.biapp.si.loc.base.exception.BaseException;
 import com.asiainfo.biapp.si.loc.base.utils.JsonUtil;
 import com.asiainfo.biapp.si.loc.base.utils.LogUtil;
 import com.asiainfo.biapp.si.loc.base.utils.StringUtil;
@@ -66,6 +67,34 @@ public class ShopCartController extends BaseController {
 
 	private static final String SUCCESS = "success";
 
+	/**
+     * 查询标签是否能够加入到购物车
+     */
+	@ApiOperation(value = "查询标签是否能够加入到购物车")
+	@ApiImplicitParam(name = "labelId", value = "标签id", required = true, paramType = "query", dataType = "string")
+	@RequestMapping(value = "/findLabelValidate", method = RequestMethod.POST)
+	public WebResult<String> findLabelValidate(HttpServletRequest req, String labelId) {
+		WebResult<String> webResult = new WebResult<>();
+		boolean success = true;
+		String msg = "";
+		try {
+			LabelInfo ciLabelInfo = CocCacheProxy.getCacheProxy().getLabelInfoById(labelId);
+			if (StringUtil.isEmpty(ciLabelInfo.getDataDate())) {
+				success = false;
+				msg = "抱歉，该标签数据未准备好，不能添加到收纳篮！";
+			}
+		} catch (Exception e) {
+			LogUtil.error("校验标签异常", e);
+			return webResult.fail(e.getMessage());
+		}
+		if (success) {
+			return webResult.success("查询标签是否能够加入到购物车成功", SUCCESS);
+		} else {
+			return webResult.fail(msg);
+		}
+	}
+	
+	
 	/**
 	 * 添加(规则)到购物车
 	 * 
@@ -157,10 +186,19 @@ public class ShopCartController extends BaseController {
 	 * @date 2017年12月14日
 	 */
 	@RequestMapping(value = "/findShopCart", method = RequestMethod.POST)
-	public WebResult<List<LabelRuleVo>> findShopCart(HttpServletRequest request) {
-		WebResult<List<LabelRuleVo>> webResult = new WebResult<>();
-		List<LabelRuleVo> rules = getSessionLabelRuleList();
-		return webResult.success("读取购物车数据成功", rules);
+	public WebResult<Map<String, Object>> findShopCart(HttpServletRequest request) {
+		Map<String, Object> result = new HashMap<String, Object>();
+		WebResult<Map<String, Object>> webResult = new WebResult<>();
+		try {
+			List<LabelRuleVo> rules = getSessionLabelRuleList();
+			int showCartRulesCount = findLabelOrCustomNum(rules);
+			result.put("showCartRulesCount", showCartRulesCount);
+			result.put("shopCartRules", rules);
+		} catch (Exception e) {
+			LogUtil.error("刷新购物车页面异常", e);
+			return webResult.fail(e.getMessage());
+		}
+		return webResult.success("读取购物车数据成功", result);
 	}
 
 	/**
@@ -207,7 +245,27 @@ public class ShopCartController extends BaseController {
 		}
 		return webResult.success("删除购物车成功", SUCCESS);
 	}
-
+	
+	@ApiOperation(value = "计算中心每次修改之后对应重新设置session")
+	@RequestMapping(value = "/saveSession", method = RequestMethod.POST)
+	public WebResult<Map<String, Object>> saveSession(HttpServletRequest req, List<LabelRuleVo> rules) {
+		Map<String, Object> result = new HashMap<String, Object>();
+		WebResult<Map<String, Object>> webResult = new WebResult<>();
+		try {
+			int numValue = 0;
+			numValue = findLabelOrCustomNum(rules);
+			if (numValue == 0) {
+				rules = null;
+			}
+			setSessionAttribute(LabelRuleContants.SHOP_CART_RULE, JsonUtil.toJsonString(rules));
+			setSessionAttribute(LabelRuleContants.SHOP_CART_RULE_NUM, String.valueOf(numValue));
+		} catch (Exception e) {
+			LogUtil.error("计算中心修改异常", e);
+			return webResult.fail(e.getMessage());
+		}
+		return webResult.success("计算中心修改成功", result);
+	}
+	
 	/**
 	 * 计算标签和清单的总个数 并为
 	 * 
