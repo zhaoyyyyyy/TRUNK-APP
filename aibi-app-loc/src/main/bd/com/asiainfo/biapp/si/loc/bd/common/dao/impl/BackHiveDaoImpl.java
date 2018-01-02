@@ -355,6 +355,24 @@ public class BackHiveDaoImpl extends BaseBackDaoImpl implements IBackSqlDao{
             }
         }
     }
+
+	@Override
+	public boolean createVerticalTable(String tableName, String columnName, String partionName) {
+		String sql = "CREATE TABLE IF NOT EXISTS "+tableName+"("+columnName+" string) PARTITIONED BY (col_name string) ";
+		return false;
+	}
+
+	@Override
+	public boolean loadDataToTabByPartion(String sql, String tableName, String partionValue) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean insertDataToTabByPartion(String sql, String tableName, String partionValue) {
+		// TODO Auto-generated method stub
+		return false;
+	}
 	
 	
 }
