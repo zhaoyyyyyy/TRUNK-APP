@@ -1,7 +1,7 @@
 /*
  * @(#)ApproveInfoServiceImpl.java
  *
- * CopyRight (c) 2017 北京亚信智慧数据科技有限公司 保留所有权利。
+ * CopyRight (c) 2017 鍖椾含浜氫俊鏅烘収鏁版嵁绉戞妧鏈夐檺鍏徃 淇濈暀鎵�鏈夋潈鍒┿��
  */
 
 package com.asiainfo.biapp.si.loc.bd.common.dao.impl;
@@ -22,22 +22,22 @@ import com.asiainfo.biapp.si.loc.bd.common.dao.IBackSqlDao;
 /**
  * Title : BackHiveDaoImpl
  * <p/>
- * Description : 后台库HIVE的访问接口实现类
+ * Description : 鍚庡彴搴揌IVE鐨勮闂帴鍙ｅ疄鐜扮被
  * <p/>
  * CopyRight : CopyRight (c) 2017
  * <p/>
- * Company : 北京亚信智慧数据科技有限公司
+ * Company : 鍖椾含浜氫俊鏅烘収鏁版嵁绉戞妧鏈夐檺鍏徃
  * <p/>
  * JDK Version Used : JDK 5.0 +
  * <p/>
  * Modification History :
  * <p/>
  * <pre>NO.    Date    Modified By    Why & What is modified</pre>
- * <pre>1    2017年12月25日    hongfb        Created</pre>
+ * <pre>1    2017骞�12鏈�25鏃�    hongfb        Created</pre>
  * <p/>
  *
  * @author  hongfb
- * @version 1.0.0.2017年12月25日
+ * @version 1.0.0.2017骞�12鏈�25鏃�
  */
 
 @Repository("backHiveDaoImpl")
@@ -51,7 +51,7 @@ public class BackHiveDaoImpl extends BaseBackDaoImpl implements IBackSqlDao{
         try{
             datas = this.executeResList(sql);
         }catch (Exception e){
-            LogUtil.error("操作后台库出错", e);
+            LogUtil.error("鎿嶄綔鍚庡彴搴撳嚭閿�", e);
         }
         
         if (null != datas && !datas.isEmpty()) {
@@ -76,7 +76,7 @@ public class BackHiveDaoImpl extends BaseBackDaoImpl implements IBackSqlDao{
         try{
             datas = this.executeResList(sql);
         }catch (Exception e){
-            LogUtil.error("操作后台库出错", e);
+            LogUtil.error("鎿嶄綔鍚庡彴搴撳嚭閿�", e);
         }
         
         if (null != datas && !datas.isEmpty()) {
@@ -84,7 +84,7 @@ public class BackHiveDaoImpl extends BaseBackDaoImpl implements IBackSqlDao{
             for (Map<String, String> map : datas) {
                 if (!map.get("col_name").contains("#")) {
                     res.add(map);
-                } else {    //在hive的rs中去掉以[#]开始的以下的列
+                } else {    //鍦╤ive鐨剅s涓幓鎺変互[#]寮�濮嬬殑浠ヤ笅鐨勫垪
                     break;
                 }
             }
@@ -103,7 +103,7 @@ public class BackHiveDaoImpl extends BaseBackDaoImpl implements IBackSqlDao{
             }
         }catch (Exception e){
             res = false;
-            LogUtil.error("操作后台库出错", e);
+            LogUtil.error("鎿嶄綔鍚庡彴搴撳嚭閿�", e);
         }
         
         return res;
@@ -119,7 +119,7 @@ public class BackHiveDaoImpl extends BaseBackDaoImpl implements IBackSqlDao{
             res = this.executeResBoolean(sql);
         }catch (Exception e){
             res = false;
-            LogUtil.error("操作后台库出错", e);
+            LogUtil.error("鎿嶄綔鍚庡彴搴撳嚭閿�", e);
         }
         return res;
 	}
@@ -133,7 +133,7 @@ public class BackHiveDaoImpl extends BaseBackDaoImpl implements IBackSqlDao{
             res = this.executeResBoolean(sql);
         }catch (Exception e){
             res = false;
-            LogUtil.error("操作后台库出错", e);
+            LogUtil.error("鎿嶄綔鍚庡彴搴撳嚭閿�", e);
         }
         
         return res;
@@ -148,7 +148,7 @@ public class BackHiveDaoImpl extends BaseBackDaoImpl implements IBackSqlDao{
             res = this.executeResBoolean(sql);
         }catch (Exception e){
             res = false;
-            LogUtil.error("操作后台库出错", e);
+            LogUtil.error("鎿嶄綔鍚庡彴搴撳嚭閿�", e);
         }
         
 		return res;
@@ -165,7 +165,7 @@ public class BackHiveDaoImpl extends BaseBackDaoImpl implements IBackSqlDao{
             res = this.executeResBoolean(sql);
         }catch (Exception e){
             res = false;
-            LogUtil.error("操作后台库出错", e);
+            LogUtil.error("鎿嶄綔鍚庡彴搴撳嚭閿�", e);
         }
         
         return res;
@@ -191,7 +191,7 @@ public class BackHiveDaoImpl extends BaseBackDaoImpl implements IBackSqlDao{
                 selectSql = selectSql.replaceFirst("select", "select row_number() over() as rownum,");
             }
         } else {
-            throw new RuntimeException("sql大小写不统一！");
+            throw new RuntimeException("sql澶у皬鍐欎笉缁熶竴锛�");
         }   
         
         String sql = new StringBuilder("select * from (").append(selectSql).append(") a where a.rownum >")
@@ -200,7 +200,7 @@ public class BackHiveDaoImpl extends BaseBackDaoImpl implements IBackSqlDao{
         try{
             return this.executeResList(sql);
         }catch (Exception e){
-            LogUtil.error("操作后台库出错", e);
+            LogUtil.error("鎿嶄綔鍚庡彴搴撳嚭閿�", e);
         }
 		return null;
 	}
@@ -208,8 +208,8 @@ public class BackHiveDaoImpl extends BaseBackDaoImpl implements IBackSqlDao{
 	@Override
 	public Integer queryCount(String selectSql) {
         int rows = 0;
-//        原因是按照缺省方式打开的ResultSet不支持结果集cursor的回滚
-//        如果想要完成上述操作，要在生成Statement对象时加入如下两个参数：
+//        鍘熷洜鏄寜鐓х己鐪佹柟寮忔墦寮�鐨凴esultSet涓嶆敮鎸佺粨鏋滈泦cursor鐨勫洖婊�
+//        濡傛灉鎯宠瀹屾垚涓婅堪鎿嶄綔锛岃鍦ㄧ敓鎴怱tatement瀵硅薄鏃跺姞鍏ュ涓嬩袱涓弬鏁帮細
         try{
             Connection connection = this.getBackConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(selectSql,ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
@@ -225,7 +225,7 @@ public class BackHiveDaoImpl extends BaseBackDaoImpl implements IBackSqlDao{
                 }
             }
         }catch (Exception e){
-            LogUtil.error("操作后台库出错", e);
+            LogUtil.error("鎿嶄綔鍚庡彴搴撳嚭閿�", e);
         }
 		return rows;
 	}
@@ -241,7 +241,7 @@ public class BackHiveDaoImpl extends BaseBackDaoImpl implements IBackSqlDao{
             
             return this.resultSetToList(resultSet);
         }catch (Exception e){
-            LogUtil.error("操作后台库出错:"+sql, e);
+            LogUtil.error("鎿嶄綔鍚庡彴搴撳嚭閿�:"+sql, e);
         }
         return null;
     }
@@ -259,7 +259,7 @@ public class BackHiveDaoImpl extends BaseBackDaoImpl implements IBackSqlDao{
             
         }catch (Exception e){
             res = false;
-            LogUtil.error("操作后台库出错:"+sql, e);
+            LogUtil.error("鎿嶄綔鍚庡彴搴撳嚭閿�:"+sql, e);
         }
         return res;
     }
@@ -274,7 +274,7 @@ public class BackHiveDaoImpl extends BaseBackDaoImpl implements IBackSqlDao{
             res = this.executeResBoolean(sql);
         }catch (Exception e){
             res = false;
-            LogUtil.error("操作后台库出错", e);
+            LogUtil.error("鎿嶄綔鍚庡彴搴撳嚭閿�", e);
         }
         
         return res;
@@ -291,11 +291,29 @@ public class BackHiveDaoImpl extends BaseBackDaoImpl implements IBackSqlDao{
             res = this.executeResBoolean(sql);
         }catch (Exception e){
             res = false;
-            LogUtil.error("操作后台库出错", e);
+            LogUtil.error("鎿嶄綔鍚庡彴搴撳嚭閿�", e);
         }
         
         return res;
     }
+
+	@Override
+	public boolean createVerticalTable(String tableName, String columnName, String partionName) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean loadDataToTabByPartion(String sql, String tableName, String partionValue) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean insertDataToTabByPartion(String sql, String tableName, String partionValue) {
+		// TODO Auto-generated method stub
+		return false;
+	}
 	
 	
 }

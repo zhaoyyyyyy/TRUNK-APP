@@ -13,25 +13,25 @@ import com.asiainfo.biapp.si.loc.base.utils.LogUtil;
 import com.asiainfo.biapp.si.loc.bd.common.dao.IBackSqlDao;
 
 /**
- * 后台库是mysql库的情况下
+ * 鍚庡彴搴撴槸mysql搴撶殑鎯呭喌涓�
  * Title : BackMysqlDaoImpl
  * <p/>
  * Description : 
  * <p/>
  * CopyRight : CopyRight (c) 2017
  * <p/>
- * Company : 北京亚信智慧数据科技有限公司
+ * Company : 鍖椾含浜氫俊鏅烘収鏁版嵁绉戞妧鏈夐檺鍏徃
  * <p/>
  * JDK Version Used : JDK 1.8 +
  * <p/>
  * Modification History	:
  * <p/>
  * <pre>NO.    Date    Modified By    Why & What is modified</pre>
- * <pre>1    2017年12月26日    Administrator        Created</pre>
+ * <pre>1    2017骞�12鏈�26鏃�    Administrator        Created</pre>
  * <p/>
  *
  * @author  zhougz3
- * @version 1.0.0.2017年12月26日
+ * @version 1.0.0.2017骞�12鏈�26鏃�
  */
 @Repository("backMysqlDaoImpl")
 public class BackMysqlDaoImpl extends BaseBackDaoImpl implements IBackSqlDao{
@@ -129,6 +129,24 @@ public class BackMysqlDaoImpl extends BaseBackDaoImpl implements IBackSqlDao{
         // TODO Auto-generated method stub
         return false;
     }
+
+	@Override
+	public boolean createVerticalTable(String tableName, String columnName, String partionName) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean loadDataToTabByPartion(String sql, String tableName, String partionValue) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean insertDataToTabByPartion(String sql, String tableName, String partionValue) {
+		// TODO Auto-generated method stub
+		return false;
+	}
 
 
 
