@@ -65,7 +65,7 @@ window.loc_onload = function() {
 									formatter : function(value, opts, data) {
 										return "<a href='###' onclick='fun_to_detail(\""
 												+ data.dimId
-												+ "\")' ><font class='detail-text'>"
+												+ "\")' ><font class='detail-text' color='blue'>"
 												+ data.dimTableName
 												+ "</font></a>";
 									}
