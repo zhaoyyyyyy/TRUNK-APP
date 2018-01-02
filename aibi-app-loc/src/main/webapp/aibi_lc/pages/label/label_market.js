@@ -10,7 +10,7 @@ var dataModel = {
 		page:[],
 		categoryInfoList : [],
 		labelInfoList : [],//标签
-		ruleListSize : 0,
+		ruleListCount : 0,
 		ruleList : [],//规则
 		currentAddLabel : {},
 		configId : '-1',
@@ -22,8 +22,7 @@ var dataModel = {
 		sortCol:"customNum",
 		isShow:false,
 		bdLsit:[],
-		childrenLabel:[],
-		currentRuleIndex : -1
+		childrenLabel:[]
 }
 var tagConfig  = {
 		"4" : "#numberValueSet" , // 指标型，存具体的指标值；
@@ -55,25 +54,14 @@ window.loc_onload = function() {
     var labelSysApp = new Vue({
     	el : '#labelInfoListApp',
     	data : dataModel,
-    	computed: {
-            rulesClassFun : function(index){
-                var rulesClass = {
-                		'ui-bracket': true,
-                		'left' : true,
-                		'ui-conditionCT' : true
-                };
-                return rulesClass
-            }
-        },
     	methods : {
+    		/**
+    		 * 选择标签
+    		 */
     		select : function(index){
     			labelMarket.addToShoppingCar(index);
     		},
-    		setLabelAttr : function(index){
-    			debugger;
-    			currentRuleIndex = index;
-    			labelMarket.setLabelAttr(index);
-    		},
+    		
     		toggle:function(categoryId,index){
     			ulListId=index;
     			$.commAjax({
@@ -395,19 +383,16 @@ var labelMarket = (function (model){
         	var flag = false;
 			if(typeId == 1) {
 				//校验标签有效性
-				//待开发
-				/*
 				$.commAjax({
-					  url: $.ctx + "/api/label/labelInfo/findLabelValidate",
+					  url: $.ctx + "/api/shopCart/findLabelValidate",
 					  postData:{
 						  labelId : {'labelId' : $.trim(id)}
 					  },
 					  onSuccess: function(returnObj){
 					  	  //1.如果验证失败，需要返回 2.需要提示
-						  
 						  flag = true;
 					  }
-				});*/
+				});
 				if(flag){
 					return;
 				}
@@ -450,7 +435,7 @@ var labelMarket = (function (model){
 				  }
 			});
         };
-		/**
+        /**
          * @description 刷新缓存
          * @param  
          * @return  
@@ -465,23 +450,43 @@ var labelMarket = (function (model){
   				  },
   				  onSuccess: function(returnObj){
   					dataModel.ruleList = [];
-  					dataModel.ruleListSize = 0;
+  					dataModel.ruleListCount = 0;
   					if(returnObj.data){
   						//1.更新已选择标签数据
 	  					//2.更新计算中心的页面样式
-  						dataModel.ruleList = returnObj.data;
-  						dataModel.ruleListSize = dataModel.ruleList.length;
+  						dataModel.ruleList = returnObj.data.shopCartRules;
+  						dataModel.ruleListCount = returnObj.data.showCartRulesCount;
   					}
   				 }
   			});
         };
+        /**
+		 * 每执行一步操作对session缓存进行重置
+		 */
+    	model.submitRules = function(sort) {
+    		var para = JSON.stringify( dataModel.ruleList );
+    		$.commAjax({
+				  url: $.ctx + "/api/shopCart/updateShopSession",
+				  postData:{labelRuleStr : para},
+				  onSuccess: function(returnObj){
+					  	var status = returnObj.status;
+						if (status == '200'){
+							model.refreshShopCart();
+						}else{
+							$.alert("添加标签失败");
+						}
+				  }
+			});
+		};
+		
         /**
          * @description 标签弹出层处理
          * @param  
          * @return  
          * ------------------------------------------------------------------
          */
-        model.setLabelAttr = function(index){
+        model.setLabelAttr = function(t){
+        	var index = $(t).parent().attr("index");
         	var rule = dataModel.ruleList[index];
         	var labelType = rule.labelTypeId;
         	var name = rule.customOrLabelName;
@@ -520,32 +525,6 @@ var labelMarket = (function (model){
 		    	wd.reload = function() {
 		    		model.refreshShopCart();
 		    	}
-    		    	/**
-    			$("#numberValueSet").dialog({
-    			      height: 515,
-    			      width: 560,
-    			      modal: true,
-    			      title:name + "-条件设置",
-    			      open:function(){
-    			    	  $(".ui-enum-content").show();
-    			      },
-    			      buttons: [
-    			    	    {
-    			    	      text: "取消",
-    			    	      "class":"ui-btn ui-btn-second",
-    			    	      click: function() {
-    			    	        $( this ).dialog( "close" );
-    			    	      }
-    		  	        },{
-    			    	      text: "确定",
-    			    	      "class":"ui-btn ui-btn-default",
-    			    	      click: function() {
-    			    	        $( this ).dialog( "close" );
-    			    	      }
-    			    	}
-    		  	  ]
-    		   });
-    		   **/
     			/**
     			var attrVal = labelInfo.attrVal ;
     			var attrName = mainObj.attr("attrName");
@@ -637,17 +616,55 @@ var labelMarket = (function (model){
     		}
     	};
     	/***
-    	 * 弹窗获取标签规则
-    	 */
-    	model.getDialogRuleValue = function(index){
-    		
-    	}
-    	/***
     	 * 弹窗设置标签规则
     	 */
     	model.setDialogRuleValue = function(index,isNeedOffset){
     		
-    	}
+    	};
+    	/**
+    	 * 集市开关的展开合并
+    	 */
+    	model.switchConnectorShow = function(t,e){
+    		//如果已经打开了就关闭，否则打开
+    		if($(t).parent().parent().hasClass("open")){
+    			$(t).parent().parent().removeClass('open');
+    		}else{
+    			$(t).parent().parent().addClass('open');
+    		}
+    	};
+    	/**
+		 * 切换连接符号
+		 */
+    	model.switchConnector = function(t,calcuElement){
+    		var index = $(t).parent().parent().parent().attr("index");
+			$(t).parent().parent().removeClass('open');
+			dataModel.ruleList[index].calcuElement = calcuElement;
+    		model.submitRules();
+			
+		};
+		/**
+		 * 更改标志型标签值
+		 */
+		model.againstLabel = function(t){
+			var index = $(t).parent().attr("index");
+			var rule = dataModel.ruleList[index];
+			if(rule.labelFlag == 1){
+				dataModel.ruleList[index] = 0 ;
+			}else{
+				dataModel.ruleList[index] = 1 ;
+			}
+			
+    		model.submitRules();
+		};
+		/**
+		 * 删除规则
+		 */
+		model.deleteRule = function(t){
+			var index = $(t).parent().parent().parent().attr("index");
+			var rule = dataModel.ruleList[index];
+			dataModel.ruleList.pop(rule);
+    		model.submitRules();
+		};
         /**
          * @description 计算中心
          * @param  

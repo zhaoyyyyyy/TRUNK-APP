@@ -206,7 +206,7 @@
 						'ui-chaining' : item.elementType ==1,
 						'ui-conditionCT' : item.elementType == 2,
                 		'ui-bracket': item.elementType == 3,
-                		'left' : item.elementType == 3 }" >
+                		'left' : item.elementType == 3 }" v-bind:index="index">
 						<!--括号 -->
 						<span v-if="item.elementType == 3" v-text="item.calcuElement"></span>
 						<!--符号 -->
@@ -215,19 +215,19 @@
 								<span class="fleft" v-if="item.calcuElement == 'and'" >与</span>
 								<span class="fleft" v-if="item.calcuElement == 'or'">或</span>
 								<span class="fleft" v-if="item.calcuElement == '-'" >剔除</span>
-								<span class="caret" onclick="labelMarket.switchConnector_turn(this,event)"></span>
+								<span class="caret" onclick="labelMarket.switchConnectorShow(this,event)"></span>
 							</button>
 							<ul class="dropdown-menu">
-								<li onclick="labelMarket.switchConnector(this,event)"><a href="#" >或</a></li>
-								<li onclick="labelMarket.switchConnector(this,event)"><a href="#" >与</a></li>
-								<li onclick="labelMarket.switchConnector(this,event)"><a href="#" >剔除</a></li>
+								<li onclick="labelMarket.switchConnector(this,'or')"><a href="#" >或</a></li>
+								<li onclick="labelMarket.switchConnector(this,'and')"><a href="#" >与</a></li>
+								<li onclick="labelMarket.switchConnector(this,'-')"><a href="#" >剔除</a></li>
 							</ul>
 						</div>
 						<!-- 标签 -->
-						<h4 class="ui-conditionCT-h4" onclick="labelMarket.againstLabel(event)" >
-							<span v-text="item.customOrLabelName+item.labelTypeId"></span>
+						<h4 :class="{'ui-conditionCT-h4': 1==1 , 'ui-inverse': item.labelFlag == 1}" onclick="labelMarket.againstLabel(this)" >
+							<span v-text="item.customOrLabelName"></span>
 							<em></em>
-							<i onclick="labelMarket.deleteThis(this)"></i>
+							<i onclick="labelMarket.deleteRule(this)"></i>
 						</h4>
 						<!-- 标签体内容 -->
 						<!-- 标志性-->
@@ -236,7 +236,7 @@
 							<div class="clearfix">是</div>
 						</div>
 						<!-- 指标型 -->
-						<div class="ui-conditionCT-content align_center" v-if="item.labelTypeId == 4" v-on:click="setLabelAttr(index)">
+						<div class="ui-conditionCT-content align_center" v-if="item.labelTypeId == 4" onclick="labelMarket.setLabelAttr(this)">
 							
 							<!-- 
 							<h5>已选条件：</h5>
@@ -390,7 +390,7 @@
 			<!----------------- 购物车 ------------>
 			<div class="ui-shop-cart nest">
 				<p class="fleft ui-shop-cart-icon">
-					<i></i> <span>已选择标签 {{ruleListSize}} 个</span>
+					<i></i> <span>已选择标签 {{ruleListCount}} 个</span>
 				</p>
 				<p class="fright">
 					<span>客户群数：</span><span class="y-text">18,290,40</span>
@@ -425,84 +425,6 @@
 			</div>
 		</div>
 	</div>
-	<!-- 计算中心数值类型弹出框-->
-	<div class="ui-dialog" id="numberValueSet">
-	    <div class="clearfix ui-enum-content" id="numberValueSetContent">
-	        
-	    </div>
-	</div>
-
-	<!-- 计算中心枚举类型弹出框
-	<div class="ui-dialog" id="itemValueSet">
-	    <div class="clearfix ui-enum-content">
-	        <div class="fleft">
-	            <div class="ui-enum-list">
-	                <div class="ui-enum-header clearfix">
-	                    <span>共104个</span>
-	                    <span>全部</span>
-	                    <span>取消</span>
-	                    <div class="form-group fright">
-	                        <div class="input-group">
-	                            <input type="text" class="form-control" id="exampleInputAmount" placeholder="搜索">
-	                            <div class="input-group-addon input-group-icon right-child"></div>
-	                        </div>
-	                    </div>
-	                </div>
-	                <ul class="ui-enum-item">
-	                    <li>
-	                        <span>华北科技学院</span>
-	                    </li>
-	                    <li class="active">
-	                        <span>
-	                            <i>+</i>杭州师范学院音乐美术学院
-	                        </span>
-	                    </li>
-	                    <li>
-	                        <span>浙江同济科技院</span>
-	                    </li>
-	                    <li>
-	                        <span>浙江教育学院</span>
-	                    </li>
-	                    <li>
-	                        <span>浙江理工大学院</span>
-	                    </li>
 	
-	                </ul>
-	                <div class="ui-enum-page clearfix">
-	                    <div id="jsonmap1_pager" class="tcdPageCode">
-	                        <a href="javascript:;" class="prevPage"></a>
-	                        <a href="javascript:;" class="tcdNumber">1</a>
-	                        <span class="current">2</span>
-	                        <span class="disabled"></span>
-	                        <span class="inputPageNum">第<input type="text" id="jsonmap1_pageNum">页</span>
-	                        <a href="javascript:;" class="jumpPageNum">跳转</a>
-	                    </div>
-	                </div>
-	            </div>
-	        </div>
-	        <div class="fleft">
-	            <div class="ui-enum-header">
-	                <span>已选1个</span>
-	                <span>全部</span>
-	                <span>取消</span>
-	                <div class="form-group fright">
-	                    <div class="input-group">
-	                        <input type="text" class="form-control" id="exampleInputAmount" placeholder="搜索">
-	                        <div class="input-group-addon input-group-icon right-child"></div>
-	                    </div>
-	                </div>
-	            </div>
-	            <ul class="ui-enum-item">
-	                <li>
-	                    <span class="del-btn">杭州师范学院音乐美术学院
-	                         <i class="del-btn-icon"></i>
-	                    </span>
-	                </li>
-	            </ul>
-	        </div>
-	    </div>
-	</div>
-	-->
-
 </body>
 </html>
