@@ -183,6 +183,8 @@ public class DimTableInfoController extends BaseController<DimTableInfo>{
         }
         if(StringUtil.isNoneBlank(dim.getDimValueCol())){
             oldDim.setDimValueCol(dim.getDimValueCol());
+        }else{
+            oldDim.setDimValueCol("");
         }
         if(StringUtil.isNoneBlank(dim.getConfigId())){
             oldDim.setConfigId(dim.getConfigId());

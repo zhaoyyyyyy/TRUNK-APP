@@ -1,8 +1,9 @@
 var model = {
 		dimTableName : "",
+		dimValueCol:"",
 		codeColType : "",
 		dimCodeCol : "",
-		dimValueCol :""	
+		dimComment :""	
 }
 window.loc_onload = function() {
 	var wd = frameElement.lhgDG;
@@ -19,16 +20,18 @@ window.loc_onload = function() {
 			url : $.ctx + '/api/dimtable/dimTableInfo/get',
 			onSuccess : function(data) {
 				model.dimTableName = data.data.dimTableName;
+				model.dimValueCol = data.data.dimValueCol;
 				model.codeColType = data.data.codeColType;
 				model.dimCodeCol = data.data.dimCodeCol;
-				model.dimValueCol = data.data.dimValueCol;
+				model.dimComment = data.data.dimComment;
 			}
 		})
 	}else{
 		model.dimTableName = "";
+		model.dimValueCol = "";
 		model.codeColType = "";
 		model.dimCodeCol = "";
-		model.dimValueCol ="";
+		model.dimComment ="";
 	}
 	new Vue({
 		el : '#dataD',
@@ -48,20 +51,41 @@ window.loc_onload = function() {
 		}
 		var reg = /^[a-zA-Z][a-zA-Z0-9_]*$/;
 		var dimTableName = $.trim($("#dimTableName").val());
+		var dimValueCol = $.trim($("#dimValueCol").val());
 		var codeColType = $.trim($("#codeColType").val());
 		var dimCodeCol = $.trim($("#dimCodeCol").val());
-		var dimValueCol = $.trim($("#dimValueCol").val());
+		var dimComment = $.trim($("#dimComment").val());
+		var result = true;
 		if (dimTableName == "") {
 			$.alert("表名不允许为空");
-		} else if (codeColType == "") {
+			result = false;
+		} 
+		if (codeColType == "") {
 			$.alert("请选择主键类型");
-		} else if(dimCodeCol != "" && dimValueCol == ""){$.alert("请输入描述字段名",300,30);}
-		else if(dimCodeCol == "" && dimValueCol != ""){$.alert("请输入主键字段名",300,30);}
-		else if (dimCodeCol != "" && !reg.test(dimCodeCol)) {
-			$.alert("主键字段名只能以英文字母开头,包含数字、字母、下划线",300,30);
-		} else if (dimValueCol != "" && !reg.test(dimValueCol)) {
-			$.alert("描述字段名只能以英文字母开头,包含数字、字母、下划线",300,30);
-		} else {
+			result = false;
+		}
+		var rdoValue = $("#yes").is(":checked") ? "是":"否";
+		if(rdoValue == "否"){
+			if(dimComment == ""){
+				$.alert("请输入描述字段名",300,30);
+				result = false;
+			}else if(dimCodeCol == ""){
+				$.alert("请输入主键字段名",300,30);
+				result = false;
+			}else if (dimCodeCol != "" && !reg.test(dimCodeCol)) {
+				$.alert("主键字段名只能以英文字母开头,包含数字、字母、下划线",300,30);
+				result = false;
+			} else if (dimComment != "" && !reg.test(dimComment)) {
+				$.alert("描述字段名只能以英文字母开头,包含数字、字母、下划线",300,30);
+				result = false;
+			}
+		}else {
+			dimCodeCol = "DIM_ID";
+			dimComment = "DIM_VALUE";
+			$("#dimCodeCol").val(dimCodeCol);
+			$("#dimComment").val(dimComment);
+		}
+		if(result){
 			var data1 =$('#saveDataForm').formToJson();
 			data1.configId = configId;
 			$.commAjax({
@@ -86,10 +110,10 @@ window.loc_onload = function() {
 		var rdoValue = $("#yes").is(":checked") ? "是":"否";
 		if(rdoValue == "否"){
 			$("#dimCodeCol1").show();
-			$("#dimValueCol1").show();			
+			$("#dimComment1").show();			
 		}else{
 			$("#dimCodeCol1").hide();
-			$("#dimValueCol1").hide();
+			$("#dimComment1").hide();
 		}
 	})
 }

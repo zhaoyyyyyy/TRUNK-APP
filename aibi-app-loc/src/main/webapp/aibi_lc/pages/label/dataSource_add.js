@@ -228,6 +228,7 @@ function analysis(){
 		url:$.ctx + "/backSql/columns",
 		postData:{"tableName" : tableName},
 		onSuccess:function(data){
+			$("#jsonmap").jqGrid("clearGridData");
 			for(var i=0;i < data.data.length;i++){
 				if(data.data[i].data_type == "string"){
 					data.data[i].data_type = "2";
