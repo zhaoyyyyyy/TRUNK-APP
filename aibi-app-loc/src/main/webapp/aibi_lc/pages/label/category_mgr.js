@@ -191,7 +191,6 @@ window.loc_onload = function() {
 			    }
 			    if(treeNode.isParent){
 			    	var childrenNodes = treeNode.children;
-			    	console.log(childrenNodes.length);
 			    	$.alert("该分类下有标签分类");
 			    }else{
 			    	$.confirm('确定要删除该标签分类？', function() {
