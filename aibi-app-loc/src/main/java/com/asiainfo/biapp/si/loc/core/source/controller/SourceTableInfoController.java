@@ -136,6 +136,17 @@ public class SourceTableInfoController extends BaseController<SourceTableInfo> {
     @RequestMapping(value = "/sourceTableInfo/save", method = RequestMethod.POST)
     public WebResult<String> save(@ApiIgnore SourceTableInfo sourceTableInfo) {
         WebResult<String> webResult = new WebResult<>();
+        List<SourceTableInfo> sourceTableInfoList = new ArrayList<>();
+        SourceTableInfoVo sourceTableInfoVo = new SourceTableInfoVo();
+        sourceTableInfoVo.setSourceTableName(sourceTableInfo.getSourceTableName());
+        try {
+            sourceTableInfoList = iSourceTableInfoService.selectSourceTableInfoList(sourceTableInfoVo);
+        } catch (BaseException e1) {
+            return webResult.fail(e1);
+        }
+        if(!sourceTableInfoList.isEmpty()){
+            return webResult.fail("表名称已存在");
+        }
         User user = new User();
         try {
             user = this.getLoginUser();
@@ -148,8 +159,8 @@ public class SourceTableInfoController extends BaseController<SourceTableInfo> {
         sourceTableInfo.setDataExtractionType(1);
         try {
             iSourceTableInfoService.addSourceTableInfo(sourceTableInfo);
-        } catch (BaseException e1) {
-            return webResult.fail(e1);
+        } catch (BaseException e2) {
+            return webResult.fail(e2);
         }
         return webResult.success("新增指标数据源信息配置成功", SUCCESS);
     }

@@ -8,12 +8,11 @@ var model = {
 		xzqhList : [],
 		configDesc : "",
 		dataAccessType : 0,
-		dataAccessType0 : 0,
 		sourceName : "",
 		sourceEnName : "",
 		invalidTime : "",
 		configId : "",
-		num : 0
+		orgId : ""
 }
 window.loc_onload = function() {
 	var configId = $.getUrlParam("configId");
@@ -50,15 +49,15 @@ window.loc_onload = function() {
 		el : '#dataD',
 		data : model,
 		updated : function(){
-			$("#type"+model.dataAccessType).click();
-			if(configId != null && configId != "" && configId != undefined){
-				$("#orgId").val(model.orgId);
-				var value = $("#orgId").val();
-				if(value == "" || value == null){
-					$("#orgId").val(1);
+			var value1 = $("#orgId").val();
+			if(value1 == "1" || configId != ""){
+				$("#type"+model.dataAccessType).click();
+				if(value1 == undefined && model.orgId == ""){
+					$("#orgId"+model.dataAccessType).val(1);
+					model.orgId = "1";
+				}else if(model.orgId != "1"){
+					$("#orgId"+model.dataAccessType).val(model.orgId);
 				}
-			}else{
-				$("#orgId").val(1);
 			}
 		}
 	})
@@ -159,7 +158,6 @@ function changeStatus(obj){
 	}
 	if(model.dataAccessType != obj.value){
 		model.dataAccessType = obj.value;
-		model.num = 1;
-		$("#orgId").val(1);
+		model.orgId = "";
 	}
 }

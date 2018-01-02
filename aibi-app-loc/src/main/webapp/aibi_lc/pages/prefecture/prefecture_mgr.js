@@ -39,7 +39,7 @@ window.loc_onload = function() {
     $("#mainGrid").jqGrid({
         url: $.ctx + "/api/prefecture/preConfigInfo/queryPage",
         datatype: "json",
-        colNames: ['专区名','专区ID', '专区英文名', '组织名称', '创建时间', '专区类型', '数据状态', '操作'],
+        colNames: ['专区名','专区ID', '组织名称', '创建时间', '专区类型', '数据状态', '操作'],
         colModel: [{
             name: 'sourceName',
             index: 'sourceName',
@@ -62,16 +62,8 @@ window.loc_onload = function() {
             align: "center"
         },
         {
-            name: 'sourceEnName',
-            index: 'sourceEnName',
-            width: 30,
-            sortable: true,
-            frozen: true,
-            align: "center"
-        },
-        {
-            name: 'contractName',
-            index: 'contractName',
+            name: 'orgId',
+            index: 'orgId',
             width: 30,
             sortable: true,
             frozen: true,
@@ -205,7 +197,7 @@ function fun_to_start(id){
 }
 function fun_to_down(id){
 	$.confirm('确定要下线该专区吗？', function() {
-		$.confirm('真的确定要下线该专区？', function() {
+		$.confirm('再次确认真的要下线该专区？', function() {
 			$.commAjax({
 				url : $.ctx + '/api/prefecture/preConfigInfo/update',
 				postData : {
@@ -213,7 +205,7 @@ function fun_to_down(id){
 					"configStatus" : 3
 				},
 				onSuccess : function(data) {
-					$.success('启用成功。', function() {
+					$.success('下线成功。', function() {
 						$("#mainGrid").setGridParam({
 							postData : $("#formSearch").formToJson()
 						}).trigger("reloadGrid", [ {
@@ -227,7 +219,7 @@ function fun_to_down(id){
 }
 function fun_to_delete(id){
 	$.confirm('确定要删除该专区吗？', function() {
-		$.confirm('真的确定要删除该专区？', function() {
+		$.confirm('再次确认真的要删除该专区？', function() {
 			$.commAjax({
 				url : $.ctx + '/api/prefecture/preConfigInfo/update',
 				postData : {
@@ -235,7 +227,7 @@ function fun_to_delete(id){
 					"configStatus" : 4
 				},
 				onSuccess : function(data) {
-					$.success('启用成功。', function() {
+					$.success('删除成功。', function() {
 						$("#mainGrid").setGridParam({
 							postData : $("#formSearch").formToJson()
 						}).trigger("reloadGrid", [ {

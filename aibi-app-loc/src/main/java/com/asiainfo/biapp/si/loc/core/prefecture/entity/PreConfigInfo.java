@@ -16,6 +16,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.hibernate.annotations.GenericGenerator;
 
@@ -126,6 +127,17 @@ public class PreConfigInfo extends BaseEntity {
     @Column(name = "CONFIG_STATUS")
     @ApiParam(value = "状态")
     private Integer configStatus;
+
+    @Transient
+    private String createUserId;
+
+    public String getCreateUserId() {
+        return createUserId;
+    }
+
+    public void setCreateUserId(String createUserId) {
+        this.createUserId = createUserId;
+    }
 
     public String getConfigId() {
         return configId;

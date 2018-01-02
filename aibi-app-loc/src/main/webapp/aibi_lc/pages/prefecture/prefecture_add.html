@@ -51,16 +51,16 @@
 								<div v-if="showHyx==true" class="form-group">
 									<label class="control-label fleft">行业线</label> 
 									<div class="control-input">
-										<select id="orgId" name="orgId" class="form-control input-pointer " >
-										<option value="1">请选择行业线</option>
-										<option v-for="h in hyxList" :value="h.orgCode">{{h.fullName}}</option>
-									</select>
+										<select id="orgId2" name="orgId" class="form-control input-pointer " >
+											<option value="1">请选择行业线</option>
+											<option v-for="h in hyxList" :value="h.orgCode">{{h.fullName}}</option>
+										</select>
 									</div>
 								</div>
 								<div v-if="showCpx==true" class="ui-form-group">
 									<label class="control-label fleft">产品线</label> 
 									<div class="control-input">
-										<select id="orgId" name="orgId" class="form-control input-pointer " >
+										<select id="orgId1" name="orgId" class="form-control input-pointer " >
 											<option value="1">请选择产品线</option>
 											<option v-for="c in cpxList" :value="c.orgCode">{{c.fullName}}</option>
 										</select>
@@ -69,7 +69,7 @@
 								<div v-if="showXzqh==true" class="ui-form-group">
 									<label class="control-label fleft">行政区划</label>
 									<div class="control-input">
-										<select id="orgId" name="orgId" class="form-control input-pointer " >
+										<select id="orgId3" name="orgId" class="form-control input-pointer " >
 											<option value="1">请选择行政区划</option>
 											<option v-for="x in xzqhList" :value="x.orgCode">{{x.fullName}}</option>
 										</select>
