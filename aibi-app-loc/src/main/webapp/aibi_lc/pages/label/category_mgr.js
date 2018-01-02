@@ -189,8 +189,13 @@ window.loc_onload = function() {
 			    } else if (window.event) {
 			      window.event.cancelBubble = true;
 			    }
-				$.confirm('确定要删除该标签分类？', function() {
-					$.commAjax({
+			    if(treeNode.isParent){
+			    	var childrenNodes = treeNode.children;
+			    	console.log(childrenNodes.length);
+			    	$.alert("该分类下有标签分类");
+			    }else{
+			    	$.confirm('确定要删除该标签分类？', function() {
+						$.commAjax({
 							url : $.ctx + '/api/label/categoryInfo/delete',
 							postData : {
 								"categoryId" : treeNode.categoryId,	
@@ -203,7 +208,9 @@ window.loc_onload = function() {
 								labeltree();
 							}
 						});
-				})
+					})
+			    }
+				
 			})
 			//修改按钮
 			var updBtn = $("#updBtn_" + treeNode.tId);
