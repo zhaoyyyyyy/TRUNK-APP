@@ -6,6 +6,7 @@ window.loc_onload = function() {
 	//移动标签时所选中的标签ID数组
 	var transData = new Array();
 	var leftTreeCagyId;  //左边树选中的分类ID
+	$("#labelLength").html(0);
 	$("#dialog").dialog({
 	      height:164,
 	      width: 300,
@@ -28,67 +29,11 @@ window.loc_onload = function() {
 					"sysId" :labelId,
 				},
 		    onSuccess: function(data){
-		    	if(data.data.length==0){
-		    		var btn=$("<button class='ui-btn ui-btn-default'>添加标签分类</button>")
-		    		$("#ztree").append(btn)
-		    		$(btn).on("click",function(){
-			    		$( "#dialog" ).dialog({
-		        	 	title:"新增标签分类",
-		        	 	autoOpen: true,
-		        	 	buttons: [
-				    	    {
-				    	       text: "取消",
-				    	       "class":"ui-btn ui-btn-second",
-				    	        click: function() {
-				    	        	$( this ).dialog( "close" );
-				    	     	}
-					  	    },
-					  	    {
-				    	        text: "确定",
-				    	        "id":"add-dialog-btn",
-				    	        "class":"ui-btn ui-btn-default",
-				    	        click: function() {
-				    	        	$( this ).dialog( "close" );	    	        
-				    	        }
-					    	}
-			  	  		],
-			  	  		open:function(){
-			  	  			$(".ui-form-group ").show();
-					      	$(".ui-form-group ").find("input").val("");
-					    }
-		        	});
-			    		$('#add-dialog-btn').click(function(){
-		        	 	var Ppname=$( "#dialog" ).find("input").val();
-		        	 	if (Ppname == null) {
-				            return;
-					    } else if (Ppname == "") {
-					            alert("节点名称不能为空");
-					    }else {
-					        $.commAjax({						
-								url : $.ctx + '/api/label/categoryInfo/save',
-								async:true,
-								postData : {
-									"sysId" :labelId,
-									"categoryName":Ppname,
-									
-								},
-								onSuccess:function(data){							
-									ztreeFunc();
-									labeltree();
-								}
-							});
-			       		}
-		        	})	
-		    			
-		    			
-		    			
-		    			
-		    			
-		    		})
-		    	}else{
-				    var ztreeObj=data.data;
-				    $.fn.zTree.init($("#ztree"), setting, ztreeObj)
-			    }  
+		    	var ztreeObj = [{"categoryId":null,"sysId":null,"sysType":null,"categoryDesc":null,"categoryName":"根","parentId":null,"categoryPath":null,"isLeaf":null,"statusId":null,"sortNum":null,"levelId":null,"children":[]}]
+		    	if(data.data.length != 0){
+		    		ztreeObj[0].children = data.data;
+		    	}
+		    	$.fn.zTree.init($("#ztree"), setting, ztreeObj);
 		    }
 	   });
 		setting = {
@@ -191,25 +136,38 @@ window.loc_onload = function() {
 			    }
 			    if(treeNode.isParent){
 			    	var childrenNodes = treeNode.children;
-			    	$.alert("该分类下有标签分类");
+			    	$.alert("该分类下有标签分类,不可以删除");
+			    }else if(!treeNode.categoryId){
+			    	$.alert("此目录不可以删除");
 			    }else{
 			    	$.confirm('确定要删除该标签分类？', function() {
 						$.commAjax({
-							url : $.ctx + '/api/label/categoryInfo/delete',
+							url : $.ctx + '/api/label/labelInfo/queryList',
 							postData : {
 								"categoryId" : treeNode.categoryId,	
-								"sysId" :labelId,								
-								"parentId":treeNode.categoryId,
+								"configId" :labelId,								
 							},
 							onSuccess:function(data){
-								$("#ztree").html("");
-								ztreeFunc();
-								labeltree();
+								if(!data.data.length){
+									$.commAjax({
+										url : $.ctx + '/api/label/categoryInfo/delete',
+										postData : {
+											"categoryId" : treeNode.categoryId,	
+											"sysId" :labelId,								
+											"parentId":treeNode.categoryId,
+										},
+										onSuccess:function(data){
+											ztreeFunc();
+											labeltree();
+										}
+									});
+								}else{
+									$.alert("该分类下还有标签，不可删除");
+								}
 							}
 						});
 					})
 			    }
-				
 			})
 			//修改按钮
 			var updBtn = $("#updBtn_" + treeNode.tId);
@@ -220,32 +178,35 @@ window.loc_onload = function() {
 			    } else if (window.event) {
 			      window.event.cancelBubble = true;
 			    }
-        	 $( "#dialog" ).dialog({
-        	 	title:"修改标签分类",
-	        	autoOpen: true,
-	        	buttons: [
-			        {
-		    	        text: "取消",
-		    	        "class":"ui-btn ui-btn-second",
-		    	        click: function() {
-		    	        	$( this ).dialog( "close" );
-		    	     	}
-				  	},
-			  	    {
-		    	        text: "确定",
-		    	        "id":"add-dialog-btn",
-		    	        "class":"ui-btn ui-btn-default",
-		    	        click: function() {
-		    	        	$( this ).dialog( "close" );	    	        
-		    	        }
-			    	}
-		  	  	],
-		  	  	open:function(){
-		  	  		$(".ui-form-group ").show();
-			      	$(".ui-form-group ").find("input").val(treeNode.categoryName);
+			    if(!treeNode.categoryId){
+			    	$.alert("此目录不可以修改");
+			    }else{
+		        	 $( "#dialog" ).dialog({
+		        	 	title:"修改标签分类",
+			        	autoOpen: true,
+			        	buttons: [
+					        {
+				    	        text: "取消",
+				    	        "class":"ui-btn ui-btn-second",
+				    	        click: function() {
+				    	        	$( this ).dialog( "close" );
+				    	     	}
+						  	},
+					  	    {
+				    	        text: "确定",
+				    	        "id":"add-dialog-btn",
+				    	        "class":"ui-btn ui-btn-default",
+				    	        click: function() {
+				    	        	$( this ).dialog( "close" );	    	        
+				    	        }
+					    	}
+				  	  	],
+				  	  	open:function(){
+				  	  		$(".ui-form-group ").show();
+					      	$(".ui-form-group ").find("input").val(treeNode.categoryName);
+					    }
+		        	 });
 			    }
-	        	
-        	 });
         	 $('#add-dialog-btn').click(function(){	        	 	
         	 	 var Ppname=$( "#dialog" ).find("input").val();	        	 	 
         	 	if (Ppname == null) {
@@ -273,7 +234,6 @@ window.loc_onload = function() {
 		function removeHoverDom(treeId, treeNode) {
 			$("#handle_" + treeNode.tId).unbind().remove();
 		};
-		
 		//展示选中分类下的标签
 		function zTreeOnClick(event, treeId, treeNode) {
 			leftTreeCagyId =treeNode.categoryId;
@@ -328,25 +288,22 @@ window.loc_onload = function() {
 			transData[j]=$(this).attr("data-id");
 			j++;
 		})
-		var flag =false;
 		for(var i=0;i<transData.length;i++){
 			$.commAjax({			
-			    url : $.ctx+'/api/label/labelInfo/update',  		    
+			    url : $.ctx+'/api/label/labelInfo/update',  	
 			    dataType : 'json', 
+			    async : false,
 			    postData : {
 						"labelId" :transData[i],
 						"categoryId":transToData,
 					},
 			    onSuccess: function(data){ 
-			    	if(!flag){
+			    	if(i == transData.length-1){
 				    	$.alert("移动标签成功");
-				    	$("#labelList").html("");
-				    	//ztreeFunc();
+				    	showLabelInfo();
 				    	$("#dialog-del").click();
-				    	//labeltree();
-				    	flag =true;
-				    	//$(".label-dialog").removeClass("active");
 			    	}
+			    	
 				}
 			});
 		}

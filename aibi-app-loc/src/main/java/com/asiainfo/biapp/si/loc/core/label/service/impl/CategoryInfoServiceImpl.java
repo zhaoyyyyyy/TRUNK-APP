@@ -18,6 +18,7 @@ import com.asiainfo.biapp.si.loc.base.dao.BaseDao;
 import com.asiainfo.biapp.si.loc.base.exception.BaseException;
 import com.asiainfo.biapp.si.loc.base.exception.ParamRequiredException;
 import com.asiainfo.biapp.si.loc.base.service.impl.BaseServiceImpl;
+import com.asiainfo.biapp.si.loc.base.utils.StringUtil;
 import com.asiainfo.biapp.si.loc.core.label.dao.ICategoryInfoDao;
 import com.asiainfo.biapp.si.loc.core.label.entity.CategoryInfo;
 import com.asiainfo.biapp.si.loc.core.label.service.ICategoryInfoService;
@@ -74,6 +75,9 @@ public class CategoryInfoServiceImpl extends BaseServiceImpl<CategoryInfo, Strin
     }
 
     public void addCategoryInfo(CategoryInfo categoryInfo) throws BaseException {
+        if(categoryInfo != null && StringUtil.isEmpty(categoryInfo.getParentId())){
+            categoryInfo.setParentId(null);
+        }
         super.saveOrUpdate(categoryInfo);
     }
 
