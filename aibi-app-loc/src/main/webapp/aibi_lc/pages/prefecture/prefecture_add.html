@@ -26,57 +26,68 @@
 			<div class="ui-lc-mian">
 				<form id="saveDataForm">
 					<input type="hidden" v-model="configId" id="configId" name="configId" />
-					<div class="ui-expand-search ui-reg-search">
-						<div class="form-inline ui-form">
-							<div class="clearfix">
-								<div class="form-group">
-									<label class="fleft mt5">专区名称</label> <input v-model="sourceName" name="sourceName" type="text"  class="fleft form-control mr10 ml10"
-										placeholder="专区名称" />
+					<div class="ui-reg-search">
+						<div class="form-horizontal ui-form dimtable-table">
+							<div class="ui-form-group">
+								<label class="control-label fleft">专区名称</label>
+								<div class="control-input">
+									<input v-model="sourceName" name="sourceName" type="text"  class="fleft form-control"
+									placeholder="专区名称" />
 								</div>
 							</div>
-							<div class="clearfix mt30">
-								<div class="form-group">
-									<label class="fleft mt5">专区类型</label>
-									<div class="ml10 control-input has-icon mt5">
+							<div class="ui-form-group">
+									<label class="control-label fleft">专区类型</label>
+									<div class="control-input">
 										<ul>
-											<li class="ml10" v-for="z in zqlxList" style="display: inline"><input :value="z.orgType" :id="'type'+z.orgType" onclick="changeStatus(this)"
-												name="dataAccessType" type="radio" /><span>{{z.fullName}}</span></li>
+											<li class="radio circle success ml10" v-for="z in zqlxList" style="display: inline">
+												<input :value="z.orgType" :id="'type'+z.orgType" onclick="changeStatus(this)"
+												name="dataAccessType" type="radio" />
+												<label  for="myr4"><i class="default"></i><span>{{z.fullName}}</span></label>
+											</li>
 										</ul>
 									</div>
-								</div>
 							</div>
-							<div class="clearfix mt30">
+							<div class="ui-form-group">
 								<div v-if="showHyx==true" class="form-group">
-									<label>行业线</label> <select id="orgId" name="orgId" class="form-control ml10 input-pointer " >
-										<option value="1">请选择行业线</option>
-										<option v-for="h in hyxList" :value="h.orgCode">{{h.fullName}}</option>
-									</select>
-								</div>
-								<div v-if="showCpx==true" class="form-group">
-									<label>产品线</label> <select id="orgId" name="orgId" class="form-control ml10 input-pointer " >
-										<option value="1">请选择产品线</option>
-										<option v-for="c in cpxList" :value="c.orgCode">{{c.fullName}}</option>
-									</select>
-								</div>
-								<div v-if="showXzqh==true" class="form-group">
-									<label>行政区划</label> <select id="orgId" name="orgId" class="form-control ml10 input-pointer " >
-										<option value="1">请选择行政区划</option>
-										<option v-for="x in xzqhList" :value="x.orgCode">{{x.fullName}}</option>
-									</select>
-								</div>
-							</div>
-							<div class="clearfix mt30">
-								<div class="form-group">
-									<label for="invalidTime">失效时间</label> <input v-model="invalidTime" name="invalidTime" type="text"
-										class="ml10 date-input form-control input-pointer form-control-bubble" data-dismiss="formDatepicker#sendTime" id="" placeholder="请选择失效日期" />
-								</div>
-							</div>
-							<div>
-								<div class="clearfix mt30">
-									<div class="form-group">
-										<label for="configDesc">专区描述</label>
-										<textarea v-model="configDesc" name="configDesc" class="form-control ml10"></textarea>
+									<label class="control-label fleft">行业线</label> 
+									<div class="control-input">
+										<select id="orgId2" name="orgId" class="form-control input-pointer " >
+											<option value="1">请选择行业线</option>
+											<option v-for="h in hyxList" :value="h.orgCode">{{h.fullName}}</option>
+										</select>
 									</div>
+								</div>
+								<div v-if="showCpx==true" class="ui-form-group">
+									<label class="control-label fleft">产品线</label> 
+									<div class="control-input">
+										<select id="orgId1" name="orgId" class="form-control input-pointer " >
+											<option value="1">请选择产品线</option>
+											<option v-for="c in cpxList" :value="c.orgCode">{{c.fullName}}</option>
+										</select>
+									</div>
+								</div>
+								<div v-if="showXzqh==true" class="ui-form-group">
+									<label class="control-label fleft">行政区划</label>
+									<div class="control-input">
+										<select id="orgId3" name="orgId" class="form-control input-pointer " >
+											<option value="1">请选择行政区划</option>
+											<option v-for="x in xzqhList" :value="x.orgCode">{{x.fullName}}</option>
+										</select>
+									</div>
+									
+								</div>
+							</div>
+							<div class="ui-form-group">
+								<label class="control-label fleft" for="invalidTime">失效时间</label> 
+								<div class="control-input">
+									<input v-model="invalidTime" name="invalidTime" type="text"
+										class="date-input form-control input-pointer form-control-bubble" data-dismiss="formDatepicker#sendTime" id="" placeholder="请选择失效日期" />
+								</div>
+							</div>
+							<div class="ui-form-group">
+								<label class="control-label fleft" for="configDesc">专区描述</label>
+								<div class="control-input">
+									<textarea v-model="configDesc" name="configDesc" class="form-control"></textarea>
 								</div>
 							</div>
 						</div>

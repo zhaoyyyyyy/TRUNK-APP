@@ -19,6 +19,9 @@ import com.asiainfo.biapp.si.loc.base.exception.BaseException;
 import com.asiainfo.biapp.si.loc.base.exception.ParamRequiredException;
 import com.asiainfo.biapp.si.loc.base.page.Page;
 import com.asiainfo.biapp.si.loc.base.service.impl.BaseServiceImpl;
+import com.asiainfo.biapp.si.loc.base.utils.DateUtil;
+import com.asiainfo.biapp.si.loc.core.label.entity.MdaSysTable;
+import com.asiainfo.biapp.si.loc.core.label.service.IMdaSysTableService;
 import com.asiainfo.biapp.si.loc.core.prefecture.dao.IPreConfigInfoDao;
 import com.asiainfo.biapp.si.loc.core.prefecture.entity.PreConfigInfo;
 import com.asiainfo.biapp.si.loc.core.prefecture.service.IPreConfigInfoService;
@@ -56,6 +59,9 @@ public class PreConfigInfoServiceImpl extends BaseServiceImpl<PreConfigInfo, Str
 
     @Autowired
     private IPreConfigInfoDao iPreConfigInfoDao;
+    
+    @Autowired
+    private IMdaSysTableService iMdaSysTableService;
 
     @Override
     protected BaseDao<PreConfigInfo, String> getBaseDao() {
@@ -87,6 +93,28 @@ public class PreConfigInfoServiceImpl extends BaseServiceImpl<PreConfigInfo, Str
 
     public void addPreConfigInfo(PreConfigInfo preConfigInfo) throws BaseException {
         super.saveOrUpdate(preConfigInfo);
+        for(int i=1;i<3;i++){
+            MdaSysTable mdaSysTable = new MdaSysTable();
+            mdaSysTable.setConfigId(preConfigInfo.getConfigId());
+            mdaSysTable.setTableSchema("");
+            mdaSysTable.setCreateTime(DateUtil.string2Date(preConfigInfo.getCreateTime(),DateUtil.DATETIME_FORMAT));
+            mdaSysTable.setCreateUserId(preConfigInfo.getCreateUserId());
+            if(i==1){
+                for(int k=1;k<3;k++){
+                    mdaSysTable.setTableName("DW_L_PREF_"+preConfigInfo.getConfigId()+"_");
+                    mdaSysTable.setTableType(i);
+                    mdaSysTable.setUpdateCycle(k);
+                    iMdaSysTableService.addMdaSysTable(mdaSysTable);
+                }
+            }else if(i==2){
+                for(int j=1;j<3;j++){
+                    mdaSysTable.setTableName("DW_G_PREF_"+preConfigInfo.getConfigId()+"_");
+                    mdaSysTable.setTableType(i);
+                    mdaSysTable.setUpdateCycle(j);
+                    iMdaSysTableService.addMdaSysTable(mdaSysTable);
+                }
+            }
+        }
     }
 
     public void modifyPreConfigInfo(PreConfigInfo preConfigInfo) throws BaseException {

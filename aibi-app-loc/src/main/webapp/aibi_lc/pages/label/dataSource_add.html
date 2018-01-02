@@ -100,50 +100,44 @@
 								<input v-model="configId" id="configId" name="configId" type="hidden" class="form-control mr10 ml10"/>      	
 			                    <label class="control-label" for="exampleInputEmail3">表名称</label> 
 			                        <div class="control-input">
-			                            <input v-model="sourceTableName" id="sourceTableName" name="sourceTableName" type="text" class="form-control mr10 ml10" placeholder="表名称">
+			                            <input v-model="sourceTableName" id="sourceTableName" name="sourceTableName" type="text" class="form-control" placeholder="表名称">
 			                        </div>
 			                        <button onclick="analysis()" type="button" class="ui-btn ui-btn-default fright">解析</button>
 			                </div>
+			                <div class="ui-form-group">
+				                    <label class="control-label" for="exampleInputEmail3">主键名称</label>
+				                    <div class="control-input">
+				                        <input v-model="idColumn" name="idColumn" type="text" class="form-control" id="exampleInputEmail3" placeholder="来源主键字段名称">
+				                    </div>
+				                </div>
 							<div class="ui-form-group">
 			                    <label class="control-label" for="exampleInputEmail3">日期分区字段</label> 
 			                    <div class="control-input">
-			                        <input v-model="dateColumnName" name="dateColumnName" type="text" class="form-control ml10" placeholder="日期分区字段">
+			                        <input v-model="dateColumnName" name="dateColumnName" type="text" class="form-control" placeholder="日期分区字段">
 			                    </div>
 			                </div>
-				            <div class="ui-form-group">
-				                    <label class="control-label" for="exampleInputEmail3">字段名称</label>
-				                    <div class="control-input">
-				                        <input v-model="idColumn" name="idColumn" type="text" class="form-control ml10" id="exampleInputEmail3" placeholder="来源主键字段名称">
-				                    </div>
-				                </div>
 				        </div>
 			            <div class="form-horizontal fleft ui-form">
 			                <div class="ui-form-group">
 			                   <label class="control-label" for="exampleInputEmail3" >表中文名</label>
 			                    <div class="control-input">
-			                        <input v-model="sourceTableCnName" name="sourceTableCnName" type="text" class="form-control ml10" id="exampleInputEmail3" placeholder="表中文名">
+			                        <input v-model="sourceTableCnName" name="sourceTableCnName" type="text" class="form-control" id="exampleInputEmail3" placeholder="表中文名">
+			                    </div>
+			                </div>
+			                <div class="ui-form-group">
+			                   <label class="control-label" for="exampleInputEmail3">主键类型</label>
+			                    <div class="control-input">
+			                        <select v-model="idType" name="idType" dicCode="BSLXZD" type="text" class="fleft form-control input-pointer"></select>
 			                    </div>
 			                </div>
 			                <div class="ui-form-group">
 			                   <label class="control-label" for="exampleInputEmail3">过滤条件</label>
 			                    <div class="control-input">
-			                        <input v-model="whereSql" name="whereSql" type="text" class="form-control ml10" placeholder="过滤条件">
-			                    </div>
-			                </div>
-			                <div class="ui-form-group">
-			                   <label class="control-label" for="exampleInputEmail3">标识类型</label>
-			                    <div class="control-input">
-			                        <select v-model="idType" name="idType" dicCode="BSLXZD" type="text" class="ml10 fleft form-control input-pointer"></select>
+			                        <input v-model="whereSql" name="whereSql" type="text" class="form-control" placeholder="过滤条件">
 			                    </div>
 			                </div>
 			            </div>
 			            <div class="form-horizontal fleft ui-form">
-			                <div class="ui-form-group">
-			                    <label class="control-label" for="exampleInputEmail3">源表类型</label>
-			                    <div class="control-input">
-			                        <select v-model="sourceTableType" name="sourceTableType" dicCode="SJYBLX" type="text" class="form-control input-pointer"></select>
-			                    </div>
-			                </div>
 			                <div class="ui-form-group">
 			                   	<label class="control-label" for="inputEmail4">数据更新周期</label>
 			                    <div class="control-input has-icon">
@@ -157,9 +151,8 @@
 									</ul>
 			                    </div>
 			                </div>
-			            	
 			            	<div class="ui-form-group">
-			                    <label class="control-label" for="exampleInputEmail3">字段类型</label>
+			                    <label class="control-label" for="exampleInputEmail3">主键字段类型</label>
 			                    <div class="control-input">
 			                        <select v-model="idDataType" name="idDataType" dicCode="ZDLXZD" type="text" class=" fleft form-control input-pointer"></select>
 			                    </div>

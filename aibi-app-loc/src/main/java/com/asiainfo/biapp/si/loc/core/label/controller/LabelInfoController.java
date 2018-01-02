@@ -6,16 +6,9 @@
 
 package com.asiainfo.biapp.si.loc.core.label.controller;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
-import net.sf.json.JSONArray;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,8 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import springfox.documentation.annotations.ApiIgnore;
-
+import com.asiainfo.biapp.si.loc.auth.model.User;
 import com.asiainfo.biapp.si.loc.base.controller.BaseController;
 import com.asiainfo.biapp.si.loc.base.exception.BaseException;
 import com.asiainfo.biapp.si.loc.base.page.Page;
@@ -37,6 +29,12 @@ import com.asiainfo.biapp.si.loc.core.label.entity.LabelInfo;
 import com.asiainfo.biapp.si.loc.core.label.service.IApproveInfoService;
 import com.asiainfo.biapp.si.loc.core.label.service.ILabelInfoService;
 import com.asiainfo.biapp.si.loc.core.label.vo.LabelInfoVo;
+
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
+import springfox.documentation.annotations.ApiIgnore;
 
 /**
  * Title : LabelInfoController
@@ -146,6 +144,13 @@ public class LabelInfoController extends BaseController<LabelInfo> {
     @RequestMapping(value = "/labelInfo/save", method = RequestMethod.POST)
     public WebResult<String> save(LabelInfo labelInfo){
         WebResult<String> webResult = new WebResult<>();
+        User user = new User();
+        try {
+            user = this.getLoginUser();
+        } catch (BaseException e) {
+            LOGGER.info("context", e);
+        }
+        labelInfo.setCreateUserId(user.getUserId());
         try {
             iLabelInfoService.addLabelInfo(labelInfo);
         } catch (BaseException e) {
@@ -182,6 +187,7 @@ public class LabelInfoController extends BaseController<LabelInfo> {
     @RequestMapping(value = "/labelInfo/update", method = RequestMethod.POST)
     public WebResult<String> edit(@ApiIgnore LabelInfo labelInfo) {
         WebResult<String> webResult = new WebResult<>();
+        String approveStatusId = request.getParameter("approveStatusId");
         LabelInfo oldLab = new LabelInfo();
         try {
             oldLab = iLabelInfoService.selectLabelInfoById(labelInfo.getLabelId());
@@ -189,6 +195,16 @@ public class LabelInfoController extends BaseController<LabelInfo> {
             return webResult.fail(e);
         }
         oldLab = fromToBean(labelInfo, oldLab);
+        if (StringUtil.isNotEmpty(approveStatusId)) {
+            try {
+                ApproveInfo approveInfo = iApproveInfoService.selectApproveInfo(labelInfo.getLabelId());
+                approveInfo.setApproveStatusId(approveStatusId);
+                approveInfo.setApproveTime(new Date());
+                oldLab.setApproveInfo(approveInfo);
+            } catch (BaseException e) {
+                e.printStackTrace();
+            }
+        }
         try {
             iLabelInfoService.modifyLabelInfo(oldLab);
         } catch (BaseException e1) {
@@ -204,7 +220,7 @@ public class LabelInfoController extends BaseController<LabelInfo> {
     })
     @RequestMapping(value = "/labelInfo/updateCategoryId", method = RequestMethod.POST)
     public WebResult<String> editCategoryId(@ApiIgnore LabelInfo labelInfo) {
-        WebResult<String> webResult = new WebResult<>();
+        WebResult<String> webResult = new WebResult<>(); 
         LabelInfo oldLab = new LabelInfo();
         try {
             oldLab = iLabelInfoService.selectLabelInfoById(labelInfo.getLabelId());
@@ -234,7 +250,6 @@ public class LabelInfoController extends BaseController<LabelInfo> {
         }
         return webResult.success("删除标签信息成功", SUCCESS);
     }
-  */  
     @ApiOperation(value="发布标签")
     @ApiImplicitParams({
         @ApiImplicitParam(name = "labelId", value = "ID", required = true, paramType = "query", dataType = "string"),
@@ -267,7 +282,7 @@ public class LabelInfoController extends BaseController<LabelInfo> {
             return webResult.fail(e1);
         }
         return webResult.success("发布标签信息成功", SUCCESS);
-    }
+    }*/
     
     public LabelInfo fromToBean(LabelInfo lab, LabelInfo oldLab) {
         if (null != lab.getKeyType()) {

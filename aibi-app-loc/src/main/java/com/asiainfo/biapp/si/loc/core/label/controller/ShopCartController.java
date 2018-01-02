@@ -8,25 +8,21 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.asiainfo.biapp.si.loc.base.common.LabelRuleContants;
 import com.asiainfo.biapp.si.loc.base.controller.BaseController;
-import com.asiainfo.biapp.si.loc.base.exception.BaseException;
 import com.asiainfo.biapp.si.loc.base.utils.JsonUtil;
+import com.asiainfo.biapp.si.loc.base.utils.LogUtil;
 import com.asiainfo.biapp.si.loc.base.utils.StringUtil;
 import com.asiainfo.biapp.si.loc.base.utils.WebResult;
 import com.asiainfo.biapp.si.loc.cache.CocCacheProxy;
 import com.asiainfo.biapp.si.loc.core.label.entity.LabelInfo;
 import com.asiainfo.biapp.si.loc.core.label.model.ExploreQueryParam;
 import com.asiainfo.biapp.si.loc.core.label.service.ILabelExploreService;
-import com.asiainfo.biapp.si.loc.core.label.service.impl.LabelExploreServiceImpl;
 import com.asiainfo.biapp.si.loc.core.label.vo.LabelRuleVo;
 
 import io.swagger.annotations.Api;
@@ -69,9 +65,35 @@ public class ShopCartController extends BaseController {
 	@Autowired
 	private ILabelExploreService exploreServiceImpl;
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(ShopCartController.class);
+	private static final String SUCCESS = "success";
 
-	 private static final String SUCCESS = "success";
+	/**
+     * 查询标签是否能够加入到购物车
+     */
+	@ApiOperation(value = "查询标签是否能够加入到购物车")
+	@ApiImplicitParam(name = "labelId", value = "标签id", required = true, paramType = "query", dataType = "string")
+	@RequestMapping(value = "/findLabelValidate", method = RequestMethod.POST)
+	public WebResult<String> findLabelValidate(HttpServletRequest req, String labelId) {
+		WebResult<String> webResult = new WebResult<>();
+		boolean success = true;
+		String msg = "";
+		try {
+			LabelInfo ciLabelInfo = CocCacheProxy.getCacheProxy().getLabelInfoById(labelId);
+			if (StringUtil.isEmpty(ciLabelInfo.getDataDate())) {
+				success = false;
+				msg = "抱歉，该标签数据未准备好，不能添加到收纳篮！";
+			}
+		} catch (Exception e) {
+			LogUtil.error("校验标签异常", e);
+			return webResult.fail(e.getMessage());
+		}
+		if (success) {
+			return webResult.success("查询标签是否能够加入到购物车成功", SUCCESS);
+		} else {
+			return webResult.fail(msg);
+		}
+	}
+	
 	
 	/**
 	 * 添加(规则)到购物车
@@ -86,7 +108,7 @@ public class ShopCartController extends BaseController {
 			@ApiImplicitParam(name = "calculationsId", value = "标签ID", required = true, paramType = "query", dataType = "string"),
 			@ApiImplicitParam(name = "typeId", value = "类型", required = true, paramType = "query", dataType = "string") })
 	@RequestMapping(value = "/saveShopSession", method = RequestMethod.POST)
-	public	WebResult<String> saveShopSession(HttpServletRequest req, String calculationsId, String typeId) {
+	public WebResult<String> saveShopSession(HttpServletRequest req, String calculationsId, String typeId) {
 		WebResult<String> webResult = new WebResult<>();
 		boolean success = true;
 		String msg = "";
@@ -112,17 +134,18 @@ public class ShopCartController extends BaseController {
 					rules.add(rule);
 
 					setSessionAttribute(LabelRuleContants.SHOP_CART_RULE, JsonUtil.toJsonString(rules));
-					setSessionAttribute(LabelRuleContants.SHOP_CART_RULE_NUM,String.valueOf(findLabelOrCustomNum(rules)));
+					setSessionAttribute(LabelRuleContants.SHOP_CART_RULE_NUM,
+							String.valueOf(findLabelOrCustomNum(rules)));
 				}
 			}
 
-		} catch (BaseException e) {
-			LOGGER.error("添加(规则)到购物车异常", e);
-			return webResult.fail(e);
+		} catch (Exception e) {
+			LogUtil.error("添加(规则)到购物车异常", e);
+			return webResult.fail(e.getMessage());
 		}
 		if (success) {
 			return webResult.success("加入购物车成功", SUCCESS);
-		}else{
+		} else {
 			return webResult.fail(msg);
 		}
 	}
@@ -147,9 +170,9 @@ public class ShopCartController extends BaseController {
 				updateRules.add(rule);
 			}
 			setSessionAttribute(LabelRuleContants.SHOP_CART_RULE, JsonUtil.toJsonString(updateRules));
-		} catch (BaseException e) {
-			LOGGER.error("设置属性更新session异常", e);
-			return webResult.fail(e);
+		} catch (Exception e) {
+			LogUtil.error("设置属性更新session异常", e);
+			return webResult.fail(e.getMessage());
 		}
 		return webResult.success("更新购物车成功", SUCCESS);
 	}
@@ -163,10 +186,19 @@ public class ShopCartController extends BaseController {
 	 * @date 2017年12月14日
 	 */
 	@RequestMapping(value = "/findShopCart", method = RequestMethod.POST)
-	public WebResult<List<LabelRuleVo>> findShopCart(HttpServletRequest request) {
-		WebResult<List<LabelRuleVo>> webResult = new WebResult<>();
-		List<LabelRuleVo> rules = getSessionLabelRuleList();
-		return webResult.success("读取购物车数据成功", rules);
+	public WebResult<Map<String, Object>> findShopCart(HttpServletRequest request) {
+		Map<String, Object> result = new HashMap<String, Object>();
+		WebResult<Map<String, Object>> webResult = new WebResult<>();
+		try {
+			List<LabelRuleVo> rules = getSessionLabelRuleList();
+			int showCartRulesCount = findLabelOrCustomNum(rules);
+			result.put("showCartRulesCount", showCartRulesCount);
+			result.put("shopCartRules", rules);
+		} catch (Exception e) {
+			LogUtil.error("刷新购物车页面异常", e);
+			return webResult.fail(e.getMessage());
+		}
+		return webResult.success("读取购物车数据成功", result);
 	}
 
 	/**
@@ -184,19 +216,19 @@ public class ShopCartController extends BaseController {
 			@ApiImplicitParam(name = "monthLabelDate", value = "数据日期(月)", required = true, paramType = "query", dataType = "string") })
 	@RequestMapping(value = "/explore", method = RequestMethod.POST)
 	public WebResult<String> explore(HttpServletRequest req, String dataDate, String dayLabelDate,
-			String monthLabelDate){
+			String monthLabelDate) {
 		WebResult<String> webResult = new WebResult<>();
 		List<LabelRuleVo> labelRules = getSessionLabelRuleList();
 		ExploreQueryParam queryParam = new ExploreQueryParam(dataDate, monthLabelDate, dayLabelDate);
 		String countSqlStr = null;
 		try {
 			countSqlStr = exploreServiceImpl.getCountSqlStr(labelRules, queryParam);
-		} catch (BaseException e) {
-			return webResult.fail(e);
+			//TODO 目前直接返回数据后期调用后台接口
+		} catch (Exception e) {
+			return webResult.fail(e.getMessage());
 		}
 		return webResult.success("探索成功", countSqlStr);
-		
-		
+
 	}
 
 	/**
@@ -207,13 +239,33 @@ public class ShopCartController extends BaseController {
 		WebResult<String> webResult = new WebResult<>();
 		try {
 			setSessionAttribute(LabelRuleContants.SHOP_CART_RULE, "");
-		} catch (BaseException e) {
-			LOGGER.error("删除购物车的对象异常", e);
-			return webResult.fail(e);
+		} catch (Exception e) {
+			LogUtil.error("删除购物车的对象异常", e);
+			return webResult.fail(e.getMessage());
 		}
 		return webResult.success("删除购物车成功", SUCCESS);
 	}
-
+	
+	@ApiOperation(value = "计算中心每次修改之后对应重新设置session")
+	@RequestMapping(value = "/saveSession", method = RequestMethod.POST)
+	public WebResult<Map<String, Object>> saveSession(HttpServletRequest req, List<LabelRuleVo> rules) {
+		Map<String, Object> result = new HashMap<String, Object>();
+		WebResult<Map<String, Object>> webResult = new WebResult<>();
+		try {
+			int numValue = 0;
+			numValue = findLabelOrCustomNum(rules);
+			if (numValue == 0) {
+				rules = null;
+			}
+			setSessionAttribute(LabelRuleContants.SHOP_CART_RULE, JsonUtil.toJsonString(rules));
+			setSessionAttribute(LabelRuleContants.SHOP_CART_RULE_NUM, String.valueOf(numValue));
+		} catch (Exception e) {
+			LogUtil.error("计算中心修改异常", e);
+			return webResult.fail(e.getMessage());
+		}
+		return webResult.success("计算中心修改成功", result);
+	}
+	
 	/**
 	 * 计算标签和清单的总个数 并为
 	 * 
@@ -256,7 +308,7 @@ public class ShopCartController extends BaseController {
 				rules = (List<LabelRuleVo>) JsonUtil.json2CollectionBean(ruleStrs, List.class, LabelRuleVo.class);
 			}
 		} catch (Exception e) {
-			LOGGER.error("getSessionLabelRuleList异常", e);
+			LogUtil.error("getSessionLabelRuleList异常", e);
 		}
 		return rules;
 	}

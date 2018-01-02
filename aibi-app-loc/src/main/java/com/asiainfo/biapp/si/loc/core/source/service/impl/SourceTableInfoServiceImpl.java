@@ -92,6 +92,7 @@ public class SourceTableInfoServiceImpl extends BaseServiceImpl<SourceTableInfo,
         super.saveOrUpdate(sourceTableInfo);
         if(!sourceTableInfo.getSourceInfoList().isEmpty()){
             for(SourceInfo s : sourceTableInfo.getSourceInfoList()){
+                s.setDepositColumn("L"+s.getSourceId());
                 s.setSourceColumnRule(s.getColumnName());
                 s.setSourceTableId(sourceTableInfo.getSourceTableId());
                 iSourceInfoService.addSourceInfo(s);

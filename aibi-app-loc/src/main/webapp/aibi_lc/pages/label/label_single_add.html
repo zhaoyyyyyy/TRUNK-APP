@@ -35,8 +35,7 @@
 	  	</div>
 	  	<div id="dataD" v-clock>
 	  		 <div id="saveDataForm">
-	            <div class="ui-lc-mian">
-	                
+	            <div class="ui-lc-mian">    
 	                <ul class="tab-list tab-hor clearfix">
 	                    <li class="fleft active"><a href="">单指标</a></li>
 	                    <li class="fleft"><a href="label_multi_add.html">多指标</a></li>
@@ -107,9 +106,8 @@
 	                                <div class="ui-form-group">
 	                                    <label for="categoryId" class="control-label">标签分类</label>
 	                                    <div class="control-input ui-form-ztree">
-	                                    	 <input type="hidden">
-	                                        <input type="text" class="form-control" id="categoryId" name="categoryId" onclick="openTtee(this)" readonly>
-	                                       
+	                                    	 <input type="hidden" name="categoryId">
+	                                        <input type="text" class="form-control" id="categoryName" onclick="openTtee(this)" readonly>
 	                                        <div class="dropdown-menu">
 	                                        	<ul id="ztree" class="ztree">
 												</ul>
@@ -120,11 +118,9 @@
 	                            <div class="form-horizontal fleft ui-form">
 	                                <div class="ui-form-group">
 	                                    <label for="dependIndex" class="control-label">规则依赖指标</label>
-	                                    <!-- <div class="control-input">
-	                                        <p  id="dependIndex" name="dependIndex">{{sourceInfo.sourceId}}</p>
-	                                    </div> -->
-	                                    <div v-if="sourceInfo.sourceId!=false">
-	                                        <p id="dependIndex" name="dependIndex">{{sourceInfo.sourceId}}</p>
+	                                    <div class="control-input" v-if="sourceInfo.sourceId!=false">
+	                                        <input :value="sourceInfo.sourceId" name="dependIndex" type="hidden">
+	                                        <span class="file-up-name">{{sourceInfo.sourceId}}</span>
 	                                    </div>
 	                                    <div v-if="sourceInfo.sourceId==false " class="control-input">
 	                                        <input class="form-control" id="dependIndex" name="dependIndex"></input>
@@ -154,28 +150,30 @@
 								    <div class="ui-form-group">
 									    <label class="control-label">失效时间</label> 
 									       <div class="control-input date-input fleft has-icon">
-					          	             <input type="text" name="failTime" class="date-input form-control input-pointer form-control-bubble" data-dismiss="formDatepicker#sendTime" id="" placeholder="请选择结束日期">
+					          	             <input name="failTime" type="text"
+									         class="date-input form-control input-pointer form-control-bubble" data-dismiss="formDatepicker#sendTime" id="" 
+									         placeholder="请选择失效日期" onmousedown="getTime(this)"/>
 					          	             <span class="glyphicon-date form-control-feedback"></span>
 					                       </div>   
 							        </div>
 							        <div class="ui-form-group">
-							            <input type="hidden" v-model="readCycle" name=updateCycle id=updateCycle>
+							            <input type="hidden" v-model="sourceTableType" name="sourceTableType" id="sourceTableType">
+							            <input type="hidden" v-model="readCycle" name="updateCycle" id="updateCycle">
 							            <label for="updateCycle" class="control-label">更新周期</label>
-							            <!-- <div class="control-input has-icon">
-	                                    <input v-model="read" type="text" class="form-control ml10"
-								             readonly="readonly" />
-							            </div>  -->  
-							            <p id="updateCycle">{{model.read}}</p>
+							            <div class="control-input">
+	                                    	<span class="file-up-name">{{model.read}}</span>
+							            </div>    
+							            
 							        </div>
 	                                <div v-if="showdimDetail[index]&&showdimDetail[index][`showdim${index}`]" class="ui-form-group">
 	                                    <label for="dimTableName" class="control-label">维表选择</label>
 	                                    <div class="control-input has-icon">
-	                                        <select id="dimTableName" name="dimTableName" class="form-control input-pointer ">
-	                                        <option>请选择维表</option>
-	                                        <option v-for = "dim in dimtableInfoList" :value="dim.dimId">{{dim.dimTableName}}</option>
+	                                        <select id="dimId" name="dimId" class="form-control input-pointer fleft">
+		                                        <option>请选择维表</option>
+		                                        <option v-for = "dim in dimtableInfoList" :value="dim.dimId">{{dim.dimTableName}}</option>
 	                                        </select>
+	                                        <button type="button" onclick="fun_to_dimdetail()" class="btn btn-default  ui-table-btn ui-table-btn fleft" >详情</button>
 	                                    </div>
-	                                    <button type="button" onclick="fun_to_dimdetail()" class="btn btn-default  ui-table-btn ui-table-btn" >详情</button>
 	                                </div>
 	                            </div>
 	                        </div>

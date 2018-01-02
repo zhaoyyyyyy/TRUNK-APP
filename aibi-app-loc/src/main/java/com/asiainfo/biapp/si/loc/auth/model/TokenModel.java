@@ -1,5 +1,5 @@
 
-package com.asiainfo.biapp.si.loc.auth.utils;
+package com.asiainfo.biapp.si.loc.auth.model;
 
 /**
  * 

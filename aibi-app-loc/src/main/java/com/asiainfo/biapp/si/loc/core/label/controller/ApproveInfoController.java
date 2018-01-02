@@ -7,7 +7,9 @@
 package com.asiainfo.biapp.si.loc.core.label.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.asiainfo.biapp.si.loc.base.controller.BaseController;
@@ -50,9 +52,9 @@ public class ApproveInfoController extends BaseController<ApproveInfo>{
     
     private static final String SUCCESS = "success";
 
-    @ApiOperation(value = "得到标签信息")
+    @ApiOperation(value = "根据资源id得到标签审批信息")
     @ApiImplicitParam(name="resourceId",value="资源Id",required=false,paramType="query",dataType="string")
-    @RequestMapping(value = "ApproveInfo/")
+    @RequestMapping(value = "ApproveInfo/",method = RequestMethod.POST)
     public WebResult<ApproveInfo> findByresourceId(String resourceId){
         WebResult<ApproveInfo> webResult = new WebResult<>();
         ApproveInfo approveInfo = new ApproveInfo();
@@ -64,9 +66,9 @@ public class ApproveInfoController extends BaseController<ApproveInfo>{
         return webResult.success("获取标签信息成功", approveInfo);
     }
     
-    @ApiOperation(value = "根据资源Id删除标签信息")
+    @ApiOperation(value = "根据资源Id删除标签审批信息")
     @ApiImplicitParam(name="resourceId",value="资源Id",required=false,paramType="query",dataType="string")
-    @RequestMapping(value = "ApproveInfo/delete")
+    @RequestMapping(value = "ApproveInfo/delete",method = RequestMethod.POST)
     public WebResult<String> del(String resourceId){
         WebResult<String> webResult = new WebResult<>();
         try {

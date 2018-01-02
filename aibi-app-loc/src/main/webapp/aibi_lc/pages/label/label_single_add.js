@@ -10,6 +10,7 @@ var model = {
 		arrs:[],
 		labelInfoList:[],
 		readCycle : "",
+		sourceTableType : "",
 		read : "",
 		nodeName:"",
 		categoryName:"",
@@ -81,13 +82,12 @@ window.loc_onload = function() {
 			onSuccess : function(data){
 				model.sourceInfoList = data.data.sourceInfoList;
 				model.readCycle=data.data.readCycle;
-				model.read = data.data.readCycle;
-				if(model.read=1){
-					model.read="一次性"
-				}else if(model.read=2){
-					model.read="月周期"
-				}else if(model.read=3){
-					model.read="月周期"
+				if(model.readCycle==1){
+					model.read="一次性";
+				}else if(model.readCycle==2){
+					model.read="月周期";
+				}else if(model.readCycle==3){
+					model.read="日周期";
 				}
 			}
 		});
@@ -131,9 +131,9 @@ function fun_to_save(){
 
 
 function fun_to_dimdetail(){
-	var dimId = $("#dimTableName").val();
-	var win = $.window('维表详情',$.ctx + '/aibi_lc/pages/dimtable/dimtable_detail.html?dimId='+dimId, 800,
-			600);
+	var dimId = $("#dimId").val();
+	var win = $.window('维表详情',$.ctx + '/aibi_lc/pages/dimtable/dimtable_detail.html?dimId='+dimId, 500,
+			300);
 	win.reload = function(){
 		$("mainGrid").setGridParam({
 			postData : $("#formSearch").formToJson()
@@ -170,6 +170,16 @@ function getData(tag){
 		
 }
 
+function getTime(element){
+	console.log(element);
+	$(element).datepicker({
+  		changeMonth: true,
+  		changeYear: true,
+  		dateFormat:"yy-mm-dd",
+  		dayNamesMin: [ "日", "一", "二", "三", "四", "五", "六" ],
+  		monthNamesShort: [ "一月", "二月", "三月", "四月", "五月", "六月", "七月", "八月", "九月", "十月", "十一月", "十二月" ]
+  	});
+}
 
 function openTtee(tag){
 	model.tagNode=tag;
@@ -189,8 +199,8 @@ function openTtee(tag){
 
 function ztreeFunc(){
 		var ztreeObj;
-		var obj = $("#preConfig_list").find("span");
-		var labelId =obj.attr("configId");				
+		var labelId =$.getUrlParam("configId");	
+		alert(labelId)
 		$.commAjax({			
 		    url : $.ctx+'/api/label/categoryInfo/queryList',  		    
 		    dataType : 'json', 

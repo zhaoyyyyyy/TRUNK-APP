@@ -63,6 +63,7 @@ $.extend({
 })
 	
 $.fn.extend({
+	//专区渲染
 	preConfig : function() {
 		 var _self = $(this);
 		 var html = '<div class="dropdown fright" id="preConfig_list">'

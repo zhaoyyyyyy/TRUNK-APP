@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <title>标签集市</title>
+    <title>首页(暂未完成)</title>
     <!--[if IE]>
     	<meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
     <![endif]-->
@@ -47,34 +47,18 @@
  <div class="ui-container clearfix iframe">
  	<div class="ui-menu fleft">
  		<ul class="ui-menu-ul" id="accordion" style="display:none;">
- 			<li>
- 				<a href="#label/label_market">标签集市</a>
- 			</li>
- 			<li>
- 				<a href="#custom/custom_market">客户群集市</a>
- 			</li>
- 			<li>
- 				<a href="javascript:;">标签管理</a>
+				
+			<li v-for="resource in resourceList">
+ 				<a  v-bind:href="'#'+resource.address" v-text="resource.resourceName">标签集市</a>
  				<div>
  					<ul class="ui-menu-ul">
- 						<li>
- 							<a href="#label/dataSource_mgr">数据源管理</a>
- 						</li>
- 						<li>
- 							<a href="#label/label_mgr">标签管理</a>
- 						</li>
- 						<li>
- 							<a href="#dimtable/dimtable_mgr">维表管理</a>
+ 						<li v-for="r in resource.children">
+ 							<a  v-bind:href="'#'+r.address" v-text="r.resourceName"></a>
  						</li>
  					</ul>
  				</div>
  			</li>
- 			<li>
- 				<a href="#prefecture/prefecture_mgr">专区管理</a>
- 			</li>
- 			<li>
- 				<a href="#label/category_mgr">标签体系管理</a>
- 			</li>
+ 				
  		</ul>
  	</div>
  	<div class="ui-main fleft">

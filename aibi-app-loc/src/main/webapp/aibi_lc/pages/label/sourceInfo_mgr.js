@@ -62,15 +62,15 @@ window.loc_onload = function(){
             {name:'columnName',index:'columnName', width:80, sortable:false,frozen : true,align:"center"},
             {name:'sourceTableInfo.sourceTableName',index:'sourceTableInfo.sourceTableName', width:100,frozen : true,align:"center",
                 formatter : function(value,opts,data){
-                	$.commAjax({
-                		url : $.ctx + "/api/source/sourceTableInfo/get",
-                		postData : {
-                			sourceTableId : data.sourceTableId
-                		},
-                		onSuccess : function(data1){
-                			return data1.data.sourceTableName;
-                		}
-                	});
+		        	$.commAjax({
+		        		url : $.ctx + "/api/source/sourceTableInfo/get",
+		        		postData : {
+		        			sourceTableId : data.sourceTableId
+		        		},
+		        		onSuccess : function(data1){
+		        			return data1.data.sourceTableName;
+		        		}
+		        	});
                 }	
             },
             {name:'sourceTableInfo.createTime',index:'sourceTableInfo.createTime', width:40, sortable:false,align:"right"}

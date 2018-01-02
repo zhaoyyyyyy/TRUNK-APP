@@ -16,6 +16,8 @@ import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,10 +26,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import springfox.documentation.annotations.ApiIgnore;
 
+import com.asiainfo.biapp.si.loc.auth.model.User;
 import com.asiainfo.biapp.si.loc.base.controller.BaseController;
 import com.asiainfo.biapp.si.loc.base.exception.BaseException;
 import com.asiainfo.biapp.si.loc.base.page.Page;
 import com.asiainfo.biapp.si.loc.base.utils.WebResult;
+import com.asiainfo.biapp.si.loc.core.label.entity.MdaSysTable;
 import com.asiainfo.biapp.si.loc.core.prefecture.entity.PreConfigInfo;
 import com.asiainfo.biapp.si.loc.core.prefecture.service.IPreConfigInfoService;
 import com.asiainfo.biapp.si.loc.core.prefecture.vo.PreConfigInfoVo;
@@ -68,6 +72,8 @@ public class PreConfigInfoController extends BaseController<PreConfigInfo> {
     private IPreConfigInfoService iPreConfigInfoService;
 
     private static final String SUCCESS = "success";
+    
+    private static final Logger LOGGER = LoggerFactory.getLogger(MdaSysTable.class);
 
     /**
      * 分页查询
@@ -156,6 +162,13 @@ public class PreConfigInfoController extends BaseController<PreConfigInfo> {
         if (null != rePre) {
             return webResult.fail("专区名称已存在");
         }
+        User user = new User();
+        try {
+            user = this.getLoginUser();
+        } catch (BaseException e) {
+            LOGGER.info("context", e);
+        }
+        preConfigInfo.setCreateUserId(user.getUserId());
         preConfigInfo.setCreateTime(new Date());
         preConfigInfo.setConfigStatus(0);
         try {

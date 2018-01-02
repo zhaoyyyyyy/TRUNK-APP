@@ -162,11 +162,11 @@ function fun_to_detail(id){
 function fun_to_publish(id){
 	$.confirm('确定发布此标签？',function(){
 		$.commAjax({
-			url : $.ctx + '/api/label/labelInfo/publish',
+			url : $.ctx + '/api/label/labelInfo/update',
 			postData : {
 				"labelId" : id,
 				"dataStatusId" : 2,
-				"approveInfo.approveStatusId": 2
+				"approveStatusId": 2
 			},
 			onSuccess : function(data){
 				$.success('发布成功。',function(){
@@ -245,7 +245,8 @@ function fun_to_offline(id){
 }
 
 function fun_to_edit(id){
-	var win = $.window('标签修改',$.ctx+'/aibi_lc/pages/label/label_edit.html?labelId='+id,500,600);
+	var configId = $.getCurrentConfigId();
+	var win = $.window('标签修改',$.ctx+'/aibi_lc/pages/label/label_edit.html?labelId='+id+"&configId="+configId,500,600);
 	win.reload = function(){
 		$("#mainGrid").setGridParam({
 			postData : $("fromSearch").fromToJson()

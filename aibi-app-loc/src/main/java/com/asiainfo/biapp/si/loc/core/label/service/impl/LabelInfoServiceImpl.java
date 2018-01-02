@@ -20,12 +20,17 @@ import com.asiainfo.biapp.si.loc.base.exception.BaseException;
 import com.asiainfo.biapp.si.loc.base.exception.ParamRequiredException;
 import com.asiainfo.biapp.si.loc.base.page.Page;
 import com.asiainfo.biapp.si.loc.base.service.impl.BaseServiceImpl;
+import com.asiainfo.biapp.si.loc.core.dimtable.entity.DimTableInfo;
+import com.asiainfo.biapp.si.loc.core.dimtable.service.IDimTableInfoService;
 import com.asiainfo.biapp.si.loc.core.label.dao.ILabelInfoDao;
 import com.asiainfo.biapp.si.loc.core.label.entity.ApproveInfo;
 import com.asiainfo.biapp.si.loc.core.label.entity.LabelCountRules;
+import com.asiainfo.biapp.si.loc.core.label.entity.LabelExtInfo;
 import com.asiainfo.biapp.si.loc.core.label.entity.LabelInfo;
+import com.asiainfo.biapp.si.loc.core.label.entity.MdaSysTableColumn;
 import com.asiainfo.biapp.si.loc.core.label.service.IApproveInfoService;
 import com.asiainfo.biapp.si.loc.core.label.service.ILabelCountRulesService;
+import com.asiainfo.biapp.si.loc.core.label.service.ILabelExtInfoService;
 import com.asiainfo.biapp.si.loc.core.label.service.ILabelInfoService;
 import com.asiainfo.biapp.si.loc.core.label.vo.LabelInfoVo;
 
@@ -68,6 +73,12 @@ public class LabelInfoServiceImpl extends BaseServiceImpl<LabelInfo, String> imp
     @Autowired 
     private ILabelCountRulesService iLabelCountRulesService;
     
+    @Autowired
+    private ILabelExtInfoService iLabelExtInfoService;
+    
+    @Autowired 
+    private IDimTableInfoService iDimTableInfoService;
+    
     @Override
     protected BaseDao<LabelInfo, String> getBaseDao() {
         return iLabelInfoDao;
@@ -109,6 +120,19 @@ public class LabelInfoServiceImpl extends BaseServiceImpl<LabelInfo, String> imp
         approveInfo.setApproveUserId(labelInfo.getCreateUserId());
         labelInfo.setApproveInfo(approveInfo); 
         iApproveInfoService.addApproveInfo(approveInfo);
+        
+        //封装标签扩展信息
+        LabelExtInfo labelExtInfo = new LabelExtInfo();
+        labelExtInfo.setLabelId(labelInfo.getLabelId());
+        labelExtInfo.setOriginalTableType(labelInfo.getSourceTableType());
+        iLabelExtInfoService.addLabelExtInfo(labelExtInfo);
+        
+        //封装元数据表列信息
+        MdaSysTableColumn mdaSysTableColumn = new MdaSysTableColumn();
+        mdaSysTableColumn.setLabelId(labelInfo.getLabelId());
+        DimTableInfo dimTable =iDimTableInfoService.get(labelInfo.getDimId());
+        mdaSysTableColumn.setDimTransId(dimTable.getDimTableName());
+        mdaSysTableColumn.setUnit(labelInfo.getUnit());
     }
 
     public void modifyLabelInfo(LabelInfo labelInfo) throws BaseException {

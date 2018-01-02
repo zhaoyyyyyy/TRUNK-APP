@@ -1,7 +1,7 @@
 window.loc_common_init = function (){
 	
 	//默认专区初始化
-	$("h3:eq(0)").preConfig();
+	$("h3.pre").preConfig();
 	
 	
 	//初始化下拉框

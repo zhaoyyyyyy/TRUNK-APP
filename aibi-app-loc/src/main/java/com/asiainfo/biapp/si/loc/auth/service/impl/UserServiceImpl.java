@@ -12,9 +12,9 @@ import org.springframework.stereotype.Service;
 
 import com.asiainfo.biapp.si.loc.auth.model.Organization;
 import com.asiainfo.biapp.si.loc.auth.model.Resource;
+import com.asiainfo.biapp.si.loc.auth.model.TokenModel;
 import com.asiainfo.biapp.si.loc.auth.model.User;
 import com.asiainfo.biapp.si.loc.auth.service.IUserService;
-import com.asiainfo.biapp.si.loc.auth.utils.TokenModel;
 import com.asiainfo.biapp.si.loc.base.dao.BaseDao;
 import com.asiainfo.biapp.si.loc.base.exception.BaseException;
 import com.asiainfo.biapp.si.loc.base.exception.ParamRequiredException;
@@ -166,11 +166,11 @@ public class UserServiceImpl extends BaseServiceImpl<User, String> implements IU
 			String resourceJson = HttpUtil.sendGet(jauthUrl+"/api/auth/permission/resource", params);
 			List<Resource> resourcePrivaliege = (List<Resource>) JsonUtil.json2CollectionBean(resourceJson, List.class, Resource.class);
 			for(Resource resource : resourcePrivaliege){
-				if(Resource.API.equals(resource.getType()) ){
+				if(Resource.API.equals(resource.getParentId()) ){
 					apiResource.add(resource);
-				}else if(Resource.MENU.equals(resource.getType()) ){
+				}else if(Resource.MENU.equals(resource.getParentId()) ){
 					menuResource.add(resource);
-				}else if(Resource.DOM.equals(resource.getType()) ){
+				}else if(Resource.DOM.equals(resource.getParentId()) ){
 					domResource.add(resource);
 				}
 			}

@@ -18,6 +18,7 @@ add-dialog@charset "utf-8";
 .ui-lc-mian > h3 >.dropdown >.dropdown-menu{
 	z-index:999;
 	right: 0px;
+	left:auto;
 }
 .ui-lc-mian > .ui-label-mes{
 	text-align: left;
@@ -505,7 +506,10 @@ add-dialog@charset "utf-8";
 	height: 40px;
 	border-bottom: 1px solid #e9e9e9;
 }
-
+/*iframe型弹框*/
+.iframe-dialog .ui-enum-content{
+	display:block;
+}
 /*创建标签-单指标高佳佳*/
 .create-main{
 	background: #fff;
@@ -562,7 +566,7 @@ add-dialog@charset "utf-8";
 }
 
 .create-main .ui-form  > .ui-form-group > .control-input{
-	width:70%;
+	width:65%;
 }
 /*创建标签-多指标高佳佳*/
 
@@ -865,6 +869,20 @@ span.del-btn{
 }
 .dataSource-tab .ui-form  > .ui-form-group > .control-input{
 	width: 56%;
+}
+/*维表管理*/
+.dimtable-table .ui-form-group > .control-label{
+	min-width:120px;
+}
+.dimtable-table .control-input{
+	width:200px;
+}
+/*iframe-条件设置*/
+.checkbox .form-control{
+	width:80%;
+}
+.checkbox .file-up-name{
+	margin:0;
 }
 
 

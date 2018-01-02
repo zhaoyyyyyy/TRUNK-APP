@@ -106,7 +106,7 @@ public class LabelInfo extends BaseEntity {
     private String labelName;
 
     /**
-     * 更新周期 1、日 ;2、月
+     * 更新周期 :1,一次性;2,月周期;3,日周期;
      */
     @Column(name = "UPDATE_CYCLE")
     @ApiParam(value = "更新周期")
@@ -231,18 +231,33 @@ public class LabelInfo extends BaseEntity {
     @ApiParam(value = "群类型")
     private Integer groupType;
     
-    /*
-     * 规则依赖指标
+    /**
+     * 依赖指标
      */
     @Transient
     private String dependIndex;
     
-    /*
+    /**
      * 具体规则
      */
     @Transient
     private String countRules;
-
+    /**
+     * 单位
+     */
+    @Transient
+    private String unit;
+    /**
+     * 维表主键
+     */
+    @Transient
+    private String dimId;
+    /**
+     * 指标源表类型
+     */
+    @Transient
+    private Integer sourceTableType; 
+    
     /**
      * 排序字段
      */
@@ -518,6 +533,36 @@ public class LabelInfo extends BaseEntity {
     
     public void setCountRules(String countRules) {
         this.countRules = countRules;
+    }
+
+    
+    public String getUnit() {
+        return unit;
+    }
+
+    
+    public void setUnit(String unit) {
+        this.unit = unit;
+    }
+
+    
+    public String getDimId() {
+        return dimId;
+    }
+
+    
+    public void setDimId(String dimId) {
+        this.dimId = dimId;
+    }
+
+    
+    public Integer getSourceTableType() {
+        return sourceTableType;
+    }
+
+    
+    public void setSourceTableType(Integer sourceTableType) {
+        this.sourceTableType = sourceTableType;
     }
 
 

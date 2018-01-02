@@ -113,6 +113,10 @@ public class SourceInfo extends BaseEntity {
     @ApiParam(value = "列数据长度")
     private Integer columnLength;
 
+    @Column(name = "DEPOSIT_COLUMN")
+    @ApiParam(value = "沉淀列名")
+    private String depositColumn;
+
     /**
      * 单位
      */
@@ -139,6 +143,14 @@ public class SourceInfo extends BaseEntity {
     @ManyToOne(cascade = CascadeType.ALL, targetEntity = SourceTableInfo.class)
     @JoinColumn(name = "SOURCE_TABLE_ID", insertable = false, updatable = false)
     private SourceTableInfo sourceTableInfo;
+
+    public String getDepositColumn() {
+        return depositColumn;
+    }
+
+    public void setDepositColumn(String depositColumn) {
+        this.depositColumn = depositColumn;
+    }
 
     public SourceTableInfo getSourceTableInfo() {
         return sourceTableInfo;

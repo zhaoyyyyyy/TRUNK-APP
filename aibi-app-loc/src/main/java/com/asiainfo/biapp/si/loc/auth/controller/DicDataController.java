@@ -76,27 +76,4 @@ public class DicDataController extends BaseController<DicData>{
 	}
 	
 	
-	/**
-	 * 通过参数查询字典分页
-	 * @return 
-	 * @return
-	 */
-	@ApiOperation(value="显示数据字典的列表（分页形式）")
-	@ApiImplicitParams({
-		@ApiImplicitParam(name = "code", value = "编码", required = false, paramType = "query" ,dataType = "string"),
-		@ApiImplicitParam(name = "dataName", value = "名称", required = false, paramType = "query" ,dataType = "string"),
-		@ApiImplicitParam(name = "note", value = "备注", required = false, paramType = "query" ,dataType = "string"),
-		@ApiImplicitParam(name = "dicCode", value = "字典编码", required = false, paramType = "query" ,dataType = "string"),
-	})
-	@RequestMapping(value="/dicdataPage/query", method=RequestMethod.POST, produces={ MediaType.APPLICATION_JSON_VALUE })
-	public Page<DicData> findDicDataPageByParams(@ModelAttribute Page<DicData> page,String dicCode){
-		
-		Page<DicData> dicDataPage = new Page<>();
-		try {
-			dicDataPage = dicDataService.findDicDataList(page, dicCode);
-		} catch (BaseException e) {
-			dicDataPage.fail(e);
-		}
-		return dicDataPage;
-	}
 }
