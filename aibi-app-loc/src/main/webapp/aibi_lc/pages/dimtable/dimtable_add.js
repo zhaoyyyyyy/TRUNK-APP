@@ -85,11 +85,11 @@ window.loc_onload = function() {
 	$("input[name='useDefaultCol']").on("click",function(){	
 		var rdoValue = $("#yes").is(":checked") ? "是":"否";
 		if(rdoValue == "否"){
-			$("#dimCodeCol").show();
-			$("#dimValueCol").show();			
+			$("#dimCodeCol1").show();
+			$("#dimValueCol1").show();			
 		}else{
-			$("#dimCodeCol").hide();
-			$("#dimValueCol").hide();
+			$("#dimCodeCol1").hide();
+			$("#dimValueCol1").hide();
 		}
 	})
 }

@@ -33,7 +33,7 @@ window.loc_onload = function() {
 		    		$("#ztree").append(btn)
 		    		$(btn).on("click",function(){
 			    		$( "#dialog" ).dialog({
-		        	 	title:"新增标签",
+		        	 	title:"新增标签分类",
 		        	 	autoOpen: true,
 		        	 	buttons: [
 				    	    {
@@ -133,7 +133,7 @@ window.loc_onload = function() {
 			      window.event.cancelBubble = true;
 			    }
 	        	 $( "#dialog" ).dialog({
-	        	 	title:"新增标签",
+	        	 	title:"新增标签分类",
 	        	 	autoOpen: true,
 	        	 	buttons: [
 			    	    {
@@ -189,7 +189,7 @@ window.loc_onload = function() {
 			    } else if (window.event) {
 			      window.event.cancelBubble = true;
 			    }
-				$.confirm('确定要删除该标签？', function() {
+				$.confirm('确定要删除该标签分类？', function() {
 					$.commAjax({
 							url : $.ctx + '/api/label/categoryInfo/delete',
 							postData : {
@@ -215,7 +215,7 @@ window.loc_onload = function() {
 			      window.event.cancelBubble = true;
 			    }
         	 $( "#dialog" ).dialog({
-        	 	title:"修改标签",
+        	 	title:"修改标签分类",
 	        	autoOpen: true,
 	        	buttons: [
 			        {
@@ -288,19 +288,13 @@ window.loc_onload = function() {
 			$(this).addClass("active")
 		}
 	})
-	//获取选中标签ID
+	//点击移动到事件
 	$("#ui-move").click(function(){
 		if($(".label-dialog").hasClass("active")){
 			$(".label-dialog").removeClass("active");
 		}else{
 			$(".label-dialog").addClass("active");
 		}
-		transData = [];
-		var j=0;
-		$("#labelList label[class~=active]").each(function(){
-			transData[j]=$(this).attr("data-id");
-			j++;
-		})
 	});
 	$("#dialog-del").click(function(){
 		$(".label-dialog").removeClass("active");
@@ -321,6 +315,13 @@ window.loc_onload = function() {
 	});
 	//移动事件
 	$("#dialog-upd").click(function(){
+		//获取要移动的标签ID
+		transData = [];
+		var j=0;
+		$("#labelList label[class~=active]").each(function(){
+			transData[j]=$(this).attr("data-id");
+			j++;
+		})
 		var flag =false;
 		for(var i=0;i<transData.length;i++){
 			$.commAjax({			
