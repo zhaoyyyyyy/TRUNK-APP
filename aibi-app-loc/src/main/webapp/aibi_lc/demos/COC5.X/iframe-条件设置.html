@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>iframe-条件设置</title>
+    <!--[if IE]>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <![endif]-->
+    <link href="../../asset/css/common/reset.css" rel="stylesheet"  />
+    <link href="../../asset/script/component/tree/css/zTreeStyle/zTreeStyle.css" rel="stylesheet"  />
+    <link href="../../asset/css/theme/default/button.css" rel="stylesheet"  />
+    <link href="../../asset/css/theme/default/form.css" rel="stylesheet"  />
+    <link href="../../asset/css/theme/default/tab.css" rel="stylesheet"  />
+    <link href="../../asset/css/theme/default/coc_frame.css" rel="stylesheet"  />
+    <link href="../../asset/css/theme/default/main.css" rel="stylesheet"  />
+    <script type="text/javascript" src="../../asset/script/component/jquery-1.12.4.js"></script>
+<script type="text/javascript" src="../../asset/script/component/jQueryUI/jquery-ui-1.12.1.min.js"></script>
+    <script type="text/javascript" src="../../asset/script/component/tree/jquery.ztree.all.min.js"></script>
+
+    <!--
+        H5兼容js CSS3 兼容JS
+    -->
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="http://apps.bdimg.com/libs/html5shiv/3.7/html5shiv.min.js"></script>
+    <script src="http://apps.bdimg.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <script type="text/javascript">
+    	$(function(){
+    		ztreeFunc();
+    		labeltree();
+    		function ztreeFunc(){
+				var zTreeObj,
+				setting = {
+					view: {
+						selectedMulti: false,
+						addHoverDom: addHoverDom,
+						removeHoverDom: removeHoverDom,
+					}
+				},
+				zTreeNodes = [
+					{"name":"在网用户状态", open:false, children: [
+						{ "name":"google", "url":"http://g.cn", "target":"_blank"},
+						{ "name":"baidu", "url":"http://baidu.com", "target":"_blank"},
+						{ "name":"sina", "url":"http://www.sina.com.cn", "target":"_blank"}
+						]
+					},
+					{"name":"在网状态", open:true, children: [
+						{ "name":"停开机状态", open:true,children:[
+							{ "name":"催停类型", "url":"http://g.cn", "target":"_blank"},
+							{ "name":"测试", "url":"http://baidu.com", "target":"_blank"}
+						]
+						},
+						]
+					}
+				];
+				zTreeObj = $.fn.zTree.init($("#ztree"), setting, zTreeNodes);
+			}
+    		function labeltree(){
+				var zTreeObj,
+				setting = {
+					view: {
+						selectedMulti: false
+					}
+				},
+				zTreeNodes = [
+					{"name":"在网用户状态", open:false, children: [
+						{ "name":"google", "url":"http://g.cn", "target":"_blank"},
+						{ "name":"baidu", "url":"http://baidu.com", "target":"_blank"},
+						{ "name":"sina", "url":"http://www.sina.com.cn", "target":"_blank"}
+						]
+					},
+					{"name":"在网状态", open:true, children: [
+						{ "name":"停开机状态", open:true,children:[
+							{ "name":"催停类型", "url":"http://g.cn", "target":"_blank"},
+							{ "name":"测试", "url":"http://baidu.com", "target":"_blank"}
+						]
+						},
+						]
+					}
+				];
+				zTreeObj = $.fn.zTree.init($("#labeltree"), setting, zTreeNodes);
+			}
+
+
+			function addHoverDom(treeId, treeNode) {
+				var aObj = $("#" + treeNode.tId + "_a");
+				if ($("#diyBtn_space_"+treeNode.id).length>0) return;
+				var editStr = "<div class='label-handles' id='diyBtn_space_" +treeNode.id+ "' ><a class='setting'></a><a class='del'></a><a class='add'></a></div>";
+				aObj.append(editStr);
+				var btn = $("#diyBtn_space_"+treeNode.id);
+				if (btn) btn.bind("click", function(){alert("diy Button for " + treeNode.name);});
+			};
+			function removeHoverDom(treeId, treeNode) {
+				$("#diyBtn_space_" +treeNode.id).unbind().remove();
+			};
+				
+			$("#selectAll").click(function(){				
+				$(".label-select-main ul li").find("input").each(function(){
+					$(this).attr("checked",true);					
+				})
+			})
+				
+			$("#ui-move").click(function(){
+				$(".label-dialog").addClass("active");
+			});
+			$("#dialog-del").click(function(){
+				$(".label-dialog").removeClass("active");
+			});
+    	})
+    </script>
+</head>
+<body>
+    <div class="iframe-nest">
+      	<div class="ui-lc-mian"> 
+      		<form>
+      			<h3>标签数据范围</h3>
+      			<div class="form-horizontal mt20">
+      				<div class="ui-form-group">
+				        <div class="radio circle success fleft"> 
+						   <input type="radio" name="radio19" id="myr3" checked="checked"> 
+						   <label for="myr3"><i class="default"></i> 数值范围</label>
+						</div>
+				        <div class="control-input">
+					       	<div class='checkbox fleft'>
+							    <input id="mycheckbox2" type="text" class="form-control fleft mr10"  placeholder="输入下线">
+							    <span class="file-up-name fleft">元</span>
+							</div>
+					       	<div class='checkbox fleft'>
+							     <input id="mycheckbox3" type="checkbox" class="checkbix" checked="checked">
+							    <label aria-label="" role="checkbox" for="mycheckbox3" class="checkbix">
+							    		<span class="large"></span>包含当前值
+							    	</label>
+							</div>
+							<div class='checkbox fleft mt10'>
+							    <input id="mycheckbox2" type="text" class="form-control fleft mr10" placeholder="输入上线">
+							    <span class="file-up-name fleft">元</span>
+							</div>
+					       	<div class='checkbox fleft mt10'>
+							     <input id="mycheckbox4" type="checkbox" class="checkbix">
+							    <label aria-label="" role="checkbox" for="mycheckbox4" class="checkbix">
+							    		<span class="large"></span>包含当前值
+							    	</label>
+							</div>
+							
+				   		 </div>
+				    </div>
+					<div class="ui-form-group">
+				        <div class="radio circle success fleft"> 
+						   <input type="radio" name="radio19" id="myr3" checked="checked"> 
+						   <label for="myr3"><i class="default"></i> 精确值</label>
+						</div>
+				        <div class="control-input ml10">
+					       	<div class='checkbox'>
+							    <input id="mycheckbox2" type="text" class="form-control fleft mr10">
+							    <span class="file-up-name fleft">元</span>
+							</div>
+					       	<p class="mt10">多条件用","分割,且不能用","结尾</p>
+							
+				   		 </div>
+				    </div>
+				      						      		
+      			</div>
+				
+      		</form>
+               
+        </div>           
+            <!-- todo -->
+    </div>      
+            
+
+
+
+</body>
+</html>

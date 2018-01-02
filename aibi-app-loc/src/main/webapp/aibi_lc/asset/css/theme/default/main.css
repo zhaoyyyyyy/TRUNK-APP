@@ -506,7 +506,10 @@
 	height: 40px;
 	border-bottom: 1px solid #e9e9e9;
 }
-
+/*iframe型弹框*/
+.iframe-dialog .ui-enum-content{
+	display:block;
+}
 /*创建标签-单指标高佳佳*/
 .create-main{
 	background: #fff;
@@ -873,6 +876,13 @@ span.del-btn{
 }
 .dimtable-table .control-input{
 	width:200px;
+}
+/*iframe-条件设置*/
+.checkbox .form-control{
+	width:80%;
+}
+.checkbox .file-up-name{
+	margin:0;
 }
 
 
