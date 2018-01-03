@@ -98,7 +98,8 @@ window.loc_onload = function() {
 	labelMarket.loadUpdateCycle();
 	//加载标签集市
 	labelMarket.loadLabelInfoList();
-	
+	//加载购物车
+	labelMarket.refreshShopCart();
 	//搜索框回车
 	$('#labelNameText').keyup(function(event){
     	if(event.keyCode == 13){
@@ -385,9 +386,7 @@ var labelMarket = (function (model){
 				//校验标签有效性
 				$.commAjax({
 					  url: $.ctx + "/api/shopCart/findLabelValidate",
-					  postData:{
-						  labelId : {'labelId' : $.trim(id)}
-					  },
+					  postData:{labelId :  $.trim(id)},
 					  onSuccess: function(returnObj){
 					  	  //1.如果验证失败，需要返回 2.需要提示
 						  flag = true;
@@ -520,8 +519,7 @@ var labelMarket = (function (model){
     			
     		}else if(labelType == "5" || labelType == "9"){  //条件选择
     			//样例弹出页面
-    			var wd = $.window(name + "-条件设置", $.ctx
-    					+ '/aibi_lc/pages/labelDialog/numberValueSet.html', 500, 500);
+    			var wd = $.window(name + "-条件设置", $.ctx + '/aibi_lc/pages/labelDialog/numberValueSet.html', 800, 500);
 		    	wd.reload = function() {
 		    		model.refreshShopCart();
 		    	}
@@ -649,9 +647,9 @@ var labelMarket = (function (model){
 			var index = $(t).parent().attr("index");
 			var rule = dataModel.ruleList[index];
 			if(rule.labelFlag == 1){
-				dataModel.ruleList[index] = 0 ;
+				dataModel.ruleList[index].labelFlag = 0 ;
 			}else{
-				dataModel.ruleList[index] = 1 ;
+				dataModel.ruleList[index].labelFlag = 1 ;
 			}
 			
     		model.submitRules();
