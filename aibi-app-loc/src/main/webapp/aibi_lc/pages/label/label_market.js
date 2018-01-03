@@ -499,28 +499,10 @@ var labelMarket = (function (model){
     			
     		}else if(labelType == "5" || labelType == "9"){  //条件选择
     			//样例弹出页面
-    			var wd = $.window(name + "-条件设置", $.ctx + '/aibi_lc/pages/labelDialog/numberValueSet.html', 800, 500);
+    			var wd = $.window(name + "-条件设置", $.ctx + '/aibi_lc/pages/labelDialog/enumItemSet.html', 800, 500);
 		    	wd.reload = function() {
 		    		model.refreshShopCart();
 		    	}
-    			/**
-    			var attrVal = labelInfo.attrVal ;
-    			var attrName = mainObj.attr("attrName");
-    			var calcuElement = mainObj.attr("calcuElement");
-    			var para="?attrVal="+attrVal+"&attrName="+attrName+"&calcuElement="+calcuElement;
-    			$(dialogId).dialog("option","title", name+"-条件设置");
-
-    			var ifmUrl = '${ctx}/aibi_ci/dialog/itemChooseDialog.jsp';
-    			var form = '<form id="postData_form" action="' + ifmUrl + '" method="post" target="_self">' + 
-    				'<input name="attrVal" type="hidden" value="' + attrVal + '"/>' +
-    				'<input name="attrName" type="hidden" value="' + attrName + '"/>' +
-    				'<input name="calcuElement" type="hidden" value="' + calcuElement + '"/>' +
-    				'<input name="labelType" type="hidden" value="' + labelType + '"/>' +
-    				'</form>';
-    			document.getElementById('itemChooseFrame').contentWindow.document.write(form);
-    			document.getElementById('itemChooseFrame').contentWindow.document.getElementById('postData_form').submit();
-    			$(dialogId).dialog("open");
-    			*/
     		}else if(labelType == "11"){  //条件选择
     			/**
                 var attrVal = mainObj.attr("attrVal");
@@ -613,7 +595,6 @@ var labelMarket = (function (model){
 			$(t).parent().parent().removeClass('open');
 			dataModel.ruleList[index].calcuElement = calcuElement;
     		model.submitRules();
-			
 		};
 		/**
 		 * 更改标志型标签值
