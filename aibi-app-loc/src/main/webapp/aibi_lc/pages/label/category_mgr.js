@@ -36,28 +36,38 @@ window.loc_onload = function() {
 		    	$.fn.zTree.init($("#ztree"), setting, ztreeObj);
 		    }
 	   });
-		setting = {
+		setting = {  
 			view: {
 				selectedMulti: false,
 				addHoverDom: addHoverDom,
 				removeHoverDom: removeHoverDom,
 			},
+//			async: {
+//				enable: true,
+//				url: $.ctx+'/api/label/categoryInfo/queryList',
+//				autoParam: ["id"]
+//			},
 			data: {
 				selectedMulti: false,			
 				simpleData: {  
 	                enable: true,   //设置是否使用简单数据模式(Array)  	                    
-	            },  
+	            },  	
 	            key: {             	
-	            	idKey: "sysId",    //设置节点唯一标识属性名称  
+	            	idKey: "categoryId",    //设置节点唯一标识属性名称  
 	                pIdKey: "parentId" ,     //设置父节点唯一标识属性名称  
 	                name:'categoryName',//zTree 节点数据保存节点名称的属性名称  
 	                title: "categoryName"//zTree 节点数据保存节点提示信息的属性名称        
 	            }  
 			},
 			callback: {
-				onClick: zTreeOnClick
+				onClick: zTreeOnClick,
+//				onAsyncSuccess: zTreeOnAsyncSuccess
 			}
-		}		
+		}	
+//		$.fn.zTree.init($("#ztree"), setting, ztreeObj);
+//		function zTreeOnAsyncSuccess(event, treeId, treeNode, msg){
+//			console.log(msg);
+//		}
 		var newCount = 1;				
 		function addHoverDom(treeId, treeNode) {
 			var sObj = $("#" + treeNode.tId + "_span");
@@ -157,8 +167,10 @@ window.loc_onload = function() {
 											"parentId":treeNode.categoryId,
 										},
 										onSuccess:function(data){
-											ztreeFunc();
-											labeltree();
+											var treeObj = $.fn.zTree.getZTreeObj("ztree");
+										    var nodes = treeObj.getNodesByParam("tId", treeNode.tId, null);
+										    treeObj.removeNode(nodes[0]);
+										    labeltree();
 										}
 									});
 								}else{
@@ -208,7 +220,7 @@ window.loc_onload = function() {
 		        	 });
 			    }
         	 $('#add-dialog-btn').click(function(){	        	 	
-        	 	 var Ppname=$( "#dialog" ).find("input").val();	        	 	 
+        	 	var Ppname=$( "#dialog" ).find("input").val();	  
         	 	if (Ppname == null) {
 		            return;
 			    } else if (Ppname == "") {
@@ -222,8 +234,11 @@ window.loc_onload = function() {
 							"categoryName":Ppname,
 							"categoryId":treeNode.categoryId,
 						},
-						onSuccess:function(data){														
-							ztreeFunc();
+						onSuccess:function(data){
+							var treeObj = $.fn.zTree.getZTreeObj("ztree");
+						    var nodes = treeObj.getNodesByParam("tId", treeNode.tId, null);
+							nodes[0].categoryName = Ppname;
+							treeObj.updateNode(nodes[0]);
 							labeltree();
 						}
 					});
