@@ -83,7 +83,7 @@ window.loc_onload = function() {
             width: 30,
             align: "center",
             formatter: function(v) {
-                return $.getCodeDesc('ZQLXZD', v)
+                return $.getCodeDesc('ZQLXZD', v);
             }
         },
         {
@@ -92,7 +92,7 @@ window.loc_onload = function() {
             width: 30,
             align: "center",
             formatter: function(v) {
-                return $.getCodeDesc('ZQZTZD', v)
+                return $.getCodeDesc('ZQZTZD', v);
             }
         },
         {
@@ -103,16 +103,16 @@ window.loc_onload = function() {
             align: "left",
             formatter: function(value, opts, data) {
             	var html = '';
-            	if(data.configStatus != 4){
+            	if(data.configStatus != 3){
             		if (data.configStatus == 1) {
                         html += '<button onclick="fun_to_over(\''+data.configId+'\')" type="button" class="btn btn-default  ui-table-btn ui-table-btn">停用</button>';
                     } else if(data.configStatus != 3){
                     	html += '<button onclick="fun_to_start(\''+data.configId+'\')" type="button" class="btn btn-default  ui-table-btn ui-table-btn">启用</button>';
                     }
+            		html += '<button onclick="fun_to_edit(\''+data.configId+'\')" type="button" class="btn btn-default ui-table-btn ui-table-btn">修改</button>'; 
                     if (data.configStatus == 2) {
                         html += '<button onclick="fun_to_down(\''+data.configId+'\')" type="button" class="btn btn-default  ui-table-btn ui-table-btn">下线</button>';
                     }
-                    html += '<button onclick="fun_to_edit(\''+data.configId+'\')" type="button" class="btn btn-default ui-table-btn ui-table-btn">修改</button>'; 
             	}
                 return html;
             }

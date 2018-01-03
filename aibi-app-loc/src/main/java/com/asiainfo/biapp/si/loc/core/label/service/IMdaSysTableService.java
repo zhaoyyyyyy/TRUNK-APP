@@ -1,6 +1,6 @@
 /*
  * @(#)IMdaSysTableService.java
- *
+ * 
  * CopyRight (c) 2017 北京亚信智慧数据科技有限公司 保留所有权利。
  */
 
@@ -13,6 +13,7 @@ import com.asiainfo.biapp.si.loc.base.page.Page;
 import com.asiainfo.biapp.si.loc.base.service.BaseService;
 import com.asiainfo.biapp.si.loc.core.label.entity.MdaSysTable;
 import com.asiainfo.biapp.si.loc.core.label.vo.MdaSysTableVo;
+import com.asiainfo.biapp.si.loc.core.prefecture.entity.PreConfigInfo;
 
 /**
  * Title : IMdaSysTableService
@@ -92,4 +93,20 @@ public interface IMdaSysTableService extends BaseService<MdaSysTable, String> {
      * @return
      */
     public void deleteMdaSysTableById(String tableId) throws BaseException;
+
+    /**
+     * Description:添加用户/客户群  日/月周期表
+     *
+     * @param preConfigInfo
+     */
+    public void addDWTable(PreConfigInfo preConfigInfo);
+
+    /**
+     * Description:通过专区ID与表类型获得表的集合
+     *
+     * @param configId
+     * @param tableType
+     * @return
+     */
+    public List<MdaSysTable> selectMdaSysTableListByConfigAndType(String configId, Integer tableType);
 }

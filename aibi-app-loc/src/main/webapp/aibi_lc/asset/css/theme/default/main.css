@@ -871,6 +871,9 @@ span.del-btn{
 	width: 56%;
 }
 /*维表管理*/
+.dimtable-table .ui-form-group > .ui-form-group{
+	margin-bottom:0;
+}
 .dimtable-table .ui-form-group > .control-label{
 	min-width:120px;
 }
