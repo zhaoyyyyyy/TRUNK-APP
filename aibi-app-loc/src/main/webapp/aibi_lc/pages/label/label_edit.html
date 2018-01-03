@@ -24,9 +24,100 @@
 	<div id="dataD" class="iframe-nest" v-cloak>
 		<div class="ui-reg-main">
 			<div class="ui-lc-mian">
+				<h3>标签修改</h3>
 				<form id="saveDataForm">
 					<input type="hidden" v-model="labelId" id="labelId" name="labelId" />
-					<div class="ui-expand-search ui-reg-search">
+					
+					<div class="clearfix create-main mt10 dataSource-tab">
+			            <div class="form-horizontal fleft ui-form">
+			                <div class="ui-form-group">
+								<label class="control-label">标签名称</label> 
+								<div class="control-input">
+									<input v-model="labelName" name="labelName" type="text"  class="fleft form-control"
+									placeholder="专区名称" />
+								</div>
+							</div>
+			                <div class="ui-form-group">
+								<label class="control-label">单位</label> 
+								<div class="control-input">
+									<input name="unit" type="text"  class="fleft form-control"
+									placeholder="请输入单位" />
+								</div>
+							</div>
+				        	<div class="ui-form-group">
+								<label class="control-label">审批状态</label> 
+								<div class="control-input">
+									<select v-model="approveStatusId" id="labelTyp" name="approveStatusId" class="form-control">
+										<option v-for="s in spzt" :value="s.code">{{s.dataName}}</option>
+								 	</select>
+								</div>
+							</div>
+			            </div>
+			            <div class="form-horizontal fleft ui-form">
+			                <div class="ui-form-group">
+								<label class="control-label">更新周期</label> 
+								<div class="control-input">
+									<select v-model="updateCycle" name="updateCycle" class="form-control" selected>
+										<option v-for="h in gxzq" :value="h.code">{{h.dataName}}</option>
+									</select>
+								</div>
+							</div>
+							<div class="ui-form-group">
+                                 <label for="categoryId" class="control-label">标签分类</label>
+                                 <div class="control-input ui-form-ztree">
+                                 	 <input type="hidden" name="categoryId">
+                                     <input type="text" class="form-control" id="categoryName" onclick="openTtee(this)" readonly>
+                                     <div class="dropdown-menu">
+                                     	<ul id="ztree" class="ztree">
+								        </ul>
+                                     </div>
+                                 </div>                             
+	                        </div>
+			            </div>
+			            <div class="form-horizontal fleft ui-form">
+			                <div class="ui-form-group">
+								<label class="control-label" for="failTime">失效时间</label>
+								<div class="control-input">
+									<input name="failTime" type="text" v-model="failTime"
+								class="form-control" data-dismiss="formDatepicker#sendTime" id="" placeholder="请选择失效日期" />
+								</div>
+							</div>
+							<div class="ui-form-group">
+								<label class="control-label">标签类型</label> 
+								<div class="control-input">
+									<select v-model="labelTypeId" id="labelTypeId" name="labelTypeId" class="form-control"
+								     onchange="changebq(this.options[this.selectedIndex].value)">
+									<option v-for="h in bqlx" :value="h.code">{{h.dataName}}</option>
+									</select>
+								</div>
+							</div> 
+							<div v-if="isemmu==true||labelTypeId==='枚举型'">
+							    <div class="ui-form-group">
+	                                <label class="control-label" for="dimTableName">维表选择</label>
+	                                <div class="control-input">
+	                                 	<select id="dimTableName" name="dimTableName" class="form-control">
+	                                         <option>请选择维表</option>
+	                                         <option v-for = "dim in dimtableInfoList" :value="dim.dimId">{{dim.dimTableName}}</option>
+	                                     </select>
+	                                </div>
+                                    <button type="button" onclick="fun_to_dimdetail()" class="file-up-btn ml10" >详情</button>
+                                </div>
+                            </div>
+			            </div>
+					</div>
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					<!--<div class="ui-expand-search ui-reg-search">
 						<div class="form-inline ui-form">
 							<div class="clearfix">
 								<div class="form-group">
@@ -71,7 +162,7 @@
                             </div>
 							<div class="clearfix mt30">
                                  <!-- <label for="categoryId" class="control-label">标签分类</label> -->
-                                 <div class="control-input ui-form-ztree">
+                                 <!--<div class="control-input ui-form-ztree">
                                  <label for="categoryId" class="control-label">标签分类</label>
                                  	 <input type="hidden" name="categoryId">
                                      <input type="text" class="form-control" id="categoryName" onclick="openTtee(this)" readonly>
@@ -81,6 +172,7 @@
                                      </div>
                                  </div>                             
 	                        </div>
+	                        
 							<div class="clearfix mt30">
 								<div class="form-group">
 									<label>审批状态</label> 
@@ -97,7 +189,7 @@
 								</div>
 							</div>
 						</div>
-					</div>
+					</div>-->
 				</form>
 				<div class="ui-reg-grid mt40">
                     <div class=" ui-table-title mt10">
