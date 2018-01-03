@@ -160,24 +160,25 @@
 							            <label for="updateCycle" class="control-label">更新周期</label>
 							            <div class="control-input">
 	                                    	<span class="file-up-name">{{model.read}}</span>
-							            </div>    
-							            
+							            </div>          
 							        </div>
-	                                <div v-if="showdimDetail[index]&&showdimDetail[index][`showdim${index}`]" class="ui-form-group">
-	                                    <label for="dimTableName" class="control-label">维表选择</label>
-	                                    <div class="control-input has-icon">
-	                                        <select id="dimId" name="dimId" class="form-control input-pointer fleft">
-		                                        <option>请选择维表</option>
-		                                        <option v-for = "dim in dimtableInfoList" :value="dim.dimId">{{dim.dimTableName}}</option>
-	                                        </select>
-	                                        <button type="button" onclick="fun_to_dimdetail()" class="btn btn-default  ui-table-btn ui-table-btn fleft" >详情</button>
-	                                    </div>
-	                                    <div class="ui-form-group">
-	                                        <label for="dataType" class="control-label">数据类型</label>
-	                                        <div class="control-input">
-	                                             <input name="dataType" type="text" class="form-control" id="dataType">
-	                                        </div>
-	                                    </div>
+							        <div v-if="showdimDetail[index]&&showdimDetail[index][`showdim${index}`]">
+		                                <div class="ui-form-group">
+		                                    <label for="dimTableName" class="control-label">维表选择</label>
+		                                    <div class="control-input has-icon">
+		                                        <select id="dimId" name="dimId" class="form-control input-pointer fleft">
+			                                        <option>请选择维表</option>
+			                                        <option v-for = "dim in dimtableInfoList" :value="dim.dimId">{{dim.dimTableName}}</option>
+		                                        </select>
+		                                        <button type="button" onclick="fun_to_dimdetail()" class="btn btn-default  ui-table-btn ui-table-btn fleft" >详情</button>
+		                                    </div> 
+		                                </div>
+		                                <div class="ui-form-group">
+		                                    <label for="dataType" class="control-label">数据类型</label>
+		                                       <div class="control-input">
+		                                            <input name="dataType" type="text" class="form-control" id="dataType">
+		                                      </div>
+		                                </div>
 	                                </div>
 	                            </div>
 	                        </div>
