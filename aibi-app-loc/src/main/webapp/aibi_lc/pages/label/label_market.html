@@ -58,7 +58,7 @@
 						<div class="clearfix">
 							<label class="fleft">标签体系：</label>
 							<div class="fleft">
-								<a href="javascript:;" class="all-active"><!-- all-active 去掉非选中状态 -->
+								<a onclick="labelMarket.selectAllCategoryId()" href="javascript:;" class="all-active"><!-- all-active 去掉非选中状态 -->
 									全部
 								</a>
 								<a class="labelItems" href="javascript:;" v-for="(labelSys,index) in categoryInfoList"
@@ -69,14 +69,13 @@
 							</div>
 						</div>
 						 <ul class="ui-label-sec ui-label-system hidden">						
-							<li class="clearfix not-border" v-for="(labelName,index) in bdLsit">
-								<label class="fleft font-weight" v-text="labelName.categoryName"></label>
+							<li class="clearfix not-border" v-for="label2 in bdList">
+								<label class="fleft font-weight" v-text="label2.categoryName"></label>
 								<div class="fleft">
-									<a href="javascript:;" class="all-active" v-for="item in childrenLabel">
+									<a onclick="labelMarket.selectByCategoryId(this)" :id="item.categoryId" href="javascript:;" class="all-active" v-for="item in label2.children">
 										<span>{{item.categoryName}}</span>
 									</a>
 								</div>
-							
 							</li>
 						</ul> 
 					</li>
@@ -106,7 +105,7 @@
 								<a href="javascript:;" onclick="labelMarket.changePublishTime(this)" id="threeMonth" class="fleft">
 									<em>三个月</em>
 								</a>
-								<!-- <div class="control-input">
+								<div class="control-input">
 				        			<div class="control-input date-input fleft has-icon">
 						          	<input type="text" class="form-control input-pointer form-control-bubble" data-dismiss="formDatepicker#sendTime1"  id="" placeholder="请选择开始日期">
 						          	<span class="glyphicon-date form-control-feedback"></span>
@@ -115,7 +114,7 @@
 						          	<input type="text" class="form-control input-pointer form-control-bubble" data-dismiss="toDatepicker#sendTime1" id="" placeholder="请选择结束日期">
 						          	<span class="glyphicon-date form-control-feedback"></span>
 						        </div>
-					        	</div> -->
+					        	</div>
 							</div>
 						</div>
 					</li>

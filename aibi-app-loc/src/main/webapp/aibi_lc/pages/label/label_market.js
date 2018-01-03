@@ -21,8 +21,7 @@ var dataModel = {
 		sortOrder:"ASC",
 		sortCol:"customNum",
 		isShow:false,
-		bdLsit:[],
-		childrenLabel:[]
+		bdList:[],
 }
 window.loc_onload = function() {
 	//初始化参数
@@ -47,6 +46,8 @@ window.loc_onload = function() {
     		},
     		
     		toggle:function(categoryId,index){
+    			$("#categoryId").val(categoryId);
+    			labelMarket.loadLabelInfoList();
     			ulListId=index;
     			$.commAjax({
 				    url: $.ctx + "/api/label/categoryInfo/queryList",
@@ -55,17 +56,7 @@ window.loc_onload = function() {
 					    parentId :categoryId
 				    },
 					onSuccess: function(data){
-						dataModel.bdLsit = data.data;
-						$.commAjax({
-							url: $.ctx + "/api/label/categoryInfo/queryList",
-						    postData:{
-						    	"sysId" :dataModel.configId,
-							    parentId :dataModel.bdLsit.categoryId
-						    },
-						    onSuccess:function(data){
-						    	dataModel.childrenLabel = data.data;
-						    }
-						})
+						dataModel.bdList = data.data;
 				    }
 				});
     		}
@@ -236,6 +227,16 @@ var labelMarket = (function (model){
     			}
     		});
 	    };
+	    
+	    //取消标签体系选择
+		model.selectAllCategoryId = function(){
+			$("#categoryId").val("");
+			labelMarket.loadLabelInfoList();
+		}
+		model.selectByCategoryId = function(obj){
+			$("#categoryId").val(obj.id);
+			labelMarket.loadLabelInfoList();
+		}
 	    
 	    //获取更新周期
 	    model.loadUpdateCycle = function(){
