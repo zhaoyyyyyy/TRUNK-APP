@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>新增专区</title>
+<!--[if IE]>
+    	<meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <![endif]-->
+	<link rel="stylesheet" theme="default" href="../../asset/css/theme/default/coc_frame.css" />
+	<link rel="stylesheet" theme="default" href="../../asset/css/theme/default/main.css" />
+	<script type="text/javascript" src="../../asset/script/common/include.js"></script>
+	<script type="text/javascript" src="enumItemSet.js"></script>
+<style type="text/css">
+[v-cloak] {
+	display: none;
+}
+</style>
+<!--[if lt IE 9]>
+	    <script src="../../asset/script/component/h5compatibility/html5shiv.min.js"></script>
+	    <script src="../../asset/script/component/h5compatibility/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+	<div id="enumItemSet" class="iframe-nest" v-cloak>
+		<div class="ui-reg-main">
+			<div class="ui-lc-mian">
+				<div class="fleft">
+		            <div class="ui-enum-list">
+		                <div class="ui-enum-header clearfix">
+		                    <span>共<span v-text="totalSizeNum"></span>个</span>
+		                    <span v-on:click="setItemStatus(true,'itemChooseDetailBox');">全部</span>
+		                    <span>取消</span>
+		                    <div class="form-group fright">
+		                        <div class="input-group">
+		                            <input type="text" class="form-control" id="exampleInputAmount" placeholder="搜索" v-bind="">
+		                            <div class="input-group-addon input-group-icon right-child"></div>
+		                        </div>
+		                    </div>
+		                </div>
+		                <ul class="ui-enum-item">
+		                    <li v-for="(item,index) in itemList" >
+		                        <span v-text="item.V_KEY">华北科技学院</span>
+		                    </li>
+		                    <li class="active">
+		                        <span>
+		                            <i>+</i>杭州师范学院音乐美术学院
+		                        </span>
+		                    </li>
+		                    <li>
+		                        <span>浙江同济科技院</span>
+		                    </li>
+		                    <li>
+		                        <span>浙江教育学院</span>
+		                    </li>
+		                    <li>
+		                        <span>浙江理工大学院</span>
+		                    </li>
+		
+		                </ul>
+		                <div class="ui-enum-page clearfix">
+		                    <div id="jsonmap1_pager" class="tcdPageCode">
+		                        <a href="javascript:;" class="prevPage"></a>
+		                        <a href="javascript:;" class="tcdNumber">1</a>
+		                        <span class="current">2</span>
+		                        <span class="disabled"></span>
+		                        <span class="inputPageNum">第<input type="text" id="jsonmap1_pageNum">页</span>
+		                        <a href="javascript:;" class="jumpPageNum">跳转</a>
+		                    </div>
+		                </div>
+		            </div>
+		        </div>
+		        <div class="fleft">
+		            <div class="ui-enum-header">
+		                <span>已选1个</span>
+		                <span>全部</span>
+		                <span>取消</span>
+		                <div class="form-group fright">
+		                    <div class="input-group">
+		                        <input type="text" class="form-control" id="exampleInputAmount" placeholder="搜索">
+		                        <div class="input-group-addon input-group-icon right-child"></div>
+		                    </div>
+		                </div>
+		            </div>
+		            <ul class="ui-enum-item">
+		                <li>
+		                    <span class="del-btn">杭州师范学院音乐美术学院
+		                         <i class="del-btn-icon"></i>
+		                    </span>
+		                </li>
+		            </ul>
+		        </div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

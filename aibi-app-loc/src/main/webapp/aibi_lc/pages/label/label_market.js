@@ -24,22 +24,6 @@ var dataModel = {
 		bdLsit:[],
 		childrenLabel:[]
 }
-var tagConfig  = {
-		"4" : "#numberValueSet" , // 指标型，存具体的指标值；
-		"5" : "#itemChoose" ,   //枚举型，列的值有对应的维表，下拉展示；
-		"6" : "#dateSettings" ,   //日期型，字符串类型的日期值。
-		"7" : "#darkValueSet" ,   //模糊型，存字符串，like查询
-		"8" : "#verticalLabelSetDialog" ,   //纵表型，对应多个列，数据是纵表存储。 */
-		"9" : "#itemChoose" ,   //按位与标签
-		"11" : "#genKpiChoose" ,    //数值标签泛化设置
-		"10" : "#customerSetDialog" ,    //客户群设置
-		"13" : "#saveCustomerDialog" ,//保存客户群
-		"12" : "#positionSelect"   , //位置行标签选择基站
-		"14" : "#emptyLabelSettings" ,//虚标签弹出层
-		"4_g" : "#numberValueGroupSet" , // 指标型，存具体的指标值；
-		"5_g" : "#itemGroupChoose"   //枚举型，列的值有对应的维表，下拉展示；
-
-}
 window.loc_onload = function() {
 	//初始化参数
 	dataModel.configId = $.getCurrentConfigId();
@@ -459,6 +443,14 @@ var labelMarket = (function (model){
   				 }
   			});
         };
+        /***
+    	 * 弹窗设置标签规则
+    	 */
+    	model.setDialogRuleValue = function(index,rule){
+    		dataModel.ruleList[index] = rule;
+    		model.submitRules();
+    		
+    	};
         /**
 		 * 每执行一步操作对session缓存进行重置
 		 */
@@ -489,27 +481,7 @@ var labelMarket = (function (model){
         	var rule = dataModel.ruleList[index];
         	var labelType = rule.labelTypeId;
         	var name = rule.customOrLabelName;
-    		var dialogId = tagConfig[rule.labelTypeId];
-    		var dataJson ={};
-    		var dataJsonStr = '';
-    		if(labelType == "4"){ // 指标型，存具体的指标值；
-    			
-    			/**
-    			var queryWay = labelInfo.attr("queryWay");
-    			var contiueMinVal = labelInfo.attr("contiueMinVal");
-    			var contiueMaxVal = labelInfo.attr("contiueMaxVal");
-    			var leftZoneSign = labelInfo.attr("leftZoneSign");
-    			var rightZoneSign = labelInfo.attr("rightZoneSign");
-    			var exactValue = labelInfo.attr("exactValue"); 
-    			var unit = labelInfo.attr("unit");
-    			unit = encodeURIComponent(encodeURIComponent(unit));
-    		
-    			var para = "?queryWay="+queryWay+"&contiueMinVal="+contiueMinVal
-    						+"&contiueMaxVal="+contiueMaxVal+"&leftZoneSign="+leftZoneSign
-    						+"&rightZoneSign="+rightZoneSign+"&exactValue="+exactValue
-    						+"&unit="+unit;
-    			var ifmUrl ="${ctx}/aibi_ci/dialog/numberValueSetDialog.jsp"+para;
-    			*/
+    		if(labelType == "4"){ // 指标型，存具体的指标值
     			//样例弹出页面
     			var wd = $.window(name + "-条件设置", $.ctx
     					+ '/aibi_lc/pages/labelDialog/numberValueSet.html?index='+index, 500, 500);
@@ -613,12 +585,7 @@ var labelMarket = (function (model){
     			//showAlert("计算元素类型错误！", "failed");
     		}
     	};
-    	/***
-    	 * 弹窗设置标签规则
-    	 */
-    	model.setDialogRuleValue = function(index,isNeedOffset){
-    		
-    	};
+    	
     	/**
     	 * 集市开关的展开合并
     	 */
