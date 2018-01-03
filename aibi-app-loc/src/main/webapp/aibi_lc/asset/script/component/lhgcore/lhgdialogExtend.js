@@ -347,15 +347,15 @@ jQuery.extend({
 	hasTopWin: function(){
 		var setTopWindow = false;	 //true
 		try {
-		　	var t = parent.frameElement;
-		　	if(!t){
-		　		　setTopWindow = false;
-				　window.parent = window.self;
-				  window.top = window.self;
-		　	}
+		 	var t = parent.frameElement;
+			if(!t){
+		     setTopWindow = false;
+				window.parent = window.self;
+				window.top = window.self;
+			}
 		} catch(error) {
-		　 setTopWindow = false;
-		　  window.parent = window.self;
+		  setTopWindow = false;
+		  window.parent = window.self;
 		  window.top = window.self;
 		}
 		return setTopWindow;
