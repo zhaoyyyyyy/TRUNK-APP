@@ -41,7 +41,8 @@ public class CocCacheProxy {
 	
 
 	public static void main(String[] args) {
-		
+//		CocCacheProxy.getCacheProxy().getLabelInfoById("12212").getMdaSysTableColumn().getMdaSysTable();
+//		CocCacheProxy.getCacheProxy().getSYSConfigInfoByKey("")
 	}
 
 

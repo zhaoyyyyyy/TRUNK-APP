@@ -1,7 +1,9 @@
 package com.asiainfo.biapp.si.loc.cache;
 
 import java.io.Serializable;
+import java.util.List;
 
+import com.asiainfo.biapp.si.loc.auth.model.DicData;
 import com.asiainfo.biapp.si.loc.core.label.entity.LabelInfo;
 
 /**
@@ -47,5 +49,10 @@ public interface CocCacheAble {
 	 */
 	public <T extends Serializable> T getSessionvalue(String token,String key);
 	
-	
+	/**
+	 * 根据编码获取指定的数据字典值
+	 * @param code
+	 * @return
+	 */
+	public List<DicData> getDicDataByCode(String code);
 }

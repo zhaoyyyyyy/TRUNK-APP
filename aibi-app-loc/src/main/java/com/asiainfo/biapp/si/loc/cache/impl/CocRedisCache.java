@@ -1,9 +1,11 @@
 package com.asiainfo.biapp.si.loc.cache.impl;
 
 import java.io.Serializable;
+import java.util.List;
 
 import org.apache.log4j.Logger;
 
+import com.asiainfo.biapp.si.loc.auth.model.DicData;
 import com.asiainfo.biapp.si.loc.base.LocCacheBase;
 import com.asiainfo.biapp.si.loc.cache.CocCacheAble;
 import com.asiainfo.biapp.si.loc.core.label.entity.LabelInfo;
@@ -55,6 +57,16 @@ public class CocRedisCache implements CocCacheAble{
 		}
 		return null;
 		
+	}
+
+	@Override
+	public List<DicData> getDicDataByCode(String code) {
+		try {
+			return LocCacheBase.getInstance().getDicDataList(code);
+		} catch (Exception e) {
+			log.error(e.getMessage(), e);
+		}
+		return null;
 	}
 
 

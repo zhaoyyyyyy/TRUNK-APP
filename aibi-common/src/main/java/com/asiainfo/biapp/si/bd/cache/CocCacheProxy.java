@@ -3,7 +3,7 @@ package com.asiainfo.biapp.si.bd.cache;
 public class CocCacheProxy implements CocCacheAble {
 	
 	private CocCacheAble cache;
-	
+	 
 	public CocCacheProxy(){
 		super();
 		if(1==1){

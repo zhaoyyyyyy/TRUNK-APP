@@ -1,9 +1,11 @@
 package com.asiainfo.biapp.si.loc.cache.impl;
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
+import com.asiainfo.biapp.si.loc.auth.model.DicData;
 import com.asiainfo.biapp.si.loc.cache.CocCacheAble;
 import com.asiainfo.biapp.si.loc.core.label.entity.LabelInfo;
 
@@ -47,6 +49,13 @@ public class CocJavaCache implements CocCacheAble{
 
 	@Override
 	public <T extends Serializable> T getSessionvalue(String token, String key) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	@Override
+	public List<DicData> getDicDataByCode(String code) {
 		// TODO Auto-generated method stub
 		return null;
 	}
