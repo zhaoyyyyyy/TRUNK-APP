@@ -142,8 +142,17 @@ public class LabelInfoController extends BaseController<LabelInfo> {
             @ApiImplicitParam(name = "sortNum", value = "排序字段", required = false, paramType = "query", dataType = "int") ,
             @ApiImplicitParam(name = "dependIndex", value = "规则依赖的指标",required=false,paramType = "query", dataType= "string")})
     @RequestMapping(value = "/labelInfo/save", method = RequestMethod.POST)
-    public WebResult<String> save(LabelInfo labelInfo){
+    public WebResult<String> save(@ApiIgnore LabelInfo labelInfo){
         WebResult<String> webResult = new WebResult<>();
+        LabelInfo label = new LabelInfo();
+        try {
+            label = iLabelInfoService.selectOneByLabelName(labelInfo.getLabelName());
+        } catch (BaseException e1) {
+            return webResult.fail(e1);
+        }
+        if (null !=label) {
+            return webResult.fail("标签名称重复");
+        }
         User user = new User();
         try {
             user = this.getLoginUser();

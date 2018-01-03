@@ -247,6 +247,13 @@ public class LabelInfo extends BaseEntity {
      */
     @Transient
     private String unit;
+    
+    /**
+     * 数据类型
+     */
+    @Transient
+    private String dataType;
+    
     /**
      * 维表主键
      */
@@ -563,6 +570,16 @@ public class LabelInfo extends BaseEntity {
     
     public void setSourceTableType(Integer sourceTableType) {
         this.sourceTableType = sourceTableType;
+    }
+
+    
+    public String getDataType() {
+        return dataType;
+    }
+
+    
+    public void setDataType(String dataType) {
+        this.dataType = dataType;
     }
 
 

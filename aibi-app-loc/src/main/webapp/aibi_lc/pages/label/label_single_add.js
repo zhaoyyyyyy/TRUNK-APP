@@ -135,13 +135,10 @@ function fun_to_save(){
 	})
 }
 
-
-
-
 function fun_to_dimdetail(){
 	var dimId = $("#dimId").val();
 	var win = $.window('维表详情',$.ctx + '/aibi_lc/pages/dimtable/dimtable_detail.html?dimId='+dimId, 500,
-			300);
+			350);
 	win.reload = function(){
 		$("mainGrid").setGridParam({
 			postData : $("#formSearch").formToJson()
@@ -203,7 +200,6 @@ function openTtee(tag){
 		
 	}
 }
-
 
 function ztreeFunc(){
 		var ztreeObj;

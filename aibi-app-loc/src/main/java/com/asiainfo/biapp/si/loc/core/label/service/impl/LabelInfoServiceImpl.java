@@ -20,6 +20,7 @@ import com.asiainfo.biapp.si.loc.base.exception.BaseException;
 import com.asiainfo.biapp.si.loc.base.exception.ParamRequiredException;
 import com.asiainfo.biapp.si.loc.base.page.Page;
 import com.asiainfo.biapp.si.loc.base.service.impl.BaseServiceImpl;
+import com.asiainfo.biapp.si.loc.base.utils.StringUtil;
 import com.asiainfo.biapp.si.loc.core.dimtable.entity.DimTableInfo;
 import com.asiainfo.biapp.si.loc.core.dimtable.service.IDimTableInfoService;
 import com.asiainfo.biapp.si.loc.core.label.dao.ILabelInfoDao;
@@ -27,11 +28,14 @@ import com.asiainfo.biapp.si.loc.core.label.entity.ApproveInfo;
 import com.asiainfo.biapp.si.loc.core.label.entity.LabelCountRules;
 import com.asiainfo.biapp.si.loc.core.label.entity.LabelExtInfo;
 import com.asiainfo.biapp.si.loc.core.label.entity.LabelInfo;
+import com.asiainfo.biapp.si.loc.core.label.entity.MdaSysTable;
 import com.asiainfo.biapp.si.loc.core.label.entity.MdaSysTableColumn;
 import com.asiainfo.biapp.si.loc.core.label.service.IApproveInfoService;
 import com.asiainfo.biapp.si.loc.core.label.service.ILabelCountRulesService;
 import com.asiainfo.biapp.si.loc.core.label.service.ILabelExtInfoService;
 import com.asiainfo.biapp.si.loc.core.label.service.ILabelInfoService;
+import com.asiainfo.biapp.si.loc.core.label.service.IMdaSysTableColService;
+import com.asiainfo.biapp.si.loc.core.label.service.IMdaSysTableService;
 import com.asiainfo.biapp.si.loc.core.label.vo.LabelInfoVo;
 
 /**
@@ -79,6 +83,12 @@ public class LabelInfoServiceImpl extends BaseServiceImpl<LabelInfo, String> imp
     @Autowired 
     private IDimTableInfoService iDimTableInfoService;
     
+    @Autowired
+    private IMdaSysTableService iMdaSysTableService;
+    
+    @Autowired
+    private IMdaSysTableColService iMdaSysTableColService;
+    
     @Override
     protected BaseDao<LabelInfo, String> getBaseDao() {
         return iLabelInfoDao;
@@ -110,6 +120,7 @@ public class LabelInfoServiceImpl extends BaseServiceImpl<LabelInfo, String> imp
         labelInfo.setEffecTime(new Date());
         labelInfo.setCreateTime(new Date());
         labelInfo.setDataStatusId(1);
+        labelInfo.setCategoryId(labelInfo.getCategoryId());
         labelInfo.setCountRulesCode(labelCountRules.getCountRulesCode());
         super.saveOrUpdate(labelInfo);
         
@@ -130,9 +141,20 @@ public class LabelInfoServiceImpl extends BaseServiceImpl<LabelInfo, String> imp
         //封装元数据表列信息
         MdaSysTableColumn mdaSysTableColumn = new MdaSysTableColumn();
         mdaSysTableColumn.setLabelId(labelInfo.getLabelId());
-        DimTableInfo dimTable =iDimTableInfoService.get(labelInfo.getDimId());
-        mdaSysTableColumn.setDimTransId(dimTable.getDimTableName());
+        List<MdaSysTable> list = iMdaSysTableService.selectMdaSysTableListByConfigAndType(labelInfo.getConfigId(), labelInfo.getUpdateCycle());
+        mdaSysTableColumn.setTableId(list.get(0).getTableId());
+        mdaSysTableColumn.setColumnName(labelInfo.getLabelId());
+        mdaSysTableColumn.setColumnCnName(labelInfo.getLabelName());
+        if (StringUtil.isNoneBlank(labelInfo.getDimId())) {
+            DimTableInfo dimTable =iDimTableInfoService.get(labelInfo.getDimId());
+            mdaSysTableColumn.setDimTransId(dimTable.getDimTableName());
+            mdaSysTableColumn.setDataType(labelInfo.getDataType());
+            int columnDataTypeId = Integer.parseInt(dimTable.getCodeColType());
+            mdaSysTableColumn.setColumnDataTypeId(columnDataTypeId);
+        }
         mdaSysTableColumn.setUnit(labelInfo.getUnit());
+        mdaSysTableColumn.setColumnStatus(1);
+        iMdaSysTableColService.addMdaSysTableColumn(mdaSysTableColumn);
     }
 
     public void modifyLabelInfo(LabelInfo labelInfo) throws BaseException {
@@ -153,6 +175,14 @@ public class LabelInfoServiceImpl extends BaseServiceImpl<LabelInfo, String> imp
         }
         super.delete(labelId);
         iApproveInfoService.deleteApproveInfo(labelId);
+    }
+
+    @Override
+    public LabelInfo selectOneByLabelName(String labelName) throws BaseException {
+        if (StringUtils.isBlank(labelName)) {
+            throw new ParamRequiredException("名称不许为空");
+        }
+        return iLabelInfoDao.selectOneByLabelName(labelName);
     }
 
 }

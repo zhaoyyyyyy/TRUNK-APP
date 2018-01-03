@@ -191,4 +191,9 @@ public class LabelInfoDaoImpl extends BaseDaoImpl<LabelInfo, String> implements 
         return labelInfoList;
     }
 
+    @Override
+    public LabelInfo selectOneByLabelName(String labelName) {     
+        return super.findOneByHql("from LabelInfo l where l.labelName =?0",labelName);
+    }
+
 }

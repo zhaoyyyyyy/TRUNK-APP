@@ -169,10 +169,10 @@
 		                                        <select id="dimId" name="dimId" class="form-control input-pointer fleft">
 			                                        <option>请选择维表</option>
 			                                        <option v-for = "dim in dimtableInfoList" :value="dim.dimId">{{dim.dimTableName}}</option>
-		                                        </select>
-		                                        <button type="button" onclick="fun_to_dimdetail()" class="btn btn-default  ui-table-btn ui-table-btn fleft" >详情</button>
+		                                        </select>       
 		                                    </div> 
-		                                </div>
+		                                    <button type="button" onclick="fun_to_dimdetail()" class="file-up-btn ml10" >详情</button>
+		                                </div>            
 		                                <div class="ui-form-group">
 		                                    <label for="dataType" class="control-label">数据类型</label>
 		                                       <div class="control-input">
