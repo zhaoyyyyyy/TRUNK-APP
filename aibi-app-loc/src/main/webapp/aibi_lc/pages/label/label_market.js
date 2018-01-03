@@ -119,7 +119,6 @@ window.loc_onload = function() {
 		$(".ui-calculate-center").removeClass("heightAuto");
 	});
 	
-	
 	//样例弹出页面
 	$("#ztreeDiv").dialog({
 	      height: 515,
@@ -443,6 +442,15 @@ var labelMarket = (function (model){
   				 }
   			});
         };
+        /***
+    	 * 弹窗设置标签规则，避免双向绑定引用相同的对象
+    	 */
+    	model.getDialogRuleValue = function(ruleIndex){
+    		var rule = dataModel.ruleList[ruleIndex];
+    		var obj = JSON.parse(JSON.stringify(rule));
+    		return obj ;
+    		
+    	};
         /***
     	 * 弹窗设置标签规则
     	 */

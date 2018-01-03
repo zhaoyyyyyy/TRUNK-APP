@@ -224,7 +224,7 @@
 							</ul>
 						</div>
 						<!-- 标签 -->
-						<h4 :class="{'ui-conditionCT-h4': 1==1 , 'ui-inverse': item.labelFlag == 1}" onclick="labelMarket.againstLabel(this)" >
+						<h4 :class="{'ui-conditionCT-h4': 1==1 , 'ui-inverse': item.labelFlag == 0}" onclick="labelMarket.againstLabel(this)" >
 							<span v-text="item.customOrLabelName"></span>
 							<em></em>
 							<i onclick="labelMarket.deleteRule(this)"></i>
@@ -237,34 +237,26 @@
 						</div>
 						<!-- 指标型 -->
 						<div class="ui-conditionCT-content align_center" v-if="item.labelTypeId == 4" onclick="labelMarket.setLabelAttr(this)">
-							
-							<!-- 
-							<h5>已选条件：</h5>
+							<h5 v-if="item.queryWay != null">已选条件：</h5>
 							<div class="clearfix" v-if="item.queryWay == 1">
 								数值范围：
 								<span v-if="item.contiueMinVal !=''">
-									<span v-if="item.leftZoneSign eq '>='" >大于等于{{item.contiueMinVal}}</span>
-									<span v-if="item.leftZoneSign eq '>'" >大于{{item.contiueMinVal}}</span>
+									<span v-if="item.leftZoneSign == '>='" >大于等于{{item.contiueMinVal}}</span>
+									<span v-if="item.leftZoneSign == '>'" >大于{{item.contiueMinVal}}</span>
 								</span>
 								<span v-if="item.contiueMaxVal !=''">
-									<span v-if="item.rightZoneSign eq '<='" >小于等于{{item.contiueMaxVal}}</span>
-									<span v-if="item.rightZoneSign eq '<'" >小于{{item.contiueMaxVal}}</span>
+									<span v-if="item.rightZoneSign == '<='" >小于等于{{item.contiueMaxVal}}</span>
+									<span v-if="item.rightZoneSign == '<'" >小于{{item.contiueMaxVal}}</span>
 								</span>
-								<span v-if="item.unit !='' " v-text="item.unit"></span>
-								<span v-if="item.groupCiLabelRuleList.length >0 ">...</span>
+								<span v-text="item.unit"></span>
 							</div>
 							<div class="clearfix" v-if="item.queryWay == 2">
 								精确值：
 								<span v-if="item.exactValue !=''" v-text="item.exactValue">
 								</span>
-								<span v-if="item.unit !='' " v-text="item.unit"></span>
-								<span v-if="item.groupCiLabelRuleList.length >0 ">...</span>
+								<span v-text="item.unit"></span>
 							</div>
-							 -->
-							<i class="ui-nothing-icon">
-								<em></em>
-								请点击设置
-							</i>
+							<i class="ui-nothing-icon" v-if="item.queryWay == null"><em></em>请点击设置</i>
 						</div>
 						<!-- 枚举型  5,9,11,12
 						<div class="ui-conditionCT-content align_center" v-if="item.labelTypeId == 5" onclick="labelMarket.setLabelAttr(this)">
@@ -278,14 +270,14 @@
 							<h5>已选条件：</h5>
 							<div class="clearfix" v-if="item.queryWay == 1">
 								<span v-if="item.startTime !=''">
-									<span v-if="item.leftZoneSign eq '>='" >大于等于{{item.startTime}}</span>
-									<span v-if="item.leftZoneSign eq '>'" >大于{{item.startTime}}</span>
+									<span v-if="item.leftZoneSign == '>='" >大于等于{{item.startTime}}</span>
+									<span v-if="item.leftZoneSign == '>'" >大于{{item.startTime}}</span>
 								</span>
 								<span v-if="item.endTime !=''">
-									<span v-if="item.rightZoneSign eq '<='" >小于等于{{item.endTime}}</span>
-									<span v-if="item.rightZoneSign eq '<'" >小于{{item.endTime}}</span>
+									<span v-if="item.rightZoneSign == '<='" >小于等于{{item.endTime}}</span>
+									<span v-if="item.rightZoneSign == '<'" >小于{{item.endTime}}</span>
 								</span>
-								<span v-if="item.isNeedOffset == 1">（动态偏移更新</span>
+								<span v-if="item.isNeedOffset == 1">（动态偏移更新）</span>
 							</div>
 							<div class="clearfix" v-if="item.queryWay == 2">
 								精确值：
