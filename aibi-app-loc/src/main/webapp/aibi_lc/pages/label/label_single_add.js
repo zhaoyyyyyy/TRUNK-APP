@@ -16,6 +16,7 @@ var model = {
 		categoryName:"",
 		tagNode:"",
 		categoryId:"",
+		configId:"",
 }
 
 function changeStatus(obj){
@@ -44,7 +45,8 @@ function changeStatus(obj){
 		});
 	}
 }
-window.loc_onload = function() {		
+window.loc_onload = function() {	
+	model.configId =$.getCurrentConfigId();
 	var dicBqlx = $.getDicData("BQLXZD");
 	for(var i = 0; i<dicBqlx.length; i++){
 		if(dicBqlx[i].code!=10&&dicBqlx[i].code!=12&&dicBqlx[i].code!=8){
@@ -72,7 +74,8 @@ window.loc_onload = function() {
 	$.commAjax({
 		url : $.ctx + '/api/source/sourceTableInfo/queryList',
 		onSuccess : function(data){
-			model.sourcetableInfoList = data.data
+			model.sourcetableInfoList = data.data,
+			model.sourceTableType = data.data.sourceTableType
 		}
 	});	
 	$('#sourceTableId').change(function(){
@@ -106,6 +109,7 @@ function fun_to_save(){
 	if($("form[class~=active]").size()==0){
 		$.alert("请选择要保存的标签");
 	}
+	var flag = "";
 	var k = 1;
 	$("form[class~=active]").each(function(){
 		var labelInfo = $(this).formToJson();
@@ -114,10 +118,14 @@ function fun_to_save(){
 			$.alert("标签名称不许为空");
 		}else{
 			$.commAjax({
+			  async : false,
 			  url : $.ctx + '/api/label/labelInfo/save',
 			  postData : labelInfo,
+			  onSuccess : function(data){
+				  flag = data.data
+			  }  
 			});	
-			if(k == $("form[class~=active]").size()){
+			if(k == $("form[class~=active]").size() && flag == "success"){	
 				$.success("创建成功",function(){
 					history.back(-1);
 				})
@@ -199,8 +207,7 @@ function openTtee(tag){
 
 function ztreeFunc(){
 		var ztreeObj;
-		var labelId =$.getUrlParam("configId");	
-		alert(labelId)
+		var labelId =$.getCurrentConfigId();	
 		$.commAjax({			
 		    url : $.ctx+'/api/label/categoryInfo/queryList',  		    
 		    dataType : 'json', 
