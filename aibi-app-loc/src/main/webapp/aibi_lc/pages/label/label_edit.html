@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>新增专区</title>
+<!--[if IE]>
+    	<meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <![endif]-->
+<link rel="stylesheet" theme="default" href="../../asset/css/theme/default/coc_frame.css" />
+<link rel="stylesheet" theme="default" href="../../asset/css/theme/default/main.css" />
+<script type="text/javascript" src="../../asset/script/common/include.js"></script>
+<script type="text/javascript" src="label_edit.js"></script>
+<style type="text/css">
+[v-cloak] {
+	display: none;
+}
+</style>
+<!--[if lt IE 9]>
+	    <script src="../../asset/script/component/h5compatibility/html5shiv.min.js"></script>
+	    <script src="../../asset/script/component/h5compatibility/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+	<div id="dataD" class="iframe-nest" v-cloak>
+		<div class="ui-reg-main">
+			<div class="ui-lc-mian">
+				<form id="saveDataForm">
+					<input type="hidden" v-model="labelId" id="labelId" name="labelId" />
+					<div class="ui-expand-search ui-reg-search">
+						<div class="form-inline ui-form">
+							<div class="clearfix">
+								<div class="form-group">
+									<label class="fleft mt5">标签名称</label> 
+									<input v-model="labelName" name="labelName" type="text"  class="fleft form-control mr10 ml10"
+										placeholder="专区名称" />
+								</div>
+							</div>
+							<div class="clearfix mt30">
+								<div class="form-group">
+									<label>更新周期</label> 
+									<select v-model="updateCycle" name="updateCycle" class="form-control ml10 input-pointer " selected>
+										<option v-for="h in gxzq" :value="h.code">{{h.dataName}}</option>
+									</select>
+								</div>
+							</div>
+							<div class="clearfix mt30">
+								<div class="form-group">
+									<label for="failTime">失效时间</label>
+									 <input name="failTime" type="text" v-model="failTime"
+									class="ml10 date-input form-control input-pointer form-control-bubble" data-dismiss="formDatepicker#sendTime" id="" placeholder="请选择失效日期" />
+								</div>
+							</div>
+							<div class="clearfix mt30">
+								<div class="form-group">
+									<label>标签类型</label> 
+									<select v-model="labelTypeId" id="labelTypeId" name="labelTypeId" class="form-control ml10 input-pointer "
+									     onchange="changebq(this.options[this.selectedIndex].value)">
+										<option v-for="h in bqlx" :value="h.code">{{h.dataName}}</option>
+									</select>
+								</div>
+							</div>
+							<div v-if="isemmu==true||labelTypeId==='枚举型'" class="clearfix mt30">
+							    <div class="form-group">
+                                 <label for="dimTableName">维表选择</label>
+                                     <select id="dimTableName" name="dimTableName" class="form-control ml10 input-pointer ">
+                                         <option>请选择维表</option>
+                                         <option v-for = "dim in dimtableInfoList" :value="dim.dimId">{{dim.dimTableName}}</option>
+                                     </select>
+                                </div>
+                                <button type="button" onclick="fun_to_dimdetail()" class="btn btn-default  ui-table-btn ui-table-btn" >详情</button>
+                            </div>
+							<div class="clearfix mt30">
+                                 <!-- <label for="categoryId" class="control-label">标签分类</label> -->
+                                 <div class="control-input ui-form-ztree">
+                                 <label for="categoryId" class="control-label">标签分类</label>
+                                 	 <input type="hidden" name="categoryId">
+                                     <input type="text" class="form-control" id="categoryName" onclick="openTtee(this)" readonly>
+                                     <div class="dropdown-menu">
+                                     	<ul id="ztree" class="ztree">
+								        </ul>
+                                     </div>
+                                 </div>                             
+	                        </div>
+							<div class="clearfix mt30">
+								<div class="form-group">
+									<label>审批状态</label> 
+									<select v-model="approveStatusId" id="labelTyp" name="approveStatusId" class="form-control ml10 input-pointer ">
+										<option v-for="s in spzt" :value="s.code">{{s.dataName}}</option>
+									</select>
+								</div>
+							</div>	
+                            <div class="clearfix mt30">
+								<div class="form-group">
+									<label class="fleft mt5">单位</label> 
+									<input name="unit" type="text"  class="fleft form-control mr10 ml10"
+										placeholder="请输入单位" />
+								</div>
+							</div>
+						</div>
+					</div>
+				</form>
+				<div class="ui-reg-grid mt40">
+                    <div class=" ui-table-title mt10">
+                        <table id="jsonmap"  class="table table-striped"></table>
+                    </div>
+                    <div class="ui-grid-button clearfix mt20">
+                        <button onclick="window.location='label_mgr.html'" type="button" class="ui-btn ui-btn-second">取消</button>
+                        <button type="button" onclick="fun_to_save()" class="ui-btn ui-btn-default">保存</button>
+                    </div>
+	            </div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>
