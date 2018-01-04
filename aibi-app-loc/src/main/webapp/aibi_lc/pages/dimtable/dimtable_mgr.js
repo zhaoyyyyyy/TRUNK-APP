@@ -71,8 +71,8 @@ window.loc_onload = function() {
 									}
 								},
 								{
-									name : 'dimValueCol',
-									index : 'dimValueCol',
+									name : 'dimComment',
+									index : 'dimComment',
 									width : 50,
 									sortable : true,
 									frozen : true,

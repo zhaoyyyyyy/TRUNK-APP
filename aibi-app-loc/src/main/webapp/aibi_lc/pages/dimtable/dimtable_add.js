@@ -1,9 +1,9 @@
 var model = {
 		dimTableName : "",
-		dimValueCol:"",
+		dimComment:"",
 		codeColType : "",
 		dimCodeCol : "",
-		dimComment :""	
+		dimValueCol:""	
 }
 window.loc_onload = function() {
 	var wd = frameElement.lhgDG;
@@ -20,18 +20,18 @@ window.loc_onload = function() {
 			url : $.ctx + '/api/dimtable/dimTableInfo/get',
 			onSuccess : function(data) {
 				model.dimTableName = data.data.dimTableName;
-				model.dimValueCol = data.data.dimValueCol;
+				model.dimComment = data.data.dimComment;
 				model.codeColType = data.data.codeColType;
 				model.dimCodeCol = data.data.dimCodeCol;
-				model.dimComment = data.data.dimComment;
+				model.dimValueCol = data.data.dimValueCol;
 			}
 		})
 	}else{
 		model.dimTableName = "";
-		model.dimValueCol = "";
+		model.dimComment = "";
 		model.codeColType = "";
 		model.dimCodeCol = "";
-		model.dimComment ="";
+		model.dimValueCol ="";
 	}
 	new Vue({
 		el : '#dataD',
@@ -51,10 +51,10 @@ window.loc_onload = function() {
 		}
 		var reg = /^[a-zA-Z][a-zA-Z0-9_]*$/;
 		var dimTableName = $.trim($("#dimTableName").val());
-		var dimValueCol = $.trim($("#dimValueCol").val());
+		var dimComment = $.trim($("#dimComment").val());
 		var codeColType = $.trim($("#codeColType").val());
 		var dimCodeCol = $.trim($("#dimCodeCol").val());
-		var dimComment = $.trim($("#dimComment").val());
+		var dimValueCol = $.trim($("#dimValueCol").val());
 		var result = true;
 		if (dimTableName == "") {
 			$.alert("表名不允许为空");
@@ -66,7 +66,7 @@ window.loc_onload = function() {
 		}
 		var rdoValue = $("#yes").is(":checked") ? "是":"否";
 		if(rdoValue == "否"){
-			if(dimComment == ""){
+			if(dimValueCol == ""){
 				$.alert("请输入描述字段名",300,30);
 				result = false;
 			}else if(dimCodeCol == ""){
@@ -75,15 +75,15 @@ window.loc_onload = function() {
 			}else if (dimCodeCol != "" && !reg.test(dimCodeCol)) {
 				$.alert("主键字段名只能以英文字母开头,包含数字、字母、下划线",300,30);
 				result = false;
-			} else if (dimComment != "" && !reg.test(dimComment)) {
+			} else if (dimValueCol != "" && !reg.test(dimValueCol)) {
 				$.alert("描述字段名只能以英文字母开头,包含数字、字母、下划线",300,30);
 				result = false;
 			}
 		}else {
 			dimCodeCol = "DIM_ID";
-			dimComment = "DIM_VALUE";
+			dimValueCol = "DIM_VALUE";
 			$("#dimCodeCol").val(dimCodeCol);
-			$("#dimComment").val(dimComment);
+			$("#dimValueCol").val(dimValueCol);
 		}
 		if(result){
 			var data1 =$('#saveDataForm').formToJson();
@@ -110,10 +110,10 @@ window.loc_onload = function() {
 		var rdoValue = $("#yes").is(":checked") ? "是":"否";
 		if(rdoValue == "否"){
 			$("#dimCodeCol1").show();
-			$("#dimComment1").show();			
+			$("#dimValueCol1").show();			
 		}else{
 			$("#dimCodeCol1").hide();
-			$("#dimComment1").hide();
+			$("#dimValueCol1").hide();
 		}
 	})
 }
