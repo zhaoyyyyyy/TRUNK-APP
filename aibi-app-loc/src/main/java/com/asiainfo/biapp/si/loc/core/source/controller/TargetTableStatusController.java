@@ -100,7 +100,7 @@ public class TargetTableStatusController extends BaseController<TargetTableStatu
         WebResult<TargetTableStatus> webResult = new WebResult<>();
         TargetTableStatus targetTableStatus = new TargetTableStatus();
         try {
-            targetTableStatus = iTargetTableStatusService.selectTargerTableStatusById(tableId);
+            targetTableStatus = iTargetTableStatusService.selectTargertTableStatusById(tableId);
         } catch (BaseException e) {
             return webResult.fail(e);
         }
@@ -121,7 +121,7 @@ public class TargetTableStatusController extends BaseController<TargetTableStatu
     public WebResult<String> save(@ApiIgnore TargetTableStatus targetTableStatus) {
         WebResult<String> webResult = new WebResult<>();
         try {
-            iTargetTableStatusService.addTargerTableStatus(targetTableStatus);
+            iTargetTableStatusService.addTargertTableStatus(targetTableStatus);
         } catch (BaseException e) {
             return webResult.fail(e);
         }
@@ -144,13 +144,13 @@ public class TargetTableStatusController extends BaseController<TargetTableStatu
         WebResult<String> webResult = new WebResult<>();
         TargetTableStatus oldTar = new TargetTableStatus();
         try {
-            oldTar = iTargetTableStatusService.selectTargerTableStatusById(targetTableStatus.getSourceTableId());
+            oldTar = iTargetTableStatusService.selectTargertTableStatusById(targetTableStatus.getSourceTableId());
         } catch (BaseException e) {
             return webResult.fail(e);
         }
         oldTar = fromToBean(targetTableStatus, oldTar);
         try {
-            iTargetTableStatusService.modifyTargerTableStatus(oldTar);
+            iTargetTableStatusService.modifyTargertTableStatus(oldTar);
         } catch (BaseException e1) {
             return webResult.fail(e1);
         }
@@ -168,7 +168,7 @@ public class TargetTableStatusController extends BaseController<TargetTableStatu
     public WebResult<String> del(String tableId) {
         WebResult<String> webResult = new WebResult<>();
         try {
-            iTargetTableStatusService.deleteTargerTableStatus(tableId);
+            iTargetTableStatusService.deleteTargertTableStatus(tableId);
         } catch (BaseException e) {
             return webResult.fail(e);
         }

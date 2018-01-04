@@ -8,9 +8,9 @@ package com.asiainfo.biapp.si.loc.core.source.entity;
 
 import io.swagger.annotations.ApiParam;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -18,6 +18,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Parameter;
 
 import com.asiainfo.biapp.si.loc.base.entity.BaseEntity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -59,9 +60,17 @@ public class SourceInfo extends BaseEntity {
      */
     @Id
     @Column(name = "SOURCE_ID")
-    @GenericGenerator(name = "idGenerator", strategy = "uuid")
-    @GeneratedValue(generator = "idGenerator")
     @ApiParam(value = "指标编码")
+    @GeneratedValue(generator = "idGenerator")
+    //COC自定义主键自增
+    @GenericGenerator(name = "idGenerator",
+        strategy = "com.asiainfo.biapp.si.loc.base.extend.LocGenerateId",
+        parameters = {
+                @Parameter(name = "name", value = "SOURCE_SEQ"), //来自DIM_SEQUECE_INFO表的 SEQUECE_NAME
+                @Parameter(name = "prefix", value = "S"), //ID前缀
+                @Parameter(name = "size", value = "3") //占位符表示 001-999
+        }
+    )
     private String sourceId;
 
     /**
@@ -140,7 +149,7 @@ public class SourceInfo extends BaseEntity {
 
     @JsonIgnore
     @ApiParam(value = "源配置")
-    @ManyToOne(cascade = CascadeType.ALL, targetEntity = SourceTableInfo.class)
+    @ManyToOne(fetch = FetchType.LAZY, targetEntity = SourceTableInfo.class)
     @JoinColumn(name = "SOURCE_TABLE_ID", insertable = false, updatable = false)
     private SourceTableInfo sourceTableInfo;
 

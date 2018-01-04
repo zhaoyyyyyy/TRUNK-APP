@@ -79,6 +79,7 @@ $.fn.extend({
 		$.commAjax({
 			async : false,
 			url:"/api/prefecture/preConfigInfo/queryList",
+			postData:{"configStatus":1},
 			onSuccess:function(result){
 				if(result.data && result.data.length > 0){
 				  //已经选择过了

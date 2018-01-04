@@ -107,7 +107,7 @@
 			                <div class="ui-form-group">
 				                    <label class="control-label" for="exampleInputEmail3">主键名称</label>
 				                    <div class="control-input">
-				                        <input v-model="idColumn" name="idColumn" type="text" class="form-control" id="exampleInputEmail3" placeholder="来源主键字段名称">
+				                        <input v-model="idColumn" id="idColumn" name="idColumn" type="text" class="form-control" id="exampleInputEmail3" placeholder="来源主键字段名称">
 				                    </div>
 				                </div>
 							<div class="ui-form-group">
@@ -158,16 +158,13 @@
 			                        <select v-model="idDataType" name="idDataType" dicCode="ZDLXZD" type="text" class=" fleft form-control input-pointer"></select>
 			                    </div>
 			                </div>
-			            
-			            
-			            
 			            </div>
 					</div>
 					<div class="ui-reg-table mt20">
 						<div class="clearfix">
 							<h3 class="fleft ml20">字段描述</h3>
-							<!-- <button type="button" class="ui-btn ui-btn-sm ui-btn-default fleft ml20">导入</button>
-							<button type="button" class="ui-btn ui-btn-sm ui-btn-second fleft ml10">模版下载</button> -->
+							<button onclick="fun_to_import()" type="button" class="ui-btn ui-btn-sm ui-btn-default fleft ml20">导入</button>
+							<button type="button" class="ui-btn ui-btn-sm ui-btn-second fleft ml10">模版下载</button>
 						</div>
 						<div class="ui-reg-grid">
 							<div class=" ui-table-title mt10">

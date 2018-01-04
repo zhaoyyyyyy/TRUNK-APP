@@ -25,7 +25,7 @@ window.loc_onload = function() {
 			"configId" : obj.attr("configId")
 		},
 		datatype: "json",
-		colNames: ['数据源表名称', '创建时间', '数据源表类型', '操作'],
+		colNames: ['指标表名称', '创建时间', '指标表类型', '操作'],
 		colModel: [{
 			name: 'sourceTableName',
 			index: 'sourceTableName',

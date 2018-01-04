@@ -70,7 +70,7 @@ public interface ITargetTableStatusService extends BaseService<TargetTableStatus
      * @return
      * @throws BaseException
      */
-    public TargetTableStatus selectTargerTableStatusById(String tableId) throws BaseException;
+    public TargetTableStatus selectTargertTableStatusById(String tableId) throws BaseException;
 
     /**
      * Description: 新增一个指标源表状态
@@ -78,7 +78,7 @@ public interface ITargetTableStatusService extends BaseService<TargetTableStatus
      * @param targetTableStatus
      * @throws BaseException
      */
-    public void addTargerTableStatus(TargetTableStatus targetTableStatus) throws BaseException;
+    public void addTargertTableStatus(TargetTableStatus targetTableStatus) throws BaseException;
 
     /**
      * Description: 修改指标源表状态
@@ -86,7 +86,7 @@ public interface ITargetTableStatusService extends BaseService<TargetTableStatus
      * @param targetTableStatus
      * @throws BaseException
      */
-    public void modifyTargerTableStatus(TargetTableStatus targetTableStatus) throws BaseException;
+    public void modifyTargertTableStatus(TargetTableStatus targetTableStatus) throws BaseException;
 
     /**
      * Description: 删除指标源表状态
@@ -94,6 +94,6 @@ public interface ITargetTableStatusService extends BaseService<TargetTableStatus
      * @param tabelId
      * @throws BaseException
      */
-    public void deleteTargerTableStatus(String tableId) throws BaseException;
+    public void deleteTargertTableStatus(String tableId) throws BaseException;
 
 }

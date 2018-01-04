@@ -11,6 +11,7 @@ import java.util.List;
 
 import net.sf.json.JSONObject;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.core.convert.converter.Converter;
 
 import com.asiainfo.biapp.si.loc.core.source.entity.SourceInfo;
@@ -62,12 +63,18 @@ public class StringToSourceInfoListConverter implements Converter<String, List<S
                     }
                     JSONObject obj = JSONObject.fromObject(str[i]);
                     sourceInfo = (SourceInfo) JSONObject.toBean(obj, SourceInfo.class);
+                    if(StringUtils.isBlank(sourceInfo.getSourceId())){
+                        sourceInfo.setSourceId(null);
+                    }
                     sourceInfoList.add(sourceInfo);
                 }
             } else {
                 SourceInfo sourceInfo = new SourceInfo();
                 JSONObject obj = JSONObject.fromObject(source);
                 sourceInfo = (SourceInfo) JSONObject.toBean(obj, SourceInfo.class);
+                if(StringUtils.isBlank(sourceInfo.getSourceId())){
+                    sourceInfo.setSourceId(null);
+                }
                 sourceInfoList.add(sourceInfo);
             }
         } else {
