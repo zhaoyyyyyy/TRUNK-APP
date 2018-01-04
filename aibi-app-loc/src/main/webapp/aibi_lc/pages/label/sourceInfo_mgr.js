@@ -12,6 +12,7 @@ window.loc_onload = function(){
 			return;
 		}	
 		frWin.addKpis(id);
+		frWin.cancel();
 	});
 	
 	frWin.addBtn("cancel", "取消", function() {

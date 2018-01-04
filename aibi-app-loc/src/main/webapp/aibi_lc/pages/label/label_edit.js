@@ -2,7 +2,10 @@ var model = {
 	bqlx : [],
 	gxzq : [],
 	spzt : [],
+	isbq : [],
 	dimtableInfoList : [],
+	sourceIdList : [],
+	sourceNameList : [],
 	labelName : "",
 	failTime : "",
 	labelId :"",
@@ -14,7 +17,6 @@ var model = {
 
 window.loc_onload = function() {
 	var labelId = $.getUrlParam("labelId");
-	var frwin = frameElement.lhgDG;
 	$.commAjax({
 		url : $.ctx + '/api/label/labelInfo/get',
 		postData : {
@@ -31,6 +33,9 @@ window.loc_onload = function() {
 			model.labelId = data.data.labelId;
 			model.updateCycle = data.data.updateCycle;
 			model.labelTypeId = data.data.labelTypeId;
+			if(model.labelTypeId==5){
+				model.isemmu=true
+			}
 			model.approveStatusId = data.data.approveInfo.approveStatusId;
 		}
 	})
@@ -57,29 +62,36 @@ window.loc_onload = function() {
 		}
 	}
 	
+	var dicIsbq = $.getDicData("SFZD");
+	for(var i = 0; i<dicIsbq.length; i++){
+		model.isbq.push(dicIsbq[i]);
+	}
 	$.commAjax({
 		url : $.ctx + '/api/dimtable/dimTableInfo/queryList',
 		onSuccess : function(data){
 			model.dimtableInfoList = data.data
 		}
 	});
-	frwin.addBtn("ok","保存",function() {
-		debugger
-		$.commAjax({
-			url : $.ctx + '/api/label/labelInfo/update',
-			postData : $('#saveDataForm').formToJson(),
-			onSuccess : function(data){
-				if(data.data == "success"){
-					$.success(msss, function() {
-						history.back(-1);
-					});
-				}
+	
+	//指标选择
+	$('#btn_index_select').click(function() {
+		var win = $.window('指标配置', $.ctx + '/aibi_lc/pages/label/sourceInfo_mgr.html', 900, 600);
+		win.addKpis = function(chooseKpis) {
+			model.sourceIdList = chooseKpis;
+			for(var i=0; i<chooseKpis.length; i++){
+				$.commAjax({
+					url : $.ctx + '/api/source/sourceInfo/get',
+					postData : {
+						"sourceId" : chooseKpis[i]
+					},
+					onSuccess : function(data){
+						model.sourceNameList.push(data.data.sourceName)
+					}
+				});
 			}
-		});
+		}
 	});
-	frwin.addBtn("cancel", "取消", function() {
-		frwin.cancel();
-	});
+	
 }
 
 function changebq(obj){
@@ -88,6 +100,20 @@ function changebq(obj){
 	}else{
 		model.isemmu=false;
 	}
+}
+
+function fun_to_save(){
+	$.commAjax({
+		url : $.ctx + '/api/label/labelInfo/update',
+		postData : $('#saveDataForm').formToJson(),
+		onSuccess : function(data){
+			if(data.data == "success"){
+				$.success(msss, function() {
+					history.back(-1);
+				});
+			}
+		}
+	});
 }
 
 function fun_to_dimdetail(){

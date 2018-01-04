@@ -43,11 +43,8 @@
                                 <label for="inputEmail3" class="control-label fleft">规则</label>
                                 <div class="control-input">
                                     <input type="text" class="form-control" id="inputEmail3" placeholder="">
-                                    <div class="label-lists">
-                                        <span class="del-btn">标签
-                                            <i class="del-btn-icon"></i>
-                                        </span>
-                                        <span class="del-btn">标签
+                                    <div class="label-lists" >
+                                        <span class="del-btn" v-for="sourceName in sourceNameList">{{sourceName}}
                                             <i class="del-btn-icon"></i>
                                         </span>
                                     </div>
@@ -58,9 +55,9 @@
                         </div>
                         <div class="form-horizontal fleft ui-form">
                             <div class="ui-form-group">
-                                <label for="inputEmail3" class="control-label">标签名称</label>
+                                <label for="labelName" class="control-label">标签名称</label>
                                 <div class="control-input">
-                                    <input type="text" class="form-control" id="inputEmail3" placeholder="cust1">
+                                    <input type="text" class="form-control" id="labelName" placeholder="cust1">
                                 </div>
                             </div>
                             <div class="ui-form-group mt20 tag-radio clearfix">
@@ -69,7 +66,7 @@
                                  <ul>
 									<li class="" v-for="g in bqlx" style="display: inline">
 									<div class="radio circle success">
-									<input :value="g.code" name="labelTypeId" type="radio" onclick="changeStatus(this)" />				
+									<input :value="g.code" :id="index" name="labelTypeId" type="radio" onclick="changeStatus(this)" />				
 										<label><i class="default"></i>{{g.dataName}}</label>
 										</div>											  	
 									</li>
@@ -144,33 +141,43 @@
 					        </div>
 					        <div class="ui-form-group">
 					            <input type="hidden" name="sourceTableType" id="sourceTableType">
-					            <input type="hidden"  name="updateCycle" id="updateCycle">
 					            <label for="updateCycle" class="control-label">更新周期</label>
-					            <div class="control-input">
-                                   	<span class="file-up-name">{{model.read}}</span>
-					            </div> 
+					            <div class="control-input has-icon">
+					            <select name="updateCycle" class="form-control input-pointer fleft" selected>
+									<!-- <option v-model="updateCycle">请选择更新周期</option> -->
+									<option v-for="h in gxzq" :value="h.code">{{h.dataName}}</option>
+								</select>
+								</div>
 					        </div>
-                            <div v-if="showdimDetail[index]&&showdimDetail[index][`showdim${index}`]" class="ui-form-group">
-                                <label for="dimTableName" class="control-label">维表选择</label>
-                                <div class="control-input has-icon">
-                                    <select id="dimId" name="dimId" class="form-control input-pointer fleft">
-                                     <option>请选择维表</option>
-                                     <option v-for = "dim in dimtableInfoList" :value="dim.dimId">{{dim.dimTableName}}</option>
-                                    </select>
-                                    <button type="button" onclick="fun_to_dimdetail()" class="btn btn-default  ui-table-btn ui-table-btn fleft" >详情</button>
-                                </div>
+                            <div v-if="showdimDetail[index]&&showdimDetail[index][`showdim${index}`]">
+                              <div class="ui-form-group">
+                                  <label for="dimTableName" class="control-label">维表选择</label>
+                                  <div class="control-input has-icon">
+                                      <select id="dimId" name="dimId" class="form-control input-pointer fleft">
+                                       <option>请选择维表</option>
+                                       <option v-for = "dim in dimtableInfoList" :value="dim.dimId">{{dim.dimTableName}}</option>
+                                      </select>       
+                                  </div> 
+                                  <button type="button" onclick="fun_to_dimdetail()" class="file-up-btn ml10" >详情</button>
+                              </div>            
+                              <div class="ui-form-group">
+                                  <label for="dataType" class="control-label">数据类型</label>
+                                     <div class="control-input">
+                                          <input name="dataType" type="text" class="form-control" id="dataType">
+                                    </div>
+                              </div>
                             </div>
                         </div>
                     </form>
                     <div class="ui-reg-grid mt40">
                         <div class=" ui-table-title mt10">
-                            <table id="jsonmap"  class="table table-striped"></table>
-                        </div>
-                        <button type="button" class="ui-btn ui-btn-sm ui-btn-second mt10">添加一行</button>
-                        <div class="ui-grid-button clearfix mt20">
-                            <button onclick="window.location='label_mgr.html'" type="button" class="ui-btn ui-btn-second">取消</button>
-                            <button type="button" class="ui-btn ui-btn-default">验证并创建</button>
-                        </div>
+	                        <table id="jsonmap"  class="table table-striped"></table>
+	                    </div>
+	                    <button type="button" onclick="fun_to_createRow()" class="ui-btn ui-btn-sm ui-btn-second mt10">添加一行</button>
+	                    <div class="ui-grid-button clearfix mt20">
+	                        <button onclick="window.location='label_mgr.html'" type="button" class="ui-btn ui-btn-second">取消</button>
+	                        <button type="button" onclick="fun_to_save()" class="ui-btn ui-btn-default">验证并创建</button>
+	                    </div>
                     </div>
                 </div>
             </div>

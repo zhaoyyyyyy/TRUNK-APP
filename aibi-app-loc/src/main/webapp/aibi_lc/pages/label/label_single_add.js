@@ -148,7 +148,7 @@ function fun_to_dimdetail(){
 	}
 }
 
-function fun_to_createRow(){
+/*function fun_to_createRow(){
 	model.sourceInfoList.push({
 		columnCaliber: "",
 	    columnCnName : "",
@@ -165,7 +165,7 @@ function fun_to_createRow(){
         countRules : "",
         updateCycle : ""
 	});
-}
+}*/
 function getData(tag){	
 	if($(tag).parents(".create-main").hasClass("active")){
 		$(tag).parents(".create-main").removeClass("active");

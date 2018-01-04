@@ -95,21 +95,15 @@ public class SourceInfoController extends BaseController<SourceInfo> {
     @ApiOperation(value = "根据ID查询指标信息")
     @ApiImplicitParam(name = "sourceId", value = "sourceId", required = true, paramType = "query", dataType = "string")
     @RequestMapping(value = "/sourceInfo/get", method = RequestMethod.POST)
-    public WebResult<List<SourceInfo>> findById(String sourceId) {
-        sourceId = request.getParameter("sourceId");
-        WebResult<List<SourceInfo>> webResult = new WebResult<>();
-        String[] sourceIds = sourceId.split(",");
-        List<SourceInfo> sourceInfolist = new ArrayList<>();
+    public WebResult<SourceInfo> findById(String sourceId) {
+        WebResult<SourceInfo> webResult = new WebResult<>();
         SourceInfo sourceInfo = new SourceInfo();
-        for (String sId : sourceIds) {
-            try {
-                sourceInfo = iSourceInfoService.selectSourceInfoById(sId);
-                sourceInfolist.add(sourceInfo);
-            } catch (BaseException e) {
-                return webResult.fail(e);
-            }
+        try {
+        sourceInfo = iSourceInfoService.selectSourceInfoById(sourceId);
+        } catch (BaseException e) {
+            return webResult.fail(e);
         }
-        return webResult.success("获取指标信息成功", sourceInfolist);
+        return webResult.success("获取指标信息成功", sourceInfo);
     }
 
     @ApiOperation(value = "新增指标信息")

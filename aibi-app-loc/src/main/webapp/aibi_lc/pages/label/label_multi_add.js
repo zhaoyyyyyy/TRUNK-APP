@@ -4,7 +4,10 @@ var model = {
 		sourcetableInfoList:[],
 		sourceInfoList:[{}],
 		bqlx : [],
-		isbq : []
+		isbq : [],
+		gxzq : [],
+		sourceIdList : [],
+		sourceNameList : [],
 }
 function changeStatus(obj){
 	if(obj.value==="5"){//枚举型标签字典value为5
@@ -43,20 +46,32 @@ window.loc_onload = function(){
 	for(var i = 0; i<dicIsbq.length; i++){
 		model.isbq.push(dicIsbq[i]);
 	}
+	var dicgxzq = $.getDicData("GXZQZD");
+	for(var i =0 ; i<dicgxzq.length; i++){
+		model.gxzq.push(dicgxzq[i]);
+	}
 	new Vue({
 		el : '#dataD',
 	    data : model ,
 	})
 	//指标选择
 	$('#btn_index_select').click(function() {
-		var win = $.window('指标配置', $.ctx + '/aibi_lc/pages/label/sourceInfo_mgr.html', 900, 650);
-		win.reload = function() {
-			$("#mainGrid").setGridParam({
-				postData : $("#formSearch").formToJson()
-					}).trigger("reloadGrid", [{
-						page : 1
-			}]);
+		var win = $.window('指标配置', $.ctx + '/aibi_lc/pages/label/sourceInfo_mgr.html', 900, 600);
+		win.addKpis = function(chooseKpis) {
+			model.sourceIdList = chooseKpis;
+			for(var i=0; i<chooseKpis.length; i++){
+				$.commAjax({
+					url : $.ctx + '/api/source/sourceInfo/get',
+					postData : {
+						"sourceId" : chooseKpis[i]
+					},
+					onSuccess : function(data){
+						model.sourceNameList.push(data.data.sourceName)
+					}
+				});
+			}
 		}
+		console.log(model.sourceNameList);
 	});
 	$("#dataStatusId").change(function(){
 		$("#mainGrid").setGridParam({
@@ -80,6 +95,34 @@ function fun_to_dimdetail(){
 			page : 1
 		}]);
 	}
+}
+function getTime(element){
+	console.log(element);
+	$(element).datepicker({
+  		changeMonth: true,
+  		changeYear: true,
+  		dateFormat:"yy-mm-dd",
+  		dayNamesMin: [ "日", "一", "二", "三", "四", "五", "六" ],
+  		monthNamesShort: [ "一月", "二月", "三月", "四月", "五月", "六月", "七月", "八月", "九月", "十月", "十一月", "十二月" ]
+  	});
+}
+function fun_to_createRow(){
+	model.sourceInfoList.push({
+		/*columnCaliber: "",
+	    columnCnName : "",
+        columnLength : "",
+        columnName : "",
+        columnNum : "",
+        columnUnit : "",
+        cooColumnType : "",
+        sourceColumnRule : "",
+        sourceId : "",
+        sourceName : "",
+        sourceTableId : "",
+        dependIndex: false,
+        countRules : "",
+        updateCycle : ""*/
+	});
 }
 function fun_del(id){
 	$.confirm('您确定要继续删除吗？',function(){
@@ -114,7 +157,7 @@ function openTtee(tag){
 }
 function ztreeFunc(){
 	var ztreeObj;
-	var labelId =$.getUrlParam("configId");					
+	var labelId =$.getCurrentConfigId();					
 	$.commAjax({			
 	    url : $.ctx+'/api/label/categoryInfo/queryList',  		    
 	    dataType : 'json', 

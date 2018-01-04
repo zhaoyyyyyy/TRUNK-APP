@@ -80,12 +80,13 @@ window.loc_onload = function(){
 	 //var params = $.extend($("#formSearch").formToJson(),{configId:$.getCurrentConfigId()});
 	
 	
-	 var params = $("#formSearch").formToJson();
-	 
+	 var obj = $("#preConfig_list").find("span");
 	 $("#mainGrid").jqGrid({
 	    	url: $.ctx + "/api/label/labelInfo/queryPage",
 	        datatype: "json",
-	        postData : params,
+	        postData: {
+				"configId" : obj.attr("configId")
+			},
 	        colNames:['标签名称','标签类型','更新周期','数据状态','标签审批状态','创建时间','操作'],
 	        colModel:[
 	            {name:'labelName',index:'labelName', width:25, align:"center",
