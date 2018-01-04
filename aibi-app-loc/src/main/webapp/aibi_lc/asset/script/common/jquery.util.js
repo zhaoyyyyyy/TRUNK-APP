@@ -230,6 +230,7 @@ $.fn.extend({
 		var form = $(this);
 		var r = $(".easyui-validatebox", form);
 		if (r.length) {
+			r.validatebox();
 			r.validatebox('validate');
 			if ($('.validatebox-invalid:visible', form).length != 0) {
 				var returnStr = '';
