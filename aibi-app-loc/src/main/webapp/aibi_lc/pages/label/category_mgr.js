@@ -396,8 +396,8 @@ window.loc_onload = function() {
 	})*/
 	//右边树的模糊查询
 	var rightTreeInput ="";
+	var text;
 	$("#btn_serach2").click(function(){
-		var text;
 		rightTreeInput = $("#exampleInputAmount2").val();
 		if(rightTreeInput == ""){labeltree(); return }
 		if(rightTreeInput !=text ){
