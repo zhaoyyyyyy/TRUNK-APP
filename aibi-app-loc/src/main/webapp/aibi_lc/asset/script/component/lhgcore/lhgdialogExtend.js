@@ -254,7 +254,7 @@ jQuery.extend({
 			callback();
 		});
 	},
-	message	: function(title, content, width, height, callback, type) {
+	message	: function(content, width, height, callback, type) {
 		var dg = frameElement;
 		if (parent.frameElement != null && frameElement.lhgDG == undefined) {
 			dg = parent.frameElement.lhgDG;
@@ -287,7 +287,7 @@ jQuery.extend({
 		height = getHeight(content, height); // 窗口高度
 		callback = callback || $.noop; // 确认后执行的方法
 		type = type || 'alert-message';
-		title = title || '提示信息'; // 窗口标题
+		title = '提示信息'; // 窗口标题
 		
 		if (dg) {
 			alertDG = new dg.curWin.J.dialog({
@@ -299,6 +299,7 @@ jQuery.extend({
 				        resize			: false,
 				        cover			: true,
 				        rang			: true,
+				        top				: '-150',
 				        btns			: true,
 				        xButton			: false,
 				        SetTopWindow	: top.window,
@@ -315,6 +316,7 @@ jQuery.extend({
 				                + '">adsf</div>',
 				        resize			: false,
 				        cover			: true,
+				        top				: '-150',
 				        rang			: true,
 				        xButton			: false,
 				        SetTopWindow	: top.window,
@@ -325,9 +327,16 @@ jQuery.extend({
 		alertDG.ShowDialog();
 		$('.' + type, alertDG.topDoc).html(content);
 		
-		alertDG.addBtn('confirm', '确定', function() {
-			alertDG.cancel();
-			callback();
+		$('#'+id +' table:eq(0) tr:eq(0)', alertDG.topDoc).remove();
+		$('#'+id +' table:eq(1) tr:has(.lhgdig_btns)', alertDG.topDoc).remove();
+		
+		$('#'+id, alertDG.topDoc).animate({top: '0px'}, 1000,function(){
+			setTimeout(function(){
+				$('#'+id, alertDG.topDoc).animate({top: '-150px'}, 1000,function(){
+					alertDG.cancel();
+					callback();
+				});
+			},2000);
 		});
 	},
 	

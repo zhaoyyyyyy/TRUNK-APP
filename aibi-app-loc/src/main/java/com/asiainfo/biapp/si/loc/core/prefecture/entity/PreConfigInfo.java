@@ -6,8 +6,6 @@
 
 package com.asiainfo.biapp.si.loc.core.prefecture.entity;
 
-import io.swagger.annotations.ApiParam;
-
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -19,8 +17,11 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Parameter;
 
 import com.asiainfo.biapp.si.loc.base.entity.BaseEntity;
+
+import io.swagger.annotations.ApiParam;
 
 /**
  * Title : PreConfigInfo
@@ -58,11 +59,19 @@ public class PreConfigInfo extends BaseEntity {
     /**
      * 主键 专区ID
      */
+    @ApiParam(value = "专区ID")
     @Id
     @Column(name = "CONFIG_ID")
-    @GenericGenerator(name = "idGenerator", strategy = "uuid")
     @GeneratedValue(generator = "idGenerator")
-    @ApiParam(value = "专区ID")
+    //COC自定义主键自增
+    @GenericGenerator(name = "idGenerator",
+        strategy = "com.asiainfo.biapp.si.loc.base.extend.LocGenerateId",
+        parameters = {
+                @Parameter(name = "name", value = "CONFIG_SEQ"), //来自DIM_SEQUECE_INFO表的 SEQUECE_NAME
+                @Parameter(name = "prefix", value = "P"), //ID前缀
+                @Parameter(name = "size", value = "3") //占位符表示 001-999
+        }
+    )
     private String configId;
 
     /**
