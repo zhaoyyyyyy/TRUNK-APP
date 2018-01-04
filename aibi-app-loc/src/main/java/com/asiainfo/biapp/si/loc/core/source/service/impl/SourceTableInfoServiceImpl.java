@@ -212,6 +212,7 @@ public class SourceTableInfoServiceImpl extends BaseServiceImpl<SourceTableInfo,
             iSourceInfoService.deleteSourceInfo(s.getSourceId());
         }
         super.delete(sourceTableId);
+        iTargetTableStatusService.deleteTargertTableStatus(sourceTableId);
     }
 
 }
