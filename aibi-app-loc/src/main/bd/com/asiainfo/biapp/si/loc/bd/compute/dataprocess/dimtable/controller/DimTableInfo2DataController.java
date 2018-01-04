@@ -53,7 +53,7 @@ public class DimTableInfo2DataController extends BaseController<DimTableInfo> {
     private IDimTableInfo2DataService iDimTableInfo2DataService;
     
     @ApiOperation(value = "维表信息跑数")
-    @RequestMapping(value = "/dimtableinfo2data/execute", method = RequestMethod.POST)
+    @RequestMapping(value = "/execute", method = RequestMethod.POST)
     @ApiImplicitParam(name = "tableName", value = "表名称(可选，不传是全量跑)",paramType = "query", dataType = "string")
     public WebResult<String> execute(String tableName) {
         WebResult<String> webResult = new WebResult<>();
