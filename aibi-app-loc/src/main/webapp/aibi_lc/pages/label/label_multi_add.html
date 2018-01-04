@@ -40,16 +40,17 @@
                     <form class="clearfix create-main mt10" v-for="(sourceInfo,index) in sourceInfoList">
                         <div class="ui-create">
                             <div class="ui-form-group clearfix">
-                                <label for="inputEmail3" class="control-label fleft">规则</label>
+                                <input type="hidden" name="dependIndex" v-model="sourceInfoList[index]['dependIndex']">
+                                <label for="inputEmail3" class="control-label fleft">规则依赖指标</label>
                                 <div class="control-input">
                                     <input type="text" class="form-control" id="inputEmail3" placeholder="">
                                     <div class="label-lists" >
-                                        <span class="del-btn" v-for="sourceName in sourceNameList">{{sourceName}}
+                                        <span class="del-btn" v-for="sourceName in sourceInfoList[index]['sourceNameList']">{{sourceName}}
                                             <i class="del-btn-icon"></i>
                                         </span>
                                     </div>
                                 </div>
-                                <button id="btn_index_select" name="btn_index_select" type="button" class="ui-btn ui-btn-ghost-brand ml10">指标选择</button>
+                                <button :id="index" onclick="chooseKpi(this)" type="button" class="ui-btn ui-btn-ghost-brand ml10">指标选择</button>
                                 <i class="del-btn-icon fright mr10 mt5"></i>
                             </div>
                         </div>
@@ -57,7 +58,7 @@
                             <div class="ui-form-group">
                                 <label for="labelName" class="control-label">标签名称</label>
                                 <div class="control-input">
-                                    <input type="text" class="form-control" id="labelName" placeholder="cust1">
+                                    <input type="text" class="form-control" id="labelName" placeholder="输入标签名称">
                                 </div>
                             </div>
                             <div class="ui-form-group mt20 tag-radio clearfix">
@@ -99,7 +100,7 @@
                             </div> 
                         </div>
                         <div class="form-horizontal fleft ui-form">
-                            <div class="ui-form-group">
+                            <!-- <div class="ui-form-group">
                                 <label for="dependIndex" class="control-label">规则依赖指标</label>
                                 <div class="control-input" v-if="sourceInfo.sourceId!=false">
                                     <input :value="sourceInfo.sourceId" name="dependIndex" type="hidden">
@@ -108,7 +109,7 @@
                                 <div v-if="sourceInfo.sourceId==false " class="control-input">
                                     <input class="form-control" id="dependIndex" name="dependIndex"></input>
                                 </div>
-	                        </div>
+	                        </div> -->
                             <div class="ui-form-group">
                                 <label for="countRules" class="control-label">具体规则</label>
                                 <div class="control-input">
@@ -127,7 +128,7 @@
                             <div class="ui-form-group">
                                 <label for="busiCaliber" class="control-label">业务口径</label>
                                 <div class="control-input">
-                                    <input type="text" class="form-control" id="busiCaliber" name="busiCaliber" placeholder="cust1">
+                                    <input type="text" class="form-control" id="busiCaliber" name="busiCaliber" placeholder="输入业务口径">
                                 </div>
                             </div>
 						    <div class="ui-form-group">

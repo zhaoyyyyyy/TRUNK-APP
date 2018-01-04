@@ -2,12 +2,14 @@ var model = {
 		dimtableInfoList:[],
 		showdimDetail: [],
 		sourcetableInfoList:[],
-		sourceInfoList:[{}],
+		sourceInfoList:[{
+			sourceNameList :[],
+			dependIndex : ""
+		}],
 		bqlx : [],
 		isbq : [],
 		gxzq : [],
 		sourceIdList : [],
-		sourceNameList : [],
 }
 function changeStatus(obj){
 	if(obj.value==="5"){//枚举型标签字典value为5
@@ -48,31 +50,14 @@ window.loc_onload = function(){
 	}
 	var dicgxzq = $.getDicData("GXZQZD");
 	for(var i =0 ; i<dicgxzq.length; i++){
-		model.gxzq.push(dicgxzq[i]);
+		if(dicgxzq[i].code!=1){
+			model.gxzq.push(dicgxzq[i]);
+		}
 	}
 	new Vue({
 		el : '#dataD',
 	    data : model ,
 	})
-	//指标选择
-	$('#btn_index_select').click(function() {
-		var win = $.window('指标配置', $.ctx + '/aibi_lc/pages/label/sourceInfo_mgr.html', 900, 600);
-		win.addKpis = function(chooseKpis) {
-			model.sourceIdList = chooseKpis;
-			for(var i=0; i<chooseKpis.length; i++){
-				$.commAjax({
-					url : $.ctx + '/api/source/sourceInfo/get',
-					postData : {
-						"sourceId" : chooseKpis[i]
-					},
-					onSuccess : function(data){
-						model.sourceNameList.push(data.data.sourceName)
-					}
-				});
-			}
-		}
-		console.log(model.sourceNameList);
-	});
 	$("#dataStatusId").change(function(){
 		$("#mainGrid").setGridParam({
 			postData:{
@@ -84,6 +69,33 @@ window.loc_onload = function(){
 	});
 	
 }
+//指标选择
+function chooseKpi(obj){
+	var win = $.window('指标配置', $.ctx + '/aibi_lc/pages/label/sourceInfo_mgr.html', 900, 600);
+	win.addKpis = function(chooseKpis) {
+		model.sourceIdList = chooseKpis;
+		var index;
+		var sourceName = [];
+		var dependx;
+		for(var i=0; i<chooseKpis.length; i++){
+			$.commAjax({
+				async : false,
+				url : $.ctx + '/api/source/sourceInfo/get',
+				postData : {
+					"sourceId" : chooseKpis[i]
+				},
+				onSuccess : function(data){
+					sourceName.push(data.data.sourceName);
+					dependx += data.data.sourceId+",";
+				}
+			});
+		}
+		index = obj.id;
+		model.sourceInfoList[index]['sourceNameList']= sourceName;
+		model.sourceInfoList[index]['dependIndex']= dependx;
+	}
+}
+
 function fun_to_dimdetail(){
 	var dimId = $("#dimId").val();
 	var win = $.window('维表详情',$.ctx + '/aibi_lc/pages/dimtable/dimtable_detail.html?dimId='+dimId, 500,
@@ -108,20 +120,8 @@ function getTime(element){
 }
 function fun_to_createRow(){
 	model.sourceInfoList.push({
-		/*columnCaliber: "",
-	    columnCnName : "",
-        columnLength : "",
-        columnName : "",
-        columnNum : "",
-        columnUnit : "",
-        cooColumnType : "",
-        sourceColumnRule : "",
-        sourceId : "",
-        sourceName : "",
-        sourceTableId : "",
-        dependIndex: false,
-        countRules : "",
-        updateCycle : ""*/
+		 sourceNameList : [],
+	     dependIndex : ""
 	});
 }
 function fun_del(id){
@@ -200,4 +200,33 @@ function ztreeFunc(){
 		$(model.tagNode).siblings("input").val(model.categoryId);
 		$(".ui-form-ztree").removeClass("open");
 	};		
+}
+function fun_to_save(){
+	if($("form[class~=active]").size()==0){
+		$.alert("请选择要保存的标签");
+	}
+	var flag = "";
+	var k = 1;
+	$("form[class~=active]").each(function(){
+		var labelInfo = $(this).formToJson();
+		var labelName = $('#labelName').val();
+		if(labelName==""){
+			$.alert("标签名称不许为空");
+		}else{
+			$.commAjax({
+			  async : false,
+			  url : $.ctx + '/api/label/labelInfo/save',
+			  postData : labelInfo,
+			  onSuccess : function(data){
+				  flag = data.data
+			  }  
+			});	
+			if(k == $("form[class~=active]").size() && flag == "success"){	
+				$.success("创建成功",function(){
+					history.back(-1);
+				})
+			}
+		}
+		k++;
+	})
 }
