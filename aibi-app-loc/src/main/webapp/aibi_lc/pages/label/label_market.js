@@ -84,6 +84,7 @@ window.loc_onload = function() {
 	
 	$(".ui-label-system > li").each(function(e){
 		$(this).delegate(".labelItems","click",function(){
+			$(this).siblings("a").removeClass("all-active");
 			if($(this).hasClass('active')){
 				$(this).removeClass('active');
 				$(".ui-label-sec").hide();
@@ -93,7 +94,9 @@ window.loc_onload = function() {
 				$(this).attr("data-id",sysId+ulListId);
 				$(".ui-label-sec").attr("data-id",sysId+ulListId);
 				if($(this).attr("data-id")==$(".ui-label-sec").attr("data-id")){
-					$(".ui-label-sec").show();
+					if($(".ui-label-sec").children().size()>0){
+						$(".ui-label-sec").show();
+					}
 				}
 			}
 		})
@@ -229,13 +232,21 @@ var labelMarket = (function (model){
 	    };
 	    
 	    //取消标签体系选择
-		model.selectAllCategoryId = function(){
+		model.selectAllCategoryId = function(elem){
 			$("#categoryId").val("");
 			labelMarket.loadLabelInfoList();
+			$(elem).addClass("all-active");
+			$(elem).siblings("a.labelItems").removeClass("active");
+			$(".ui-label-sec").hide();
 		}
 		model.selectByCategoryId = function(obj){
 			$("#categoryId").val(obj.id);
-			labelMarket.loadLabelInfoList();
+			if($(obj).hasClass("active")){
+				$(obj).removeClass("active");
+			}else{
+				$(obj).addClass("active").siblings("a").removeClass("active");
+			}
+			
 		}
 	    
 	    //获取更新周期

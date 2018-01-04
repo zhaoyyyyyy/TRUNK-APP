@@ -47,6 +47,10 @@
 	border-bottom: 1px solid #e9e9e9;
 	overflow: hidden;
 }
+.ui-label-system p{
+	vertical-align: middle;
+	line-height: 45px;
+}
 .ui-label-system > li > div > label,
 .ui-label-system > li > label{
 	width: 100px;
@@ -66,6 +70,9 @@
 /* 	content: " "; */
 	color: #666;
 	padding: 4px 12px;
+}
+.ui-label-sec > li > div > a.active{
+	color:#007F3B;
 }
 .ui-label-system > li > div > div > a.active{
 	border:1px solid #009241;
@@ -791,13 +798,13 @@ span.del-btn{
 	background:url(./images/lc-icon.png) no-repeat;
 }
 .label-handles > a.setting{
-	background-position: -488px -176px;
+	background-position: -486px -176px;
 }
 .label-handles > a.del{
-	background-position: -510px -176px;
+	background-position: -508px -176px;
 }
 .label-handles > a.add{
-	background-position: -533px -176px;
+	background-position: -531px -176px;
 }
 .label-select-head{
 	padding:0 0 10px 0;
