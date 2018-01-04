@@ -1,21 +1,19 @@
 package com.asiainfo.biapp.si.loc.base.service.impl;
 
+import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.asiainfo.biapp.si.loc.base.dao.BaseDao;
 import com.asiainfo.biapp.si.loc.base.exception.BaseException;
 import com.asiainfo.biapp.si.loc.base.page.Page;
 import com.asiainfo.biapp.si.loc.base.service.BaseService;
 
-public abstract class BaseServiceImpl<M,ID> implements BaseService<M,String> {
+public abstract class BaseServiceImpl<M,ID extends Serializable> implements BaseService<M, ID> {
 	
-	protected abstract BaseDao<M,String> getBaseDao();
+	protected abstract BaseDao<M, ID> getBaseDao();
     
 	@Override
     public void save(M model) {
