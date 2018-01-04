@@ -1,8 +1,13 @@
-input.validatebox-invalid,textarea.validatebox-invalid {
+/*input.validatebox-invalid,textarea.validatebox-invalid {
     background: url('../images/invalid_line.gif') repeat-x scroll center bottom;
     border: 1px #CC3300 solid !important;
+}*/
+input.validatebox-invalid,textarea.validatebox-invalid {
+     border-color: #F14134;
+    outline: 0;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(241, 65, 52, 0.54);
+    box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(241, 65, 52, 0.54);
 }
-
 .validatebox-tip {
     position: absolute;
     width: 120px !important;

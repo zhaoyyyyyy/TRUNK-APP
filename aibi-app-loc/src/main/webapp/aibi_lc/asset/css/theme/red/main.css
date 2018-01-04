@@ -611,7 +611,7 @@ i.del-btn-icon{
 	background:url(./images/lc-icon.png) no-repeat -223px -106px;
 	cursor:pointer;
 }
-.ui-create .label-lists{
+.ui-form-group > .control-input > .label-lists{
 	position:absolute;
 	top:4px;
 	left:5px;
