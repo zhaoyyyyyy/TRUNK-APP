@@ -123,10 +123,12 @@ public class SourceTableInfoServiceImpl extends BaseServiceImpl<SourceTableInfo,
                 if(sourceTableInfo.getIdColumn().equals(s.getSourceName())){
                     continue;
                 }
-                s.setDepositColumn("L"+s.getSourceId());
                 s.setSourceColumnRule(s.getColumnName());
                 s.setSourceTableId(sourceTableInfo.getSourceTableId());
                 iSourceInfoService.addSourceInfo(s);
+                SourceInfo newS = iSourceInfoService.selectSourceInfoById(s.getSourceId());
+                newS.setDepositColumn("L"+newS.getSourceId());
+                iSourceInfoService.modifySourceInfo(newS);
             }
         }
     }

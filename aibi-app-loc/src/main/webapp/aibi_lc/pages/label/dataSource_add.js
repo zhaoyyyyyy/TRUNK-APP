@@ -74,10 +74,10 @@ window.loc_onload = function() {
 	    editurl: $.ctx +"/api/source/sourceInfo/save",
 	    postData: pD,
 	    datatype: "json",
-	    colNames: ['原字段名称', '字段类型', '指标名称', '描述','指标编码', '操作'],
+	    colNames: ['源字段名称', '字段类型', '指标名称', '描述','指标编码', '操作'],
 	    colModel: [{
-	        name: 'sourceName',
-	        index: 'sourceName',
+	        name: 'columnName',
+	        index: 'columnName',
 	        width: 80,
 	        sortable: false,
 	        frozen: true,
@@ -103,8 +103,8 @@ window.loc_onload = function() {
 	        }
 	    },
 	    {
-	        name: 'columnCnName',
-	        index: 'columnCnName',
+	        name: 'sourceName',
+	        index: 'sourceName',
 	        width: 110,
 	        editable: true,
 	        align: "center",
@@ -113,8 +113,8 @@ window.loc_onload = function() {
 	        }
 	    },
 	    {
-	        name: 'columnUnit',
-	        index: 'columnUnit',
+	        name: 'columnCaliber',
+	        index: 'columnCaliber',
 	        width: 120,
 	        editable: true,
 	        align: "center"
@@ -161,10 +161,10 @@ window.loc_onload = function() {
 	    height: '100%'
 	});
 	var dataRow = {
-		"sourceName" : "",
+		"columnName" : "",
 		"cooColumnType" : "",
-		"columnCnName" : "",
-		"columnUnit" : "",
+		"sourceName" : "",
+		"columnCaliber" : "",
 		"sourceId" : "",
 		"op" : ""
 	}
@@ -269,10 +269,10 @@ function analysis(){
 					data.data[i].data_type = "1";
 				}
 				var dataRow = {
-					"sourceName" : data.data[i].col_name,
+					"columnName" : data.data[i].col_name,
 					"cooColumnType" : data.data[i].data_type,
-					"columnCnName" : "",
-					"columnUnit" : data.data[i].comment,
+					"sourceName" : "",
+					"columnCaliber" : data.data[i].comment,
 					"sourceId" : "",
 					"op" : ""
 				}
