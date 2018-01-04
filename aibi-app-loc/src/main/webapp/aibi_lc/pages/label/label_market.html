@@ -70,7 +70,7 @@
 						</div>
 						 <ul class="ui-label-sec ui-label-system hidden">						
 							<li class="clearfix" v-for="label2 in bdList">
-								<label class="fleft font-weight" v-text="label2.categoryName"></label>
+								<label><a onclick="labelMarket.selectByCategoryId(this)" :id="label2.categoryId" class="fleft font-weight" v-text="label2.categoryName"></a></label>
 								<div class="fleft">
 									<a onclick="labelMarket.selectByCategoryId(this)" :id="item.categoryId" href="javascript:;" v-for="item in label2.children">
 										<span>{{item.categoryName}}</span>

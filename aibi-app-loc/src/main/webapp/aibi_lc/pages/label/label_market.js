@@ -244,7 +244,7 @@ var labelMarket = (function (model){
 			}else{
 				$(obj).addClass("active").siblings("a").removeClass("active");
 			}
-			
+			labelMarket.loadLabelInfoList();
 		}
 	    
 	    //获取更新周期
