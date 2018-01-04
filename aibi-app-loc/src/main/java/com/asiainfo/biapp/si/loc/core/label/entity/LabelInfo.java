@@ -23,6 +23,7 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Parameter;
 
 import com.asiainfo.biapp.si.loc.base.entity.BaseEntity;
 
@@ -65,8 +66,14 @@ public class LabelInfo extends BaseEntity {
      */
     @Id
     @Column(name = "LABEL_ID")
-    @GenericGenerator(name = "idGenerator", strategy = "uuid")
     @GeneratedValue(generator = "idGenerator")
+    @GenericGenerator(name = "idGenerator", 
+        strategy = "com.asiainfo.biapp.si.loc.base.extend.LocGenerateId",
+        parameters = {
+            @Parameter(name = "name", value = "LABEL_SEQ"), // 来自DIM_SEQUECE_INFO表的 SEQUECE_NAME
+            @Parameter(name = "prefix", value = "L"), // ID前缀
+            @Parameter(name = "size", value = "3") // 占位符表示 001-999
+    })  
     @ApiParam(value = "标签ID")
     private String labelId;
 
@@ -230,41 +237,43 @@ public class LabelInfo extends BaseEntity {
     @Column(name = "GROUP_TYPE")
     @ApiParam(value = "群类型")
     private Integer groupType;
-    
+
     /**
      * 依赖指标
      */
     @Transient
     private String dependIndex;
-    
+
     /**
      * 具体规则
      */
     @Transient
     private String countRules;
+
     /**
      * 单位
      */
     @Transient
     private String unit;
-    
+
     /**
      * 数据类型
      */
     @Transient
     private String dataType;
-    
+
     /**
      * 维表主键
      */
     @Transient
     private String dimId;
+
     /**
      * 指标源表类型
      */
     @Transient
-    private Integer sourceTableType; 
-    
+    private Integer sourceTableType;
+
     /**
      * 排序字段
      */
@@ -272,32 +281,31 @@ public class LabelInfo extends BaseEntity {
     @ApiParam(value = "排序字段")
     private Integer sortNum;
 
-    @ManyToOne(fetch=FetchType.EAGER)
-    @JoinColumn(name="LABEL_ID",referencedColumnName="LABEL_ID",insertable=false,updatable=false)
-    private MdaSysTableColumn mdaSysTableColumn;  
-    
-    @OneToMany(fetch=FetchType.EAGER)  
-    @JoinColumn(name="LABEL_ID",referencedColumnName="LABEL_ID",insertable=false,updatable=false)
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "LABEL_ID", referencedColumnName = "LABEL_ID", insertable = false, updatable = false)
+    private MdaSysTableColumn mdaSysTableColumn;
+
+    @OneToMany(fetch = FetchType.EAGER)
+    @JoinColumn(name = "LABEL_ID", referencedColumnName = "LABEL_ID", insertable = false, updatable = false)
     private Set<LabelVerticalColumnRel> verticalColumnRels;
-	
-    @ManyToOne(fetch=FetchType.EAGER)
-    @JoinColumn(name="LABEL_ID",referencedColumnName="RESOURCE_ID",insertable=false,updatable=false)
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "LABEL_ID", referencedColumnName = "RESOURCE_ID", insertable = false, updatable = false)
     private ApproveInfo approveInfo;
 
-    @OneToOne(fetch=FetchType.EAGER)
-    @JoinColumn(name="LABEL_ID",referencedColumnName="LABEL_ID",insertable=false,updatable=false)
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "LABEL_ID", referencedColumnName = "LABEL_ID", insertable = false, updatable = false)
     private LabelExtInfo labelExtInfo;
-    
-    
+
     public LabelExtInfo getLabelExtInfo() {
-		return labelExtInfo;
-	}
+        return labelExtInfo;
+    }
 
-	public void setLabelExtInfo(LabelExtInfo labelExtInfo) {
-		this.labelExtInfo = labelExtInfo;
-	}
+    public void setLabelExtInfo(LabelExtInfo labelExtInfo) {
+        this.labelExtInfo = labelExtInfo;
+    }
 
-	public ApproveInfo getApproveInfo() {
+    public ApproveInfo getApproveInfo() {
         return approveInfo;
     }
 
@@ -506,81 +514,68 @@ public class LabelInfo extends BaseEntity {
         this.sortNum = sortNum;
     }
 
-	public MdaSysTableColumn getMdaSysTableColumn() {
-		return mdaSysTableColumn;
-	}
+    public MdaSysTableColumn getMdaSysTableColumn() {
+        return mdaSysTableColumn;
+    }
 
-	public void setMdaSysTableColumn(MdaSysTableColumn mdaSysTableColumn) {
-		this.mdaSysTableColumn = mdaSysTableColumn;
-	}
+    public void setMdaSysTableColumn(MdaSysTableColumn mdaSysTableColumn) {
+        this.mdaSysTableColumn = mdaSysTableColumn;
+    }
 
-	public Set<LabelVerticalColumnRel> getVerticalColumnRels() {
-		return verticalColumnRels;
-	}
+    public Set<LabelVerticalColumnRel> getVerticalColumnRels() {
+        return verticalColumnRels;
+    }
 
-	public void setVerticalColumnRels(Set<LabelVerticalColumnRel> verticalColumnRels) {
-		this.verticalColumnRels = verticalColumnRels;
-	}
+    public void setVerticalColumnRels(Set<LabelVerticalColumnRel> verticalColumnRels) {
+        this.verticalColumnRels = verticalColumnRels;
+    }
 
-    
     public String getDependIndex() {
         return dependIndex;
     }
 
-    
     public void setDependIndex(String dependIndex) {
         this.dependIndex = dependIndex;
     }
 
-    
     public String getCountRules() {
         return countRules;
     }
 
-    
     public void setCountRules(String countRules) {
         this.countRules = countRules;
     }
 
-    
     public String getUnit() {
         return unit;
     }
 
-    
     public void setUnit(String unit) {
         this.unit = unit;
     }
 
-    
     public String getDimId() {
         return dimId;
     }
 
-    
     public void setDimId(String dimId) {
         this.dimId = dimId;
     }
 
-    
     public Integer getSourceTableType() {
         return sourceTableType;
     }
 
-    
     public void setSourceTableType(Integer sourceTableType) {
         this.sourceTableType = sourceTableType;
     }
 
-    
     public String getDataType() {
         return dataType;
     }
 
-    
     public void setDataType(String dataType) {
         this.dataType = dataType;
     }
-
 
 }

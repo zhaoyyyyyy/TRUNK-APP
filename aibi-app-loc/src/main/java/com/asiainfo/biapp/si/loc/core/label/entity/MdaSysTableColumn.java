@@ -17,6 +17,7 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Parameter;
 
 import com.asiainfo.biapp.si.loc.base.entity.BaseEntity;
 import com.asiainfo.biapp.si.loc.core.dimtable.entity.DimTableInfo;
@@ -61,8 +62,14 @@ public class MdaSysTableColumn extends BaseEntity {
      */
     @Id
     @Column(name = "COLUMN_ID")
-    @GenericGenerator(name = "idGenerator", strategy = "uuid")
     @GeneratedValue(generator = "idGenerator")
+    @GenericGenerator(name = "idGenerator", 
+    strategy = "com.asiainfo.biapp.si.loc.base.extend.LocGenerateId",
+    parameters = {
+        @Parameter(name = "name", value = "COLUMN_SEQ"), // 来自DIM_SEQUECE_INFO表的 SEQUECE_NAME
+        @Parameter(name = "prefix", value = "COl"), // ID前缀
+        @Parameter(name = "size", value = "3") // 占位符表示 001-999
+    }) 
     @ApiParam(value = "列Id")
     private String columnId;
     
