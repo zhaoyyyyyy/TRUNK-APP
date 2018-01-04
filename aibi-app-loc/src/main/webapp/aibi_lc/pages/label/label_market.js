@@ -502,7 +502,7 @@ var labelMarket = (function (model){
     		if(labelType == "4"){ // 指标型，存具体的指标值
     			//样例弹出页面
     			var wd = $.window(name + "-条件设置", $.ctx
-    					+ '/aibi_lc/pages/labelDialog/numberValueSet.html?index='+index, 500, 500);
+    					+ '/aibi_lc/pages/labelDialog/numberValueSet.html?index='+index, 600, 500);
 		    	wd.reload = function() {
 		    		model.refreshShopCart();
 		    	}
