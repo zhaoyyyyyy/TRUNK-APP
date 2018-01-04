@@ -19,6 +19,8 @@ import com.asiainfo.biapp.si.loc.base.exception.BaseException;
 import com.asiainfo.biapp.si.loc.base.exception.ParamRequiredException;
 import com.asiainfo.biapp.si.loc.base.page.Page;
 import com.asiainfo.biapp.si.loc.base.service.impl.BaseServiceImpl;
+import com.asiainfo.biapp.si.loc.core.label.service.ILabelCountRulesService;
+import com.asiainfo.biapp.si.loc.core.label.vo.LabelCountRulesVo;
 import com.asiainfo.biapp.si.loc.core.source.dao.ISourceInfoDao;
 import com.asiainfo.biapp.si.loc.core.source.entity.SourceInfo;
 import com.asiainfo.biapp.si.loc.core.source.service.ISourceInfoService;
@@ -56,6 +58,9 @@ public class SourceInfoServiceImpl extends BaseServiceImpl<SourceInfo, String> i
 
     @Autowired
     private ISourceInfoDao iSourceInfoDao;
+    
+    @Autowired
+    private ILabelCountRulesService iLabelCountRulesService;
 
     @Override
     protected BaseDao<SourceInfo, String> getBaseDao() {
@@ -92,6 +97,11 @@ public class SourceInfoServiceImpl extends BaseServiceImpl<SourceInfo, String> i
         }
         if (selectSourceInfoById(sourceId) == null) {
             throw new ParamRequiredException("ID不存在");
+        }
+        LabelCountRulesVo labelCountRulesVo = new LabelCountRulesVo();
+        labelCountRulesVo.setDependIndex(this.selectSourceInfoById(sourceId).getSourceId());
+        if(!iLabelCountRulesService.selectLabelCountRulesList(labelCountRulesVo).isEmpty()){
+            throw new ParamRequiredException("指标已经注册");
         }
         super.delete(sourceId);
     }

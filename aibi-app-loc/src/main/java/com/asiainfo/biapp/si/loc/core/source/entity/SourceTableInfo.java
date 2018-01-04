@@ -13,9 +13,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -216,7 +216,7 @@ public class SourceTableInfo extends BaseEntity {
     private Integer statusId;
 
     @ApiParam(value = "指标信息列")
-    @OneToMany(cascade = CascadeType.ALL,targetEntity=SourceInfo.class)
+    @OneToMany(fetch = FetchType.LAZY,targetEntity=SourceInfo.class)
     @JoinColumn(name = "SOURCE_TABLE_ID", insertable = false, updatable = false)
     private List<SourceInfo> sourceInfoList = new ArrayList<>(0);
 
