@@ -155,36 +155,14 @@ function fun_to_detail(id){
 }
 function fun_to_over(id){
 	$.confirm('确定停用该专区？', function() {
-		$.confirm('真的确定要停用该专区？', function() {
-			$.commAjax({
-				url : $.ctx + '/api/prefecture/preConfigInfo/update',
-				postData : {
-					"configId" : id,
-					"configStatus" : 2
-				},
-				onSuccess : function(data) {
-					$.success('停用成功。', function() {
-						$("#mainGrid").setGridParam({
-							postData : $("#formSearch").formToJson()
-						}).trigger("reloadGrid", [ {
-							page : 1
-						} ]);
-					});
-				}
-			});
-		})
-	})
-}
-function fun_to_start(id){
-	$.confirm('确定启用该专区？', function() {
 		$.commAjax({
 			url : $.ctx + '/api/prefecture/preConfigInfo/update',
 			postData : {
 				"configId" : id,
-				"configStatus" : 1
+				"configStatus" : 2
 			},
 			onSuccess : function(data) {
-				$.success('启用成功。', function() {
+				$.success('停用成功。', function() {
 					$("#mainGrid").setGridParam({
 						postData : $("#formSearch").formToJson()
 					}).trigger("reloadGrid", [ {
@@ -195,47 +173,61 @@ function fun_to_start(id){
 		});
 	})
 }
+function fun_to_start(id){
+	$.commAjax({
+		url : $.ctx + '/api/prefecture/preConfigInfo/update',
+		postData : {
+			"configId" : id,
+			"configStatus" : 1
+		},
+		onSuccess : function(data) {
+			$.success('启用成功。', function() {
+				$("#mainGrid").setGridParam({
+					postData : $("#formSearch").formToJson()
+				}).trigger("reloadGrid", [ {
+					page : 1
+				} ]);
+			});
+		}
+	});
+}
 function fun_to_down(id){
 	$.confirm('确定要下线该专区吗？', function() {
-		$.confirm('再次确认真的要下线该专区？', function() {
-			$.commAjax({
-				url : $.ctx + '/api/prefecture/preConfigInfo/update',
-				postData : {
-					"configId" : id,
-					"configStatus" : 3
-				},
-				onSuccess : function(data) {
-					$.success('下线成功。', function() {
-						$("#mainGrid").setGridParam({
-							postData : $("#formSearch").formToJson()
-						}).trigger("reloadGrid", [ {
-							page : 1
-						} ]);
-					});
-				}
-			});
-		})
+		$.commAjax({
+			url : $.ctx + '/api/prefecture/preConfigInfo/update',
+			postData : {
+				"configId" : id,
+				"configStatus" : 3
+			},
+			onSuccess : function(data) {
+				$.success('下线成功。', function() {
+					$("#mainGrid").setGridParam({
+						postData : $("#formSearch").formToJson()
+					}).trigger("reloadGrid", [ {
+						page : 1
+					} ]);
+				});
+			}
+		});
 	})
 }
 function fun_to_delete(id){
 	$.confirm('确定要删除该专区吗？', function() {
-		$.confirm('再次确认真的要删除该专区？', function() {
-			$.commAjax({
-				url : $.ctx + '/api/prefecture/preConfigInfo/update',
-				postData : {
-					"configId" : id,
-					"configStatus" : 4
-				},
-				onSuccess : function(data) {
-					$.success('删除成功。', function() {
-						$("#mainGrid").setGridParam({
-							postData : $("#formSearch").formToJson()
-						}).trigger("reloadGrid", [ {
-							page : 1
-						} ]);
-					});
-				}
-			});
-		})
+		$.commAjax({
+			url : $.ctx + '/api/prefecture/preConfigInfo/update',
+			postData : {
+				"configId" : id,
+				"configStatus" : 4
+			},
+			onSuccess : function(data) {
+				$.success('删除成功。', function() {
+					$("#mainGrid").setGridParam({
+						postData : $("#formSearch").formToJson()
+					}).trigger("reloadGrid", [ {
+						page : 1
+					} ]);
+				});
+			}
+		});
 	})
 }

@@ -5,7 +5,6 @@ var model = {
 		zqlxList : [],
 		hyxList : [],
 		cpxList : [],
-		xzqhList : [],
 		configDesc : "",
 		dataAccessType : 0,
 		sourceName : "",
@@ -82,27 +81,6 @@ window.loc_onload = function() {
 					}
 				}
 			}
-			$.commAjax({
-				url : $.ctx + '/api/user/privaliegeData/query',
-				onSuccess : function(data1) {
-					if(data1.data != null && data1.data != undefined){
-						var dataobj = data1.data;
-						for(var e=0 ; e<4 ; e++){
-							if(dataobj[e]==undefined){
-								continue;
-							}
-							for(var l=0 ; l<dataobj[e].length ; l++){
-								var od = dataobj[e][l];
-								if(od.parentId == "999"){
-									model.zqlxList.push(od);
-								}else if(od.orgType == "3"){
-									model.xzqhList.push(od);
-								}
-							}
-						}
-					}
-				}
-			})
 		}
 	});
 	
