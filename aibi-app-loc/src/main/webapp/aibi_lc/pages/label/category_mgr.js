@@ -150,18 +150,17 @@ window.loc_onload = function() {
 			    }else if(!treeNode.categoryId){
 			    	$.alert("此目录不可以删除");
 			    }else{
-			    	$.confirm('确定要删除该标签分类？', function() {
-						$.commAjax({
-							url : $.ctx + '/api/label/labelInfo/queryList',
-							postData : {
-								"categoryId" : treeNode.categoryId,	
-								"configId" :labelId,								
-							},
-							onSuccess:function(data){
-								if(!data.data.length){
+			    	$.commAjax({
+						url : $.ctx + '/api/label/labelInfo/queryList',
+						postData : {
+							"categoryId" : treeNode.categoryId,	
+							"configId" :labelId,								
+						},onSuccess:function(data){
+							if(!data.data.length){
+								$.confirm('确定要删除该标签分类？', function() {
 									$.commAjax({
-										url : $.ctx + '/api/label/categoryInfo/delete',
-										postData : {
+											url : $.ctx + '/api/label/categoryInfo/delete',
+											postData : {
 											"categoryId" : treeNode.categoryId,	
 											"sysId" :labelId,								
 											"parentId":treeNode.categoryId,
@@ -173,12 +172,12 @@ window.loc_onload = function() {
 										    labeltree();
 										}
 									});
-								}else{
-									$.alert("该分类下还有标签，不可删除");
-								}
+								});
+							}else{
+							$.alert("该分类下还有标签，不可删除");
 							}
-						});
-					})
+						}
+			    	})
 			    }
 			})
 			//修改按钮
@@ -303,6 +302,9 @@ window.loc_onload = function() {
 			transData[j]=$(this).attr("data-id");
 			j++;
 		})
+		if(transData.length == 0){
+			$.alert("请选择标签");
+		}
 		for(var i=0;i<transData.length;i++){
 			$.commAjax({			
 			    url : $.ctx+'/api/label/labelInfo/update',  	
