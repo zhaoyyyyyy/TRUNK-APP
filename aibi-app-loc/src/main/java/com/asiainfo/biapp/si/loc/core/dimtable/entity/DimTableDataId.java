@@ -51,6 +51,14 @@ public class DimTableDataId extends BaseEntity{
     @ApiParam(value = "维表主键")
     private String dimCode;
 
+    public DimTableDataId() {
+    }
+    /**
+     * @param dimTableName
+     */
+    public DimTableDataId(String dimTableName) {
+        this.dimTableName = dimTableName;
+    }
 	/**
      * @param dimTableName
      * @param dimCode

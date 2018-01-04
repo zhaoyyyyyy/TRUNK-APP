@@ -47,7 +47,7 @@ public interface IDimTableDataService extends BaseService<DimTableData, DimTable
     
     /**
      * 
-     * 根据条件查询列表
+     * 根据条件查询列表(因数据量太大而慎用)
      *
      * @param DimTableDataVo
      * @return
@@ -55,13 +55,14 @@ public interface IDimTableDataService extends BaseService<DimTableData, DimTable
     public List<DimTableData> selectDimTableDataList(DimTableData dimTableData) throws BaseException;
     
     /**
-     * 通过ID得到一个实体 Description:
+     *  Description:根据条件查询列表
      *
      * @param dimId
      * @return
      * @throws BaseException
      */
-    public DimTableData selectDimTableDataById(DimTableDataId dimTableDataId) throws BaseException;
+
+    public Page<DimTableData> selectDimTableDataPageList(Page<DimTableData> page, String labelId, String dimName) throws BaseException;
 
 
 }

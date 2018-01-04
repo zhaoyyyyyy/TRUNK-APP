@@ -19,10 +19,16 @@ import com.asiainfo.biapp.si.loc.base.exception.ParamRequiredException;
 import com.asiainfo.biapp.si.loc.base.page.Page;
 import com.asiainfo.biapp.si.loc.base.service.impl.BaseServiceImpl;
 import com.asiainfo.biapp.si.loc.base.utils.StringUtil;
+import com.asiainfo.biapp.si.loc.cache.CocCacheProxy;
 import com.asiainfo.biapp.si.loc.core.dimtable.dao.IDimTableDataDao;
 import com.asiainfo.biapp.si.loc.core.dimtable.entity.DimTableData;
 import com.asiainfo.biapp.si.loc.core.dimtable.entity.DimTableDataId;
+import com.asiainfo.biapp.si.loc.core.dimtable.entity.DimTableInfo;
 import com.asiainfo.biapp.si.loc.core.dimtable.service.IDimTableDataService;
+import com.asiainfo.biapp.si.loc.core.label.dao.IMdaSysTableDao;
+import com.asiainfo.biapp.si.loc.core.label.entity.LabelInfo;
+import com.asiainfo.biapp.si.loc.core.label.entity.MdaSysTable;
+import com.asiainfo.biapp.si.loc.core.label.entity.MdaSysTableColumn;
 
 /**
  * Title : DimTableDataServiceImpl
@@ -51,29 +57,59 @@ public class DimTableDataServiceImpl extends BaseServiceImpl<DimTableData, DimTa
 
     @Autowired
     private IDimTableDataDao iDimTableDataDao;
+
+    @Autowired
+    private IMdaSysTableDao iMdaSysTableDao;
     
     @Override
     protected BaseDao<DimTableData, DimTableDataId> getBaseDao() {
         return iDimTableDataDao;
     }
         
-    public Page<DimTableData> selectDimTableDataPageList(Page<DimTableData> page, DimTableData DimTableDataVo)
+    public Page<DimTableData> selectDimTableDataPageList(Page<DimTableData> page, DimTableData dimTableData)
             throws BaseException {
-        return iDimTableDataDao.selectDimTableDataPageList(page, DimTableDataVo);
+        return iDimTableDataDao.selectDimTableDataPageList(page, dimTableData);
     }
 
-    public List<DimTableData> selectDimTableDataList(DimTableData DimTableDataVo) throws BaseException {
-        return iDimTableDataDao.selectDimTableDataList(DimTableDataVo);
+    public List<DimTableData> selectDimTableDataList(DimTableData dimTableData) throws BaseException {
+        return iDimTableDataDao.selectDimTableDataList(dimTableData);
     }
 
-    public DimTableData selectDimTableDataById(DimTableDataId dimTableDataId) throws BaseException {
-        if (null != null) {
-            if (StringUtil.isBlank(dimTableDataId.getDimTableName()) && StringUtil.isBlank(dimTableDataId.getDimCode()) ) {
-                throw new ParamRequiredException("DimTableNameh或DimCode都不能为空");
+    public Page<DimTableData> selectDimTableDataPageList(Page<DimTableData> page, String labelId, String dimName) throws BaseException{
+        DimTableData dimTableData = new DimTableData();
+        
+        //过滤条件
+        if (StringUtil.isBlank(labelId)) {
+            List<DimTableData> rows = page.getRows();
+            if (null != rows && !rows.isEmpty()) {
+                dimTableData.setId(rows.get(0).getId());
             }
-            return super.get(dimTableDataId);
+        } else {
+            //获取维表表名
+            LabelInfo labelInfo = CocCacheProxy.getCacheProxy().getLabelInfoById(labelId);
+            MdaSysTableColumn mdaSysTableColumn = labelInfo.getMdaSysTableColumn();
+            DimTableInfo dimTableInfo = mdaSysTableColumn.getDimtableInfo();
+            System.out.println(dimTableInfo);
+            String dimTableName = null;
+            if (null != dimTableInfo) {
+                dimTableName = dimTableInfo.getDimTableName();
+            } else {
+                MdaSysTable mdaSysTable = iMdaSysTableDao.get(mdaSysTableColumn.getTableId());
+                dimTableName = mdaSysTable.getTableName();
+            }
+            
+            if (StringUtil.isBlank(dimTableName)) {
+                throw new ParamRequiredException("dimTableName不能为空");
+            }
+            dimTableData.setId(new DimTableDataId(dimTableName));
+            if (StringUtil.isNoneBlank(dimName)) {
+                dimTableData.setDimValue(dimName);
+            }
         }
-        return null;
+        
+        
+        return this.selectDimTableDataPageList(page, dimTableData);
     }
-
+    
+    
 }
