@@ -509,7 +509,7 @@ var labelMarket = (function (model){
     			
     		}else if(labelType == "5" || labelType == "9"){  //条件选择
     			//样例弹出页面
-    			var wd = $.window(name + "-条件设置", $.ctx + '/aibi_lc/pages/labelDialog/enumItemSet.html', 800, 500);
+    			var wd = $.window(name + "-条件设置", $.ctx + '/aibi_lc/pages/labelDialog/enumItemSet.html?index='+index, 800, 500);
 		    	wd.reload = function() {
 		    		model.refreshShopCart();
 		    	}

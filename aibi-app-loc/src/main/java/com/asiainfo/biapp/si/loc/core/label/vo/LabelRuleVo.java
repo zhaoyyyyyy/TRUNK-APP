@@ -45,6 +45,7 @@ public class LabelRuleVo extends LabelRule {
 	private Integer updateCycle;
 	private String dataDate;//数据时间字段
 	private String queryWay;//用于显示
+	private String attrName;//属性名称，页面回显用
 	public Integer getLabelTypeId() {
 		return labelTypeId;
 	}
@@ -84,6 +85,14 @@ public class LabelRuleVo extends LabelRule {
     
     public void setQueryWay(String queryWay) {
         this.queryWay = queryWay;
+    }
+    
+    public String getAttrName() {
+        return attrName;
+    }
+    
+    public void setAttrName(String attrName) {
+        this.attrName = attrName;
     }
 	
 	

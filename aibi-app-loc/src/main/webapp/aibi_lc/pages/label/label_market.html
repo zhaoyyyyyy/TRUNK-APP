@@ -218,9 +218,9 @@
 								<span class="caret" onclick="labelMarket.switchConnectorShow(this,event)"></span>
 							</button>
 							<ul class="dropdown-menu">
-								<li onclick="labelMarket.switchConnector(this,'or')"><a href="#" >或</a></li>
-								<li onclick="labelMarket.switchConnector(this,'and')"><a href="#" >与</a></li>
-								<li onclick="labelMarket.switchConnector(this,'-')"><a href="#" >剔除</a></li>
+								<li onclick="labelMarket.switchConnector(this,'or')"><a href="javascript:void(0)" >或</a></li>
+								<li onclick="labelMarket.switchConnector(this,'and')"><a href="javascript:void(0)" >与</a></li>
+								<li onclick="labelMarket.switchConnector(this,'-')"><a href="javascript:void(0)" >剔除</a></li>
 							</ul>
 						</div>
 						<!-- 标签 -->
@@ -258,13 +258,13 @@
 							</div>
 							<i class="ui-nothing-icon" v-if="item.queryWay == null"><em></em>请点击设置</i>
 						</div>
-						<!-- 枚举型  5,9,11,12
+						<!-- 枚举型  5,9,11,12-->
 						<div class="ui-conditionCT-content align_center" v-if="item.labelTypeId == 5" onclick="labelMarket.setLabelAttr(this)">
-							<h5>已选条件：</h5>
-							<div class="clearfix" v-text="item.attrName">
+							<h5 v-if="item.attrVal != null ">已选条件：</h5>
+							<div class="clearfix" v-if="item.attrVal != null " v-text="item.attrName">
 							</div>
-							<span v-if="item.groupCiLabelRuleList.length >0 ">...</span>
-						</div>-->
+							<i class="ui-nothing-icon" v-if="item.attrVal == null "><em></em>请点击设置</i>
+						</div>
 						<!-- 日期型
 						<div class="ui-conditionCT-content" v-if="item.labelTypeId == 6" onclick="labelMarket.setLabelAttr(this)">
 							<h5>已选条件：</h5>
