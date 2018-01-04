@@ -772,27 +772,23 @@ span.del-btn{
 }
 .label-handles{
 	display:inline-block;
-	margin:0 0 0 20px;
+	margin:0 0 0 10px;
 }
 .label-handles > a{
 	display:inline-block;
-	width:15px!important;
+	width:18px!important;
 	height:15px!important;
 	margin:0 4px!important;
 	background:url(./images/lc-icon.png) no-repeat;
 }
 .label-handles > a.setting{
-	background-position: -423px -319px;
+	background-position: -488px -176px;
 }
 .label-handles > a.del{
-	background-position: -222px -104px;
-	border:1px solid #999;
-	border-radius:50%;
+	background-position: -510px -176px;
 }
 .label-handles > a.add{
-	background-position: -28px -249px;
-	border:1px solid #999;
-	border-radius:50%;
+	background-position: -533px -176px;
 }
 .label-select-head{
 	padding:0 0 10px 0;
