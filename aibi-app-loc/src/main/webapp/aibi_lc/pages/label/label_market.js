@@ -94,9 +94,7 @@ window.loc_onload = function() {
 				$(this).attr("data-id",sysId+ulListId);
 				$(".ui-label-sec").attr("data-id",sysId+ulListId);
 				if($(this).attr("data-id")==$(".ui-label-sec").attr("data-id")){
-					if($(".ui-label-sec").children().size()>0){
-						$(".ui-label-sec").show();
-					}
+					$(".ui-label-sec").show();
 				}
 			}
 		})
