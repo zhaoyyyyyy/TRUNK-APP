@@ -4,6 +4,8 @@ package com.asiainfo.biapp.si.loc.bd.common.service;
 import java.util.List;
 import java.util.Map;
 
+import com.asiainfo.biapp.si.loc.base.exception.SqlRunException;
+
 public interface IBackSqlService {
 
     /**
@@ -13,7 +15,7 @@ public interface IBackSqlService {
      * @param tableName 表名
      * @return table_name
      */
-    public List<Map<String, String>> queryTableLikeTableName(String tableName);
+    public List<Map<String, String>> queryTableLikeTableName(String tableName) throws SqlRunException;
 
     /**
      * 查询某表中的列
@@ -22,7 +24,7 @@ public interface IBackSqlService {
      * @param tableName 表名
      * @return  COLUMN_NAME, DATA_TYPE, COLUMN_COMMENT
      */
-    public List<Map<String, String>> queryTableColumn(String tableName);
+    public List<Map<String, String>> queryTableColumn(String tableName) throws SqlRunException;
 
 	
 	/**
@@ -32,7 +34,7 @@ public interface IBackSqlService {
 	 * @param tableName
 	 * @return
 	 */
-	public boolean isExistsTable(String tableName);
+	public boolean isExistsTable(String tableName) throws SqlRunException;
 	 
 	/**
 	 * 
@@ -42,7 +44,7 @@ public interface IBackSqlService {
 	 * @param templeteTableName  模板表表明
 	 * @return
 	 */
-	public boolean createTableByTemplete(String newTableName,final String templeteTableName);
+	public boolean createTableByTemplete(String newTableName,final String templeteTableName) throws SqlRunException;
 	
 	 /**
      * 
@@ -52,7 +54,7 @@ public interface IBackSqlService {
      * @param selectSql 标准ddl查询语句
      * @return
      */
-    public boolean insertTableAsSelect(String tableName,String selectSql);
+    public boolean insertTableAsSelect(String tableName,String selectSql) throws SqlRunException;
     
     /**
      * 
@@ -62,14 +64,14 @@ public interface IBackSqlService {
      * @param selectSql 标准ddl查询语句
      * @return
      */
-    public boolean createTableAsSelect(String tableName,String selectSql);
+    public boolean createTableAsSelect(String tableName,String selectSql) throws SqlRunException;
     
     /**
      * 给某表加入某列
      * @param tableName
      * @return boolean  是否成功
      */
-    public boolean alterTable(String tableName,String columnName,final String columnType);
+    public boolean alterTable(String tableName,String columnName,final String columnType) throws SqlRunException;
     
     
     /**
@@ -81,7 +83,7 @@ public interface IBackSqlService {
      * @param pageSize  每页多少条
      * @return
      */
-    public List<Map<String,String>> queryForPage(String selectSql,Integer pageStart,Integer pageSize);
+    public List<Map<String,String>> queryForPage(String selectSql,Integer pageStart,Integer pageSize) throws SqlRunException;
     
     /**
      * 
@@ -92,7 +94,7 @@ public interface IBackSqlService {
      * @param pageSize  每页多少条
      * @return
      */
-    public Integer queryCount(String selectSql);
+    public Integer queryCount(String selectSql) throws SqlRunException;
     
     /**
      * 
@@ -101,7 +103,7 @@ public interface IBackSqlService {
      * @param tableName 表名
      * @return
      */
-    public boolean dropTable(String tableName);
+    public boolean dropTable(String tableName) throws SqlRunException;
     
     /**
      * 
@@ -111,5 +113,5 @@ public interface IBackSqlService {
      * @param newTableName 新表明
      * @return
      */
-    public boolean renameTable(String oldTableName, String newTableName);
+    public boolean renameTable(String oldTableName, String newTableName) throws SqlRunException;
 }
