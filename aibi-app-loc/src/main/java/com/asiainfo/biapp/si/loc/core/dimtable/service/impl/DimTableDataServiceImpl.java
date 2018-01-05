@@ -76,13 +76,16 @@ public class DimTableDataServiceImpl extends BaseServiceImpl<DimTableData, DimTa
     }
 
     public Page<DimTableData> selectDimTableDataPageList(Page<DimTableData> page, String labelId, String dimName) throws BaseException{
+        //过滤条件
         DimTableData dimTableData = new DimTableData();
         
-        //过滤条件
         if (StringUtil.isBlank(labelId)) {
-            List<DimTableData> rows = page.getRows();
-            if (null != rows && !rows.isEmpty()) {
-                dimTableData.setId(rows.get(0).getId());
+            if (null != page) {
+                List<DimTableData> rows = page.getRows();
+                if (null != rows && !rows.isEmpty()) {
+                    //默认把page里的第一个元素作为参数
+                    dimTableData = rows.get(0); 
+                }
             }
         } else {
             //获取维表表名
