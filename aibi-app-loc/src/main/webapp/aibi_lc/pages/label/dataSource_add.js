@@ -189,17 +189,21 @@ function setColor(cellvalue, options, rowObject) {
 	return cellvalue;
 }
 function fun_to_del(id,sourceId) {
-	$.commAjax({
-		url:$.ctx+"/api/label/labelCountRules/queryList",
-		postData:{"dependIndex":sourceId},
-		onSuccess:function(data){
-			if(data.data.length==0){
-				$("#jsonmap").jqGrid("delRowData", id);
-			}else{
-				$.alert("该指标已经注册");
+	if(sourceId != "" && sourceId != null){
+		$.commAjax({
+			url:$.ctx+"/api/label/labelCountRules/queryList",
+			postData:{"dependIndex":sourceId},
+			onSuccess:function(data){
+				if(data.data.length==0){
+					$("#jsonmap").jqGrid("delRowData", id);
+				}else{
+					$.alert("该指标已经注册");
+				}
 			}
-		}
-	})
+		})
+	}else{
+		$("#jsonmap").jqGrid("delRowData", id);
+	}
 }
 function fun_to_save() {
 	if($('#formData').validateForm()){
