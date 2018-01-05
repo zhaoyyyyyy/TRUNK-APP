@@ -12,6 +12,8 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
+import org.apache.log4j.Logger;
 import org.springframework.stereotype.Repository;
 import com.asiainfo.biapp.si.loc.base.common.LabelInfoContants;
 import com.asiainfo.biapp.si.loc.base.exception.SqlRunException;
@@ -42,7 +44,8 @@ import com.asiainfo.biapp.si.loc.bd.common.dao.IBackSqlDao;
 
 @Repository("backHiveDaoImpl")
 public class BackHiveDaoImpl extends BaseBackDaoImpl implements IBackSqlDao{
-
+	private Logger log = Logger.getLogger(BackHiveDaoImpl.class);
+	
 	@Override
 	public List<Map<String, String>> queryTableLikeTableName(String tableName) throws SqlRunException {
 	    List<Map<String, String>> res = new ArrayList<>();
@@ -299,6 +302,7 @@ public class BackHiveDaoImpl extends BaseBackDaoImpl implements IBackSqlDao{
 		String sql ="CREATE TABLE IF NOT EXISTS "+tableName+" ("+
 					columnName+" string )  PARTITIONED BY ("+LabelInfoContants.KHQ_CROSS_DATE_PARTION
 					+" string, "+LabelInfoContants.KHQ_CROSS_ID_PARTION+" string) stored as parquet ";
+		log.debug(" ----------------------  BackHiveDaoImpl.createVerticalTable  sql=" + sql);
 		return this.executeResBoolean(sql);
 	}
 
@@ -310,6 +314,7 @@ public class BackHiveDaoImpl extends BaseBackDaoImpl implements IBackSqlDao{
 		sqlstr.append(" PARTITION (").append(LabelInfoContants.KHQ_CROSS_DATE_PARTION);
 		sqlstr.append(" = ").append(partionDate).append(",").append(LabelInfoContants.KHQ_CROSS_ID_PARTION);
 		sqlstr.append(" = ").append(partionID).append(") ");
+		log.debug(" ----------------------  BackHiveDaoImpl.loadDataToTabByPartion  sql=" + sqlstr.toString());
 		return this.executeResBoolean(sqlstr.toString());
 	}
 
@@ -320,6 +325,7 @@ public class BackHiveDaoImpl extends BaseBackDaoImpl implements IBackSqlDao{
 		sqlstr.append(" PARTITION (").append(LabelInfoContants.KHQ_CROSS_DATE_PARTION);
 		sqlstr.append(" = ").append(partionDate).append(",").append(LabelInfoContants.KHQ_CROSS_ID_PARTION);
 		sqlstr.append(" = ").append(partionID).append(") ").append(sql);
+		log.debug(" ----------------------  BackHiveDaoImpl.insertDataToTabByPartion  sql=" + sqlstr.toString());
 		return this.executeResBoolean(sqlstr.toString());
 	}
 	

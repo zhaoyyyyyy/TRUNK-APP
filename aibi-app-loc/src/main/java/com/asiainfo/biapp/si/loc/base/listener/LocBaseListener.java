@@ -1,4 +1,4 @@
-package com.asiainfo.biapp.si.loc.springlistener;
+package com.asiainfo.biapp.si.loc.base.listener;
 
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
