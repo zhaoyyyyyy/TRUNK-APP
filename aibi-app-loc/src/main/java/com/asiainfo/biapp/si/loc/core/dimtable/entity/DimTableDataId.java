@@ -32,7 +32,6 @@ import io.swagger.annotations.ApiParam;
  * @author  hongfb
  * @version 1.0.0.2018年1月3日
  */
-
 public class DimTableDataId extends BaseEntity{
 
     private static final long serialVersionUID = 1L;
@@ -41,14 +40,12 @@ public class DimTableDataId extends BaseEntity{
      * 维表表名,主键之一
      */
     @Column(name = "DIM_TABLENAME")
-    @ApiParam(value = "维表表名")
     private String dimTableName;
     
     /**
      * 维表主键,主键之一
      */
     @Column(name = "DIM_CODE")
-    @ApiParam(value = "维表主键")
     private String dimCode;
 
     public DimTableDataId() {

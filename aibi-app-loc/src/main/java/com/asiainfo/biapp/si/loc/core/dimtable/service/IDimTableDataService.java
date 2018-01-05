@@ -34,6 +34,7 @@ import com.asiainfo.biapp.si.loc.core.dimtable.entity.DimTableDataId;
  * @author  hongfb
  * @version 1.0.0.2018年1月3日
  */
+
 public interface IDimTableDataService extends BaseService<DimTableData, DimTableDataId>{
 
     /**
@@ -53,16 +54,7 @@ public interface IDimTableDataService extends BaseService<DimTableData, DimTable
      * @return
      */
     public List<DimTableData> selectDimTableDataList(DimTableData dimTableData) throws BaseException;
+
     
-    /**
-     *  Description:根据条件查询列表
-     *
-     * @param dimId
-     * @return
-     * @throws BaseException
-     */
-
-    public Page<DimTableData> selectDimTableDataPageList(Page<DimTableData> page, String labelId, String dimName) throws BaseException;
-
 
 }
