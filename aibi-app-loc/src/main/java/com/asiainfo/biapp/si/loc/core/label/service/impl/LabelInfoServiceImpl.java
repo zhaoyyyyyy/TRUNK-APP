@@ -24,6 +24,7 @@ import com.asiainfo.biapp.si.loc.base.utils.StringUtil;
 import com.asiainfo.biapp.si.loc.core.dimtable.entity.DimTableInfo;
 import com.asiainfo.biapp.si.loc.core.dimtable.service.IDimTableInfoService;
 import com.asiainfo.biapp.si.loc.core.label.dao.ILabelInfoDao;
+import com.asiainfo.biapp.si.loc.core.label.dao.IMdaSysTableDao;
 import com.asiainfo.biapp.si.loc.core.label.entity.ApproveInfo;
 import com.asiainfo.biapp.si.loc.core.label.entity.LabelCountRules;
 import com.asiainfo.biapp.si.loc.core.label.entity.LabelExtInfo;
@@ -70,6 +71,9 @@ public class LabelInfoServiceImpl extends BaseServiceImpl<LabelInfo, String> imp
 
     @Autowired
     private ILabelInfoDao iLabelInfoDao;
+    
+    @Autowired
+    private IMdaSysTableDao iMdaSysTableDao;
     
     @Autowired 
     private IApproveInfoService iApproveInfoService;
@@ -148,7 +152,7 @@ public class LabelInfoServiceImpl extends BaseServiceImpl<LabelInfo, String> imp
         mdaSysTableColumn.setColumnCnName(labelInfo.getLabelName());
         if (StringUtil.isNoneBlank(labelInfo.getDimId())) {
             DimTableInfo dimTable =iDimTableInfoService.selectDimTableInfoById(labelInfo.getDimId());
-            mdaSysTableColumn.setDimTransId(dimTable.getDimTableName());
+            mdaSysTableColumn.setDimTransId(labelInfo.getDimId());
             mdaSysTableColumn.setDataType(labelInfo.getDataType());
             int columnDataTypeId = Integer.parseInt(dimTable.getCodeColType());
             mdaSysTableColumn.setColumnDataTypeId(columnDataTypeId);
@@ -204,4 +208,21 @@ public class LabelInfoServiceImpl extends BaseServiceImpl<LabelInfo, String> imp
         return iLabelInfoDao.selectOneByLabelName(labelName);
     }
 
+    @Override
+    public String selectDimNameBylabelId(String labelId) throws BaseException{
+        LabelInfo labelInfo = iLabelInfoDao.get(labelId);
+        MdaSysTableColumn mdaSysTableColumn = labelInfo.getMdaSysTableColumn();
+        DimTableInfo dimTableInfo = mdaSysTableColumn.getDimtableInfo();
+        String dimTableName = null;
+        if (null !=dimTableInfo) {
+            dimTableName = dimTableInfo.getDimTableName();
+        }else {
+            MdaSysTable mdaSysTable = iMdaSysTableDao.get(mdaSysTableColumn.getTableId());
+            dimTableName = mdaSysTable.getTableName();
+        }
+        if (StringUtil.isBlank(dimTableName)) {
+            throw new ParamRequiredException("找不到对应的维表名");
+        }
+        return dimTableName;
+    }
 }

@@ -261,6 +261,19 @@ public class LabelInfoController extends BaseController<LabelInfo> {
     }
     
 */
+    @ApiOperation(value = "通过标签ID得到维表表名")
+    @ApiImplicitParam(name = "labelId", value = "ID", required = true, paramType = "query", dataType = "string")
+    @RequestMapping(value = "/labelInfo/getDimtableName", method = RequestMethod.POST) 
+    public WebResult<String> findDimNameBylabelId(String labelId){
+        WebResult<String> webResult = new WebResult<>();
+        String dimTableName= null;
+        try {
+            dimTableName = iLabelInfoService.selectDimNameBylabelId(labelId);
+        } catch (BaseException e) {
+            webResult.fail(e);
+        }
+        return webResult.success("获取维表表名成功", dimTableName);
+    }
     
     public LabelInfo fromToBean(LabelInfo lab, LabelInfo oldLab) {
         if (null != lab.getKeyType()) {

@@ -4,7 +4,17 @@ var model = {
 		sourcetableInfoList:[],
 		sourceInfoList:[{
 			sourceNameList :[],
-			dependIndex : ""
+			dependIndex : "",
+			labelName : "",
+			labelTypeId : "",
+			isRegular : "",
+			countRules : "",
+			unit : "",
+			busiCaliber : "",
+			failTime : "",
+		    updateCycle : "",
+		    dataType : "",
+		    categoryName : ""
 		}],
 		bqlx : [],
 		isbq : [],
@@ -57,6 +67,12 @@ window.loc_onload = function(){
 	new Vue({
 		el : '#dataD',
 	    data : model ,
+	    methods : {
+	    	del_form : function(index){
+	    		debugger
+	    		model.sourceInfoList.splice(index,1);
+	    	}
+	    }
 	})
 	$("#dataStatusId").change(function(){
 		$("#mainGrid").setGridParam({
@@ -121,7 +137,17 @@ function getTime(element){
 function fun_to_createRow(){
 	model.sourceInfoList.push({
 		 sourceNameList : [],
-	     dependIndex : ""
+	     dependIndex : "",
+	     labelName : "",
+	     labelTypeId : "",
+	     isRegular : "",
+		 countRules : "",
+		 unit : "",
+		 busiCaliber : "",
+	     failTime : "",
+	     updateCycle : "",
+	     dataType : "",
+	     categoryName : ""
 	});
 }
 function fun_del(id){

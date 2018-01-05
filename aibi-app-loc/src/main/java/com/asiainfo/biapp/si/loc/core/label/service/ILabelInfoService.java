@@ -102,5 +102,12 @@ public interface ILabelInfoService extends BaseService<LabelInfo, String> {
      * @throws BaseException
      */
     public void deleteLabelInfo(String labelId) throws BaseException;
-
+    
+    /**
+     * Description:通过标签Id得到维表表名
+     *
+     * @param labelId
+     * @throws BaseException
+     */
+    public String selectDimNameBylabelId(String labelId) throws BaseException;
 }
