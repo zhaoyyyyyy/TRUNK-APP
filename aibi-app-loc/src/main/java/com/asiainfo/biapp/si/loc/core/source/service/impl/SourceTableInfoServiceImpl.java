@@ -176,7 +176,6 @@ public class SourceTableInfoServiceImpl extends BaseServiceImpl<SourceTableInfo,
             throw new ParamRequiredException("指标源表状态表数据错误");
         }
         
-        
         //修改指标信息列
         List<String> newIds = new ArrayList<>();
         if(!sourceTableInfo.getSourceInfoList().isEmpty()){
