@@ -68,7 +68,7 @@ public class SourceInfo extends BaseEntity {
         parameters = {
                 @Parameter(name = "name", value = "SOURCE_SEQ"), //来自DIM_SEQUECE_INFO表的 SEQUECE_NAME
                 @Parameter(name = "prefix", value = "S"), //ID前缀
-                @Parameter(name = "size", value = "3") //占位符表示 001-999
+                @Parameter(name = "size", value = "8") //占位符表示 00000001-99999999
         }
     )
     private String sourceId;
