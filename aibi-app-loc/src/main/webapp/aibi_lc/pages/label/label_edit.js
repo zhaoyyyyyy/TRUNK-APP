@@ -28,8 +28,8 @@ window.loc_onload = function() {
 		onSuccess : function(data) {
 			var time = new Date(data.data.failTime);
 			var y = time.getFullYear()+'-';//年
-			var m = (time.getMonth()+1<10 ? '0'+(time.getMonth()+1):date.getMonth()+1)+'-';//月
-			var d = (time.getDate()+1<10 ? '0' +(time.getDate()):date.getDate());//日		
+			var m = (time.getMonth()+1<10 ? '0'+(time.getMonth()+1):time.getMonth()+1)+'-';//月
+			var d = (time.getDate()+1<10 ? '0' +(time.getDate()):time.getDate());//日		
 			model.failTime = y+m+d;
 			model.labelName = data.data.labelName;
 			model.labelId = data.data.labelId;
@@ -127,9 +127,9 @@ function fun_to_save(){
 }
 
 function fun_to_dimdetail(){
-	var dimId = $("#dimTableName").val();
+	var dimId = $("#dimId").val();
 	var win = $.window('维表详情',$.ctx + '/aibi_lc/pages/dimtable/dimtable_detail.html?dimId='+dimId, 500,
-			300);
+			350);
 	win.reload = function(){
 		$("mainGrid").setGridParam({
 			postData : $("#formSearch").formToJson()
