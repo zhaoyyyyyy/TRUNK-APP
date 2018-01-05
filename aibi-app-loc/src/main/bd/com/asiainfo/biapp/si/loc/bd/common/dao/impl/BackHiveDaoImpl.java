@@ -15,6 +15,7 @@ import java.util.Map;
 
 import org.springframework.stereotype.Repository;
 
+import com.asiainfo.biapp.si.loc.base.common.LabelInfoContants;
 import com.asiainfo.biapp.si.loc.base.utils.LogUtil;
 import com.asiainfo.biapp.si.loc.base.utils.StringUtil;
 import com.asiainfo.biapp.si.loc.bd.common.dao.IBackSqlDao;
@@ -298,21 +299,32 @@ public class BackHiveDaoImpl extends BaseBackDaoImpl implements IBackSqlDao{
     }
 
 	@Override
-	public boolean createVerticalTable(String tableName,String columnName,String partionDate,String partionID) {
-		// TODO Auto-generated method stub
-		return false;
+	public boolean createVerticalTable(String tableName,String columnName) {
+		String sql ="CREATE TABLE IF NOT EXISTS "+tableName+" ("+
+					columnName+" string )  PARTITIONED BY ("+LabelInfoContants.KHQ_CROSS_DATE_PARTION
+					+" string, "+LabelInfoContants.KHQ_CROSS_ID_PARTION+" string) stored as parquet ";
+		return this.executeResBoolean(sql);
 	}
 
 	@Override
-	public boolean loadDataToTabByPartion(String sql, String tableName,String partionDate,String partionID) {
-		// TODO Auto-generated method stub
-		return false;
+	public boolean loadDataToTabByPartion(String fileName, String tableName,String partionDate,String partionID) {
+		StringBuffer sqlstr = new StringBuffer();
+		sqlstr.append("load data local inpath ").append(fileName);
+		sqlstr.append(" OVERWRITE into table ").append(tableName);
+		sqlstr.append(" PARTITION (").append(LabelInfoContants.KHQ_CROSS_DATE_PARTION);
+		sqlstr.append(" = ").append(partionDate).append(",").append(LabelInfoContants.KHQ_CROSS_ID_PARTION);
+		sqlstr.append(" = ").append(partionID).append(") ");
+		return this.executeResBoolean(sqlstr.toString());
 	}
 
 	@Override
 	public boolean insertDataToTabByPartion(String sql,String tableName,String partionDate,String partionID) {
-		// TODO Auto-generated method stub
-		return false;
+		StringBuffer sqlstr = new StringBuffer();
+		sqlstr.append("insert overwrite TABLE ").append(tableName);
+		sqlstr.append(" PARTITION (").append(LabelInfoContants.KHQ_CROSS_DATE_PARTION);
+		sqlstr.append(" = ").append(partionDate).append(",").append(LabelInfoContants.KHQ_CROSS_ID_PARTION);
+		sqlstr.append(" = ").append(partionID).append(") ").append(sql);
+		return this.executeResBoolean(sqlstr.toString());
 	}
 	
 	

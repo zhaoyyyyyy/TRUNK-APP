@@ -22,6 +22,26 @@ package com.asiainfo.biapp.si.loc.base.common;
  * @version 1.0.0.2017年12月18日
  */
 public interface LabelInfoContants {
+	
+	/**
+	 * 客户群标签当天写入纵表的表头， 后面需要拼写上 configid
+	 */
+	public static final String KHQ_CROSS_TABLE = "DW_KHQ_CROSS_";
+	/**
+	 * 客户群当天数据写入的纵表列名
+	 */
+	public static final String KHQ_CROSS_COLUMN = "USERID";
+	/**
+	 * 客群群当天写入数据的纵表的分区字段名
+	 */
+	public static final String KHQ_CROSS_ID_PARTION = "CUSTOM_ID";
+	/**
+	 * 客群群当天写入数据的纵表的分区字段名
+	 */
+	public static final String KHQ_CROSS_DATE_PARTION = "STAT_DATE";
+	
+	
+	
 	/**
 	 * 标签类型
 	 */

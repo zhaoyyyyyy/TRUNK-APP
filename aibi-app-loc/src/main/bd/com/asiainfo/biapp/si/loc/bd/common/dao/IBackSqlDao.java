@@ -142,16 +142,16 @@ public interface IBackSqlDao {
      * @param partionID		分区字段2：客户群id分区字段名
      * @return
      */
-    public boolean createVerticalTable(String tableName,String columnName,String partionDate,String partionID);
+    public boolean createVerticalTable(String tableName,String columnName);
     
     /**
      * 数据文件方式  指定分区 覆盖式导入指定 表
-     * @param sql
+     * @param fileName  数据文件的绝对路径
      * @param tableName
      * @param partionDate
      * @return
      */
-    public boolean loadDataToTabByPartion(String sql, String tableName,String partionDate,String partionID);
+    public boolean loadDataToTabByPartion(String fileName, String tableName,String partionDate,String partionID);
     
     /**
      * 表数据方式  指定分区 覆盖式导入 指定表
