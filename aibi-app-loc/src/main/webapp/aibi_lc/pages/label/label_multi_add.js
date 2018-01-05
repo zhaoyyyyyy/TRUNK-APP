@@ -2,9 +2,24 @@ var model = {
 		dimtableInfoList:[],
 		showdimDetail: [],
 		sourcetableInfoList:[],
-		sourceInfoList:[{}],
+		sourceInfoList:[{
+			sourceNameList :[],
+			dependIndex : "",
+			labelName : "",
+			labelTypeId : "",
+			isRegular : "",
+			countRules : "",
+			unit : "",
+			busiCaliber : "",
+			failTime : "",
+		    updateCycle : "",
+		    dataType : "",
+		    categoryName : ""
+		}],
 		bqlx : [],
-		isbq : []
+		isbq : [],
+		gxzq : [],
+		sourceIdList : [],
 }
 function changeStatus(obj){
 	if(obj.value==="5"){//枚举型标签字典value为5
@@ -43,21 +58,22 @@ window.loc_onload = function(){
 	for(var i = 0; i<dicIsbq.length; i++){
 		model.isbq.push(dicIsbq[i]);
 	}
+	var dicgxzq = $.getDicData("GXZQZD");
+	for(var i =0 ; i<dicgxzq.length; i++){
+		if(dicgxzq[i].code!=1){
+			model.gxzq.push(dicgxzq[i]);
+		}
+	}
 	new Vue({
 		el : '#dataD',
 	    data : model ,
+	    methods : {
+	    	del_form : function(index){
+	    		debugger
+	    		model.sourceInfoList.splice(index,1);
+	    	}
+	    }
 	})
-	//指标选择
-	$('#btn_index_select').click(function() {
-		var win = $.window('指标配置', $.ctx + '/aibi_lc/pages/label/sourceInfo_mgr.html', 900, 650);
-		win.reload = function() {
-			$("#mainGrid").setGridParam({
-				postData : $("#formSearch").formToJson()
-					}).trigger("reloadGrid", [{
-						page : 1
-			}]);
-		}
-	});
 	$("#dataStatusId").change(function(){
 		$("#mainGrid").setGridParam({
 			postData:{
@@ -69,6 +85,33 @@ window.loc_onload = function(){
 	});
 	
 }
+//指标选择
+function chooseKpi(obj){
+	var win = $.window('指标配置', $.ctx + '/aibi_lc/pages/label/sourceInfo_mgr.html', 900, 600);
+	win.addKpis = function(chooseKpis) {
+		model.sourceIdList = chooseKpis;
+		var index;
+		var sourceName = [];
+		var dependx;
+		for(var i=0; i<chooseKpis.length; i++){
+			$.commAjax({
+				async : false,
+				url : $.ctx + '/api/source/sourceInfo/get',
+				postData : {
+					"sourceId" : chooseKpis[i]
+				},
+				onSuccess : function(data){
+					sourceName.push(data.data.sourceName);
+					dependx += data.data.sourceId+",";
+				}
+			});
+		}
+		index = obj.id;
+		model.sourceInfoList[index]['sourceNameList']= sourceName;
+		model.sourceInfoList[index]['dependIndex']= dependx;
+	}
+}
+
 function fun_to_dimdetail(){
 	var dimId = $("#dimId").val();
 	var win = $.window('维表详情',$.ctx + '/aibi_lc/pages/dimtable/dimtable_detail.html?dimId='+dimId, 500,
@@ -80,6 +123,32 @@ function fun_to_dimdetail(){
 			page : 1
 		}]);
 	}
+}
+function getTime(element){
+	console.log(element);
+	$(element).datepicker({
+  		changeMonth: true,
+  		changeYear: true,
+  		dateFormat:"yy-mm-dd",
+  		dayNamesMin: [ "日", "一", "二", "三", "四", "五", "六" ],
+  		monthNamesShort: [ "一月", "二月", "三月", "四月", "五月", "六月", "七月", "八月", "九月", "十月", "十一月", "十二月" ]
+  	});
+}
+function fun_to_createRow(){
+	model.sourceInfoList.push({
+		 sourceNameList : [],
+	     dependIndex : "",
+	     labelName : "",
+	     labelTypeId : "",
+	     isRegular : "",
+		 countRules : "",
+		 unit : "",
+		 busiCaliber : "",
+	     failTime : "",
+	     updateCycle : "",
+	     dataType : "",
+	     categoryName : ""
+	});
 }
 function fun_del(id){
 	$.confirm('您确定要继续删除吗？',function(){
@@ -114,7 +183,7 @@ function openTtee(tag){
 }
 function ztreeFunc(){
 	var ztreeObj;
-	var labelId =$.getUrlParam("configId");					
+	var labelId =$.getCurrentConfigId();					
 	$.commAjax({			
 	    url : $.ctx+'/api/label/categoryInfo/queryList',  		    
 	    dataType : 'json', 
@@ -157,4 +226,30 @@ function ztreeFunc(){
 		$(model.tagNode).siblings("input").val(model.categoryId);
 		$(".ui-form-ztree").removeClass("open");
 	};		
+}
+function fun_to_save(){
+	var flag = "";
+	var k = 1;
+	$("form").each(function(){
+		var labelInfo = $(this).formToJson();
+		var labelName = $('#labelName').val();
+		if(labelName==""){
+			$.alert("标签名称不许为空");
+		}else{
+			$.commAjax({
+			  async : false,
+			  url : $.ctx + '/api/label/labelInfo/save',
+			  postData : labelInfo,
+			  onSuccess : function(data){
+				  flag = data.data
+			  }  
+			});	
+			if(k == $("form").size() && flag == "success"){	
+				$.success("创建成功",function(){
+					history.back(-1);
+				})
+			}
+		}
+		k++;
+	})
 }

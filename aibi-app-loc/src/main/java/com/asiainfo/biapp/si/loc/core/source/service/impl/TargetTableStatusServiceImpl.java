@@ -73,26 +73,26 @@ public class TargetTableStatusServiceImpl extends BaseServiceImpl<TargetTableSta
         return iTargetTableStatusDao.selectTargetTableStatusList(targetTableStatusVo);
     }
 
-    public TargetTableStatus selectTargerTableStatusById(String tableId) throws BaseException {
+    public TargetTableStatus selectTargertTableStatusById(String tableId) throws BaseException {
         if (StringUtils.isBlank(tableId)) {
             throw new ParamRequiredException("ID不能为空");
         }
         return super.get(tableId);
     }
 
-    public void addTargerTableStatus(TargetTableStatus targetTableStatus) throws BaseException {
+    public void addTargertTableStatus(TargetTableStatus targetTableStatus) throws BaseException {
         super.saveOrUpdate(targetTableStatus);
     }
 
-    public void modifyTargerTableStatus(TargetTableStatus targetTableStatus) throws BaseException {
+    public void modifyTargertTableStatus(TargetTableStatus targetTableStatus) throws BaseException {
         super.saveOrUpdate(targetTableStatus);
     }
 
-    public void deleteTargerTableStatus(String tableId) throws BaseException {
+    public void deleteTargertTableStatus(String tableId) throws BaseException {
         if (StringUtils.isBlank(tableId)) {
             throw new ParamRequiredException("ID不能为空");
         }
-        if (selectTargerTableStatusById(tableId) == null) {
+        if (selectTargertTableStatusById(tableId) == null) {
             throw new ParamRequiredException("ID不存在");
         }
         super.delete(tableId);

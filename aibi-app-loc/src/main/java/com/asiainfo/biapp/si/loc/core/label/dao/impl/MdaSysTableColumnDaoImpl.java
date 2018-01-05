@@ -103,4 +103,9 @@ public class MdaSysTableColumnDaoImpl extends BaseDaoImpl<MdaSysTableColumn, Str
         reMap.put("params", params);
         return reMap;
     }
+
+    @Override
+    public MdaSysTableColumn selectMdaSysTableColBylabelId(String labelId) {
+        return findOneByHql("from MdaSysTableColumn m where m.labelId=?0 ",labelId);
+    }
 }

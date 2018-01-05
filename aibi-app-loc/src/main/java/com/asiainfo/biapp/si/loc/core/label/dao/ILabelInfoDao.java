@@ -64,5 +64,14 @@ public interface ILabelInfoDao extends BaseDao<LabelInfo, String> {
      * @return
      */
     public List<LabelInfo> selectEffectiveCiLabelInfo();
+    
+    /**
+     * 
+     * Description: 
+     *
+     * @param labelname
+     * @return
+     */
+    public LabelInfo selectOneByLabelName(String labelName);
 
 }

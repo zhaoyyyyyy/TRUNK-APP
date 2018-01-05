@@ -80,12 +80,13 @@ window.loc_onload = function(){
 	 //var params = $.extend($("#formSearch").formToJson(),{configId:$.getCurrentConfigId()});
 	
 	
-	 var params = $("#formSearch").formToJson();
-	 
+	 var obj = $("#preConfig_list").find("span");
 	 $("#mainGrid").jqGrid({
 	    	url: $.ctx + "/api/label/labelInfo/queryPage",
 	        datatype: "json",
-	        postData : params,
+	        postData: {
+				"configId" : obj.attr("configId")
+			},
 	        colNames:['标签名称','标签类型','更新周期','数据状态','标签审批状态','创建时间','操作'],
 	        colModel:[
 	            {name:'labelName',index:'labelName', width:25, align:"center",
@@ -130,7 +131,7 @@ window.loc_onload = function(){
 	            		    	       '<button onclick="fun_to_offline(\''+data.labelId+'\')" type="button" class="btn btn-default  ui-table-btn ui-table-btn" >下线</button>';
 	            		    }
 	            		    if(data.dataStatusId !=2){
-	            		    	html+= '<button onclick="fun_to_edit(\''+data.labelId+'\')" type="button" class="btn btn-default  ui-table-btn ui-table-btn" >修改</button>';
+	            		    	html+= '<button onclick="window.location=\'label_edit.html?labelId='+data.labelId+'\'" type="button" class="btn btn-default  ui-table-btn ui-table-btn" >修改</button>';
 	            		    }
 	            		    if(data.dataStatusId==1){
 	            			    html+= '<button onclick="fun_to_del(\''+data.labelId+'\')" type="button" class="btn btn-default  ui-table-btn ui-table-btn" >删除</button>';
@@ -243,7 +244,7 @@ function fun_to_offline(id){
 		});
 	});
 }
-
+/*
 function fun_to_edit(id){
 	var configId = $.getCurrentConfigId();
 	var win = $.window('标签修改',$.ctx+'/aibi_lc/pages/label/label_edit.html?labelId='+id+"&configId="+configId,500,600);
@@ -255,7 +256,7 @@ function fun_to_edit(id){
 		}]);
 	}
 }
-
+*/
 function fun_to_del(id){
 	$.confirm('您确定要继续删除吗？',function(){
 		$.commAjax({

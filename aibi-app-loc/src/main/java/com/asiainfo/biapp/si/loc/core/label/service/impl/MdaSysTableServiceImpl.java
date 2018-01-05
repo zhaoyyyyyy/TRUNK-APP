@@ -110,7 +110,7 @@ public class MdaSysTableServiceImpl extends BaseServiceImpl<MdaSysTable, String>
                     mdaSysTable.setCreateUserId(preConfigInfo.getCreateUserId());
                     mdaSysTable.setTableName("DW_L_PREF_" + preConfigInfo.getConfigId() + "_");
                     mdaSysTable.setTableType(i);
-                    mdaSysTable.setUpdateCycle(k);
+                    mdaSysTable.setUpdateCycle(k+1);
                     try {
                         this.addMdaSysTable(mdaSysTable);
                     } catch (BaseException e) {
@@ -126,7 +126,7 @@ public class MdaSysTableServiceImpl extends BaseServiceImpl<MdaSysTable, String>
                     mdaSysTable.setCreateUserId(preConfigInfo.getCreateUserId());
                     mdaSysTable.setTableName("DW_G_PREF_" + preConfigInfo.getConfigId() + "_");
                     mdaSysTable.setTableType(i);
-                    mdaSysTable.setUpdateCycle(j);
+                    mdaSysTable.setUpdateCycle(j+1);
                     try {
                         this.addMdaSysTable(mdaSysTable);
                     } catch (BaseException e) {

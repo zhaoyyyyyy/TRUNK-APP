@@ -142,8 +142,17 @@ public class LabelInfoController extends BaseController<LabelInfo> {
             @ApiImplicitParam(name = "sortNum", value = "排序字段", required = false, paramType = "query", dataType = "int") ,
             @ApiImplicitParam(name = "dependIndex", value = "规则依赖的指标",required=false,paramType = "query", dataType= "string")})
     @RequestMapping(value = "/labelInfo/save", method = RequestMethod.POST)
-    public WebResult<String> save(LabelInfo labelInfo){
+    public WebResult<String> save(@ApiIgnore LabelInfo labelInfo){
         WebResult<String> webResult = new WebResult<>();
+        LabelInfo label = new LabelInfo();
+        try {
+            label = iLabelInfoService.selectOneByLabelName(labelInfo.getLabelName());
+        } catch (BaseException e1) {
+            return webResult.fail(e1);
+        }
+        if (null !=label) {
+            return webResult.fail("标签名称重复");
+        }
         User user = new User();
         try {
             user = this.getLoginUser();
@@ -250,39 +259,21 @@ public class LabelInfoController extends BaseController<LabelInfo> {
         }
         return webResult.success("删除标签信息成功", SUCCESS);
     }
-    @ApiOperation(value="发布标签")
-    @ApiImplicitParams({
-        @ApiImplicitParam(name = "labelId", value = "ID", required = true, paramType = "query", dataType = "string"),
-        @ApiImplicitParam(name = "dataStatusId", value = "数据状态ID", required = false, paramType = "query", dataType = "int"),
-        @ApiImplicitParam(name = "approveStatusId",value = "标签审批状态id" ,required = false, paramType = "query",dataType = "int") })
-    @RequestMapping(value = "/labelInfo/publish", method = RequestMethod.POST)
-    public WebResult<String> publish(@ApiIgnore LabelInfo labelInfo){
-        String approveStatusId = request.getParameter("approveStatusId");
+    
+*/
+    @ApiOperation(value = "通过标签ID得到维表表名")
+    @ApiImplicitParam(name = "labelId", value = "ID", required = true, paramType = "query", dataType = "string")
+    @RequestMapping(value = "/labelInfo/getDimtableName", method = RequestMethod.POST) 
+    public WebResult<String> findDimNameBylabelId(String labelId){
         WebResult<String> webResult = new WebResult<>();
-        LabelInfo oldLab = new LabelInfo();
+        String dimTableName= null;
         try {
-            oldLab = iLabelInfoService.selectLabelInfoById(labelInfo.getLabelId());
+            dimTableName = iLabelInfoService.selectDimNameBylabelId(labelId);
         } catch (BaseException e) {
-            return webResult.fail(e);
+            webResult.fail(e);
         }
-        oldLab = fromToBean(labelInfo, oldLab);
-        if (StringUtil.isNotEmpty(approveStatusId)) {
-            try {
-                ApproveInfo approveInfo = iApproveInfoService.selectApproveInfo(labelInfo.getLabelId());
-                approveInfo.setApproveStatusId(approveStatusId);
-                approveInfo.setApproveTime(new Date());
-                oldLab.setApproveInfo(approveInfo);
-            } catch (BaseException e) {
-                e.printStackTrace();
-            }     
-        }  
-        try {
-            iLabelInfoService.modifyLabelInfo(oldLab);
-        } catch (BaseException e1) {
-            return webResult.fail(e1);
-        }
-        return webResult.success("发布标签信息成功", SUCCESS);
-    }*/
+        return webResult.success("获取维表表名成功", dimTableName);
+    }
     
     public LabelInfo fromToBean(LabelInfo lab, LabelInfo oldLab) {
         if (null != lab.getKeyType()) {

@@ -261,7 +261,7 @@ String.prototype.length2 = function() {
 				case 'validate' :
 					return this.each(function() {
 						validate(this);
-						// $(this).blur();
+						$(this).blur();
 				}
 					);
 				case 'isValid' :
@@ -280,20 +280,18 @@ String.prototype.length2 = function() {
 			} else {
 				init(this);
 				var t = $(this);
-				alert(t.attr('required') )
 				state = $.data(this, 'validatebox', {
-					options	: $.extend({}, $.fn.validatebox.defaults, {
-						required		: (t.attr('required') ? (t.attr('required') == 'true' || t.attr('required') == true || t.attr('required') == 'required') : undefined),
-						validType		: (t.attr('validType') || undefined),
-						maxlength		: (t.attr('maxlength') || undefined),
-/** 新增长度验证add by qiuj 2012-06-26 end * */
-						maxlen			: (t.attr('maxlen') || undefined),
-/** 新增长度验证add by qiuj 2012-06-26 end * */
-						missingMessage	: (t.attr('missingMessage') || undefined),
-						invalidMessage	: (t.attr('invalidMessage') || undefined)
-					}, options
-					)
-				}
+						options	: $.extend({}, $.fn.validatebox.defaults, {
+							required		: (t.attr('required') ? (t.attr('required') == 'true' || t.attr('required') == true || t.attr('required') == 'required') : undefined),
+							validType		: (t.attr('validType') || undefined),
+							maxlength		: (t.attr('maxlength') || undefined),
+	/** 新增长度验证add by qiuj 2012-06-26 end * */
+							maxlen			: (t.attr('maxlen') || undefined),
+	/** 新增长度验证add by qiuj 2012-06-26 end * */
+							missingMessage	: (t.attr('missingMessage') || undefined),
+							invalidMessage	: (t.attr('invalidMessage') || undefined)
+						}, options)
+					}
 				);
 			}
 			

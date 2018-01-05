@@ -10,18 +10,9 @@ window.loc_onload = function(){
 		if(id.length<1){
 			$.alert("请选择需要的指标");
 			return;
-		}
-		$.commAjax({
-			url: $.ctx + '/api/source/sourceInfo/get?sourceId='+id,
-			onSuccess:function(data){
-				var sourceNamelist = null;
-				var sourceInfolist = data.data;
-				for(var i=0; i <sourceInfolist.length;i++){
-					var sourceName = sourceInfolist[i].sourceName;
-					console.log(sourceName)
-				}	
-			}
-		})
+		}	
+		frWin.addKpis(id);
+		frWin.cancel();
 	});
 	
 	frWin.addBtn("cancel", "取消", function() {
@@ -50,8 +41,7 @@ window.loc_onload = function(){
 	})
 	
 	
-	
-	
+
     $("#mainGrid").jqGrid({
         url: $.ctx + "/api/source/sourceInfo/queryPage",
         datatype: "json",
@@ -59,21 +49,39 @@ window.loc_onload = function(){
         colModel:[
             {name:'sourceId',index:'sourceId', wideth:20,align:"center",hidden:true, key:true},
             {name:'sourceName',index:'sourceName', width:20, sortable:false,frozen : true,align:"center"},//frozen : true固定列
-            {name:'columnName',index:'columnName', width:80, sortable:false,frozen : true,align:"center"},
-            {name:'sourceTableInfo.sourceTableName',index:'sourceTableInfo.sourceTableName', width:100,frozen : true,align:"center",
+            {name:'columnName',index:'columnName', width:30, sortable:false,frozen : true,align:"center"},
+            {name:'sourceTableName',index:'sourceTableName', width:50,frozen : true,align:"center",
                 formatter : function(value,opts,data){
+                	var sourceTableName = "";
 		        	$.commAjax({
+		        		async : false,
 		        		url : $.ctx + "/api/source/sourceTableInfo/get",
 		        		postData : {
 		        			sourceTableId : data.sourceTableId
 		        		},
-		        		onSuccess : function(data1){
-		        			return data1.data.sourceTableName;
+		        		onSuccess : function(data){
+		        			sourceTableName = data.data.sourceTableName;
 		        		}
 		        	});
+		        	return sourceTableName;
                 }	
             },
-            {name:'sourceTableInfo.createTime',index:'sourceTableInfo.createTime', width:40, sortable:false,align:"right"}
+            {name:'createTime',index:'createTime', width:40, sortable:false,align:"right",
+                formatter : function(value,opts,data){
+                	var createTime = "";
+                	$.commAjax({
+                		async : false,
+                		url : $.ctx + "/api/source/sourceTableInfo/get",
+                		postData : {
+		        			sourceTableId : data.sourceTableId
+		        		},
+		        		onSuccess : function(data){
+		        			createTime = data.data.createTime;
+		        		}
+                	});
+                	return createTime;
+                }	
+            }
         ],
         rowNum:10,
         rowList:[10,20,30],

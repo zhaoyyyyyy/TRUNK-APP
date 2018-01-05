@@ -100,4 +100,8 @@ public class MdaSysTableColServiceImpl extends BaseServiceImpl<MdaSysTableColumn
         super.delete(columnId);
     }
 
+    @Override
+    public MdaSysTableColumn selectMdaSysTableColBylabelId(String labelId) {
+        return iMdaSysTableColumnDao.selectMdaSysTableColBylabelId(labelId);
+    }
 }

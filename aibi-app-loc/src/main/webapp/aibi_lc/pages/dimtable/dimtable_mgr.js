@@ -63,16 +63,14 @@ window.loc_onload = function() {
 									frozen : true,
 									align : "center",
 									formatter : function(value, opts, data) {
-										return "<a href='###' onclick='fun_to_detail(\""
-												+ data.dimId
-												+ "\")' ><font class='detail-text' color='blue'>"
+										return "<font class='detail-text' >"
 												+ data.dimTableName
 												+ "</font></a>";
 									}
 								},
 								{
-									name : 'dimValueCol',
-									index : 'dimValueCol',
+									name : 'dimComment',
+									index : 'dimComment',
 									width : 50,
 									sortable : true,
 									frozen : true,
@@ -87,8 +85,9 @@ window.loc_onload = function() {
 									formatter : function(v) {
 										return "<button type='button' class='btn btn-default  ui-table-btn ui-table-btn' onclick='fun_to_edit(\""
 												+ v
-												+ "\")'>修改</button> "
-												+ "<button type='button' class='btn btn-default ui-table-btn' onclick='del( \""
+												+ "\")'>修改</button> <button type='button' class='btn btn-default ui-table-btn' onclick='fun_to_detail( \""
+												+ v + "\" )'>查看</button>"
+												+ "<button type='button' class='btn btn-default ui-table-btn' onclick='fun_to_del( \""
 												+ v + "\" )'>删除</button>"
 									}
 								} ],
@@ -97,7 +96,7 @@ window.loc_onload = function() {
 						        viewrecords: true,
 					});
 }
-function del(dimId) {
+function fun_to_del(dimId) {
 	$.confirm('确认删除此维表吗', function() {
 		$.commAjax({
 			url : $.ctx + '/api/dimtable/dimTableInfo/delete',
@@ -118,8 +117,8 @@ function del(dimId) {
 }
 function fun_to_detail(id) {
 	var wd = $.window('维表详情', $.ctx
-			+ '/aibi_lc/pages/dimtable/dimtable_detail.html?dimId=' + id, 500,
-			350);
+			+ '/aibi_lc/pages/dimtable/dimtable_detail.html?dimId=' + id, 900,
+			500);
 	wd.reload = function() {
 		$("#mainGrid").setGridParam({
 			postData : $("#formSearch").formToJson()

@@ -20,18 +20,23 @@ import com.asiainfo.biapp.si.loc.base.exception.BaseException;
 import com.asiainfo.biapp.si.loc.base.exception.ParamRequiredException;
 import com.asiainfo.biapp.si.loc.base.page.Page;
 import com.asiainfo.biapp.si.loc.base.service.impl.BaseServiceImpl;
+import com.asiainfo.biapp.si.loc.base.utils.StringUtil;
 import com.asiainfo.biapp.si.loc.core.dimtable.entity.DimTableInfo;
 import com.asiainfo.biapp.si.loc.core.dimtable.service.IDimTableInfoService;
 import com.asiainfo.biapp.si.loc.core.label.dao.ILabelInfoDao;
+import com.asiainfo.biapp.si.loc.core.label.dao.IMdaSysTableDao;
 import com.asiainfo.biapp.si.loc.core.label.entity.ApproveInfo;
 import com.asiainfo.biapp.si.loc.core.label.entity.LabelCountRules;
 import com.asiainfo.biapp.si.loc.core.label.entity.LabelExtInfo;
 import com.asiainfo.biapp.si.loc.core.label.entity.LabelInfo;
+import com.asiainfo.biapp.si.loc.core.label.entity.MdaSysTable;
 import com.asiainfo.biapp.si.loc.core.label.entity.MdaSysTableColumn;
 import com.asiainfo.biapp.si.loc.core.label.service.IApproveInfoService;
 import com.asiainfo.biapp.si.loc.core.label.service.ILabelCountRulesService;
 import com.asiainfo.biapp.si.loc.core.label.service.ILabelExtInfoService;
 import com.asiainfo.biapp.si.loc.core.label.service.ILabelInfoService;
+import com.asiainfo.biapp.si.loc.core.label.service.IMdaSysTableColService;
+import com.asiainfo.biapp.si.loc.core.label.service.IMdaSysTableService;
 import com.asiainfo.biapp.si.loc.core.label.vo.LabelInfoVo;
 
 /**
@@ -67,6 +72,9 @@ public class LabelInfoServiceImpl extends BaseServiceImpl<LabelInfo, String> imp
     @Autowired
     private ILabelInfoDao iLabelInfoDao;
     
+    @Autowired
+    private IMdaSysTableDao iMdaSysTableDao;
+    
     @Autowired 
     private IApproveInfoService iApproveInfoService;
     
@@ -78,6 +86,12 @@ public class LabelInfoServiceImpl extends BaseServiceImpl<LabelInfo, String> imp
     
     @Autowired 
     private IDimTableInfoService iDimTableInfoService;
+    
+    @Autowired
+    private IMdaSysTableService iMdaSysTableService;
+    
+    @Autowired
+    private IMdaSysTableColService iMdaSysTableColService;
     
     @Override
     protected BaseDao<LabelInfo, String> getBaseDao() {
@@ -110,6 +124,8 @@ public class LabelInfoServiceImpl extends BaseServiceImpl<LabelInfo, String> imp
         labelInfo.setEffecTime(new Date());
         labelInfo.setCreateTime(new Date());
         labelInfo.setDataStatusId(1);
+        labelInfo.setGroupType(0);
+        labelInfo.setCategoryId(labelInfo.getCategoryId());
         labelInfo.setCountRulesCode(labelCountRules.getCountRulesCode());
         super.saveOrUpdate(labelInfo);
         
@@ -130,9 +146,20 @@ public class LabelInfoServiceImpl extends BaseServiceImpl<LabelInfo, String> imp
         //封装元数据表列信息
         MdaSysTableColumn mdaSysTableColumn = new MdaSysTableColumn();
         mdaSysTableColumn.setLabelId(labelInfo.getLabelId());
-        DimTableInfo dimTable =iDimTableInfoService.get(labelInfo.getDimId());
-        mdaSysTableColumn.setDimTransId(dimTable.getDimTableName());
+        List<MdaSysTable> list = iMdaSysTableService.selectMdaSysTableListByConfigAndType(labelInfo.getConfigId(), labelInfo.getUpdateCycle());
+        mdaSysTableColumn.setTableId(list.get(0).getTableId());
+        mdaSysTableColumn.setColumnName(labelInfo.getLabelId());
+        mdaSysTableColumn.setColumnCnName(labelInfo.getLabelName());
+        if (StringUtil.isNoneBlank(labelInfo.getDimId())) {
+            DimTableInfo dimTable =iDimTableInfoService.selectDimTableInfoById(labelInfo.getDimId());
+            mdaSysTableColumn.setDimTransId(labelInfo.getDimId());
+            mdaSysTableColumn.setDataType(labelInfo.getDataType());
+            int columnDataTypeId = Integer.parseInt(dimTable.getCodeColType());
+            mdaSysTableColumn.setColumnDataTypeId(columnDataTypeId);
+        }
         mdaSysTableColumn.setUnit(labelInfo.getUnit());
+        mdaSysTableColumn.setColumnStatus(1);
+        iMdaSysTableColService.addMdaSysTableColumn(mdaSysTableColumn);
     }
 
     public void modifyLabelInfo(LabelInfo labelInfo) throws BaseException {
@@ -142,6 +169,24 @@ public class LabelInfoServiceImpl extends BaseServiceImpl<LabelInfo, String> imp
             labelInfo.setEffecTime(new Date());
         }
         super.saveOrUpdate(labelInfo);
+        
+        //修改标签规则维表信息
+        LabelCountRules labelCountRules = iLabelCountRulesService.selectLabelCountRulesById(labelInfo.getCountRulesCode());
+        labelCountRules.setDependIndex(labelInfo.getDependIndex());
+        labelCountRules.setCountRules(labelInfo.getCountRules());
+        iLabelCountRulesService.saveOrUpdate(labelCountRules);
+        
+        //修改元数据表列信息
+        MdaSysTableColumn mdaSysTableColumn = iMdaSysTableColService.selectMdaSysTableColBylabelId(labelInfo.getLabelId());
+        if (StringUtil.isNoneBlank(labelInfo.getDimId())) {
+            DimTableInfo dimTable = iDimTableInfoService.selectDimTableInfoById(labelInfo.getDimId());
+            mdaSysTableColumn.setDimTransId(dimTable.getDimTableName());
+            mdaSysTableColumn.setDataType(labelInfo.getDataType());
+            int columnDataTypeId = Integer.parseInt(dimTable.getCodeColType());
+            mdaSysTableColumn.setColumnDataTypeId(columnDataTypeId);
+        }
+        mdaSysTableColumn.setUnit(labelInfo.getUnit());
+        iMdaSysTableColService.modifyMdaSysTableColumn(mdaSysTableColumn);
     }
 
     public void deleteLabelInfo(String labelId) throws BaseException {
@@ -155,4 +200,29 @@ public class LabelInfoServiceImpl extends BaseServiceImpl<LabelInfo, String> imp
         iApproveInfoService.deleteApproveInfo(labelId);
     }
 
+    @Override
+    public LabelInfo selectOneByLabelName(String labelName) throws BaseException {
+        if (StringUtils.isBlank(labelName)) {
+            throw new ParamRequiredException("名称不许为空");
+        }
+        return iLabelInfoDao.selectOneByLabelName(labelName);
+    }
+
+    @Override
+    public String selectDimNameBylabelId(String labelId) throws BaseException{
+        LabelInfo labelInfo = iLabelInfoDao.get(labelId);
+        MdaSysTableColumn mdaSysTableColumn = labelInfo.getMdaSysTableColumn();
+        DimTableInfo dimTableInfo = mdaSysTableColumn.getDimtableInfo();
+        String dimTableName = null;
+        if (null !=dimTableInfo) {
+            dimTableName = dimTableInfo.getDimTableName();
+        }else {
+            MdaSysTable mdaSysTable = iMdaSysTableDao.get(mdaSysTableColumn.getTableId());
+            dimTableName = mdaSysTable.getTableName();
+        }
+        if (StringUtil.isBlank(dimTableName)) {
+            throw new ParamRequiredException("找不到对应的维表名");
+        }
+        return dimTableName;
+    }
 }

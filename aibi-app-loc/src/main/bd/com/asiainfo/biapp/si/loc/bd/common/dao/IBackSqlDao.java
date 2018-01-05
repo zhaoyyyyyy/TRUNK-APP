@@ -4,6 +4,8 @@ package com.asiainfo.biapp.si.loc.bd.common.dao;
 import java.util.List;
 import java.util.Map;
 
+import com.asiainfo.biapp.si.loc.base.exception.SqlRunException;
+
 /**
  * 后台库操作接口(持久层)
  * Title : IBackSqlDao
@@ -34,7 +36,7 @@ public interface IBackSqlDao {
      * @param tableName 表名
      * @return
      */
-    public List<Map<String, String>> queryTableLikeTableName(String tableName);
+    public List<Map<String, String>> queryTableLikeTableName(String tableName) throws SqlRunException;
 
     /**
      * 查询某表中的列
@@ -43,7 +45,7 @@ public interface IBackSqlDao {
      * @param tableName 表名
      * @return  COLUMN_NAME, DATA_TYPE, COLUMN_COMMENT
      */
-    public List<Map<String, String>> queryTableColumn(String tableName);
+    public List<Map<String, String>> queryTableColumn(String tableName) throws SqlRunException;
 
 	
 	/**
@@ -53,7 +55,7 @@ public interface IBackSqlDao {
 	 * @param tableName
 	 * @return
 	 */
-	public boolean isExistsTable(String tableName);
+	public boolean isExistsTable(String tableName) throws SqlRunException;
 	 
 	/**
 	 * 
@@ -63,7 +65,7 @@ public interface IBackSqlDao {
 	 * @param templeteTableName  模板表表明
 	 * @return
 	 */
-	public boolean createTableByTemplete(String newTableName,final String templeteTableName);
+	public boolean createTableByTemplete(String newTableName,final String templeteTableName) throws SqlRunException;
 	
 	 /**
      * 
@@ -73,7 +75,7 @@ public interface IBackSqlDao {
      * @param selectSql 标准ddl查询语句
      * @return
      */
-    public boolean insertTableAsSelect(String tableName,String selectSql);
+    public boolean insertTableAsSelect(String tableName,String selectSql) throws SqlRunException;
     
     /**
      * 
@@ -83,14 +85,14 @@ public interface IBackSqlDao {
      * @param selectSql 标准ddl查询语句
      * @return
      */
-    public boolean createTableAsSelect(String tableName,String selectSql);
+    public boolean createTableAsSelect(String tableName,String selectSql) throws SqlRunException;
     
     /**
      * 给某表加入某列
      * @param tableName
      * @return boolean  是否成功
      */
-    public boolean alterTable(String tableName,String columnName,final String columnType);
+    public boolean alterTable(String tableName,String columnName,final String columnType) throws SqlRunException;
     
     
     /**
@@ -102,7 +104,7 @@ public interface IBackSqlDao {
      * @param pageSize  每页多少条
      * @return
      */
-    public List<Map<String,String>> queryForPage(String selectSql,Integer pageStart,Integer pageSize);
+    public List<Map<String,String>> queryForPage(String selectSql,Integer pageStart,Integer pageSize) throws SqlRunException;
     
     /**
      * 
@@ -113,7 +115,7 @@ public interface IBackSqlDao {
      * @param pageSize  每页多少条
      * @return
      */
-    public Integer queryCount(String selectSql);
+    public Integer queryCount(String selectSql) throws SqlRunException;
     
     /**
      * 
@@ -122,7 +124,7 @@ public interface IBackSqlDao {
      * @param tableName 表名
      * @return
      */
-    public boolean dropTable(String tableName);
+    public boolean dropTable(String tableName) throws SqlRunException;
     
     /**
      * 
@@ -132,7 +134,7 @@ public interface IBackSqlDao {
      * @param newTableName 新表明
      * @return
      */
-    public boolean renameTable(String oldTableName, String newTableName);
+    public boolean renameTable(String oldTableName, String newTableName) throws SqlRunException;
     
     /**
      * 前台创建 纵表   一般有两个 场景 ： 1，某专区的一次性标签的存放；2，某专区临时客户群标签的存放；
@@ -142,7 +144,7 @@ public interface IBackSqlDao {
      * @param partionID		分区字段2：客户群id分区字段名
      * @return
      */
-    public boolean createVerticalTable(String tableName,String columnName);
+    public boolean createVerticalTable(String tableName,String columnName) throws SqlRunException;
     
     /**
      * 数据文件方式  指定分区 覆盖式导入指定 表
@@ -151,7 +153,7 @@ public interface IBackSqlDao {
      * @param partionDate
      * @return
      */
-    public boolean loadDataToTabByPartion(String fileName, String tableName,String partionDate,String partionID);
+    public boolean loadDataToTabByPartion(String fileName, String tableName,String partionDate,String partionID) throws SqlRunException;
     
     /**
      * 表数据方式  指定分区 覆盖式导入 指定表
@@ -160,7 +162,7 @@ public interface IBackSqlDao {
      * @param partionDate
      * @return
      */
-    public boolean insertDataToTabByPartion(String sql,String tableName,String partionDate,String partionID);
+    public boolean insertDataToTabByPartion(String sql,String tableName,String partionDate,String partionID) throws SqlRunException;
     
     
     

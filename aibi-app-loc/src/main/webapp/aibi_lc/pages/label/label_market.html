@@ -58,7 +58,7 @@
 						<div class="clearfix">
 							<label class="fleft">标签体系：</label>
 							<div class="fleft">
-								<a href="javascript:;" class="all-active"><!-- all-active 去掉非选中状态 -->
+								<a onclick="labelMarket.selectAllCategoryId(this)" href="javascript:;" class="all-active"><!-- all-active 去掉非选中状态 -->
 									全部
 								</a>
 								<a class="labelItems" href="javascript:;" v-for="(labelSys,index) in categoryInfoList"
@@ -69,15 +69,15 @@
 							</div>
 						</div>
 						 <ul class="ui-label-sec ui-label-system hidden">						
-							<li class="clearfix not-border" v-for="(labelName,index) in bdLsit">
-								<label class="fleft font-weight" v-text="labelName.categoryName"></label>
+							<li class="clearfix" v-for="label2 in bdList">
+								<label class="fleft font-weight"><a onclick="labelMarket.selectByCategoryId(this)" :id="label2.categoryId" v-text="label2.categoryName"></a></label>
 								<div class="fleft">
-									<a href="javascript:;" class="all-active" v-for="item in childrenLabel">
+									<a onclick="labelMarket.selectByCategoryId(this)" :id="item.categoryId" href="javascript:;" v-for="item in label2.children">
 										<span>{{item.categoryName}}</span>
 									</a>
 								</div>
-							
 							</li>
+							<p v-if="bdList.length==0">无子分类</p>
 						</ul> 
 					</li>
 					 
@@ -106,7 +106,7 @@
 								<a href="javascript:;" onclick="labelMarket.changePublishTime(this)" id="threeMonth" class="fleft">
 									<em>三个月</em>
 								</a>
-								<!-- <div class="control-input">
+								<div class="control-input">
 				        			<div class="control-input date-input fleft has-icon">
 						          	<input type="text" class="form-control input-pointer form-control-bubble" data-dismiss="formDatepicker#sendTime1"  id="" placeholder="请选择开始日期">
 						          	<span class="glyphicon-date form-control-feedback"></span>
@@ -115,7 +115,7 @@
 						          	<input type="text" class="form-control input-pointer form-control-bubble" data-dismiss="toDatepicker#sendTime1" id="" placeholder="请选择结束日期">
 						          	<span class="glyphicon-date form-control-feedback"></span>
 						        </div>
-					        	</div> -->
+					        	</div>
 							</div>
 						</div>
 					</li>
@@ -218,13 +218,13 @@
 								<span class="caret" onclick="labelMarket.switchConnectorShow(this,event)"></span>
 							</button>
 							<ul class="dropdown-menu">
-								<li onclick="labelMarket.switchConnector(this,'or')"><a href="#" >或</a></li>
-								<li onclick="labelMarket.switchConnector(this,'and')"><a href="#" >与</a></li>
-								<li onclick="labelMarket.switchConnector(this,'-')"><a href="#" >剔除</a></li>
+								<li onclick="labelMarket.switchConnector(this,'or')"><a href="javascript:void(0)" >或</a></li>
+								<li onclick="labelMarket.switchConnector(this,'and')"><a href="javascript:void(0)" >与</a></li>
+								<li onclick="labelMarket.switchConnector(this,'-')"><a href="javascript:void(0)" >剔除</a></li>
 							</ul>
 						</div>
 						<!-- 标签 -->
-						<h4 :class="{'ui-conditionCT-h4': 1==1 , 'ui-inverse': item.labelFlag == 1}" onclick="labelMarket.againstLabel(this)" >
+						<h4 :class="{'ui-conditionCT-h4': 1==1 , 'ui-inverse': item.labelFlag == 0}" onclick="labelMarket.againstLabel(this)" >
 							<span v-text="item.customOrLabelName"></span>
 							<em></em>
 							<i onclick="labelMarket.deleteRule(this)"></i>
@@ -237,55 +237,47 @@
 						</div>
 						<!-- 指标型 -->
 						<div class="ui-conditionCT-content align_center" v-if="item.labelTypeId == 4" onclick="labelMarket.setLabelAttr(this)">
-							
-							<!-- 
-							<h5>已选条件：</h5>
+							<h5 v-if="item.queryWay != null">已选条件：</h5>
 							<div class="clearfix" v-if="item.queryWay == 1">
 								数值范围：
 								<span v-if="item.contiueMinVal !=''">
-									<span v-if="item.leftZoneSign eq '>='" >大于等于{{item.contiueMinVal}}</span>
-									<span v-if="item.leftZoneSign eq '>'" >大于{{item.contiueMinVal}}</span>
+									<span v-if="item.leftZoneSign == '>='" >大于等于{{item.contiueMinVal}}</span>
+									<span v-if="item.leftZoneSign == '>'" >大于{{item.contiueMinVal}}</span>
 								</span>
 								<span v-if="item.contiueMaxVal !=''">
-									<span v-if="item.rightZoneSign eq '<='" >小于等于{{item.contiueMaxVal}}</span>
-									<span v-if="item.rightZoneSign eq '<'" >小于{{item.contiueMaxVal}}</span>
+									<span v-if="item.rightZoneSign == '<='" >小于等于{{item.contiueMaxVal}}</span>
+									<span v-if="item.rightZoneSign == '<'" >小于{{item.contiueMaxVal}}</span>
 								</span>
-								<span v-if="item.unit !='' " v-text="item.unit"></span>
-								<span v-if="item.groupCiLabelRuleList.length >0 ">...</span>
+								<span v-text="item.unit"></span>
 							</div>
 							<div class="clearfix" v-if="item.queryWay == 2">
 								精确值：
 								<span v-if="item.exactValue !=''" v-text="item.exactValue">
 								</span>
-								<span v-if="item.unit !='' " v-text="item.unit"></span>
-								<span v-if="item.groupCiLabelRuleList.length >0 ">...</span>
+								<span v-text="item.unit"></span>
 							</div>
-							 -->
-							<i class="ui-nothing-icon">
-								<em></em>
-								请点击设置
-							</i>
+							<i class="ui-nothing-icon" v-if="item.queryWay == null"><em></em>请点击设置</i>
 						</div>
-						<!-- 枚举型  5,9,11,12
+						<!-- 枚举型  5,9,11,12-->
 						<div class="ui-conditionCT-content align_center" v-if="item.labelTypeId == 5" onclick="labelMarket.setLabelAttr(this)">
-							<h5>已选条件：</h5>
-							<div class="clearfix" v-text="item.attrName">
+							<h5 v-if="item.attrVal != null ">已选条件：</h5>
+							<div class="clearfix" v-if="item.attrVal != null " v-text="item.attrName">
 							</div>
-							<span v-if="item.groupCiLabelRuleList.length >0 ">...</span>
-						</div>-->
+							<i class="ui-nothing-icon" v-if="item.attrVal == null "><em></em>请点击设置</i>
+						</div>
 						<!-- 日期型
 						<div class="ui-conditionCT-content" v-if="item.labelTypeId == 6" onclick="labelMarket.setLabelAttr(this)">
 							<h5>已选条件：</h5>
 							<div class="clearfix" v-if="item.queryWay == 1">
 								<span v-if="item.startTime !=''">
-									<span v-if="item.leftZoneSign eq '>='" >大于等于{{item.startTime}}</span>
-									<span v-if="item.leftZoneSign eq '>'" >大于{{item.startTime}}</span>
+									<span v-if="item.leftZoneSign == '>='" >大于等于{{item.startTime}}</span>
+									<span v-if="item.leftZoneSign == '>'" >大于{{item.startTime}}</span>
 								</span>
 								<span v-if="item.endTime !=''">
-									<span v-if="item.rightZoneSign eq '<='" >小于等于{{item.endTime}}</span>
-									<span v-if="item.rightZoneSign eq '<'" >小于{{item.endTime}}</span>
+									<span v-if="item.rightZoneSign == '<='" >小于等于{{item.endTime}}</span>
+									<span v-if="item.rightZoneSign == '<'" >小于{{item.endTime}}</span>
 								</span>
-								<span v-if="item.isNeedOffset == 1">（动态偏移更新</span>
+								<span v-if="item.isNeedOffset == 1">（动态偏移更新）</span>
 							</div>
 							<div class="clearfix" v-if="item.queryWay == 2">
 								精确值：
@@ -394,6 +386,7 @@
 				</p>
 				<p class="fright">
 					<span>客户群数：</span><span class="y-text">18,290,40</span>
+					<span class="shop-icon"></span>
 					<button type="button" class="ui-btn ui-btn-default mr10">
 						<span class="create-white"></span> 创建客户群
 					</button>

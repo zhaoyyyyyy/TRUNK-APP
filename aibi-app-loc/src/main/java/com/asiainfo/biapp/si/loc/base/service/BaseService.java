@@ -1,5 +1,6 @@
 package com.asiainfo.biapp.si.loc.base.service;
 
+import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
@@ -8,7 +9,7 @@ import java.util.Map;
 import com.asiainfo.biapp.si.loc.base.exception.BaseException;
 import com.asiainfo.biapp.si.loc.base.page.Page;
 
-public interface BaseService<T,String> {
+public interface BaseService<T,ID extends Serializable> {
     
     
 	/**

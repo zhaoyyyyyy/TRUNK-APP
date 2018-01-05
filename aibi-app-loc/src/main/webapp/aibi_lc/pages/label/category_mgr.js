@@ -36,28 +36,38 @@ window.loc_onload = function() {
 		    	$.fn.zTree.init($("#ztree"), setting, ztreeObj);
 		    }
 	   });
-		setting = {
+		setting = {  
 			view: {
 				selectedMulti: false,
 				addHoverDom: addHoverDom,
 				removeHoverDom: removeHoverDom,
 			},
+//			async: {
+//				enable: true,
+//				url: $.ctx+'/api/label/categoryInfo/queryList',
+//				autoParam: ["id"]
+//			},
 			data: {
 				selectedMulti: false,			
 				simpleData: {  
 	                enable: true,   //设置是否使用简单数据模式(Array)  	                    
-	            },  
+	            },  	
 	            key: {             	
-	            	idKey: "sysId",    //设置节点唯一标识属性名称  
+	            	idKey: "categoryId",    //设置节点唯一标识属性名称  
 	                pIdKey: "parentId" ,     //设置父节点唯一标识属性名称  
 	                name:'categoryName',//zTree 节点数据保存节点名称的属性名称  
 	                title: "categoryName"//zTree 节点数据保存节点提示信息的属性名称        
 	            }  
 			},
 			callback: {
-				onClick: zTreeOnClick
+				onClick: zTreeOnClick,
+//				onAsyncSuccess: zTreeOnAsyncSuccess
 			}
-		}		
+		}	
+//		$.fn.zTree.init($("#ztree"), setting, ztreeObj);
+//		function zTreeOnAsyncSuccess(event, treeId, treeNode, msg){
+//			console.log(msg);
+//		}
 		var newCount = 1;				
 		function addHoverDom(treeId, treeNode) {
 			var sObj = $("#" + treeNode.tId + "_span");
@@ -120,6 +130,7 @@ window.loc_onload = function() {
 							onSuccess:function(data){							
 								ztreeFunc();
 								labeltree();
+								$.alert("新增标签分类成功");
 							}
 						});
 		       		}
@@ -138,35 +149,36 @@ window.loc_onload = function() {
 			    	var childrenNodes = treeNode.children;
 			    	$.alert("该分类下有标签分类,不可以删除");
 			    }else if(!treeNode.categoryId){
-			    	$.alert("此目录不可以删除");
+			    	$.alert("此标签分类不可以删除");
 			    }else{
-			    	$.confirm('确定要删除该标签分类？', function() {
-						$.commAjax({
-							url : $.ctx + '/api/label/labelInfo/queryList',
-							postData : {
-								"categoryId" : treeNode.categoryId,	
-								"configId" :labelId,								
-							},
-							onSuccess:function(data){
-								if(!data.data.length){
+			    	$.commAjax({
+						url : $.ctx + '/api/label/labelInfo/queryList',
+						postData : {
+							"categoryId" : treeNode.categoryId,	
+							"configId" :labelId,								
+						},onSuccess:function(data){
+							if(!data.data.length){
+								$.confirm('确定要删除该标签分类？', function() {
 									$.commAjax({
-										url : $.ctx + '/api/label/categoryInfo/delete',
-										postData : {
+											url : $.ctx + '/api/label/categoryInfo/delete',
+											postData : {
 											"categoryId" : treeNode.categoryId,	
 											"sysId" :labelId,								
 											"parentId":treeNode.categoryId,
 										},
 										onSuccess:function(data){
-											ztreeFunc();
-											labeltree();
+											var treeObj = $.fn.zTree.getZTreeObj("ztree");
+										    var nodes = treeObj.getNodesByParam("tId", treeNode.tId, null);
+										    treeObj.removeNode(nodes[0]);
+										    labeltree();
 										}
 									});
-								}else{
-									$.alert("该分类下还有标签，不可删除");
-								}
+								});
+							}else{
+							$.alert("该分类下还有标签，不可删除");
 							}
-						});
-					})
+						}
+			    	})
 			    }
 			})
 			//修改按钮
@@ -179,7 +191,7 @@ window.loc_onload = function() {
 			      window.event.cancelBubble = true;
 			    }
 			    if(!treeNode.categoryId){
-			    	$.alert("此目录不可以修改");
+			    	$.alert("此标签分类不可以修改");
 			    }else{
 		        	 $( "#dialog" ).dialog({
 		        	 	title:"修改标签分类",
@@ -208,11 +220,11 @@ window.loc_onload = function() {
 		        	 });
 			    }
         	 $('#add-dialog-btn').click(function(){	        	 	
-        	 	 var Ppname=$( "#dialog" ).find("input").val();	        	 	 
+        	 	var Ppname=$( "#dialog" ).find("input").val();	  
         	 	if (Ppname == null) {
 		            return;
 			    } else if (Ppname == "") {
-			            alert("节点名称不能为空");
+			            alert("标签分类名称不能为空");
 			    }else {
 			        $.commAjax({						
 						url : $.ctx + '/api/label/categoryInfo/update',
@@ -222,9 +234,13 @@ window.loc_onload = function() {
 							"categoryName":Ppname,
 							"categoryId":treeNode.categoryId,
 						},
-						onSuccess:function(data){														
-							ztreeFunc();
+						onSuccess:function(data){
+							var treeObj = $.fn.zTree.getZTreeObj("ztree");
+						    var nodes = treeObj.getNodesByParam("tId", treeNode.tId, null);
+							nodes[0].categoryName = Ppname;
+							treeObj.updateNode(nodes[0]);
 							labeltree();
+							$.alert("修改标签分类成功");
 						}
 					});
 	       		}
@@ -288,6 +304,9 @@ window.loc_onload = function() {
 			transData[j]=$(this).attr("data-id");
 			j++;
 		})
+		if(transData.length == 0){
+			$.alert("请选择标签");
+		}
 		for(var i=0;i<transData.length;i++){
 			$.commAjax({			
 			    url : $.ctx+'/api/label/labelInfo/update',  	
@@ -381,8 +400,8 @@ window.loc_onload = function() {
 	})*/
 	//右边树的模糊查询
 	var rightTreeInput ="";
+	var text;
 	$("#btn_serach2").click(function(){
-		var text;
 		rightTreeInput = $("#exampleInputAmount2").val();
 		if(rightTreeInput == ""){labeltree(); return }
 		if(rightTreeInput !=text ){

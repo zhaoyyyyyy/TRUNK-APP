@@ -31,11 +31,12 @@ public class DicDataServiceImpl implements IDicDataService{
 		if(StringUtil.isEmpty(code)){
 			throw new ParamRequiredException("数据字典编码必须填写");
 		}
+		//throw new LocCacheException("获取数据字典缓存失败:"+code);
 		try{
 			List<DicData> dic =  LocCacheBase.getInstance().getDicDataList(code);
 			return dic;
 		}catch(Exception e){
-			throw new LocCacheException("获取数据字典缓存失败");
+			throw new LocCacheException("获取数据字典缓存失败:"+code);
 		}
 	}
 

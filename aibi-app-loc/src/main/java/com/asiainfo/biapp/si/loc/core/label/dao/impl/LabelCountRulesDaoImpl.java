@@ -70,8 +70,8 @@ public class LabelCountRulesDaoImpl extends BaseDaoImpl<LabelCountRules, String>
             params.put("countRulesCode", labelCountRulesVo.getCountRulesCode());
         }
         if (null != labelCountRulesVo.getDependIndex()) {
-            hql.append("and l.dependIndex = :dependIndex ");
-            params.put("dependIndex", labelCountRulesVo.getDependIndex());
+            hql.append("and l.dependIndex LIKE :dependIndex ");
+            params.put("dependIndex","%"+ labelCountRulesVo.getDependIndex() +"%");
         }
         if (null != labelCountRulesVo.getCountRules()) {
             hql.append("and l.countRules = :countRules ");

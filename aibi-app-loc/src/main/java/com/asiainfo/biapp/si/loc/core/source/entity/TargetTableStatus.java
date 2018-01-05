@@ -55,8 +55,6 @@ public class TargetTableStatus extends BaseEntity {
      */
     @Id
     @Column(name = "SOURCE_TABLE_ID")
-    @GenericGenerator(name = "idGenerator", strategy = "uuid")
-    @GeneratedValue(generator = "idGenerator")
     @ApiParam(value = "表ID")
     private String sourceTableId;
 

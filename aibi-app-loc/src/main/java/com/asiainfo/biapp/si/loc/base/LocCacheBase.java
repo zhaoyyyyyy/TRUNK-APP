@@ -21,6 +21,7 @@ import com.asiainfo.biapp.si.loc.base.common.LabelInfoContants;
 import com.asiainfo.biapp.si.loc.base.exception.BaseException;
 import com.asiainfo.biapp.si.loc.base.extend.SpringContextHolder;
 import com.asiainfo.biapp.si.loc.base.utils.JsonUtil;
+import com.asiainfo.biapp.si.loc.base.utils.LogUtil;
 import com.asiainfo.biapp.si.loc.base.utils.RedisUtils;
 import com.asiainfo.biapp.si.loc.core.label.dao.ILabelInfoDao;
 import com.asiainfo.biapp.si.loc.core.label.entity.LabelExtInfo;
@@ -182,7 +183,7 @@ public class LocCacheBase extends ICacheBase implements ApplicationContextAware{
 	 * @throws Exception
 	 */
 	public void initAllDicData(){
-		log.info("开始加载数据字典缓存");
+		LogUtil.info("加载[数据字典]缓存start");
 		try {
 			IDicDataService dataService = (IDicDataService)SpringContextHolder.getBean("dicDataService");
 			List<DicData> allDicDataList = dataService.queryAllDicData();
@@ -199,26 +200,22 @@ public class LocCacheBase extends ICacheBase implements ApplicationContextAware{
 	            }
 			this.setHashObject(Prefix.LOC+Prefix.KV+CacheKey.CI_DICDATA_MAP, returnMap);
 		} catch (BaseException e) {
-			log.error(e.getMessage(),e);
+			LogUtil.error("加载[数据字典]缓存faile",e);
 		} catch (Exception e) {
-			log.error(e.getMessage(),e);
+			LogUtil.error("加载[数据字典]缓存faile",e);
 		}
+		LogUtil.info("加载[数据字典]缓存end");
 	}
 	/**
 	 * 根据key获取 对应 系统配置 value
 	 * @param key
 	 * @return
 	 */
-	public List<DicData> getDicDataList(String key){
-		try {
-			Map<String,String> map = RedisUtils.getForHashObjByKey(Prefix.LOC+Prefix.KV+CacheKey.CI_DICDATA_MAP);
-			String dataJson = map.get(key);
-			List<DicData> dicData = (List<DicData>) JsonUtil.json2CollectionBean(dataJson, List.class, DicData.class);
-			return dicData;
-		} catch (Exception e) {
-			log.error(e.getMessage(),e);
-		}
-		return null;
+	public List<DicData> getDicDataList(String key) throws Exception{
+		Map<String,String> map = RedisUtils.getForHashObjByKey(Prefix.LOC+Prefix.KV+CacheKey.CI_DICDATA_MAP);
+		String dataJson = map.get(key);
+		List<DicData> dicData = (List<DicData>) JsonUtil.json2CollectionBean(dataJson, List.class, DicData.class);
+		return dicData;
 	}
 	
 	/**

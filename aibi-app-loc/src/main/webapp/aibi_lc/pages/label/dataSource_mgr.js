@@ -25,7 +25,7 @@ window.loc_onload = function() {
 			"configId" : obj.attr("configId")
 		},
 		datatype: "json",
-		colNames: ['数据源表名称', '创建时间', '数据源表类型', '操作'],
+		colNames: ['指标表名称', '创建时间', '指标表类型', '操作'],
 		colModel: [{
 			name: 'sourceTableName',
 			index: 'sourceTableName',
@@ -89,38 +89,24 @@ function fun_to_up(id) {
 	window.location = 'dataSource_add.html?isEdit=1&sourceTableId=' + id;
 }
 function fun_to_del(id) {
-	var msg = "";
-	$.commAjax({
-		url : $.ctx + '/api/source/sourceInfo/queryList',
-		postData : {
-			"sourceTableId" : id
-		},
-		onSuccess : function(data) {
-			if (data.data.length != 0) {
-				msg = "删除该数据源表会同时删除该数据源的指标信息列，确定删除吗？";
-			} else {
-				msg = "确定删除该数据源表吗？";
+	$.confirm("确定删除该数据源表吗？", function() {
+		$.commAjax({
+			url : $.ctx + '/api/source/sourceTableInfo/delete',
+			postData : {
+				"sourceTableId" : id
+			},
+			onSuccess : function(data1) {
+				if (data1.data == "success") {
+					$.success("删除成功", function() {
+						$("#jsonmap1").setGridParam({
+							postData : $("#formSearch").formToJson()
+						}).trigger("reloadGrid", [ {
+							page : 1
+						} ]);
+					})
+				}
 			}
-			$.confirm(msg, function() {
-				$.commAjax({
-					url : $.ctx + '/api/source/sourceTableInfo/delete',
-					postData : {
-						"sourceTableId" : id
-					},
-					onSuccess : function(data1) {
-						if (data1.data == "success") {
-							$.success("删除成功", function() {
-								$("#jsonmap1").setGridParam({
-									postData : $("#formSearch").formToJson()
-								}).trigger("reloadGrid", [ {
-									page : 1
-								} ]);
-							})
-						}
-					}
-				})
-			})
-		}
+		})
 	})
 }
 function fun_to_delAll() {
@@ -130,15 +116,20 @@ function fun_to_delAll() {
 		return;
 	}
 	$.confirm("您确定要继续删除吗？该操作会同时删除数据源表下的指标信息列", function() {
+		var success = "";
 		for(var i=0;i<ids.length;i++){
 			$.commAjax({
 				url : $.ctx + '/api/source/sourceTableInfo/delete',
+				async : false,
 				postData : {
 					"sourceTableId" : ids[i]
 				},
+				onSuccess:function(data){
+					success = data.data;
+				}
 			});
 			var k = i + 1;
-			if(k == ids.length){
+			if(k == ids.length&&success!=""){
 				$.success("删除成功", function() {
 					$("#jsonmap1").setGridParam({
 						postData : $("#formSearch").formToJson()

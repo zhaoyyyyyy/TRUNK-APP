@@ -78,11 +78,8 @@ $.extend({
 								$.alert("系统无法响应请求，请联系管理员");
 							}
 						} else if (obj.msg) {
-							$.alert(obj.msg);
-							try {
-								console.log(obj.execption+"1");
-							} catch (e) {
-							}
+							$.message(obj.msg);
+							try {console.log(obj.execption);} catch (e) {}
 						}
 					} else {
 						if ($.isFunction(options.onSuccess))
@@ -233,6 +230,7 @@ $.fn.extend({
 		var form = $(this);
 		var r = $(".easyui-validatebox", form);
 		if (r.length) {
+			r.validatebox();
 			r.validatebox('validate');
 			if ($('.validatebox-invalid:visible', form).length != 0) {
 				var returnStr = '';

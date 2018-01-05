@@ -30,12 +30,9 @@
 </head>
 <body>
     <div class="iframe-nest">
-	  	<div class="ui-lc-mian">
-	  		<h3>创建标签</h3>
-	  	</div>
-	  	<div id="dataD" v-clock>
-	  		 <div id="saveDataForm">
-	            <div class="ui-lc-mian">    
+       <div id="dataD" v-clock>
+	  	  <div class="ui-lc-mian">
+	  		<h3>创建标签</h3>  
 	                <ul class="tab-list tab-hor clearfix">
 	                    <li class="fleft active"><a href="">单指标</a></li>
 	                    <li class="fleft"><a href="label_multi_add.html">多指标</a></li>
@@ -63,6 +60,7 @@
 	                    </div>
 	                </div>
 	                <form class="clearfix create-main mt10"  v-for="(sourceInfo,index) in sourceInfoList">
+	                    <input type="hidden" name="configId" v-model="configId">
 	                    <div class="progress fleft">
 	                        <span class="progress-label">
 	                            <i class="icon" onclick="getData(this)"></i>
@@ -106,7 +104,7 @@
 	                                <div class="ui-form-group">
 	                                    <label for="categoryId" class="control-label">标签分类</label>
 	                                    <div class="control-input ui-form-ztree">
-	                                    	 <input type="hidden" name="categoryId">
+	                                    	<input type="hidden" name="categoryId">
 	                                        <input type="text" class="form-control" id="categoryName" onclick="openTtee(this)" readonly>
 	                                        <div class="dropdown-menu">
 	                                        	<ul id="ztree" class="ztree">
@@ -144,7 +142,7 @@
 	                                <div class="ui-form-group">
 	                                    <label for="busiCaliber" class="control-label">业务口径</label>
 	                                    <div class="control-input">
-	                                        <input type="text" class="form-control" id="busiCaliber" name="busiCaliber" placeholder="cust1">
+	                                        <input type="text" class="form-control" id="busiCaliber" name="busiCaliber" placeholder="请输入业务口径">
 	                                    </div>
 	                                </div>
 								    <div class="ui-form-group">
@@ -162,18 +160,25 @@
 							            <label for="updateCycle" class="control-label">更新周期</label>
 							            <div class="control-input">
 	                                    	<span class="file-up-name">{{model.read}}</span>
-							            </div>    
-							            
+							            </div>          
 							        </div>
-	                                <div v-if="showdimDetail[index]&&showdimDetail[index][`showdim${index}`]" class="ui-form-group">
-	                                    <label for="dimTableName" class="control-label">维表选择</label>
-	                                    <div class="control-input has-icon">
-	                                        <select id="dimId" name="dimId" class="form-control input-pointer fleft">
-		                                        <option>请选择维表</option>
-		                                        <option v-for = "dim in dimtableInfoList" :value="dim.dimId">{{dim.dimTableName}}</option>
-	                                        </select>
-	                                        <button type="button" onclick="fun_to_dimdetail()" class="btn btn-default  ui-table-btn ui-table-btn fleft" >详情</button>
-	                                    </div>
+							        <div v-if="showdimDetail[index]&&showdimDetail[index][`showdim${index}`]">
+		                                <div class="ui-form-group">
+		                                    <label for="dimTableName" class="control-label">维表选择</label>
+		                                    <div class="control-input has-icon">
+		                                        <select id="dimId" name="dimId" class="form-control input-pointer fleft">
+			                                        <option>请选择维表</option>
+			                                        <option v-for = "dim in dimtableInfoList" :value="dim.dimId">{{dim.dimTableName}}</option>
+		                                        </select>       
+		                                    </div> 
+		                                    <button type="button" onclick="fun_to_dimdetail()" class="file-up-btn ml10" >详情</button>
+		                                </div>            
+		                                <div class="ui-form-group">
+		                                    <label for="dataType" class="control-label">数据类型</label>
+		                                       <div class="control-input">
+		                                            <input name="dataType" type="text" class="form-control" id="dataType">
+		                                      </div>
+		                                </div>
 	                                </div>
 	                            </div>
 	                        </div>
@@ -183,14 +188,13 @@
 	                    <div class=" ui-table-title mt10">
 	                        <table id="jsonmap"  class="table table-striped"></table>
 	                    </div>
-	                    <button type="button" onclick="fun_to_createRow()" class="ui-btn ui-btn-sm ui-btn-second mt10">添加一行</button>
+	                    <!-- <button type="button" onclick="fun_to_createRow()" class="ui-btn ui-btn-sm ui-btn-second mt10">添加一行</button> -->
 	                    <div class="ui-grid-button clearfix mt20">
 	                        <button onclick="window.location='label_mgr.html'" type="button" class="ui-btn ui-btn-second">取消</button>
 	                        <button type="button" onclick="fun_to_save()" class="ui-btn ui-btn-default">验证并创建</button>
 	                    </div>
 	                </div>
-	            </div>
-	        </div> 
+	         </div>
 	  	</div>
 	       
         <!-- todo -->

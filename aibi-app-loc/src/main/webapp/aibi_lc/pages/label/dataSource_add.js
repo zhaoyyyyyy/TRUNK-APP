@@ -74,10 +74,10 @@ window.loc_onload = function() {
 	    editurl: $.ctx +"/api/source/sourceInfo/save",
 	    postData: pD,
 	    datatype: "json",
-	    colNames: ['字段名称', '字段类型', '指标中文名', '描述', '操作'],
+	    colNames: ['源字段名称', '字段类型', '指标名称', '描述','指标编码', '操作'],
 	    colModel: [{
-	        name: 'sourceName',
-	        index: 'sourceName',
+	        name: 'columnName',
+	        index: 'columnName',
 	        width: 80,
 	        sortable: false,
 	        frozen: true,
@@ -103,8 +103,8 @@ window.loc_onload = function() {
 	        }
 	    },
 	    {
-	        name: 'columnCnName',
-	        index: 'columnCnName',
+	        name: 'sourceName',
+	        index: 'sourceName',
 	        width: 110,
 	        editable: true,
 	        align: "center",
@@ -113,11 +113,17 @@ window.loc_onload = function() {
 	        }
 	    },
 	    {
-	        name: 'columnUnit',
-	        index: 'columnUnit',
+	        name: 'columnCaliber',
+	        index: 'columnCaliber',
 	        width: 120,
 	        editable: true,
 	        align: "center"
+	    },
+	    {
+	        name: 'sourceId',
+	        index: 'sourceId',
+	        align: "center",
+	        hidden: true
 	    },
 	    {
 	        name: 'op',
@@ -126,7 +132,7 @@ window.loc_onload = function() {
 	        sortable: false,
 	        align: "center",
 	        formatter: function(value, opts, data) {
-	            return '<button onclick="fun_to_del('+opts.rowId+')" type="button" class="btn btn-default  ui-table-btn ui-table-btn">删除</button>';
+	            return '<button onclick="fun_to_del(\''+opts.rowId+'\',\''+data.sourceId+'\')" type="button" class="btn btn-default  ui-table-btn ui-table-btn">删除</button>';
 	        }
 	    }],
 	    cellEdit: true,
@@ -155,10 +161,11 @@ window.loc_onload = function() {
 	    height: '100%'
 	});
 	var dataRow = {
-		"sourceName" : "",
+		"columnName" : "",
 		"cooColumnType" : "",
-		"columnCnName" : "",
-		"columnUnit" : "",
+		"sourceName" : "",
+		"columnCaliber" : "",
+		"sourceId" : "",
 		"op" : ""
 	}
 	$("#btn_addRow").click(function() {
@@ -173,8 +180,18 @@ function setColor(cellvalue, options, rowObject) {
 	}
 	return cellvalue;
 }
-function fun_to_del(id) {
-	$("#jsonmap").jqGrid("delRowData", id);
+function fun_to_del(id,sourceId) {
+	$.commAjax({
+		url:$.ctx+"/api/label/labelCountRules/queryList",
+		postData:{"dependIndex":sourceId},
+		onSuccess:function(data){
+			if(data.data.length==0){
+				$("#jsonmap").jqGrid("delRowData", id);
+			}else{
+				$.alert("该指标已经注册");
+			}
+		}
+	})
 }
 function fun_to_save() {
 	
@@ -187,8 +204,15 @@ function fun_to_save() {
     //拼接批量信息
 	var list = $("#jsonmap").jqGrid("getRowData");
 	var sourceInfoList = "sourceInfoList{";
+	var idColumn = $("#idColumn").val();
+	var colNum = "";
 	for(var k = 0; k<list.length; k++){
 		delete list[k].op;
+		if(list[k].sourceName == idColumn){
+			colNum = "error";
+			$.alert("第["+(k+1)+"]行字段名称与主键名称重复");
+			break;
+		}
 		sourceInfoList += JSON.stringify(list[k]); 
 		var l = k+1;
 		if(l!=list.length){
@@ -198,7 +222,12 @@ function fun_to_save() {
 		}
 	}
 	$("#sourceInfoList").val(sourceInfoList);
-	
+	if(colNum == "error"){
+		for (var q = 0; q < ids.length; q++) {
+	        $("#jsonmap").jqGrid("editRow", ids[q]);
+	    }
+		return false;
+	}
 	//开始进行保存
 	var url_ = "";
 	var msss = "";
@@ -212,6 +241,7 @@ function fun_to_save() {
 	}
 	$.commAjax({
 		url : url_,
+		async : false,
 		postData : $('#formData').formToJson(),
 		onSuccess : function(data) {
 			if(data.data == "success"){
@@ -220,7 +250,10 @@ function fun_to_save() {
 				});
 			}
 		}
-	})
+	});
+	for (var p = 0; p < ids.length; p++) {
+        $("#jsonmap").jqGrid("editRow", ids[p]);
+    }
 }
 function analysis(){
 	var tableName = $("#sourceTableName").val();
@@ -236,10 +269,11 @@ function analysis(){
 					data.data[i].data_type = "1";
 				}
 				var dataRow = {
-					"sourceName" : data.data[i].col_name,
+					"columnName" : data.data[i].col_name,
 					"cooColumnType" : data.data[i].data_type,
-					"columnCnName" : "",
-					"columnUnit" : data.data[i].comment,
+					"sourceName" : "",
+					"columnCaliber" : data.data[i].comment,
+					"sourceId" : "",
 					"op" : ""
 				}
 				model.sortNum += 1;
@@ -248,4 +282,11 @@ function analysis(){
 			}
 		}
 	})
+}
+function fun_to_import(){
+	var wd = $.window('导入列信息', $.ctx
+			+ '/aibi_lc/pages/label/dataSource_import.html', 500, 200);
+    	wd.reload = function() {
+    		//TODO
+    	}
 }
