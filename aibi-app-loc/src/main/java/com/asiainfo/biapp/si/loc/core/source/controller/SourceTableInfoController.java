@@ -10,19 +10,11 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import org.apache.poi.hssf.usermodel.HSSFRow;
-import org.apache.poi.hssf.usermodel.HSSFSheet;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.poifs.filesystem.POIFSFileSystem;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,18 +22,15 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
 
 import springfox.documentation.annotations.ApiIgnore;
 
 import com.asiainfo.biapp.si.loc.auth.model.User;
 import com.asiainfo.biapp.si.loc.base.controller.BaseController;
-import com.asiainfo.biapp.si.loc.base.entity.StatusAndMessage;
 import com.asiainfo.biapp.si.loc.base.exception.BaseException;
 import com.asiainfo.biapp.si.loc.base.page.Page;
 import com.asiainfo.biapp.si.loc.base.utils.StringUtil;
 import com.asiainfo.biapp.si.loc.base.utils.WebResult;
-import com.asiainfo.biapp.si.loc.core.source.entity.SourceInfo;
 import com.asiainfo.biapp.si.loc.core.source.entity.SourceTableInfo;
 import com.asiainfo.biapp.si.loc.core.source.service.ISourceTableInfoService;
 import com.asiainfo.biapp.si.loc.core.source.vo.SourceTableInfoVo;
@@ -305,98 +294,98 @@ public class SourceTableInfoController extends BaseController<SourceTableInfo> {
         return oldSou;
     }
 
-    @ApiOperation(value = "导入列信息")
-    @RequestMapping(value = "/sourceTableInfo/upload", consumes = "multipart/*", method = RequestMethod.POST)
-    public WebResult<Object> upload(@ApiParam(value = "文件上传", required = true) MultipartFile multipartFile) throws IOException, ParseException {
-        WebResult<Object> webResult = new WebResult<>();
-        // 限制文件大小
-        long fileSize = 5 * 1024 * 1024;
-
-        String fileName = multipartFile.getOriginalFilename();
-        String contentType = multipartFile.getContentType();
-
-        String fileSuffix = fileName.substring(fileName.lastIndexOf('.') + 1).toLowerCase();
-
-        List<SourceInfo> sourceInfoListAll = new ArrayList<>();
-        List<SourceInfo> sourceInfoListRight = new ArrayList<>();
-        List<StatusAndMessage> sourceInfoListWrong = new ArrayList<>();
-
-        if (!multipartFile.isEmpty()) {
-
-            if (!fileSuffix.equals("xls")) {
-                webResult.setMsg("模板文件类型错误，请上传Excel类型文件！");
-            } else if (!"application/vnd.ms-excel".equals(contentType)) {
-                webResult.setMsg("模板文件类型错误，请上传Excel类型文件！");
-            } else if (multipartFile.getSize() > fileSize) {
-                webResult.setMsg("文件大小超过最大限制5M！");
-            } else {
-                String errorInfo = checkFile(multipartFile, sourceInfoListAll, sourceInfoListRight, sourceInfoListWrong);
-                if ("error_all".equals(errorInfo)) {
-                    webResult.setMsg("模板文件格式有错误！");
-                } else if ("error_some".equals(errorInfo)) {
-                    webResult.setMsg("模板文件内容有错误：");
-                    webResult.setData(sourceInfoListWrong);
-                } else {
-                    webResult.setMsg("经验证，无错误数据，共成功读取" + sourceInfoListRight.size() + "条用户信息。");
-                    webResult.setData(sourceInfoListRight);
-                }
-            }
-
-        } else {
-            webResult.setMsg("模板文件为空");
-        }
-
-        return webResult;
-    }
-
-    public String checkFile(MultipartFile multipartFile, List<SourceInfo> sourceInfoListAll,
-            List<SourceInfo> sourceInfoListRight, List<StatusAndMessage> sourceInfoListWrong) throws IOException, ParseException {
-        InputStream is = multipartFile.getInputStream();
-        POIFSFileSystem poifsFileSystem = new POIFSFileSystem(is);
-        HSSFWorkbook hssfWorkbook =  new HSSFWorkbook(poifsFileSystem);
-        //验证状态
-        String message = "error_all";
-        //模板最大列数
-        long maxColNum = 4;
-        //模板sheet名称
-        String tempSheetName = "指标列信息导入模板";
-        //隐藏的模板文件验证信息
-        String hiddenInfo = "模板文件验证";
-        
-        //上传文件信息
-        HSSFSheet hssfSheet = hssfWorkbook.getSheetAt(0);
-        String uploadSheetName = hssfSheet.getSheetName();//sheet名称
-        HSSFRow xRow= hssfSheet.getRow(3);
-        int colNum = xRow.getLastCellNum();//上传文件列数
-        int rowNum = hssfWorkbook.getSheetAt(0).getLastRowNum();//上传文件行数
-        
-        //sheet名称确认
-        if(!tempSheetName.equals(uploadSheetName)){
-            message = "error_all";   //模板文件有误
-            return message;
-        }
-        //列数确认
-        if (maxColNum != colNum){
-            message = "error_all";   //模板文件有误
-            return message;
-        }
-        //隐藏验证信息确认
-        String info = hssfSheet.getRow(1).getCell(0).getStringCellValue();
-        if(!hiddenInfo.equals(info)){
-            message = "error_all";   //模板文件有误
-            return message;
-        }
-        //四列标题确认
-        if ("字段名称".equals(xRow.getCell(0).getStringCellValue())
-                &&"字段类型"  .equals(xRow.getCell(1).getStringCellValue())
-                &&"字段中文明"  .equals(xRow.getCell(2).getStringCellValue())
-                &&"业务口径".equals(xRow.getCell(3).getStringCellValue())){
-            //标题验证成功
-        }else{
-            message = "error_all";  //模板文件有误
-            return message;
-        }
-        return message;
-    }
+//    @ApiOperation(value = "导入列信息")
+//    @RequestMapping(value = "/sourceTableInfo/upload", consumes = "multipart/*", method = RequestMethod.POST)
+//    public WebResult<Object> upload(@ApiParam(value = "文件上传", required = true) MultipartFile multipartFile) throws IOException, ParseException {
+//        WebResult<Object> webResult = new WebResult<>();
+//        // 限制文件大小
+//        long fileSize = 5 * 1024 * 1024;
+//
+//        String fileName = multipartFile.getOriginalFilename();
+//        String contentType = multipartFile.getContentType();
+//
+//        String fileSuffix = fileName.substring(fileName.lastIndexOf('.') + 1).toLowerCase();
+//
+//        List<SourceInfo> sourceInfoListAll = new ArrayList<>();
+//        List<SourceInfo> sourceInfoListRight = new ArrayList<>();
+//        List<StatusAndMessage> sourceInfoListWrong = new ArrayList<>();
+//
+//        if (!multipartFile.isEmpty()) {
+//
+//            if (!fileSuffix.equals("xls")) {
+//                webResult.setMsg("模板文件类型错误，请上传Excel类型文件！");
+//            } else if (!"application/vnd.ms-excel".equals(contentType)) {
+//                webResult.setMsg("模板文件类型错误，请上传Excel类型文件！");
+//            } else if (multipartFile.getSize() > fileSize) {
+//                webResult.setMsg("文件大小超过最大限制5M！");
+//            } else {
+//                String errorInfo = checkFile(multipartFile, sourceInfoListAll, sourceInfoListRight, sourceInfoListWrong);
+//                if ("error_all".equals(errorInfo)) {
+//                    webResult.setMsg("模板文件格式有错误！");
+//                } else if ("error_some".equals(errorInfo)) {
+//                    webResult.setMsg("模板文件内容有错误：");
+//                    webResult.setData(sourceInfoListWrong);
+//                } else {
+//                    webResult.setMsg("经验证，无错误数据，共成功读取" + sourceInfoListRight.size() + "条用户信息。");
+//                    webResult.setData(sourceInfoListRight);
+//                }
+//            }
+//
+//        } else {
+//            webResult.setMsg("模板文件为空");
+//        }
+//
+//        return webResult;
+//    }
+//
+//    public String checkFile(MultipartFile multipartFile, List<SourceInfo> sourceInfoListAll,
+//            List<SourceInfo> sourceInfoListRight, List<StatusAndMessage> sourceInfoListWrong) throws IOException, ParseException {
+//        InputStream is = multipartFile.getInputStream();
+//        POIFSFileSystem poifsFileSystem = new POIFSFileSystem(is);
+//        HSSFWorkbook hssfWorkbook =  new HSSFWorkbook(poifsFileSystem);
+//        //验证状态
+//        String message = "error_all";
+//        //模板最大列数
+//        long maxColNum = 4;
+//        //模板sheet名称
+//        String tempSheetName = "指标列信息导入模板";
+//        //隐藏的模板文件验证信息
+//        String hiddenInfo = "模板文件验证";
+//        
+//        //上传文件信息
+//        HSSFSheet hssfSheet = hssfWorkbook.getSheetAt(0);
+//        String uploadSheetName = hssfSheet.getSheetName();//sheet名称
+//        HSSFRow xRow= hssfSheet.getRow(3);
+//        int colNum = xRow.getLastCellNum();//上传文件列数
+//        int rowNum = hssfWorkbook.getSheetAt(0).getLastRowNum();//上传文件行数
+//        
+//        //sheet名称确认
+//        if(!tempSheetName.equals(uploadSheetName)){
+//            message = "error_all";   //模板文件有误
+//            return message;
+//        }
+//        //列数确认
+//        if (maxColNum != colNum){
+//            message = "error_all";   //模板文件有误
+//            return message;
+//        }
+//        //隐藏验证信息确认
+//        String info = hssfSheet.getRow(1).getCell(0).getStringCellValue();
+//        if(!hiddenInfo.equals(info)){
+//            message = "error_all";   //模板文件有误
+//            return message;
+//        }
+//        //四列标题确认
+//        if ("字段名称".equals(xRow.getCell(0).getStringCellValue())
+//                &&"字段类型"  .equals(xRow.getCell(1).getStringCellValue())
+//                &&"字段中文明"  .equals(xRow.getCell(2).getStringCellValue())
+//                &&"业务口径".equals(xRow.getCell(3).getStringCellValue())){
+//            //标题验证成功
+//        }else{
+//            message = "error_all";  //模板文件有误
+//            return message;
+//        }
+//        return message;
+//    }
 
 }
