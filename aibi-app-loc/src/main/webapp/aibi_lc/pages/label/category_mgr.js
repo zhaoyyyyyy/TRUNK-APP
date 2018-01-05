@@ -117,7 +117,7 @@ window.loc_onload = function() {
 	        	 	if (Ppname == null) {
 			            return;
 				    } else if (Ppname == "") {
-				            alert("节点名称不能为空");
+				            $.alert("节点名称不能为空");
 				    }else {
 				        $.commAjax({						
 							url : $.ctx + '/api/label/categoryInfo/save',
