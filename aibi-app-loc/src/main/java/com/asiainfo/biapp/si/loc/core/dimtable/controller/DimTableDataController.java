@@ -50,6 +50,8 @@ import io.swagger.annotations.ApiOperation;
 @RestController
 public class DimTableDataController extends BaseController<DimTableData>{
     
+    private static final String SUCCESS = "success";
+    
     @Autowired
     private IDimTableDataService iDimTableDataService;
     
@@ -68,5 +70,19 @@ public class DimTableDataController extends BaseController<DimTableData>{
         return webResult.success("分页查询维表值成功", dimTableDatas);
     }
     
+    
+    @ApiOperation(value = "维表信息跑数")
+    @RequestMapping(value = "/dimtableinfo2data", method = RequestMethod.POST)
+    @ApiImplicitParam(name = "tableName", value = "表名称(可选，不传是全量跑)",paramType = "query", dataType = "string")
+    public WebResult<String> execute(String tableName) {
+        WebResult<String> webResult = new WebResult<>();
+        try {
+            iDimTableDataService.dimTableInfo2Data(tableName);
+        } catch (BaseException e) {
+            return webResult.fail(e);
+        }
+        return webResult.success("维表信息跑数成功", SUCCESS);
+        
+    }
 
 }

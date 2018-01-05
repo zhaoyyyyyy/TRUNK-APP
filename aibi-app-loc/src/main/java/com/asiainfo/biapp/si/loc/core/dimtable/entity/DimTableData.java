@@ -126,6 +126,22 @@ public class DimTableData extends BaseEntity {
     @Override
     public String toString() {
         return "DimTableData [dimTableName=" + id.getDimTableName() + ", dimCode=" + id.getDimCode() + ", dimValue=" + dimValue + "]";
+    }
+    
+    @Override
+    public boolean equals(Object other) {
+        if ((this == other))  
+            return true;  
+        if ((other == null))  
+            return false;  
+        if (!(other instanceof DimTableData))  
+            return false;  
+        DimTableData castOther = (DimTableData) other;  
+  
+
+        return (this.getId().equals(castOther.getId()) && 
+                ((this.getDimValue() == castOther.getDimValue()) || (this.getDimValue() != null && 
+                castOther.getDimValue() != null && this.getDimValue().equals(castOther.getDimValue())))); 
     }  
 
 }
