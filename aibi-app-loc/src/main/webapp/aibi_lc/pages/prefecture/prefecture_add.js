@@ -47,6 +47,14 @@ window.loc_onload = function() {
 	new Vue({
 		el : '#dataD',
 		data : model,
+		mounted: function () {
+		    this.$nextTick(function () {
+			    var r = $(".easyui-validatebox");
+	   			if (r.length){
+	   				r.validatebox();
+	   			}
+		    })
+		},
 		updated : function(){
 			var value1 = $("#orgId").val();
 			if(value1 == "1" || configId != ""){
@@ -85,33 +93,36 @@ window.loc_onload = function() {
 	});
 	
 	wd.addBtn("ok", "保存", function() {
-		var url_ = "";
-		var msss = "";
-		if(model.configId!=null && model.configId!=undefined && model.configId!= ""){
-			url_ = $.ctx + '/api/prefecture/preConfigInfo/update';
-			msss = "修改成功";
-		}else{
-			$("#configId").removeAttr("name");;
-			url_ = $.ctx + '/api/prefecture/preConfigInfo/save';
-			msss = "保存成功";
-		}
-//		if($("#saveDataForm").validateForm){
-			$.commAjax({
-				url : url_,
-				postData : $('#saveDataForm').formToJson(),
-				onSuccess : function(data) {
-					if(data.data == "success"){
-						$.success(msss, function() {
-							wd.cancel();
-							wd.reload();
-						});
+		if($('#saveDataForm').validateForm()){
+			var url_ = "";
+			var msss = "";
+			if(model.configId!=null && model.configId!=undefined && model.configId!= ""){
+				url_ = $.ctx + '/api/prefecture/preConfigInfo/update';
+				msss = "修改成功";
+			}else{
+				$("#configId").removeAttr("name");;
+				url_ = $.ctx + '/api/prefecture/preConfigInfo/save';
+				msss = "保存成功";
+			}
+	//		if($("#saveDataForm").validateForm){
+				$.commAjax({
+					url : url_,
+					postData : $('#saveDataForm').formToJson(),
+					onSuccess : function(data) {
+						if(data.data == "success"){
+							$.success(msss, function() {
+								wd.cancel();
+								wd.reload();
+							});
+						}
+						
 					}
-					
-				}
-			})
-//		}else{
-//			$.alert("表单校验失败");
-//		}
+				})
+	//		}else{
+	//			$.alert("表单校验失败");
+	//		}
+	
+		}
 	});
 	
 	wd.addBtn("cancel", "取消", function() {

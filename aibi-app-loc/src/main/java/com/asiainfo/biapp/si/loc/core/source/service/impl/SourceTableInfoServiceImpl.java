@@ -105,6 +105,15 @@ public class SourceTableInfoServiceImpl extends BaseServiceImpl<SourceTableInfo,
         if(StringUtil.isEmpty(sourceTableInfo.getIdColumn())){
             throw new ParamRequiredException("主键名称不能为空");
         }
+        List<String> nameList = new ArrayList<>();
+        for(SourceInfo s : sourceTableInfo.getSourceInfoList()){
+            if(!nameList.contains(s.getColumnName())){
+                nameList.add(s.getColumnName());
+            }else{
+                throw new ParamRequiredException("字段名称不能重复");
+            }
+        }
+        
         super.saveOrUpdate(sourceTableInfo);
         
         //添加指标源表状态
@@ -148,8 +157,8 @@ public class SourceTableInfoServiceImpl extends BaseServiceImpl<SourceTableInfo,
         }
         List<String> nameList = new ArrayList<>();
         for(SourceInfo s : sourceTableInfo.getSourceInfoList()){
-            if(!nameList.contains(s.getSourceName())){
-                nameList.add(s.getSourceName());
+            if(!nameList.contains(s.getColumnName())){
+                nameList.add(s.getColumnName());
             }else{
                 throw new ParamRequiredException("字段名称不能重复");
             }
@@ -160,8 +169,13 @@ public class SourceTableInfoServiceImpl extends BaseServiceImpl<SourceTableInfo,
         
         //修改状态表
         TargetTableStatus targetTableStatus = iTargetTableStatusService.selectTargertTableStatusById(sourceTableInfo.getSourceTableId());
-        targetTableStatus.setSourceTableName(sourceTableInfo.getSourceTableName());
-        iTargetTableStatusService.modifyTargertTableStatus(targetTableStatus);
+        if(targetTableStatus != null){
+            targetTableStatus.setSourceTableName(sourceTableInfo.getSourceTableName());
+            iTargetTableStatusService.modifyTargertTableStatus(targetTableStatus);
+        }else{
+            throw new ParamRequiredException("指标源表状态表数据错误");
+        }
+        
         
         //修改指标信息列
         List<String> newIds = new ArrayList<>();
@@ -174,10 +188,10 @@ public class SourceTableInfoServiceImpl extends BaseServiceImpl<SourceTableInfo,
                 s.setSourceTableId(sourceTableInfo.getSourceTableId());
                 if(StringUtils.isNotBlank(s.getSourceId())){
                     SourceInfo olds = iSourceInfoService.selectSourceInfoById(s.getSourceId());
-                    olds.setSourceName(s.getSourceName());
+                    olds.setColumnName(s.getColumnName());
                     olds.setCooColumnType(s.getCooColumnType());
-                    olds.setColumnCnName(s.getColumnCnName());
-                    olds.setColumnUnit(s.getColumnUnit());
+                    olds.setSourceName(s.getSourceName());
+                    olds.setColumnCaliber(s.getColumnCaliber());
                     iSourceInfoService.modifySourceInfo(olds);
                     newIds.add(olds.getSourceId());
                 }else{

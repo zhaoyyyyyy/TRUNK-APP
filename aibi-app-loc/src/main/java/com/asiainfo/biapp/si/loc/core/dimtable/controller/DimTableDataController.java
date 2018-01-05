@@ -56,15 +56,11 @@ public class DimTableDataController extends BaseController<DimTableData>{
     
     @ApiOperation(value = "分页查询维表值")
     @RequestMapping(value = "/queryPage", method = RequestMethod.POST)
-    @ApiImplicitParams({
-        @ApiImplicitParam(name = "labelId", value = "标签ID(选填)",paramType = "query", dataType = "string"),
-        @ApiImplicitParam(name = "dimName", value = "维表值(选填，支持模糊搜索)",paramType = "query", dataType = "string")
-    })
-    public WebResult<Page<DimTableData>> queryPage(@ModelAttribute Page<DimTableData> page, String labelId, String dimName){
+    public WebResult<Page<DimTableData>> queryPage(@ModelAttribute Page<DimTableData> page, @ModelAttribute DimTableData dimTableData){
         WebResult<Page<DimTableData>> webResult = new WebResult<>();
         Page<DimTableData> dimTableDatas = null;
         try {
-            dimTableDatas = iDimTableDataService.selectDimTableDataPageList(page, labelId, dimName);
+            dimTableDatas = iDimTableDataService.selectDimTableDataPageList(page, dimTableData);
         } catch (BaseException e) {
             return webResult.fail(e);
         }

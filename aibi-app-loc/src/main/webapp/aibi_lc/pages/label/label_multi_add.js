@@ -69,7 +69,6 @@ window.loc_onload = function(){
 	    data : model ,
 	    methods : {
 	    	del_form : function(index){
-	    		debugger
 	    		model.sourceInfoList.splice(index,1);
 	    	}
 	    }
@@ -232,23 +231,18 @@ function fun_to_save(){
 	var k = 1;
 	$("form").each(function(){
 		var labelInfo = $(this).formToJson();
-		var labelName = $('#labelName').val();
-		if(labelName==""){
-			$.alert("标签名称不许为空");
-		}else{
-			$.commAjax({
-			  async : false,
-			  url : $.ctx + '/api/label/labelInfo/save',
-			  postData : labelInfo,
-			  onSuccess : function(data){
-				  flag = data.data
-			  }  
-			});	
-			if(k == $("form").size() && flag == "success"){	
-				$.success("创建成功",function(){
-					history.back(-1);
-				})
-			}
+		$.commAjax({
+		  async : false,
+		  url : $.ctx + '/api/label/labelInfo/save',
+		  postData : labelInfo,
+		  onSuccess : function(data){
+			  flag = data.data
+		  }  
+		});	
+		if(k == $("form").size() && flag == "success"){	
+			$.success("创建成功",function(){
+				history.back(-1);
+			})
 		}
 		k++;
 	})

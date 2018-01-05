@@ -48,7 +48,15 @@ window.loc_onload = function() {
 	}
 	new Vue({
 		el : "#dataD",
-		data : model
+		data : model,
+		mounted: function () {
+		    this.$nextTick(function () {
+			    var r = $(".easyui-validatebox");
+	   			if (r.length){
+	   				r.validatebox();
+	   			}
+		    })
+		}
 	})
 	var url = "";
 	var pD = {};
@@ -181,79 +189,115 @@ function setColor(cellvalue, options, rowObject) {
 	return cellvalue;
 }
 function fun_to_del(id,sourceId) {
-	$.commAjax({
-		url:$.ctx+"/api/label/labelCountRules/queryList",
-		postData:{"dependIndex":sourceId},
-		onSuccess:function(data){
-			if(data.data.length==0){
-				$("#jsonmap").jqGrid("delRowData", id);
-			}else{
-				$.alert("该指标已经注册");
+	if(sourceId != "" && sourceId != null){
+		$.commAjax({
+			url:$.ctx+"/api/label/labelCountRules/queryList",
+			postData:{"dependIndex":sourceId},
+			onSuccess:function(data){
+				if(data.data.length==0){
+					$("#jsonmap").jqGrid("delRowData", id);
+				}else{
+					$.alert("该指标已经注册");
+				}
 			}
-		}
-	})
+		})
+	}else{
+		$("#jsonmap").jqGrid("delRowData", id);
+	}
 }
 function fun_to_save() {
-	
-	//取消所有编辑
-	var ids = $("#jsonmap").jqGrid('getDataIDs');
-    for (var i = 0; i < ids.length; i++) {
-        $("#jsonmap").jqGrid("saveRow", ids[i]);
-    }
-	
-    //拼接批量信息
-	var list = $("#jsonmap").jqGrid("getRowData");
-	var sourceInfoList = "sourceInfoList{";
-	var idColumn = $("#idColumn").val();
-	var colNum = "";
-	for(var k = 0; k<list.length; k++){
-		delete list[k].op;
-		if(list[k].sourceName == idColumn){
-			colNum = "error";
-			$.alert("第["+(k+1)+"]行字段名称与主键名称重复");
-			break;
-		}
-		sourceInfoList += JSON.stringify(list[k]); 
-		var l = k+1;
-		if(l!=list.length){
-			sourceInfoList += ",";
-		}else{
-			sourceInfoList += "}";
-		}
-	}
-	$("#sourceInfoList").val(sourceInfoList);
-	if(colNum == "error"){
-		for (var q = 0; q < ids.length; q++) {
-	        $("#jsonmap").jqGrid("editRow", ids[q]);
+	if($('#formData').validateForm()){
+		//取消所有编辑
+		var ids = $("#jsonmap").jqGrid('getDataIDs');
+	    for (var i = 0; i < ids.length; i++) {
+	        $("#jsonmap").jqGrid("saveRow", ids[i]);
+	        var rowData = JSON.stringify($("#jsonmap").jqGrid("getRowData",ids[i]));
+	        if(rowData.indexOf('input')>0){
+	        	return false;
+	        }
 	    }
-		return false;
-	}
-	//开始进行保存
-	var url_ = "";
-	var msss = "";
-	if(model.sourceTableId!=null && model.sourceTableId!=undefined && model.sourceTableId!= ""){
-		url_ = $.ctx + '/api/source/sourceTableInfo/update';
-		msss = "修改成功";
-	}else{
-		$("#sourceTableId").removeAttr("name");
-		url_ = $.ctx + '/api/source/sourceTableInfo/save';
-		msss = "保存成功";
-	}
-	$.commAjax({
-		url : url_,
-		async : false,
-		postData : $('#formData').formToJson(),
-		onSuccess : function(data) {
-			if(data.data == "success"){
-				$.success(msss, function() {
-					history.back(-1);
-				});
+	    //拼接批量信息
+		var list = $("#jsonmap").jqGrid("getRowData");
+		var sourceInfoList = "sourceInfoList{";
+		var idColumn = $("#idColumn").val();
+		var colNum = "";
+		for(var k = 0; k<list.length; k++){
+			delete list[k].op;
+			if(list[k].columnName == idColumn){
+				colNum = "error";
+				$.alert("第["+(k+1)+"]行字段名称与主键名称重复");
+				break;
+			}
+			sourceInfoList += JSON.stringify(list[k]); 
+			var l = k+1;
+			if(l!=list.length){
+				sourceInfoList += ",";
+			}else{
+				sourceInfoList += "}";
 			}
 		}
-	});
-	for (var p = 0; p < ids.length; p++) {
-        $("#jsonmap").jqGrid("editRow", ids[p]);
-    }
+		$("#sourceInfoList").val(sourceInfoList);
+		if(colNum == "error"){
+			for (var q = 0; q < ids.length; q++) {
+		        $("#jsonmap").jqGrid("editRow", ids[q]);
+		    }
+			return false;
+		}else{
+			//开始进行保存
+			var url_ = "";
+			var msss = "";
+			if(model.sourceTableId!=null && model.sourceTableId!=undefined && model.sourceTableId!= ""){
+				url_ = $.ctx + '/api/source/sourceTableInfo/update';
+				msss = "修改成功";
+			}else{
+				$("#sourceTableId").removeAttr("name");
+				url_ = $.ctx + '/api/source/sourceTableInfo/save';
+				msss = "保存成功";
+			}
+			$.commAjax({
+				url : $.ctx + "/backSql/columns",
+				postData:{"tableName" : $("#sourceTableName").val()},
+				onSuccess : function(data) {
+					var colnames = [];
+					for(var u=0;u < data.data.length;u++){
+						colnames.push(data.data[u].col_name);
+					}
+					if(data.data!=null && !colnames.indexOf(idColumn)>0){
+						$.commAjax({
+							url : url_,
+							async : false,
+							postData : $('#formData').formToJson(),
+							onSuccess : function(data1) {
+								if(data.data1 == "success"){
+									$.success(msss, function() {
+										history.back(-1);
+									});
+								}
+							}
+						});
+					}else{
+						$.confirm('表不存在或者表结构异常，确认保存？', function() {
+							$.commAjax({
+								url : url_,
+								async : false,
+								postData : $('#formData').formToJson(),
+								onSuccess : function(data) {
+									if(data.data == "success"){
+										$.success(msss, function() {
+											history.back(-1);
+										});
+									}
+								}
+							});
+						})
+					}
+				}
+			})
+			for (var p = 0; p < ids.length; p++) {
+		        $("#jsonmap").jqGrid("editRow", ids[p]);
+		    }
+		}
+	}
 }
 function analysis(){
 	var tableName = $("#sourceTableName").val();

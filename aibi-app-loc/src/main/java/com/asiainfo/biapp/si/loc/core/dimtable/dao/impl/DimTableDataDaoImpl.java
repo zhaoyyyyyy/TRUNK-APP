@@ -63,8 +63,8 @@ public class DimTableDataDaoImpl extends BaseDaoImpl<DimTableData, DimTableDataI
      * @param DimTableDataId
      * @return
      */
-    public List<DimTableData> selectDimTableDataList(DimTableData DimTableData) throws BaseException {
-        Map<String, Object> reMap = fromBean(DimTableData);
+    public List<DimTableData> selectDimTableDataList(DimTableData dimTableData) throws BaseException {
+        Map<String, Object> reMap = fromBean(dimTableData);
         Map<String, Object> params = (Map<String, Object>) reMap.get("params");
         
         return super.findListByHql(reMap.get("hql").toString(), params);
@@ -74,7 +74,7 @@ public class DimTableDataDaoImpl extends BaseDaoImpl<DimTableData, DimTableDataI
         Map<String, Object> reMap = new HashMap<>();
         Map<String, Object> params = new HashMap<>();
         StringBuffer hql = new StringBuffer("from DimTableData d where 1=1 ");
-        if(null != dimTableData.getId()){
+        if (null != dimTableData.getId()) {
             if(StringUtil.isNoneBlank(dimTableData.getId().getDimTableName())){
                 hql.append("and d.id.dimTableName = :dimTableName ");
                 params.put("dimTableName", dimTableData.getId().getDimTableName());

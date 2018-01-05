@@ -34,6 +34,7 @@ import com.asiainfo.biapp.si.loc.core.dimtable.entity.DimTableDataId;
  * @author  hongfb
  * @version 1.0.0.2017年12月27日
  */
+
 public interface IDimTableDataDao extends BaseDao<DimTableData, DimTableDataId>{
     
     /**
@@ -43,7 +44,7 @@ public interface IDimTableDataDao extends BaseDao<DimTableData, DimTableDataId>{
      * @param DimTableData
      * @return
      */
-    public Page<DimTableData> selectDimTableDataPageList(Page<DimTableData> page, DimTableData DimTableDataVo) throws BaseException;
+    public Page<DimTableData> selectDimTableDataPageList(Page<DimTableData> page, DimTableData dimTableData) throws BaseException;
 
     /**
      * 根据条件查询列表
@@ -51,6 +52,6 @@ public interface IDimTableDataDao extends BaseDao<DimTableData, DimTableDataId>{
      * @param DimTableData
      * @return
      */
-    public List<DimTableData> selectDimTableDataList(DimTableData DimTableDataVo) throws BaseException;
+    public List<DimTableData> selectDimTableDataList(DimTableData dimTableData) throws BaseException;
 
 }
