@@ -88,6 +88,7 @@ window.loc_onload = function() {
 			if($(this).hasClass('active')){
 				$(this).removeClass('active');
 				$(".ui-label-sec").hide();
+				$(".ui-label-sec").find("a").removeClass("active");
 			}else{
 				$(this).addClass('active').siblings(".labelItems").removeClass("active");
 				var sysId=$(this).attr("sysid");
@@ -242,7 +243,12 @@ var labelMarket = (function (model){
 			if($(obj).hasClass("active")){
 				$(obj).removeClass("active");
 			}else{
+				//二级三级选中状态切换
 				$(obj).addClass("active").siblings("a").removeClass("active");
+				$(obj).parent("div").siblings("label").find('a').removeClass("active");
+				$(obj).parent("label").siblings("div").find('a').removeClass("active");
+				$(obj).parents("li").siblings("li").find("label a").removeClass("active");
+				$(obj).parents("li").siblings("li").find("div a").removeClass("active");
 			}
 			labelMarket.loadLabelInfoList();
 		}

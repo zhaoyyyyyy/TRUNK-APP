@@ -58,6 +58,9 @@ add-dialog@charset "utf-8";
 	vertical-align: middle;
 	line-height: 45px;
 }
+.ui-label-system > li > label > a.active{
+	color:#009241;
+}
 .ui-label-sec > li > div,
 .ui-label-system > li > div > div{
 	padding: 10px 0 0;
