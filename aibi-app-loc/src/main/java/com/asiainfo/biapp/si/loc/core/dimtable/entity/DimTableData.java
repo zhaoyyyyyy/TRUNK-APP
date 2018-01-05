@@ -13,6 +13,7 @@ import javax.persistence.Table;
 
 import com.asiainfo.biapp.si.loc.base.entity.BaseEntity;
 import com.asiainfo.biapp.si.loc.base.utils.StringUtil;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import io.swagger.annotations.ApiParam;
 
@@ -47,7 +48,15 @@ public class DimTableData extends BaseEntity{
      * 维表表名,联合主键
      */
     @EmbeddedId
+    @JsonIgnore
     private DimTableDataId id;
+
+    @ApiParam(value = "维表表名")
+    private String tableName;
+    
+    @ApiParam(value = "维表主键")
+    private String dimKey;
+    
     
     /**
      * 维表值列名
@@ -82,6 +91,25 @@ public class DimTableData extends BaseEntity{
 	public void setDimValue(String dimValue) {
 		this.dimValue = dimValue;
 	}
+    
+    public String getTableName() {
+        return this.id.getDimTableName();
+    }
+
+    
+    public void setTableName(String dimTableName) {
+        this.id.setDimTableName(dimTableName);
+    }
+
+    
+    public String getDimKey() {
+        return this.id.getDimCode();
+    }
+
+    
+    public void setDimKey(String dimCode) {
+        this.id.setDimCode(dimCode);
+    }
 
     @Override
     public boolean equals(Object other) {  
@@ -102,6 +130,14 @@ public class DimTableData extends BaseEntity{
                     ((this.getDimValue() == castOther.getDimValue()) || 
                     (StringUtil.isNoneBlank(this.getDimValue()) && StringUtil.isNoneBlank(castOther.getDimValue()) && 
                     this.getDimValue().equals(castOther.getDimValue())))); 
+    }
+
+    /* (non-Javadoc)
+     * @see java.lang.Object#toString()
+     */
+    @Override
+    public String toString() {
+        return "DimTableData [dimTableName=" + id.getDimTableName() + ", dimCode=" + id.getDimCode() + ", dimValue=" + dimValue + "]";
     }  
     
     

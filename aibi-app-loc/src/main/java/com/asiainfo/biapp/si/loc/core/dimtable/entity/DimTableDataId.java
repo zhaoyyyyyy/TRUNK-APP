@@ -113,7 +113,13 @@ public class DimTableDataId extends BaseEntity{
         return result;  
     }
 
-    
+    /* (non-Javadoc)
+     * @see java.lang.Object#toString()
+     */
+    @Override
+    public String toString() {
+        return "DimTableDataId [dimTableName=" + dimTableName + ", dimCode=" + dimCode + "]";
+    }
     
     
 
