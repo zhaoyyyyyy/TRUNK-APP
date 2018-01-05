@@ -211,8 +211,11 @@ function fun_to_save() {
 		var ids = $("#jsonmap").jqGrid('getDataIDs');
 	    for (var i = 0; i < ids.length; i++) {
 	        $("#jsonmap").jqGrid("saveRow", ids[i]);
+	        var rowData = JSON.stringify($("#jsonmap").jqGrid("getRowData",ids[i]));
+	        if(rowData.indexOf('input')>0){
+	        	return false;
+	        }
 	    }
-		
 	    //拼接批量信息
 		var list = $("#jsonmap").jqGrid("getRowData");
 		var sourceInfoList = "sourceInfoList{";
@@ -252,22 +255,48 @@ function fun_to_save() {
 				msss = "保存成功";
 			}
 			$.commAjax({
-				url : url_,
-				async : false,
-				postData : $('#formData').formToJson(),
+				url : $.ctx + "/backSql/columns",
+				postData:{"tableName" : $("#sourceTableName").val()},
 				onSuccess : function(data) {
-					if(data.data == "success"){
-						$.success(msss, function() {
-							history.back(-1);
+					var colnames = [];
+					for(var u=0;u < data.data.length;u++){
+						colnames.push(data.data[u].col_name);
+					}
+					if(data.data!=null && !colnames.indexOf(idColumn)>0){
+						$.commAjax({
+							url : url_,
+							async : false,
+							postData : $('#formData').formToJson(),
+							onSuccess : function(data1) {
+								if(data.data1 == "success"){
+									$.success(msss, function() {
+										history.back(-1);
+									});
+								}
+							}
 						});
+					}else{
+						$.confirm('表不存在或者表结构异常，确认保存？', function() {
+							$.commAjax({
+								url : url_,
+								async : false,
+								postData : $('#formData').formToJson(),
+								onSuccess : function(data) {
+									if(data.data == "success"){
+										$.success(msss, function() {
+											history.back(-1);
+										});
+									}
+								}
+							});
+						})
 					}
 				}
-			});
+			})
 			for (var p = 0; p < ids.length; p++) {
 		        $("#jsonmap").jqGrid("editRow", ids[p]);
 		    }
 		}
-
 	}
 }
 function analysis(){
