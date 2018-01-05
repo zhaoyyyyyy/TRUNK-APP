@@ -105,6 +105,15 @@ public class SourceTableInfoServiceImpl extends BaseServiceImpl<SourceTableInfo,
         if(StringUtil.isEmpty(sourceTableInfo.getIdColumn())){
             throw new ParamRequiredException("主键名称不能为空");
         }
+        List<String> nameList = new ArrayList<>();
+        for(SourceInfo s : sourceTableInfo.getSourceInfoList()){
+            if(!nameList.contains(s.getSourceName())){
+                nameList.add(s.getSourceName());
+            }else{
+                throw new ParamRequiredException("字段名称不能重复");
+            }
+        }
+        
         super.saveOrUpdate(sourceTableInfo);
         
         //添加指标源表状态

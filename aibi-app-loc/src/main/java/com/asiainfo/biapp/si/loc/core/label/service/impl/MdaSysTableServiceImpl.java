@@ -105,7 +105,7 @@ public class MdaSysTableServiceImpl extends BaseServiceImpl<MdaSysTable, String>
                 for (int k = 1; k < 3; k++) {
                     mdaSysTable = new MdaSysTable();
                     mdaSysTable.setConfigId(preConfigInfo.getConfigId());
-                    mdaSysTable.setTableSchema("TEST");
+                    mdaSysTable.setTableSchema("COCDEV");
                     mdaSysTable.setCreateTime(new Date());
                     mdaSysTable.setCreateUserId(preConfigInfo.getCreateUserId());
                     mdaSysTable.setTableName("DW_L_PREF_" + preConfigInfo.getConfigId() + "_");

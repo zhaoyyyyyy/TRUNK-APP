@@ -208,7 +208,7 @@ function fun_to_save() {
 	var colNum = "";
 	for(var k = 0; k<list.length; k++){
 		delete list[k].op;
-		if(list[k].sourceName == idColumn){
+		if(list[k].columnName == idColumn){
 			colNum = "error";
 			$.alert("第["+(k+1)+"]行字段名称与主键名称重复");
 			break;
@@ -227,33 +227,35 @@ function fun_to_save() {
 	        $("#jsonmap").jqGrid("editRow", ids[q]);
 	    }
 		return false;
-	}
-	//开始进行保存
-	var url_ = "";
-	var msss = "";
-	if(model.sourceTableId!=null && model.sourceTableId!=undefined && model.sourceTableId!= ""){
-		url_ = $.ctx + '/api/source/sourceTableInfo/update';
-		msss = "修改成功";
 	}else{
-		$("#sourceTableId").removeAttr("name");
-		url_ = $.ctx + '/api/source/sourceTableInfo/save';
-		msss = "保存成功";
-	}
-	$.commAjax({
-		url : url_,
-		async : false,
-		postData : $('#formData').formToJson(),
-		onSuccess : function(data) {
-			if(data.data == "success"){
-				$.success(msss, function() {
-					history.back(-1);
-				});
-			}
+		$.alert("go");
+		//开始进行保存
+		var url_ = "";
+		var msss = "";
+		if(model.sourceTableId!=null && model.sourceTableId!=undefined && model.sourceTableId!= ""){
+			url_ = $.ctx + '/api/source/sourceTableInfo/update';
+			msss = "修改成功";
+		}else{
+			$("#sourceTableId").removeAttr("name");
+			url_ = $.ctx + '/api/source/sourceTableInfo/save';
+			msss = "保存成功";
 		}
-	});
-	for (var p = 0; p < ids.length; p++) {
-        $("#jsonmap").jqGrid("editRow", ids[p]);
-    }
+		$.commAjax({
+			url : url_,
+			async : false,
+			postData : $('#formData').formToJson(),
+			onSuccess : function(data) {
+				if(data.data == "success"){
+					$.success(msss, function() {
+						history.back(-1);
+					});
+				}
+			}
+		});
+		for (var p = 0; p < ids.length; p++) {
+	        $("#jsonmap").jqGrid("editRow", ids[p]);
+	    }
+	}
 }
 function analysis(){
 	var tableName = $("#sourceTableName").val();
