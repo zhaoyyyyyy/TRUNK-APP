@@ -80,7 +80,7 @@ window.loc_onload = function() {
 				result = false;
 			}
 		}else {
-			dimCodeCol = "DIM_ID";
+			dimCodeCol = "DIM_CODE";
 			dimValueCol = "DIM_VALUE";
 			$("#dimCodeCol").val(dimCodeCol);
 			$("#dimValueCol").val(dimValueCol);
