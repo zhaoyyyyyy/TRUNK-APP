@@ -31,9 +31,9 @@ window.loc_onload = function() {
 				model.orgId = data.data.orgId;
 				var time = new Date(data.data.invalidTime);
 				var y = time.getFullYear();//年
-				var m = time.getMonth() + 1;//月
-				var d = time.getDate();//日
-				model.invalidTime = y+"-"+m+"-"+d;
+				var m = (time.getMonth()+1<10 ? '0'+(time.getMonth()+1):time.getMonth()+1);//月
+				var d = (time.getDate()+1<10 ? '0' +(time.getDate()):time.getDate());//日	
+				$("#invalidTime").val(y+"-"+m+"-"+d);
 			}
 		})
 	}else{
@@ -42,7 +42,6 @@ window.loc_onload = function() {
 		model.sourceName = "";
 		model.sourceEnName = "";
 		model.orgId = "";
-		model.invalidTime = "";
 	}
 	new Vue({
 		el : '#dataD',
