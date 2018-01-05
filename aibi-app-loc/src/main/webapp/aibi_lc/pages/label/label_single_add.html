@@ -72,7 +72,7 @@
 	                                <div class="ui-form-group">
 	                                    <label for="labelName" class="control-label">标签名称</label>
 	                                    <div class="control-input">
-	                                        <input :value="sourceInfo.sourceName" type="text" class="form-control" id="labelName" name="labelName">
+	                                        <input :value="sourceInfo.sourceName" required="true" type="text" class="form-control easyui-validatebox" id="labelName" name="labelName">
 	                                    </div>
 	                                </div>
 	                                <div class="ui-form-group mt20 tag-radio clearfix">
@@ -105,7 +105,7 @@
 	                                    <label for="categoryId" class="control-label">标签分类</label>
 	                                    <div class="control-input ui-form-ztree">
 	                                    	<input type="hidden" name="categoryId">
-	                                        <input type="text" class="form-control" id="categoryName" onclick="openTtee(this)" readonly>
+	                                        <input required="true" type="text" class="form-control easyui-validatebox" id="categoryName" onclick="openTtee(this)" readonly>
 	                                        <div class="dropdown-menu">
 	                                        	<ul id="ztree" class="ztree">
 												</ul>
@@ -128,13 +128,14 @@
 	                                    <label for="countRules" class="control-label">具体规则</label>
 	                                    <div class="control-input">
 	                                        <textarea rows="5" id="countRules" name="countRules" 
-	                                            class="form-control form-control-textarea">{{sourceInfo.sourceId}}</textarea>
+	                                         required="true"  class="form-control form-control-textarea easyui-validatebox">{{sourceInfo.sourceId}}</textarea>
 	                                    </div>
 	                                </div>
 	                                <div class="ui-form-group">
 	                                    <label for="unit" class="control-label">单位</label>
 	                                    <div class="control-input">
-	                                        <input type="text" class="form-control" id="unit" name="unit" placeholder="请输入单位">
+	                                        <input type="text" class="form-control easyui-validatebox" id="unit"
+	                                        	required="true" name="unit" placeholder="请输入单位">
 	                                    </div>
 	                                </div>
 	                            </div>
@@ -142,14 +143,15 @@
 	                                <div class="ui-form-group">
 	                                    <label for="busiCaliber" class="control-label">业务口径</label>
 	                                    <div class="control-input">
-	                                        <input type="text" class="form-control" id="busiCaliber" name="busiCaliber" placeholder="请输入业务口径">
+	                                        <input type="text" class="form-control easyui-validatebox" 
+	                                        required="true"	id="busiCaliber" name="busiCaliber" placeholder="请输入业务口径">
 	                                    </div>
 	                                </div>
 								    <div class="ui-form-group">
 									    <label class="control-label">失效时间</label> 
 									       <div class="control-input date-input fleft has-icon">
-					          	             <input name="failTime" type="text"
-									         class="date-input form-control input-pointer form-control-bubble" data-dismiss="formDatepicker#sendTime" id="" 
+					          	             <input name="failTime" type="text" required="true"
+									         class="form-control input-pointer easyui-validatebox" data-dismiss="formDatepicker#sendTime" id="" 
 									         placeholder="请选择失效日期" onmousedown="getTime(this)"/>
 					          	             <span class="glyphicon-date form-control-feedback"></span>
 					                       </div>   
@@ -166,7 +168,7 @@
 		                                <div class="ui-form-group">
 		                                    <label for="dimTableName" class="control-label">维表选择</label>
 		                                    <div class="control-input has-icon">
-		                                        <select id="dimId" name="dimId" class="form-control input-pointer fleft">
+		                                        <select id="dimId" name="dimId" required="true" class="form-control input-pointer easyui-validatebox">
 			                                        <option>请选择维表</option>
 			                                        <option v-for = "dim in dimtableInfoList" :value="dim.dimId">{{dim.dimTableName}}</option>
 		                                        </select>       
@@ -176,7 +178,7 @@
 		                                <div class="ui-form-group">
 		                                    <label for="dataType" class="control-label">数据类型</label>
 		                                       <div class="control-input">
-		                                            <input name="dataType" type="text" class="form-control" id="dataType">
+		                                            <input name="dataType" type="text" required="true" class="form-control easyui-validatebox" id="dataType">
 		                                      </div>
 		                                </div>
 	                                </div>

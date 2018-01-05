@@ -64,6 +64,14 @@ window.loc_onload = function() {
 	new Vue({
 		el : '#dataD',
 	    data : model ,
+	    mounted: function () {
+		    this.$nextTick(function () {
+			    var r = $(".easyui-validatebox");
+	   			if (r.length){
+	   				r.validatebox();
+	   			}
+		    })
+		}
 	})
 	$.commAjax({
 		url : $.ctx + '/api/dimtable/dimTableInfo/queryList',
@@ -112,26 +120,30 @@ function fun_to_save(){
 	var flag = "";
 	var k = 1;
 	$("form[class~=active]").each(function(){
-		var labelInfo = $(this).formToJson();
-		var labelName = $('#labelName').val();
-		if(labelName==""){
-			$.alert("标签名称不许为空");
-		}else{
-			$.commAjax({
-			  async : false,
-			  url : $.ctx + '/api/label/labelInfo/save',
-			  postData : labelInfo,
-			  onSuccess : function(data){
-				  flag = data.data
-			  }  
-			});	
-			if(k == $("form[class~=active]").size() && flag == "success"){	
-				$.success("创建成功",function(){
-					history.back(-1);
-				})
+		if($("form[class~=active]").validateForm()){
+			
+			var labelInfo = $(this).formToJson();
+			var labelName = $('#labelName').val();
+			if(labelName==""){
+				$.alert("标签名称不许为空");
+			}else{
+				$.commAjax({
+				  async : false,
+				  url : $.ctx + '/api/label/labelInfo/save',
+				  postData : labelInfo,
+				  onSuccess : function(data){
+					  flag = data.data
+				  }  
+				});	
+				if(k == $("form[class~=active]").size() && flag == "success"){	
+					$.success("创建成功",function(){
+						history.back(-1);
+					})
+				}
 			}
+			k++;
+	
 		}
-		k++;
 	})
 }
 
