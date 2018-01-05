@@ -48,7 +48,15 @@ window.loc_onload = function() {
 	}
 	new Vue({
 		el : "#dataD",
-		data : model
+		data : model,
+		mounted: function () {
+		    this.$nextTick(function () {
+			    var r = $(".easyui-validatebox");
+	   			if (r.length){
+	   				r.validatebox();
+	   			}
+		    })
+		}
 	})
 	var url = "";
 	var pD = {};
@@ -194,67 +202,68 @@ function fun_to_del(id,sourceId) {
 	})
 }
 function fun_to_save() {
-	
-	//取消所有编辑
-	var ids = $("#jsonmap").jqGrid('getDataIDs');
-    for (var i = 0; i < ids.length; i++) {
-        $("#jsonmap").jqGrid("saveRow", ids[i]);
-    }
-	
-    //拼接批量信息
-	var list = $("#jsonmap").jqGrid("getRowData");
-	var sourceInfoList = "sourceInfoList{";
-	var idColumn = $("#idColumn").val();
-	var colNum = "";
-	for(var k = 0; k<list.length; k++){
-		delete list[k].op;
-		if(list[k].columnName == idColumn){
-			colNum = "error";
-			$.alert("第["+(k+1)+"]行字段名称与主键名称重复");
-			break;
-		}
-		sourceInfoList += JSON.stringify(list[k]); 
-		var l = k+1;
-		if(l!=list.length){
-			sourceInfoList += ",";
-		}else{
-			sourceInfoList += "}";
-		}
-	}
-	$("#sourceInfoList").val(sourceInfoList);
-	if(colNum == "error"){
-		for (var q = 0; q < ids.length; q++) {
-	        $("#jsonmap").jqGrid("editRow", ids[q]);
+	if($('#formData').validateForm()){
+		//取消所有编辑
+		var ids = $("#jsonmap").jqGrid('getDataIDs');
+	    for (var i = 0; i < ids.length; i++) {
+	        $("#jsonmap").jqGrid("saveRow", ids[i]);
 	    }
-		return false;
-	}else{
-		$.alert("go");
-		//开始进行保存
-		var url_ = "";
-		var msss = "";
-		if(model.sourceTableId!=null && model.sourceTableId!=undefined && model.sourceTableId!= ""){
-			url_ = $.ctx + '/api/source/sourceTableInfo/update';
-			msss = "修改成功";
-		}else{
-			$("#sourceTableId").removeAttr("name");
-			url_ = $.ctx + '/api/source/sourceTableInfo/save';
-			msss = "保存成功";
-		}
-		$.commAjax({
-			url : url_,
-			async : false,
-			postData : $('#formData').formToJson(),
-			onSuccess : function(data) {
-				if(data.data == "success"){
-					$.success(msss, function() {
-						history.back(-1);
-					});
-				}
+		
+	    //拼接批量信息
+		var list = $("#jsonmap").jqGrid("getRowData");
+		var sourceInfoList = "sourceInfoList{";
+		var idColumn = $("#idColumn").val();
+		var colNum = "";
+		for(var k = 0; k<list.length; k++){
+			delete list[k].op;
+			if(list[k].columnName == idColumn){
+				colNum = "error";
+				$.alert("第["+(k+1)+"]行字段名称与主键名称重复");
+				break;
 			}
-		});
-		for (var p = 0; p < ids.length; p++) {
-	        $("#jsonmap").jqGrid("editRow", ids[p]);
-	    }
+			sourceInfoList += JSON.stringify(list[k]); 
+			var l = k+1;
+			if(l!=list.length){
+				sourceInfoList += ",";
+			}else{
+				sourceInfoList += "}";
+			}
+		}
+		$("#sourceInfoList").val(sourceInfoList);
+		if(colNum == "error"){
+			for (var q = 0; q < ids.length; q++) {
+		        $("#jsonmap").jqGrid("editRow", ids[q]);
+		    }
+			return false;
+		}else{
+			//开始进行保存
+			var url_ = "";
+			var msss = "";
+			if(model.sourceTableId!=null && model.sourceTableId!=undefined && model.sourceTableId!= ""){
+				url_ = $.ctx + '/api/source/sourceTableInfo/update';
+				msss = "修改成功";
+			}else{
+				$("#sourceTableId").removeAttr("name");
+				url_ = $.ctx + '/api/source/sourceTableInfo/save';
+				msss = "保存成功";
+			}
+			$.commAjax({
+				url : url_,
+				async : false,
+				postData : $('#formData').formToJson(),
+				onSuccess : function(data) {
+					if(data.data == "success"){
+						$.success(msss, function() {
+							history.back(-1);
+						});
+					}
+				}
+			});
+			for (var p = 0; p < ids.length; p++) {
+		        $("#jsonmap").jqGrid("editRow", ids[p]);
+		    }
+		}
+
 	}
 }
 function analysis(){
