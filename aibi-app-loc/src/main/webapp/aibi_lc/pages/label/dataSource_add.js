@@ -268,7 +268,7 @@ function fun_to_save() {
 							async : false,
 							postData : $('#formData').formToJson(),
 							onSuccess : function(data1) {
-								if(data.data1 == "success"){
+								if(data1.data == "success"){
 									$.success(msss, function() {
 										history.back(-1);
 									});
