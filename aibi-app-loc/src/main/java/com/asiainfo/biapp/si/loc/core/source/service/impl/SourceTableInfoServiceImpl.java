@@ -188,10 +188,10 @@ public class SourceTableInfoServiceImpl extends BaseServiceImpl<SourceTableInfo,
                 s.setSourceTableId(sourceTableInfo.getSourceTableId());
                 if(StringUtils.isNotBlank(s.getSourceId())){
                     SourceInfo olds = iSourceInfoService.selectSourceInfoById(s.getSourceId());
-                    olds.setSourceName(s.getSourceName());
+                    olds.setColumnName(s.getColumnName());
                     olds.setCooColumnType(s.getCooColumnType());
-                    olds.setColumnCnName(s.getColumnCnName());
-                    olds.setColumnUnit(s.getColumnUnit());
+                    olds.setSourceName(s.getSourceName());
+                    olds.setColumnCaliber(s.getColumnCaliber());
                     iSourceInfoService.modifySourceInfo(olds);
                     newIds.add(olds.getSourceId());
                 }else{
