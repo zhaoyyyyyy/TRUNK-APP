@@ -41,6 +41,7 @@ window.loc_onload = function() {
 			model.approveStatusId = data.data.approveInfo.approveStatusId;
 		}
 	})
+	
 	new Vue({
 			el : "#dataD",
 			data : model,
