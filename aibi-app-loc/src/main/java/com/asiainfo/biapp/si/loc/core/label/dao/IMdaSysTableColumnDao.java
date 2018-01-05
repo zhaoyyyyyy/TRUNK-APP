@@ -58,4 +58,7 @@ public interface IMdaSysTableColumnDao extends BaseDao<MdaSysTableColumn, String
      * @return
      */
     public List<MdaSysTableColumn> selectMdaSysTableColList(MdaSysTableColumnVo mdaSysTableColumnVo);
+    
+    public MdaSysTableColumn selectMdaSysTableColBylabelId(String labelId);
 }
+

@@ -92,4 +92,6 @@ public interface IMdaSysTableColService extends BaseService<MdaSysTableColumn, S
      * @throws BaseException
      */
     public void deleteMdaSysTableColumnById(String columnId) throws BaseException;
+    
+    public MdaSysTableColumn selectMdaSysTableColBylabelId(String labelId);
 }

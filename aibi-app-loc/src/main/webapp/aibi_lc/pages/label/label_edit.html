@@ -26,13 +26,14 @@
 			<div class="ui-lc-mian">
 				<h3>标签修改</h3>
 				<form id="saveDataForm">
+				    <input type="hidden" v-model="configId" name="configId"> 
 					<input type="hidden" v-model="labelId" id="labelId" name="labelId" />
 					<div class="form-horizontal ui-form">
 		                <div class="ui-form-group ml70">
 							<label class="control-label">标签名称</label> 
 							<div class="control-input ml10">
-								<input v-model="labelName" name="labelName" type="text"  class="fleft form-control"
-								placeholder="专区名称" />
+								<input v-model="labelName" name="labelName" type="text" required="required" class="easyui-validatebox fleft form-control"
+								placeholder="标签名称名称" />
 							</div>
 						</div>
 		                <div class="ui-form-group ml70">
@@ -45,7 +46,7 @@
 						<div class="ui-form-group ml70">
 							<label class="control-label">更新周期</label> 
 							<div class="control-input ml10">
-								<select v-model="updateCycle" name="updateCycle" class="form-control" selected>
+								<select v-model="updateCycle" name="updateCycle" required="required" class="easyui-validatebox form-control" selected>
 									<option v-for="h in gxzq" :value="h.code">{{h.dataName}}</option>
 								</select>
 							</div>
@@ -53,8 +54,8 @@
 						<div class="ui-form-group ml70">
 							<label class="control-label" for="failTime">失效时间</label>
 							<div class="control-input ml10">
-								<input name="failTime" type="text" v-model="failTime"
-							class="form-control" data-dismiss="formDatepicker#sendTime" id="" placeholder="请选择失效日期" />
+								<input name="failTime" type="text" v-model="failTime" required="required"
+							class="easyui-validatebox form-control" data-dismiss="formDatepicker#sendTime" id="" placeholder="请选择失效日期" />
 							</div>
 						</div>
 						<div class="ui-form-group ml70">
@@ -63,7 +64,7 @@
                                <ul>
 								  <li class="" v-for="(i,index) in isbq" style="display: inline">
 								  	<div class="radio circle success">
-								  		<input :value="i.code" name="isRegular" type="radio" checked="index===0"/>													
+								  		<input :value="i.code" name="isRegular" type="radio" required="required" class="easyui-validatebox" checked="index===0"/>													
 										<label><i class="default"></i>{{i.dataName}}</label>
 								  	</div>											  	
 								  </li>
@@ -71,6 +72,7 @@
 				            </div>
                         </div>
 		            	<div class="ui-form-group ml70">
+		            	    <input type="hidden" name="dependIndex" v-model="dependIndex">
                             <label for="inputEmail3" class="control-label fleft">规则依赖指标</label>
                             <div class="control-input ml10">
                                 <input type="text" class="form-control" id="inputEmail3" placeholder="">
@@ -97,7 +99,7 @@
                         <div class="ui-form-group ml70">
 							<label class="control-label">标签类型</label> 
 							<div class="control-input ml10">
-								<select v-model="labelTypeId" id="labelTypeId" name="labelTypeId" class="form-control"
+								<select v-model="labelTypeId" id="labelTypeId" name="labelTypeId" required="required" class="easyui-validatebox form-control"
 							     onchange="changebq(this.options[this.selectedIndex].value)">
 								<option v-for="h in bqlx" :value="h.code">{{h.dataName}}</option>
 								</select>
@@ -107,7 +109,7 @@
 						    <div class="ui-form-group ml70">
                                 <label class="control-label" for="dimTableName">维表选择</label>
                                 <div class="control-input ml10">
-                                 	<select id="dimTableName" name="dimTableName" class="form-control">
+                                 	<select id="dimId" name="dimId" required="required" class="easyui-validatebox form-control">
                                          <option>请选择维表</option>
                                          <option v-for = "dim in dimtableInfoList" :value="dim.dimId">{{dim.dimTableName}}</option>
                                      </select>
@@ -117,7 +119,7 @@
                             <div class="ui-form-group ml70">
                                 <label for="dataType" class="control-label">数据类型</label>
                                    <div class="control-input ml10">
-                                        <input name="dataType" type="text" class="form-control" id="dataType">
+                                        <input name="dataType" type="text" required="required" class="easyui-validatebox form-control" id="dataType">
                                   </div>
                             </div>
                         </div>

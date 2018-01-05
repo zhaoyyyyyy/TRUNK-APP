@@ -42,7 +42,7 @@ import io.swagger.annotations.ApiOperation;
  * @author  lilin7
  * @version 1.0.0.2017年12月15日
  */
-@Api(value = "审批状态信息")
+//@Api(value = "审批状态信息")
 @RequestMapping("api/label")
 @RestController
 public class ApproveInfoController extends BaseController<ApproveInfo>{

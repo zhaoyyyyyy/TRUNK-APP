@@ -147,25 +147,6 @@ function fun_to_dimdetail(){
 		}]);
 	}
 }
-
-/*function fun_to_createRow(){
-	model.sourceInfoList.push({
-		columnCaliber: "",
-	    columnCnName : "",
-        columnLength : "",
-        columnName : "",
-        columnNum : "",
-        columnUnit : "",
-        cooColumnType : "",
-        sourceColumnRule : "",
-        sourceId : "",
-        sourceName : "",
-        sourceTableId : "",
-        dependIndex: false,
-        countRules : "",
-        updateCycle : ""
-	});
-}*/
 function getData(tag){	
 	if($(tag).parents(".create-main").hasClass("active")){
 		$(tag).parents(".create-main").removeClass("active");

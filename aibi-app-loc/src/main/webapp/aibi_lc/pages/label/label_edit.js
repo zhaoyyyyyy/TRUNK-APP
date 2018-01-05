@@ -6,16 +6,19 @@ var model = {
 	dimtableInfoList : [],
 	sourceIdList : [],
 	sourceNameList : [],
+	categoryId : "",
 	labelName : "",
 	failTime : "",
-	labelId :"",
-	updateCycle:"",
-	labelTypeId:"",
-	approveStatusId:"",
+	labelId : "",
+	updateCycle : "",
+	labelTypeId : "",
+	approveStatusId : "",
+	dependIndex : "",
 	isemmu : false,
 }
 
 window.loc_onload = function() {
+	model.configId = $.getCurrentConfigId();
 	var labelId = $.getUrlParam("labelId");
 	$.commAjax({
 		url : $.ctx + '/api/label/labelInfo/get',
@@ -23,12 +26,11 @@ window.loc_onload = function() {
 			"labelId" : labelId
 		},
 		onSuccess : function(data) {
-			console.log(data)
 			var time = new Date(data.data.failTime);
-			var y = time.getFullYear();//年
-			var m = time.getMonth() + 1;//月
-			var d = time.getDate();//日		
-			model.failTime = y+"年"+m+"月"+d+"日 ";
+			var y = time.getFullYear()+'-';//年
+			var m = (time.getMonth()+1<10 ? '0'+(time.getMonth()+1):date.getMonth()+1)+'-';//月
+			var d = (time.getDate()+1<10 ? '0' +(time.getDate()):date.getDate());//日		
+			model.failTime = y+m+d;
 			model.labelName = data.data.labelName;
 			model.labelId = data.data.labelId;
 			model.updateCycle = data.data.updateCycle;
@@ -78,17 +80,21 @@ window.loc_onload = function() {
 		var win = $.window('指标配置', $.ctx + '/aibi_lc/pages/label/sourceInfo_mgr.html', 900, 600);
 		win.addKpis = function(chooseKpis) {
 			model.sourceIdList = chooseKpis;
+			var dependx;
 			for(var i=0; i<chooseKpis.length; i++){
 				$.commAjax({
+					async : false,
 					url : $.ctx + '/api/source/sourceInfo/get',
 					postData : {
 						"sourceId" : chooseKpis[i]
 					},
 					onSuccess : function(data){
-						model.sourceNameList.push(data.data.sourceName)
+						model.sourceNameList.push(data.data.sourceName),
+					    dependx += data.data.sourceId+","
 					}
 				});
 			}
+			model.dependIndex= dependx;
 		}
 	});
 	
@@ -103,17 +109,21 @@ function changebq(obj){
 }
 
 function fun_to_save(){
-	$.commAjax({
-		url : $.ctx + '/api/label/labelInfo/update',
-		postData : $('#saveDataForm').formToJson(),
-		onSuccess : function(data){
-			if(data.data == "success"){
-				$.success(msss, function() {
-					history.back(-1);
-				});
+	if($("#saveDataForm").validateForm()){
+		$.commAjax({
+			url : $.ctx + '/api/label/labelInfo/update',
+			postData : $('#saveDataForm').formToJson(),
+			onSuccess : function(data){
+				if(data.data == "success"){
+					$.success("修改成功", function() {
+						history.back(-1);
+					});
+				}
 			}
-		}
-	});
+		});
+	}else{
+		$.alert("表单校验失败");
+	}
 }
 
 function fun_to_dimdetail(){
@@ -144,7 +154,7 @@ function openTtee(tag){
 }
 function ztreeFunc(){
 	var ztreeObj;
-	var labelId =$.getUrlParam("configId");				
+	var labelId =$.getCurrentConfigId();			
 	$.commAjax({			
 	    url : $.ctx+'/api/label/categoryInfo/queryList',  		    
 	    dataType : 'json', 

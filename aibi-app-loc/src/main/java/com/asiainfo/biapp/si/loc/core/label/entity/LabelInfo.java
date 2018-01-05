@@ -72,7 +72,7 @@ public class LabelInfo extends BaseEntity {
         parameters = {
             @Parameter(name = "name", value = "LABEL_SEQ"), //  来自DIM_SEQUECE_INFO表的 SEQUECE_NAME
             @Parameter(name = "prefix", value = "L"), // ID前缀
-            @Parameter(name = "size", value = "3") // 占位符表示 001-999
+            @Parameter(name = "size", value = "7") // 占位符
     })  
     @ApiParam(value = "标签ID")
     private String labelId;

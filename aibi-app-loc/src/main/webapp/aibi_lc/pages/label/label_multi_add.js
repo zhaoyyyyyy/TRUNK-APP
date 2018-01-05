@@ -202,12 +202,9 @@ function ztreeFunc(){
 	};		
 }
 function fun_to_save(){
-	if($("form[class~=active]").size()==0){
-		$.alert("请选择要保存的标签");
-	}
 	var flag = "";
 	var k = 1;
-	$("form[class~=active]").each(function(){
+	$("form").each(function(){
 		var labelInfo = $(this).formToJson();
 		var labelName = $('#labelName').val();
 		if(labelName==""){
@@ -221,7 +218,7 @@ function fun_to_save(){
 				  flag = data.data
 			  }  
 			});	
-			if(k == $("form[class~=active]").size() && flag == "success"){	
+			if(k == $("form").size() && flag == "success"){	
 				$.success("创建成功",function(){
 					history.back(-1);
 				})
