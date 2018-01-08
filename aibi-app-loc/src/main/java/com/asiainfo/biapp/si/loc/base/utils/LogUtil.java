@@ -13,7 +13,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
-import com.asiainfo.biapp.si.loc.auth.model.User;
 import com.asiainfo.biapp.si.loc.auth.utils.AuthUtils;
 
 @Component
@@ -154,15 +153,30 @@ public class LogUtil {
      */
     private static void saveLog(String level, String threadName, String interfaceUrl, String method, Object msg) {
         try {
-        	HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
-        	String token = AuthUtils.getTokenByRequest(request);
-        	User user = AuthUtils.getUserByToken(token);
+        	
+        	HttpServletRequest request = null;
+        	String url = "local";
+        	String userId = "loc_sys";
+        	String token = "loc_sys";
+        	try {
+        		request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+        		url = request.getRequestURL()+"/"+ request.getRequestURI();
+        		token = AuthUtils.getTokenByRequest(request);
+            	userId = AuthUtils.getUserByToken(token).getUserName();
+        	} catch (Exception e) {
+        		  StackTraceElement ste = getClassName();
+        	      String className = ste.getClassName();
+        	      Logger log = getLogger(className);
+        	      log.info("系统调用无法获取用户信息",e);
+			}
+        	
+        	
            
         	// 组装http远程调用
             Map<String, Object> params = new HashMap<>();
 
-            params.put("userId", user.getUserId());
-            params.put("ipAddr", request.getRequestURI());
+            params.put("userId", userId);
+            params.put("ipAddr", url);
             params.put("token", token);
             params.put("opTime",DateUtil.date2String(new Date()));
             params.put("sysId", nodeName);
@@ -172,10 +186,12 @@ public class LogUtil {
             params.put("interfaceUrl", interfaceUrl + "/" + method);
             params.put("errorMsg", msg);
 
-            HttpUtil.sendPost(jauthUrl + "/api/monitor/save", params);
+            HttpUtil.sendPost(jauthUrl + "/api/log/monitor/save", params);
         } catch (Exception e) {
-        	e.printStackTrace();
-        	//LogUtil.error("给JAUTH同步日志出错",e);
+        	StackTraceElement ste = getClassName();
+  	      	String className = ste.getClassName();
+  	      	Logger log = getLogger(className);
+  	      	log.error("给JAUTH同步日志出错",e);
         }
     }
 
