@@ -259,15 +259,18 @@ window.loc_onload = function() {
 	//标签全部选中
 	$("#selectAll").click(function(){				
 		$(".label-select-main ul li").find("input").each(function(){
-			$(this).attr("checked",true);
+			$(this).prop("checked", true);
 			$(this).siblings("label").addClass("active");
 		})
 	})
-	$("#labelList").delegate("label","click",function(){
-		if($(this).hasClass("active")){
-			$(this).removeClass("active")
+	
+	$("#labelList").delegate("input","click",function(){
+		if($(this).siblings("label").hasClass("active")){
+			$(this).siblings("label").removeClass("active");
+			$(this).prop("checked", false);
 		}else{
-			$(this).addClass("active")
+			$(this).siblings("label").addClass("active");
+			$(this).prop("checked", true);
 		}
 	})
 	//点击移动到事件
