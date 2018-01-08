@@ -90,7 +90,9 @@ window.loc_onload = function(){
 			page:1
 		}]);
 	});
-	
+	$(".ui-lc-mian").delegate(".create-main i.del-btn-icon","click",function(){
+		$(this).parents("form.create-main").remove();
+	})
 }
 //指标选择
 function chooseKpi(obj){
@@ -131,16 +133,16 @@ function fun_to_dimdetail(){
 		}]);
 	}
 }
-//function getTime(element){
-//	console.log(element);
-//	$(element).datepicker({
-//		changeMonth: true,
-//		changeYear: true,
-//		dateFormat:"yy-mm-dd",
-//		dayNamesMin: [ "日", "一", "二", "三", "四", "五", "六" ],
-//		monthNamesShort: [ "一月", "二月", "三月", "四月", "五月", "六月", "七月", "八月", "九月", "十月", "十一月", "十二月" ]
-//	});
-//}
+function getTime(element){
+	console.log(element);
+	$(element).datepicker({
+		changeMonth: true,
+		changeYear: true,
+		dateFormat:"yy-mm-dd",
+		dayNamesMin: [ "日", "一", "二", "三", "四", "五", "六" ],
+		monthNamesShort: [ "一月", "二月", "三月", "四月", "五月", "六月", "七月", "八月", "九月", "十月", "十一月", "十二月" ]
+	});
+}
 function fun_to_createRow(){
 	model.sourceInfoList.push({
 		 sourceNameList : [],
@@ -157,6 +159,7 @@ function fun_to_createRow(){
 	     categoryName : ""
 	});
 }
+
 function fun_del(id){
 	$.confirm('您确定要继续删除吗？',function(){
 		$.commAjax({
