@@ -75,7 +75,7 @@ public class DimTableDataController extends BaseController<DimTableData>{
         @ApiImplicitParam(name = "dimKey", value = "维表key(选填)",paramType = "query", dataType = "string"),
         @ApiImplicitParam(name = "dimValue", value = "维表值(选填，支持模糊搜索)",paramType = "query", dataType = "string")
     })
-    public Page<DimTableData> queryPage(@ApiIgnore @ModelAttribute Page<DimTableData> page, String schema,
+    public Page<DimTableData> queryPage(@ModelAttribute Page<DimTableData> page, String schema,
             String dimTableName, String dimKey, String dimValue){
         Page<DimTableData> dimTableDatas = new Page<>();
         //组装参数
