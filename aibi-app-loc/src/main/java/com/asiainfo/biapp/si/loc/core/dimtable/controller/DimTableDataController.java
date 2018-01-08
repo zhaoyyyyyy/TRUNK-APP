@@ -58,6 +58,14 @@ public class DimTableDataController extends BaseController<DimTableData>{
     private IDimTableDataService iDimTableDataService;
     
     
+    /**
+     * @Description:分页查询维表值
+     * @param page 分页器
+     * @param dimTableName  维表名称(必填)
+     * @param dimKey    维表key(选填)
+     * @param dimValue  维表值(选填，支持模糊搜索)
+     * @return Page<DimTableData>
+     */
     @ApiOperation(value = "分页查询维表值")
     @RequestMapping(value = "/queryPage", method = RequestMethod.POST)
     @ApiImplicitParams({
@@ -65,10 +73,9 @@ public class DimTableDataController extends BaseController<DimTableData>{
         @ApiImplicitParam(name = "dimKey", value = "维表key(选填)",paramType = "query", dataType = "string"),
         @ApiImplicitParam(name = "dimValue", value = "维表值(选填，支持模糊搜索)",paramType = "query", dataType = "string")
     })
-    public WebResult<Page<DimTableData>> queryPage(@ModelAttribute Page<DimTableData> page, 
+    public Page<DimTableData> queryPage(@ModelAttribute Page<DimTableData> page, 
             String dimTableName, String dimKey, String dimValue){
-        WebResult<Page<DimTableData>> webResult = new WebResult<>();
-        Page<DimTableData> dimTableDatas = null;
+        Page<DimTableData> dimTableDatas = new Page<>();
         //组装参数
         DimTableData dimTableData = new DimTableData(new DimTableDataId(dimTableName));
         if (StringUtil.isNoneBlank(dimKey)) {
@@ -80,10 +87,10 @@ public class DimTableDataController extends BaseController<DimTableData>{
         try {
             dimTableDatas = iDimTableDataService.selectDimTableDataPageList(page, dimTableData);
         } catch (BaseException e) {
-            return webResult.fail(e);
+            dimTableDatas.fail(e);
         }
         
-        return webResult.success("分页查询维表值成功", dimTableDatas);
+        return dimTableDatas;
     }
     
     
