@@ -38,12 +38,13 @@
                         <li class="fleft active"><a href="">多指标</a></li>
                     </ul>
                     <form class="clearfix create-main mt10" v-for="(sourceInfo,index) in sourceInfoList">
+                        <input type="hidden" v-model="configId" name="configId">
                         <div class="ui-create">
                             <div class="ui-form-group clearfix">
                                 <input type="hidden" name="dependIndex" v-model="sourceInfoList[index]['dependIndex']">
                                 <label for="inputEmail3" class="control-label fleft">规则依赖指标</label>
                                 <div class="control-input">
-                                    <input required="true" type="text" class="form-control easyui-validatebox" id="inputEmail3" placeholder="">
+                                    <input type="text" class="form-control" id="inputEmail3" placeholder="">
                                     <div class="label-lists" >
                                         <span class="del-btn" v-for="sourceName in sourceInfoList[index]['sourceNameList']">{{sourceName}}
                                             <i class="del-btn-icon"></i>

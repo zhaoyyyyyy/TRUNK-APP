@@ -20,6 +20,7 @@ var model = {
 		isbq : [],
 		gxzq : [],
 		sourceIdList : [],
+		configId : "",
 }
 function changeStatus(obj){
 	if(obj.value==="5"){//枚举型标签字典value为5
@@ -48,6 +49,7 @@ function changeStatus(obj){
 	}
 }
 window.loc_onload = function(){
+	model.configId = $.getCurrentConfigId();
 	var dicBqlx = $.getDicData("BQLXZD");
 	for(var i = 0; i<dicBqlx.length; i++){
 		if(dicBqlx[i].code!=10&&dicBqlx[i].code!=12&&dicBqlx[i].code!=8){
@@ -92,7 +94,7 @@ window.loc_onload = function(){
 	});
 	$(".ui-lc-mian").delegate(".create-main i.del-btn-icon","click",function(){
 		$(this).parents("form.create-main").remove();
-	})
+	});
 }
 //指标选择
 function chooseKpi(obj){
@@ -101,7 +103,7 @@ function chooseKpi(obj){
 		model.sourceIdList = chooseKpis;
 		var index;
 		var sourceName = [];
-		var dependx;
+		var dependx="";
 		for(var i=0; i<chooseKpis.length; i++){
 			$.commAjax({
 				async : false,
@@ -117,7 +119,7 @@ function chooseKpi(obj){
 		}
 		index = obj.id;
 		model.sourceInfoList[index]['sourceNameList']= sourceName;
-		model.sourceInfoList[index]['dependIndex']= dependx;
+		model.sourceInfoList[index]['dependIndex']= dependx.substr(0,dependx.length-1);
 	}
 }
 

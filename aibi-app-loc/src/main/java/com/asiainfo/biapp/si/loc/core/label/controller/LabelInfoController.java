@@ -210,6 +210,8 @@ public class LabelInfoController extends BaseController<LabelInfo> {
                 approveInfo.setApproveStatusId(approveStatusId);
                 approveInfo.setApproveTime(new Date());
                 oldLab.setApproveInfo(approveInfo);
+                oldLab.setPublishTime(new Date());
+                oldLab.setEffecTime(new Date());
             } catch (BaseException e) {
                 e.printStackTrace();
             }
@@ -341,6 +343,18 @@ public class LabelInfoController extends BaseController<LabelInfo> {
         }
         if (null != lab.getSortNum()) {
             oldLab.setSortNum(lab.getSortNum());
+        }
+        if (StringUtil.isNotBlank(lab.getDependIndex())) {
+            oldLab.setDependIndex(lab.getDependIndex());
+        }
+        if (StringUtil.isNoneBlank(lab.getCountRules())) {
+            oldLab.setCountRules(lab.getCountRules());
+        }
+        if (StringUtil.isNoneBlank(lab.getDimId())) {
+            oldLab.setDimId(lab.getDimId());
+        }
+        if (StringUtil.isNoneBlank(lab.getUnit())) {
+            oldLab.setUnit(lab.getUnit());
         }
         return oldLab;
     }
