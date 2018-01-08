@@ -195,6 +195,13 @@ public class SourceTableInfo extends BaseEntity {
     private Integer dataExtractionType;
 
     /**
+     * 数据存储类型 1:分区；2：分表
+     */
+    @Column(name = "DATA_STORE")
+    @ApiParam(value = "数据存储类型")
+    private Integer dataStore;
+
+    /**
      * 日期分区字段
      */
     @Column(name = "DATE_COLUMN_NAME")
@@ -216,9 +223,17 @@ public class SourceTableInfo extends BaseEntity {
     private Integer statusId;
 
     @ApiParam(value = "指标信息列")
-    @OneToMany(fetch = FetchType.LAZY,targetEntity=SourceInfo.class)
+    @OneToMany(fetch = FetchType.LAZY, targetEntity = SourceInfo.class)
     @JoinColumn(name = "SOURCE_TABLE_ID", insertable = false, updatable = false)
     private List<SourceInfo> sourceInfoList = new ArrayList<>(0);
+
+    public Integer getDataStore() {
+        return dataStore;
+    }
+
+    public void setDataStore(Integer dataStore) {
+        this.dataStore = dataStore;
+    }
 
     public List<SourceInfo> getSourceInfoList() {
         return sourceInfoList;

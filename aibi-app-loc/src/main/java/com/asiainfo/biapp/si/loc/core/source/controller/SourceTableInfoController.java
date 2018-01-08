@@ -157,9 +157,10 @@ public class SourceTableInfoController extends BaseController<SourceTableInfo> {
         sourceTableInfo.setCreateUserId(user.getUserId());
         sourceTableInfo.setKeyType(sourceTableInfo.getIdType());
         sourceTableInfo.setDataExtractionType(0);
-        sourceTableInfo.setTableSchema("cocdev");
+        sourceTableInfo.setTableSchema("COCDEV");
         sourceTableInfo.setSourceTableType(1);
         sourceTableInfo.setStatusId(1);
+        sourceTableInfo.setDataStore(1);
         try {
             iSourceTableInfoService.addSourceTableInfo(sourceTableInfo);
         } catch (BaseException e2) {

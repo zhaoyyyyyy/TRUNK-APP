@@ -259,36 +259,16 @@ function fun_to_save() {
 				postData:{"tableName" : $("#sourceTableName").val()},
 				onSuccess : function(data) {
 					var colnames = [];
-					for(var u=0;u < data.data.length;u++){
-						colnames.push(data.data[u].col_name);
+					if(data.data != null){
+						for(var u=0;u < data.data.length;u++){
+							colnames.push(data.data[u].col_name);
+						}
 					}
-					if(data.data!=null && !colnames.indexOf(idColumn)>0){
-						$.commAjax({
-							url : url_,
-							async : false,
-							postData : $('#formData').formToJson(),
-							onSuccess : function(data1) {
-								if(data1.data == "success"){
-									$.success(msss, function() {
-										history.back(-1);
-									});
-								}
-							}
-						});
+					if(!colnames.indexOf(idColumn)>0){
+						ajax_to_save(url_,msss);
 					}else{
 						$.confirm('表不存在或者表结构异常，确认保存？', function() {
-							$.commAjax({
-								url : url_,
-								async : false,
-								postData : $('#formData').formToJson(),
-								onSuccess : function(data) {
-									if(data.data == "success"){
-										$.success(msss, function() {
-											history.back(-1);
-										});
-									}
-								}
-							});
+							ajax_to_save(url_,msss);
 						})
 					}
 				}
@@ -333,4 +313,18 @@ function fun_to_import(){
     	wd.reload = function() {
     		//TODO
     	}
+}
+function ajax_to_save(url,mesg){
+	$.commAjax({
+		url : url,
+		async : false,
+		postData : $('#formData').formToJson(),
+		onSuccess : function(data) {
+			if(data.data == "success"){
+				$.success(mesg, function() {
+					history.back(-1);
+				});
+			}
+		}
+	});
 }

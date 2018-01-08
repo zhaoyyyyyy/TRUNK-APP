@@ -60,8 +60,31 @@ window.loc_onload = function() {
 			align: "center",
 			autowidth:false,
 			key:true,
-			formatter: function(v) {
-				var html = '<button onclick="fun_to_up(\'' + v + '\')" type="button" class="btn btn-default ui-table-btn">修改</button>' + '<button onclick="fun_to_del(\'' + v + '\')" type="button" class="btn btn-default  ui-table-btn ui-table-btn">删除</button>';
+			formatter: function(value, opts, data) {
+				var is = "";
+				var html = '<button onclick="fun_to_up(\'' + data.sourceTableId + '\')" type="button" class="btn btn-default ui-table-btn">修改</button>';
+				$.commAjax({
+					url:$.ctx+"/api/source/sourceInfo/queryList",
+					async:false,
+					postData:{"dependIndex":data.sourceTableId},
+					onSuccess:function(data){
+						for(var num = 0 ;num <data.data.length; num++){
+							$.commAjax({
+								url:$.ctx+"/api/label/labelCountRules/queryList",
+								async:false,
+								postData:{"dependIndex":data.data[num].sourceId},
+								onSuccess:function(data){
+									if(data.data.length!=0){
+										is="have";
+									}
+								}
+							})
+						}
+						if(is != ""){
+							html += '<button onclick="fun_to_del(\'' + data.sourceTableId + '\')" type="button" class="btn btn-default  ui-table-btn ui-table-btn">删除</button>';
+						}
+					}
+				})
 				return html;
 			}
 		}],
@@ -95,8 +118,8 @@ function fun_to_del(id) {
 			postData : {
 				"sourceTableId" : id
 			},
-			onSuccess : function(data1) {
-				if (data1.data == "success") {
+			onSuccess : function(data) {
+				if (data.data == "success") {
 					$.success("删除成功", function() {
 						$("#jsonmap1").setGridParam({
 							postData : $("#formSearch").formToJson()
@@ -111,33 +134,57 @@ function fun_to_del(id) {
 }
 function fun_to_delAll() {
 	var ids = $('#jsonmap1').jqGrid('getGridParam', 'selarrrow');
+	var is = "";
 	if (!ids.length > 0) {
 		$.alert("请选择要删除的数据源表");
 		return;
 	}
 	$.confirm("您确定要继续删除吗？该操作会同时删除数据源表下的指标信息列", function() {
-		var success = "";
-		for(var i=0;i<ids.length;i++){
+		for(var i=0;i<ids.length;i++){//判断选中的是否有被注册的
 			$.commAjax({
-				url : $.ctx + '/api/source/sourceTableInfo/delete',
-				async : false,
-				postData : {
-					"sourceTableId" : ids[i]
-				},
+				url:$.ctx+"/api/source/sourceInfo/queryList",
+				async:false,
+				postData:{"dependIndex":ids[i]},
 				onSuccess:function(data){
-					success = data.data;
+					for(var num = 0 ;num <data.data.length; num++){
+						$.commAjax({
+							url:$.ctx+"/api/label/labelCountRules/queryList",
+							async:false,
+							postData:{"dependIndex":data.data[num].sourceId},
+							onSuccess:function(data){
+								if(data.data.length!=0){
+									is="have";
+								}
+							}
+						})
+					}
 				}
-			});
-			var k = i + 1;
-			if(k == ids.length&&success!=""){
-				$.success("删除成功", function() {
-					$("#jsonmap1").setGridParam({
-						postData : $("#formSearch").formToJson()
-					}).trigger("reloadGrid", [ {
-						page : 1
-					} ]);
-				})
+			})
+		}
+		if(is!="have"){
+			for(var j=0;j<ids.length;j++){
+				var k = j + 1;
+				$.commAjax({
+					url : $.ctx + '/api/source/sourceTableInfo/delete',
+					async : false,
+					postData : {
+						"sourceTableId" : ids[j]
+					},
+					onSuccess:function(data){
+						if(k == ids.length){
+							$.success("删除成功", function() {
+								$("#jsonmap1").setGridParam({
+									postData : $("#formSearch").formToJson()
+								}).trigger("reloadGrid", [ {
+									page : 1
+								} ]);
+							})
+						}
+					}
+				});
 			}
+		}else{
+			$.alert("选择的指标源表中有被注册的指标，请重新选择");
 		}
 	});
 }
