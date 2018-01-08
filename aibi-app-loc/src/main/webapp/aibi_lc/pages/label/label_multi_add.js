@@ -20,7 +20,6 @@ var model = {
 		isbq : [],
 		gxzq : [],
 		sourceIdList : [],
-		configId : ""
 }
 function changeStatus(obj){
 	if(obj.value==="5"){//枚举型标签字典value为5
@@ -49,8 +48,6 @@ function changeStatus(obj){
 	}
 }
 window.loc_onload = function(){
-	model.configId =$.getCurrentConfigId();
-	debugger
 	var dicBqlx = $.getDicData("BQLXZD");
 	for(var i = 0; i<dicBqlx.length; i++){
 		if(dicBqlx[i].code!=10&&dicBqlx[i].code!=12&&dicBqlx[i].code!=8){
@@ -74,7 +71,15 @@ window.loc_onload = function(){
 	    	del_form : function(index){
 	    		model.sourceInfoList.splice(index,1);
 	    	}
-	    }
+	    },
+	    mounted: function () {
+		    this.$nextTick(function () {
+			    var r = $(".easyui-validatebox");
+	   			if (r.length){
+	   				r.validatebox();
+	   			}
+		    })
+		}
 	})
 	$("#dataStatusId").change(function(){
 		$("#mainGrid").setGridParam({
@@ -233,20 +238,22 @@ function fun_to_save(){
 	var flag = "";
 	var k = 1;
 	$("form").each(function(){
-		var labelInfo = $(this).formToJson();
-		$.commAjax({
-		  async : false,
-		  url : $.ctx + '/api/label/labelInfo/save',
-		  postData : labelInfo,
-		  onSuccess : function(data){
-			  flag = data.data
-		  }  
-		});	
-		if(k == $("form").size() && flag == "success"){	
-			$.success("创建成功",function(){
-				history.back(-1);
-			})
+		if($("form").validateForm()){
+			var labelInfo = $(this).formToJson();
+			$.commAjax({
+			  async : false,
+			  url : $.ctx + '/api/label/labelInfo/save',
+			  postData : labelInfo,
+			  onSuccess : function(data){
+				  flag = data.data
+			  }  
+			});	
+			if(k == $("form").size() && flag == "success"){	
+				$.success("创建成功",function(){
+					history.back(-1);
+				})
+			}
+			k++;
 		}
-		k++;
 	})
 }
