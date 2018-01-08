@@ -1,22 +1,22 @@
 window.loc_onload = function() {
 	var dimTableName = $.getUrlParam("dimTableName");
 	$("#mainGrid").jqGrid({
-		url : $.ctx + "/api/dimtable/dimTableInfo/queryPage",
+		url : $.ctx + "/api/dimtabledata/queryPage",
 		datatype : "json",
 		postData :{"dimTableName": dimTableName},
 		colNames : ['编号','名称' ],
 		colModel : [
 				{
-					name : 'dimTableName',
-					index : 'dimTableName',
+					name : 'dimKey',
+					index : 'dimKey',
 					width : 50,
 					sortable : true,
 					frozen : true,
 					align : "center"
 				},
 				{
-					name : 'dimId',
-					index : 'dimId',
+					name : 'dimValue',
+					index : 'dimValue',
 					width : 50,
 					sortable : true,
 					align : "center"
