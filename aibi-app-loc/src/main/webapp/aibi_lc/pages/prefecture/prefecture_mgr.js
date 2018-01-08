@@ -144,7 +144,7 @@ function fun_to_edit(id){
 }
 function fun_to_detail(id){
 	var wd = $.window('专区详情', $.ctx
-			+ '/aibi_lc/pages/prefecture/prefecture_detail.html?configId=' + id, 500, 500);
+			+ '/aibi_lc/pages/prefecture/prefecture_detail.html?configId=' + id, 500, 300);
 	wd.reload = function() {
 		$("#mainGrid").setGridParam({
 			postData : $("#formSearch").formToJson()
