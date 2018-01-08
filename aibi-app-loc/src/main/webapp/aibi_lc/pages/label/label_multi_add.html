@@ -38,6 +38,7 @@
                         <li class="fleft active"><a href="">多指标</a></li>
                     </ul>
                     <form class="clearfix create-main mt10" v-for="(sourceInfo,index) in sourceInfoList">
+                        <input type="hidden" name="configId" v-model="configId">
                         <div class="ui-create">
                             <div class="ui-form-group clearfix">
                                 <input type="hidden" name="dependIndex" v-model="sourceInfoList[index]['dependIndex']">

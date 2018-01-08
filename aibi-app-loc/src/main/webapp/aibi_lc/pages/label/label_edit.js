@@ -20,27 +20,29 @@ var model = {
 window.loc_onload = function() {
 	model.configId = $.getCurrentConfigId();
 	var labelId = $.getUrlParam("labelId");
-	$.commAjax({
-		url : $.ctx + '/api/label/labelInfo/get',
-		postData : {
-			"labelId" : labelId
-		},
-		onSuccess : function(data) {
-			var time = new Date(data.data.failTime);
-			var y = time.getFullYear()+'-';//年
-			var m = (time.getMonth()+1<10 ? '0'+(time.getMonth()+1):time.getMonth()+1)+'-';//月
-			var d = (time.getDate()+1<10 ? '0' +(time.getDate()):time.getDate());//日		
-			model.failTime = y+m+d;
-			model.labelName = data.data.labelName;
-			model.labelId = data.data.labelId;
-			model.updateCycle = data.data.updateCycle;
-			model.labelTypeId = data.data.labelTypeId;
-			if(model.labelTypeId==5){
-				model.isemmu=true
+	if(labelId!=""&&labelId!=null&&labelId!=undefined){
+		$.commAjax({
+			url : $.ctx + '/api/label/labelInfo/get',
+			postData : {
+				"labelId" : labelId
+			},
+			onSuccess : function(data) {
+				var time = new Date(data.data.failTime);
+				var y = time.getFullYear()+'-';//年
+				var m = (time.getMonth()+1<10 ? '0'+(time.getMonth()+1):time.getMonth()+1)+'-';//月
+				var d = (time.getDate()+1<10 ? '0' +(time.getDate()):time.getDate());//日		
+				model.failTime = y+m+d;
+				model.labelName = data.data.labelName;
+				model.labelId = data.data.labelId;
+				model.updateCycle = data.data.updateCycle;
+				model.labelTypeId = data.data.labelTypeId;
+				if(model.labelTypeId==5){
+					model.isemmu=true
+				}
+				model.approveStatusId = data.data.approveInfo.approveStatusId;
 			}
-			model.approveStatusId = data.data.approveInfo.approveStatusId;
-		}
-	})
+		});
+	}
 	
 	new Vue({
 			el : "#dataD",

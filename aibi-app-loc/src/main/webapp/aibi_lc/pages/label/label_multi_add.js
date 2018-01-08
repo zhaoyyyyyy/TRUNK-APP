@@ -20,6 +20,7 @@ var model = {
 		isbq : [],
 		gxzq : [],
 		sourceIdList : [],
+		configId : ""
 }
 function changeStatus(obj){
 	if(obj.value==="5"){//枚举型标签字典value为5
@@ -48,6 +49,8 @@ function changeStatus(obj){
 	}
 }
 window.loc_onload = function(){
+	model.configId =$.getCurrentConfigId();
+	debugger
 	var dicBqlx = $.getDicData("BQLXZD");
 	for(var i = 0; i<dicBqlx.length; i++){
 		if(dicBqlx[i].code!=10&&dicBqlx[i].code!=12&&dicBqlx[i].code!=8){
