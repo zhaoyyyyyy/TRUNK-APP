@@ -176,9 +176,13 @@ public class LabelInfoServiceImpl extends BaseServiceImpl<LabelInfo, String> imp
         
         //修改标签规则维表信息
         LabelCountRules labelCountRules = iLabelCountRulesService.selectLabelCountRulesById(labelInfo.getCountRulesCode());
-        labelCountRules.setDependIndex(labelInfo.getDependIndex());
-        labelCountRules.setCountRules(labelInfo.getCountRules());
-        iLabelCountRulesService.saveOrUpdate(labelCountRules);
+        if (StringUtil.isNoneBlank(labelInfo.getDependIndex())) {
+            labelCountRules.setDependIndex(labelInfo.getDependIndex());
+        }
+        if (StringUtil.isNoneBlank(labelInfo.getCountRules())) {
+            labelCountRules.setCountRules(labelInfo.getCountRules());
+        }
+        iLabelCountRulesService.modifyLabelCountRules(labelCountRules);
         
         //修改元数据表列信息
         MdaSysTableColumn mdaSysTableColumn = iMdaSysTableColService.selectMdaSysTableColBylabelId(labelInfo.getLabelId());
@@ -189,7 +193,9 @@ public class LabelInfoServiceImpl extends BaseServiceImpl<LabelInfo, String> imp
             int columnDataTypeId = Integer.parseInt(dimTable.getCodeColType());
             mdaSysTableColumn.setColumnDataTypeId(columnDataTypeId);
         }
-        mdaSysTableColumn.setUnit(labelInfo.getUnit());
+        if (StringUtil.isNoneBlank(labelInfo.getUnit())) {
+            mdaSysTableColumn.setUnit(labelInfo.getUnit());
+        }
         iMdaSysTableColService.modifyMdaSysTableColumn(mdaSysTableColumn);
     }
 
