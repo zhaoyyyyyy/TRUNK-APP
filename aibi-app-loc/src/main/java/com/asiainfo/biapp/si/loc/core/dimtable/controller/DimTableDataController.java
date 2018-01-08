@@ -15,8 +15,10 @@ import org.springframework.web.bind.annotation.RestController;
 import com.asiainfo.biapp.si.loc.base.controller.BaseController;
 import com.asiainfo.biapp.si.loc.base.exception.BaseException;
 import com.asiainfo.biapp.si.loc.base.page.Page;
+import com.asiainfo.biapp.si.loc.base.utils.StringUtil;
 import com.asiainfo.biapp.si.loc.base.utils.WebResult;
 import com.asiainfo.biapp.si.loc.core.dimtable.entity.DimTableData;
+import com.asiainfo.biapp.si.loc.core.dimtable.entity.DimTableDataId;
 import com.asiainfo.biapp.si.loc.core.dimtable.service.IDimTableDataService;
 
 import io.swagger.annotations.Api;
@@ -58,9 +60,23 @@ public class DimTableDataController extends BaseController<DimTableData>{
     
     @ApiOperation(value = "分页查询维表值")
     @RequestMapping(value = "/queryPage", method = RequestMethod.POST)
-    public WebResult<Page<DimTableData>> queryPage(@ModelAttribute Page<DimTableData> page, @ModelAttribute DimTableData dimTableData){
+    @ApiImplicitParams({
+        @ApiImplicitParam(name = "dimTableName", value = "维表名称(必填)",paramType = "query", dataType = "string"),
+        @ApiImplicitParam(name = "dimKey", value = "维表key(选填)",paramType = "query", dataType = "string"),
+        @ApiImplicitParam(name = "dimValue", value = "维表值(选填，支持模糊搜索)",paramType = "query", dataType = "string")
+    })
+    public WebResult<Page<DimTableData>> queryPage(@ModelAttribute Page<DimTableData> page, 
+            String dimTableName, String dimKey, String dimValue){
         WebResult<Page<DimTableData>> webResult = new WebResult<>();
         Page<DimTableData> dimTableDatas = null;
+        //组装参数
+        DimTableData dimTableData = new DimTableData(new DimTableDataId(dimTableName));
+        if (StringUtil.isNoneBlank(dimKey)) {
+            dimTableData.getId().setDimCode(dimKey);
+        }
+        if (StringUtil.isNoneBlank(dimValue)) {
+            dimTableData.setDimValue(dimValue);
+        }
         try {
             dimTableDatas = iDimTableDataService.selectDimTableDataPageList(page, dimTableData);
         } catch (BaseException e) {
