@@ -6,6 +6,8 @@
 
 package com.asiainfo.biapp.si.loc.core.label.vo;
 
+import java.util.List;
+
 import com.asiainfo.biapp.si.loc.core.label.entity.LabelRule;
 
 /**
@@ -46,6 +48,9 @@ public class LabelRuleVo extends LabelRule {
 	private String dataDate;//数据时间字段
 	private String queryWay;//用于显示
 	private String attrName;//属性名称，页面回显用
+	
+	private List<LabelRuleVo> childLabelRuleList;// 纵表标签子标签或客户群规则
+	
 	public Integer getLabelTypeId() {
 		return labelTypeId;
 	}
@@ -94,6 +99,12 @@ public class LabelRuleVo extends LabelRule {
     public void setAttrName(String attrName) {
         this.attrName = attrName;
     }
+	public List<LabelRuleVo> getChildLabelRuleList() {
+		return childLabelRuleList;
+	}
+	public void setChildLabelRuleList(List<LabelRuleVo> childLabelRuleList) {
+		this.childLabelRuleList = childLabelRuleList;
+	}
 	
 	
 	
