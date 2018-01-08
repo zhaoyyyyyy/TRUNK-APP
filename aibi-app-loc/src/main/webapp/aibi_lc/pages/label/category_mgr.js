@@ -171,6 +171,7 @@ window.loc_onload = function() {
 										    var nodes = treeObj.getNodesByParam("tId", treeNode.tId, null);
 										    treeObj.removeNode(nodes[0]);
 										    labeltree();
+										    $.alert("删除标签分类成功");
 										}
 									});
 								});
