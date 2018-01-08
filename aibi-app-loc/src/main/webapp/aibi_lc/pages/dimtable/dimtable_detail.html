@@ -10,23 +10,32 @@
 <link rel="stylesheet" theme="default" href="../../asset/css/theme/default/main.css" />
 <script type="text/javascript" src="../../asset/script/common/include.js"></script>
 <script type="text/javascript" src="dimtable_detail.js"></script>
-<style type="text/css">
-[v-cloak] {
-	display: none;
-}
-</style>
 <!--[if lt IE 9]>
 	    <script src="../../asset/script/component/h5compatibility/html5shiv.min.js"></script>
 	    <script src="../../asset/script/component/h5compatibility/respond.min.js"></script>
     <![endif]-->
 </head>
 <body>
-	<div id="dataD" class="iframe-nest" v-cloak>
-		<div class="ui-reg-main">
-			<!-- div class="ui-lc-mian">
+	<div>
+		<div class="ui-lc-mian">
+			<div >
+				<table id="mainGrid" class="table"></table>
+				<div id="mainGridPager"></div>
+			</div>
+		</div>
+	</div>
+</body>
+<!-- <body>
+	<div>
+	<div class="ui-lc-mian">
+		<div>
+				<table id="mainGrid" ></table>
+				<div id="mainGridPager"></div>
+			</div>
+			div class="ui-lc-mian">
 				<h3>维表详情</h3>
 			</div>
-			<div class="ui-expand-search ui-reg-search"> -->
+			<div class="ui-expand-search ui-reg-search">
 				<div class="form-inline ui-form">
 					<div class="clearfix">
 						<div class="form-group">
@@ -46,12 +55,12 @@
 								class="form-control " id="inputEmail4" readonly="readonly" />
 						</div>
 					</div>
-					<!-- <div class="clearfix mt30">
+					<div class="clearfix mt30">
 						<div class="form-group">
 							<label>主键类型</label> <input :value="data.codeColType" name="codeColType" type="text" class="ml10 form-control"
 								readonly="readonly" />
 						</div>
-					</div> -->
+					</div>
 					<div>
 						<div class="clearfix mt30">
 							<div class="form-group">
@@ -61,9 +70,9 @@
 							</div>
 						</div>
 					</div>
-				</div>
+				</div> 
 			</div>
 		</div>
 	</div>
-</body>
+</body> -->
 </html>

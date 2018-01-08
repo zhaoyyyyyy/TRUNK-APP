@@ -65,7 +65,7 @@ window.loc_onload = function() {
 									formatter : function(value, opts, data) {
 										return "<font class='detail-text' >"
 												+ data.dimTableName
-												+ "</font></a>";
+												+ "</font></a> ";
 									}
 								},
 								{
@@ -82,13 +82,13 @@ window.loc_onload = function() {
 									width : 80,
 									sortable : false,
 									align : "center",
-									formatter : function(v) {
+									formatter : function(value, opts, data) {
 										return "<button type='button' class='btn btn-default  ui-table-btn ui-table-btn' onclick='fun_to_edit(\""
-												+ v
+												+ value
 												+ "\")'>修改</button> <button type='button' class='btn btn-default ui-table-btn' onclick='fun_to_detail( \""
-												+ v + "\" )'>查看</button>"
+												+ data.dimTableName + "\" )'>查看</button>"
 												+ "<button type='button' class='btn btn-default ui-table-btn' onclick='fun_to_del( \""
-												+ v + "\" )'>删除</button>"
+												+ value + "\" )'>删除</button>"
 									}
 								} ],
 								rowList: [10, 20, 30],
@@ -115,9 +115,9 @@ function fun_to_del(dimId) {
 		});
 	});
 }
-function fun_to_detail(id) {
+function fun_to_detail(dimTableName) {
 	var wd = $.window('维表详情', $.ctx
-			+ '/aibi_lc/pages/dimtable/dimtable_detail.html?dimId=' + id, 900,
+			+ '/aibi_lc/pages/dimtable/dimtable_detail.html?dimTableName=' + dimTableName, 900,
 			500);
 	wd.reload = function() {
 		$("#mainGrid").setGridParam({
