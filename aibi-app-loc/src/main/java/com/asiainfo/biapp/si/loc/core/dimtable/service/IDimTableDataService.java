@@ -56,5 +56,12 @@ public interface IDimTableDataService extends BaseService<DimTableData, DimTable
     public List<DimTableData> selectDimTableDataList(DimTableData dimTableData) throws BaseException;
 
     
+    /**
+     * @Description: dim_table的跑数入口，数据流是：DimTableInfo(前台) ——>后台——>DimTableData(前台)
+     * @param String tableName 维表表名
+     *
+     */
+    public void dimTableInfo2Data(String tableName) throws BaseException;
+ 
 
 }
