@@ -34,5 +34,5 @@ context:
   bean:
     classes: com.asiainfo.biapp.si.loc.base.LocCacheBase
   listener:
-    classes: com.asiainfo.biapp.si.loc.springlistener.LocBaseListener
+    classes: com.asiainfo.biapp.si.loc.base.listener.LocBaseListener
   
