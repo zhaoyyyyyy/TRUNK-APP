@@ -75,20 +75,17 @@ public class LogAspectAdvice {
     public void saveLog(Object[] args, String method, String targetName, Object result) {
         // http保存日志
         System.out.println("saveLog");
-     Map<String, Object> params = new HashMap<>();
-
+        Map<String, Object> params = new HashMap<>();
         params.put("userId", "admin");
         params.put("ipAddr", "127.0.0.1");
         params.put("opTime", new Date());
-        
         params.put("sysId", nodeName);
-        
         params.put("interfaceName", targetName);
         params.put("interfaceUrl", targetName + "/" + method);
         params.put("inputParams", args[0]);
         params.put("outputParams", result);
         try {
-        	 HttpUtil.sendPost(jauthUrl + "/api/interface/save", params);
+        	 HttpUtil.sendPost(jauthUrl + "/api/log/interface/save", params);
 		} catch (Exception e) {
 			LogUtil.error("同步给JAUTH异常数据失败", e);
 		}
