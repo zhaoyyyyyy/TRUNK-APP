@@ -6,6 +6,7 @@ var model = {
 	dimtableInfoList : [],
 	sourceIdList : [],
 	sourceNameList : [],
+	dependIndexList : [],
 	categoryId : "",
 	labelName : "",
 	failTime : "",
@@ -49,7 +50,18 @@ window.loc_onload = function() {
 	new Vue({
 			el : "#dataD",
 			data : model,
-			})
+			methods : {
+				del_sourceName : function(index){
+					model.sourceNameList.splice(index,1);
+					model.dependIndexList.splice(index,1);
+					var dependx = "";
+					for(var i=0; i<model.dependIndexList.length; i++){
+						dependx += model.dependIndexList[i]+","
+					}
+					$("#dependIndex").val(dependx.substr(0,dependx.length-1));
+				}
+			}
+	})
 	var dicgxzq = $.getDicData("GXZQZD");
 	for(var i =0 ; i<dicgxzq.length; i++){
 		model.gxzq.push(dicgxzq[i]);
@@ -86,6 +98,7 @@ window.loc_onload = function() {
 		win.addKpis = function(chooseKpis) {
 			model.sourceIdList = chooseKpis;
 			var dependx="";
+			model.sourceNameList = [];
 			for(var i=0; i<chooseKpis.length; i++){
 				$.commAjax({
 					async : false,
@@ -95,11 +108,16 @@ window.loc_onload = function() {
 					},
 					onSuccess : function(data){
 						model.sourceNameList.push(data.data.sourceName),
-					    dependx += data.data.sourceId+","
+						model.dependIndexList.push(data.data.sourceId)
+//					    dependx += data.data.sourceId+","
 					}
 				});
 			}
+			for(var i=0; i<model.dependIndexList.length; i++){
+				dependx += model.dependIndexList[i]+","
+			}
 			model.dependIndex= dependx.substr(0,dependx.length-1);
+			$("#dependIndex").val(dependx.substr(0,dependx.length-1));
 		}
 	});
 	

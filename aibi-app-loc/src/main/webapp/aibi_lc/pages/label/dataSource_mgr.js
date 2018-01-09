@@ -80,7 +80,6 @@ window.loc_onload = function() {
 								}
 							})
 						}
-						debugger;
 						if(is != "have"){
 							html += '<button onclick="fun_to_del(\'' + value + '\')" type="button" class="btn btn-default  ui-table-btn ui-table-btn">删除</button>';
 						}
@@ -145,7 +144,7 @@ function fun_to_delAll() {
 			$.commAjax({
 				url:$.ctx+"/api/source/sourceInfo/queryList",
 				async:false,
-				postData:{"dependIndex":ids[i]},
+				postData:{"sourceTableId":ids[i]},
 				onSuccess:function(data){
 					for(var num = 0 ;num <data.data.length; num++){
 						$.commAjax({

@@ -120,6 +120,7 @@ function chooseKpi(obj){
 		index = obj.id;
 		model.sourceInfoList[index]['sourceNameList']= sourceName;
 		model.sourceInfoList[index]['dependIndex']= dependx.substr(0,dependx.length-1);
+		$("#dependIndex_"+index).val(dependx.substr(0,dependx.length-1));
 	}
 }
 

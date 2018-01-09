@@ -35,6 +35,28 @@ window.loc_onload = function() {
             page: 1
         }]);
     })
+    
+    var orgdata = [];
+    
+    $.commAjax({
+		url : $.ctx + '/api/user/privaliegeOrg/query',
+		async : false,
+		onSuccess : function(data) {
+			if(data.data != null && data.data != undefined){
+				var orgobj = data.data;
+				for(var i=0; i<4; i++){
+					if(orgobj[i]==undefined){
+						continue;
+					}
+					for(var f=0; f<orgobj[i].length; f++){
+						var ob = orgobj[i][f];
+						orgdata[ob.orgCode]=ob.simpleName;
+					}
+				}
+			}
+			
+		}
+	});
 
     $("#mainGrid").jqGrid({
         url: $.ctx + "/api/prefecture/preConfigInfo/queryPage",
@@ -67,7 +89,10 @@ window.loc_onload = function() {
             width: 30,
             sortable: true,
             frozen: true,
-            align: "center"
+            align: "center",
+            formatter : function(value){
+            	return orgdata[value];
+            }
         },
         {
             name: 'createTime',
