@@ -22,7 +22,11 @@
     min-width: 90px;
 }
 span.input-required{
-	color: #DC143C;
+	color: #FF0000;
+    vertical-align: middle;
+    display: inline-block;
+    font-size: 16px;
+    font-weight: bold;
 }
 .form-horizontal.left > .ui-form-group > .control-label{
     text-align: left;
