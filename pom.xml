@@ -117,7 +117,7 @@
 	  <build>
 	  
 	  		<!--TODO 假设权限jauth为测试代码目录 20170927 -->
-	  		<testSourceDirectory>${basedir}/src/main/jauth</testSourceDirectory>
+	  		<testSourceDirectory>${basedir}/src/main/bd</testSourceDirectory>
 	        <testOutputDirectory>${basedir}/target/classes</testOutputDirectory> 
 	  		<!--springboot默认打成jar包-->
 	  		<resources>
@@ -135,18 +135,7 @@
 		                    <include>**/**</include>
 		                </includes>
 		            </resource>
-		            <resource>
-		                <directory>${basedir}/src/main/java</directory>
-		                <includes>
-		                    <include>**/**</include>
-		                </includes>
-		            </resource>
-		            <resource>
-		                <directory>${basedir}/src/main/bd</directory>
-		                <includes>
-		                    <include>**/**</include>
-		                </includes>
-		            </resource>
+		            
 		    </resources>
 		    
 			<plugins>
@@ -162,26 +151,32 @@
 					</configuration>
 				</plugin>
 	
-	<!-- 			<plugin>
-					<inherited>true</inherited>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-deploy-plugin</artifactId>
-					<goals>deploy-file</goals>
-					<configuration>
-						<file>target/aibi-component-${name}-${version}.jar</file>
-						<artifactId>aibi-component-${name}</artifactId>
-						<groupId>com.asiainfo.biframe</groupId>
-						<version>${version}</version>
-						<packaging>jar</packaging>
-						<repositoryId>nexus-public-snapshots</repositoryId>
-						<url>http://10.1.251.240:8081/nexus/content/repositories/${release-dir}</url>
-					</configuration>
-				</plugin>
-	 -->		
+				<!-- codehaus提供了build-helper-maven-plugin插件来支持自定义的项目目录结构  20180109 -->		
 	 			<plugin>
 					<groupId>org.springframework.boot</groupId>
 					<artifactId>spring-boot-maven-plugin</artifactId>
 				</plugin>
+				
+				<plugin>
+					<groupId>org.codehaus.mojo</groupId>
+					<artifactId>build-helper-maven-plugin</artifactId>
+					<version>1.8</version>
+					<executions>  
+	                    <execution>  
+	                        <id>add-source</id>  
+	                        <phase>initialize</phase>  
+	                        <goals>  
+	                            <goal>add-source</goal>  
+	                        </goals>  
+	                        <configuration>  
+	                            <sources>  
+	                                <source>${basedir}/src/main/bd</source>  
+	                            </sources>  
+	                        </configuration>  
+	                    </execution>  
+	                </executions>  
+				</plugin>
+				
 			</plugins>
 		</build>
 	

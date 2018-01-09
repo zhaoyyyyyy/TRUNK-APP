@@ -28,7 +28,7 @@ import com.asiainfo.biapp.si.loc.base.exception.SqlRunException;
  * @version 1.0.0.2017年12月26日
  */
 public interface IBackSqlDao {
-
+    
     /**
      * 查询后台库中的表
      * Description: 

@@ -1,21 +1,27 @@
 
 package com.asiainfo.biapp.si.loc.base.aspect;
 
+import java.lang.reflect.Method;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.AfterThrowing;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import com.asiainfo.biapp.si.loc.base.utils.DateUtil;
 import com.asiainfo.biapp.si.loc.base.utils.HttpUtil;
 import com.asiainfo.biapp.si.loc.base.utils.LogUtil;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import io.swagger.annotations.ApiOperation;
 
 /**
  * Title : LogAspectAdvice
@@ -67,22 +73,43 @@ public class LogAspectAdvice {
         this.nodeName = nodeName;
     }
 
+    /**
+     * 获取方法名称
+     * @param joinPoint
+     * @return
+     * @throws Exception
+     */
+    public static String getbooleanMethod(JoinPoint joinPoint) throws Exception {
+        Class<?> clazz = joinPoint.getTarget().getClass();
+        String name = joinPoint.getSignature().getName();
+        Object[] parameterTypes = joinPoint.getArgs();
+        for (Method method : clazz.getDeclaredMethods()) {
+            if (method.getName().equals(name) && method.getParameterTypes().length == parameterTypes.length) {
+            	ApiOperation apiOperation = method.getAnnotation(ApiOperation.class);
+            if (apiOperation != null) {
+                return apiOperation.value();
+            }
+                break;
+            }
+        }
+        return "";
+    }
+    
+    
 
     // 指定切入点匹配表达式，注意它是以方法的形式进行声明的。
     // 第一个* 代表返回值类型,需要加空格
     // 如果要设置多个切点可以使用 || 拼接
-    @Pointcut("execution(* com.asiainfo.biapp.si.loc.*.controller.*Controller.*(..))")
-    public void saveLog(Object[] args, String method, String targetName, Object result) {
+    public void saveLog(String inputParams,String interfaceName, String method, String targetName, String result) {
         // http保存日志
-        System.out.println("saveLog");
         Map<String, Object> params = new HashMap<>();
         params.put("userId", "admin");
         params.put("ipAddr", "127.0.0.1");
-        params.put("opTime", new Date());
+        params.put("opTime",DateUtil.date2String(new Date()));
         params.put("sysId", nodeName);
-        params.put("interfaceName", targetName);
+        params.put("interfaceName",interfaceName );
         params.put("interfaceUrl", targetName + "/" + method);
-        params.put("inputParams", args[0]);
+        params.put("inputParams", inputParams);
         params.put("outputParams", result);
         try {
         	 HttpUtil.sendPost(jauthUrl + "/api/log/interface/save", params);
@@ -90,16 +117,13 @@ public class LogAspectAdvice {
 			LogUtil.error("同步给JAUTH异常数据失败", e);
 		}
        
-
-       
     }
 
     // 环绕通知（##环绕通知的方法中一定要有ProceedingJoinPoint 参数,与
     // Filter中的 doFilter方法类似）
 
- //   @Around("execution(* com.asiainfo.biapp.si.loc.*.controller.*.*(..))")
+    @Around("execution(* com.asiainfo.biapp.si.loc.core.*.controller.*.*(..))")
     public Object doAround(ProceedingJoinPoint pjp) throws Throwable {
-        System.out.println("===========进入around环绕方法！=========== \n");
         // 调用方法的参数
         Object[] args = pjp.getArgs();
         // 调用的方法名
@@ -110,10 +134,45 @@ public class LogAspectAdvice {
         String targetName = pjp.getTarget().getClass().getName();
         // 执行完方法的返回值：调用proceed()方法，就会触发切入点方法执行
         Object result = pjp.proceed();// result的值就是被拦截方法的返回值
-        System.out.println("输出：" + args[0] + ";" + method + ";" + target + ";" + result + "\n");
+        
         if(!"setReqAndRes".equals(method)){
-        this.saveLog(args, method, targetName, result);}
-        System.out.println("调用方法结束：之后执行！\n");
+        	
+        	
+        
+            
+            
+        	String inputParams = "";
+        	if(args != null  && args.length> 0){
+        		//inputParams = JSONArray.fromObject(args).toString();
+        		
+        		//TODO 这个因为是request输出的，没法处理，后续看 zhougz3
+        		ObjectMapper mapper = new ObjectMapper();
+        		if(args[0] instanceof org.apache.catalina.connector.RequestFacade){
+        			inputParams = "";
+        		}else{
+        			inputParams = mapper.writeValueAsString(args);
+        		}
+        		
+                
+        		if(inputParams.length() > 2000){
+        			inputParams = inputParams.substring(0, 2000);
+        		}
+        	}
+        	
+        	String resultStr = "";
+        	if(result != null ){
+        		//resultStr = JSONObject.fromObject(result).toString();
+        		
+        		ObjectMapper mapper = new ObjectMapper();
+        		resultStr = mapper.writeValueAsString(result);
+        		
+        		if(resultStr.length() > 2000){
+        			resultStr = resultStr.substring(0, 2000);
+        		}
+        	}
+        	String interfaceName = getbooleanMethod(pjp);
+        	this.saveLog(inputParams, interfaceName,method, targetName, resultStr );
+        }
         return result;
     }
 

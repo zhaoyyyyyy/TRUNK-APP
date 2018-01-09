@@ -105,6 +105,7 @@ public class DimTableDataServiceImpl extends BaseServiceImpl<DimTableData, DimTa
         }
         List<DimTableInfo> dimTableInfos = iDimTableInfoDao.selectDimTableInfoList(dimTableInfoVo);
         if (null != dimTableInfos && !dimTableInfos.isEmpty()) {
+            String schema = backServiceImpl.getCurBackDbSchema();
             String sql = null;
             int num = 0;
             int forNum = 1; //读取次数
@@ -114,7 +115,7 @@ public class DimTableDataServiceImpl extends BaseServiceImpl<DimTableData, DimTa
             DimTableData dimTableData = null;
             for (DimTableInfo dimTableInfo : dimTableInfos) {
                 //获取sql，并查询，入库
-                sql = this.getSql(dimTableInfo, new StringBuilder());
+                sql = this.getSql(schema, dimTableInfo, new StringBuilder());
                 LogUtil.info("查询维表("+dimTableInfo.getDimTableName()+"):"+sql);
                 try {
                     num = backServiceImpl.queryCount(sql);
@@ -165,11 +166,11 @@ public class DimTableDataServiceImpl extends BaseServiceImpl<DimTableData, DimTa
      * @param sql
      * @return 拼接好的sql
      */
-    private String getSql(DimTableInfo dimTableInfo, StringBuilder sql){
+    private String getSql(String schema, DimTableInfo dimTableInfo, StringBuilder sql){
         if (null != dimTableInfo) {
-            sql.append("select ").append(dimTableInfo.getDimCodeCol()).append(", ")
-               .append(dimTableInfo.getDimValueCol()).append(" ")
-               .append("from ").append(dimTableInfo.getDimTableName()).append(" ");
+            sql.append("select ").append(StringUtil.isNotBlank(schema)?schema+".":"").append(dimTableInfo.getDimCodeCol())
+               .append(", ").append(dimTableInfo.getDimValueCol()).append(" ").append("from ")
+               .append(dimTableInfo.getDimTableName()).append(" ");
                
             if (StringUtil.isNoneBlank(dimTableInfo.getDimWhere())) {
                 if (dimTableInfo.getDimWhere().contains(SQL_WHERE_L) || dimTableInfo.getDimWhere().contains(SQL_WHERE_U)) {

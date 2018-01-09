@@ -36,7 +36,7 @@
 								<input v-model="configId" id="configId" name="configId" type="hidden" class="form-control mr10 ml10"/>      	
 			                    <label class="control-label" for="exampleInputEmail3">表名称</label> 
 			                        <div class="control-input">
-			                            <input v-model="sourceTableName" id="sourceTableName" name="sourceTableName" 
+			                            <input v-model="sourceTableName" id="sourceTableName" name="sourceTableName" validType="alphaStart"
 			                            required="true"	type="text" class="form-control easyui-validatebox" placeholder="表名称">
 			                        </div>
 			                        <button onclick="analysis()" type="button" class="ui-btn ui-btn-default ml10">解析</button>

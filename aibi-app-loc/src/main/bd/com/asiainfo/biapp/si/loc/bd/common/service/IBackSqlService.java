@@ -9,6 +9,13 @@ import com.asiainfo.biapp.si.loc.base.exception.SqlRunException;
 public interface IBackSqlService {
 
     /**
+     * Description: 查询当前后台库的schema
+     *
+     * @return 查询当前后台库的schema
+     */
+    public String getCurBackDbSchema() throws SqlRunException;
+
+    /**
      * 查询后台库中的表
      * Description: 
      *

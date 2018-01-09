@@ -13,8 +13,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.asiainfo.biapp.si.loc.base.common.LabelInfoContants;
 import com.asiainfo.biapp.si.loc.base.common.LabelRuleContants;
 import com.asiainfo.biapp.si.loc.base.controller.BaseController;
+import com.asiainfo.biapp.si.loc.base.utils.DateUtil;
 import com.asiainfo.biapp.si.loc.base.utils.JsonUtil;
 import com.asiainfo.biapp.si.loc.base.utils.LogUtil;
 import com.asiainfo.biapp.si.loc.base.utils.StringUtil;
@@ -67,6 +69,73 @@ public class ShopCartController extends BaseController {
 
 	private static final String SUCCESS = "success";
 
+	
+	/**
+	 * Description:  查找购物车规则中最早数据日期
+	 */
+	@ApiOperation(value = "查找购物车规则中最早数据日期")
+	@RequestMapping(value = "/findEaliestDataDate", method = RequestMethod.POST)
+	public WebResult<Map<String, Object>> findEaliestDataDate(HttpServletRequest request) {
+		Map<String, Object> result = new HashMap<String, Object>();
+		WebResult<Map<String, Object>> webResult = new WebResult<>();
+		try {
+			//缓存中读取
+			String monthDate = "201712";
+			String dayDate = "20171208";
+			boolean isAllNewDate = true;
+			List<LabelRuleVo> rules = getSessionLabelRuleList();
+			if(rules != null) {
+				for(int i=0; i<rules.size(); i++) {
+					LabelRuleVo rule = rules.get(i);
+					if(LabelRuleContants.ELEMENT_TYPE_LABEL_ID == rule.getElementType()) {
+						String dataDate = rule.getDataDate();
+						if(LabelInfoContants.LABEL_CYCLE_TYPE_M == rule.getUpdateCycle()) {
+							if(Integer.valueOf(dataDate) < Integer.valueOf(monthDate)) {
+								monthDate = dataDate;
+								isAllNewDate = false;
+							}
+						} else {
+							if(Integer.valueOf(dataDate) < Integer.valueOf(dayDate)) {
+								dayDate = dataDate;
+								isAllNewDate = false;
+							}
+						}
+					} else if(LabelRuleContants.ELEMENT_TYPE_CUSTOM_RULES == rule.getElementType()){
+						List<LabelRuleVo> children = rule.getChildLabelRuleList();
+						for(int j=0; j<children.size(); j++) {
+							LabelRuleVo child = children.get(j);
+							if(LabelRuleContants.ELEMENT_TYPE_LABEL_ID == child.getElementType()) {
+								String dataDate = child.getDataDate();
+								if(LabelInfoContants.LABEL_CYCLE_TYPE_M == child.getUpdateCycle()) {
+									if(Integer.valueOf(dataDate) < Integer.valueOf(monthDate)) {
+										monthDate = dataDate;
+										isAllNewDate = false;
+									}
+								} else {
+									if(Integer.valueOf(dataDate) < Integer.valueOf(dayDate)) {
+										dayDate = dataDate;
+										isAllNewDate = false;
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+			
+			result.put("monthDate", DateUtil.string2StringFormat(monthDate, DateUtil.FORMAT_YYYYMM, DateUtil.FORMAT_YYYY_MM));//规则中最早月数据日期
+			result.put("dayDate", DateUtil.string2StringFormat(dayDate, DateUtil.FORMAT_YYYYMMDD, DateUtil.FORMAT_YYYY_MM_DD));//规则中最早日数据日期
+			result.put("isAllNewDate", isAllNewDate);
+			result.put("newMonthDate", DateUtil.string2StringFormat(monthDate, DateUtil.FORMAT_YYYYMM, DateUtil.FORMAT_YYYY_MM));//最新月数据日期
+			result.put("newDayDate", DateUtil.string2StringFormat(dayDate, DateUtil.FORMAT_YYYYMMDD, DateUtil.FORMAT_YYYY_MM_DD));//最新日数据日期
+		} catch (Exception e) {
+			LogUtil.error(" 查找购物车规则中最早数据日期异常", e);
+			return webResult.fail(e.getMessage());
+		}
+		return webResult.success(" 查找购物车规则中最早数据日期成功", result);
+	}
+	
+	
 	/**
 	 * 查询标签是否能够加入到购物车
 	 */
@@ -162,9 +231,10 @@ public class ShopCartController extends BaseController {
 			int numValue = 0;
 			numValue = findLabelOrCustomNum(rules);
 			if (numValue == 0) {
-				rules = null;
+				setSessionAttribute(LabelRuleContants.SHOP_CART_RULE, "");
+			}else{
+				setSessionAttribute(LabelRuleContants.SHOP_CART_RULE, JsonUtil.toJsonString(rules));
 			}
-			setSessionAttribute(LabelRuleContants.SHOP_CART_RULE, JsonUtil.toJsonString(rules));
 			setSessionAttribute(LabelRuleContants.SHOP_CART_RULE_NUM, String.valueOf(numValue));
 		} catch (Exception e) {
 			LogUtil.error("计算中心修改异常", e);
@@ -218,15 +288,17 @@ public class ShopCartController extends BaseController {
 		WebResult<String> webResult = new WebResult<>();
 		List<LabelRuleVo> labelRules = getSessionLabelRuleList();
 		ExploreQueryParam queryParam = new ExploreQueryParam(dataDate, monthLabelDate, dayLabelDate);
-		String countSqlStr = null;
+		StringBuffer sql = new StringBuffer();
 		try {
-			countSqlStr = exploreServiceImpl.getCountSqlStr(labelRules, queryParam);
+			//不包含纵表的探索
+			String querySql = exploreServiceImpl.getFromSqlForMultiLabel(labelRules, queryParam);
+			sql.append("select count(1) ").append(querySql);
 			// TODO 目前直接返回数据后期调用后台接口
 		} catch (Exception e) {
 			LogUtil.error("探索异常", e);
 			return webResult.fail(e.getMessage());
 		}
-		return webResult.success("探索成功", countSqlStr);
+		return webResult.success("探索成功", sql.toString());
 
 	}
 

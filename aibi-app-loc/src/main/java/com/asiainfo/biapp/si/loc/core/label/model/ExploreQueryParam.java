@@ -32,13 +32,14 @@ public class ExploreQueryParam {
 	private String dataDate;// 统计周期
 	private String monthDate;// 客户群所使用的月标签的数据时间
 	private String dayDate;// 客户群所使用的日标签的数据时间
+	
 	private String userId;// 获取当前Session中的用户ID
 	private Integer configId;// 专区ID
 	private String cityId;// 地市ID
 
-	private Integer interval;
-	private Integer updateCycle;
-	private boolean isValidate;
+	private Integer interval;//偏移量
+	private Integer updateCycle;//客户群周期性
+	private boolean isValidate;//是否生成校验sql
 
 	public ExploreQueryParam() {
 		super();

@@ -8,14 +8,42 @@ import javax.transaction.Transactional;
 
 import org.springframework.stereotype.Service;
 
+import com.asiainfo.biapp.si.loc.base.BaseConstants;
 import com.asiainfo.biapp.si.loc.base.exception.SqlRunException;
 import com.asiainfo.biapp.si.loc.base.extend.SpringContextHolder;
 import com.asiainfo.biapp.si.loc.bd.common.dao.IBackSqlDao;
 import com.asiainfo.biapp.si.loc.bd.common.service.IBackSqlService;
+import com.asiainfo.biapp.si.loc.cache.CocCacheProxy;
 
 @Service
 @Transactional
 public class BackServiceImpl implements IBackSqlService{
+
+    private static final String REGEX_BEVEL = "/";
+    
+    /** 缓冲当前的schema */
+    private static String SYS_BGDB_SCHEMA = null;
+    
+    /**
+     * Description: 查询当前后台库的schema
+     *
+     * @return 查询当前后台库的schema
+     */
+    public String getCurBackDbSchema() throws SqlRunException{
+        String schema = null;
+        if (null == SYS_BGDB_SCHEMA) {
+            String url = CocCacheProxy.getCacheProxy().getSYSConfigInfoByKey(BaseConstants.SYS_BGDB_URL);
+            if (url.endsWith(REGEX_BEVEL)) { //去掉末尾[/]
+                url = new StringBuilder(url).deleteCharAt(url.length() - 1).toString();
+            }
+            String[] split = url.split(REGEX_BEVEL);
+            schema = split[split.length-1];
+        } else {
+            schema = SYS_BGDB_SCHEMA;
+        }
+            
+        return schema;
+    }
 
 	/**
      * 通过配置文件拿到适配的daoImpl的beanId
@@ -89,5 +117,6 @@ public class BackServiceImpl implements IBackSqlService{
     public boolean renameTable(String oldTableName, String newTableName) throws SqlRunException {
         return getBackDaoBean().renameTable(oldTableName, newTableName);
     }
+
 
 }

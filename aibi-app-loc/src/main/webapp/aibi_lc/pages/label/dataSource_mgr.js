@@ -61,13 +61,13 @@ window.loc_onload = function() {
 			autowidth:false,
 			key:true,
 			formatter: function(value, opts, data) {
-				var is = "";
-				var html = '<button onclick="fun_to_up(\'' + data.sourceTableId + '\')" type="button" class="btn btn-default ui-table-btn">修改</button>';
+				var html = '<button onclick="fun_to_up(\'' + value + '\')" type="button" class="btn btn-default ui-table-btn">修改</button>';
 				$.commAjax({
 					url:$.ctx+"/api/source/sourceInfo/queryList",
 					async:false,
-					postData:{"dependIndex":data.sourceTableId},
+					postData:{"sourceTableId":value},
 					onSuccess:function(data){
+						var is = "";
 						for(var num = 0 ;num <data.data.length; num++){
 							$.commAjax({
 								url:$.ctx+"/api/label/labelCountRules/queryList",
@@ -80,8 +80,9 @@ window.loc_onload = function() {
 								}
 							})
 						}
-						if(is != ""){
-							html += '<button onclick="fun_to_del(\'' + data.sourceTableId + '\')" type="button" class="btn btn-default  ui-table-btn ui-table-btn">删除</button>';
+						debugger;
+						if(is != "have"){
+							html += '<button onclick="fun_to_del(\'' + value + '\')" type="button" class="btn btn-default  ui-table-btn ui-table-btn">删除</button>';
 						}
 					}
 				})

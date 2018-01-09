@@ -512,6 +512,16 @@ String.prototype.length2 = function() {
 				},
 				message		: '只能输入英文字符.'
 			},
+			alphaStart			  : {
+				validator	: function(value) {
+					if (value) {
+						return /^[a-zA-Z]/.test(value);
+					} else {
+						return true;
+					}
+				},
+				message		: '必须以英文字符开头.'
+			},
 			alphanum			: {
 				validator	: function(value, param) {
 					if (value) {
@@ -541,6 +551,16 @@ String.prototype.length2 = function() {
 					}
 				},
 				message		: '只能输入字母、数字和下划线。'
+			},
+			alphanumStartUnderline			: {
+				validator	: function(value, param) {
+					if (value) {
+						return /^[a-zA-Z][a-zA-Z0-9_]*$/.test(value);
+					} else {
+						return true;
+					}
+				},
+				message		: '必须以英文字符开始,包括数字、字母、和下划线。'
 			},
 			zeroPositiveint			: {
 				validator	: function(value, param) {
