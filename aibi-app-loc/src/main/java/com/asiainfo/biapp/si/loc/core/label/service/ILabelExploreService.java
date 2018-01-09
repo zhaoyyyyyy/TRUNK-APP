@@ -4,7 +4,6 @@ package com.asiainfo.biapp.si.loc.core.label.service;
 import java.util.List;
 
 import com.asiainfo.biapp.si.loc.base.exception.BaseException;
-import com.asiainfo.biapp.si.loc.core.label.entity.LabelVerticalColumnRel;
 import com.asiainfo.biapp.si.loc.core.label.model.ExploreQueryParam;
 import com.asiainfo.biapp.si.loc.core.label.vo.LabelRuleVo;
 

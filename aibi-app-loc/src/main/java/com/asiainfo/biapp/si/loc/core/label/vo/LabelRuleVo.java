@@ -51,6 +51,9 @@ public class LabelRuleVo extends LabelRule {
 	
 	private List<LabelRuleVo> childLabelRuleList;// 纵表标签子标签或客户群规则
 	
+	//标签数Param
+	private String effectDate;
+	
 	public Integer getLabelTypeId() {
 		return labelTypeId;
 	}
@@ -105,7 +108,12 @@ public class LabelRuleVo extends LabelRule {
 	public void setChildLabelRuleList(List<LabelRuleVo> childLabelRuleList) {
 		this.childLabelRuleList = childLabelRuleList;
 	}
-	
+	public String getEffectDate() {
+		return effectDate;
+	}
+	public void setEffectDate(String effectDate) {
+		this.effectDate = effectDate;
+	}
 	
 	
 }

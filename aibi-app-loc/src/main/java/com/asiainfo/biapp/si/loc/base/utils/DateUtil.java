@@ -608,37 +608,35 @@ public class DateUtil {
      * @param dateType  日期类型
      * @return
      */
-//    public static String getOffsetDateByDate(String date, int offset, int dateType) {
-//    	if(date == null || "".equals(date)) {
-//    		return null;
-//    	}
-//        String offsetDate = "";
-//        Calendar c = Calendar.getInstance();
-//        try {
-//			switch (dateType) {
-//			case DATETYPE_MONTH:
-//				DateFormat yyyyMMDateFormat = new SimpleDateFormat(
-//						CommonConstants.DATE_FORMAT_YYYYMM);
-//				Date m_date = yyyyMMDateFormat.parse(date);
-//				c.setTime(m_date);
-//				c.add(Calendar.MONTH, offset);
-//				offsetDate = yyyyMMDateFormat.format(c.getTime());
-//				break;
-//			case DATETYPE_DAY:
-//				DateFormat yyyyMMddDateFormat = new SimpleDateFormat(
-//						CommonConstants.DATE_FORMAT_YYYYMMDD);
-//				Date d_date = yyyyMMddDateFormat.parse(date);
-//				c.setTime(d_date);
-//				c.add(Calendar.DATE, offset);
-//				offsetDate = yyyyMMddDateFormat.format(c.getTime());
-//				break;
-//			default:
-//			}
-//        } catch (ParseException e) {
-//			e.printStackTrace();
-//		}
-//        return offsetDate;
-//    }
+    public static String getOffsetDateByDate(String date, int offset, int dateType) {
+    	if(date == null || "".equals(date)) {
+    		return null;
+    	}
+        String offsetDate = "";
+        Calendar c = Calendar.getInstance();
+        try {
+			switch (dateType) {
+			case DATETYPE_MONTH:
+				DateFormat yyyyMMDateFormat = new SimpleDateFormat(FORMAT_YYYYMM);
+				Date m_date = yyyyMMDateFormat.parse(date);
+				c.setTime(m_date);
+				c.add(Calendar.MONTH, offset);
+				offsetDate = yyyyMMDateFormat.format(c.getTime());
+				break;
+			case DATETYPE_DAY:
+				DateFormat yyyyMMddDateFormat = new SimpleDateFormat(FORMAT_YYYYMMDD);
+				Date d_date = yyyyMMddDateFormat.parse(date);
+				c.setTime(d_date);
+				c.add(Calendar.DATE, offset);
+				offsetDate = yyyyMMddDateFormat.format(c.getTime());
+				break;
+			default:
+			}
+        } catch (ParseException e) {
+			e.printStackTrace();
+		}
+        return offsetDate;
+    }
     /**
      * 获取指定日期偏移日期
      * @param date yyyyMM或者yyyyMMdd形式字符串，根据dateType决定

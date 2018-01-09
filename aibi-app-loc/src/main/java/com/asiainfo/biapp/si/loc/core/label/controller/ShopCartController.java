@@ -2,6 +2,7 @@
 package com.asiainfo.biapp.si.loc.core.label.controller;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -69,6 +70,38 @@ public class ShopCartController extends BaseController {
 
 	private static final String SUCCESS = "success";
 
+	@ApiOperation(value = "判断所选日期是否早于标签生效日期")
+	@ApiImplicitParams({
+			@ApiImplicitParam(name = "newLabelMonthFormat", value = "所选月数据日期", required = true, paramType = "query", dataType = "string"),
+			@ApiImplicitParam(name = "newLabelDayFormat", value = "所选日数据日期(20180108)", required = true, paramType = "query", dataType = "string") })
+	@RequestMapping(value = "/checkRuleEffectDate", method = RequestMethod.POST)
+	public WebResult<String> checkRuleEffectDate(HttpServletRequest req, String newLabelMonthFormat,String newLabelDayFormat) {
+		WebResult<String> webResult = new WebResult<>();
+		boolean flag = false;
+		List<LabelRuleVo> rules = getSessionLabelRuleList();
+		for (LabelRuleVo rule : rules) {
+			if(LabelRuleContants.ELEMENT_TYPE_LABEL_ID == rule.getElementType()) {
+				   String effectDate = rule.getEffectDate();
+                   if(LabelInfoContants.LABEL_CYCLE_TYPE_M == rule.getUpdateCycle()) {
+                	   if(Integer.valueOf(newLabelMonthFormat) < Integer.valueOf(effectDate)) {
+                           flag = true;
+                           break;
+                       }
+                   }else{
+                	   if(Integer.valueOf(newLabelDayFormat) < Integer.valueOf(effectDate)) {
+                           flag = true;
+                           break;
+                       } 
+                   }
+			}//end getElementType
+		}
+		if (flag) {
+			return webResult.success("判断所选日期是否早于标签生效日期", SUCCESS);
+		} else {
+			return webResult.fail("所选日期早于标签生效日期，请重新选择！");
+		}
+	}
+	
 	
 	/**
 	 * Description:  查找购物车规则中最早数据日期
@@ -79,10 +112,12 @@ public class ShopCartController extends BaseController {
 		Map<String, Object> result = new HashMap<String, Object>();
 		WebResult<Map<String, Object>> webResult = new WebResult<>();
 		try {
-			//缓存中读取
+			//TODO 缓存中读取
 			String monthDate = "201712";
 			String dayDate = "20171208";
-			boolean isAllNewDate = true;
+			boolean existMonthLabel = false;//是否存在月周期标签
+		    boolean existDayLabel = false;//是否存在日周期标签
+			boolean isAllNewDate = true;//规则中标签是否都是最新数据日期
 			List<LabelRuleVo> rules = getSessionLabelRuleList();
 			if(rules != null) {
 				for(int i=0; i<rules.size(); i++) {
@@ -90,11 +125,13 @@ public class ShopCartController extends BaseController {
 					if(LabelRuleContants.ELEMENT_TYPE_LABEL_ID == rule.getElementType()) {
 						String dataDate = rule.getDataDate();
 						if(LabelInfoContants.LABEL_CYCLE_TYPE_M == rule.getUpdateCycle()) {
+							existMonthLabel = true;
 							if(Integer.valueOf(dataDate) < Integer.valueOf(monthDate)) {
 								monthDate = dataDate;
 								isAllNewDate = false;
 							}
 						} else {
+							existDayLabel = true;
 							if(Integer.valueOf(dataDate) < Integer.valueOf(dayDate)) {
 								dayDate = dataDate;
 								isAllNewDate = false;
@@ -107,11 +144,13 @@ public class ShopCartController extends BaseController {
 							if(LabelRuleContants.ELEMENT_TYPE_LABEL_ID == child.getElementType()) {
 								String dataDate = child.getDataDate();
 								if(LabelInfoContants.LABEL_CYCLE_TYPE_M == child.getUpdateCycle()) {
+									existMonthLabel = true;
 									if(Integer.valueOf(dataDate) < Integer.valueOf(monthDate)) {
 										monthDate = dataDate;
 										isAllNewDate = false;
 									}
 								} else {
+									existDayLabel = true;
 									if(Integer.valueOf(dataDate) < Integer.valueOf(dayDate)) {
 										dayDate = dataDate;
 										isAllNewDate = false;
@@ -128,6 +167,8 @@ public class ShopCartController extends BaseController {
 			result.put("isAllNewDate", isAllNewDate);
 			result.put("newMonthDate", DateUtil.string2StringFormat(monthDate, DateUtil.FORMAT_YYYYMM, DateUtil.FORMAT_YYYY_MM));//最新月数据日期
 			result.put("newDayDate", DateUtil.string2StringFormat(dayDate, DateUtil.FORMAT_YYYYMMDD, DateUtil.FORMAT_YYYY_MM_DD));//最新日数据日期
+			result.put("existMonthLabel", existMonthLabel);
+			result.put("existDayLabel", existDayLabel);
 		} catch (Exception e) {
 			LogUtil.error(" 查找购物车规则中最早数据日期异常", e);
 			return webResult.fail(e.getMessage());
@@ -412,6 +453,17 @@ public class ShopCartController extends BaseController {
 		rule.setElementType(LabelRuleContants.ELEMENT_TYPE_LABEL_ID);
 		rule.setDataDate(ciLabelInfo.getDataDate());// 设置最新数据日期
 		rule.setUpdateCycle(ciLabelInfo.getUpdateCycle());// 设置标签周期性
+		Date effectTime = ciLabelInfo.getEffecTime();
+		int updateCycle = ciLabelInfo.getUpdateCycle();
+		if(updateCycle == LabelInfoContants.LABEL_CYCLE_TYPE_D){
+			//获得标签可以使用的最早日期
+			String effectDate =DateUtil.date2String(effectTime, DateUtil.FORMAT_YYYYMMDD);
+			rule.setEffectDate(DateUtil.getOffsetDateByDate(effectDate, -1, 1));
+		} else if(updateCycle == LabelInfoContants.LABEL_CYCLE_TYPE_M){
+			//获得标签可以使用的最早月份
+			String effectDate =DateUtil.date2String(effectTime, DateUtil.FORMAT_YYYYMM);
+			rule.setEffectDate(DateUtil.getOffsetDateByDate(effectDate, -1, 0));
+		}
 		return rule;
 	}
 
