@@ -20,6 +20,7 @@ import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
 
 import com.asiainfo.biapp.si.loc.base.entity.BaseEntity;
+import com.asiainfo.biapp.si.loc.base.utils.StringUtil;
 
 import io.swagger.annotations.ApiParam;
 
@@ -206,7 +207,10 @@ public class PreConfigInfo extends BaseEntity {
 
     public String getCreateTime() {
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss");
-        return formatter.format(createTime);
+        if(createTime != null){
+        	 return formatter.format(createTime);
+        }
+       return "";
     }
 
     public void setCreateTime(Date createTime) {
