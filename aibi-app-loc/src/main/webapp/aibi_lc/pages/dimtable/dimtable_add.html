@@ -37,7 +37,8 @@
 					</div>
 				</div>
 				<div class="ui-form-group clearfix">
-					<label class="control-label fleft " for="exampleInputEmail3">*主键类型:</label>
+					<label class="control-label fleft " for="exampleInputEmail3">
+					<span class="input-required">*</span>主键类型:</label>
 					<div class="control-input  ml10 has-icon">
 						<select name="codeColType" class="form-control easyui-validatebox" dicCode="ZDLXZD"
 						required="true"	id="codeColType" v-model="codeColType">
@@ -45,7 +46,8 @@
 					</div>
 				</div>
 				<div class="ui-form-group clearfix" id="isDefaultLi">
-					<label class="control-label fleft" for="exampleInputEmail3">*使用默认字段:</label>
+					<label class="control-label fleft" for="exampleInputEmail3">
+						<span class="input-required">*</span>使用默认字段:</label>
 					<div class="control-input ml10 mt5">
 						<!-- <div class="radio circle success">
                             <input type="radio" name="useDefaultCol" id="yes"  value="是"/ checked="checked">
@@ -64,7 +66,8 @@
 					</div>
 				</div>
 				<div class="ui-form-group clearfix" id="dimCodeCol1" style="display:none;">
-					<label class="control-label fleft" for="exampleInputEmail3">*主键字段名:</label>
+					<label class="control-label fleft" for="exampleInputEmail3">
+					<span class="input-required">*</span>主键字段名:</label>
 					<div class="control-input has-icon ml10">
 						<input name="dimCodeCol" type="text" class="form-control easyui-validatebox" required="true" validType="alphanumStartUnderline"
 							id="dimCodeCol" maxlength="28" placeholder="请输入主键字段名" v-model="dimCodeCol"/> <span
@@ -73,7 +76,8 @@
 					</div>
 				</div>
 				<div class="ui-form-group clearfix" id="dimValueCol1" style="display:none;">
-					<label class="control-label fleft" for="exampleInputEmail3">*描述字段名:</label>
+					<label class="control-label fleft" for="exampleInputEmail3">
+					<span class="input-required">*</span>描述字段名:</label>
 					<div class="control-input has-icon ml10">
 						<input name="dimValueCol" type="text" class="form-control easyui-validatebox" v-model="dimValueCol"
 							id="dimValueCol" maxlength="28" required="true" placeholder="请输入描述字段名" /> <span
