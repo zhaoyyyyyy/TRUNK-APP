@@ -616,7 +616,7 @@ var labelMarket = (function (model){
 		 * 更改标志型标签值
 		 */
 		model.againstLabel = function(t){
-			var index = $(t).parent().attr("index");
+			var index = $(t).parent().parent().attr("index");
 			var rule = dataModel.ruleList[index];
 			if(rule){
 				if(rule.labelFlag == 1){
@@ -632,10 +632,44 @@ var labelMarket = (function (model){
 		 * 删除规则
 		 */
 		model.deleteRule = function(t){
-			var index = $(t).parent().parent().parent().attr("index");
+			var index = Number($(t).parent().parent().attr("index"));
+			index = model.deleteCurlyBraces(index);
+			//删除关联的连接符
+			index = model.deleteConnectFlags(index);
 			dataModel.ruleList.splice(index,1);
     		model.submitRules();
 		};
+		/**
+		 * 删除匹配的括号【与条件直接关联的括号】,待测试
+		 */
+		model.deleteCurlyBraces = function(index){
+			var pre = dataModel.ruleList[index-1];
+			var nex = dataModel.ruleList[index+1];
+			if(pre && nex && pre.elementType == 3 && nex.elementType == 3){
+				dataModel.ruleList.splice(index+1,1);
+				dataModel.ruleList.splice(index-1,1);
+				index = index-1;
+				deleteCurlyBraces(index);//递归删除
+			}
+			return index;
+		}
+		/**
+		 * 删除连接符
+		 */
+		model.deleteConnectFlags = function(index){
+			var pre = dataModel.ruleList[index-1];
+			if(pre && pre.elementType == 1){
+				dataModel.ruleList.splice(index-1,1);
+				index = index -1;
+			}else{
+				var nex = dataModel.ruleList[index+1];
+				if(nex && nex.elementType == 1){
+					dataModel.ruleList.splice(index+1,1);
+				}
+			}
+			return index;
+			
+		}
 		/**
 		 * 枚举或者文本类精确匹配时需要验证个数不能大于100个（oracle数据库超过1000个报错，而且过多影响数据探索，没有实际意义）
 		 */
