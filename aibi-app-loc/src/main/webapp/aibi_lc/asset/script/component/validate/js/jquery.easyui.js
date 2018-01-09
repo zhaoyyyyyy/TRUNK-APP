@@ -512,6 +512,16 @@ String.prototype.length2 = function() {
 				},
 				message		: '只能输入英文字符.'
 			},
+			alphaStart			  : {
+				validator	: function(value) {
+					if (value) {
+						return /^[a-zA-Z]/.test(value);
+					} else {
+						return true;
+					}
+				},
+				message		: '必须以英文字符开头.'
+			},
 			alphanum			: {
 				validator	: function(value, param) {
 					if (value) {
