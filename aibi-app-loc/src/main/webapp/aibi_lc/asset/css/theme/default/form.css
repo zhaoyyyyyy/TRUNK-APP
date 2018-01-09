@@ -21,6 +21,9 @@
     position: relative;
     min-width: 90px;
 }
+span.input-required{
+	color: #DC143C;
+}
 .form-horizontal.left > .ui-form-group > .control-label{
     text-align: left;
 }
