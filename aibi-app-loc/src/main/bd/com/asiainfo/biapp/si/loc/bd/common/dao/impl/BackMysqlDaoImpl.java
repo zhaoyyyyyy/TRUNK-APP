@@ -1,3 +1,8 @@
+/*
+ * @(#)BackGbaseDaoImpl.java
+ *
+ * CopyRight (c) 2018 北京亚信智慧数据科技有限公司 保留所有权利。
+ */
 
 package com.asiainfo.biapp.si.loc.bd.common.dao.impl;
 
@@ -9,32 +14,41 @@ import java.util.Map;
 
 import org.springframework.stereotype.Repository;
 
+import com.asiainfo.biapp.si.loc.base.exception.SqlRunException;
 import com.asiainfo.biapp.si.loc.base.utils.LogUtil;
 import com.asiainfo.biapp.si.loc.bd.common.dao.IBackSqlDao;
 
 /**
- * 鍚庡彴搴撴槸mysql搴撶殑鎯呭喌涓�
+ * 后台库是mysql库的情况下
  * Title : BackMysqlDaoImpl
  * <p/>
  * Description : 
  * <p/>
- * CopyRight : CopyRight (c) 2017
+ * CopyRight : CopyRight (c) 2018
  * <p/>
- * Company : 鍖椾含浜氫俊鏅烘収鏁版嵁绉戞妧鏈夐檺鍏徃
+ * Company : 北京亚信智慧数据科技有限公司
  * <p/>
  * JDK Version Used : JDK 1.8 +
  * <p/>
- * Modification History	:
+ * Modification History :
  * <p/>
  * <pre>NO.    Date    Modified By    Why & What is modified</pre>
- * <pre>1    2017骞�12鏈�26鏃�    Administrator        Created</pre>
+ * <pre>1    2017年12月26日    Administrator        Created</pre>
  * <p/>
  *
  * @author  zhougz3
- * @version 1.0.0.2017骞�12鏈�26鏃�
+ * @version 1.0.0.2017年12月26日
  */
+
 @Repository("backMysqlDaoImpl")
 public class BackMysqlDaoImpl extends BaseBackDaoImpl implements IBackSqlDao{
+    
+
+    @Override
+    public String getCurBackDbSchema() throws SqlRunException{
+            
+        return this.getCurBackDbSchema();
+    }
 	
 	@Override
 	public List<Map<String, String>> queryTableLikeTableName(String tableName) {
