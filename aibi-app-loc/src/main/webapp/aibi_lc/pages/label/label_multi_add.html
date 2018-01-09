@@ -46,8 +46,8 @@
                                 <div class="control-input">
                                     <input type="text" name="dependIndex" class="form-control easyui-validatebox" :id="'dependIndex_'+index" required="true" readonly="readonly">
                                     <div class="label-lists" >
-                                        <span class="del-btn" v-for="sourceName in sourceInfoList[index]['sourceNameList']">{{sourceName}}
-                                            <i class="del-btn-icon"></i>
+                                        <span class="del-btn" v-for="(sourceName,index) in sourceInfoList[index]['sourceNameList']">{{sourceName}}
+                                            <i class="del-btn-icon" v-on:click="del_sourceName(index)"></i>
                                         </span>
                                     </div>
                                 </div>
