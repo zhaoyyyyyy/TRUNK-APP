@@ -1,4 +1,4 @@
-package com.asiainfo.biapp.si.loc.auth.service.impl;
+package com.asiainfo.biapp.si.loc.localization.chinapost.service.impl;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -29,7 +29,7 @@ import net.sf.json.JSONObject;
 
 /**
  * 
- * Title : 用户相关业务实现层
+ * Title : 中国邮政集团，邮政业务，用户相关业务实现层
  * <p/>
  * Description : 
  * <p/>
@@ -48,14 +48,17 @@ import net.sf.json.JSONObject;
  * @author  zhougz3
  * @version 1.0.0.2017年11月7日
  */
-@Profile("dev")
+@Profile("cp-yw")
 @Service("userService")
 @Transactional
-public class UserServiceImpl extends BaseServiceImpl<User, String> implements IUserService{
+public class YwUserServiceImpl extends BaseServiceImpl<User, String> implements IUserService{
 
 	@Value("${jauth-url}")  
     private String jauthUrl; 
 
+	@Value("${acrm-url}")  
+    private String acrmUrl; 
+	
 	@Override
 	protected BaseDao<User, String> getBaseDao() {
 		return null;

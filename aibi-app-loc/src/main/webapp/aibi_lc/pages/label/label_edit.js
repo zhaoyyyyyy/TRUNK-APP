@@ -14,6 +14,7 @@ var model = {
 	labelTypeId : "",
 	approveStatusId : "",
 	dependIndex : "",
+	configId : "",
 	isemmu : false,
 }
 
@@ -21,6 +22,7 @@ window.loc_onload = function() {
 	model.configId = $.getCurrentConfigId();
 	var labelId = $.getUrlParam("labelId");
 	if(labelId!=""&&labelId!=null&&labelId!=undefined){
+		model.labelId = labelId;
 		$.commAjax({
 			url : $.ctx + '/api/label/labelInfo/get',
 			postData : {
@@ -31,9 +33,9 @@ window.loc_onload = function() {
 				var y = time.getFullYear()+'-';//年
 				var m = (time.getMonth()+1<10 ? '0'+(time.getMonth()+1):time.getMonth()+1)+'-';//月
 				var d = (time.getDate()+1<10 ? '0' +(time.getDate()):time.getDate());//日		
-				model.failTime = y+m+d;
+//				model.failTime = y+m+d;
+				$("#failTime").val(y+m+d);
 				model.labelName = data.data.labelName;
-				model.labelId = data.data.labelId;
 				model.updateCycle = data.data.updateCycle;
 				model.labelTypeId = data.data.labelTypeId;
 				if(model.labelTypeId==5){
@@ -83,7 +85,7 @@ window.loc_onload = function() {
 		var win = $.window('指标配置', $.ctx + '/aibi_lc/pages/label/sourceInfo_mgr.html', 900, 600);
 		win.addKpis = function(chooseKpis) {
 			model.sourceIdList = chooseKpis;
-			var dependx;
+			var dependx="";
 			for(var i=0; i<chooseKpis.length; i++){
 				$.commAjax({
 					async : false,
@@ -97,7 +99,7 @@ window.loc_onload = function() {
 					}
 				});
 			}
-			model.dependIndex= dependx;
+			model.dependIndex= dependx.substr(0,dependx.length-1);
 		}
 	});
 	
@@ -113,12 +115,22 @@ function changebq(obj){
 
 function fun_to_save(){
 	if($("#saveDataForm").validateForm()){
+		var url_ = "";
+		var msg = "";
+		if(model.labelId!=null && model.labelId!="" && model.labelId!=undefined){
+			url_ = $.ctx + '/api/label/labelInfo/update',
+			msg = "修改成功";
+		}else{
+			$("#labelId").removeAttr("name"),
+			url_ = $.ctx + '/api/label/labelInfo/save',
+			msg = "保存成功";
+		}
 		$.commAjax({
-			url : $.ctx + '/api/label/labelInfo/update',
+			url : url_,
 			postData : $('#saveDataForm').formToJson(),
 			onSuccess : function(data){
 				if(data.data == "success"){
-					$.success("修改成功", function() {
+					$.success(msg, function() {
 						history.back(-1);
 					});
 				}

@@ -125,7 +125,6 @@ public class LabelInfoServiceImpl extends BaseServiceImpl<LabelInfo, String> imp
         iLabelCountRulesService.addLabelCountRules(labelCountRules);        
         
         //封装标签信息
-        labelInfo.setEffecTime(new Date());
         labelInfo.setCreateTime(new Date());
         labelInfo.setDataStatusId(1);
         labelInfo.setGroupType(0);
@@ -154,7 +153,7 @@ public class LabelInfoServiceImpl extends BaseServiceImpl<LabelInfo, String> imp
         mdaSysTableColumn.setTableId(list.get(0).getTableId());
         mdaSysTableColumn.setColumnName(labelInfo.getLabelId());
         mdaSysTableColumn.setColumnCnName(labelInfo.getLabelName());
-        if (StringUtil.isNoneBlank(labelInfo.getDimId())) {
+        if (StringUtil.isNotBlank(labelInfo.getDimId())) {
             DimTableInfo dimTable =iDimTableInfoService.selectDimTableInfoById(labelInfo.getDimId());
             mdaSysTableColumn.setDimTransId(labelInfo.getDimId());
             mdaSysTableColumn.setDataType(labelInfo.getDataType());
@@ -176,24 +175,24 @@ public class LabelInfoServiceImpl extends BaseServiceImpl<LabelInfo, String> imp
         
         //修改标签规则维表信息
         LabelCountRules labelCountRules = iLabelCountRulesService.selectLabelCountRulesById(labelInfo.getCountRulesCode());
-        if (StringUtil.isNoneBlank(labelInfo.getDependIndex())) {
+        if (StringUtil.isNotBlank(labelInfo.getDependIndex())) {
             labelCountRules.setDependIndex(labelInfo.getDependIndex());
         }
-        if (StringUtil.isNoneBlank(labelInfo.getCountRules())) {
+        if (StringUtil.isNotBlank(labelInfo.getCountRules())) {
             labelCountRules.setCountRules(labelInfo.getCountRules());
         }
         iLabelCountRulesService.modifyLabelCountRules(labelCountRules);
         
         //修改元数据表列信息
         MdaSysTableColumn mdaSysTableColumn = iMdaSysTableColService.selectMdaSysTableColBylabelId(labelInfo.getLabelId());
-        if (StringUtil.isNoneBlank(labelInfo.getDimId())) {
+        if (StringUtil.isNotBlank(labelInfo.getDimId())) {
             DimTableInfo dimTable = iDimTableInfoService.selectDimTableInfoById(labelInfo.getDimId());
             mdaSysTableColumn.setDimTransId(labelInfo.getDimId());
             mdaSysTableColumn.setDataType(labelInfo.getDataType());
             int columnDataTypeId = Integer.parseInt(dimTable.getCodeColType());
             mdaSysTableColumn.setColumnDataTypeId(columnDataTypeId);
         }
-        if (StringUtil.isNoneBlank(labelInfo.getUnit())) {
+        if (StringUtil.isNotBlank(labelInfo.getUnit())) {
             mdaSysTableColumn.setUnit(labelInfo.getUnit());
         }
         iMdaSysTableColService.modifyMdaSysTableColumn(mdaSysTableColumn);
