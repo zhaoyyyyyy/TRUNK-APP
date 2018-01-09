@@ -20,6 +20,7 @@ $.extend({
 	commAjax	: function(options, el) {
 		options = $.extend({
 			url			: '',
+			isShowMask	: false,
 			type		: 'POST',
 			postData	: {},
 			beforeSend	: false,
@@ -27,7 +28,8 @@ $.extend({
 			onFailure	: false,
 			timeout		: 1800000,
 			async		: true,
-			checkSubmitted:false
+			checkSubmitted:false,
+			maskMassage	: '数据加载中' // 等待提示信息
 		}, options);
 		
 		if(options.checkSubmitted){
@@ -36,6 +38,21 @@ $.extend({
 				return;
 			}
 		}
+		
+		if (!el) {
+			el = $('body');
+		}
+		if (options.isShowMask && el.length > 0) {
+			el.mask({
+				top		: el.offset().top,
+				left	: el.offset().left,
+				width	: el.width(),
+				height	: el.height(),
+				message	: options.maskMassage
+			});
+		}
+		
+		
 		
 		var ssg = window.sessionStorage;
 		var tokenStr;
@@ -59,7 +76,9 @@ $.extend({
 			async		: options.async,
 			cache		: false,
 			complete	: function(req, st) {
+				
 				if (options.isShowMask) {
+					debugger
 					el.unmask();
 				}
 				// status：200为服务中成功的状态，0为本地打开时的成功状态
@@ -226,6 +245,88 @@ $.extend({
 
 // 第二部分。
 $.fn.extend({
+	mask : function(options) {
+		var $self = $(this), $mask, $maskText;
+		options = $.extend({
+			autoShow	: true,
+			id			: 'massk',
+			left		: $self.offset().left
+			        + parseInt(($self.css('padding-left') || 0).replace(
+			                'px', ''
+			        )),
+			top			: $self.offset().top
+			        + parseInt(($self.css('padding-top') || 0).replace(
+			                'px', ''
+			        )),
+			width		: $self.width() + 2, // 宽度
+			height		: $self.height() + 2, // 高度
+			message		: '数据加载中', // 提示内容
+			showMessage	: true
+			// 提示内容
+		}, options);
+		
+		this.init = function() {
+			$mask = $('<div class="window-mask"></div>').attr('id',
+			        options.id
+			).appendTo(this);
+			$mask.css({
+				top				: options.top,
+				left			: options.left,
+				zIndex			: 99998,
+				width			: options.width,
+				height			: options.height,
+				'line-height'	: options.height + 'px',
+				display			: 'none'
+			});
+			if (options.showMessage) {
+				$maskText = $('<div class="window-text"></div>').attr('id',
+				        options.id + '_text'
+				).appendTo(this);
+				$maskText.css({
+					top		: (options.top + options.height / 2 - 60 / 2),
+					left	: options.left + options.width / 2 - 340 / 2,
+					zIndex	: 99999,
+					display	: 'none'
+				});
+			}
+		};
+		this.show = function() {
+			$mask.show();
+			if ($maskText)
+				$maskText.show();
+		};
+		this.hide = function() {
+			$mask.hide();
+			if ($maskText)
+				$maskText.hide();
+		};
+		this.remove = function() {
+			$mask.remove();
+			if ($maskText)
+				$maskText.remove();
+		};
+		this.changeText = function(text) {
+			if ($maskText)
+				$maskText.html(text + '...');
+		};
+		$(top).bind('resize.mask', function() {
+			$mask.css({
+				width	: $self.width(),
+				height	: $self.height()
+			});
+		});
+		this.init();
+		if (options.autoShow)
+			this.show();
+		this.changeText(options.message);
+		return this;
+	},
+	unmask	: function(id) {
+		var unmaskId = id || 'massk';
+		$('#' + unmaskId, this).remove();
+		$('#' + unmaskId + '_text', this).remove();
+		$(top).unbind('resize.mask');
+	},
 	validateForm : function() {
 		var form = $(this);
 		var r = $(".easyui-validatebox", form);

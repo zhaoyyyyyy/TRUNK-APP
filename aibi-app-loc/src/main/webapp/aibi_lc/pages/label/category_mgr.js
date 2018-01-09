@@ -22,7 +22,8 @@ window.loc_onload = function() {
 		var ztreeObj;
 		var labelId = $.getCurrentConfigId();
 		$.commAjax({			
-		    url : $.ctx+'/api/label/categoryInfo/queryList',  		    
+		    url : $.ctx+'/api/label/categoryInfo/queryList',
+		    isShowMask : true,
 		    dataType : 'json', 
 		    async:true,
 		    postData : {
@@ -34,7 +35,8 @@ window.loc_onload = function() {
 		    		ztreeObj[0].children = data.data;
 		    	}
 		    	$.fn.zTree.init($("#ztree"), setting, ztreeObj);
-		    }
+		    },
+		    maskMassage : 'Load...'
 	   });
 		setting = {  
 			view: {
@@ -121,6 +123,7 @@ window.loc_onload = function() {
 				    }else {
 				        $.commAjax({						
 							url : $.ctx + '/api/label/categoryInfo/save',
+							isShowMask : true,
 							async:true,
 							postData : {
 								"sysId" :labelId,
@@ -131,7 +134,8 @@ window.loc_onload = function() {
 								ztreeFunc();
 								labeltree();
 								$.alert("新增标签分类成功");
-							}
+							},
+							maskMassage : '添加中...'
 						});
 		       		}
 	        	})
@@ -153,6 +157,7 @@ window.loc_onload = function() {
 			    }else{
 			    	$.commAjax({
 						url : $.ctx + '/api/label/labelInfo/queryList',
+						isShowMask : true,
 						postData : {
 							"categoryId" : treeNode.categoryId,	
 							"configId" :labelId,								
@@ -172,13 +177,14 @@ window.loc_onload = function() {
 										    treeObj.removeNode(nodes[0]);
 										    labeltree();
 										    $.alert("删除标签分类成功");
-										}
+										},
 									});
 								});
 							}else{
-							$.alert("该分类下还有标签，不可删除");
+								$.alert("该分类下还有标签，不可删除");
 							}
-						}
+						},
+						maskMassage : '删除中...'
 			    	})
 			    }
 			})
@@ -229,6 +235,7 @@ window.loc_onload = function() {
 			    }else {
 			        $.commAjax({						
 						url : $.ctx + '/api/label/categoryInfo/update',
+						isShowMask : true,
 						async:true,
 						postData : {
 							"sysId" :labelId,
@@ -242,7 +249,8 @@ window.loc_onload = function() {
 							treeObj.updateNode(nodes[0]);
 							labeltree();
 							$.alert("修改标签分类成功");
-						}
+						},
+						maskMassage : '修改中...'
 					});
 	       		}
         	})	        	
@@ -313,7 +321,8 @@ window.loc_onload = function() {
 		}
 		for(var i=0;i<transData.length;i++){
 			$.commAjax({			
-			    url : $.ctx+'/api/label/labelInfo/update',  	
+			    url : $.ctx+'/api/label/labelInfo/update',  
+			    isShowMask : true,
 			    dataType : 'json', 
 			    async : false,
 			    postData : {
@@ -327,7 +336,8 @@ window.loc_onload = function() {
 				    	$("#dialog-del").click();
 			    	}
 			    	
-				}
+				},
+				maskMassage : '正在移动...'
 			});
 		}
 	});
@@ -422,7 +432,8 @@ window.loc_onload = function() {
 		var text;			//模糊查询时的关键字
 		if(number == 1){text = labelInfo}		//标签的模糊查询	
 		$.commAjax({			
-		    url : $.ctx+'/api/label/labelInfo/queryList',  		    
+		    url : $.ctx+'/api/label/labelInfo/queryList', 
+		    isShowMask : true,
 		    dataType : 'json', 
 		    async:true,
 		    postData : {
@@ -447,7 +458,8 @@ window.loc_onload = function() {
 				    	$("#labelList").append(html);
 		    		}
 		    	}
-		    }  
+		    },
+		    maskMassage : '搜索中...'
 	   });
 	}
 }
