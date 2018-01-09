@@ -80,7 +80,6 @@ window.loc_onload = function() {
 								}
 							})
 						}
-						debugger;
 						if(is != "have"){
 							html += '<button onclick="fun_to_del(\'' + value + '\')" type="button" class="btn btn-default  ui-table-btn ui-table-btn">删除</button>';
 						}

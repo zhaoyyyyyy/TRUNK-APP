@@ -209,6 +209,21 @@ function fun_to_del(id,sourceId) {
 }
 function fun_to_save() {
 	if($('#formData').validateForm()){
+		var colnames = [];
+		var exe = true;
+		$.commAjax({
+			url : $.ctx + "/backSql/columns",
+			async : false,
+			postData:{"tableName" : $("#tableSchema").val()+"."+$("#sourceTableName").val()},
+			onSuccess : function(data) {
+				
+				if(data.data != null){
+					for(var u=0;u < data.data.length;u++){
+						colnames.push(data.data[u].col_name);
+					}
+				}
+			}
+		})
 		//取消所有编辑
 		var ids = $("#jsonmap").jqGrid('getDataIDs');
 	    for (var i = 0; i < ids.length; i++) {
@@ -234,6 +249,9 @@ function fun_to_save() {
 				$.alert("第["+(k+1)+"]行字段名称与主键名称重复");
 				break;
 			}
+			if(!colnames.indexOf(list[k])>0){
+				exe = false;
+			}
 			sourceInfoList += JSON.stringify(list[k]); 
 			var l = k+1;
 			if(l!=list.length){
@@ -252,6 +270,7 @@ function fun_to_save() {
 			//开始进行保存
 			var url_ = "";
 			var msss = "";
+			var dateColumnName = $("#dateColumnName").val();
 			if(model.sourceTableId!=null && model.sourceTableId!=undefined && model.sourceTableId!= ""){
 				url_ = $.ctx + '/api/source/sourceTableInfo/update';
 				msss = "修改成功";
@@ -260,25 +279,14 @@ function fun_to_save() {
 				url_ = $.ctx + '/api/source/sourceTableInfo/save';
 				msss = "保存成功";
 			}
-			$.commAjax({
-				url : $.ctx + "/backSql/columns",
-				postData:{"tableName" : $("#tableSchema").val()+"."+$("#sourceTableName").val()},
-				onSuccess : function(data) {
-					var colnames = [];
-					if(data.data != null){
-						for(var u=0;u < data.data.length;u++){
-							colnames.push(data.data[u].col_name);
-						}
-					}
-					if(!colnames.indexOf(idColumn)>0){
-						ajax_to_save(url_,msss);
-					}else{
-						$.confirm('表不存在或者表结构异常，确认保存？', function() {
-							ajax_to_save(url_,msss);
-						})
-					}
-				}
-			})
+			if(!colnames.indexOf(idColumn)>0 && !colnames.indexOf(dateColumnName)>0 && exe){
+				ajax_to_save(url_,msss);
+			}else{
+				debugger;
+				$.confirm('表不存在或者表结构异常，确认保存？', function() {
+					ajax_to_save(url_,msss);
+				})
+			}
 			for (var p = 0; p < ids.length; p++) {
 		        $("#jsonmap").jqGrid("editRow", ids[p]);
 		    }
@@ -286,6 +294,10 @@ function fun_to_save() {
 	}
 }
 function analysis(){
+	if(!$("#tableSchema").val()){
+		$.alert("请输入SCHEMA");
+		return false;
+	}
 	var tableName = $("#tableSchema").val()+"."+$("#sourceTableName").val();
 	$.commAjax({
 		url:$.ctx + "/backSql/columns",
