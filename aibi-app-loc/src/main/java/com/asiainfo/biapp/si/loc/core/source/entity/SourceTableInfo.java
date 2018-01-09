@@ -365,7 +365,10 @@ public class SourceTableInfo extends BaseEntity {
 
     public String getCreateTime() {
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss");
-        return formatter.format(createTime);
+        if(createTime != null){
+        	return formatter.format(createTime);
+        }
+        return "";
     }
 
     public void setCreateTime(Date createTime) {

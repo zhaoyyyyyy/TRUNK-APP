@@ -17,6 +17,8 @@ import org.springframework.stereotype.Component;
 import com.asiainfo.biapp.si.loc.base.utils.DateUtil;
 import com.asiainfo.biapp.si.loc.base.utils.HttpUtil;
 import com.asiainfo.biapp.si.loc.base.utils.LogUtil;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationConfig;
 
 import io.swagger.annotations.ApiOperation;
 import net.sf.json.JSONArray;
@@ -135,18 +137,32 @@ public class LogAspectAdvice {
         Object result = pjp.proceed();// result的值就是被拦截方法的返回值
         
         if(!"setReqAndRes".equals(method)){
-        	String resultStr = "";
-        	if(result != null ){
-        		resultStr = JSONObject.fromObject(result).toString();
-        		if(resultStr.length() > 2000){
-        			resultStr = resultStr.substring(0, 2000);
-        		}
-        	}
+        	
+        	
+        
+            
+            
         	String inputParams = "";
         	if(args != null  && args.length> 0){
-        		inputParams = JSONArray.fromObject(args).toString();
+        		//inputParams = JSONArray.fromObject(args).toString();
+        		
+        		ObjectMapper mapper = new ObjectMapper();
+        		inputParams = mapper.writeValueAsString(args);
+                
         		if(inputParams.length() > 2000){
         			inputParams = inputParams.substring(0, 2000);
+        		}
+        	}
+        	
+        	String resultStr = "";
+        	if(result != null ){
+        		//resultStr = JSONObject.fromObject(result).toString();
+        		
+        		ObjectMapper mapper = new ObjectMapper();
+        		resultStr = mapper.writeValueAsString(result);
+        		
+        		if(resultStr.length() > 2000){
+        			resultStr = resultStr.substring(0, 2000);
         		}
         	}
         	String interfaceName = getbooleanMethod(pjp);
