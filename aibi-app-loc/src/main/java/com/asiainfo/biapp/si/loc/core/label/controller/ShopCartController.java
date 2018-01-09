@@ -7,8 +7,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -75,7 +73,7 @@ public class ShopCartController extends BaseController {
 			@ApiImplicitParam(name = "newLabelMonthFormat", value = "所选月数据日期", required = true, paramType = "query", dataType = "string"),
 			@ApiImplicitParam(name = "newLabelDayFormat", value = "所选日数据日期(20180108)", required = true, paramType = "query", dataType = "string") })
 	@RequestMapping(value = "/checkRuleEffectDate", method = RequestMethod.POST)
-	public WebResult<String> checkRuleEffectDate(HttpServletRequest req, String newLabelMonthFormat,String newLabelDayFormat) {
+	public WebResult<String> checkRuleEffectDate( String newLabelMonthFormat,String newLabelDayFormat) {
 		WebResult<String> webResult = new WebResult<>();
 		boolean flag = false;
 		List<LabelRuleVo> rules = getSessionLabelRuleList();
@@ -108,7 +106,7 @@ public class ShopCartController extends BaseController {
 	 */
 	@ApiOperation(value = "查找购物车规则中最早数据日期")
 	@RequestMapping(value = "/findEaliestDataDate", method = RequestMethod.POST)
-	public WebResult<Map<String, Object>> findEaliestDataDate(HttpServletRequest request) {
+	public WebResult<Map<String, Object>> findEaliestDataDate() {
 		Map<String, Object> result = new HashMap<String, Object>();
 		WebResult<Map<String, Object>> webResult = new WebResult<>();
 		try {
@@ -183,7 +181,7 @@ public class ShopCartController extends BaseController {
 	@ApiOperation(value = "查询标签是否能够加入到购物车")
 	@ApiImplicitParam(name = "labelId", value = "标签id", required = true, paramType = "query", dataType = "string")
 	@RequestMapping(value = "/findLabelValidate", method = RequestMethod.POST)
-	public WebResult<String> findLabelValidate(HttpServletRequest req, String labelId) {
+	public WebResult<String> findLabelValidate( String labelId) {
 		WebResult<String> webResult = new WebResult<>();
 		boolean success = true;
 		String msg = "";
@@ -217,7 +215,7 @@ public class ShopCartController extends BaseController {
 			@ApiImplicitParam(name = "calculationsId", value = "标签ID", required = true, paramType = "query", dataType = "string"),
 			@ApiImplicitParam(name = "typeId", value = "类型", required = true, paramType = "query", dataType = "string") })
 	@RequestMapping(value = "/saveShopSession", method = RequestMethod.POST)
-	public WebResult<String> saveShopSession(HttpServletRequest req, String calculationsId, String typeId) {
+	public WebResult<String> saveShopSession( String calculationsId, String typeId) {
 		WebResult<String> webResult = new WebResult<>();
 		boolean success = true;
 		String msg = "";
@@ -265,7 +263,7 @@ public class ShopCartController extends BaseController {
 	@ApiOperation(value = "计算中心每次修改之后对应重新设置session")
 	@ApiImplicitParam(name = "labelRuleStr", value = "规则串", required = true, paramType = "query", dataType = "string")
 	@RequestMapping(value = "/updateShopSession", method = RequestMethod.POST)
-	public WebResult<String> updateShopSession(HttpServletRequest req, String labelRuleStr) {
+	public WebResult<String> updateShopSession( String labelRuleStr) {
 		WebResult<String> webResult = new WebResult<>();
 		try {
 			List<LabelRuleVo> rules = (List<LabelRuleVo>) JsonUtil.json2CollectionBean(labelRuleStr, List.class, LabelRuleVo.class);
@@ -294,7 +292,7 @@ public class ShopCartController extends BaseController {
 	 */
 	@ApiOperation(value = "读取购物车数据")
 	@RequestMapping(value = "/findShopCart", method = RequestMethod.POST)
-	public WebResult<Map<String, Object>> findShopCart(HttpServletRequest request) {
+	public WebResult<Map<String, Object>> findShopCart() {
 		Map<String, Object> result = new HashMap<String, Object>();
 		WebResult<Map<String, Object>> webResult = new WebResult<>();
 		try {
@@ -324,7 +322,7 @@ public class ShopCartController extends BaseController {
 			@ApiImplicitParam(name = "dayLabelDate", value = "数据日期(日)", required = true, paramType = "query", dataType = "string"),
 			@ApiImplicitParam(name = "monthLabelDate", value = "数据日期(月)", required = true, paramType = "query", dataType = "string") })
 	@RequestMapping(value = "/explore", method = RequestMethod.POST)
-	public WebResult<String> explore(HttpServletRequest req, String dataDate, String dayLabelDate,
+	public WebResult<String> explore(String dataDate, String dayLabelDate,
 			String monthLabelDate) {
 		WebResult<String> webResult = new WebResult<>();
 		List<LabelRuleVo> labelRules = getSessionLabelRuleList();
@@ -347,7 +345,7 @@ public class ShopCartController extends BaseController {
 	 * 删除购物车的对象
 	 */
 	@RequestMapping(value = "/delShopSession", method = RequestMethod.POST)
-	public WebResult<String> delShopSession(HttpServletRequest req) {
+	public WebResult<String> delShopSession() {
 		WebResult<String> webResult = new WebResult<>();
 		try {
 			setSessionAttribute(LabelRuleContants.SHOP_CART_RULE, "");
@@ -359,7 +357,7 @@ public class ShopCartController extends BaseController {
 	}
 
 	//"计算中心每次修改之后对应重新设置session"
-	public WebResult<String> saveSession(HttpServletRequest req) {
+	public WebResult<String> saveSession() {
 		WebResult<String> webResult = new WebResult<>();
 		try {
 			String labelRuleStr = null;
