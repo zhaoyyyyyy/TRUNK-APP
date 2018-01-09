@@ -37,7 +37,6 @@ window.loc_onload = function() {
     });
     
     enumRule.getDimtableName();
-    enumRule.initDimtabledataPage();
    
 }
 /**
@@ -56,8 +55,8 @@ var enumRule = (function (model){
 				  labelId : ruleDataModel.rule.calcuElement
 			  },
 			  onSuccess: function(returnObj){
-				  dataModel.dimTableName = returnObj.data;
-				  enumRule.queryPage();
+				  ruleDataModel.dimTableName = returnObj.data;
+				  enumRule.initDimtabledataPage();
 			  }
 		});
 	}
