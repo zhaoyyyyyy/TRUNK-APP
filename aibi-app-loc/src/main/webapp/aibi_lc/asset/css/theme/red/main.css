@@ -618,6 +618,8 @@ i.del-btn-icon{
 	position:absolute;
 	top:4px;
 	left:5px;
+	width:98%;
+	background:#fff;
 }
 span.del-btn{
 	color: #666666;
