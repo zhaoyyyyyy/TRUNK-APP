@@ -36,8 +36,7 @@ window.loc_onload = function() {
     	data : ruleDataModel
     });
     
-    ruleDataModel.dimTableName = 'DW_COC_LABEL_USER_003';
-    //enumRule.getDimtableName();
+    enumRule.getDimtableName();
     enumRule.initDimtabledataPage();
    
 }
