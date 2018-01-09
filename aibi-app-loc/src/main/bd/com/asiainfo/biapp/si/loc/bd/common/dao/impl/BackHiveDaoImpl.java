@@ -50,11 +50,6 @@ public class BackHiveDaoImpl extends BaseBackDaoImpl implements IBackSqlDao{
 	private Logger log = Logger.getLogger(BackHiveDaoImpl.class);
 
 
-    @Override
-    public String getCurBackDbSchema() throws SqlRunException{
-            
-        return this.getCurBackDbSchema();
-    }
 	
 	@Override
 	public List<Map<String, String>> queryTableLikeTableName(String tableName) throws SqlRunException {

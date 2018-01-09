@@ -15,7 +15,6 @@ import javax.sql.DataSource;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceBuilder;
 
 import com.asiainfo.biapp.si.loc.base.BaseConstants;
-import com.asiainfo.biapp.si.loc.base.exception.SqlRunException;
 import com.asiainfo.biapp.si.loc.cache.CocCacheProxy;
 
 /**
@@ -40,11 +39,6 @@ import com.asiainfo.biapp.si.loc.cache.CocCacheProxy;
  * @version 1.0.0.2017年12月25日
  */
 public class BaseBackDaoImpl {
-
-    private static final String REGEX_BEVEL = "/";
-    
-    /** 缓冲当前的schema */
-    private static String SYS_BGDB_SCHEMA = null;
 	
 	/**
 	 * 
@@ -114,27 +108,6 @@ public class BaseBackDaoImpl {
         return list;
     }
     
-
-    /**
-     * Description: 查询当前后台库的schema
-     *
-     * @return 查询当前后台库的schema
-     */
-    public String getCurBackDbSchema() throws SqlRunException{
-        String schema = null;
-        if (null == SYS_BGDB_SCHEMA) {
-            String url = CocCacheProxy.getCacheProxy().getSYSConfigInfoByKey(BaseConstants.SYS_BGDB_URL);
-            if (url.endsWith(REGEX_BEVEL)) { //去掉末尾[/]
-                url = new StringBuilder(url).deleteCharAt(url.length() - 1).toString();
-            }
-            String[] split = url.split(REGEX_BEVEL);
-            schema = split[split.length-1];
-        } else {
-            schema = SYS_BGDB_SCHEMA;
-        }
-            
-        return schema;
-    }
     
     
 }

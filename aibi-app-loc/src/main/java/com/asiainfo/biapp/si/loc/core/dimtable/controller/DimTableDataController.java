@@ -70,18 +70,14 @@ public class DimTableDataController extends BaseController<DimTableData>{
     @ApiOperation(value = "分页查询维表值")
     @RequestMapping(value = "/queryPage", method = RequestMethod.POST)
     @ApiImplicitParams({
-        @ApiImplicitParam(name = "schema", value = "schema(选填)",paramType = "query", dataType = "string"),
         @ApiImplicitParam(name = "dimTableName", value = "维表名称(必填)",paramType = "query", dataType = "string"),
         @ApiImplicitParam(name = "dimKey", value = "维表key(选填)",paramType = "query", dataType = "string"),
         @ApiImplicitParam(name = "dimValue", value = "维表值(选填，支持模糊搜索)",paramType = "query", dataType = "string")
     })
-    public Page<DimTableData> queryPage(@ModelAttribute Page<DimTableData> page, String schema,
+    public Page<DimTableData> queryPage(@ModelAttribute Page<DimTableData> page,
             String dimTableName, String dimKey, String dimValue){
         Page<DimTableData> dimTableDatas = new Page<>();
         //组装参数
-        if (StringUtil.isNoneBlank(schema)) {
-            dimTableName = schema + "."+ dimTableName;
-        }
         DimTableData dimTableData = new DimTableData(new DimTableDataId(dimTableName));
         if (StringUtil.isNoneBlank(dimValue)) {
             dimTableData.setDimValue(dimValue);

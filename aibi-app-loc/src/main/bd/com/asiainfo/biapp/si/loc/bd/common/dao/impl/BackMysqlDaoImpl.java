@@ -44,12 +44,6 @@ import com.asiainfo.biapp.si.loc.bd.common.dao.IBackSqlDao;
 public class BackMysqlDaoImpl extends BaseBackDaoImpl implements IBackSqlDao{
     
 
-    @Override
-    public String getCurBackDbSchema() throws SqlRunException{
-            
-        return this.getCurBackDbSchema();
-    }
-	
 	@Override
 	public List<Map<String, String>> queryTableLikeTableName(String tableName) {
 		try{
