@@ -34,7 +34,7 @@
 			                <div class="ui-form-group">
 			                	<input id="sourceInfoList" name="sourceInfoList" type="hidden" class="form-control mr10 ml10" />
 								<input v-model="configId" id="configId" name="configId" type="hidden" class="form-control mr10 ml10"/>      	
-			                    <label class="control-label" for="exampleInputEmail3">表名称</label> 
+			                    <label class="control-label" for="exampleInputEmail3"><span class="input-required">*</span>表名称</label> 
 			                        <div class="control-input">
 			                            <input v-model="sourceTableName" id="sourceTableName" name="sourceTableName" required="true" validtype="alphaStart"
 	type="text" class="form-control easyui-validatebox" placeholder="表名称，命名以英文字母开头，可以包含数字下划线">
@@ -42,14 +42,14 @@
 			                        <button onclick="analysis()" type="button" class="ui-btn ui-btn-default ml10">解析</button>
 			                </div>
 			                <div class="ui-form-group">
-			                   <label class="control-label" for="exampleInputEmail3" >表中文名</label>
+			                   <label class="control-label" for="exampleInputEmail3" ><span class="input-required">*</span>表中文名</label>
 			                    <div class="control-input">
 			                        <input v-model="sourceTableCnName" name="sourceTableCnName" type="text" 
 			                        required="true"	class="form-control easyui-validatebox" id="exampleInputEmail3" placeholder="表中文名">
 			                    </div>
 			                </div>
 							<div class="ui-form-group">
-			                    <label class="control-label" for="exampleInputEmail3">分区字段</label> 
+			                    <label class="control-label" for="exampleInputEmail3"><span class="input-required">*</span>分区字段</label> 
 			                    <div class="control-input">
 			                        <input v-model="dateColumnName" id="dateColumnName" name="dateColumnName" type="text" required="true" validtype="alphaStart" class="form-control easyui-validatebox" placeholder="日期分区字段名称">
 			                    	<span id="dimCodeColTxtTip" class="fleft columnGreenTip" title="数据表中的日期分区字段，命名以英文字母开头，可以包含数字下划线。例如:DATA_DATE">?</span>
@@ -78,28 +78,28 @@
 				        </div>
 			            <div class="form-horizontal fleft mt20 ml30">
 			            	<div class="ui-form-group">
-			                   <label class="control-label" for="exampleInputEmail3">SCHEMA</label>
+			                   <label class="control-label" for="exampleInputEmail3"><span class="input-required">*</span>SCHEMA</label>
 			                    <div class="control-input">
 			                        <input required="true" v-model="tableSchema" id="tableSchema" required="true" name="tableSchema" type="text" class="easyui-validatebox form-control" placeholder="表名SCHEMA">
 			                    	<span id="dimCodeColTxtTip" class="fleft columnGreenTip" title="表所在的SCHEMA，默认可填写default">?</span>
 			                    </div>
 			                </div>
 			                <div class="ui-form-group">
-			                    <label class="control-label" for="exampleInputEmail3">主键名称</label>
+			                    <label class="control-label" for="exampleInputEmail3"><span class="input-required">*</span>主键名称</label>
 			                    <div class="control-input">
 			                        <input v-model="idColumn" id="idColumn" name="idColumn" type="text" validtype="alphaStart"
 			                        required="true"	class="form-control easyui-validatebox" id="exampleInputEmail3" placeholder="来源主键字段名称">
 			                    </div>
 				            </div>
 				            <div class="ui-form-group">
-			                   <label class="control-label" for="exampleInputEmail3">主键类型</label>
+			                   <label class="control-label" for="exampleInputEmail3"><span class="input-required">*</span>主键类型</label>
 			                    <div class="control-input">
 			                        <select v-model="idType" name="idType" dicCode="BSLXZD" type="text" 
 			                        required="true"	class="form-control input-pointer easyui-validatebox"></select>
 			                    </div>
 			                </div>
 				            <div class="ui-form-group">
-			                    <label class="control-label" for="exampleInputEmail3">字段类型</label>
+			                    <label class="control-label" for="exampleInputEmail3"><span class="input-required">*</span>主键字段类型</label>
 			                    <div class="control-input">
 			                        <select v-model="idDataType" required="true" name="idDataType" dicCode="ZDLXZD" type="text" class="form-control input-pointer easyui-validatebox"></select>
 			                    </div>

@@ -93,6 +93,10 @@ window.loc_onload = function() {
 	
 	wd.addBtn("ok", "保存", function() {
 		if($('#saveDataForm').validateForm()){
+			if(model.dataAccessType == "" || model.orgId == "1"){
+				$.alert("请选择专区类型及其所属");
+				return false;
+			}
 			var url_ = "";
 			var msss = "";
 			if(model.configId!=null && model.configId!=undefined && model.configId!= ""){
@@ -103,23 +107,19 @@ window.loc_onload = function() {
 				url_ = $.ctx + '/api/prefecture/preConfigInfo/save';
 				msss = "保存成功";
 			}
-	//		if($("#saveDataForm").validateForm){
-				$.commAjax({
-					url : url_,
-					postData : $('#saveDataForm').formToJson(),
-					onSuccess : function(data) {
-						if(data.data == "success"){
-							$.success(msss, function() {
-								wd.cancel();
-								wd.reload();
-							});
-						}
-						
-					}
-				})
-	//		}else{
-	//			$.alert("表单校验失败");
-	//		}
+//			$.commAjax({
+//				url : url_,
+//				postData : $('#saveDataForm').formToJson(),
+//				onSuccess : function(data) {
+//					if(data.data == "success"){
+//						$.success(msss, function() {
+//							wd.cancel();
+//							wd.reload();
+//						});
+//					}
+//					
+//				}
+//			})
 	
 		}
 	});

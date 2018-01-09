@@ -301,7 +301,10 @@ function fun_to_save() {
 	}
 }
 function analysis(){
-	if(!$("#tableSchema").val()){
+	if(!$("#sourceTableName").val()){
+		$.alert("请输入表名");
+		return false;
+	}else if(!$("#tableSchema").val()){
 		$.alert("请输入SCHEMA");
 		return false;
 	}

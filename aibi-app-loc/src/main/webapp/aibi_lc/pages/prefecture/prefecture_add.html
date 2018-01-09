@@ -29,14 +29,14 @@
 					<div class="ui-reg-search">
 						<div class="form-horizontal ui-form dimtable-table">
 							<div class="ui-form-group">
-								<label class="control-label fleft">专区名称</label>
+								<label class="control-label fleft"><span class="input-required">*</span>专区名称</label>
 								<div class="control-input">
 									<input v-model="sourceName" name="sourceName" type="text"  class="fleft form-control easyui-validatebox"
 									required="true"	placeholder="专区名称" />
 								</div>
 							</div>
 							<div class="ui-form-group">
-									<label class="control-label fleft">专区类型</label>
+									<label class="control-label fleft"><span class="input-required">*</span>专区类型</label>
 									<div class="control-input">
 										<ul>
 											<li class="radio circle success ml10" v-for="z in zqlxList" style="display: inline">
@@ -49,7 +49,7 @@
 							</div>
 							<div class="ui-form-group">
 								<div v-if="showHyx==true" class="form-group">
-									<label class="control-label fleft">行业线</label> 
+									<label class="control-label fleft"><span class="input-required">*</span>行业线</label> 
 									<div class="control-input">
 										<select id="orgId2" required="true" name="orgId" class="form-control input-pointer easyui-validatebox" >
 											<option value="1">请选择行业线</option>
@@ -58,7 +58,7 @@
 									</div>
 								</div>
 								<div v-if="showCpx==true" class="ui-form-group">
-									<label class="control-label fleft">业务线</label> 
+									<label class="control-label fleft"><span class="input-required">*</span>业务线</label> 
 									<div class="control-input">
 										<select required="true" id="orgId1" name="orgId" class="form-control input-pointer easyui-validatebox" >
 											<option value="1" required="true" class="easyui-validatebox">请选择业务线</option>
@@ -68,7 +68,7 @@
 								</div>
 							</div>
 							<div class="ui-form-group">
-								<label class="control-label fleft" for="invalidTime">失效时间</label> 
+								<label class="control-label fleft" for="invalidTime"><span class="input-required">*</span>失效时间</label> 
 								<div class="control-input">
 									<input name="invalidTime" type="text"
 									required="true"	class="form-control input-pointer easyui-validatebox" data-dismiss="formDatepicker#sendTime" id="invalidTime" placeholder="请选择失效日期" />
