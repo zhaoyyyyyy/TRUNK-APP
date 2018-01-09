@@ -255,7 +255,7 @@ function fun_to_save() {
 				$.alert("第["+(k+1)+"]行字段名称与分区字段重复");
 				break;
 			}
-			if(!colnames.indexOf(list[k])>0){
+			if(!isInArray(colnames,list[k].columnName)){
 				exe = false;
 			}
 			sourceInfoList += JSON.stringify(list[k]); 
@@ -289,6 +289,7 @@ function fun_to_save() {
 			if(boolean1 && boolean2 && exe){
 				ajax_to_save(url_,msss);
 			}else{
+				debugger;
 				$.confirm('表不存在或者表结构异常，确认保存？', function() {
 					ajax_to_save(url_,msss);
 				})
