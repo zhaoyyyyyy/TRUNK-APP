@@ -17,6 +17,7 @@ import org.springframework.context.ApplicationContextAware;
 import com.asiainfo.biapp.si.loc.auth.model.DicData;
 import com.asiainfo.biapp.si.loc.auth.service.IDicDataService;
 import com.asiainfo.biapp.si.loc.auth.utils.LocConfigUtil;
+import com.asiainfo.biapp.si.loc.base.common.CommonConstants;
 import com.asiainfo.biapp.si.loc.base.common.LabelInfoContants;
 import com.asiainfo.biapp.si.loc.base.exception.BaseException;
 import com.asiainfo.biapp.si.loc.base.extend.SpringContextHolder;
@@ -24,10 +25,12 @@ import com.asiainfo.biapp.si.loc.base.utils.JsonUtil;
 import com.asiainfo.biapp.si.loc.base.utils.LogUtil;
 import com.asiainfo.biapp.si.loc.base.utils.RedisUtils;
 import com.asiainfo.biapp.si.loc.core.label.dao.ILabelInfoDao;
+import com.asiainfo.biapp.si.loc.core.label.dao.INewestLabelDateDao;
 import com.asiainfo.biapp.si.loc.core.label.entity.LabelExtInfo;
 import com.asiainfo.biapp.si.loc.core.label.entity.LabelInfo;
 import com.asiainfo.biapp.si.loc.core.label.entity.LabelVerticalColumnRel;
 import com.asiainfo.biapp.si.loc.core.label.entity.MdaSysTableColumn;
+import com.asiainfo.biapp.si.loc.core.label.entity.NewestLabelDate;
 
 /**
  * LOC 缓存存取 工具类
@@ -44,6 +47,8 @@ public class LocCacheBase extends ICacheBase implements ApplicationContextAware{
 	
 	
     private ILabelInfoDao iLabelInfoDao;
+    
+    private INewestLabelDateDao newestLabelDao;
 	
 	public LocCacheBase() {
 		super(Prefix.LOC);
@@ -65,6 +70,7 @@ public class LocCacheBase extends ICacheBase implements ApplicationContextAware{
 	public synchronized void init(){
 //		this.iLabelInfoDao= labelInfoDao;
 		this.iLabelInfoDao = (ILabelInfoDao)SpringContextHolder.getBean("labelInfoDaoImpl");
+		this.newestLabelDao = (INewestLabelDateDao)SpringContextHolder.getBean("newestLabelDateDaoImpl");
 		this.initAllLabelInfo();
 		this.initAllConfigInfo();
 		this.initAllDicData();
@@ -123,6 +129,39 @@ public class LocCacheBase extends ICacheBase implements ApplicationContextAware{
 			log.error(e.getMessage(),e);
 		}
 		log.debug("------------------------------------ LocCacheBase -initAllLabelInfo end -------------------------------");
+	}
+	
+	public void initCiNewestLabelDate(){
+		List<NewestLabelDate> labelDate = newestLabelDao.selectNewestLabelDateList(null);
+		CopyOnWriteArrayList<NewestLabelDate> newDateList = new CopyOnWriteArrayList<NewestLabelDate>(labelDate);
+		Map<Object, Object> newDateMap = new ConcurrentHashMap<Object, Object>();
+		for (NewestLabelDate newDate : newDateList) {
+			newDateMap.put(CommonConstants.NEW_DATE, newDate);
+		}
+		
+		try {
+			this.setObject(Prefix.LOC+Prefix.KV+CacheKey.TABLE_CI_NEWEST_LABEL_DATE, newDateMap);
+			this.setObject(Prefix.LOC+Prefix.LIST+CacheKey.TABLE_CI_NEWEST_LABEL_DATE, newDateList);
+			this.set(Prefix.LOC+Prefix.CLAZZ+CacheKey.TABLE_CI_NEWEST_LABEL_DATE, NewestLabelDate.class.getName());
+		} catch (Exception e) {
+			log.error(e.getMessage(),e);
+		}
+		
+	}
+	
+	/**
+	 * 获取日标签最新数据日期
+	 * @return
+	 */
+	public NewestLabelDate getNewestLabelDate() {
+		//initCiNewestLabelDate();
+		NewestLabelDate labelDate = null;
+		try {
+			labelDate = (NewestLabelDate)this.getObjectMap(CacheKey.TABLE_CI_NEWEST_LABEL_DATE, CommonConstants.NEW_DATE);
+		} catch (Exception e) {
+			log.error(e.getMessage(),e);
+		}
+		return labelDate;
 	}
 	
 	/**

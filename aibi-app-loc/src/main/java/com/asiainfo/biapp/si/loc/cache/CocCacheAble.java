@@ -55,4 +55,30 @@ public interface CocCacheAble {
 	 * @return
 	 */
 	public List<DicData> getDicDataByCode(String code);
+	
+	/**
+	 * 获取日标签最新数据日期
+	 * @return
+	 */
+	public String getNewLabelDay();
+	
+	/**
+	 * 获取日标签最新数据日期是否统计过用户数
+	 * @return
+	 */
+	public Integer getNewLabelDayStatus();
+	
+	/**
+	 * 获取月标签最新数据月份
+	 * @return
+	 */
+	public String getNewLabelMonth();
+	
+	/**
+	 * 获取月标签最新数据月份是否统计过用户数
+	 * @return
+	 */
+	public Integer getNewLabelMonthStatus();
+	
+	
 }

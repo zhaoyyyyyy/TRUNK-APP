@@ -69,5 +69,33 @@ public class CocRedisCache implements CocCacheAble{
 		return null;
 	}
 
+	@Override
+	public String getNewLabelDay() {
+		String res = null;
+		res= LocCacheBase.getInstance().getNewestLabelDate().getDayNewestDate();
+		return res;
+	}
+
+	@Override
+	public Integer getNewLabelDayStatus() {
+		Integer res = null;
+		res= LocCacheBase.getInstance().getNewestLabelDate().getDayNewestStatus();
+		return res;
+	}
+
+	@Override
+	public String getNewLabelMonth() {
+		String res = null;
+		res= LocCacheBase.getInstance().getNewestLabelDate().getMonthNewestDate();
+		return res;
+	}
+
+	@Override
+	public Integer getNewLabelMonthStatus() {
+		Integer res = null;
+		res= LocCacheBase.getInstance().getNewestLabelDate().getMonthNewestStatus();
+		return res;
+	}
+
 
 }

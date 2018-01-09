@@ -259,6 +259,26 @@ public abstract class ICacheBase {
     }
     
     /**
+	 * @param tableName
+	 * @param key
+	 * @return
+     * @throws Exception 
+	 */
+	public Object getObjectMap(String tableName,Object key) throws Exception{
+		if (key == null){
+            return null;
+        }
+		String clsName = this.get(appKey+Prefix.CLAZZ+tableName);
+		String listJsonValue = this.get(appKey+Prefix.KV+tableName);
+		try {
+			Map<?, ?> cacheList = (Map<?, ?>)JsonUtil.json2CollectionBean(listJsonValue, Map.class,String.class,Class.forName(clsName));
+			return cacheList.get(key);
+		} catch (Exception e) {
+			throw new Exception(e);
+		}
+	}
+    
+    /**
      * @param tableName
      * @param key
      * @return

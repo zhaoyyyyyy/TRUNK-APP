@@ -106,6 +106,12 @@ public class HdfsUtil {
 		for (FileStatus status : listStatus) {
 
 			String name = status.getPath().getName();
+			if(name.startsWith("_")){
+				continue;
+			}
+			if(name.startsWith(".")){
+				continue;
+			}
 			String localPath = src + name;
 			Path srcPath = new Path(localPath);
 
@@ -116,7 +122,7 @@ public class HdfsUtil {
 				in = fs.open(srcPath);
 				//由于追加方式写入不支持字节流读取，只能先转成字符流
 				BufferedReader bf = new BufferedReader(new InputStreamReader(in));
-				out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(dst, true),"gbk"));
+				out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(dst, false),"gbk"));
 				// 打开一个随机访问文件流，按读写方式     
 				String valueString = null;
 				while ((valueString=bf.readLine())!=null) {
@@ -256,10 +262,10 @@ public class HdfsUtil {
 
 		HdfsUtil.initEnvi("hdfs://10.19.58.79:8020/", "hdfs");
 		System.out.println("---------------------------------------------------------------------------");
-		HdfsUtil.fileLocation("/apps/hive/warehouse/coc.db/coc_opg1");
+		HdfsUtil.fileLocation("/apps/hive/warehouse/coc.db/coc_ems1");
 		System.out.println("---------------------------------------------------------------------------");
 		// HdfsUtil.catFile("/chengdu/md_user_ip_20160111/data/md_user_ip_20160111.csv");
-//		HdfsUtil.getFile("/apps/hive/warehouse/coc.db/coc_opg1/","F://hadoop/gaga.csv");
+		HdfsUtil.getFile("/apps/hive/warehouse/coc.db/coc_ems1/","F:\\hadoop\\gaga.csv");
 //		HdfsUtil.readFile("/user/hive/warehouse/ci_cuser_20150116104533694_484750/part-00000");
 		// HdfsUtil.remove("/abcd", true);
 		// HdfsUtil.putFile("C:\\data1.txt", "/input/data/");
