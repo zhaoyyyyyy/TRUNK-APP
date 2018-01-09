@@ -36,7 +36,8 @@
 								<input v-model="configId" id="configId" name="configId" type="hidden" class="form-control mr10 ml10"/>      	
 			                    <label class="control-label" for="exampleInputEmail3">表名称</label> 
 			                        <div class="control-input">
-			                            <input v-model="sourceTableName" id="sourceTableName" name="sourceTableName" required="true"	type="text" class="form-control easyui-validatebox" placeholder="表名称，命名以英文字母开头，可以包含数字下划线">
+			                            <input v-model="sourceTableName" id="sourceTableName" name="sourceTableName" required="true" validtype="alphaStart"
+	type="text" class="form-control easyui-validatebox" placeholder="表名称，命名以英文字母开头，可以包含数字下划线">
 			                        </div>
 			                        <button onclick="analysis()" type="button" class="ui-btn ui-btn-default ml10">解析</button>
 			                </div>
@@ -50,7 +51,7 @@
 							<div class="ui-form-group">
 			                    <label class="control-label" for="exampleInputEmail3">分区字段</label> 
 			                    <div class="control-input">
-			                        <input v-model="dateColumnName" id="dateColumnName" name="dateColumnName" type="text" required="true" class="form-control easyui-validatebox" placeholder="日期分区字段名称">
+			                        <input v-model="dateColumnName" id="dateColumnName" name="dateColumnName" type="text" required="true" validtype="alphaStart" class="form-control easyui-validatebox" placeholder="日期分区字段名称">
 			                    	<span id="dimCodeColTxtTip" class="fleft columnGreenTip" title="数据表中的日期分区字段，命名以英文字母开头，可以包含数字下划线。例如:DATA_DATE">?</span>
 			                    </div>
 			                </div>
@@ -86,7 +87,7 @@
 			                <div class="ui-form-group">
 			                    <label class="control-label" for="exampleInputEmail3">主键名称</label>
 			                    <div class="control-input">
-			                        <input v-model="idColumn" id="idColumn" name="idColumn" type="text" 
+			                        <input v-model="idColumn" id="idColumn" name="idColumn" type="text" validtype="alphaStart"
 			                        required="true"	class="form-control easyui-validatebox" id="exampleInputEmail3" placeholder="来源主键字段名称">
 			                    </div>
 				            </div>
