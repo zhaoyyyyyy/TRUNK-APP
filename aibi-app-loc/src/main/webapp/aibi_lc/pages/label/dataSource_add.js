@@ -237,6 +237,7 @@ function fun_to_save() {
 		var list = $("#jsonmap").jqGrid("getRowData");
 		var sourceInfoList = "sourceInfoList{";
 		var idColumn = $("#idColumn").val();
+		var dateColumnName = $("#dateColumnName").val();
 		var colNum = "";
 		if(list.length == 0){
 			$.alert("请填写指标信息列");
@@ -247,6 +248,11 @@ function fun_to_save() {
 			if(list[k].columnName == idColumn){
 				colNum = "error";
 				$.alert("第["+(k+1)+"]行字段名称与主键名称重复");
+				break;
+			}
+			if(list[k].columnName == dateColumnName){
+				colNum = "error";
+				$.alert("第["+(k+1)+"]行字段名称与分区字段重复");
 				break;
 			}
 			if(!colnames.indexOf(list[k])>0){
@@ -270,7 +276,6 @@ function fun_to_save() {
 			//开始进行保存
 			var url_ = "";
 			var msss = "";
-			var dateColumnName = $("#dateColumnName").val();
 			if(model.sourceTableId!=null && model.sourceTableId!=undefined && model.sourceTableId!= ""){
 				url_ = $.ctx + '/api/source/sourceTableInfo/update';
 				msss = "修改成功";
@@ -279,10 +284,11 @@ function fun_to_save() {
 				url_ = $.ctx + '/api/source/sourceTableInfo/save';
 				msss = "保存成功";
 			}
-			if(!colnames.indexOf(idColumn)>0 && !colnames.indexOf(dateColumnName)>0 && exe){
+			var boolean1 = isInArray(colnames,idColumn);
+			var boolean2 = isInArray(colnames,dateColumnName);
+			if(boolean1 && boolean2 && exe){
 				ajax_to_save(url_,msss);
 			}else{
-				debugger;
 				$.confirm('表不存在或者表结构异常，确认保存？', function() {
 					ajax_to_save(url_,msss);
 				})
@@ -349,4 +355,12 @@ function ajax_to_save(url,mesg){
 			}
 		}
 	});
+}
+function isInArray(arr,value){
+    for(var i = 0; i < arr.length; i++){
+        if(value === arr[i]){
+            return true;
+        }
+    }
+    return false;
 }
