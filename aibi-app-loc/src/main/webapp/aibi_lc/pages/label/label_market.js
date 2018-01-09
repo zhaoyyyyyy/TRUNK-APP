@@ -22,6 +22,13 @@ var dataModel = {
 		sortCol:"customNum",
 		isShow:false,
 		bdList:[],
+		exploreCustomNum:'--', //探索结果
+		_EnumCount : 100,//枚举值的最大个数
+		_maxLabelNum : 100 ,//选择的标签最大个数
+		existMonthLabel : true,//规则中是否包含月标签
+		existDayLabel : true,//规则中是否包含月标签
+		labelMonth : '',//规则中月日期
+		labelDay : ''//规则中日日期
 }
 window.loc_onload = function() {
 	//初始化参数
@@ -382,17 +389,24 @@ var labelMarket = (function (model){
 		 */
         model.addShopCart = function(id,typeId,isEditCustomFlag,defaultOp){
         	var flag = false;
+        	var msg = "";
 			if(typeId == 1) {
 				//校验标签有效性
 				$.commAjax({
 					  url: $.ctx + "/api/shopCart/findLabelValidate",
+					  async	: false,//同步
 					  postData:{labelId :  $.trim(id)},
 					  onSuccess: function(returnObj){
 					  	  //1.如果验证失败，需要返回 2.需要提示
-						  flag = true;
+						  if(returnObj.status == '201'){
+							  flag = true; 
+							  msg = returnObj.msg ;
+						  }
+						  
 					  }
 				});
 				if(flag){
+					$.alert(msg);
 					return;
 				}
 			}
@@ -412,6 +426,7 @@ var labelMarket = (function (model){
 				});
 				*/
 				if(flag){
+					$.alert("添加标签失败");
 					return;
 				}
 			}
@@ -521,23 +536,7 @@ var labelMarket = (function (model){
 		    		model.refreshShopCart();
 		    	}
     		}else if(labelType == "11"){  //条件选择
-    			/**
-                var attrVal = mainObj.attr("attrVal");
-                var attrName = mainObj.attr("attrName");
-                var calcuElement = mainObj.attr("calcuElement");
-                var para="?attrVal="+attrVal+"&attrName="+attrName+"&calcuElement="+calcuElement;
-                $(dialogId).dialog("option","title", name+"-条件设置");
-                var ifmUrl = '${ctx}/aibi_ci/dialog/genKpiChooseDialog.jsp';
-                var form = '<form id="postData_form" action="' + ifmUrl + '" method="post" target="_self">' + 
-                    '<input name="attrVal" type="hidden" value="' + attrVal + '"/>' +
-                    '<input name="attrName" type="hidden" value="' + attrName + '"/>' +
-                    '<input name="calcuElement" type="hidden" value="' + calcuElement + '"/>' +
-                    '<input name="labelType" type="hidden" value="' + labelType + '"/>' +
-                    '</form>';
-                document.getElementById('genKpiChooseFrame').contentWindow.document.write(form);
-                document.getElementById('genKpiChooseFrame').contentWindow.document.getElementById('postData_form').submit();
-                $(dialogId).dialog("open");
-                **/
+    			
             }else if(labelType == "6"){//日期类型标签
     			var startTime = "" ;
     			var endTime ="" ;
@@ -619,22 +618,193 @@ var labelMarket = (function (model){
 		model.againstLabel = function(t){
 			var index = $(t).parent().attr("index");
 			var rule = dataModel.ruleList[index];
-			if(rule.labelFlag == 1){
-				dataModel.ruleList[index].labelFlag = 0 ;
-			}else{
-				dataModel.ruleList[index].labelFlag = 1 ;
+			if(rule){
+				if(rule.labelFlag == 1){
+					dataModel.ruleList[index].labelFlag = 0 ;
+				}else{
+					dataModel.ruleList[index].labelFlag = 1 ;
+				}
+				
+	    		model.submitRules();
 			}
-			
-    		model.submitRules();
 		};
 		/**
 		 * 删除规则
 		 */
 		model.deleteRule = function(t){
 			var index = $(t).parent().parent().parent().attr("index");
-			var rule = dataModel.ruleList[index];
-			dataModel.ruleList.pop(rule);
+			dataModel.ruleList.splice(index,1);
     		model.submitRules();
+		};
+		/**
+		 * 枚举或者文本类精确匹配时需要验证个数不能大于100个（oracle数据库超过1000个报错，而且过多影响数据探索，没有实际意义）
+		 */
+		model.validateEnumCount = function(){
+			var resultFlag = true;
+			for(var i=0 ; i<dataModel.ruleList.length;i++){
+				if(dataModel.ruleList[i].elementType == 2 && dataModel.ruleList[i].labelTypeId == 5){
+					var str = dataModel.ruleList[i].attrVal;
+					if(str!=null&&str!=""&&str.split(",").length>dataModel._EnumCount){
+						resultFlag = false;
+					}
+					if(!resultFlag){
+						return resultFlag;
+					}
+				}
+			}
+			if(!resultFlag){
+				return false;
+			}
+		};
+		/**
+		 * 校验
+		 */
+		model.validateForm  = function(){
+			if(model.validateEnumCount() == false){
+				$.alert("配置的条件中值超过"+dataModel._EnumCount+"个，无法计算，可以保存客户群后查看客户数！");
+				return false;
+			}
+			if(dataModel.ruleListCount>dataModel._maxLabelNum){
+				$.alert("计算元素不能超过" + dataModel._maxLabelNum + "个！","failed");
+				return false;
+			}
+
+			if(!model.isSetProperties()){
+				$.alert("存在没有设置属性的标签");
+				return false;
+			}
+			return true;
+		}
+		/**
+		 * 存在没有设置属性的标签
+		 */
+		model.isSetProperties = function(){
+			var flag=true;
+			if($(".ui-nothing-icon").length>0){
+				flag = false;
+			}
+			return flag;
+		}
+		/**
+		 * 遍历购物车标签是否存在无效标签,购物车中不是所有规则都是标签，还有客户群
+		 */
+		model.labelsValite	= function() {
+			var resultFlag = true;
+			for(var i=0 ; i<dataModel.ruleList.length;i++){
+				if(dataModel.ruleList[i].elementType == 2 && dataModel.ruleList[i].labelTypeId != 13){
+					$.commAjax({
+						  url: $.ctx + "/api/shopCart/findLabelValidate",
+						  postData:{labelId : dataModel.ruleList[i].calcuElement},
+						  async	: false,//同步
+						  onSuccess: function(returnObj){
+							  	var status = returnObj.status;
+								if (status != '200'){
+									resultFlag = false;
+									$.alert("购物车中存在无效标签，请删除！");
+								}
+						  }
+					});
+				}
+			}
+			return resultFlag;
+		};
+		/**
+		 * sql验证
+		 */
+		model.validateSql = function(labelMonth,labelDay){
+			var flag = false;				
+			//验证sql
+			var actionUrl = $.ctx + '/api/shopCart/validateSql';
+			$.commAjax({
+				  url: actionUrl,
+				  async	: false,//同步
+				  postData:{
+					  "monthLabelDate":labelMonth,
+					  "dayLabelDate":labelDay
+				  },
+				  onSuccess: function(returnObj){
+					  	var status = returnObj.status;
+					  	var msg = returnObj.msg;
+						if (status == '200'){
+							//删除失效的标签
+							flag = true;
+						}else{
+							$.alert(msg);
+						}
+				  }
+			});
+			return flag;
+		}
+		/**
+		 * 探索标签
+		 */
+		model.explore = function(){
+			
+			if(model.validateForm()){
+				var existLabel = true;
+				//只有清单时,不弹出对话框,直接探索
+				$.commAjax({
+					  url: $.ctx + "/api/shopCart/findEaliestDataDate",
+					  async	: false,//同步
+					  onSuccess: function(returnObj){
+						  	var status = returnObj.status;
+						  	var result = returnObj.data;
+							if (status == '200'){
+								model.existMonthLabel = result.existMonthLabel;
+								model.existDayLabel = result.existDayLabel;
+								model.labelMonth = result.monthDate;
+								model.labelDay = result.dayDate;
+								if(!model.existMonthLabel && !model.existDayLabel){//不含标签时直接探索
+									//验证sql
+									if(model.validateSql(model.labelMonth.replace(/-/g,""),model.labelDay.replace(/-/g,""))){
+										model.submitForExplore(model.labelMonth.replace(/-/g,""),model.labelDay.replace(/-/g,""));
+									}
+									existLabel = false;
+								}
+							}
+					  }
+				});
+				if(!existLabel){
+					return false;
+				}
+				//设置标签数据日期
+    			var wd = $.window("标签数据日期", $.ctx + '/aibi_lc/pages/labelDialog/shopCartDataDateSet.html', 600, 500);
+		    	wd.reload = function() {
+		    		model.refreshShopCart();
+		    	}
+			}else{
+				dataModel.exploreCustomNum = "--";
+			}
+			
+		};
+		/**
+		 * 提交探索
+		 */
+		model.submitForExplore = function(labelMonth,labelDay){
+			var actionUrl = "";
+			var param = {
+				"dataDate":labelMonth,
+				"monthLabelDate":labelMonth,
+				"dayLabelDate":labelDay
+			};
+			$.commAjax({
+				  url: $.ctx + "/api/shopCart/explore",
+				  postData:param,
+				  onSuccess: function(returnObj){
+					dataModel.exploreCustomNum = 0;
+					if(returnObj.status == '200'){
+						dataModel.exploreCustomNum = returnObj.data;
+					}else{
+						$.alert("探索失败");
+					}
+				 }
+			});
+		};
+		/**
+		 * 进入客户群编辑界面
+		 */
+		model.gotoSaveCustomer = function(e){
+			
 		};
         /**
          * @description 计算中心

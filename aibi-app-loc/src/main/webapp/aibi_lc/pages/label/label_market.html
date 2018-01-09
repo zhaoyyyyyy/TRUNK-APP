@@ -385,9 +385,9 @@
 					<i></i> <span>已选择标签 {{ruleListCount}} 个</span>
 				</p>
 				<p class="fright">
-					<span>客户群数：</span><span class="y-text">18,290,40</span>
-					<span class="shop-icon"></span>
-					<button type="button" class="ui-btn ui-btn-default mr10">
+					<span>客户群数：</span><span class="y-text" v-text="exploreCustomNum"></span>
+					<span class="shop-icon" onclick="labelMarket.explore(event,this);"></span>
+					<button type="button" class="ui-btn ui-btn-default mr10" onclick="labelMarket.gotoSaveCustomer(event);">
 						<span class="create-white"></span> 创建客户群
 					</button>
 				</p>
