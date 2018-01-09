@@ -70,9 +70,12 @@ window.loc_onload = function(){
 		el : '#dataD',
 	    data : model ,
 	    methods : {
-	    	del_form : function(index){
+	    	/*del_form : function(index){
 	    		model.sourceInfoList.splice(index,1);
-	    	}
+	    	},*/
+	        del_sourceName : function(index){
+	        	debugger
+	        }
 	    },
 	    mounted: function () {
 		    this.$nextTick(function () {

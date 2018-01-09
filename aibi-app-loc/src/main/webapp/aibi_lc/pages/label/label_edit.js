@@ -60,6 +60,14 @@ window.loc_onload = function() {
 					}
 					$("#dependIndex").val(dependx.substr(0,dependx.length-1));
 				}
+			},
+			mounted: function () {
+			    this.$nextTick(function () {
+				    var r = $(".easyui-validatebox");
+		   			if (r.length){
+		   				r.validatebox();
+		   			}
+			    })
 			}
 	})
 	var dicgxzq = $.getDicData("GXZQZD");
