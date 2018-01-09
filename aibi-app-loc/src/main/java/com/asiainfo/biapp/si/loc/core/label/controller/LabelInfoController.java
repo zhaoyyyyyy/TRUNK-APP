@@ -211,7 +211,6 @@ public class LabelInfoController extends BaseController<LabelInfo> {
                 approveInfo.setApproveTime(new Date());
                 oldLab.setApproveInfo(approveInfo);
                 oldLab.setPublishTime(new Date());
-                oldLab.setEffecTime(new Date());
             } catch (BaseException e) {
                 e.printStackTrace();
             }
