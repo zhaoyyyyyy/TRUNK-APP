@@ -17,6 +17,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<start-class>com.asiainfo.biapp.si.loc.LocApplication</start-class>
 		<log4j.version>1.2.16</log4j.version>
+		<hadoop.version>2.5.0</hadoop.version>
 	</properties>
 	<dependencies>
 
@@ -44,22 +45,10 @@
 		</dependency>
 
 		<dependency>
-			<groupId>org.apache.hadoop</groupId>
-			<artifactId>hadoop-core</artifactId>
-			<version>1.2.1</version>
-			<exclusions>
-				<!-- <exclusion> <artifactId>jsp-api-2.1</artifactId> <groupId>org.mortbay.jetty</groupId> 
-					</exclusion> -->
-				<!-- <exclusion> <artifactId>jsp-2.1</artifactId> <groupId>org.mortbay.jetty</groupId> 
-					</exclusion> -->
-				<exclusion>
-					<artifactId>servlet-api-2.5</artifactId>
-					<groupId>org.mortbay.jetty</groupId>
-				</exclusion>
-				<exclusion>
-					<artifactId>servlet-api</artifactId>
-					<groupId>org.mortbay.jetty</groupId>
-				</exclusion>
+  			<groupId>org.apache.hadoop</groupId>
+  			<artifactId>hadoop-client</artifactId>
+  			<version>${hadoop.version}</version>
+  			<exclusions>
 				<!-- <exclusion>
 					<artifactId>log4j</artifactId>
 					<groupId>log4j</groupId>
@@ -73,17 +62,25 @@
 					<groupId>org.slf4j</groupId>
 				</exclusion>
 				<exclusion>
-					<artifactId>jetty-all</artifactId>
-					<groupId>org.eclipse.jetty.aggregate</groupId>
+					<artifactId>jetty</artifactId>
+					<groupId>org.mortbay.jetty</groupId>
+				</exclusion>
+				<exclusion>
+					<artifactId>jetty-util</artifactId>
+					<groupId>org.mortbay.jetty</groupId>
+				</exclusion>
+				<exclusion>
+					<artifactId>servlet-api</artifactId>
+					<groupId>javax.servlet</groupId>
 				</exclusion>
 				<exclusion>
 					<artifactId>guava</artifactId>
 					<groupId>com.google.guava</groupId>
 				</exclusion>
+
 			</exclusions>
 		</dependency>
-
-		<dependency>
+ 		<dependency>
 			<groupId>org.apache.hive</groupId>
 			<artifactId>hive-jdbc</artifactId>
 			<version>1.2.1</version>

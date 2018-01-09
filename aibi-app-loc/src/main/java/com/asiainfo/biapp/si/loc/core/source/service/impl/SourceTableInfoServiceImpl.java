@@ -11,8 +11,7 @@ import java.util.List;
 
 import javax.transaction.Transactional;
 
-import org.apache.commons.lang.StringUtils;
-import org.hsqldb.lib.StringUtil;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -96,13 +95,13 @@ public class SourceTableInfoServiceImpl extends BaseServiceImpl<SourceTableInfo,
         if(!sourceTableInfo.getSourceInfoList().isEmpty()&&"please-format-sourceInfoList".equals(sourceTableInfo.getSourceInfoList().get(0).getSourceTableId())){
             throw new ParamRequiredException("指标信息列表格式不正确");
         }
-        if(StringUtil.isEmpty(sourceTableInfo.getSourceTableName())){
+        if(StringUtils.isEmpty(sourceTableInfo.getSourceTableName())){
             throw new ParamRequiredException("表名称不能为空");
         }
-        if(StringUtil.isEmpty(sourceTableInfo.getSourceTableCnName())){
+        if(StringUtils.isEmpty(sourceTableInfo.getSourceTableCnName())){
             throw new ParamRequiredException("表中文名称不能为空");
         }
-        if(StringUtil.isEmpty(sourceTableInfo.getIdColumn())){
+        if(StringUtils.isEmpty(sourceTableInfo.getIdColumn())){
             throw new ParamRequiredException("主键名称不能为空");
         }
         List<String> nameList = new ArrayList<>();
@@ -146,13 +145,13 @@ public class SourceTableInfoServiceImpl extends BaseServiceImpl<SourceTableInfo,
         if(!sourceTableInfo.getSourceInfoList().isEmpty()&&"please-format-sourceInfoList".equals(sourceTableInfo.getSourceInfoList().get(0).getSourceTableId())){
             throw new ParamRequiredException("指标信息列表格式不正确");
         }
-        if(StringUtil.isEmpty(sourceTableInfo.getSourceTableName())){
+        if(StringUtils.isEmpty(sourceTableInfo.getSourceTableName())){
             throw new ParamRequiredException("表名称不能为空");
         }
-        if(StringUtil.isEmpty(sourceTableInfo.getSourceTableCnName())){
+        if(StringUtils.isEmpty(sourceTableInfo.getSourceTableCnName())){
             throw new ParamRequiredException("表中文名称不能为空");
         }
-        if(StringUtil.isEmpty(sourceTableInfo.getIdColumn())){
+        if(StringUtils.isEmpty(sourceTableInfo.getIdColumn())){
             throw new ParamRequiredException("主键名称不能为空");
         }
         List<String> nameList = new ArrayList<>();
