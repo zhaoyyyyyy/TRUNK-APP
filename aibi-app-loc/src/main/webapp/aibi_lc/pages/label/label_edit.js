@@ -58,7 +58,12 @@ window.loc_onload = function() {
 					for(var i=0; i<model.dependIndexList.length; i++){
 						dependx += model.dependIndexList[i]+","
 					}
-					$("#dependIndex").val(dependx.substr(0,dependx.length-1));
+					if($("#label-lists span").length>1){
+						$("#dependIndex").val(dependx.substr(0,dependx.length-1));
+					}else{
+						$("#dependIndex").val("");
+					}
+					
 				}
 			},
 			mounted: function () {
