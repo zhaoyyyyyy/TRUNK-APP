@@ -443,7 +443,10 @@ public class LabelInfo extends BaseEntity {
 
     public String getCreateTime() {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        return dateFormat.format(createTime);
+        if(createTime != null){
+        	return dateFormat.format(createTime);
+        }
+        return "";
     }
 
     public void setCreateTime(Date createTime) {

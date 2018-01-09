@@ -6,6 +6,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.AfterThrowing;
@@ -18,11 +20,8 @@ import com.asiainfo.biapp.si.loc.base.utils.DateUtil;
 import com.asiainfo.biapp.si.loc.base.utils.HttpUtil;
 import com.asiainfo.biapp.si.loc.base.utils.LogUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationConfig;
 
 import io.swagger.annotations.ApiOperation;
-import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
 
 /**
  * Title : LogAspectAdvice
@@ -146,8 +145,14 @@ public class LogAspectAdvice {
         	if(args != null  && args.length> 0){
         		//inputParams = JSONArray.fromObject(args).toString();
         		
+        		//TODO 这个因为是request输出的，没法处理，后续看 zhougz3
         		ObjectMapper mapper = new ObjectMapper();
-        		inputParams = mapper.writeValueAsString(args);
+        		if(args[0] instanceof org.apache.catalina.connector.RequestFacade){
+        			inputParams = "";
+        		}else{
+        			inputParams = mapper.writeValueAsString(args);
+        		}
+        		
                 
         		if(inputParams.length() > 2000){
         			inputParams = inputParams.substring(0, 2000);
