@@ -14,7 +14,8 @@ var model = {
 	sortNum : 0,
 	gxzq : [],
 	sourceTableId : "",
-	configId : ""
+	configId : "",
+	tableSchema : ""
 }
 window.loc_onload = function() {
 	model.configId = $.getCurrentConfigId();
@@ -42,6 +43,7 @@ window.loc_onload = function() {
 				model.idType = data.data.idType;
 				model.idColumn = data.data.idColumn;
 				model.idDataType = data.data.idDataType;
+				model.tableSchema = data.data.tableSchema;
 				$("#code"+data.data.readCycle).click();
 			}
 		})
@@ -221,6 +223,10 @@ function fun_to_save() {
 		var sourceInfoList = "sourceInfoList{";
 		var idColumn = $("#idColumn").val();
 		var colNum = "";
+		if(list.length == 0){
+			$.alert("请填写指标信息列");
+			return false;
+		}
 		for(var k = 0; k<list.length; k++){
 			delete list[k].op;
 			if(list[k].columnName == idColumn){
@@ -256,7 +262,7 @@ function fun_to_save() {
 			}
 			$.commAjax({
 				url : $.ctx + "/backSql/columns",
-				postData:{"tableName" : $("#sourceTableName").val()},
+				postData:{"tableName" : $("#tableSchema").val()+"."+$("#sourceTableName").val()},
 				onSuccess : function(data) {
 					var colnames = [];
 					if(data.data != null){
@@ -280,11 +286,15 @@ function fun_to_save() {
 	}
 }
 function analysis(){
-	var tableName = $("#sourceTableName").val();
+	var tableName = $("#tableSchema").val()+"."+$("#sourceTableName").val();
 	$.commAjax({
 		url:$.ctx + "/backSql/columns",
 		postData:{"tableName" : tableName},
 		onSuccess:function(data){
+			if(data.data==null){
+				$.alert("表不存在");
+				return false;
+			}
 			$("#jsonmap").jqGrid("clearGridData");
 			for(var i=0;i < data.data.length;i++){
 				if(data.data[i].data_type == "string"){
