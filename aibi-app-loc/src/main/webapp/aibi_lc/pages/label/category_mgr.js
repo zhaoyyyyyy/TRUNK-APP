@@ -386,18 +386,20 @@ window.loc_onload = function() {
 	//标签部分的模糊查询
 	$("#btn_serach1").click(function(){
 		var text =$("#exampleInputAmount1").val();
-		showLabelInfo(text,1);
+		showLabelInfo(text);
+		/*if(labelCategory != 1){
+			showLabelInfo(text,1);
+		}else{
+			showLabelInfo(text);
+		}*/
 	})
 	//全部分类当前分类判断
-	/*function distIndex(dataId){
-		var text =$("#exampleInputAmount1").val();
-		if(dataId==0){
-			alert(0)
-			//showLabelInfo(text,1);
-			}else{
-			alert(1)
-			//showLabelInfo(text,3);
-			}
+	/*var labelCategory; //1.当前分类     其他为全部分类
+	function distIndex(dataId){
+		labelCategory = 0;
+		if(dataId != 0){
+			labelCategory =1; //将分类定义为当前分类
+		}
 	}
 	$("#radioList .radio").each(function(e){
 		if($(this).find("label").hasClass('active')){
@@ -429,8 +431,9 @@ window.loc_onload = function() {
 	function showLabelInfo(labelInfo,number){
 		var obj = $("#preConfig_list").find("span");
 		var configId =obj.attr("configId");    //专区ID
-		var text;			//模糊查询时的关键字
-		if(number == 1){text = labelInfo}		//标签的模糊查询	
+		var categoryId = leftTreeCagyId;
+		var text = labelInfo;			//模糊查询时的关键字
+		if(number == 1){text = labelInfo; categoryId = "";}//全部分类下的标签模糊查询
 		$.commAjax({			
 		    url : $.ctx+'/api/label/labelInfo/queryList', 
 		    isShowMask : true,
@@ -439,7 +442,7 @@ window.loc_onload = function() {
 		    postData : {
 					"labelName" :text,
 					"configId" :configId,
-					"categoryId" :leftTreeCagyId,
+					"categoryId" :categoryId,
 				},
 		    onSuccess: function(data){
 		    	$("#labelList").html("");
