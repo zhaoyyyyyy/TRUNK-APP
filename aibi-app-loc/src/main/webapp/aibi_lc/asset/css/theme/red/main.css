@@ -924,7 +924,7 @@ span.del-btn{
 /* 遮罩显示加载状态*/
 .window-text {
 	width:140px;
-	padding:10px 0;
+	padding:10px 0 10px 20px;
 	font-size: 11px;
 	zoom: 1;
 	background: #fff url(../../../images/loading.gif) no-repeat 20px center;
