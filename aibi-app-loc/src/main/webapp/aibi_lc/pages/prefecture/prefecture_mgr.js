@@ -68,7 +68,7 @@ window.loc_onload = function() {
             name: 'sourceName',
             index: 'sourceName',
             width: 30,
-            sortable: true,
+            sortable: false,
             frozen: true,
             align: "center",
             formatter : function(value, opts, data) {
@@ -81,7 +81,7 @@ window.loc_onload = function() {
             name: 'configId',
             index: 'configId',
             width: 30,
-            sortable: true,
+            sortable: false,
             frozen: true,
             align: "center"
         },
@@ -89,7 +89,7 @@ window.loc_onload = function() {
             name: 'orgId',
             index: 'orgId',
             width: 30,
-            sortable: true,
+            sortable: false,
             frozen: true,
             align: "center",
             formatter : function(value){
@@ -100,7 +100,7 @@ window.loc_onload = function() {
             name: 'createTime',
             index: 'createTime',
             width: 60,
-            sortable: true,
+            sortable: false,
             frozen: true,
             align: "center",
         },
@@ -109,6 +109,7 @@ window.loc_onload = function() {
             index: 'dataAccessType',
             width: 30,
             align: "center",
+            sortable: false,
             formatter: function(v) {
                 return $.getCodeDesc('ZQLXZD', v);
             }
@@ -118,6 +119,7 @@ window.loc_onload = function() {
             index: 'configStatus',
             width: 30,
             align: "center",
+            sortable: false,
             formatter: function(v) {
                 return $.getCodeDesc('ZQZTZD', v);
             }

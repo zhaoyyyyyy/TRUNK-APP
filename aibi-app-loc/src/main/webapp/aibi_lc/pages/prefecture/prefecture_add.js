@@ -2,6 +2,8 @@ var model = {
 		showCpx : false,
 		showHyx : false,
 		showXzqh : false,
+		showSelect : false,
+		selectName : "",
 		zqlxList : [],
 		hyxList : [],
 		cpxList : [],
@@ -61,7 +63,6 @@ window.loc_onload = function() {
 			if(value1 == "" || configId != ""){
 				$("#type"+model.dataAccessType).click();
 				if(value1 != undefined && model.orgId != "" && model.orgId != "1"){
-					debugger;
 					$("#org").val(orgdata[model.orgId]);
 				}
 			}
@@ -81,7 +82,7 @@ window.loc_onload = function() {
 						orgdata[ob.orgCode]=ob.simpleName;
 						if(ob.parentId == "999"){
 							model.zqlxList.push(ob);
-						}else if(ob.orgType == "2"){
+						}else if(ob.orgType == "2" && ob.parentId == "3"){
 							model.hyxList.push(ob);
 						}else if(ob.orgType == "1" && ob.parentId == "2"){
 							model.cpxList.push(ob);
@@ -132,25 +133,23 @@ window.loc_onload = function() {
 	});
 }
 function changeStatus(obj){
+	model.showSelect = true;
 	if(obj.id == "type1"){
-		model.showCpx = true;
-		model.showHyx = false;
-		model.showXzqh = false;
+		model.selectName = "产品线";
+		$("#org").val("");
 	}
 	if(obj.id == "type2"){
-		model.showCpx = false;
-		model.showHyx = true;
-		model.showXzqh = false;
+		model.selectName = "行业线";
+		$("#org").val("");
 	}
 	if(obj.id == "type3"){
-		model.showHyx = false;
-		model.showCpx = false;
-		model.showXzqh = true;
+		model.selectName = "";
+		$("#org").val("");
 	}
 	if(model.dataAccessType != obj.value){
 		model.dataAccessType = obj.value;
-		model.orgId = "";
 	}
+	$(".ui-form-ztree").removeClass("open");
 }
 function openTtee(tag){
 	var install = {
@@ -183,7 +182,11 @@ function openTtee(tag){
 	}else{
 		$(tag).parent(".ui-form-ztree").addClass("open");
 		$(tag).parent(".ui-form-ztree").find(".dropdown-menu").css("width",100+"%");
-		model.ztreeObj=model.cpxList;
+		if(model.dataAccessType == "2"){
+			model.ztreeObj=model.hyxList;
+		}else if(model.dataAccessType == "1"){
+			model.ztreeObj=model.cpxList;
+		}
     	$.fn.zTree.init($("#pretree"), install, model.ztreeObj);
 	}
 	

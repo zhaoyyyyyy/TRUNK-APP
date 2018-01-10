@@ -48,8 +48,8 @@
 									</div>
 							</div>
 							<div class="ui-form-group">
-								<div v-if="showCpx==true" class="ui-form-group">
-									<label class="control-label fleft"><span class="input-required">*</span>业务线</label> 
+								<div v-if="showSelect==true" class="ui-form-group">
+									<label class="control-label fleft"><span class="input-required">*</span>{{selectName}}</label> 
 									<div class="ui-form-ztree control-input">
 										<input name="orgId" id="orgId" type="hidden" />
 										<input id="org" type="text" class="form-control easyui-validatebox" onclick="openTtee(this)" required="true" readonly placeholder="请选择"></input>
