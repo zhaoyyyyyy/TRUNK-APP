@@ -4,6 +4,7 @@ var model = {
 		sourcetableInfoList:[],
 		sourceInfoList:[{
 			sourceNameList :[],
+			dependIndexList : [],
 			dependIndex : "",
 			labelName : "",
 			labelTypeId : "",
@@ -73,8 +74,23 @@ window.loc_onload = function(){
 	    	/*del_form : function(index){
 	    		model.sourceInfoList.splice(index,1);
 	    	},*/
-	        del_sourceName : function(index){
-	        	debugger
+	        del_sourceName : function(index,index1){
+	        	console.log(model.sourceInfoList)
+	        	model.sourceInfoList[index]['sourceNameList'].splice(index1,1);
+	        	model.sourceInfoList[index]['dependIndexList'].splice(index1,1);
+	        	var dependx="";
+	        	for(var i=0; i<model.sourceInfoList[index]['dependIndexList'].length; i++){
+	    			dependx += model.sourceInfoList[index]['dependIndexList']+","
+	    		}
+	        	if($(".label-lists span").length>1){
+	        		console.log($(".label-lists span").size())
+	        		debugger;
+					$("#dependIndex_"+index).val(dependx.substr(0,dependx.length-1));
+				}else{
+					console.log($(".label-lists span").size())
+	        		debugger;
+					$("#dependIndex_"+index).val("");
+				}
 	        }
 	    },
 	    mounted: function () {
@@ -95,7 +111,7 @@ window.loc_onload = function(){
 			page:1
 		}]);
 	});
-	$(".ui-lc-mian").delegate(".create-main i.del-btn-icon","click",function(){
+	$(".ui-lc-mian").delegate(".create-main i.form-del-btn","click",function(){
 		$(this).parents("form.create-main").remove();
 	});
 }
@@ -104,8 +120,9 @@ function chooseKpi(obj){
 	var win = $.window('指标配置', $.ctx + '/aibi_lc/pages/label/sourceInfo_mgr.html', 900, 600);
 	win.addKpis = function(chooseKpis) {
 		model.sourceIdList = chooseKpis;
-		var index;
+		var index = obj.id;
 		var sourceName = [];
+		var dependIndexList = [];
 		var dependx="";
 		for(var i=0; i<chooseKpis.length; i++){
 			$.commAjax({
@@ -116,13 +133,17 @@ function chooseKpi(obj){
 				},
 				onSuccess : function(data){
 					sourceName.push(data.data.sourceName);
-					dependx += data.data.sourceId+",";
+					dependIndexList.push(data.data.sourceId);
+//					dependx += data.data.sourceId+",";
 				}
 			});
 		}
-		index = obj.id;
+		for(var i=0; i<dependIndexList.length; i++){
+			dependx += dependIndexList[i]+","
+		}
 		model.sourceInfoList[index]['sourceNameList']= sourceName;
-		model.sourceInfoList[index]['dependIndex']= dependx.substr(0,dependx.length-1);
+		model.sourceInfoList[index]['dependIndexList'] = dependIndexList;
+//		model.sourceInfoList[index]['dependIndex']= dependx.substr(0,dependx.length-1);
 		$("#dependIndex_"+index).val(dependx.substr(0,dependx.length-1));
 	}
 }
