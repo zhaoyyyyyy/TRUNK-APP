@@ -58,9 +58,10 @@ window.loc_onload = function() {
 		},
 		updated : function(){
 			var value1 = $("#orgId").val();
-			if(value1 == "1" || configId != ""){
+			if(value1 == "" || configId != ""){
 				$("#type"+model.dataAccessType).click();
-				if(model.orgId != "1"){
+				if(value1 != undefined && model.orgId != "" && model.orgId != "1"){
+					debugger;
 					$("#org").val(orgdata[model.orgId]);
 				}
 			}
@@ -82,7 +83,7 @@ window.loc_onload = function() {
 							model.zqlxList.push(ob);
 						}else if(ob.orgType == "2"){
 							model.hyxList.push(ob);
-						}else if(ob.orgType == "1"){
+						}else if(ob.orgType == "1" && ob.parentId == "2"){
 							model.cpxList.push(ob);
 						}
 					}
@@ -189,8 +190,8 @@ function openTtee(tag){
 	//展示选中分类下的标签
 	function zTreeOnClick(event, treeId, treeNode) {
 		model.nodeName=treeNode;
-		model.orgId=treeNode.id;
-		$("#orgId").val(treeNode.id);
+		model.orgId=treeNode.orgCode;
+		$("#orgId").val(treeNode.orgCode);
 		$(model.tagNode).val(treeNode.simpleName);
 		$(".ui-form-ztree").removeClass("open");
 	};	
