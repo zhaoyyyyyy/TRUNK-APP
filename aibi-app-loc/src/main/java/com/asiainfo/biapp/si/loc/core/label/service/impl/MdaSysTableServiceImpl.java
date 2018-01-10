@@ -61,7 +61,7 @@ public class MdaSysTableServiceImpl extends BaseServiceImpl<MdaSysTable, String>
 
     @Autowired
     private IMdaSysTableDao iMdaSysTableDao;
-    
+    @Autowired
     private IBackSqlService iBackSqlService;
 
     @Override
