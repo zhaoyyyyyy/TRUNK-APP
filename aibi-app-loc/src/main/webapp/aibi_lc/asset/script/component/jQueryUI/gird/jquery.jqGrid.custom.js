@@ -4,6 +4,7 @@ try{
 }catch(e){}
 jQuery.extend(jQuery.jgrid.defaults, {        
    	url:'./grid.json',
+   	isShowMask : false,
 	datatype: "json",
 	mtype:"POST",
    	colNames:[ ],
@@ -43,6 +44,7 @@ jQuery.extend(jQuery.jgrid.defaults, {
 		beforeSend :function(){
 			$("#load_"+$(this).attr("id")).show();
 			$(".loading").show();
+			debugger
 		}
     },
 	height: '100%',
