@@ -65,6 +65,8 @@ window.loc_onload = function() {
 				$.commAjax({
 					url:$.ctx+"/api/source/sourceInfo/queryList",
 					async:false,
+					isShowMask : true,
+					maskMassage : 'Load...',
 					postData:{"sourceTableId":value},
 					onSuccess:function(data){
 						var is = "";

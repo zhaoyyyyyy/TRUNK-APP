@@ -6,6 +6,8 @@ window.loc_onload = function() {
 		postData : {
 			"configId" : configId
 		},
+		isShowMask : true,
+		maskMassage : 'Load...',
 		onSuccess : function(data) {
 			var time = new Date(data.data.invalidTime);
 			var y = time.getFullYear();//年

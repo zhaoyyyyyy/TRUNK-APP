@@ -11,9 +11,11 @@ var model = {
 		sourceEnName : "",
 		invalidTime : "",
 		configId : "",
-		orgId : ""
+		orgId : "",
+		ztreeObj : []
 }
 window.loc_onload = function() {
+	var orgdata = [];
 	var configId = $.getUrlParam("configId");
 	var wd = frameElement.lhgDG;
 	if (configId != null && configId != "" && configId != undefined) {
@@ -58,26 +60,24 @@ window.loc_onload = function() {
 			var value1 = $("#orgId").val();
 			if(value1 == "1" || configId != ""){
 				$("#type"+model.dataAccessType).click();
-				if(value1 == undefined && model.orgId == ""){
-					$("#orgId"+model.dataAccessType).val(1);
-					model.orgId = "1";
-				}else if(model.orgId != "1"){
-					$("#orgId"+model.dataAccessType).val(model.orgId);
+				if(model.orgId != "1"){
+					$("#org").val(orgdata[model.orgId]);
 				}
 			}
 		}
 	})
 	$.commAjax({
-		url : $.ctx + '/api/user/privaliegeOrg/query',
+		url : $.ctx + '/api/user/get',
 		onSuccess : function(data) {
-			if(data.data != null && data.data != undefined){
-				var orgobj = data.data;
+			if(data.data.orgPrivaliege != null && data.data.orgPrivaliege != undefined){
+				var orgobj = data.data.orgPrivaliege;
 				for(var i=0; i<4; i++){
 					if(orgobj[i]==undefined){
 						continue;
 					}
 					for(var f=0; f<orgobj[i].length; f++){
 						var ob = orgobj[i][f];
+						orgdata[ob.orgCode]=ob.simpleName;
 						if(ob.parentId == "999"){
 							model.zqlxList.push(ob);
 						}else if(ob.orgType == "2"){
@@ -93,7 +93,7 @@ window.loc_onload = function() {
 	
 	wd.addBtn("ok", "保存", function() {
 		if($('#saveDataForm').validateForm()){
-			if(model.dataAccessType == "" || model.orgId == "1"){
+			if(model.dataAccessType == ""){
 				$.alert("请选择专区类型及其所属");
 				return false;
 			}
@@ -107,19 +107,21 @@ window.loc_onload = function() {
 				url_ = $.ctx + '/api/prefecture/preConfigInfo/save';
 				msss = "保存成功";
 			}
-//			$.commAjax({
-//				url : url_,
-//				postData : $('#saveDataForm').formToJson(),
-//				onSuccess : function(data) {
-//					if(data.data == "success"){
-//						$.success(msss, function() {
-//							wd.cancel();
-//							wd.reload();
-//						});
-//					}
-//					
-//				}
-//			})
+			$.commAjax({
+				url : url_,
+				isShowMask : true,
+				maskMassage : 'Load...',
+				postData : $('#saveDataForm').formToJson(),
+				onSuccess : function(data) {
+					if(data.data == "success"){
+						$.success(msss, function() {
+							wd.cancel();
+							wd.reload();
+						});
+					}
+					
+				}
+			})
 	
 		}
 	});
@@ -148,4 +150,48 @@ function changeStatus(obj){
 		model.dataAccessType = obj.value;
 		model.orgId = "";
 	}
+}
+function openTtee(tag){
+	var install = {
+			view: {
+				selectedMulti: false,
+			},
+			data: {
+				selectedMulti: false,			
+				simpleData: {  
+	                enable: true,   //设置是否使用简单数据模式(Array)  	                    
+	            },  
+	            key: {             	
+	            	idKey: "id",    //设置节点唯一标识属性名称  
+	                pIdKey: "parentId" ,     //设置父节点唯一标识属性名称  
+	                name:"simpleName",//zTree 节点数据保存节点名称的属性名称  
+	                title: "simpleName"//zTree 节点数据保存节点提示信息的属性名称        
+	            }  
+			},
+			callback: {
+				onClick: zTreeOnClick
+			}
+		}
+	
+	model.tagNode=tag;
+	var e = document.all ? window.event : arguments[0] ? arguments[0] : event;
+	e.stopPropagation?e.stopPropagation():e.cancelBubble=true;
+	
+	if($(tag).parent(".ui-form-ztree").hasClass("open")){
+		$(tag).parent(".ui-form-ztree").removeClass("open")
+	}else{
+		$(tag).parent(".ui-form-ztree").addClass("open");
+		$(tag).parent(".ui-form-ztree").find(".dropdown-menu").css("width",100+"%");
+		model.ztreeObj=model.cpxList;
+    	$.fn.zTree.init($("#pretree"), install, model.ztreeObj);
+	}
+	
+	//展示选中分类下的标签
+	function zTreeOnClick(event, treeId, treeNode) {
+		model.nodeName=treeNode;
+		model.orgId=treeNode.id;
+		$("#orgId").val(treeNode.id);
+		$(model.tagNode).val(treeNode.simpleName);
+		$(".ui-form-ztree").removeClass("open");
+	};	
 }

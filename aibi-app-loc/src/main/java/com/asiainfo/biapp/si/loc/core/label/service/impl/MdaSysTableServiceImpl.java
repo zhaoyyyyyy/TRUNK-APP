@@ -18,9 +18,11 @@ import org.springframework.stereotype.Service;
 import com.asiainfo.biapp.si.loc.base.dao.BaseDao;
 import com.asiainfo.biapp.si.loc.base.exception.BaseException;
 import com.asiainfo.biapp.si.loc.base.exception.ParamRequiredException;
+import com.asiainfo.biapp.si.loc.base.exception.SqlRunException;
 import com.asiainfo.biapp.si.loc.base.page.Page;
 import com.asiainfo.biapp.si.loc.base.service.impl.BaseServiceImpl;
 import com.asiainfo.biapp.si.loc.base.utils.LogUtil;
+import com.asiainfo.biapp.si.loc.bd.common.service.IBackSqlService;
 import com.asiainfo.biapp.si.loc.core.label.dao.IMdaSysTableDao;
 import com.asiainfo.biapp.si.loc.core.label.entity.MdaSysTable;
 import com.asiainfo.biapp.si.loc.core.label.service.IMdaSysTableService;
@@ -59,6 +61,8 @@ public class MdaSysTableServiceImpl extends BaseServiceImpl<MdaSysTable, String>
 
     @Autowired
     private IMdaSysTableDao iMdaSysTableDao;
+    
+    private IBackSqlService iBackSqlService;
 
     @Override
     protected BaseDao<MdaSysTable, String> getBaseDao() {
@@ -100,12 +104,18 @@ public class MdaSysTableServiceImpl extends BaseServiceImpl<MdaSysTable, String>
 
     public void addDWTable(PreConfigInfo preConfigInfo) {
         MdaSysTable mdaSysTable;
+        String tableSchema = "default";
+        try {
+            tableSchema = iBackSqlService.getCurBackDbSchema();
+        } catch (SqlRunException e1) {
+            LogUtil.info(e1);
+        }
         for (int i = 1; i < 3; i++) {
             if (i == 1) {
                 for (int k = 1; k < 3; k++) {
                     mdaSysTable = new MdaSysTable();
                     mdaSysTable.setConfigId(preConfigInfo.getConfigId());
-                    mdaSysTable.setTableSchema("COCDEV");
+                    mdaSysTable.setTableSchema(tableSchema);
                     mdaSysTable.setCreateTime(new Date());
                     mdaSysTable.setCreateUserId(preConfigInfo.getCreateUserId());
                     mdaSysTable.setTableName("DW_L_PREF_" + preConfigInfo.getConfigId() + "_");
@@ -121,7 +131,7 @@ public class MdaSysTableServiceImpl extends BaseServiceImpl<MdaSysTable, String>
                 for (int j = 1; j < 3; j++) {
                     mdaSysTable = new MdaSysTable();
                     mdaSysTable.setConfigId(preConfigInfo.getConfigId());
-                    mdaSysTable.setTableSchema("TEST");
+                    mdaSysTable.setTableSchema(tableSchema);
                     mdaSysTable.setCreateTime(new Date());
                     mdaSysTable.setCreateUserId(preConfigInfo.getCreateUserId());
                     mdaSysTable.setTableName("DW_G_PREF_" + preConfigInfo.getConfigId() + "_");

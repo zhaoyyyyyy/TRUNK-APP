@@ -33,6 +33,8 @@ window.loc_onload = function() {
 			postData : {
 				"sourceTableId" : id
 			},
+			isShowMask : true,
+			maskMassage : 'Load...',
 			onSuccess : function(data) {
 				model.sourceTableName = data.data.sourceTableName;
 				model.sourceTableCnName = data.data.sourceTableCnName;
@@ -195,6 +197,8 @@ function fun_to_del(id,sourceId) {
 		$.commAjax({
 			url:$.ctx+"/api/label/labelCountRules/queryList",
 			postData:{"dependIndex":sourceId},
+			isShowMask : true,
+			maskMassage : 'Load...',
 			onSuccess:function(data){
 				if(data.data.length==0){
 					$("#jsonmap").jqGrid("delRowData", id);
@@ -214,6 +218,8 @@ function fun_to_save() {
 		$.commAjax({
 			url : $.ctx + "/backSql/columns",
 			async : false,
+			isShowMask : true,
+			maskMassage : 'Load...',
 			postData:{"tableName" : $("#tableSchema").val()+"."+$("#sourceTableName").val()},
 			onSuccess : function(data) {
 				
@@ -289,7 +295,6 @@ function fun_to_save() {
 			if(boolean1 && boolean2 && exe){
 				ajax_to_save(url_,msss);
 			}else{
-				debugger;
 				$.confirm('表不存在或者表结构异常，确认保存？', function() {
 					ajax_to_save(url_,msss);
 				})
@@ -312,31 +317,48 @@ function analysis(){
 	$.commAjax({
 		url:$.ctx + "/backSql/columns",
 		postData:{"tableName" : tableName},
+		isShowMask : true,
 		onSuccess:function(data){
 			if(data.data==null){
 				$.alert("表不存在");
 				return false;
 			}
-			$("#jsonmap").jqGrid("clearGridData");
-			for(var i=0;i < data.data.length;i++){
-				if(data.data[i].data_type == "string"){
-					data.data[i].data_type = "2";
-				}else if(data.data[i].data_type == "integer"){
-					data.data[i].data_type = "1";
-				}
-				var dataRow = {
-					"columnName" : data.data[i].col_name,
-					"cooColumnType" : data.data[i].data_type,
-					"sourceName" : "",
-					"columnCaliber" : data.data[i].comment,
-					"sourceId" : "",
-					"op" : ""
-				}
-				model.sortNum += 1;
-				$("#jsonmap").jqGrid("addRowData", model.sortNum, dataRow, "last");
-				$("#jsonmap").jqGrid("editRow", model.sortNum);
+			var ids = $("#jsonmap").jqGrid('getDataIDs');
+			for (var isi=0; isi<ids.length; isi++) {//让单元格可以获取内容
+		        $("#jsonmap").jqGrid("saveRow", ids[isi]);
+		    }
+			var exitColnames = [];
+			var list = $("#jsonmap").jqGrid("getRowData");
+			for(var num=0;num<list.length;num++){//获取已存在的行
+				exitColnames.push(list[num].columnName);
 			}
-		}
+			for(var i=0;i < data.data.length;i++){
+				if(isInArray(exitColnames, data.data[i].col_name)){//判断当前行是否已存在
+					continue;
+				}else{
+					if(data.data[i].data_type == "string"){
+						data.data[i].data_type = "2";
+					}else if(data.data[i].data_type == "integer"){
+						data.data[i].data_type = "1";
+					}
+					var dataRow = {
+						"columnName" : data.data[i].col_name,
+						"cooColumnType" : data.data[i].data_type,
+						"sourceName" : "",
+						"columnCaliber" : data.data[i].comment,
+						"sourceId" : "",
+						"op" : ""
+					}
+					model.sortNum += 1;
+					$("#jsonmap").jqGrid("addRowData", model.sortNum, dataRow, "last");
+					$("#jsonmap").jqGrid("editRow", model.sortNum);
+				}
+			}
+			for (var p = 0; p < ids.length; p++) {
+		        $("#jsonmap").jqGrid("editRow", ids[p]);
+		    }
+		},
+		maskMassage : 'Load...'
 	})
 }
 function fun_to_import(){

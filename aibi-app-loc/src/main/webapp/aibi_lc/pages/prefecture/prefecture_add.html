@@ -40,30 +40,23 @@
 									<div class="control-input">
 										<ul>
 											<li class="radio circle success ml10" v-for="z in zqlxList" style="display: inline">
-												<input class="easyui-validatebox" :value="z.orgType" :id="'type'+z.orgType" onclick="changeStatus(this)"
-												name="dataAccessType" type="radio" required="true"/>
+												<input class="" :value="z.orgType" :id="'type'+z.orgType" onclick="changeStatus(this)"
+												name="dataAccessType" type="radio"/>
 												<label  for="myr4"><i class="default"></i><span>{{z.fullName}}</span></label>
 											</li>
 										</ul>
 									</div>
 							</div>
 							<div class="ui-form-group">
-								<div v-if="showHyx==true" class="form-group">
-									<label class="control-label fleft"><span class="input-required">*</span>行业线</label> 
-									<div class="control-input">
-										<select id="orgId2" required="true" name="orgId" class="form-control input-pointer easyui-validatebox" >
-											<option value="1">请选择行业线</option>
-											<option v-for="h in hyxList" :value="h.orgCode">{{h.fullName}}</option>
-										</select>
-									</div>
-								</div>
 								<div v-if="showCpx==true" class="ui-form-group">
 									<label class="control-label fleft"><span class="input-required">*</span>业务线</label> 
-									<div class="control-input">
-										<select required="true" id="orgId1" name="orgId" class="form-control input-pointer easyui-validatebox" >
-											<option value="1" required="true" class="easyui-validatebox">请选择业务线</option>
-											<option v-for="c in cpxList" :value="c.orgCode">{{c.fullName}}</option>
-										</select>
+									<div class="ui-form-ztree control-input">
+										<input name="orgId" id="orgId" type="hidden" />
+										<input id="org" type="text" class="form-control easyui-validatebox" onclick="openTtee(this)" required="true" readonly placeholder="请选择"></input>
+							 				<div class="dropdown-menu">
+					                         	<ul id="pretree" class="ztree">
+										        </ul>
+			                                </div>
 									</div>
 								</div>
 							</div>

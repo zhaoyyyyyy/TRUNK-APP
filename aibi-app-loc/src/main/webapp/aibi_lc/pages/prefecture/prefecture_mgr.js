@@ -39,11 +39,13 @@ window.loc_onload = function() {
     var orgdata = [];
     
     $.commAjax({
-		url : $.ctx + '/api/user/privaliegeOrg/query',
+		url : $.ctx + '/api/user/get',
+		isShowMask : true,
+		maskMassage : 'Load...',
 		async : false,
 		onSuccess : function(data) {
-			if(data.data != null && data.data != undefined){
-				var orgobj = data.data;
+			if(data.data.orgPrivaliege != null && data.data.orgPrivaliege != undefined){
+				var orgobj = data.data.orgPrivaliege;
 				for(var i=0; i<4; i++){
 					if(orgobj[i]==undefined){
 						continue;
