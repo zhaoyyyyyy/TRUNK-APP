@@ -155,6 +155,8 @@ var  mainPage={
  			        "../../asset/script/component/jQueryUI/gird/js/i18n/grid.locale-cn.js",
  			        "../../asset/script/component/jQueryUI/gird/jquery.jqGrid.custom.js",
  			        "../../asset/script/component/tree/jquery.ztree.all.min.js",
+ 			        "../../asset/script/component/fileUpload/ajaxfileupload.js",
+			        "../../asset/script/component/fileUpload/jQuery.fileUpload.js",
 			        ],
 			        callback:function(){
 			        	Scripts.loadScript({src:[
