@@ -927,7 +927,7 @@ span.del-btn{
 	padding:10px 0;
 	font-size: 11px;
 	zoom: 1;
-	background: #fff url(images/loading.gif) no-repeat 20px center;
+	background: #fff url(../../../images/loading.gif) no-repeat 20px center;
 	padding-left: 20px;
 	position: absolute;
 	filter: alpha(enabled=false);
