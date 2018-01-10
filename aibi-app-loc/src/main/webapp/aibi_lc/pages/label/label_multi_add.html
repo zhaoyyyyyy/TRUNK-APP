@@ -42,28 +42,34 @@
                         <div class="ui-create">
                             <div class="ui-form-group clearfix">
                                 <!-- <input type="hidden" name="dependIndex" v-model="sourceInfoList[index]['dependIndex']"> -->
-                                <label for="inputEmail3" class="control-label fleft">规则依赖指标</label>
+                                <label for="inputEmail3" class="control-label fleft">
+                                 <span class="input-required">*</span>                                
+                                                                 规则依赖指标</label>
                                 <div class="control-input">
                                     <input type="text" name="dependIndex" class="form-control easyui-validatebox" :id="'dependIndex_'+index" required="true" readonly="readonly">
                                     <div class="label-lists" >
-                                        <span class="del-btn" v-for="(sourceName,index) in sourceInfoList[index]['sourceNameList']">{{sourceName}}
-                                            <i class="del-btn-icon" v-on:click="del_sourceName(index)"></i>
+                                        <span class="del-btn" v-for="(sourceName,index1) in sourceInfoList[index]['sourceNameList']">{{sourceName}}
+                                            <i class="del-btn-icon" v-on:click="del_sourceName(index,index1)"></i>
                                         </span>
                                     </div>
                                 </div>
                                 <button :id="index" onclick="chooseKpi(this)" type="button" class="ui-btn ui-btn-ghost-brand ml10">指标选择</button>
-                                <i class="del-btn-icon fright mr10 mt5" ></i>
+                                <i class="del-btn-icon form-del-btn fright mr10 mt5" ></i>
                             </div>
                         </div>
                         <div class="form-horizontal fleft ui-form">
                             <div class="ui-form-group clearfix">
-                                <label for="labelName" class="control-label">标签名称</label>
+                                <label for="labelName" class="control-label">
+                                 <span class="input-required">*</span>                                
+                                                                 标签名称</label>
                                 <div class="control-input">
                                     <input required="true" type="text" class="form-control easyui-validatebox" name="labelName" placeholder="输入标签名称">
                                 </div>
                             </div>
                             <div class="ui-form-group mt10 tag-radio clearfix">
-                                <label class="control-label fleft">标签类型</label>
+                                <label class="control-label fleft">
+                                 <span class="input-required">*</span>                                
+                                                                 标签类型</label>
                                 <div class="control-input fleft ml10">
                                  <ul>
 									<li class="" v-for="g in bqlx" style="display: inline">
@@ -76,7 +82,9 @@
 								</div>
                             </div>
                             <div class="ui-form-group tag-radio clearfix">
-                                  <label class="control-label fleft">是否正式标签</label>
+                                  <label class="control-label fleft">
+                                   <span class="input-required">*</span>                                  
+                                                                     是否正式标签</label>
                                   <div class="control-input fleft ml10">
                                      <ul>
 										 <li class="" v-for="(i,index) in isbq" style="display: inline">
@@ -89,7 +97,9 @@
 							     </div>
                             </div>
                             <div class="ui-form-group clearfix">
-                                <label for="categoryId" class="control-label">标签分类</label>
+                                <label for="categoryId" class="control-label">
+                                 <span class="input-required">*</span>                                
+                                                                 标签分类</label>
                                 <div class="control-input ui-form-ztree">
                                 	<input type="hidden" name="categoryId">
                                     <input required="true" type="text" class="form-control easyui-validatebox" id="categoryName" onclick="openTtee(this)" readonly>
@@ -102,14 +112,18 @@
                         </div>
                         <div class="form-horizontal fleft ui-form">
                             <div class="ui-form-group clearfix">
-                                <label for="countRules" class="control-label">具体规则</label>
+                                <label for="countRules" class="control-label">
+                                 <span class="input-required">*</span>                                
+                                                                 具体规则</label>
                                 <div class="control-input">
                                     <textarea required="true" rows="7" id="countRules" name="countRules"
                                         class="form-control form-control-textarea easyui-validatebox">{{sourceInfo.sourceId}}</textarea>
                                 </div>
                             </div>
                             <div class="ui-form-group clearfix">
-                                <label for="unit" class="control-label">单位</label>
+                                <label for="unit" class="control-label">
+                                 <span class="input-required">*</span>                                
+                                                                 单位</label>
                                 <div class="control-input">
                                     <input required="true" type="text" class="form-control form-control easyui-validatebox" v-model="sourceInfo.unit" name="unit" placeholder="请输入单位">
                                 </div>
@@ -117,13 +131,17 @@
                         </div>
                         <div class="form-horizontal fleft ui-form">
                             <div class="ui-form-group clearfix">
-                                <label for="busiCaliber" class="control-label">业务口径</label>
+                                <label for="busiCaliber" class="control-label">
+                                 <span class="input-required">*</span>                                
+                                                                 业务口径</label>
                                 <div class="control-input">
                                     <input required="true" v-model="sourceInfo.busiCaliber" type="text" class="form-control easyui-validatebox" id="busiCaliber" name="busiCaliber" placeholder="输入业务口径">
                                 </div>
                             </div>
 						    <div class="ui-form-group clearfix">
-							    <label class="control-label">失效时间</label> 
+							    <label class="control-label">
+							     <span class="input-required">*</span>    
+							         失效时间</label> 
 							       <div class="control-input date-input fleft has-icon">
 			          	             <input required="true" name="failTime" type="text" 
 							         class="date-input form-control input-pointer form-control-bubble easyui-validatebox" data-dismiss="formDatepicker#sendTime" id="" 
@@ -133,7 +151,9 @@
 					        </div>
 					        <div class="ui-form-group clearfix">
 					            <input type="hidden" name="sourceTableType" id="sourceTableType">
-					            <label for="updateCycle" class="control-label">更新周期</label>
+					            <label for="updateCycle" class="control-label">
+					             <span class="input-required">*</span>            
+					                         更新周期</label>
 					            <div class="control-input has-icon">
 					            <select required="true" name="updateCycle" class="form-control input-pointer easyui-validatebox" v-model="sourceInfo.updateCycle">
 									<!-- <option v-model="updateCycle">请选择更新周期</option> -->
@@ -143,7 +163,9 @@
 					        </div>
                             <div v-if="showdimDetail[index]&&showdimDetail[index][`showdim${index}`]">
                               <div class="ui-form-group clearfix">
-                                  <label for="dimTableName" class="control-label">维表选择</label>
+                                  <label for="dimTableName" class="control-label">
+                                   <span class="input-required">*</span>                                  
+                                                                     维表选择</label>
                                   <div class="control-input has-icon">
                                       <select required="true" id="dimId" name="dimId" class="form-control input-pointer easyui-validatebox">
                                        <option>请选择维表</option>
@@ -153,7 +175,9 @@
                                   <button type="button" onclick="fun_to_dimdetail()" class="file-up-btn ml10" >详情</button>
                               </div>            
                               <div class="ui-form-group clearfix">
-                                  <label for="dataType" class="control-label">数据类型</label>
+                                  <label for="dataType" class="control-label">
+                                   <span class="input-required">*</span>                                  
+                                                                     数据类型</label>
                                      <div class="control-input">
                                           <input required="true" v-model="sourceInfo.dataType" name="dataType" type="text" class="form-control easyui-validatebox" id="dataType">
                                     </div>
