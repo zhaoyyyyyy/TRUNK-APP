@@ -115,6 +115,15 @@ public class DimTableInfoController extends BaseController<DimTableInfo>{
     public WebResult<String> save(@ApiIgnore DimTableInfo dimTableInfo) throws BaseException{
             WebResult<String> webResult = new WebResult<>();
             dimTableInfo.setCreateTime(new Date());
+            DimTableInfo dimTable = new DimTableInfo();
+            try {
+                dimTable = iDimTableInfoService.selectOneByDimTableName(dimTableInfo.getDimTableName());
+            } catch (BaseException e) {
+                return webResult.fail(e);
+            }
+            if (null != dimTable) {
+                return webResult.fail("维表名称已存在");
+            }
             try {
                 iDimTableInfoService.addDimTableInfo(dimTableInfo);
             } catch (BaseException e) {

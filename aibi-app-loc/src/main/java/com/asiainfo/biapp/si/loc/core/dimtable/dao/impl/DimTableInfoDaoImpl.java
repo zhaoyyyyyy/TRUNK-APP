@@ -18,6 +18,7 @@ import com.asiainfo.biapp.si.loc.base.utils.StringUtil;
 import com.asiainfo.biapp.si.loc.core.dimtable.dao.IDimTableInfoDao;
 import com.asiainfo.biapp.si.loc.core.dimtable.entity.DimTableInfo;
 import com.asiainfo.biapp.si.loc.core.dimtable.vo.DimTableInfoVo;
+import com.asiainfo.biapp.si.loc.core.prefecture.entity.PreConfigInfo;
 
 /**
  * Title : DimTableInfoDaoImpl
@@ -65,6 +66,10 @@ public class DimTableInfoDaoImpl extends BaseDaoImpl<DimTableInfo, String> imple
         Map<String, Object> reMap = fromBean(dimTableInfoVo);
         Map<String, Object> params = (Map<String, Object>)reMap.get("params");
         return super.findListByHql(reMap.get("hql").toString(), params);
+    }
+    
+    public DimTableInfo selectOneByDimTableName(String dimTableName) {
+        return super.findOneByHql("from DimTableInfo d where d.dimTableName = ?0", dimTableName);
     }
     
     public Map<String, Object> fromBean(DimTableInfoVo dimTableInfoVo){
