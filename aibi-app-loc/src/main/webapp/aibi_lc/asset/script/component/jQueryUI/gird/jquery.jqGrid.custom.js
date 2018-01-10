@@ -42,6 +42,7 @@ jQuery.extend(jQuery.jgrid.defaults, {
 		},
 		beforeSend :function(){
 			$("#load_"+$(this).attr("id")).show();
+			$(".loading").show();
 		}
     },
 	height: '100%',
