@@ -305,11 +305,14 @@ window.loc_onload = function() {
 					"sysId" :labelId,
 				},
 		    onSuccess: function(data){
-		    	$.fn.zTree.init($("#ztree"), setting, data.data);
 		    	var text = $("#exampleInputAmount").val();
-				var treeObj = $.fn.zTree.getZTreeObj("ztree");
-				var zTreeNodes = treeObj.getNodesByParamFuzzy("categoryName", text, null);
-				$.fn.zTree.init($("#ztree"), setting, zTreeNodes);
+		    	if(text == ""){ztreeFunc()}
+		    	else{
+		    		$.fn.zTree.init($("#ztree"), setting, data.data);
+					var treeObj = $.fn.zTree.getZTreeObj("ztree");
+					var zTreeNodes = treeObj.getNodesByParamFuzzy("categoryName", text, null);
+					$.fn.zTree.init($("#ztree"), setting, zTreeNodes);
+		    	}
 		    },
 		    maskMassage : 'Load...'
 	   });
@@ -430,11 +433,14 @@ window.loc_onload = function() {
 					"sysId" :labelId,
 				},
 		    onSuccess: function(data){
-		    	$.fn.zTree.init($("#labeltree"), install, data.data);
 		    	var text = $("#exampleInputAmount2").val();
-				var treeObj = $.fn.zTree.getZTreeObj("labeltree");
-				var zTreeNodes = treeObj.getNodesByParamFuzzy("categoryName", text, null);
-				$.fn.zTree.init($("#labeltree"), install, zTreeNodes);
+		    	if(text ==""){labeltree();}
+		    	else{
+		    		$.fn.zTree.init($("#labeltree"), install, data.data);
+					var treeObj = $.fn.zTree.getZTreeObj("labeltree");
+					var zTreeNodes = treeObj.getNodesByParamFuzzy("categoryName", text, null);
+					$.fn.zTree.init($("#labeltree"), install, zTreeNodes);
+		    	}
 		    },
 		    maskMassage : 'Load...'
 	   });
@@ -453,6 +459,7 @@ window.loc_onload = function() {
 					"labelName" :text,
 					"configId" :labelId,
 					"categoryId" :categoryId,
+					"dataStatusId" : 2,
 				},
 		    onSuccess: function(data){
 		    	$("#labelList").html("");
