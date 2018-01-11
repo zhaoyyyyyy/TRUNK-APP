@@ -93,10 +93,6 @@ window.loc_onload = function() {
 	console.log(orgdata);
 	wd.addBtn("ok", "保存", function() {
 		if($('#saveDataForm').validateForm()){
-			if(model.dataAccessType == ""){
-				$.alert("请选择专区类型及其所属");
-				return false;
-			}
 			var url_ = "";
 			var msss = "";
 			if(model.configId!=null && model.configId!=undefined && model.configId!= ""){
