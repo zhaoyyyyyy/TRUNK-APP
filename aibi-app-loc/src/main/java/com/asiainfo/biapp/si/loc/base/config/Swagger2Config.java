@@ -1,4 +1,4 @@
-package com.asiainfo.biapp.si.loc.auth.filter;
+package com.asiainfo.biapp.si.loc.base.config;
 
 import java.util.ArrayList;
 import java.util.List;
