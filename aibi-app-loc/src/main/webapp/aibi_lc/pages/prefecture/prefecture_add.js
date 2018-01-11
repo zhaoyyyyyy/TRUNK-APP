@@ -18,7 +18,8 @@ var model = {
 		ztreeObj : []
 }
 window.loc_onload = function() {
-	var orgdata = ["all-null",""];
+	var orgdata = [];
+	orgdata["allnull"] = "";
 	var configId = $.getUrlParam("configId");
 	var wd = frameElement.lhgDG;
 	if (configId != null && configId != "" && configId != undefined) {
@@ -61,10 +62,8 @@ window.loc_onload = function() {
 		    })
 		},
 		updated : function(){
-			if(configId != null && configId != "" && configId != undefined){
 				$("#type"+model.dataAccessType).click();
 				$("#org").val(orgdata[model.orgId]);
-			}
 		}
 	})
 	$.commAjax({
@@ -91,7 +90,7 @@ window.loc_onload = function() {
 			}
 		}
 	});
-	
+	console.log(orgdata);
 	wd.addBtn("ok", "保存", function() {
 		if($('#saveDataForm').validateForm()){
 			if(model.dataAccessType == ""){
@@ -147,7 +146,7 @@ function changeStatus(obj){
 	}
 	if(model.dataAccessType != obj.value){
 		model.dataAccessType = obj.value;
-		model.orgId = "all-null";
+		model.orgId = "allnull";
 	}
 	$(".ui-form-ztree").removeClass("open");
 }

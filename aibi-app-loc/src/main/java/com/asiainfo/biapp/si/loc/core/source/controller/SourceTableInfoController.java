@@ -69,8 +69,6 @@ public class SourceTableInfoController extends BaseController<SourceTableInfo> {
     @Autowired
     private ISourceTableInfoService iSourceTableInfoService;
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(SourceTableInfoController.class);
-
     private static final String SUCCESS = "success";
 
     @ApiOperation(value = "分页查询指标数据源信息配置")
@@ -136,35 +134,13 @@ public class SourceTableInfoController extends BaseController<SourceTableInfo> {
     @RequestMapping(value = "/sourceTableInfo/save", method = RequestMethod.POST)
     public WebResult<String> save(@ApiIgnore SourceTableInfo sourceTableInfo) {
         WebResult<String> webResult = new WebResult<>();
-        List<SourceTableInfo> sourceTableInfoList = new ArrayList<>();
-        SourceTableInfoVo sourceTableInfoVo = new SourceTableInfoVo();
-        sourceTableInfoVo.setSourceTableName(sourceTableInfo.getSourceTableName());
-        try {
-            sourceTableInfoList = iSourceTableInfoService.selectSourceTableInfoList(sourceTableInfoVo);
-        } catch (BaseException e1) {
-            return webResult.fail(e1);
-        }
-        if (!sourceTableInfoList.isEmpty()&&StringUtil.isNotBlank(sourceTableInfoVo.getSourceTableName())) {
-            return webResult.fail("表名称已存在");
-        }
         User user = new User();
         try {
             user = this.getLoginUser();
-        } catch (BaseException e) {
-            LOGGER.info("context", e);
-        }
-        sourceTableInfo.setCreateTime(new Date());
-        sourceTableInfo.setCreateUserId(user.getUserId());
-        sourceTableInfo.setKeyType(sourceTableInfo.getIdType());
-        sourceTableInfo.setDataExtractionType(0);
-        sourceTableInfo.setTableSchema(sourceTableInfo.getTableSchema());
-        sourceTableInfo.setSourceTableType(1);
-        sourceTableInfo.setStatusId(1);
-        sourceTableInfo.setDataStore(1);
-        try {
+            sourceTableInfo.setCreateUserId(user.getUserId());
             iSourceTableInfoService.addSourceTableInfo(sourceTableInfo);
-        } catch (BaseException e2) {
-            return webResult.fail(e2);
+        } catch (BaseException e) {
+            return webResult.fail(e);
         }
         return webResult.success("新增指标数据源信息配置成功", SUCCESS);
     }
@@ -193,17 +169,10 @@ public class SourceTableInfoController extends BaseController<SourceTableInfo> {
     @RequestMapping(value = "/sourceTableInfo/update", method = RequestMethod.POST)
     public WebResult<String> edit(@ApiIgnore SourceTableInfo sourceTableInfo) {
         WebResult<String> webResult = new WebResult<>();
-        SourceTableInfo oldSou = new SourceTableInfo();
         try {
-            oldSou = iSourceTableInfoService.selectSourceTableInfoById(sourceTableInfo.getSourceTableId());
+            iSourceTableInfoService.modifySourceTableInfo(sourceTableInfo);
         } catch (BaseException e) {
             return webResult.fail(e);
-        }
-        oldSou = fromToBean(sourceTableInfo, oldSou);
-        try {
-            iSourceTableInfoService.modifySourceTableInfo(oldSou);
-        } catch (BaseException e1) {
-            return webResult.fail(e1);
         }
         return webResult.success("修改指标数据源信息配置成功", SUCCESS);
     }
@@ -226,74 +195,6 @@ public class SourceTableInfoController extends BaseController<SourceTableInfo> {
         return webResult.success("删除指标数据源信息配置成功", SUCCESS);
     }
 
-    /**
-     * 封装实体信息
-     *
-     * @param sou
-     * @param oldSou
-     * @return
-     */
-    public SourceTableInfo fromToBean(SourceTableInfo sou, SourceTableInfo oldSou) {
-        if (StringUtil.isNotBlank(sou.getConfigId())) {
-            oldSou.setConfigId(sou.getConfigId());
-        }
-        if (StringUtil.isNotBlank(sou.getSourceFileName())) {
-            oldSou.setSourceFileName(sou.getSourceFileName());
-        }
-        if (StringUtil.isNotBlank(sou.getSourceTableName())) {
-            oldSou.setSourceTableName(sou.getSourceTableName());
-        }
-        if (StringUtil.isNotBlank(sou.getTableSchema())) {
-            oldSou.setTableSchema(sou.getTableSchema());
-        }
-        if (StringUtil.isNotBlank(sou.getSourceTableCnName())) {
-            oldSou.setSourceTableCnName(sou.getSourceTableCnName());
-        }
-        if (null != sou.getSourceTableType()) {
-            oldSou.setSourceTableType(sou.getSourceTableType());
-        }
-        if (StringUtil.isNotBlank(sou.getTableSuffix())) {
-            oldSou.setTableSuffix(sou.getTableSuffix());
-        }
-        if (null != sou.getReadCycle()) {
-            oldSou.setReadCycle(sou.getReadCycle());
-        }
-        if (null != sou.getIdType()) {
-            oldSou.setKeyType(sou.getIdType());
-            oldSou.setIdType(sou.getIdType());
-        }
-        if (StringUtil.isNotBlank(sou.getIdColumn())) {
-            oldSou.setIdColumn(sou.getIdColumn());
-        }
-        if (StringUtil.isNotBlank(sou.getIdDataType())) {
-            oldSou.setIdDataType(sou.getIdDataType());
-        }
-        if (StringUtil.isNotBlank(sou.getColumnCaliber())) {
-            oldSou.setColumnCaliber(sou.getColumnCaliber());
-        }
-        if (StringUtil.isNotBlank(sou.getDataSourceId())) {
-            oldSou.setDataSourceId(sou.getDataSourceId());
-        }
-        if (null != sou.getDataSourceType()) {
-            oldSou.setDataSourceType(sou.getDataSourceType());
-        }
-        if (null != sou.getDataExtractionType()) {
-            oldSou.setDataExtractionType(sou.getDataExtractionType());
-        }
-        if (StringUtil.isNotBlank(sou.getDateColumnName())) {
-            oldSou.setDateColumnName(sou.getDateColumnName());
-        }
-        if (StringUtil.isNotBlank(sou.getWhereSql())) {
-            oldSou.setWhereSql(sou.getWhereSql());
-        }
-        if (null != sou.getStatusId()) {
-            oldSou.setStatusId(sou.getStatusId());
-        }
-        if (null != sou.getSourceInfoList()) {
-            oldSou.setSourceInfoList(sou.getSourceInfoList());
-        }
-        return oldSou;
-    }
 
 //    @ApiOperation(value = "导入列信息")
 //    @RequestMapping(value = "/sourceTableInfo/upload", consumes = "multipart/*", method = RequestMethod.POST, produces = { MediaType.APPLICATION_JSON_VALUE })
