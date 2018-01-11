@@ -368,9 +368,29 @@ function analysis(){
 function fun_to_import(){
 	var wd = $.window('导入列信息', $.ctx
 			+ '/aibi_lc/pages/label/dataSource_import.html', 500, 200);
-    	wd.reload = function() {
-    		//TODO
-    	}
+	wd.addSourceList = function(sourceList) {
+		for(var i=0;i<sourceList.length;i++){
+			if(sourceList[i].cooColumnType == "string" || sourceList[i].cooColumnType == "varchar" 
+				|| sourceList[i].cooColumnType == "STRING" || sourceList[i].cooColumnType == "VARCHAR"  ){
+				sourceList[i].cooColumnType = "2";
+			}else if(sourceList[i].cooColumnType == "integer" || sourceList[i].cooColumnType == "INTEGER"){
+				sourceList[i].cooColumnType = "1";
+			}else if(sourceList[i].cooColumnType == ""){
+				sourceList[i].cooColumnType = "2";
+			}
+			var dataRow = {
+				"columnName" : sourceList[i].columnName,
+				"cooColumnType" : sourceList[i].cooColumnType,
+				"sourceName" : sourceList[i].sourceName,
+				"columnCaliber" : sourceList[i].columnCaliber,
+				"sourceId" : "",
+				"op" : ""
+			}
+			model.sortNum += 1;
+			$("#jsonmap").jqGrid("addRowData", model.sortNum, dataRow, "last");
+			$("#jsonmap").jqGrid("editRow", model.sortNum);
+		}
+	}
 }
 function ajax_to_save(url,mesg){
 	$.commAjax({

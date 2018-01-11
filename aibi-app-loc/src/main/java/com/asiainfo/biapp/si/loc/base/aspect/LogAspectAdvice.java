@@ -148,9 +148,13 @@ public class LogAspectAdvice {
         		//TODO 这个因为是request输出的，没法处理，后续看 zhougz3
         		ObjectMapper mapper = new ObjectMapper();
         		if(args[0] instanceof org.apache.catalina.connector.RequestFacade){
-        			inputParams = "";
+        			inputParams = "请求头";
         		}else{
-        			inputParams = mapper.writeValueAsString(args);
+        		    try {
+        		        inputParams = mapper.writeValueAsString(args);
+                    } catch (Exception e) {
+                        inputParams = "不能解析的参数";
+                    }
         		}
         		
                 
