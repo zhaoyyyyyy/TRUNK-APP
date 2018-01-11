@@ -71,9 +71,6 @@ window.loc_onload = function(){
 		el : '#dataD',
 	    data : model ,
 	    methods : {
-	    	/*del_form : function(index){
-	    		model.sourceInfoList.splice(index,1);
-	    	},*/
 	        del_sourceName : function(index,index1){
 	        	console.log(model.sourceInfoList)
 	        	model.sourceInfoList[index]['sourceNameList'].splice(index1,1);
@@ -134,7 +131,6 @@ function chooseKpi(obj){
 				onSuccess : function(data){
 					sourceName.push(data.data.sourceName);
 					dependIndexList.push(data.data.sourceId);
-//					dependx += data.data.sourceId+",";
 				}
 			});
 		}
@@ -143,7 +139,6 @@ function chooseKpi(obj){
 		}
 		model.sourceInfoList[index]['sourceNameList']= sourceName;
 		model.sourceInfoList[index]['dependIndexList'] = dependIndexList;
-//		model.sourceInfoList[index]['dependIndex']= dependx.substr(0,dependx.length-1);
 		$("#dependIndex_"+index).val(dependx.substr(0,dependx.length-1));
 	}
 }

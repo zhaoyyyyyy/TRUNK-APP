@@ -100,7 +100,7 @@
                             <div class="control-input ml10">
                                 <input name="dependIndex" id="dependIndex" type="text" class="form-control easyui-validatebox" required="true" readonly="readonly">
                                 <div class="label-lists">
-                                    <span class="del-btn" v-for="(sourceName,index) in sourceNameList">{{sourceName}}
+                                    <span class="del-btn" v-for="(sourceId,index) in dependIndexList">{{sourceId}}
                                         <i class="del-btn-icon" v-on:click="del_sourceName(index)"></i>
                                     </span>
                                 </div>
@@ -113,7 +113,7 @@
                                                       具体规则</label>
                            <div class="control-input ml10">
                                <textarea rows="4" id="countRules" name="countRules" required="true"
-                                   class="easyui-validatebox form-control form-control-textarea"></textarea>
+                                   class="easyui-validatebox form-control form-control-textarea">{{countRules}}</textarea>
                            </div>
                         </div>
 		                <div class="ui-form-group ml70">

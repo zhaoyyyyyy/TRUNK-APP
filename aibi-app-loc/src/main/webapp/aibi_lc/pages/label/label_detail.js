@@ -12,6 +12,7 @@ var model={
 		dataType : "",
 		dependIndex : "",
 		sourceName : "",
+		countRules : "",
 		sourceNameList : []
 }
 window.loc_onload = function() {
@@ -81,9 +82,10 @@ window.loc_onload = function() {
 				},
 				onSuccess : function(data4){
 					model.dependIndex = data4.data.dependIndex;
+					model.countRules = data4.data.countRules;
 					var dependList = model.dependIndex.split(",");
 					for(var i=0; i<dependList.length ; i++){
-						$.commAjax({
+						/*$.commAjax({
 							ansyc : false,
 							url : $.ctx + '/api/source/sourceInfo/get',
 							postData : {
@@ -92,8 +94,10 @@ window.loc_onload = function() {
 							onSuccess : function(data5){
 								model.sourceName += data5.data.sourceName+""
 							}
-						});
+						});*/
+						model.sourceName += dependList[i]+","
 					}
+					model.sourceName = model.sourceName.substr(0,model.sourceName.length-1);
 				}	
 			}); 	
 		},

@@ -89,29 +89,29 @@ window.loc_onload = function(){
 			},
 	        colNames:['标签名称','标签类型','更新周期','数据状态','标签审批状态','创建时间','操作'],
 	        colModel:[
-	            {name:'labelName',index:'labelName', width:25, align:"center",
+	            {name:'labelName',index:'labelName', width:25, align:"center",sortable:false,
 	            	formatter : function(value, opts, data) {
 	            		return "<a href='###' onclick='fun_to_detail(\"" + data.labelId
 	        			+ "\")' ><font color='blue'>" + data.labelName
 	        			+ "</font></a>";
 	            	}
 	            },
-	            {name:'labelTypeId',index:'labelTypeId', width:15, align:"center",
+	            {name:'labelTypeId',index:'labelTypeId', width:15, align:"center",sortable:false,
 	            	formatter : function(value, opts, data) {
 	            		return $.getCodeDesc("BQLXZD",value);
 	            	}
 	            },
-	            {name:'updateCycle',index:'updateCycle', width:15, align:"center",
+	            {name:'updateCycle',index:'updateCycle', width:15, align:"center",sortable:false,
 	            	formatter : function(value, opts, data) {
 	            		return $.getCodeDesc("GXZQZD",value);
 	            	}
 	            },
-	            {name:'dataStatusId',index:'dataStatusId', width:15, align:"center",
+	            {name:'dataStatusId',index:'dataStatusId', width:15, align:"center",sortable:false,
 	            	formatter : function(value, opts, data) {
 	            		return $.getCodeDesc("BQZTZD",value);
 	            	}
 	            },
-	            {name:'approveInfo.approveStatusId',index:'approveInfo.approveStatusId', width:15, align:"center",
+	            {name:'approveInfo.approveStatusId',index:'approveInfo.approveStatusId', width:15, align:"center",sortable:false,
 	            	formatter : function(value, opts, data) {
 	            		return $.getCodeDesc("SPZTZD",value);
 	            	}
@@ -144,7 +144,6 @@ window.loc_onload = function(){
 	        rowNum:12,
 	        rowList:[10,20,30],
 	        viewrecords: true,
-	        sortable:false,
 //	        multiselect:true,
 	        pager: '#mainGridPager'  
 	    });

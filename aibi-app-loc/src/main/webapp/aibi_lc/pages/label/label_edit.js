@@ -22,6 +22,7 @@ var model = {
 	unit : "",
 	isRegular : "",
 	categoryName : "",
+	countRules : "",
 	isemmu : false,
 }
 
@@ -72,10 +73,11 @@ window.loc_onload = function() {
 						"countRulesCode" : countRulesCode
 					},
 					onSuccess : function(data4){
+						model.countRules = data4.data.countRules;
 						var echodependIndex = data4.data.dependIndex;
 						var dependList = echodependIndex.split(",");
 						for(var i=0; i<dependList.length ; i++){
-							$.commAjax({
+							/*$.commAjax({
 								ansyc : false,
 								url : $.ctx + '/api/source/sourceInfo/get',
 								postData : {
@@ -84,7 +86,9 @@ window.loc_onload = function() {
 								onSuccess : function(data5){
 									model.sourceNameList.push(data5.data.sourceName)
 								}
-							});
+							});*/
+//							model.sourceNameList.push(dependList[i])
+							model.dependIndexList.push(dependList[i])
 						}
 					}	
 				});
@@ -116,7 +120,7 @@ window.loc_onload = function() {
 			data : model,
 			methods : {
 				del_sourceName : function(index){
-					model.sourceNameList.splice(index,1);
+//					model.sourceNameList.splice(index,1);
 					model.dependIndexList.splice(index,1);
 					var dependx = "";
 					for(var i=0; i<model.dependIndexList.length; i++){
@@ -178,9 +182,11 @@ window.loc_onload = function() {
 		win.addKpis = function(chooseKpis) {
 			model.sourceIdList = chooseKpis;
 			var dependx="";
-			model.sourceNameList = [];
+//			model.sourceNameList = [];
+			model.dependIndexList=[];
 			for(var i=0; i<chooseKpis.length; i++){
-				$.commAjax({
+				model.dependIndexList.push(chooseKpis[i])
+			/*	$.commAjax({
 					async : false,
 					url : $.ctx + '/api/source/sourceInfo/get',
 					postData : {
@@ -189,9 +195,9 @@ window.loc_onload = function() {
 					onSuccess : function(data){
 						model.sourceNameList.push(data.data.sourceName),
 						model.dependIndexList.push(data.data.sourceId)
-//					    dependx += data.data.sourceId+","
+					    dependx += data.data.sourceId+","
 					}
-				});
+				});*/
 			}
 			for(var i=0; i<model.dependIndexList.length; i++){
 				dependx += model.dependIndexList[i]+","
