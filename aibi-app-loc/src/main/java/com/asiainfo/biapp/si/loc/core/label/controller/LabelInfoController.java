@@ -19,16 +19,23 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.asiainfo.biapp.si.loc.auth.model.User;
+import com.asiainfo.biapp.si.loc.base.common.LabelInfoContants;
+import com.asiainfo.biapp.si.loc.base.common.LabelRuleContants;
 import com.asiainfo.biapp.si.loc.base.controller.BaseController;
 import com.asiainfo.biapp.si.loc.base.exception.BaseException;
 import com.asiainfo.biapp.si.loc.base.page.Page;
+import com.asiainfo.biapp.si.loc.base.utils.JsonUtil;
+import com.asiainfo.biapp.si.loc.base.utils.LogUtil;
 import com.asiainfo.biapp.si.loc.base.utils.StringUtil;
 import com.asiainfo.biapp.si.loc.base.utils.WebResult;
 import com.asiainfo.biapp.si.loc.core.label.entity.ApproveInfo;
+import com.asiainfo.biapp.si.loc.core.label.entity.LabelExtInfo;
 import com.asiainfo.biapp.si.loc.core.label.entity.LabelInfo;
+import com.asiainfo.biapp.si.loc.core.label.model.ExploreQueryParam;
 import com.asiainfo.biapp.si.loc.core.label.service.IApproveInfoService;
 import com.asiainfo.biapp.si.loc.core.label.service.ILabelInfoService;
 import com.asiainfo.biapp.si.loc.core.label.vo.LabelInfoVo;
+import com.asiainfo.biapp.si.loc.core.label.vo.LabelRuleVo;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -65,7 +72,7 @@ import springfox.documentation.annotations.ApiIgnore;
 @Api(value = "标签信息管理", description = "张楠")
 @RequestMapping("api/label")
 @RestController
-public class LabelInfoController extends BaseController<LabelInfo> {
+public class LabelInfoController extends BaseController {
 
     @Autowired
     private ILabelInfoService iLabelInfoService;
@@ -77,6 +84,42 @@ public class LabelInfoController extends BaseController<LabelInfo> {
 
     private static final String SUCCESS = "success";
 
+    
+	@ApiOperation(value = "保存客户群型标签")
+	@ApiImplicitParams({
+		    @ApiImplicitParam(name = "labelName", value = "客户群名称", required = true, paramType = "query", dataType = "string"),
+            @ApiImplicitParam(name = "updateCycle", value = "更新周期", required = true, paramType = "query", dataType = "int"),
+            @ApiImplicitParam(name = "orgId", value = "数据限制", required = true, paramType = "query", dataType = "string"),
+            @ApiImplicitParam(name = "tacticsId", value = "策略ID", required = true, paramType = "query", dataType = "string"),
+            @ApiImplicitParam(name = "busiLegend", value = "客户群描述", required = true, paramType = "query", dataType = "string"),
+            @ApiImplicitParam(name = "dataDate", value = "日期", required = true, paramType = "query", dataType = "string"),
+			@ApiImplicitParam(name = "dayLabelDate", value = "数据日期(日)", required = true, paramType = "query", dataType = "string"),
+			@ApiImplicitParam(name = "monthLabelDate", value = "数据日期(月)", required = true, paramType = "query", dataType = "string") })
+	@RequestMapping(value = "/labelInfo/saveCustomerLabelInfo", method = RequestMethod.POST)
+	public WebResult<String> saveCustomerLabelInfo(String labelName,Integer updateCycle,String orgId,String tacticsId,String busiLegend,String dataDate, String dayLabelDate, String monthLabelDate) {
+		WebResult<String> webResult = new WebResult<>();
+		try {
+			//基本信息
+			LabelInfo labelInfo =new LabelInfo();
+			labelInfo.setLabelName(labelName);
+			labelInfo.setLabelTypeId(LabelInfoContants.LABEL_TYPE_CUST);
+			labelInfo.setUpdateCycle(updateCycle);
+			labelInfo.setOrgId(orgId);
+			labelInfo.setBusiLegend(busiLegend);
+			//拓展信息
+			LabelExtInfo labelExtInfo = new LabelExtInfo();
+	        labelExtInfo.setTacticsId(tacticsId);
+			//标签规则
+			List<LabelRuleVo> labelRules =getSessionLabelRuleList();
+			ExploreQueryParam queryParam = new ExploreQueryParam(dataDate, monthLabelDate, dayLabelDate);
+			iLabelInfoService.saveCustomerLabelInfo(labelExtInfo, labelInfo, labelRules, queryParam);
+		} catch (Exception e) {
+			e.printStackTrace();
+			LogUtil.error("保存客户群型标签异常", e);
+		}
+		return webResult.success("保存客户群型标签信息成功", SUCCESS);
+	}
+    
     @ApiOperation(value = "分页查询标签信息")
     @RequestMapping(value = "/labelInfo/queryPage", method = RequestMethod.POST)
     public Page<LabelInfo> list(@ModelAttribute Page<LabelInfo> page, @ModelAttribute LabelInfoVo labelInfoVo) {
@@ -357,5 +400,30 @@ public class LabelInfoController extends BaseController<LabelInfo> {
         }
         return oldLab;
     }
+    
+    /**
+	 * 
+	 * Description: 从session获取购物车对象
+	 *
+	 * @return
+	 *
+	 * @author tianxy3
+	 * @date 2017年12月22日
+	 */
+	private List<LabelRuleVo> getSessionLabelRuleList() {
+		List<LabelRuleVo> rules = null;
+		try {
+			String ruleStrs = (String) getSessionAttribute(LabelRuleContants.SHOP_CART_RULE);
+			if (StringUtil.isEmpty(ruleStrs)) {
+				rules = new ArrayList<LabelRuleVo>();
+			} else {
+				rules = (List<LabelRuleVo>) JsonUtil.json2CollectionBean(ruleStrs, List.class, LabelRuleVo.class);
+			}
+		} catch (Exception e) {
+			LogUtil.error("getSessionLabelRuleList异常", e);
+		}
+		return rules;
+	}
+    
 
 }

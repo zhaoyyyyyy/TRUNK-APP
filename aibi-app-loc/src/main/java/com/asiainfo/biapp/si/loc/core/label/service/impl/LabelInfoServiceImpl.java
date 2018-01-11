@@ -32,6 +32,7 @@ import com.asiainfo.biapp.si.loc.core.label.entity.LabelExtInfo;
 import com.asiainfo.biapp.si.loc.core.label.entity.LabelInfo;
 import com.asiainfo.biapp.si.loc.core.label.entity.MdaSysTable;
 import com.asiainfo.biapp.si.loc.core.label.entity.MdaSysTableColumn;
+import com.asiainfo.biapp.si.loc.core.label.model.ExploreQueryParam;
 import com.asiainfo.biapp.si.loc.core.label.service.IApproveInfoService;
 import com.asiainfo.biapp.si.loc.core.label.service.ILabelCountRulesService;
 import com.asiainfo.biapp.si.loc.core.label.service.ILabelExtInfoService;
@@ -39,6 +40,7 @@ import com.asiainfo.biapp.si.loc.core.label.service.ILabelInfoService;
 import com.asiainfo.biapp.si.loc.core.label.service.IMdaSysTableColService;
 import com.asiainfo.biapp.si.loc.core.label.service.IMdaSysTableService;
 import com.asiainfo.biapp.si.loc.core.label.vo.LabelInfoVo;
+import com.asiainfo.biapp.si.loc.core.label.vo.LabelRuleVo;
 
 /**
  * Title : LabelInfoServiceImpl
@@ -228,4 +230,16 @@ public class LabelInfoServiceImpl extends BaseServiceImpl<LabelInfo, String> imp
         }
         return dimTableName;
     }
+
+	@Override
+	public void saveCustomerLabelInfo(LabelExtInfo labelExtInfo, LabelInfo labelInfo, List<LabelRuleVo> labelRuleList,
+			ExploreQueryParam queryParam) throws BaseException {
+		//基本信息
+		 super.saveOrUpdate(labelInfo);
+		 labelExtInfo.setLabelId(labelInfo.getLabelId());
+		 iLabelExtInfoService.addLabelExtInfo(labelExtInfo);
+		//TODO元数据列
+		//标签规则
+		
+	}
 }
