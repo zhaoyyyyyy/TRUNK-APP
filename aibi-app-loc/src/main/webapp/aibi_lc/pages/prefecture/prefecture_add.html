@@ -38,9 +38,9 @@
 							<div class="ui-form-group">
 									<label class="control-label fleft"><span class="input-required">*</span>专区类型</label>
 									<div class="control-input">
-										<ul>
+										<ul id="radioList">
 											<li class="radio circle success ml10" v-for="z in zqlxList" style="display: inline">
-												<input class="" :value="z.orgType" :id="'type'+z.orgType" onclick="changeStatus(this)"
+												<input class="easyui-validatebox" validType="radio" :value="z.orgType" :id="'type'+z.orgType" onclick="changeStatus(this)"
 												name="dataAccessType" type="radio"/>
 												<label  for="myr4"><i class="default"></i><span>{{z.fullName}}</span></label>
 											</li>

@@ -934,6 +934,9 @@ span.del-btn{
 	border :4px solid #E5F2F8;
 	display: none;
 }
-
+/*标签管理详情*/
+.label-detail label.control-label{
+	width:120px;
+}
 
 
