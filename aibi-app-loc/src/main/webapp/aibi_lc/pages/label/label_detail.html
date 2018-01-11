@@ -50,23 +50,33 @@
 				</div>
 				<div class="ui-form-group mt10">
 					<label class="control-label">规则依赖指标：</label>
-					<span class="file-up-name">{{labelTypeId}}</span> 
+					<span class="file-up-name">{{sourceName}}</span> 
 				</div>
 				<div class="ui-form-group mt10">
 					<label class="control-label">具体规则：</label>
 					<span class="file-up-name">{{labelTypeId}}</span> 
 				</div>
 				<div class="ui-form-group mt10">
+					<label class="control-label">标签分类：</label>
+					<span class="file-up-name">{{categoryName}}</span> 
+				</div>
+				<div class="ui-form-group mt10">
 					<label class="control-label">标签类型：</label>
 					<span class="file-up-name">{{labelTypeId}}</span> 
 				</div>
-				<div class="ui-form-group mt10">
-					<label class="control-label">是否正式标签：</label>
-					<span class="file-up-name">{{labelTypeId}}</span> 
+				<div v-if="labelTypeId==='枚举型'">
+				    <div class="ui-form-group mt10">
+					    <label class="control-label">对应维表名称：</label>
+					    <span class="file-up-name">{{dimTableName}}</span> 
+				    </div>
+				    <div class="ui-form-group mt10">
+					    <label class="control-label">数据类型：</label>
+					<span class="file-up-name">{{dataType}}</span> 
+				</div>
 				</div>
 				<div class="ui-form-group mt10">
-					<label class="control-label">规则依赖指标：</label>
-					<span class="file-up-name">{{labelTypeId}}</span> 
+					<label class="control-label">是否正式标签：</label>
+					<span class="file-up-name">{{isRegular}}</span> 
 				</div>
 			</div>
 		</div>

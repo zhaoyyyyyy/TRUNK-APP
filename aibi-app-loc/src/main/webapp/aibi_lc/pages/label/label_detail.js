@@ -6,11 +6,19 @@ var model={
 		applySuggest : "",
 		busiLegend : "",
 		labelTypeId : "",
+		isRegular : "",
+		categoryName : "",
+		dimTableName : "",
+		dataType : "",
+		dependIndex : "",
+		sourceName : "",
+		sourceNameList : []
 }
 window.loc_onload = function() {
 	var labelId = $.getUrlParam("labelId");
 	var frwin = frameElement.lhgDG;
 	$.commAjax({
+		isShowMask : true,
 		url : $.ctx + '/api/label/labelInfo/get',
 		postData : {
 			"labelId" : labelId
@@ -28,7 +36,68 @@ window.loc_onload = function() {
 			model.busiLegend = data.data.busiLegend;
 			model.labelTypeId = $.getCodeDesc("BQLXZD",data.data.labelTypeId);
 			model.updateCycle = $.getCodeDesc("GXZQZD",data.data.updateCycle);
-		}
+			model.isRegular = $.getCodeDesc("SFZD",data.data.isRegular);
+			var labelId = data.data.labelId;
+			if(model.labelTypeId=="枚举型"){
+				$.commAjax({
+					ansyc : false,
+					url : $.ctx + '/api/label/mdaSysTableCol/queryList',
+					postData : {
+						"labelId" : labelId
+					},
+					onSuccess : function(data2){
+						var list = data2.data;
+						model.dataType = list[0].dataType;
+						var dimId = list[0].dimTransId;
+						$.commAjax({
+							ansyc : false,
+							url : $.ctx + '/api/dimtable/dimTableInfo/get',
+							postData : {
+								"dimId" : dimId
+							},
+						    onSuccess : function(data3){
+						    	model.dimTableName = data3.data.dimTableName;
+						    }
+						});
+					}
+				});
+			}
+			var categoryId = data.data.categoryId;
+			$.commAjax({
+				url : $.ctx + '/api/label/categoryInfo/get',
+				postData : {
+					"categoryId" : categoryId
+				},
+			    onSuccess : function(data1){
+			    	model.categoryName = data1.data.categoryName
+			    }
+			});
+			var countRulesCode = data.data.countRulesCode;
+			$.commAjax({
+				ansyc : false,
+				url : $.ctx + '/api/label/labelCountRules/get',
+				postData : {
+					"countRulesCode" : countRulesCode
+				},
+				onSuccess : function(data4){
+					model.dependIndex = data4.data.dependIndex;
+					var dependList = model.dependIndex.split(",");
+					for(var i=0; i<dependList.length ; i++){
+						$.commAjax({
+							ansyc : false,
+							url : $.ctx + '/api/source/sourceInfo/get',
+							postData : {
+								"sourceId" : dependList[i]
+							},
+							onSuccess : function(data5){
+								model.sourceName += data5.data.sourceName+""
+							}
+						});
+					}
+				}	
+			}); 	
+		},
+		maskMassage : 'load...'
 	})
 	frwin.addBtn("cancel", "确定", function() {
 		frwin.cancel();

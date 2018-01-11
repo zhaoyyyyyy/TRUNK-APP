@@ -48,17 +48,46 @@ window.loc_onload = function() {
 				model.updateCycle = data.data.updateCycle;
 				model.labelTypeId = data.data.labelTypeId;
 				model.isRegular = data.data.isRegular;
+				if(model.isRegular==1){
+					$("#type"+model.isRegular).click()
+				}else if(model.isRegular==2){
+					$("#type"+model.isRegular).click()
+				}
 				var categoryId = data.data.categoryId;
 				$.commAjax({
 					ansyc : false,
-					url : $.ctx + "/api/",
+					url : $.ctx + '/api/label/categoryInfo/get',
 					postData : {
 						"categoryId" : categoryId
 					},
 				    onSuccess : function(data2){
 				    	model.categoryName = data2.data.categoryName
 				    }
-				})
+				});
+				var countRulesCode = data.data.countRulesCode;
+				$.commAjax({
+					ansyc : false,
+					url : $.ctx + '/api/label/labelCountRules/get',
+					postData : {
+						"countRulesCode" : countRulesCode
+					},
+					onSuccess : function(data4){
+						var echodependIndex = data4.data.dependIndex;
+						var dependList = echodependIndex.split(",");
+						for(var i=0; i<dependList.length ; i++){
+							$.commAjax({
+								ansyc : false,
+								url : $.ctx + '/api/source/sourceInfo/get',
+								postData : {
+									"sourceId" : dependList[i]
+								},
+								onSuccess : function(data5){
+									model.sourceNameList.push(data5.data.sourceName)
+								}
+							});
+						}
+					}	
+				});
 				if(model.labelTypeId==5){
 					model.isemmu=true;
 					$.commAjax({
