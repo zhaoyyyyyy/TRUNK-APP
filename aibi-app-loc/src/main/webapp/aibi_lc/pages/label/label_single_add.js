@@ -18,7 +18,6 @@ var model = {
 		tagNode:"",
 		categoryId:"",
 		configId:"",
-		checked:false,//添加radio属性
 }
 
 function changeStatus(obj){
@@ -72,7 +71,6 @@ window.loc_onload = function() {
 	    data : model ,
 	    mounted: function () {
 		    this.$nextTick(function () {
-		    	this.bqlx[0].checked=true;//默认第一个radio选中
 			    var r = $(".easyui-validatebox");
 	   			if (r.length){
 	   				r.validatebox();
