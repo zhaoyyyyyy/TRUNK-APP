@@ -102,31 +102,55 @@
 			</div>
 			<ul id="labelList" class="clearfix ui-label-list" >
 				<li v-for="(item,index) in labelInfoList" :class="{padding0 : (index+1)%4 ==0 }" >
-					<div class="ui-label-info">
-						<h3 class="clearfix">
-							<span v-text="item.labelName"></span>
-							<i v-on:click="select(index)"></i>
-						</h3>
-						<div class="ui-label-item">
-							<a href="javascript:;">
-								<b v-text="item.customNum" ></b>人
-							</a>
-							<a href="javascript:;" class="ui-label-time">
-								<span v-if="item.updateCycle == 3 ">日</span>
-								<span v-if="item.updateCycle == 2 ">月</span>
-							</a>
-							<a href="javascript:;" class="not-border ui-label-date">
-								<span v-text="item.dataDate"></span>
-							</a>
+					<div class="ul-label-box">
+						<div class="ui-label-info">
+							<h3 class="clearfix">
+								<span v-text="item.labelName"></span>
+								<i v-on:click="select(index)"></i>
+							</h3>
+							<div class="ui-label-item">
+								<a href="javascript:;">
+									<b v-text="item.customNum" ></b>人
+								</a>
+								<a href="javascript:;" class="ui-label-time">
+									<span v-if="item.updateCycle == 3 ">日</span>
+									<span v-if="item.updateCycle == 2 ">月</span>
+								</a>
+								<a href="javascript:;" class="not-border ui-label-date">
+									<span v-text="item.dataDate"></span>
+								</a>
+							</div>
+							<h4 class="ui-business-caliber">
+								规则
+							</h4>
+							<h4 class="ui-business-caliber">
+								描述
+							</h4>
+							</br>
+							<a name="custom_portrait_btn" onclick="labelMarket.customer_portrait_dialog(this)" href="javascript:void(0);">[群体画像图标]</a>
 						</div>
-						<h4 class="ui-business-caliber">
-							规则
-						</h4>
-						<h4 class="ui-business-caliber">
-							描述
-						</h4>
-						</br>
-						<a name="custom_portrait_btn" onclick="labelMarket.customer_portrait_dialog(this)" href="javascript:void(0);">[群体画像图标]</a>
+						<ul class="ui-lable-icon">
+	 						<li>
+	 							<a class="label-icon1" herf=""></a>
+	 						</li>
+	 						<li>
+	 							<a class="label-icon2" herf=""></a>
+	 						</li>
+	 						<li>
+	 							<a class="label-icon3" herf=""></a>
+	 						</li>
+	 						<li>
+	 							<a class="label-icon4" herf=""></a>
+	 							<ul class="dropdown-menu">
+							       <li><a href="#">Action</a></li>
+							       <li><a href="#">Another action</a></li>
+							       <li><a href="#">Something else here</a></li>
+						        </ul> 
+	 						</li>
+	 						<li>
+	 							<a class="label-icon5" herf=""></a>
+	 						</li>
+	 					</ul>
 					</div>
 				</li>
 			</ul>
