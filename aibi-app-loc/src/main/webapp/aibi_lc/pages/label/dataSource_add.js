@@ -107,6 +107,7 @@ window.loc_onload = function() {
 	        edittype: 'select',
 	        formatter: 'select',
 	        editable: true,
+	        sortable: false,
 	        editoptions: {
 	            value: dicCode
 	        },
@@ -119,6 +120,7 @@ window.loc_onload = function() {
 	        index: 'sourceName',
 	        width: 110,
 	        editable: true,
+	        sortable: false,
 	        align: "center",
 	        editrules: {
 	        	required: true,
@@ -127,6 +129,7 @@ window.loc_onload = function() {
 	    {
 	        name: 'columnCaliber',
 	        index: 'columnCaliber',
+	        sortable: false,
 	        width: 120,
 	        editable: true,
 	        align: "center"
@@ -134,6 +137,7 @@ window.loc_onload = function() {
 	    {
 	        name: 'sourceId',
 	        index: 'sourceId',
+	        sortable: false,
 	        align: "center",
 	        hidden: true
 	    },

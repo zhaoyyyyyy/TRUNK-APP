@@ -9,6 +9,7 @@ var model = {
 		cpxList : [],
 		configDesc : "",
 		dataAccessType : 0,
+		dataAccessType0 : 0,
 		sourceName : "",
 		sourceEnName : "",
 		invalidTime : "",
@@ -17,7 +18,7 @@ var model = {
 		ztreeObj : []
 }
 window.loc_onload = function() {
-	var orgdata = [];
+	var orgdata = ["all-null",""];
 	var configId = $.getUrlParam("configId");
 	var wd = frameElement.lhgDG;
 	if (configId != null && configId != "" && configId != undefined) {
@@ -30,6 +31,7 @@ window.loc_onload = function() {
 			onSuccess : function(data) {
 				model.configDesc = data.data.configDesc;
 				model.dataAccessType = data.data.dataAccessType;
+				model.dataAccessType0 = data.data.dataAccessType;
 				model.sourceName = data.data.sourceName;
 				model.sourceEnName = data.data.sourceEnName;
 				model.orgId = data.data.orgId;
@@ -59,12 +61,9 @@ window.loc_onload = function() {
 		    })
 		},
 		updated : function(){
-			var value1 = $("#orgId").val();
-			if(value1 == "" || configId != ""){
+			if(configId != null && configId != "" && configId != undefined){
 				$("#type"+model.dataAccessType).click();
-				if(value1 != undefined && model.orgId != "" && model.orgId != "1"){
-					$("#org").val(orgdata[model.orgId]);
-				}
+				$("#org").val(orgdata[model.orgId]);
 			}
 		}
 	})
@@ -148,6 +147,7 @@ function changeStatus(obj){
 	}
 	if(model.dataAccessType != obj.value){
 		model.dataAccessType = obj.value;
+		model.orgId = "all-null";
 	}
 	$(".ui-form-ztree").removeClass("open");
 }
