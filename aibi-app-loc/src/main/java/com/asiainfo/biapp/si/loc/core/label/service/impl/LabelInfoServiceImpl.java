@@ -6,11 +6,14 @@
 
 package com.asiainfo.biapp.si.loc.core.label.service.impl;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.transaction.Transactional;
 
+import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,6 +33,7 @@ import com.asiainfo.biapp.si.loc.core.label.entity.ApproveInfo;
 import com.asiainfo.biapp.si.loc.core.label.entity.LabelCountRules;
 import com.asiainfo.biapp.si.loc.core.label.entity.LabelExtInfo;
 import com.asiainfo.biapp.si.loc.core.label.entity.LabelInfo;
+import com.asiainfo.biapp.si.loc.core.label.entity.LabelRule;
 import com.asiainfo.biapp.si.loc.core.label.entity.MdaSysTable;
 import com.asiainfo.biapp.si.loc.core.label.entity.MdaSysTableColumn;
 import com.asiainfo.biapp.si.loc.core.label.model.ExploreQueryParam;
@@ -37,6 +41,7 @@ import com.asiainfo.biapp.si.loc.core.label.service.IApproveInfoService;
 import com.asiainfo.biapp.si.loc.core.label.service.ILabelCountRulesService;
 import com.asiainfo.biapp.si.loc.core.label.service.ILabelExtInfoService;
 import com.asiainfo.biapp.si.loc.core.label.service.ILabelInfoService;
+import com.asiainfo.biapp.si.loc.core.label.service.ILabelRuleService;
 import com.asiainfo.biapp.si.loc.core.label.service.IMdaSysTableColService;
 import com.asiainfo.biapp.si.loc.core.label.service.IMdaSysTableService;
 import com.asiainfo.biapp.si.loc.core.label.vo.LabelInfoVo;
@@ -99,6 +104,9 @@ public class LabelInfoServiceImpl extends BaseServiceImpl<LabelInfo, String> imp
     @Autowired
     private IMdaSysTableColService iMdaSysTableColService;
     
+    @Autowired
+    private ILabelRuleService ruleService;
+    
     @Override
     protected BaseDao<LabelInfo, String> getBaseDao() {
         return iLabelInfoDao;
@@ -151,8 +159,8 @@ public class LabelInfoServiceImpl extends BaseServiceImpl<LabelInfo, String> imp
         //封装元数据表列信息
         MdaSysTableColumn mdaSysTableColumn = new MdaSysTableColumn();
         mdaSysTableColumn.setLabelId(labelInfo.getLabelId());
-        List<MdaSysTable> list = iMdaSysTableService.selectMdaSysTableListByConfigAndType(labelInfo.getConfigId(), labelInfo.getUpdateCycle());
-        mdaSysTableColumn.setTableId(list.get(0).getTableId());
+    	MdaSysTable mdaSysTable = iMdaSysTableService.queryMdaSysTable(labelInfo.getConfigId(),labelInfo.getUpdateCycle(),1);
+    	mdaSysTableColumn.setTableId(mdaSysTable.getTableId());
         mdaSysTableColumn.setColumnName(labelInfo.getLabelId());
         mdaSysTableColumn.setColumnCnName(labelInfo.getLabelName());
         if (StringUtil.isNotBlank(labelInfo.getDimId())) {
@@ -234,12 +242,32 @@ public class LabelInfoServiceImpl extends BaseServiceImpl<LabelInfo, String> imp
 	@Override
 	public void saveCustomerLabelInfo(LabelExtInfo labelExtInfo, LabelInfo labelInfo, List<LabelRuleVo> labelRuleList,
 			ExploreQueryParam queryParam) throws BaseException {
-		//基本信息
-		 super.saveOrUpdate(labelInfo);
-		 labelExtInfo.setLabelId(labelInfo.getLabelId());
-		 iLabelExtInfoService.addLabelExtInfo(labelExtInfo);
-		//TODO元数据列
-		//标签规则
-		
+		// 基本信息
+		super.saveOrUpdate(labelInfo);
+		String customId = labelInfo.getLabelId();
+		labelExtInfo.setLabelId(customId);
+		iLabelExtInfoService.addLabelExtInfo(labelExtInfo);
+		// 元数据列
+		MdaSysTable mdaSysTable = iMdaSysTableService.queryMdaSysTable(labelInfo.getConfigId(),
+				labelInfo.getUpdateCycle(),2);
+		MdaSysTableColumn mdaSysTableColumn = new MdaSysTableColumn();
+		mdaSysTableColumn.setLabelId(labelInfo.getLabelId());
+		mdaSysTableColumn.setTableId(mdaSysTable.getTableId());
+		mdaSysTableColumn.setColumnName(labelInfo.getLabelId());
+		mdaSysTableColumn.setColumnCnName(labelInfo.getLabelName());
+		mdaSysTableColumn.setColumnStatus(1);
+		iMdaSysTableColService.addMdaSysTableColumn(mdaSysTableColumn);
+		// 保存标签规则
+		for (LabelRuleVo labelRuleVo : labelRuleList) {
+			LabelRule labelRule = new LabelRule();
+			try {
+				BeanUtils.copyProperties(labelRule, labelRuleVo);
+			} catch (Exception e) {
+			}
+			labelRule.setCustomId(customId);
+			ruleService.addLabelRule(labelRule);
+		}
+		//TODO  生成清单
+
 	}
 }

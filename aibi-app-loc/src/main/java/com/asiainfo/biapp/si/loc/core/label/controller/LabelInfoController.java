@@ -92,11 +92,12 @@ public class LabelInfoController extends BaseController {
             @ApiImplicitParam(name = "orgId", value = "数据限制", required = true, paramType = "query", dataType = "string"),
             @ApiImplicitParam(name = "tacticsId", value = "策略ID", required = true, paramType = "query", dataType = "string"),
             @ApiImplicitParam(name = "busiLegend", value = "客户群描述", required = true, paramType = "query", dataType = "string"),
+            @ApiImplicitParam(name = "configId", value = "专区ID", required = false, paramType = "query", dataType = "string"),
             @ApiImplicitParam(name = "dataDate", value = "日期", required = true, paramType = "query", dataType = "string"),
 			@ApiImplicitParam(name = "dayLabelDate", value = "数据日期(日)", required = true, paramType = "query", dataType = "string"),
 			@ApiImplicitParam(name = "monthLabelDate", value = "数据日期(月)", required = true, paramType = "query", dataType = "string") })
 	@RequestMapping(value = "/labelInfo/saveCustomerLabelInfo", method = RequestMethod.POST)
-	public WebResult<String> saveCustomerLabelInfo(String labelName,Integer updateCycle,String orgId,String tacticsId,String busiLegend,String dataDate, String dayLabelDate, String monthLabelDate) {
+	public WebResult<String> saveCustomerLabelInfo(String labelName,Integer updateCycle,String orgId,String tacticsId,String busiLegend,String dataDate,String configId, String dayLabelDate, String monthLabelDate) {
 		WebResult<String> webResult = new WebResult<>();
 		try {
 			//基本信息
@@ -106,6 +107,7 @@ public class LabelInfoController extends BaseController {
 			labelInfo.setUpdateCycle(updateCycle);
 			labelInfo.setOrgId(orgId);
 			labelInfo.setBusiLegend(busiLegend);
+			labelInfo.setConfigId(configId);
 			//拓展信息
 			LabelExtInfo labelExtInfo = new LabelExtInfo();
 	        labelExtInfo.setTacticsId(tacticsId);
@@ -116,6 +118,7 @@ public class LabelInfoController extends BaseController {
 		} catch (Exception e) {
 			e.printStackTrace();
 			LogUtil.error("保存客户群型标签异常", e);
+			return webResult.fail("保存客户群型标签异常");
 		}
 		return webResult.success("保存客户群型标签信息成功", SUCCESS);
 	}

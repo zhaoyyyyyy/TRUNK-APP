@@ -153,4 +153,17 @@ public class MdaSysTableServiceImpl extends BaseServiceImpl<MdaSysTable, String>
         mdaSysTableVo.setUpdateCycle(updateCycle);
         return iMdaSysTableDao.selectMdaSysTableList(mdaSysTableVo);
     }
+
+	@Override
+	public MdaSysTable queryMdaSysTable(String configId, Integer updateCycle, Integer tableType) {
+		MdaSysTableVo mdaSysTableVo = new MdaSysTableVo();
+		mdaSysTableVo.setConfigId(configId);
+		mdaSysTableVo.setTableType(tableType);
+		mdaSysTableVo.setUpdateCycle(updateCycle);
+		List<MdaSysTable> tableList = iMdaSysTableDao.selectMdaSysTableList(mdaSysTableVo);
+		if (tableList != null && tableList.size() > 0) {
+			return tableList.get(0);
+		}
+		return null;
+	}
 }
