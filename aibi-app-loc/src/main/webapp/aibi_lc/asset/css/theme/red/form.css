@@ -303,7 +303,7 @@ radio样式
 }
 .radio i:before {
     position: relative;
-    z-index: 999;
+    z-index: 99;
     left: 0;
     display: inline-block;
     vertical-align: bottom;

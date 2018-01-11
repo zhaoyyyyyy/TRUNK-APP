@@ -78,7 +78,7 @@ $.extend({
 			complete	: function(req, st) {
 				
 				if (options.isShowMask) {
-					debugger
+					//debugger
 					el.unmask();
 				}
 				// status：200为服务中成功的状态，0为本地打开时的成功状态
