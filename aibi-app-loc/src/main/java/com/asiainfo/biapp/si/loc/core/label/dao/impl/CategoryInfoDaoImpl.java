@@ -14,6 +14,8 @@ import org.springframework.stereotype.Repository;
 
 import com.asiainfo.biapp.si.loc.base.dao.BaseDaoImpl;
 import com.asiainfo.biapp.si.loc.base.utils.StringUtil;
+import com.asiainfo.biapp.si.loc.core.dimtable.entity.DimTableInfo;
+import com.asiainfo.biapp.si.loc.core.dimtable.vo.DimTableInfoVo;
 import com.asiainfo.biapp.si.loc.core.label.dao.ICategoryInfoDao;
 import com.asiainfo.biapp.si.loc.core.label.entity.CategoryInfo;
 import com.asiainfo.biapp.si.loc.core.label.vo.CategoryInfoVo;
@@ -47,7 +49,17 @@ import com.asiainfo.biapp.si.loc.core.label.vo.CategoryInfoVo;
 @Repository
 public class CategoryInfoDaoImpl extends BaseDaoImpl<CategoryInfo, String> implements ICategoryInfoDao {
 
+    public CategoryInfo selectCategoryInfoByCategoryName(String categoryName) {
+        return super.findOneByHql("from CategoryInfo c where c.categoryName = ?0", categoryName);
+    }
+    
     public List<CategoryInfo> selectCategoryInfoList(CategoryInfoVo categoryInfoVo) {
+        Map<String, Object> reMap = fromBean(categoryInfoVo);
+        Map<String, Object> params = (Map<String, Object>)reMap.get("params");
+        return super.findListByHql(reMap.get("hql").toString(), params);
+    }
+    public Map<String, Object> fromBean(CategoryInfoVo categoryInfoVo){
+        Map<String, Object> reMap = new HashMap<>();
         Map<String, Object> params = new HashMap<>();
         StringBuffer hql = new StringBuffer("from CategoryInfo c where 1=1 ");
         if (StringUtil.isNotBlank(categoryInfoVo.getCategoryId())) {
@@ -96,6 +108,8 @@ public class CategoryInfoDaoImpl extends BaseDaoImpl<CategoryInfo, String> imple
             hql.append("and c.levelId = :levelId ");
             params.put("levelId", categoryInfoVo.getLevelId());
         }
-        return super.findListByHql(hql.toString(), params);
+        reMap.put("hql", hql);
+        reMap.put("params", params);
+        return reMap;
     }
 }

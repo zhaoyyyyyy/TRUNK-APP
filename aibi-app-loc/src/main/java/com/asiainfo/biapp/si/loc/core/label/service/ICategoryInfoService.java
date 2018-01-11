@@ -75,5 +75,13 @@ public interface ICategoryInfoService extends BaseService<CategoryInfo, String>{
      * @throws BaseException
      */
     public void deleteCategoryInfoById(String categoryId) throws BaseException;
+    
+    /**
+     * 通过名称获取一个实体 Description:
+     *
+     * @param categoryName
+     * @throws BaseException
+     */
+    public CategoryInfo selectCategoryInfoByCategoryName(String categoryName) throws BaseException;
 
 }

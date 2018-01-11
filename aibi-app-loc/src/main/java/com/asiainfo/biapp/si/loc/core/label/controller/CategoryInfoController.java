@@ -104,6 +104,11 @@ public class CategoryInfoController extends BaseController<CategoryInfo>{
     @RequestMapping(value = "/categoryInfo/save", method = RequestMethod.POST)
     public WebResult<String> save(@ApiIgnore CategoryInfo categoryInfo) throws BaseException{
             WebResult<String> webResult = new WebResult<>();
+            CategoryInfo category = new CategoryInfo();
+            category = iCategoryInfoService.selectCategoryInfoByCategoryName(categoryInfo.getCategoryName());
+            if (null != category){
+                return webResult.fail("分类名称已存在");
+            }
             try {
                 iCategoryInfoService.addCategoryInfo(categoryInfo);
             } catch (BaseException e) {
@@ -130,10 +135,15 @@ public class CategoryInfoController extends BaseController<CategoryInfo>{
     public WebResult<String> edit(@ApiIgnore CategoryInfo categoryInfo) throws BaseException{
         WebResult<String> webResult = new WebResult<>();
         CategoryInfo oldCat = new CategoryInfo();
+        CategoryInfo category = new CategoryInfo();
+        category = iCategoryInfoService.selectCategoryInfoByCategoryName(categoryInfo.getCategoryName());
         try {
             oldCat = iCategoryInfoService.selectCategoryInfoById(categoryInfo.getCategoryId());
         } catch (BaseException e) {
             return webResult.fail(e);
+        }
+        if(!categoryInfo.getCategoryName().equals(oldCat.getCategoryName()) && null != category){
+            return webResult.fail("分类名称已存在");
         }
         oldCat = fromToBean(categoryInfo, oldCat);
         iCategoryInfoService.update(oldCat);
