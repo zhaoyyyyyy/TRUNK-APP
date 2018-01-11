@@ -1,4 +1,5 @@
 window.loc_onload = function() {
+	var labelId = $.getCurrentConfigId(); //专区ID
 	ztreeFunc();
 	labeltree();
 	//移动标签时所选中的节点ID
@@ -20,7 +21,6 @@ window.loc_onload = function() {
 	//左边树
 	function ztreeFunc(){
 		var ztreeObj;
-		var labelId = $.getCurrentConfigId();
 		$.commAjax({			
 		    url : $.ctx+'/api/label/categoryInfo/queryList',
 		    isShowMask : true,
@@ -295,17 +295,24 @@ window.loc_onload = function() {
 		$("#labelList").find("input[checked]");
 	});
 	//左边树模糊查询
-	var leftTreeInput ="";
-	var text;
 	$("#btn_serach").click(function(){
-		leftTreeInput = $("#exampleInputAmount").val();
-		if(leftTreeInput == ""){ztreeFunc(); return }
-		if(leftTreeInput !=text ){
-			var treeObj = $.fn.zTree.getZTreeObj("ztree");
-			var zTreeNodes = treeObj.getNodesByParamFuzzy("categoryName", leftTreeInput, null);
-			$.fn.zTree.init($("#ztree"), setting, zTreeNodes);
-			text =leftTreeInput;
-		}
+		$.commAjax({			
+		    url : $.ctx+'/api/label/categoryInfo/queryList',
+		    isShowMask : true,
+		    dataType : 'json', 
+		    async:true,
+		    postData : {
+					"sysId" :labelId,
+				},
+		    onSuccess: function(data){
+		    	$.fn.zTree.init($("#ztree"), setting, data.data);
+		    	var text = $("#exampleInputAmount").val();
+				var treeObj = $.fn.zTree.getZTreeObj("ztree");
+				var zTreeNodes = treeObj.getNodesByParamFuzzy("categoryName", text, null);
+				$.fn.zTree.init($("#ztree"), setting, zTreeNodes);
+		    },
+		    maskMassage : 'Load...'
+	   });
 	});
 	//移动事件
 	$("#dialog-upd").click(function(){
@@ -344,8 +351,6 @@ window.loc_onload = function() {
 	//移动时的树
 	function labeltree(){
 		var ztreeObj;
-		var obj = $("#preConfig_list").find("span");
-		var labelId =obj.attr("configId");			
 		$.commAjax({			
 		    url : $.ctx+'/api/label/categoryInfo/queryList',  		    
 		    dataType : 'json', 
@@ -415,22 +420,27 @@ window.loc_onload = function() {
 		})
 	})*/
 	//右边树的模糊查询
-	var rightTreeInput ="";
-	var text;
 	$("#btn_serach2").click(function(){
-		rightTreeInput = $("#exampleInputAmount2").val();
-		if(rightTreeInput == ""){labeltree(); return }
-		if(rightTreeInput !=text ){
-			var treeObj = $.fn.zTree.getZTreeObj("labeltree");
-			var zTreeNodes = treeObj.getNodesByParamFuzzy("categoryName", rightTreeInput, null);
-			$.fn.zTree.init($("#labeltree"), install, zTreeNodes);
-			text =rightTreeInput;
-		}
+		$.commAjax({			
+		    url : $.ctx+'/api/label/categoryInfo/queryList',
+		    isShowMask : true,
+		    dataType : 'json', 
+		    async:true,
+		    postData : {
+					"sysId" :labelId,
+				},
+		    onSuccess: function(data){
+		    	$.fn.zTree.init($("#labeltree"), install, data.data);
+		    	var text = $("#exampleInputAmount2").val();
+				var treeObj = $.fn.zTree.getZTreeObj("labeltree");
+				var zTreeNodes = treeObj.getNodesByParamFuzzy("categoryName", text, null);
+				$.fn.zTree.init($("#labeltree"), install, zTreeNodes);
+		    },
+		    maskMassage : 'Load...'
+	   });
 	});
 	//符合条件的标签的拼写
 	function showLabelInfo(labelInfo,number){
-		var obj = $("#preConfig_list").find("span");
-		var configId =obj.attr("configId");    //专区ID
 		var categoryId = leftTreeCagyId;
 		var text = labelInfo;			//模糊查询时的关键字
 		if(number == 1){text = labelInfo; categoryId = "";}//全部分类下的标签模糊查询
@@ -441,7 +451,7 @@ window.loc_onload = function() {
 		    async:true,
 		    postData : {
 					"labelName" :text,
-					"configId" :configId,
+					"configId" :labelId,
 					"categoryId" :categoryId,
 				},
 		    onSuccess: function(data){
