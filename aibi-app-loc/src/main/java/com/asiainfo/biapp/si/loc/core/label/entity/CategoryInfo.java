@@ -22,6 +22,7 @@ import javax.persistence.OrderBy;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Parameter;
 
 import com.asiainfo.biapp.si.loc.base.entity.BaseEntity;
 
@@ -62,9 +63,17 @@ public class CategoryInfo extends BaseEntity {
      */
     @Id
     @Column(name = "CATEGORY_ID")
-    @GenericGenerator(name = "idGenerator", strategy = "uuid")
     @GeneratedValue(generator = "idGenerator")
     @ApiParam(value = "分类ID")
+    //COC自定义主键自增
+    @GenericGenerator(name = "idGenerator",
+        strategy = "com.asiainfo.biapp.si.loc.base.extend.LocGenerateId",
+        parameters = {
+                @Parameter(name = "name", value = "LABEL_CATEGORY_SEQ"), //来自DIM_SEQUECE_INFO表的 SEQUECE_NAME
+                @Parameter(name = "prefix", value = "C"), //ID前缀
+                @Parameter(name = "size", value = "3") //占位符表示 001-999
+        }
+    )
     private String categoryId;
 
     /**
