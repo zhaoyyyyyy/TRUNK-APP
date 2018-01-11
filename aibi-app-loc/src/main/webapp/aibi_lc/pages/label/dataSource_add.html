@@ -30,7 +30,7 @@
 				<form id="formData">
 				<input id="sourceTableId" name="sourceTableId" v-model="sourceTableId" type="hidden" />
 					<div class="clearfix create-main mt10 dataSource-tab">
-			            <div class="form-horizontal fleft mt20 ml30">
+			            <div class="form-horizontal fleft mt20">
 			                <div class="ui-form-group">
 			                	<input id="sourceInfoList" name="sourceInfoList" type="hidden" class="form-control mr10 ml10" />
 								<input v-model="configId" id="configId" name="configId" type="hidden" class="form-control mr10 ml10"/>      	
@@ -68,7 +68,7 @@
 			                        <ul>
 										<li class="" v-for="g in gxzq" style="display: inline">
 											<div class="radio circle success">
-												<input :value="g.code"  :id="'code'+g.code" name="readCycle" type="radio" />
+												<input class="easyui-validatebox" :value="g.code"  :id="'code'+g.code" name="readCycle" type="radio"/>
 												<label><i class="default"></i>{{g.dataName}}</label>
 											</div>
 										</li>

@@ -19,7 +19,7 @@
     padding: 5px 10px 0;
     text-align: right;
     position: relative;
-    min-width: 90px;
+    min-width:105px;
 }
 span.input-required{
 	color: #FF0000;
