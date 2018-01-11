@@ -28,8 +28,11 @@ import com.asiainfo.biapp.si.loc.base.page.Page;
 import com.asiainfo.biapp.si.loc.base.utils.StringUtil;
 import com.asiainfo.biapp.si.loc.base.utils.WebResult;
 import com.asiainfo.biapp.si.loc.core.source.entity.SourceInfo;
+import com.asiainfo.biapp.si.loc.core.source.entity.SourceTableInfo;
 import com.asiainfo.biapp.si.loc.core.source.service.ISourceInfoService;
+import com.asiainfo.biapp.si.loc.core.source.service.ISourceTableInfoService;
 import com.asiainfo.biapp.si.loc.core.source.vo.SourceInfoVo;
+import com.asiainfo.biapp.si.loc.core.source.vo.SourceTableInfoVo;
 
 /**
  * Title : SourceInfoController
@@ -64,6 +67,9 @@ public class SourceInfoController extends BaseController<SourceInfo> {
 
     @Autowired
     private ISourceInfoService iSourceInfoService;
+    
+    @Autowired
+    private ISourceTableInfoService iSourceTableInfoService;
 
     private static final String SUCCESS = "success";
 
@@ -79,6 +85,15 @@ public class SourceInfoController extends BaseController<SourceInfo> {
         return sourceInfoPage;
     }
 
+    @ApiOperation(value = "根据专区分页查询指标")
+    @ApiImplicitParam(name = "configId", value = "configId", required = true, paramType = "query", dataType = "string")
+    @RequestMapping(value="/sourceInfo/queryPagebyconfigId", method = RequestMethod.POST)
+    public Page<SourceInfo> sourcelist(@ModelAttribute Page<SourceInfo> page,String configId){
+        Page<SourceInfo> sourceInfoPage = new Page<>();
+        sourceInfoPage = iSourceInfoService.selectSourceInfoListByConfigId(sourceInfoPage, configId);
+        return sourceInfoPage;
+    }
+    
     @ApiOperation(value = "不分页查询指标信息")
     @RequestMapping(value = "/sourceInfo/queryList", method = RequestMethod.POST)
     public WebResult<List<SourceInfo>> findList(@ModelAttribute SourceInfoVo sourceInfoVo) {

@@ -57,5 +57,14 @@ public interface ISourceInfoDao extends BaseDao<SourceInfo, String> {
      * @return
      */
     public List<SourceInfo> selectSourceInfoList(SourceInfoVo sourceInfoVo);
+    
+    /**
+     * 
+     * Description: 根据configId查询指标
+     *
+     * @param configId
+     * @return
+     */
+    public Page<SourceInfo> selectSourceInfoListByConfigId(Page<SourceInfo> page,String configId);
 
 }

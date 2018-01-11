@@ -27,44 +27,70 @@
 				<div class="form-inline ui-form">
 					<div class="clearfix">
 						<div class="form-group">
-							<label>标签名称</label> <input v-model="data.labelName" name="labelName" type="text" class="form-control ml10"
-								readonly="readonly" />
+							<label>标签名称：</label> 
+							<span class="file-up-name">{{labelName}}</span>
 						</div>
 					</div>
 					<div class="clearfix mt30">
 						<div class="form-group">
-							<label>业务口径说明</label> <input v-model="data.busiCaliber" name="busiCaliber" type="text"
-								class="form-control ml10" id="inputEmail4" readonly="readonly" />
+							<label>业务口径说明：</label> 
+							<span class="file-up-name">{{busiCaliber}}</span>
 						</div>
 					</div>
 					<div class="clearfix mt30">
 						<div class="form-group">
-							<label>失效时间</label> <input v-model="data.failTime" name="failTime" type="text" class="ml10 form-control"
-								readonly="readonly" />
+							<label>失效时间：</label> 
+							<span class="file-up-name">{{failTime}}</span>
 						</div>
 					</div>
 					<div class="clearfix mt30">
 						<div class="form-group">
-							<label>应用建议</label> <input v-model="data.applySuggest" name="applySuggest" type="text" class="ml10 form-control"
-								readonly="readonly" />
+							<label>更新周期：</label> 
+							<span class="file-up-name">{{updateCycle}}</span>
 						</div>
 					</div>
 					<div class="clearfix mt30">
 						<div class="form-group">
-							<label>业务说明</label> <input v-model="data.busiLegend" name="busiLegend" type="text" class="ml10 form-control"
-								readonly="readonly" />
+							<label>应用建议：</label>
+							<span class="file-up-name">{{applySuggest}}</span>
 						</div>
 					</div>
-					<div>
-					<div>
-						<div class="clearfix mt30">
-							<div class="form-group">
-								<label>专区描述</label>
-								<textarea v-model="data.configDesc" name="configDesc" class="form-control ml10" readonly="readonly"></textarea>
-							</div>
+					<div class="clearfix mt30">
+						<div class="form-group">
+							<label>业务说明：</label>
+							<span class="file-up-name">{{busiLegend}}</span>
 						</div>
 					</div>
-				</div>
+					<div class="clearfix mt30">
+						<div class="form-group">
+							<label>规则依赖指标：</label>
+							<span class="file-up-name">{{labelTypeId}}</span> 
+						</div>
+					</div>
+					<div class="clearfix mt30">
+						<div class="form-group">
+							<label>具体规则：</label>
+							<span class="file-up-name">{{labelTypeId}}</span> 
+						</div>
+					</div>
+					<div class="clearfix mt30">
+						<div class="form-group">
+							<label>标签类型：</label>
+							<span class="file-up-name">{{labelTypeId}}</span> 
+						</div>
+					</div>
+					<div class="clearfix mt30">
+						<div class="form-group">
+							<label>是否正式标签：</label>
+							<span class="file-up-name">{{labelTypeId}}</span> 
+						</div>
+					</div>
+					<div class="clearfix mt30">
+						<div class="form-group">
+							<label>规则依赖指标：</label>
+							<span class="file-up-name">{{labelTypeId}}</span> 
+						</div>
+					</div>
 			</div>
 		</div>
 	</div>

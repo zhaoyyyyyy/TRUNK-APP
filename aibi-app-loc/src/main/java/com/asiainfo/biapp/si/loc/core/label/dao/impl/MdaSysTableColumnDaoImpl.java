@@ -68,8 +68,8 @@ public class MdaSysTableColumnDaoImpl extends BaseDaoImpl<MdaSysTableColumn, Str
         Map<String, Object> params = new HashMap<>();
         StringBuffer hql = new StringBuffer("from MdaSysTableColumn m where 1=1");
         if (StringUtils.isNotBlank(mdaSysTableColumnVo.getLabelId())) {
-            hql.append(" and m.lableId = :lableId");
-            params.put("lableId", mdaSysTableColumnVo.getLabelId());
+            hql.append(" and m.labelId = :labelId");
+            params.put("labelId", mdaSysTableColumnVo.getLabelId());
         }
         if (StringUtils.isNotBlank(mdaSysTableColumnVo.getTableId())) {
             hql.append(" and m.tableId = :tableId");

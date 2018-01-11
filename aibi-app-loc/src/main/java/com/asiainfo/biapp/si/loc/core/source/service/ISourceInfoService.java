@@ -94,5 +94,14 @@ public interface ISourceInfoService extends BaseService<SourceInfo, String> {
      * @throws BaseException
      */
     public void deleteSourceInfo(String sourceId) throws BaseException;
+    
+    /**
+     * 
+     * Description: 根据configId查询指标
+     *
+     * @param configId
+     * @return
+     */
+    public Page<SourceInfo> selectSourceInfoListByConfigId(Page<SourceInfo> page,String configId);
 
 }

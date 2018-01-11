@@ -2,6 +2,7 @@
  * Created by j on 2017/12/6.
  */
 window.loc_onload = function(){
+	var configId = $.getCurrentConfigId();
 	var frWin = frameElement.lhgDG;
 	frWin.removeBtn();
 	//获取选定的指标名称
@@ -43,7 +44,10 @@ window.loc_onload = function(){
 	
 
     $("#mainGrid").jqGrid({
-        url: $.ctx + "/api/source/sourceInfo/queryPage",
+        url: $.ctx + "/api/source/sourceInfo/queryPagebyconfigId",
+        postData : {
+        	"configId" : configId
+        },
         datatype: "json",
         colNames:['指标Id','指标名称','源数据表字段', '源数据表名称','创建时间'],
         colModel:[

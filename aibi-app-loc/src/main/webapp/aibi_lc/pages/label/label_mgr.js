@@ -144,6 +144,7 @@ window.loc_onload = function(){
 	        rowNum:12,
 	        rowList:[10,20,30],
 	        viewrecords: true,
+	        sortable:false,
 //	        multiselect:true,
 	        pager: '#mainGridPager'  
 	    });

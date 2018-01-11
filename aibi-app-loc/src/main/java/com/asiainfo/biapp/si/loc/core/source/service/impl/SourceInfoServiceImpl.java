@@ -106,4 +106,9 @@ public class SourceInfoServiceImpl extends BaseServiceImpl<SourceInfo, String> i
         super.delete(sourceId);
     }
 
+    @Override
+    public Page<SourceInfo> selectSourceInfoListByConfigId(Page<SourceInfo> page,String configId) {
+        return iSourceInfoDao.selectSourceInfoListByConfigId(page, configId);
+    }
+
 }

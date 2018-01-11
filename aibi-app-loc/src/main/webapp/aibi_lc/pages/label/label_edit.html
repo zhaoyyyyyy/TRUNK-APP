@@ -70,9 +70,11 @@
 						</div> 
 						<div v-if="isemmu==true||labelTypeId==='枚举型'">
 						    <div class="ui-form-group ml70">
-                                <label class="control-label" for="dimTableName">维表选择</label>
+                                <label class="control-label" for="dimTableName">
+                                <span class="input-required">*</span>                               
+                                                               维表选择</label>
                                 <div class="control-input ml10">
-                                 	<select id="dimId" name="dimId" required="true" class="easyui-validatebox form-control">
+                                 	<select v-model="dimId" name="dimId" id="dimId" required="true" class="easyui-validatebox form-control">
                                          <option>请选择维表</option>
                                          <option v-for = "dim in dimtableInfoList" :value="dim.dimId">{{dim.dimTableName}}</option>
                                      </select>
@@ -80,9 +82,13 @@
                                 <button type="button" onclick="fun_to_dimdetail()" class="file-up-btn ml10" >详情</button>
                             </div>
                             <div class="ui-form-group ml70">
-                                <label for="dataType" class="control-label">数据类型</label>
+                                <label for="dataType" class="control-label">
+                                <span class="input-required">*</span>                                
+                                                                 数据类型</label>
                                    <div class="control-input ml10">
-                                        <input name="dataType" type="text" required="true" class="easyui-validatebox form-control" id="dataType">
+                                        <select v-model="dataName" name="dataType" required="true" class="easyui-validatebox form-control" selected>
+									        <option v-for = "h in sjlx" :value="h.dataName">{{h.dataName}}</option>
+								        </select>
                                   </div>
                             </div>
                         </div>
@@ -111,24 +117,29 @@
                            </div>
                         </div>
 		                <div class="ui-form-group ml70">
-							<label class="control-label">
-							<span class="input-required">*</span>
-							单位</label> 
+							<label class="control-label">单位</label> 
 							<div class="control-input ml10">
-								<input name="unit" type="text" required="true" class="easyui-validatebox fleft form-control"
-								placeholder="请输入单位" />
+								<input v-model="unit" name="unit" type="text" class="fleft form-control" placeholder="请输入单位" />
 							</div>
 						</div>
-						
+						<div class="ui-form-group ml70">
+							<label class="control-label">
+							<span class="input-required">*</span>
+							业务口径</label> 
+							<div class="control-input ml10">
+								<input type="text" class="form-control easyui-validatebox" 
+	                            required="true"	id="busiCaliber" name="busiCaliber" placeholder="请输入业务口径">
+							</div>
+						</div>
 						<div class="ui-form-group ml70">
                             <label class="control-label fleft">
                             <span class="input-required">*</span>
                                                         是否正式标签</label>
                             <div class="control-input ml10">
                                <ul>
-								  <li class="" v-for="(i,index) in isbq" style="display: inline">
+								  <li v-for="(i,index) in isbq" style="display: inline">
 								  	<div class="radio circle success">
-								  		<input :value="i.code" name="isRegular" type="radio" required="true" class="easyui-validatebox" checked="index===0"/>													
+								  		<input :value="i.code" name="isRegular" type="radio" required="true" class="easyui-validatebox"/>													
 										<label><i class="default"></i>{{i.dataName}}</label>
 								  	</div>											  	
 								  </li>

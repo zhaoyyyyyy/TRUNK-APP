@@ -41,7 +41,7 @@
 	                    <div class="form-inline ui-form">
 	                        <div class="clearfix">
 	                            <div  class="form-group">
-	                                <label class="fleft mt5" for="exampleInputEmail4">选择指标数据</label>
+	                                <label class="fleft mt5" for="exampleInputEmail4">指标源表</label>
 	                                <div class="control-input has-icon">
 	                                    <select id="sourceTableId" name="sourceTableId" class="form-control ml10 input-pointer ">
 	                                    <option>请选择指标</option>
@@ -98,7 +98,7 @@
 	                                                                        是否正式标签</label>
 	                                    <div class="control-input fleft ml10">
 	                                       <ul>
-											  <li class="" v-for="(i,index) in isbq" style="display: inline">
+											  <li v-for="(i,index) in isbq" style="display: inline">
 											  	<div class="radio circle success">
 											  		<input :value="i.code" name="isRegular" type="radio" checked="index===0"/>													
 													<label><i class="default"></i>{{i.dataName}}</label>
@@ -142,12 +142,9 @@
 	                                    </div>
 	                                </div>
 	                                <div class="ui-form-group">
-	                                    <label for="unit" class="control-label">
-	                                    <span class="input-required">*</span>                                    
-	                                                                        单位</label>
+	                                    <label for="unit" class="control-label">单位</label>
 	                                    <div class="control-input">
-	                                        <input type="text" class="form-control easyui-validatebox" id="unit"
-	                                        	required="true" name="unit" placeholder="请输入单位">
+	                                        <input type="text" class="form-control" id="unit" name="unit" placeholder="请输入单位">
 	                                    </div>
 	                                </div>
 	                            </div>
@@ -198,7 +195,9 @@
 		                                    <span class="input-required">*</span>                                    
 		                                                                        数据类型</label>
 		                                       <div class="control-input">
-		                                            <input name="dataType" type="text" required="true" class="form-control easyui-validatebox" id="dataType">
+		                                            <select name="dataType" required="true" class="easyui-validatebox form-control" selected>
+									                   <option v-for = "h in sjlx" :value="h.dataName">{{h.dataName}}</option>
+								                    </select>
 		                                      </div>
 		                                </div>
 	                                </div>

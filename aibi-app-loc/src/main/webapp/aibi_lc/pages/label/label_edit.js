@@ -3,6 +3,7 @@ var model = {
 	gxzq : [],
 	spzt : [],
 	isbq : [],
+	sjlx : [],
 	dimtableInfoList : [],
 	sourceIdList : [],
 	sourceNameList : [],
@@ -16,6 +17,11 @@ var model = {
 	approveStatusId : "",
 	dependIndex : "",
 	configId : "",
+	dataName : "",
+	dimId : "",
+	unit : "",
+	isRegular : "",
+	categoryName : "",
 	isemmu : false,
 }
 
@@ -25,6 +31,8 @@ window.loc_onload = function() {
 	if(labelId!=""&&labelId!=null&&labelId!=undefined){
 		model.labelId = labelId;
 		$.commAjax({
+			ansyc : false,
+			isShowMask : true,
 			url : $.ctx + '/api/label/labelInfo/get',
 			postData : {
 				"labelId" : labelId
@@ -39,14 +47,41 @@ window.loc_onload = function() {
 				model.labelName = data.data.labelName;
 				model.updateCycle = data.data.updateCycle;
 				model.labelTypeId = data.data.labelTypeId;
+				model.isRegular = data.data.isRegular;
+				var categoryId = data.data.categoryId;
+				$.commAjax({
+					ansyc : false,
+					url : $.ctx + "/api/",
+					postData : {
+						"categoryId" : categoryId
+					},
+				    onSuccess : function(data2){
+				    	model.categoryName = data2.data.categoryName
+				    }
+				})
 				if(model.labelTypeId==5){
-					model.isemmu=true
+					model.isemmu=true;
+					$.commAjax({
+						ansyc : false,
+						url : $.ctx + '/api/label/mdaSysTableCol/queryList',
+						postData : {
+							"labelId" : labelId
+						},
+						onSuccess : function(data1){
+							var list = data1.data;
+							if(list.length!=0){
+								model.dataName = list[0].dataType;
+								model.dimId = list[0].dimTransId;
+								model.unit = list[0].unit
+							};
+						}
+					});
 				}
 				model.approveStatusId = data.data.approveInfo.approveStatusId;
-			}
+			},
+			maskMassage : 'load...'
 		});
 	}
-	
 	new Vue({
 			el : "#dataD",
 			data : model,
@@ -80,20 +115,23 @@ window.loc_onload = function() {
 		model.gxzq.push(dicgxzq[i]);
 	}
 	
+	var dicsjlx = $.getDicData("ZDLXZD");
+	for(var i =0 ; i<dicsjlx.length; i++){
+		model.sjlx.push(dicsjlx[i]);
+	}
+
 	var dicBqlx = $.getDicData("BQLXZD");
 	for(var i = 0; i<dicBqlx.length; i++){
 		if(dicBqlx[i].code!=10&&dicBqlx[i].code!=12&&dicBqlx[i].code!=8){
 			model.bqlx.push(dicBqlx[i]);
 		}		 
 	}
-	
 	var dicspzt = $.getDicData("SPZTZD");
 	for(var i = 0; i<dicspzt.length; i++){
 		if(dicspzt[i].code!=3){
 			model.spzt.push(dicspzt[i]); 
 		}
-	}
-	
+	}	
 	var dicIsbq = $.getDicData("SFZD");
 	for(var i = 0; i<dicIsbq.length; i++){
 		model.isbq.push(dicIsbq[i]);
