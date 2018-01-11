@@ -100,6 +100,18 @@ public class DimTableInfoServiceImpl extends BaseServiceImpl<DimTableInfo, Strin
     }
 
     public void modifyDimTableInfo(DimTableInfo dimTableInfo) throws BaseException {
+        if(StringUtils.isEmpty(dimTableInfo.getDimTableName())){
+            throw new ParamRequiredException("维表名称不能为空");
+        }
+        if(StringUtils.isEmpty(dimTableInfo.getCodeColType())){
+            throw new ParamRequiredException("主键类型不能为空");
+        }
+        if(StringUtils.isEmpty(dimTableInfo.getDimValueCol()) && !StringUtils.isEmpty(dimTableInfo.getDimCodeCol())){
+            throw new ParamRequiredException("请输入描述字段名");
+        }
+        if(!StringUtils.isEmpty(dimTableInfo.getDimValueCol()) && StringUtils.isEmpty(dimTableInfo.getDimCodeCol())){
+            throw new ParamRequiredException("请输入主键字段名");
+        }
         super.saveOrUpdate(dimTableInfo);
     }
 
