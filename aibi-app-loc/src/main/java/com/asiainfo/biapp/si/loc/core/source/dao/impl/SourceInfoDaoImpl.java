@@ -114,14 +114,14 @@ public class SourceInfoDaoImpl extends BaseDaoImpl<SourceInfo, String> implement
     }
 
     @Override
-    public Page<SourceInfo> selectSourceInfoListByConfigId(Page<SourceInfo> page, String configId) {
+    public Page<SourceInfo> selectSourceInfoListByConfigId(Page<SourceInfo> page, String configId,String sourceName) {
         Map<String, Object> params = new HashMap<>();
-        params.put("configId", configId);
-        /*StringBuffer hql = new StringBuffer("Select a.sourceId,a.sourceName,a.sourceTableId,a.columnName,a.sourceColumnRule,a.columnCnName,"
-                + "a.cooColumnType,a.columnLength,a.depositColumn,a.columnUnit,a.columnCaliber,a.columnNum"
-                + " from SourceInfo a,SourceTableInfo b where a.sourceTableId=b.sourceTableId "
-                + "and b.configId= :configId");*/
         StringBuffer hqls = new StringBuffer("from SourceInfo s where s.sourceTableId in(select a.sourceTableId from SourceTableInfo a where a.configId= :configId)");
+        params.put("configId", configId);
+        if (StringUtil.isNoneBlank(sourceName)) {
+            hqls.append(" and s.sourceName LIKE :sourceName");
+            params.put("sourceName", "%"+sourceName+"%");
+        }
         return super.findPageByHql(page, hqls.toString(), params);
     }
 }

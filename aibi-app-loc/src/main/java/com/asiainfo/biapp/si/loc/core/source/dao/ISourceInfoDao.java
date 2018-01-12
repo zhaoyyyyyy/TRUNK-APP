@@ -65,6 +65,6 @@ public interface ISourceInfoDao extends BaseDao<SourceInfo, String> {
      * @param configId
      * @return
      */
-    public Page<SourceInfo> selectSourceInfoListByConfigId(Page<SourceInfo> page,String configId);
+    public Page<SourceInfo> selectSourceInfoListByConfigId(Page<SourceInfo> page,String configId,String sourceName);
 
 }

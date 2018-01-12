@@ -107,8 +107,11 @@ public class SourceInfoServiceImpl extends BaseServiceImpl<SourceInfo, String> i
     }
 
     @Override
-    public Page<SourceInfo> selectSourceInfoListByConfigId(Page<SourceInfo> page,String configId) {
-        return iSourceInfoDao.selectSourceInfoListByConfigId(page, configId);
+    public Page<SourceInfo> selectSourceInfoListByConfigId(Page<SourceInfo> page,String configId,String sourceName) throws BaseException {
+        if (StringUtils.isBlank(configId)) {
+            throw new ParamRequiredException("此专区不存在");
+        }
+        return iSourceInfoDao.selectSourceInfoListByConfigId(page, configId,sourceName);
     }
 
 }
