@@ -69,5 +69,12 @@ public interface LabelRuleContants {
 	/** 0：不需要 **/
 	public static int IS_NEED_OFFSET_NO = 0;
 	
+	/**
+	 * 1客户群，2模板
+	 */
+	/** 1客户群 */
+	public static final int LABEL_RULE_FROM_COSTOMER = 1;
+	/** 2模板 */
+	public static final int LABEL_RULE_FROM_TEMPLATE = 2;
 	
 }

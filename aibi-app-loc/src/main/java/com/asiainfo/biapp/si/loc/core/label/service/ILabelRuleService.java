@@ -9,7 +9,6 @@ package com.asiainfo.biapp.si.loc.core.label.service;
 import java.util.List;
 
 import com.asiainfo.biapp.si.loc.base.exception.BaseException;
-import com.asiainfo.biapp.si.loc.base.page.Page;
 import com.asiainfo.biapp.si.loc.base.service.BaseService;
 import com.asiainfo.biapp.si.loc.core.label.entity.LabelRule;
 import com.asiainfo.biapp.si.loc.core.label.vo.LabelRuleVo;
@@ -42,56 +41,38 @@ import com.asiainfo.biapp.si.loc.core.label.vo.LabelRuleVo;
  */
 public interface ILabelRuleService extends BaseService<LabelRule, String> {
 
-    /**
-     * Description: 分页查询客户群规则
-     *
-     * @param page
-     * @param labelRuleVo
-     * @return
-     * @throws BaseException
-     */
-    public Page<LabelRule> selectLabelRulePageList(Page<LabelRule> page, LabelRuleVo labelRuleVo) throws BaseException;
+	/**
+	 * 
+	 * Description: * 按客户群或者模板Id查找所用的标签规则
+	 * 
+	 * @param customId
+	 *            客户群或者模板Id
+	 * @param customType
+	 *            1、客户群，2、模板
+	 * @return
+	 * @throws BaseException
+	 *
+	 * @author tianxy3
+	 * @date 2018年1月12日
+	 */
+	public List<LabelRuleVo> queryCiLabelRuleList(String customId, Integer customType) throws BaseException;
 
-    /**
-     * Description: 查询客户群规则列表
-     *
-     * @param labelRuleVo
-     * @return
-     * @throws BaseException
-     */
-    public List<LabelRule> selectLabelRuleList(LabelRuleVo labelRuleVo) throws BaseException;
 
-    /**
-     * Description: 根据ID拿到客户群规则
-     *
-     * @param ruleId
-     * @return
-     * @throws BaseException
-     */
-    public LabelRule selectLabelRuleById(String ruleId) throws BaseException;
+	/**
+	 * Description: 新增一个客户群规则
+	 *
+	 * @param labelRule
+	 * @throws BaseException
+	 */
+	public void addLabelRule(LabelRule labelRule) throws BaseException;
 
-    /**
-     * Description: 新增一个客户群规则
-     *
-     * @param labelRule
-     * @throws BaseException
-     */
-    public void addLabelRule(LabelRule labelRule) throws BaseException;
 
-    /**
-     * Description: 修改客户群规则
-     *
-     * @param labelRule
-     * @throws BaseException
-     */
-    public void modifyLabelRule(LabelRule labelRule) throws BaseException;
-
-    /**
-     * Description: 删除客户群规则
-     *
-     * @param ruleId
-     * @throws BaseException
-     */
-    public void deleteLabelRule(String ruleId) throws BaseException;
+	/**
+	 * Description: 删除客户群规则
+	 *
+	 * @param ruleId
+	 * @throws BaseException
+	 */
+	public void deleteLabelRule(String ruleId) throws BaseException;
 
 }

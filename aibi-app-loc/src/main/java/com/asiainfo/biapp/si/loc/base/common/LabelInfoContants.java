@@ -155,4 +155,31 @@ public interface LabelInfoContants {
 	/** 元数据列默认长度，字符串类型:varchar */
 	public static final String COLUMN_TYPE_LENGTH = "32";
     
+	/** 标签数据状态: 1、未生效 */
+	public static final int LABEL_DATA_STATUS_ID_NOT_EFFECT = 1;
+	/** 标签数据状态: 2、已生效 */
+	public static final int LABEL_DATA_STATUS_ID_EFFECT = 2;
+	/** 标签数据状态: 3、已失效 */
+	public static final int LABEL_DATA_STATUS_ID_FAILURE = 3;
+	/** 标签数据状态: 4、冷冻期 */
+	public static final int LABEL_DATA_STATUS_ID_FREEZED = 4;
+	/** 标签数据状态: 5、已下线 */
+	public static final int LABEL_DATA_STATUS_ID_UNDER = 5;
+	/** 标签数据状态: 6、已删除 */
+	public static final int LABEL_DATA_STATUS_ID_DELETED = 6;
+
+	/**
+	 * 客户群数据状态
+	 */
+	/** 客户群数据状态：0、 创建失败 */
+	public static final int CUSTOM_DATA_STATUS_FAILED = 0;
+	/** 客户群数据状态：1、待 创建 */
+	public static final int CUSTOM_DATA_STATUS_WAIT = 1;
+	/** 客户群数据状态：2、 创建中 */
+	public static final int CUSTOM_DATA_STATUS_CREATING = 2;
+	/** 客户群数据状态：3、 创建成功 */
+	public static final int CUSTOM_DATA_STATUS_SUCCESS = 3;
+	/** 客户群数据状态：4、 预约状态 */
+	public static final int CUSTOM_DATA_STATUS_ORDER = 4;
+	
 }

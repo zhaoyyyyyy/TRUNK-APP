@@ -53,7 +53,7 @@ public interface ILabelInfoService extends BaseService<LabelInfo, String> {
 	 * @author  tianxy3
 	 * @date 2018年1月11日
 	 */
-	public void saveCustomerLabelInfo(LabelExtInfo labelExtInfo,LabelInfo labelInfo,List<LabelRuleVo> labelRuleList, ExploreQueryParam queryParam) throws BaseException;
+	public void saveCustomerLabelInfo(LabelExtInfo labelExtInfo,LabelInfo labelInfo,List<LabelRuleVo> labelRuleList) throws BaseException;
 
 	
     /**

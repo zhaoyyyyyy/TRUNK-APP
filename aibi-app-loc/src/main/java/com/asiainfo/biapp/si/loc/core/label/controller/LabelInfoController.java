@@ -31,7 +31,6 @@ import com.asiainfo.biapp.si.loc.base.utils.WebResult;
 import com.asiainfo.biapp.si.loc.core.label.entity.ApproveInfo;
 import com.asiainfo.biapp.si.loc.core.label.entity.LabelExtInfo;
 import com.asiainfo.biapp.si.loc.core.label.entity.LabelInfo;
-import com.asiainfo.biapp.si.loc.core.label.model.ExploreQueryParam;
 import com.asiainfo.biapp.si.loc.core.label.service.IApproveInfoService;
 import com.asiainfo.biapp.si.loc.core.label.service.ILabelInfoService;
 import com.asiainfo.biapp.si.loc.core.label.vo.LabelInfoVo;
@@ -69,6 +68,7 @@ import springfox.documentation.annotations.ApiIgnore;
  * @author zhangnan7
  * @version 1.0.0.2017年11月16日
  */
+@SuppressWarnings("rawtypes")
 @Api(value = "标签信息管理", description = "张楠")
 @RequestMapping("api/label")
 @RestController
@@ -103,18 +103,20 @@ public class LabelInfoController extends BaseController {
 			//基本信息
 			LabelInfo labelInfo =new LabelInfo();
 			labelInfo.setLabelName(labelName);
-			labelInfo.setLabelTypeId(LabelInfoContants.LABEL_TYPE_CUST);
 			labelInfo.setUpdateCycle(updateCycle);
 			labelInfo.setOrgId(orgId);
 			labelInfo.setBusiLegend(busiLegend);
 			labelInfo.setConfigId(configId);
+			labelInfo.setDataDate(dataDate);
 			//拓展信息
 			LabelExtInfo labelExtInfo = new LabelExtInfo();
 	        labelExtInfo.setTacticsId(tacticsId);
+	        labelExtInfo.setDayLabelDate(dayLabelDate);
+	        labelExtInfo.setMonthLabelDate(monthLabelDate);
 			//标签规则
 			List<LabelRuleVo> labelRules =getSessionLabelRuleList();
-			ExploreQueryParam queryParam = new ExploreQueryParam(dataDate, monthLabelDate, dayLabelDate);
-			iLabelInfoService.saveCustomerLabelInfo(labelExtInfo, labelInfo, labelRules, queryParam);
+			
+			iLabelInfoService.saveCustomerLabelInfo(labelExtInfo, labelInfo, labelRules);
 		} catch (Exception e) {
 			e.printStackTrace();
 			LogUtil.error("保存客户群型标签异常", e);
@@ -413,6 +415,7 @@ public class LabelInfoController extends BaseController {
 	 * @author tianxy3
 	 * @date 2017年12月22日
 	 */
+	@SuppressWarnings("unchecked")
 	private List<LabelRuleVo> getSessionLabelRuleList() {
 		List<LabelRuleVo> rules = null;
 		try {

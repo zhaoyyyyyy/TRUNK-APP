@@ -6,20 +6,26 @@
 
 package com.asiainfo.biapp.si.loc.core.label.service.impl;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.transaction.Transactional;
 
+import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.asiainfo.biapp.si.loc.base.common.LabelRuleContants;
 import com.asiainfo.biapp.si.loc.base.dao.BaseDao;
 import com.asiainfo.biapp.si.loc.base.exception.BaseException;
 import com.asiainfo.biapp.si.loc.base.exception.ParamRequiredException;
 import com.asiainfo.biapp.si.loc.base.page.Page;
 import com.asiainfo.biapp.si.loc.base.service.impl.BaseServiceImpl;
+import com.asiainfo.biapp.si.loc.cache.CocCacheProxy;
 import com.asiainfo.biapp.si.loc.core.label.dao.ILabelRuleDao;
+import com.asiainfo.biapp.si.loc.core.label.entity.LabelInfo;
 import com.asiainfo.biapp.si.loc.core.label.entity.LabelRule;
 import com.asiainfo.biapp.si.loc.core.label.service.ILabelRuleService;
 import com.asiainfo.biapp.si.loc.core.label.vo.LabelRuleVo;
@@ -62,15 +68,30 @@ public class LabelRuleServiceImpl extends BaseServiceImpl<LabelRule, String> imp
         return iLabelRuleDao;
     }
 
-    public Page<LabelRule> selectLabelRulePageList(Page<LabelRule> page, LabelRuleVo labelRuleVo) throws BaseException {
-        return iLabelRuleDao.selectLabelRulePageList(page, labelRuleVo);
-    }
+	@Override
+	public List<LabelRuleVo> queryCiLabelRuleList(String customId, Integer customType) throws BaseException {
+		List<LabelRuleVo> list=new ArrayList<>();
+		LabelRuleVo param=new LabelRuleVo();
+		param.setCustomId(customId);
+		param.setCustomType(customType);
+		List<LabelRule> labelRuleList = iLabelRuleDao.selectLabelRuleList(param);
+		for (LabelRule entity : labelRuleList) {
+			LabelRuleVo labelRuleVo=new LabelRuleVo();
+			try {
+				BeanUtils.copyProperties(labelRuleVo, entity);
+			} catch (Exception e) {}
+			if (LabelRuleContants.ELEMENT_TYPE_LABEL_ID == entity.getElementType()) {
+				String labelIdStr = entity.getCalcuElement();
+				LabelInfo labelInfo = CocCacheProxy.getCacheProxy().getLabelInfoById(labelIdStr);
+				labelRuleVo.setLabelTypeId(labelInfo.getLabelTypeId());
+				//TODO 设置其他参数
+			}
+			list.add(labelRuleVo);
+		}
+		return list;
+	}
 
-    public List<LabelRule> selectLabelRuleList(LabelRuleVo labelRuleVo) throws BaseException {
-        return iLabelRuleDao.selectLabelRuleList(labelRuleVo);
-    }
-
-    public LabelRule selectLabelRuleById(String ruleId) throws BaseException {
+    private LabelRule selectLabelRuleById(String ruleId) throws BaseException {
         if (StringUtils.isBlank(ruleId)) {
             throw new ParamRequiredException("ID不能为空");
         }
@@ -78,10 +99,6 @@ public class LabelRuleServiceImpl extends BaseServiceImpl<LabelRule, String> imp
     }
 
     public void addLabelRule(LabelRule labelRule) throws BaseException {
-        super.saveOrUpdate(labelRule);
-    }
-
-    public void modifyLabelRule(LabelRule labelRule) throws BaseException {
         super.saveOrUpdate(labelRule);
     }
 

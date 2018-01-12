@@ -1,10 +1,24 @@
 
 package com.asiainfo.biapp.si.loc.base.task;
 
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
+import com.asiainfo.biapp.si.loc.base.common.LabelInfoContants;
+import com.asiainfo.biapp.si.loc.base.common.LabelRuleContants;
+import com.asiainfo.biapp.si.loc.base.extend.SpringContextHolder;
+import com.asiainfo.biapp.si.loc.base.utils.LogUtil;
+import com.asiainfo.biapp.si.loc.bd.common.dao.IBackSqlDao;
+import com.asiainfo.biapp.si.loc.bd.common.service.IBackSqlService;
+import com.asiainfo.biapp.si.loc.core.label.entity.LabelInfo;
 import com.asiainfo.biapp.si.loc.core.label.model.CustomRunModel;
+import com.asiainfo.biapp.si.loc.core.label.service.ILabelExploreService;
+import com.asiainfo.biapp.si.loc.core.label.service.ILabelInfoService;
+import com.asiainfo.biapp.si.loc.core.label.service.ILabelRuleService;
+import com.asiainfo.biapp.si.loc.core.label.vo.LabelRuleVo;
 
 /**
  * 
@@ -38,15 +52,45 @@ import com.asiainfo.biapp.si.loc.core.label.model.CustomRunModel;
 public class CustomerListCreaterThread extends Thread {
 
 	private String customGroupId;// 客户群id
+
 	private CustomRunModel customRunModel;
 
+	@Autowired
+	private ILabelExploreService exploreServiceImpl;
+
+	@Autowired
+	private ILabelRuleService ruleService;
+
+	@Autowired
+    private ILabelInfoService labelInfoService;
+	
+	@Autowired
+	private IBackSqlService backServiceImpl;
+	
 	@Override
 	public void run() {
-		System.out.println(customRunModel);
-		//1.获取sql
-		//2.生成表
-		//3.发通知
+		try {
+			try {
+				Thread.sleep(5000);//之前的事务提交需要一定时间
+			} catch (InterruptedException e) {
+				LogUtil.error("InterruptedException", e);
+			}
+			// 1.获取sql
+			LabelInfo customGroup = labelInfoService.get(customGroupId);
+			List<LabelRuleVo> labelRuleList = ruleService.queryCiLabelRuleList(customGroupId, LabelRuleContants.LABEL_RULE_FROM_COSTOMER);
+			String countSqlStr = exploreServiceImpl.getCountSqlStr(labelRuleList, customRunModel);
+			// 2.生成表
+			String tableName=LabelInfoContants.KHQ_CROSS_ONCE_TABLE+customGroup.getConfigId()+"_"+customGroup.getDataDate();
+	    	IBackSqlDao backSqlDao = (IBackSqlDao)SpringContextHolder.getBean("backMysqlDaoImpl");
+	    	backSqlDao.createVerticalTable(tableName, LabelInfoContants.KHQ_CROSS_COLUMN);
+	    	backSqlDao.insertDataToTabByPartion(countSqlStr, tableName, customGroupId);
+			// 3.发通知
+			
+		} catch (Exception e) {
+			LogUtil.error("生成客户群的清单异常", e);
+		}
 		
+
 	}
 
 	public void setCustomRunModel(CustomRunModel customRunModel) {

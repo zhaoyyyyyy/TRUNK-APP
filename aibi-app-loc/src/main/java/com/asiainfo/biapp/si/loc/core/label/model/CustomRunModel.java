@@ -30,7 +30,7 @@ import java.io.Serializable;
  * @author tianxy3
  * @version 1.0.0.2018年1月12日
  */
-public class CustomRunModel implements Serializable {
+public class CustomRunModel extends ExploreQueryParam implements Serializable {
 
 	/**  */
 	private static final long serialVersionUID = 1L;
@@ -45,9 +45,5 @@ public class CustomRunModel implements Serializable {
 		this.customGroupId = customGroupId;
 	}
 
-	public CustomRunModel(String customGroupId) {
-		super();
-		this.customGroupId = customGroupId;
-	}
 
 }

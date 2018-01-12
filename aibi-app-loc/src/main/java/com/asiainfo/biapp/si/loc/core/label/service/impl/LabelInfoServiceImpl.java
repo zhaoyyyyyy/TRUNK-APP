@@ -19,6 +19,8 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Service;
 
+import com.asiainfo.biapp.si.loc.base.common.LabelInfoContants;
+import com.asiainfo.biapp.si.loc.base.common.LabelRuleContants;
 import com.asiainfo.biapp.si.loc.base.dao.BaseDao;
 import com.asiainfo.biapp.si.loc.base.exception.BaseException;
 import com.asiainfo.biapp.si.loc.base.exception.ParamRequiredException;
@@ -41,7 +43,6 @@ import com.asiainfo.biapp.si.loc.core.label.entity.LabelRule;
 import com.asiainfo.biapp.si.loc.core.label.entity.MdaSysTable;
 import com.asiainfo.biapp.si.loc.core.label.entity.MdaSysTableColumn;
 import com.asiainfo.biapp.si.loc.core.label.model.CustomRunModel;
-import com.asiainfo.biapp.si.loc.core.label.model.ExploreQueryParam;
 import com.asiainfo.biapp.si.loc.core.label.service.IApproveInfoService;
 import com.asiainfo.biapp.si.loc.core.label.service.ILabelCountRulesService;
 import com.asiainfo.biapp.si.loc.core.label.service.ILabelExtInfoService;
@@ -247,23 +248,14 @@ public class LabelInfoServiceImpl extends BaseServiceImpl<LabelInfo, String> imp
     }
 
 	@Override
-	public void saveCustomerLabelInfo(LabelExtInfo labelExtInfo, LabelInfo labelInfo, List<LabelRuleVo> labelRuleList,
-			ExploreQueryParam queryParam) throws BaseException {
-		// 基本信息
-		super.saveOrUpdate(labelInfo);
-		String customId = labelInfo.getLabelId();
+	public void saveCustomerLabelInfo(LabelExtInfo labelExtInfo, LabelInfo customInfo, List<LabelRuleVo> labelRuleList) throws BaseException {
+		//TODO  基本信息是否需要加入缓存?
+		customInfo.setLabelTypeId(LabelInfoContants.LABEL_TYPE_CUST);
+		customInfo.setDataStatusId(LabelInfoContants.CUSTOM_DATA_STATUS_WAIT);
+		super.saveOrUpdate(customInfo);
+		String customId = customInfo.getLabelId();
 		labelExtInfo.setLabelId(customId);
 		iLabelExtInfoService.addLabelExtInfo(labelExtInfo);
-		// 元数据列
-		MdaSysTable mdaSysTable = iMdaSysTableService.queryMdaSysTable(labelInfo.getConfigId(),
-				labelInfo.getUpdateCycle(),2);
-		MdaSysTableColumn mdaSysTableColumn = new MdaSysTableColumn();
-		mdaSysTableColumn.setLabelId(labelInfo.getLabelId());
-		mdaSysTableColumn.setTableId(mdaSysTable.getTableId());
-		mdaSysTableColumn.setColumnName(labelInfo.getLabelId());
-		mdaSysTableColumn.setColumnCnName(labelInfo.getLabelName());
-		mdaSysTableColumn.setColumnStatus(1);
-		iMdaSysTableColService.addMdaSysTableColumn(mdaSysTableColumn);
 		// 保存标签规则
 		for (LabelRuleVo labelRuleVo : labelRuleList) {
 			LabelRule labelRule = new LabelRule();
@@ -272,13 +264,19 @@ public class LabelInfoServiceImpl extends BaseServiceImpl<LabelInfo, String> imp
 			} catch (Exception e) {
 			}
 			labelRule.setCustomId(customId);
+			labelRule.setCustomType(LabelRuleContants.LABEL_RULE_FROM_COSTOMER);
 			ruleService.addLabelRule(labelRule);
 		}
 		//生成清单
 		CustomerListCreaterThread creator = null;
 		try {
 			creator = (CustomerListCreaterThread) context.getBean("customerListCreaterThread");
-			creator.setCustomRunModel( new CustomRunModel(customId));
+			CustomRunModel model = new CustomRunModel();
+			model.setCustomGroupId(customId);
+			model.setDataDate(customInfo.getDataDate());
+			model.setDayDate(labelExtInfo.getDayLabelDate());
+			model.setMonthDate(labelExtInfo.getMonthLabelDate());
+			creator.setCustomRunModel(model);
 			ThreadPool.getInstance().execute(creator, false);
 		} catch (Exception e) {
 			LogUtil.error("线程池异常", e);
