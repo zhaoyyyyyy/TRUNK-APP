@@ -50,9 +50,17 @@ window.loc_onload = function() {
     		 */
     		select : function(index){
     			labelMarket.addToShoppingCar(index);
-    		}
+    		},
+    		toggleDropdown : function(item){
+				if(typeof item.isOpen=='undefined'){
+					this.$set(item,"isOpen",true)
+				}else{
+					item.isOpen=!item.isOpen;
+				}
+			}
     	}
     });
+
 	
 	//初始化加载标签体系
 	labelMarket.loadLabelCategoryList();
@@ -92,8 +100,7 @@ window.loc_onload = function() {
 			}
 		})
 	})
-	
-	
+
 	
 	//计算中心弹出/收起（下面）
 	$(".ui-shop-cart").click(function(){
@@ -103,7 +110,6 @@ window.loc_onload = function() {
 	$(".J-min").click(function(){
 		$(".ui-calculate-center").removeClass("heightAuto");
 	});
-	
 	
 }
 
