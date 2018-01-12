@@ -3,7 +3,6 @@ var model = {
 		showdimDetail: [],
 		sourcetableInfoList:[],
 		sourceInfoList:[{
-			sourceNameList :[],
 			dependIndexList : [],
 			dependIndex : "",
 			labelName : "",
@@ -73,7 +72,6 @@ window.loc_onload = function(){
 	    methods : {
 	        del_sourceName : function(index,index1){
 	        	console.log(model.sourceInfoList)
-	        	model.sourceInfoList[index]['sourceNameList'].splice(index1,1);
 	        	model.sourceInfoList[index]['dependIndexList'].splice(index1,1);
 	        	var dependx="";
 	        	for(var i=0; i<model.sourceInfoList[index]['dependIndexList'].length; i++){
@@ -118,24 +116,11 @@ function chooseKpi(obj){
 		var dependIndexList = [];
 		var dependx="";
 		for(var i=0; i<chooseKpis.length; i++){
-			/*$.commAjax({
-				async : false,
-				url : $.ctx + '/api/source/sourceInfo/get',
-				postData : {
-					"sourceId" : chooseKpis[i]
-				},
-				onSuccess : function(data){
-					sourceName.push(data.data.sourceName);
-					dependIndexList.push(data.data.sourceId);
-				}
-			});*/
-			sourceName.push(chooseKpis[i]);
 			dependIndexList.push(chooseKpis[i]);
 		}
 		for(var i=0; i<dependIndexList.length; i++){
 			dependx += dependIndexList[i]+","
 		}
-		model.sourceInfoList[index]['sourceNameList']= sourceName;
 		model.sourceInfoList[index]['dependIndexList'] = dependIndexList;
 		$("#dependIndex_"+index).val(dependx.substr(0,dependx.length-1));
 	}
@@ -168,7 +153,7 @@ function getTime(element){
 }
 function fun_to_createRow(){
 	model.sourceInfoList.push({
-		 sourceNameList : [],
+		 dependIndexList : [],
 	     dependIndex : "",
 	     labelName : "",
 	     labelTypeId : "",

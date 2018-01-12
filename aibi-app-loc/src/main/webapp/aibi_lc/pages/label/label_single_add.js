@@ -99,7 +99,6 @@ window.loc_onload = function() {
 		}
 	});	
 	$('#sourceTableId').change(function(){
-		model.showdimDetail=[];
 		var sourceTableId = $("#sourceTableId").val();
 		$.commAjax({
 			url : $.ctx + '/api/source/sourceTableInfo/get?sourceTableId='+sourceTableId,
@@ -107,6 +106,7 @@ window.loc_onload = function() {
 				model.sourceInfoList = data.data.sourceInfoList;
 				model.readCycle=data.data.readCycle;
 				model.read = $.getCodeDesc("GXZQZD",data.data.readCycle);
+				model.showdimDetail=[];
 			}
 		});
 	});
