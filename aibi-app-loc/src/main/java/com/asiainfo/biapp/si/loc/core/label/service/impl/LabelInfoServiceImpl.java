@@ -6,16 +6,17 @@
 
 package com.asiainfo.biapp.si.loc.core.label.service.impl;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 
 import javax.transaction.Transactional;
 
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Service;
 
 import com.asiainfo.biapp.si.loc.base.dao.BaseDao;
@@ -23,7 +24,10 @@ import com.asiainfo.biapp.si.loc.base.exception.BaseException;
 import com.asiainfo.biapp.si.loc.base.exception.ParamRequiredException;
 import com.asiainfo.biapp.si.loc.base.page.Page;
 import com.asiainfo.biapp.si.loc.base.service.impl.BaseServiceImpl;
+import com.asiainfo.biapp.si.loc.base.task.CustomerListCreaterThread;
+import com.asiainfo.biapp.si.loc.base.utils.LogUtil;
 import com.asiainfo.biapp.si.loc.base.utils.StringUtil;
+import com.asiainfo.biapp.si.loc.base.utils.ThreadPool;
 import com.asiainfo.biapp.si.loc.core.dimtable.dao.IDimTableInfoDao;
 import com.asiainfo.biapp.si.loc.core.dimtable.entity.DimTableInfo;
 import com.asiainfo.biapp.si.loc.core.dimtable.service.IDimTableInfoService;
@@ -36,6 +40,7 @@ import com.asiainfo.biapp.si.loc.core.label.entity.LabelInfo;
 import com.asiainfo.biapp.si.loc.core.label.entity.LabelRule;
 import com.asiainfo.biapp.si.loc.core.label.entity.MdaSysTable;
 import com.asiainfo.biapp.si.loc.core.label.entity.MdaSysTableColumn;
+import com.asiainfo.biapp.si.loc.core.label.model.CustomRunModel;
 import com.asiainfo.biapp.si.loc.core.label.model.ExploreQueryParam;
 import com.asiainfo.biapp.si.loc.core.label.service.IApproveInfoService;
 import com.asiainfo.biapp.si.loc.core.label.service.ILabelCountRulesService;
@@ -75,7 +80,7 @@ import com.asiainfo.biapp.si.loc.core.label.vo.LabelRuleVo;
  */
 @Service
 @Transactional
-public class LabelInfoServiceImpl extends BaseServiceImpl<LabelInfo, String> implements ILabelInfoService {
+public class LabelInfoServiceImpl extends BaseServiceImpl<LabelInfo, String> implements ILabelInfoService,ApplicationContextAware {
 
     @Autowired
     private ILabelInfoDao iLabelInfoDao;
@@ -106,6 +111,8 @@ public class LabelInfoServiceImpl extends BaseServiceImpl<LabelInfo, String> imp
     
     @Autowired
     private ILabelRuleService ruleService;
+    
+	private static ApplicationContext context;  
     
     @Override
     protected BaseDao<LabelInfo, String> getBaseDao() {
@@ -267,7 +274,20 @@ public class LabelInfoServiceImpl extends BaseServiceImpl<LabelInfo, String> imp
 			labelRule.setCustomId(customId);
 			ruleService.addLabelRule(labelRule);
 		}
-		//TODO  生成清单
+		//生成清单
+		CustomerListCreaterThread creator = null;
+		try {
+			creator = (CustomerListCreaterThread) context.getBean("customerListCreaterThread");
+			creator.setCustomRunModel( new CustomRunModel(customId));
+			ThreadPool.getInstance().execute(creator, false);
+		} catch (Exception e) {
+			LogUtil.error("线程池异常", e);
+		}
+	}
 
+	@Override
+	public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+		LabelInfoServiceImpl.context = applicationContext; 
+		
 	}
 }
