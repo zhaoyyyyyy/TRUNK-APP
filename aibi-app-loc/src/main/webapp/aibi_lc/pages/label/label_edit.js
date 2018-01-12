@@ -146,7 +146,9 @@ window.loc_onload = function() {
 	})
 	var dicgxzq = $.getDicData("GXZQZD");
 	for(var i =0 ; i<dicgxzq.length; i++){
-		model.gxzq.push(dicgxzq[i]);
+		if(dicgxzq[i].code!=1){
+			model.gxzq.push(dicgxzq[i]);
+		}
 	}
 	
 	var dicsjlx = $.getDicData("ZDLXZD");
