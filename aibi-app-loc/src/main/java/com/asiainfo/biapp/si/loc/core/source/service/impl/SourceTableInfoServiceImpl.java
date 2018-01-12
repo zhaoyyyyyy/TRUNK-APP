@@ -6,6 +6,11 @@
 
 package com.asiainfo.biapp.si.loc.core.source.service.impl;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -16,11 +21,15 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import au.com.bytecode.opencsv.CSVReader;
+
 import com.asiainfo.biapp.si.loc.base.dao.BaseDao;
 import com.asiainfo.biapp.si.loc.base.exception.BaseException;
 import com.asiainfo.biapp.si.loc.base.exception.ParamRequiredException;
 import com.asiainfo.biapp.si.loc.base.page.Page;
 import com.asiainfo.biapp.si.loc.base.service.impl.BaseServiceImpl;
+import com.asiainfo.biapp.si.loc.base.utils.FileUtil;
+import com.asiainfo.biapp.si.loc.base.utils.LogUtil;
 import com.asiainfo.biapp.si.loc.base.utils.StringUtil;
 import com.asiainfo.biapp.si.loc.core.source.dao.ISourceTableInfoDao;
 import com.asiainfo.biapp.si.loc.core.source.entity.SourceInfo;
@@ -309,6 +318,63 @@ public class SourceTableInfoServiceImpl extends BaseServiceImpl<SourceTableInfo,
             oldSou.setSourceInfoList(sou.getSourceInfoList());
         }
         return oldSou;
+    }
+    
+    public List<SourceInfo> parseColumnInfoFile(InputStream inputStream, String fileName) throws Exception{
+        String filePath = null;
+        try {
+            filePath = FileUtil.uploadTargetUserFile(inputStream, fileName);
+        } catch (Exception e1) {
+            LogUtil.error("获取文件目录信息报错", e1);
+        }
+        
+        //解析模版文件
+        List<SourceInfo> sourceInfoList = new ArrayList<SourceInfo>();
+        CSVReader reader = null;
+        // 当前记录条数
+        int currentRowNum = 0;
+        //列数
+        int columnSize = 4;
+
+        InputStream in = new FileInputStream(new File(filePath));
+        Charset charset = FileUtil.getInputStreamCharset(in);
+        reader = new CSVReader(new InputStreamReader(new FileInputStream(
+                new File(filePath)), charset));
+        String[] nextLine;
+        
+        try {
+            while ((nextLine = reader.readNext()) != null) {
+                currentRowNum++;
+                //跳过注释行
+                if(nextLine[0].startsWith("#")) {
+                    continue;
+                }
+                if(nextLine.length < columnSize){
+                    throw new Exception("导入文件错误");
+                }
+                SourceInfo sourceInfo = new SourceInfo();
+                sourceInfo.setColumnName(nextLine[0]);
+                sourceInfo.setCooColumnType(nextLine[1]);
+                sourceInfo.setSourceName(nextLine[2]);
+                sourceInfo.setColumnCaliber(nextLine[3]);
+                
+                sourceInfoList.add(sourceInfo);
+            }
+        } catch (Exception e) {
+            LogUtil.error("parseColumnInfoFile 行号："+currentRowNum+",error:", e);
+            currentRowNum = -1;
+            throw new Exception("导入报错"+e.getMessage(),e);
+        } finally {
+            if(in != null){
+                in.close();
+            }
+            if (reader != null) {
+                reader.close();
+                reader = null;
+            }
+        }
+        LogUtil.info("end parseColumnInfoFile ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
+        return sourceInfoList;
     }
 
 }

@@ -370,12 +370,13 @@ function fun_to_import(){
 			+ '/aibi_lc/pages/label/dataSource_import.html', 500, 200);
 	wd.addSourceList = function(sourceList) {
 		for(var i=0;i<sourceList.length;i++){
-			if(sourceList[i].cooColumnType == "string" || sourceList[i].cooColumnType == "varchar" 
-				|| sourceList[i].cooColumnType == "STRING" || sourceList[i].cooColumnType == "VARCHAR"  ){
+			var bool = sourceList[i].cooColumnType.indexOf("VARCHAR")>0;
+			debugger;
+			if(sourceList[i].cooColumnType.indexOf("varchar") != -1 || sourceList[i].cooColumnType.indexOf("VARCHAR") != -1  ){
 				sourceList[i].cooColumnType = "2";
-			}else if(sourceList[i].cooColumnType == "integer" || sourceList[i].cooColumnType == "INTEGER"){
+			}else if(sourceList[i].cooColumnType.indexOf("integer") != -1 || sourceList[i].cooColumnType.indexOf("INTEGER") != -1){
 				sourceList[i].cooColumnType = "1";
-			}else if(sourceList[i].cooColumnType == ""){
+			}else{
 				sourceList[i].cooColumnType = "2";
 			}
 			var dataRow = {
