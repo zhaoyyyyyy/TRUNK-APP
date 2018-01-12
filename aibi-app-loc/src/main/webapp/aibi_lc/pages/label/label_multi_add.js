@@ -80,12 +80,8 @@ window.loc_onload = function(){
 	    			dependx += model.sourceInfoList[index]['dependIndexList']+","
 	    		}
 	        	if($(".label-lists span").length>1){
-	        		console.log($(".label-lists span").size())
-	        		debugger;
 					$("#dependIndex_"+index).val(dependx.substr(0,dependx.length-1));
 				}else{
-					console.log($(".label-lists span").size())
-	        		debugger;
 					$("#dependIndex_"+index).val("");
 				}
 	        }
@@ -122,7 +118,7 @@ function chooseKpi(obj){
 		var dependIndexList = [];
 		var dependx="";
 		for(var i=0; i<chooseKpis.length; i++){
-			$.commAjax({
+			/*$.commAjax({
 				async : false,
 				url : $.ctx + '/api/source/sourceInfo/get',
 				postData : {
@@ -132,7 +128,9 @@ function chooseKpi(obj){
 					sourceName.push(data.data.sourceName);
 					dependIndexList.push(data.data.sourceId);
 				}
-			});
+			});*/
+			sourceName.push(chooseKpis[i]);
+			dependIndexList.push(chooseKpis[i]);
 		}
 		for(var i=0; i<dependIndexList.length; i++){
 			dependx += dependIndexList[i]+","

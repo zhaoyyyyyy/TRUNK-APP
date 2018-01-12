@@ -4,7 +4,7 @@ var model={
 		failTime : "",
 		updateCycle : "",
 		applySuggest : "",
-		busiLegend : "",
+		busiCaliber : "",
 		labelTypeId : "",
 		isRegular : "",
 		categoryName : "",
@@ -34,7 +34,6 @@ window.loc_onload = function() {
 			model.busiCaliber = data.data.busiCaliber;
 			model.failTime = data.data.failTime;
 			model.applySuggest = data.data.applySuggest;
-			model.busiLegend = data.data.busiLegend;
 			model.labelTypeId = $.getCodeDesc("BQLXZD",data.data.labelTypeId);
 			model.updateCycle = $.getCodeDesc("GXZQZD",data.data.updateCycle);
 			model.isRegular = $.getCodeDesc("SFZD",data.data.isRegular);

@@ -23,6 +23,7 @@ var model = {
 	isRegular : "",
 	categoryName : "",
 	countRules : "",
+	busiCaliber : "",
 	isemmu : false,
 }
 
@@ -43,12 +44,12 @@ window.loc_onload = function() {
 				var y = time.getFullYear()+'-';//年
 				var m = (time.getMonth()+1<10 ? '0'+(time.getMonth()+1):time.getMonth()+1)+'-';//月
 				var d = (time.getDate()+1<10 ? '0' +(time.getDate()):time.getDate());//日		
-//				model.failTime = y+m+d;
 				$("#failTime").val(y+m+d);
 				model.labelName = data.data.labelName;
 				model.updateCycle = data.data.updateCycle;
 				model.labelTypeId = data.data.labelTypeId;
 				model.isRegular = data.data.isRegular;
+				model.busiCaliber = data.data.busiCaliber;
 				if(model.isRegular==1){
 					$("#type"+model.isRegular).click()
 				}else if(model.isRegular==2){
@@ -247,15 +248,18 @@ function fun_to_save(){
 
 function fun_to_dimdetail(){
 	var dimId = $("#dimId").val();
-	var win = $.window('维表详情',$.ctx + '/aibi_lc/pages/dimtable/dimtable_detail.html?dimId='+dimId, 500,
-			350);
-	win.reload = function(){
-		$("mainGrid").setGridParam({
-			postData : $("#formSearch").formToJson()
-		}).trigger("reloadGrid",[{
-			page : 1
-		}]);
-	}
+	$.commAjax({
+		ansyc : false,
+	    url : $.ctx + '/api/dimtable/dimTableInfo/get',
+	    postData : {
+	    	"dimId" : dimId
+	    },
+	    onSuccess : function(data){
+	    	var dimTableName = data.data.dimTableName;
+	    	var win = $.window('维表详情',$.ctx + '/aibi_lc/pages/dimtable/dimtable_detail.html?dimTableName='+dimTableName, 800,
+	    			400);
+	    }
+	});
 }
 function openTtee(tag){
 	model.tagNode=tag;

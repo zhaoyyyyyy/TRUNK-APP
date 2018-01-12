@@ -116,8 +116,8 @@ window.loc_onload = function(){
 	            		return $.getCodeDesc("SPZTZD",value);
 	            	}
 	            },
-	            {name:'createTime',index:'createTime', width:20, align:"center"},
-	            {name:'labelId',index:'labelId', width:30, text_aling:"left", key:true,
+	            {name:'createTime',index:'createTime', width:20, align:"center",sortable:false},
+	            {name:'labelId',index:'labelId', width:30, text_aling:"left", key:true,sortable:false,
 	            	formatter : function(value, opts, data) {
 	            		var html = '';
 	            		if(data.dataStatusId !=6){
@@ -130,10 +130,10 @@ window.loc_onload = function(){
 	            		    	html+= '<button onclick="fun_to_start(\''+data.labelId+'\')" type="button" class="btn btn-default  ui-table-btn ui-table-btn" >启用</button>'+
 	            		    	       '<button onclick="fun_to_offline(\''+data.labelId+'\')" type="button" class="btn btn-default  ui-table-btn ui-table-btn" >下线</button>';
 	            		    }
-	            		    if(data.dataStatusId !=2){
+	            		    if(data.dataStatusId !=2 && data.dataStatusId !=5){
 	            		    	html+= '<button onclick="window.location=\'label_edit.html?labelId='+data.labelId+'\'" type="button" class="btn btn-default  ui-table-btn ui-table-btn" >修改</button>';
 	            		    }
-	            		    if(data.dataStatusId==1){
+	            		    if(data.dataStatusId==1 || data.dataStatusId ==5){
 	            			    html+= '<button onclick="fun_to_del(\''+data.labelId+'\')" type="button" class="btn btn-default  ui-table-btn ui-table-btn" >删除</button>';
 	            		    }  
 	            		}	
