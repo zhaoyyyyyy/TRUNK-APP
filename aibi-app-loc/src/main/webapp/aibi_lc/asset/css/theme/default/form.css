@@ -19,7 +19,14 @@
     padding: 5px 10px 0;
     text-align: right;
     position: relative;
-    min-width: 90px;
+    min-width:105px;
+}
+span.input-required{
+	color: #FF0000;
+    vertical-align: middle;
+    display: inline-block;
+    font-size: 16px;
+    font-weight: bold;
 }
 .form-horizontal.left > .ui-form-group > .control-label{
     text-align: left;
@@ -296,7 +303,7 @@ radio样式
 }
 .radio i:before {
     position: relative;
-    z-index: 999;
+    z-index: 99;
     left: 0;
     display: inline-block;
     vertical-align: bottom;

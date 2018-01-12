@@ -13,6 +13,7 @@ import com.asiainfo.biapp.si.loc.base.page.Page;
 import com.asiainfo.biapp.si.loc.base.service.BaseService;
 import com.asiainfo.biapp.si.loc.core.dimtable.entity.DimTableInfo;
 import com.asiainfo.biapp.si.loc.core.dimtable.vo.DimTableInfoVo;
+import com.asiainfo.biapp.si.loc.core.prefecture.entity.PreConfigInfo;
 
 /**
  * Title : IDimTableInfoService
@@ -62,6 +63,15 @@ public interface IDimTableInfoService extends BaseService<DimTableInfo, String>{
      * @throws BaseException
      */
     public DimTableInfo selectDimTableInfoById(String dimId) throws BaseException;
+    
+    /**
+     * Description: 根据名称查询维表
+     *
+     * @param dimTableName
+     * @return
+     * @throws BaseException
+     */
+    public DimTableInfo selectOneByDimTableName(String dimTableName) throws BaseException;
 
     /**
      * 新增或修改一个实体 Description:

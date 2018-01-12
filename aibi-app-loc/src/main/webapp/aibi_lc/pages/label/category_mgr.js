@@ -1,4 +1,5 @@
 window.loc_onload = function() {
+	var labelId = $.getCurrentConfigId(); //专区ID
 	ztreeFunc();
 	labeltree();
 	//移动标签时所选中的节点ID
@@ -20,9 +21,9 @@ window.loc_onload = function() {
 	//左边树
 	function ztreeFunc(){
 		var ztreeObj;
-		var labelId = $.getCurrentConfigId();
 		$.commAjax({			
-		    url : $.ctx+'/api/label/categoryInfo/queryList',  		    
+		    url : $.ctx+'/api/label/categoryInfo/queryList',
+		    isShowMask : true,
 		    dataType : 'json', 
 		    async:true,
 		    postData : {
@@ -34,7 +35,8 @@ window.loc_onload = function() {
 		    		ztreeObj[0].children = data.data;
 		    	}
 		    	$.fn.zTree.init($("#ztree"), setting, ztreeObj);
-		    }
+		    },
+		    maskMassage : 'Load...'
 	   });
 		setting = {  
 			view: {
@@ -121,6 +123,7 @@ window.loc_onload = function() {
 				    }else {
 				        $.commAjax({						
 							url : $.ctx + '/api/label/categoryInfo/save',
+							isShowMask : true,
 							async:true,
 							postData : {
 								"sysId" :labelId,
@@ -131,7 +134,8 @@ window.loc_onload = function() {
 								ztreeFunc();
 								labeltree();
 								$.alert("新增标签分类成功");
-							}
+							},
+							maskMassage : '添加中...'
 						});
 		       		}
 	        	})
@@ -153,6 +157,7 @@ window.loc_onload = function() {
 			    }else{
 			    	$.commAjax({
 						url : $.ctx + '/api/label/labelInfo/queryList',
+						isShowMask : true,
 						postData : {
 							"categoryId" : treeNode.categoryId,	
 							"configId" :labelId,								
@@ -172,13 +177,14 @@ window.loc_onload = function() {
 										    treeObj.removeNode(nodes[0]);
 										    labeltree();
 										    $.alert("删除标签分类成功");
-										}
+										},
 									});
 								});
 							}else{
-							$.alert("该分类下还有标签，不可删除");
+								$.alert("该分类下还有标签，不可删除");
 							}
-						}
+						},
+						maskMassage : '删除中...'
 			    	})
 			    }
 			})
@@ -229,6 +235,7 @@ window.loc_onload = function() {
 			    }else {
 			        $.commAjax({						
 						url : $.ctx + '/api/label/categoryInfo/update',
+						isShowMask : true,
 						async:true,
 						postData : {
 							"sysId" :labelId,
@@ -242,7 +249,8 @@ window.loc_onload = function() {
 							treeObj.updateNode(nodes[0]);
 							labeltree();
 							$.alert("修改标签分类成功");
-						}
+						},
+						maskMassage : '修改中...'
 					});
 	       		}
         	})	        	
@@ -287,17 +295,27 @@ window.loc_onload = function() {
 		$("#labelList").find("input[checked]");
 	});
 	//左边树模糊查询
-	var leftTreeInput ="";
-	var text;
 	$("#btn_serach").click(function(){
-		leftTreeInput = $("#exampleInputAmount").val();
-		if(leftTreeInput == ""){ztreeFunc(); return }
-		if(leftTreeInput !=text ){
-			var treeObj = $.fn.zTree.getZTreeObj("ztree");
-			var zTreeNodes = treeObj.getNodesByParamFuzzy("categoryName", leftTreeInput, null);
-			$.fn.zTree.init($("#ztree"), setting, zTreeNodes);
-			text =leftTreeInput;
-		}
+		$.commAjax({			
+		    url : $.ctx+'/api/label/categoryInfo/queryList',
+		    isShowMask : true,
+		    dataType : 'json', 
+		    async:true,
+		    postData : {
+					"sysId" :labelId,
+				},
+		    onSuccess: function(data){
+		    	var text = $("#exampleInputAmount").val();
+		    	if(text == ""){ztreeFunc()}
+		    	else{
+		    		$.fn.zTree.init($("#ztree"), setting, data.data);
+					var treeObj = $.fn.zTree.getZTreeObj("ztree");
+					var zTreeNodes = treeObj.getNodesByParamFuzzy("categoryName", text, null);
+					$.fn.zTree.init($("#ztree"), setting, zTreeNodes);
+		    	}
+		    },
+		    maskMassage : 'Load...'
+	   });
 	});
 	//移动事件
 	$("#dialog-upd").click(function(){
@@ -313,7 +331,8 @@ window.loc_onload = function() {
 		}
 		for(var i=0;i<transData.length;i++){
 			$.commAjax({			
-			    url : $.ctx+'/api/label/labelInfo/update',  	
+			    url : $.ctx+'/api/label/labelInfo/update',  
+			    isShowMask : true,
 			    dataType : 'json', 
 			    async : false,
 			    postData : {
@@ -327,15 +346,14 @@ window.loc_onload = function() {
 				    	$("#dialog-del").click();
 			    	}
 			    	
-				}
+				},
+				maskMassage : '正在移动...'
 			});
 		}
 	});
 	//移动时的树
 	function labeltree(){
 		var ztreeObj;
-		var obj = $("#preConfig_list").find("span");
-		var labelId =obj.attr("configId");			
 		$.commAjax({			
 		    url : $.ctx+'/api/label/categoryInfo/queryList',  		    
 		    dataType : 'json', 
@@ -376,18 +394,20 @@ window.loc_onload = function() {
 	//标签部分的模糊查询
 	$("#btn_serach1").click(function(){
 		var text =$("#exampleInputAmount1").val();
-		showLabelInfo(text,1);
+		showLabelInfo(text);
+		/*if(labelCategory != 1){
+			showLabelInfo(text,1);
+		}else{
+			showLabelInfo(text);
+		}*/
 	})
 	//全部分类当前分类判断
-	/*function distIndex(dataId){
-		var text =$("#exampleInputAmount1").val();
-		if(dataId==0){
-			alert(0)
-			//showLabelInfo(text,1);
-			}else{
-			alert(1)
-			//showLabelInfo(text,3);
-			}
+	/*var labelCategory; //1.当前分类     其他为全部分类
+	function distIndex(dataId){
+		labelCategory = 0;
+		if(dataId != 0){
+			labelCategory =1; //将分类定义为当前分类
+		}
 	}
 	$("#radioList .radio").each(function(e){
 		if($(this).find("label").hasClass('active')){
@@ -403,32 +423,43 @@ window.loc_onload = function() {
 		})
 	})*/
 	//右边树的模糊查询
-	var rightTreeInput ="";
-	var text;
 	$("#btn_serach2").click(function(){
-		rightTreeInput = $("#exampleInputAmount2").val();
-		if(rightTreeInput == ""){labeltree(); return }
-		if(rightTreeInput !=text ){
-			var treeObj = $.fn.zTree.getZTreeObj("labeltree");
-			var zTreeNodes = treeObj.getNodesByParamFuzzy("categoryName", rightTreeInput, null);
-			$.fn.zTree.init($("#labeltree"), install, zTreeNodes);
-			text =rightTreeInput;
-		}
+		$.commAjax({			
+		    url : $.ctx+'/api/label/categoryInfo/queryList',
+		    isShowMask : true,
+		    dataType : 'json', 
+		    async:true,
+		    postData : {
+					"sysId" :labelId,
+				},
+		    onSuccess: function(data){
+		    	var text = $("#exampleInputAmount2").val();
+		    	if(text ==""){labeltree();}
+		    	else{
+		    		$.fn.zTree.init($("#labeltree"), install, data.data);
+					var treeObj = $.fn.zTree.getZTreeObj("labeltree");
+					var zTreeNodes = treeObj.getNodesByParamFuzzy("categoryName", text, null);
+					$.fn.zTree.init($("#labeltree"), install, zTreeNodes);
+		    	}
+		    },
+		    maskMassage : 'Load...'
+	   });
 	});
 	//符合条件的标签的拼写
 	function showLabelInfo(labelInfo,number){
-		var obj = $("#preConfig_list").find("span");
-		var configId =obj.attr("configId");    //专区ID
-		var text;			//模糊查询时的关键字
-		if(number == 1){text = labelInfo}		//标签的模糊查询	
+		var categoryId = leftTreeCagyId;
+		var text = labelInfo;			//模糊查询时的关键字
+		if(number == 1){text = labelInfo; categoryId = "";}//全部分类下的标签模糊查询
 		$.commAjax({			
-		    url : $.ctx+'/api/label/labelInfo/queryList',  		    
+		    url : $.ctx+'/api/label/labelInfo/queryList', 
+		    isShowMask : true,
 		    dataType : 'json', 
 		    async:true,
 		    postData : {
 					"labelName" :text,
-					"configId" :configId,
-					"categoryId" :leftTreeCagyId,
+					"configId" :labelId,
+					"categoryId" :categoryId,
+					"dataStatusId" : 2,
 				},
 		    onSuccess: function(data){
 		    	$("#labelList").html("");
@@ -447,7 +478,8 @@ window.loc_onload = function() {
 				    	$("#labelList").append(html);
 		    		}
 		    	}
-		    }  
+		    },
+		    maskMassage : '搜索中...'
 	   });
 	}
 }

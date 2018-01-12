@@ -20,9 +20,11 @@ import com.asiainfo.biapp.si.loc.base.exception.ParamRequiredException;
 import com.asiainfo.biapp.si.loc.base.service.impl.BaseServiceImpl;
 import com.asiainfo.biapp.si.loc.base.utils.StringUtil;
 import com.asiainfo.biapp.si.loc.core.label.dao.ICategoryInfoDao;
+import com.asiainfo.biapp.si.loc.core.label.dao.ILabelInfoDao;
 import com.asiainfo.biapp.si.loc.core.label.entity.CategoryInfo;
 import com.asiainfo.biapp.si.loc.core.label.service.ICategoryInfoService;
 import com.asiainfo.biapp.si.loc.core.label.vo.CategoryInfoVo;
+import com.asiainfo.biapp.si.loc.core.label.vo.LabelInfoVo;
 
 /**
  * Title : CategoryInfoServiceImpl
@@ -51,6 +53,9 @@ public class CategoryInfoServiceImpl extends BaseServiceImpl<CategoryInfo, Strin
     @Autowired
     private ICategoryInfoDao iCategoryInfoDao;
     
+    @Autowired
+    private ILabelInfoDao iLabelInfoDao;
+    
 
     @Override
     protected BaseDao<CategoryInfo, String> getBaseDao() {
@@ -73,15 +78,37 @@ public class CategoryInfoServiceImpl extends BaseServiceImpl<CategoryInfo, Strin
         }
         return super.get(categoryId);
     }
+    
+    public CategoryInfo selectCategoryInfoByCategoryName(String categoryName,String sysId) throws BaseException {
+        if (StringUtils.isBlank(categoryName)) {
+            throw new ParamRequiredException("名称不能为空");
+        }
+        if(StringUtils.isBlank(sysId)){
+            throw new ParamRequiredException("专区ID出错");
+        }
+        return iCategoryInfoDao.selectCategoryInfoByCategoryName(categoryName,sysId);
+    }
 
     public void addCategoryInfo(CategoryInfo categoryInfo) throws BaseException {
         if(categoryInfo != null && StringUtil.isEmpty(categoryInfo.getParentId())){
             categoryInfo.setParentId(null);
         }
+        if(StringUtils.isBlank(categoryInfo.getCategoryName())){
+            throw new ParamRequiredException("分类名称不能为空");
+        }
+        if(categoryInfo.getCategoryName().length()>8){
+            throw new ParamRequiredException("分类名称过长");
+        }
         super.saveOrUpdate(categoryInfo);
     }
 
     public void modifyCategoryInfo(CategoryInfo categoryInfo) throws BaseException{
+        if(StringUtils.isBlank(categoryInfo.getCategoryName())){
+            throw new ParamRequiredException("分类名称不能为空");
+        }
+        if(categoryInfo.getCategoryName().length()>8){
+            throw new ParamRequiredException("分类名称过长");
+        }
         super.saveOrUpdate(categoryInfo);
         
     }
@@ -89,6 +116,17 @@ public class CategoryInfoServiceImpl extends BaseServiceImpl<CategoryInfo, Strin
     public void deleteCategoryInfoById(String categoryId) throws BaseException {
         if (selectCategoryInfoById(categoryId)==null){
             throw new ParamRequiredException("ID不存在");
+        }
+        if(StringUtils.isBlank(categoryId)){
+            throw new ParamRequiredException("ID不能为空");
+        }
+        if(selectCategoryInfoById(categoryId).getChildren().size() != 0){
+            throw new ParamRequiredException("该分类下还有分类，不可以删除");
+        }
+        LabelInfoVo labelInfoVo = new LabelInfoVo();
+        labelInfoVo.setCategoryId(categoryId);
+        if(iLabelInfoDao.selectLabelInfoList(labelInfoVo).size() != 0){
+            throw new ParamRequiredException("该分类下还有标签，不可以删除");
         }
         super.delete(categoryId);
         

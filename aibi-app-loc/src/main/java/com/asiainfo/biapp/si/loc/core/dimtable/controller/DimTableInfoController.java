@@ -115,6 +115,15 @@ public class DimTableInfoController extends BaseController<DimTableInfo>{
     public WebResult<String> save(@ApiIgnore DimTableInfo dimTableInfo) throws BaseException{
             WebResult<String> webResult = new WebResult<>();
             dimTableInfo.setCreateTime(new Date());
+            DimTableInfo dimTable = new DimTableInfo();
+            try {
+                dimTable = iDimTableInfoService.selectOneByDimTableName(dimTableInfo.getDimTableName());
+            } catch (BaseException e) {
+                return webResult.fail(e);
+            }
+            if (null != dimTable) {
+                return webResult.fail("维表名称已存在");
+            }
             try {
                 iDimTableInfoService.addDimTableInfo(dimTableInfo);
             } catch (BaseException e) {
@@ -138,10 +147,15 @@ public class DimTableInfoController extends BaseController<DimTableInfo>{
     public WebResult<String> edit(@ApiIgnore DimTableInfo dimTableInfo) throws BaseException{
         WebResult<String> webResult = new WebResult<>();
         DimTableInfo oldDim = new DimTableInfo();
+        DimTableInfo dimTable = new DimTableInfo();
+        dimTable = iDimTableInfoService.selectOneByDimTableName(dimTableInfo.getDimTableName());
         try {
             oldDim = iDimTableInfoService.selectDimTableInfoById(dimTableInfo.getDimId());
         } catch (BaseException e) {
             return webResult.fail(e);
+        }
+        if(!dimTableInfo.getDimTableName().equals(oldDim.getDimTableName()) && null != dimTable){
+            return webResult.fail("维表名称已存在");
         }
         oldDim = fromToBean(dimTableInfo, oldDim);
         iDimTableInfoService.update(oldDim);

@@ -33,6 +33,8 @@ window.loc_onload = function() {
 			postData : {
 				"sourceTableId" : id
 			},
+			isShowMask : true,
+			maskMassage : 'Load...',
 			onSuccess : function(data) {
 				model.sourceTableName = data.data.sourceTableName;
 				model.sourceTableCnName = data.data.sourceTableCnName;
@@ -105,6 +107,7 @@ window.loc_onload = function() {
 	        edittype: 'select',
 	        formatter: 'select',
 	        editable: true,
+	        sortable: false,
 	        editoptions: {
 	            value: dicCode
 	        },
@@ -117,6 +120,7 @@ window.loc_onload = function() {
 	        index: 'sourceName',
 	        width: 110,
 	        editable: true,
+	        sortable: false,
 	        align: "center",
 	        editrules: {
 	        	required: true,
@@ -125,6 +129,7 @@ window.loc_onload = function() {
 	    {
 	        name: 'columnCaliber',
 	        index: 'columnCaliber',
+	        sortable: false,
 	        width: 120,
 	        editable: true,
 	        align: "center"
@@ -132,6 +137,7 @@ window.loc_onload = function() {
 	    {
 	        name: 'sourceId',
 	        index: 'sourceId',
+	        sortable: false,
 	        align: "center",
 	        hidden: true
 	    },
@@ -195,6 +201,8 @@ function fun_to_del(id,sourceId) {
 		$.commAjax({
 			url:$.ctx+"/api/label/labelCountRules/queryList",
 			postData:{"dependIndex":sourceId},
+			isShowMask : true,
+			maskMassage : 'Load...',
 			onSuccess:function(data){
 				if(data.data.length==0){
 					$("#jsonmap").jqGrid("delRowData", id);
@@ -214,6 +222,8 @@ function fun_to_save() {
 		$.commAjax({
 			url : $.ctx + "/backSql/columns",
 			async : false,
+			isShowMask : true,
+			maskMassage : 'Load...',
 			postData:{"tableName" : $("#tableSchema").val()+"."+$("#sourceTableName").val()},
 			onSuccess : function(data) {
 				
@@ -255,7 +265,7 @@ function fun_to_save() {
 				$.alert("第["+(k+1)+"]行字段名称与分区字段重复");
 				break;
 			}
-			if(!colnames.indexOf(list[k])>0){
+			if(!isInArray(colnames,list[k].columnName)){
 				exe = false;
 			}
 			sourceInfoList += JSON.stringify(list[k]); 
@@ -300,7 +310,10 @@ function fun_to_save() {
 	}
 }
 function analysis(){
-	if(!$("#tableSchema").val()){
+	if(!$("#sourceTableName").val()){
+		$.alert("请输入表名");
+		return false;
+	}else if(!$("#tableSchema").val()){
 		$.alert("请输入SCHEMA");
 		return false;
 	}
@@ -308,39 +321,77 @@ function analysis(){
 	$.commAjax({
 		url:$.ctx + "/backSql/columns",
 		postData:{"tableName" : tableName},
+		isShowMask : true,
 		onSuccess:function(data){
 			if(data.data==null){
 				$.alert("表不存在");
 				return false;
 			}
-			$("#jsonmap").jqGrid("clearGridData");
-			for(var i=0;i < data.data.length;i++){
-				if(data.data[i].data_type == "string"){
-					data.data[i].data_type = "2";
-				}else if(data.data[i].data_type == "integer"){
-					data.data[i].data_type = "1";
-				}
-				var dataRow = {
-					"columnName" : data.data[i].col_name,
-					"cooColumnType" : data.data[i].data_type,
-					"sourceName" : "",
-					"columnCaliber" : data.data[i].comment,
-					"sourceId" : "",
-					"op" : ""
-				}
-				model.sortNum += 1;
-				$("#jsonmap").jqGrid("addRowData", model.sortNum, dataRow, "last");
-				$("#jsonmap").jqGrid("editRow", model.sortNum);
+			var ids = $("#jsonmap").jqGrid('getDataIDs');
+			for (var isi=0; isi<ids.length; isi++) {//让单元格可以获取内容
+		        $("#jsonmap").jqGrid("saveRow", ids[isi]);
+		    }
+			var exitColnames = [];
+			var list = $("#jsonmap").jqGrid("getRowData");
+			for(var num=0;num<list.length;num++){//获取已存在的行
+				exitColnames.push(list[num].columnName);
 			}
-		}
+			for(var i=0;i < data.data.length;i++){
+				if(isInArray(exitColnames, data.data[i].col_name)){//判断当前行是否已存在
+					continue;
+				}else{
+					if(data.data[i].data_type == "string"){
+						data.data[i].data_type = "2";
+					}else if(data.data[i].data_type == "integer"){
+						data.data[i].data_type = "1";
+					}
+					var dataRow = {
+						"columnName" : data.data[i].col_name,
+						"cooColumnType" : data.data[i].data_type,
+						"sourceName" : "",
+						"columnCaliber" : data.data[i].comment,
+						"sourceId" : "",
+						"op" : ""
+					}
+					model.sortNum += 1;
+					$("#jsonmap").jqGrid("addRowData", model.sortNum, dataRow, "last");
+					$("#jsonmap").jqGrid("editRow", model.sortNum);
+				}
+			}
+			for (var p = 0; p < ids.length; p++) {
+		        $("#jsonmap").jqGrid("editRow", ids[p]);
+		    }
+		},
+		maskMassage : 'Load...'
 	})
 }
 function fun_to_import(){
 	var wd = $.window('导入列信息', $.ctx
-			+ '/aibi_lc/pages/label/dataSource_import.html', 500, 200);
-    	wd.reload = function() {
-    		//TODO
-    	}
+			+ '/aibi_lc/pages/label/dataSource_import.html', 300, 200);
+	wd.addSourceList = function(sourceList) {
+		for(var i=0;i<sourceList.length;i++){
+			var bool = sourceList[i].cooColumnType.indexOf("VARCHAR")>0;
+			debugger;
+			if(sourceList[i].cooColumnType.indexOf("varchar") != -1 || sourceList[i].cooColumnType.indexOf("VARCHAR") != -1  ){
+				sourceList[i].cooColumnType = "2";
+			}else if(sourceList[i].cooColumnType.indexOf("integer") != -1 || sourceList[i].cooColumnType.indexOf("INTEGER") != -1){
+				sourceList[i].cooColumnType = "1";
+			}else{
+				sourceList[i].cooColumnType = "2";
+			}
+			var dataRow = {
+				"columnName" : sourceList[i].columnName,
+				"cooColumnType" : sourceList[i].cooColumnType,
+				"sourceName" : sourceList[i].sourceName,
+				"columnCaliber" : sourceList[i].columnCaliber,
+				"sourceId" : "",
+				"op" : ""
+			}
+			model.sortNum += 1;
+			$("#jsonmap").jqGrid("addRowData", model.sortNum, dataRow, "last");
+			$("#jsonmap").jqGrid("editRow", model.sortNum);
+		}
+	}
 }
 function ajax_to_save(url,mesg){
 	$.commAjax({

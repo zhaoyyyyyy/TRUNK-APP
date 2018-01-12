@@ -22,48 +22,53 @@
 </head>
 <body>
 	<div id="dataD" class="iframe-nest" v-cloak>
-		<div class="ui-reg-main">
-			<div class="ui-expand-search ui-reg-search">
-				<div class="form-inline ui-form">
-					<div class="clearfix">
-						<div class="form-group">
-							<label>标签名称</label> <input v-model="data.labelName" name="labelName" type="text" class="form-control ml10"
-								readonly="readonly" />
-						</div>
-					</div>
-					<div class="clearfix mt30">
-						<div class="form-group">
-							<label>业务口径说明</label> <input v-model="data.busiCaliber" name="busiCaliber" type="text"
-								class="form-control ml10" id="inputEmail4" readonly="readonly" />
-						</div>
-					</div>
-					<div class="clearfix mt30">
-						<div class="form-group">
-							<label>失效时间</label> <input v-model="data.failTime" name="failTime" type="text" class="ml10 form-control"
-								readonly="readonly" />
-						</div>
-					</div>
-					<div class="clearfix mt30">
-						<div class="form-group">
-							<label>应用建议</label> <input v-model="data.applySuggest" name="applySuggest" type="text" class="ml10 form-control"
-								readonly="readonly" />
-						</div>
-					</div>
-					<div class="clearfix mt30">
-						<div class="form-group">
-							<label>业务说明</label> <input v-model="data.busiLegend" name="busiLegend" type="text" class="ml10 form-control"
-								readonly="readonly" />
-						</div>
-					</div>
-					<div>
-					<div>
-						<div class="clearfix mt30">
-							<div class="form-group">
-								<label>专区描述</label>
-								<textarea v-model="data.configDesc" name="configDesc" class="form-control ml10" readonly="readonly"></textarea>
-							</div>
-						</div>
-					</div>
+		<div class="ui-lc-mian">
+			<div class="form-horizontal ui-form label-detail">
+				<div class="ui-form-group">
+					<label class="control-label">标签名称：</label> 
+					<span class="file-up-name">{{labelName}}</span>
+				</div>
+				<div class="ui-form-group mt10">
+					<label class="control-label">业务口径说明：</label> 
+					<span class="file-up-name">{{busiCaliber}}</span>
+				</div>
+				<div class="ui-form-group mt10">
+					<label class="control-label">失效时间：</label> 
+					<span class="file-up-name">{{failTime}}</span>
+				</div>
+				<div class="ui-form-group mt10">
+					<label class="control-label">更新周期：</label> 
+					<span class="file-up-name">{{updateCycle}}</span>
+				</div>
+				<div class="ui-form-group mt10">
+					<label class="control-label">规则依赖指标：</label>
+					<span class="file-up-name">{{sourceName}}</span> 
+				</div>
+				<div class="ui-form-group mt10">
+					<label class="control-label">具体规则：</label>
+					<span class="file-up-name">{{countRules}}</span> 
+				</div>
+				<div class="ui-form-group mt10">
+					<label class="control-label">标签分类：</label>
+					<span class="file-up-name">{{categoryName}}</span> 
+				</div>
+				<div class="ui-form-group mt10">
+					<label class="control-label">标签类型：</label>
+					<span class="file-up-name">{{labelTypeId}}</span> 
+				</div>
+				<div v-if="labelTypeId==='枚举型'">
+				    <div class="ui-form-group mt10">
+					    <label class="control-label">对应维表名称：</label>
+					    <span class="file-up-name">{{dimTableName}}</span> 
+				    </div>
+				    <div class="ui-form-group mt10">
+					    <label class="control-label">数据类型：</label>
+					<span class="file-up-name">{{dataType}}</span> 
+				</div>
+				</div>
+				<div class="ui-form-group mt10">
+					<label class="control-label">是否正式标签：</label>
+					<span class="file-up-name">{{isRegular}}</span> 
 				</div>
 			</div>
 		</div>

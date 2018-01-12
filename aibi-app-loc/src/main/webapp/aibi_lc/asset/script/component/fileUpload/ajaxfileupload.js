@@ -7,7 +7,7 @@ jQuery.extend({
         //create frame
         var frameId = 'jUploadFrame' + id;
 
-        if(window.ActiveXObject) {
+        if(window&&window.ActiveXObject) {
             var io = document.createElement('<iframe id="' + frameId + '" name="' + frameId + '" />');
             if(typeof uri== 'boolean'){
                 io.src = 'javascript:false';
@@ -123,7 +123,7 @@ jQuery.extend({
                 } catch(e)
                 {
                     status = "error";
-                    jQuery.handleError(s, xml, status, e);
+                   //TODO jQuery.handleError(s, xml, status, e);
                 }
 
                 // The request was completed
@@ -186,7 +186,7 @@ jQuery.extend({
         {
             jQuery.handleError(s, xml, null, e);
         }
-        if(window.attachEvent){
+        if(window && window.attachEvent){
             document.getElementById(frameId).attachEvent('onload', uploadCallback);
         }
         else{

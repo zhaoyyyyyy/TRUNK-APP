@@ -21,7 +21,9 @@
 			<form id="saveDataForm" class="form-horizontal dimtable-table">
 				<input type="hidden" id="dimId" name="dimId"  v-model="dimId"/>
 				<div class="ui-form-group clearfix">
-					<label class="control-label fleft" for="exampleInputEmail3">*&nbsp;表名:</label>
+					<label class="control-label fleft" for="exampleInputEmail3">
+						<span class="input-required">*</span>
+					表名:</label>
 					<div class="control-input ml10 has-icon">
 						<input name="dimTableName" type="text" class="form-control easyui-validatebox" v-model="dimTableName"
 						required="true"	id="dimTableName" maxlength="28" placeholder="请输入表名" />
@@ -35,7 +37,8 @@
 					</div>
 				</div>
 				<div class="ui-form-group clearfix">
-					<label class="control-label fleft " for="exampleInputEmail3">*主键类型:</label>
+					<label class="control-label fleft " for="exampleInputEmail3">
+					<span class="input-required">*</span>主键类型:</label>
 					<div class="control-input  ml10 has-icon">
 						<select name="codeColType" class="form-control easyui-validatebox" dicCode="ZDLXZD"
 						required="true"	id="codeColType" v-model="codeColType">
@@ -43,7 +46,8 @@
 					</div>
 				</div>
 				<div class="ui-form-group clearfix" id="isDefaultLi">
-					<label class="control-label fleft" for="exampleInputEmail3">*使用默认字段:</label>
+					<label class="control-label fleft" for="exampleInputEmail3">
+						<span class="input-required">*</span>使用默认字段:</label>
 					<div class="control-input ml10 mt5">
 						<!-- <div class="radio circle success">
                             <input type="radio" name="useDefaultCol" id="yes"  value="是"/ checked="checked">
@@ -62,7 +66,8 @@
 					</div>
 				</div>
 				<div class="ui-form-group clearfix" id="dimCodeCol1" style="display:none;">
-					<label class="control-label fleft" for="exampleInputEmail3">*主键字段名:</label>
+					<label class="control-label fleft" for="exampleInputEmail3">
+					<span class="input-required">*</span>主键字段名:</label>
 					<div class="control-input has-icon ml10">
 						<input name="dimCodeCol" type="text" class="form-control easyui-validatebox" required="true" validType="alphanumStartUnderline"
 							id="dimCodeCol" maxlength="28" placeholder="请输入主键字段名" v-model="dimCodeCol"/> <span
@@ -71,10 +76,11 @@
 					</div>
 				</div>
 				<div class="ui-form-group clearfix" id="dimValueCol1" style="display:none;">
-					<label class="control-label fleft" for="exampleInputEmail3">*描述字段名:</label>
+					<label class="control-label fleft" for="exampleInputEmail3">
+					<span class="input-required">*</span>值字段名:</label>
 					<div class="control-input has-icon ml10">
 						<input name="dimValueCol" type="text" class="form-control easyui-validatebox" v-model="dimValueCol"
-							id="dimValueCol" maxlength="28" required="true" placeholder="请输入描述字段名" /> <span
+							id="dimValueCol" maxlength="28" required="true" placeholder="请输入值字段名" /> <span
 							id="dimCodeColTxtTip" class="fleft columnGreenTip"
 							title="描述字段名只能以英文字母开头,包含数字、字母、下划线">?</span>
 					</div>

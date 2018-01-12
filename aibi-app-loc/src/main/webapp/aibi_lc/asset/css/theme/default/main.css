@@ -139,20 +139,31 @@
 .ui-label-list > li.padding0{
 	padding:0;
 }
+.ui-label-list > li > .ul-label-box{
+	box-shadow: 0 0 6px 0 rgba(0,0,0,0.05);
+}
 .ui-label-list > li > .ui-label-info{
+	border-bottom: 2px solid #fff;
+	border-radius: 4px!important;
+	box-shadow: 0 0 6px 0 rgba(0,0,0,0.05);
+}
+.ui-label-list > li .ui-label-info{
 	height: 230px;
 	background-color: #fff;
-	border: 2px solid #fff;
-	border-radius: 4px;
-	box-shadow: 0 0 6px 0 rgba(0,0,0,0.05);
+	border-radius: 4px 4px 0 0;
 	padding: 10px;
+	border-left: 2px solid #fff;
+	border-right: 2px solid #fff;
+	border-top: 2px solid #fff;
 }
-.ui-label-list > li:HOVER > .ui-label-info,
-.ui-label-list > li.active > .ui-label-info{
-	border: 2px solid #009241;
+.ui-label-list > li:HOVER .ui-label-info,
+.ui-label-list > li:HOVER .ui-lable-icon,
+.ui-label-list > li.active .ui-label-info,
+.ui-label-list > li.active .ui-lable-icon{
+	border-color:#009241;
 }
-.ui-label-list > li:HOVER > .ui-label-info > h3,
-.ui-label-list > li.active > .ui-label-info > h3{
+.ui-label-list > li:HOVER .ui-label-info > h3,
+.ui-label-list > li.active .ui-label-info > h3{
 	height: 35px;
 	text-align: left;
 	line-height: 35px;
@@ -160,7 +171,10 @@
 	color: #007F3B;
 	padding: 0 10px;
 }
-.ui-label-list > li > .ui-label-info > h3{
+.ui-label-list > li .ui-lable-icon > li > a:HOVER {
+	background-color: #F5A623;
+}
+.ui-label-list > li .ui-label-info > h3{
 	height: 35px;
 	text-align: left;
 	line-height: 35px;
@@ -168,11 +182,11 @@
 	color: #000;
 	padding: 0 10px;
 }
-.ui-label-list > li > .ui-label-info > h3 > span{
+.ui-label-list > li .ui-label-info > h3 > span{
 	float: left;
 }
-.ui-label-list > li:HOVER > .ui-label-info > h3 > i,
-.ui-label-list > li.active > .ui-label-info > h3 > i{
+.ui-label-list > li:HOVER .ui-label-info > h3 > i,
+.ui-label-list > li.active .ui-label-info > h3 > i{
 	height: 35px;
 	width: 35px;
 	background: url(./images/lc-icon.png) no-repeat -382px -17px;
@@ -215,6 +229,51 @@
 	text-align: left;
 	color: #000;
 	font-size: 14px;
+}
+.ui-lable-icon{
+	background: #F2F7FC;
+	height: 60px;
+	width:100%;
+	text-align: center;
+	vertical-align: middle;
+	padding:10px;
+	border-radius:0 0 4px 4px;
+	border-left: 2px solid #F2F7FC;
+	border-right: 2px solid #F2F7FC;
+	border-bottom: 2px solid #F2F7FC;
+}
+.ui-lable-icon > li{
+	display:inline-block;
+	margin:4px 5px;
+	position:relative;
+}
+.ui-lable-icon > li > a{
+	display:inline-block;
+	background: #949FB3 url(images/lc-icon.png) no-repeat -22px -16px;;
+	width: 34px;
+	height: 34px;
+	border-radius: 50%;
+}
+.ui-lable-icon > li > a.label-icon2{
+	background-position:-75px -16px;
+}
+.ui-lable-icon > li > a.label-icon3{
+	background-position:-122px -16px;
+}
+.ui-lable-icon > li > a.label-icon4{
+	background-position:-175px -16px;
+}
+.ui-lable-icon > li > a.label-icon5{
+	background-position:-228px -16px;
+}
+.ui-lable-icon > li.open > a{
+	background-color: #6178A3;
+}
+.ui-lable-icon > li.open > .dropdown-menu{
+	top:auto;
+	bottom:100%;
+	left:50%;
+	margin-left:-88px;
 }
 .ui-label-info > p{
 	min-height: 32px;
@@ -587,6 +646,9 @@
 .create-main .ui-form  .ui-form-group > .control-input{
 	width:65%;
 }
+.create-main .ui-form  .ui-form-group > .control-select{
+	width:50%;
+}
 /*创建标签-多指标高佳佳*/
 
 .ui-create{
@@ -924,18 +986,19 @@ span.del-btn{
 /* 遮罩显示加载状态*/
 .window-text {
 	width:140px;
-	height:40px;
-	line-height: 40px;
+	padding:10px 0 10px 20px;
 	font-size: 11px;
 	zoom: 1;
-	background: #fff url(images/loading.gif) no-repeat 20px center;
-	padding-left: 20px;
+	background: #fff url(../../../images/loading.gif) no-repeat 20px center;
 	position: absolute;
 	filter: alpha(enabled=false);
 	text-align:center;
 	border :4px solid #E5F2F8;
 	display: none;
 }
-
+/*标签管理详情*/
+.label-detail label.control-label{
+	width:120px;
+}
 
 

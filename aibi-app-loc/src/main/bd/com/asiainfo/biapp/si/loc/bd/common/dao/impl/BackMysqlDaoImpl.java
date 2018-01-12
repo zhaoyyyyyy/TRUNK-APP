@@ -121,9 +121,22 @@ public class BackMysqlDaoImpl extends BaseBackDaoImpl implements IBackSqlDao{
 	}
 
 	@Override
-	public Integer queryCount(String selectSql) {
-		// TODO Auto-generated method stub
-		return null;
+	public Integer queryCount(String selectSql) throws SqlRunException {
+	    selectSql = selectSql.toUpperCase();
+        if (!selectSql.contains("COUNT")) {
+            selectSql = new StringBuilder("SELECT COUNT(1) FROM (").append(selectSql).append(") a").toString();
+        }
+        int rows = 0;
+        try{
+            ResultSet rs =  this.getBackConnection().prepareStatement(selectSql).executeQuery();
+            if(rs != null && rs.next()) {
+                rows = rs.getInt(1);
+            }
+        }catch (Exception e){
+            throw new SqlRunException("操作后台库出错");
+        }
+        
+        return rows;
 	}
 
     @Override

@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>标签集市</title>
+    <!--[if IE]>
+    	<meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <![endif]-->
+    <link rel="stylesheet" theme="default" href="../../asset/css/common/reset.css"/> 
+    <link rel="stylesheet" theme="default" href="../../asset/css/theme/default/coc_frame.css"/> 
+	<link rel="stylesheet" theme="default" href="../../asset/css/theme/default/main.css"/> 
+   	<script type="text/javascript" src="../../asset/script/common/include.js"></script>
+   	<script type="text/javascript" src="custom_market.js"></script>
+   	<style type="text/css">
+	[v-cloak] {
+		display: none;
+	}
+	</style>
+    <!--[if lt IE 9]>
+	    <script src="../../asset/script/component/h5compatibility/html5shiv.min.js"></script>
+	    <script src="../../asset/script/component/h5compatibility/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+	<div class="iframe-nest" >
+		<div class="ui-lc-mian">
+			<h3 class="pre" id="labelMktHeader">
+				<span>客户群集市</span>
+			</h3>
+		</div>
+		<div id="labelInfoListApp" v-cloak><!-- ID只能写在本层，因为vue冲突 -->
+			<!-------------------查询条件 begin ------------------------>
+			<div class="ui-lc-mian">
+				<div class="ui-label-mes clearfix">
+					<span class="fleft">客户群集市 &nbsp; &nbsp;共<b>{{page.totalCount}}</b>个标签</span>
+					<div class="form-group fright">
+						<div class="input-group">
+							<input id="labelNameText" type="text" class="form-control" id="exampleInputAmount" placeholder="请输入客户群关键字">
+							<span id="btn_search" onclick="labelMarket.btn_search()" class="input-group-addon input-group-icon right-child input-pointer"></span>
+						</div>
+					</div>
+				</div>
+				<form id="formSearch">
+					<input id="labelName" name="labelName" type="hidden">
+					<input id="configId" name="configId" type="hidden" />
+					<input id="categoryId" name="categoryId" type="hidden" />
+					<input id="orgId" name="orgId" type="hidden" />
+					<input id="publishTime" name="publishTime" type="hidden" />
+					<input id="updateCycle" name="updateCycle" type="hidden" />
+					<input id="sortCol" name="sortCol" type="hidden" />
+					<input id="sortOrder" name="sortOrder" type="hidden" />
+					<input id="publishTimeStart" name="publishTimeStart" type="hidden">
+					<input id="publishTimeEnd" name="publishTimeEnd" type="hidden">
+				</form>
+				<form>
+					<ul class="ui-label-system" >
+					<li>
+						<div class="clearfix">
+							<label class="fleft">发布时间：</label>
+							<div class="fleft">
+								<a href="javascript:;" onclick="labelMarket.changePublishTime(this)" id="allDate" class="all-active fleft"><!-- all-active 去掉非选中状态 -->
+									全部
+								</a>
+								<a href="javascript:;" onclick="labelMarket.changePublishTime(this)" id="oneDay" class="fleft">
+									<em>一天</em>
+								</a>
+								<a href="javascript:;" onclick="labelMarket.changePublishTime(this)" id="oneMonth" class="fleft">
+									<em>一个月</em>
+								</a>
+								<a href="javascript:;" onclick="labelMarket.changePublishTime(this)" id="threeMonth" class="fleft">
+									<em>三个月</em>
+								</a>
+								<div class="control-input">
+				        			<div class="control-input date-input fleft has-icon">
+						          	<input type="text" class="form-control input-pointer form-control-bubble" data-dismiss="formDatepicker#sendTime1"  id="" placeholder="请选择开始日期">
+						          	<span class="glyphicon-date form-control-feedback"></span>
+						        </div>
+						        <div class="control-input date-input fleft ml10 has-icon">
+						          	<input type="text" class="form-control input-pointer form-control-bubble" data-dismiss="toDatepicker#sendTime1" id="" placeholder="请选择结束日期">
+						          	<span class="glyphicon-date form-control-feedback"></span>
+						        </div>
+					        	</div>
+							</div>
+						</div>
+					</li>
+					<li class="not-border">
+						<div id="Gxzq" class="clearfix" v-cloak>
+							<label class="fleft">更新周期：</label>
+							<div class="fleft">
+								<a onclick="labelMarket.ucSearch(this)" id="allUc" class="fleft all-active">全部</a>
+								<a href="javascript:;" onclick="labelMarket.ucSearch(this)" :name="g.code" :id="'updateCycle'+g.code" v-for="g in gxzqList"><em>{{g.dataName}}</em></a>
+							</div>
+						</div>
+					</li>
+					</ul>
+				</form>
+			</div>
+			<!-------------------查询条件 end ------------------------>
+			<div class="ui-filter-bar ui-lc-mian">
+				<a onclick="labelMarket.changeSortCol(this)" id="customNum" name="labelExtInfo.customNum" class="fleft active">人气</a>
+				<a onclick="labelMarket.changeSortCol(this)" id="sortPublishTime" name="publishTime" class="fleft">创建时间</a>
+			</div>
+			<ul id="labelList" class="clearfix ui-label-list" >
+				<li v-for="(item,index) in labelInfoList" :class="{padding0 : (index+1)%4 ==0 }" >
+					<div class="ul-label-box">
+						<div class="ui-label-info">
+							<h3 class="clearfix">
+								<span v-text="item.labelName"></span>
+								<i v-on:click="select(index)"></i>
+							</h3>
+							<div class="ui-label-item">
+								<a href="javascript:;">
+									<b v-text="item.customNum" ></b>人
+								</a>
+								<a href="javascript:;" class="ui-label-time">
+									<span v-if="item.updateCycle == 3 ">日</span>
+									<span v-if="item.updateCycle == 2 ">月</span>
+								</a>
+								<a href="javascript:;" class="not-border ui-label-date">
+									<span v-text="item.dataDate"></span>
+								</a>
+							</div>
+							<h4 class="ui-business-caliber">
+								规则
+							</h4>
+							<h4 class="ui-business-caliber">
+								描述
+							</h4>
+							</br>
+							<a name="custom_portrait_btn" onclick="labelMarket.customer_portrait_dialog(this)" href="javascript:void(0);">[群体画像图标]</a>
+						</div>
+						<ul class="ui-lable-icon">
+	 						<li>
+	 							<a class="label-icon1" herf=""></a>
+	 						</li>
+	 						<li>
+	 							<a class="label-icon2" herf=""></a>
+	 						</li>
+	 						<li>
+	 							<a class="label-icon3" herf=""></a>
+	 						</li>
+	 						<li v-bind:class="{open:item.isOpen}" @click="toggleDropdown(item)">
+	 							<a class="label-icon4" herf="javascript:"></a>
+	 							<ul class="dropdown-menu">
+							       <li><a href="#">Action</a></li>
+							       <li><a href="#">Another action</a></li>
+							       <li><a href="#">Something else here</a></li>
+						        </ul> 
+	 						</li>
+	 						<li>
+	 							<a class="label-icon5" herf=""></a>
+	 						</li>
+	 					</ul>
+					</div>
+				</li>
+			</ul>
+			<div class="ui-corner-bottom mb50">
+				<div class="clearfix">
+					<div class="fleft totalPage">
+						<span class="fleft">共{{page.totalCount}}条记录，共{{page.totalPageCount}}页，当前第{{page.currentPageNo}}页</span>
+					</div>
+					<div id="jsonmap1_pager" class="tcdPageCode">
+						<a href="javascript:;" class="prevPage">上一页</a>
+						<a href="javascript:;" class="current tcdNumber">1</a>
+						<span class="disabled">下一页</span>
+						<!-- <select class="ui-pg-selbox ui-widget-content ui-corner-all" title="每页记录数">
+							<option role="option" value="10" selected="selected">10</option>
+							<option role="option" value="20">20</option>
+							<option role="option" value="30">30</option>
+						</select> -->
+						<span class="inputPageNum">第<input type="text" id="jsonmap1_pageNum">页</span>
+						<a href="javascript:;" class="jumpPageNum">跳转</a>
+					</div>
+				</div>
+			</div>
+
+			<!---------------------- 计算中心 --------------->
+			<div class="ui-calculate-center">
+				<h3 class="ui-calc-h3">
+					标签配置
+					<span>
+						<em data-attr="left" class="J-drag-bracket">(</em>
+						<em data-attr="right" class="J-drag-bracket">)</em>
+						<i class="J-min"></i>
+					</span>
+				</h3>
+				<div class="ui-calc-content clearfix" id="sortable">
+					<div v-for="(item,index) in ruleList" :class="{
+						'ui-chaining' : item.elementType ==1,
+						'ui-conditionCT' : item.elementType == 2,
+                		'ui-bracket': item.elementType == 3,
+                		'left' : item.elementType == 3 }" v-bind:index="index">
+						<!--括号 -->
+						<span v-if="item.elementType == 3" v-text="item.calcuElement"></span>
+						<!--符号 -->
+						<div  v-if="item.elementType == 1" class="dropdown">
+							<button type="button" class="ui-btn ui-btn-menu ui-icon-btn">
+								<span class="fleft" v-if="item.calcuElement == 'and'" >与</span>
+								<span class="fleft" v-if="item.calcuElement == 'or'">或</span>
+								<span class="fleft" v-if="item.calcuElement == '-'" >剔除</span>
+								<span class="caret" onclick="labelMarket.switchConnectorShow(this,event)"></span>
+							</button>
+							<ul class="dropdown-menu">
+								<li onclick="labelMarket.switchConnector(this,'or')"><a href="javascript:void(0)" >或</a></li>
+								<li onclick="labelMarket.switchConnector(this,'and')"><a href="javascript:void(0)" >与</a></li>
+								<li onclick="labelMarket.switchConnector(this,'-')"><a href="javascript:void(0)" >剔除</a></li>
+							</ul>
+						</div>
+						<!-- 标签 -->
+						<h4 :class="{'ui-conditionCT-h4': 1==1 , 'ui-inverse': item.labelFlag == 0}"  >
+							<span v-text="item.customOrLabelName" onclick="labelMarket.againstLabel(this)"></span>
+							<em onclick="labelMarket.againstLabel(this)"></em>
+							<i onclick="labelMarket.deleteRule(this)"></i>
+						</h4>
+						<!-- 标签体内容 -->
+						<!-- 标志性-->
+						<div class="ui-conditionCT-content align_center" v-if="item.labelTypeId == 1">
+							<h5>已选条件：</h5>
+							<div class="clearfix">是</div>
+						</div>
+						<!-- 指标型 -->
+						<div class="ui-conditionCT-content align_center" v-if="item.labelTypeId == 4" onclick="labelMarket.setLabelAttr(this)">
+							<h5 v-if="item.queryWay != null">已选条件：</h5>
+							<div class="clearfix" v-if="item.queryWay == 1">
+								数值范围：
+								<span v-if="item.contiueMinVal !=''">
+									<span v-if="item.leftZoneSign == '>='" >大于等于{{item.contiueMinVal}}</span>
+									<span v-if="item.leftZoneSign == '>'" >大于{{item.contiueMinVal}}</span>
+								</span>
+								<span v-if="item.contiueMaxVal !=''">
+									<span v-if="item.rightZoneSign == '<='" >小于等于{{item.contiueMaxVal}}</span>
+									<span v-if="item.rightZoneSign == '<'" >小于{{item.contiueMaxVal}}</span>
+								</span>
+								<span v-text="item.unit"></span>
+							</div>
+							<div class="clearfix" v-if="item.queryWay == 2">
+								精确值：
+								<span v-if="item.exactValue !=''" v-text="item.exactValue">
+								</span>
+								<span v-text="item.unit"></span>
+							</div>
+							<i class="ui-nothing-icon" v-if="item.queryWay == null"><em></em>请点击设置</i>
+						</div>
+						<!-- 枚举型  5,9,11,12-->
+						<div class="ui-conditionCT-content align_center" v-if="item.labelTypeId == 5" onclick="labelMarket.setLabelAttr(this)">
+							<h5 v-if="item.attrVal != null ">已选条件：</h5>
+							<div class="clearfix" v-if="item.attrVal != null " v-text="item.attrName">
+							</div>
+							<i class="ui-nothing-icon" v-if="item.attrVal == null "><em></em>请点击设置</i>
+						</div>
+						<!-- 日期型
+						<div class="ui-conditionCT-content" v-if="item.labelTypeId == 6" onclick="labelMarket.setLabelAttr(this)">
+							<h5>已选条件：</h5>
+							<div class="clearfix" v-if="item.queryWay == 1">
+								<span v-if="item.startTime !=''">
+									<span v-if="item.leftZoneSign == '>='" >大于等于{{item.startTime}}</span>
+									<span v-if="item.leftZoneSign == '>'" >大于{{item.startTime}}</span>
+								</span>
+								<span v-if="item.endTime !=''">
+									<span v-if="item.rightZoneSign == '<='" >小于等于{{item.endTime}}</span>
+									<span v-if="item.rightZoneSign == '<'" >小于{{item.endTime}}</span>
+								</span>
+								<span v-if="item.isNeedOffset == 1">（动态偏移更新）</span>
+							</div>
+							<div class="clearfix" v-if="item.queryWay == 2">
+								精确值：
+								<span v-if="item.exactValue !=''" v-text="item.exactValue"></span>
+							</div>
+						</div>
+						 -->
+						<!-- 文本型
+						<div class="ui-conditionCT-content" v-if="item.labelTypeId == 7" onclick="labelMarket.setLabelAttr(this)">
+							<h5>已选条件：</h5>
+							<div class="clearfix" v-if="item.queryWay == 1">
+								模糊值：
+								<span v-if="item.darkValue !=''" v-text="item.darkValue"></span>
+							</div>
+							<div class="clearfix" v-if="item.queryWay == 2">
+								精确值：
+								<span v-if="item.exactValue !=''" v-text="item.exactValue"></span>
+							</div>
+						</div>
+						 -->
+						<div class="tooltip top" role="tooltip" v-if="item.labelTypeId == 1 || item.labelTypeId == 4 || item.labelTypeId == 5">
+							<div class="tooltip-arrow"></div>
+							<div class="tooltip-inner">鼠标点击标签反选</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<!----------------- 购物车 ------------>
+			<div class="ui-shop-cart nest">
+				<p class="fleft ui-shop-cart-icon">
+					<i></i> <span>已选择标签 {{ruleListCount}} 个</span>
+				</p>
+				<p class="fright">
+					<span>客户群数：</span><span class="y-text" v-text="exploreCustomNum"></span>
+					<span class="shop-icon" onclick="labelMarket.explore(event,this);"></span>
+					<button type="button" class="ui-btn ui-btn-default mr10" onclick="labelMarket.gotoSaveCustomer(event);">
+						<span class="create-white"></span> 创建客户群
+					</button>
+				</p>
+			</div>
+
+		</div>
+
+	</div>
+
+
+	<!-- 计算中心弹框 -->
+	<div class="ui-dialog" id="ztreeDiv">
+		<div class="clearfix ui-enum-content">
+			<div class="fleft">
+				<div class="ui-enum-list">
+					<div class="ui-enum-header"></div>
+					<ul>
+
+					</ul>
+				</div>
+
+			</div>
+			<div class="fleft">
+				<div class="ui-enum-header"></div>
+				<ul id="ztree" class="ztree">
+
+				</ul>
+			</div>
+		</div>
+	</div>
+	
+</body>
+</html>

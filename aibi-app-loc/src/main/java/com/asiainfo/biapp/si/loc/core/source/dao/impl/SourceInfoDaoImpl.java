@@ -113,4 +113,15 @@ public class SourceInfoDaoImpl extends BaseDaoImpl<SourceInfo, String> implement
         return reMap;
     }
 
+    @Override
+    public Page<SourceInfo> selectSourceInfoListByConfigId(Page<SourceInfo> page, String configId,String sourceName) {
+        Map<String, Object> params = new HashMap<>();
+        StringBuffer hqls = new StringBuffer("from SourceInfo s where s.sourceTableId in(select a.sourceTableId from SourceTableInfo a where a.configId= :configId)");
+        params.put("configId", configId);
+        if (StringUtil.isNoneBlank(sourceName)) {
+            hqls.append(" and s.sourceName LIKE :sourceName");
+            params.put("sourceName", "%"+sourceName+"%");
+        }
+        return super.findPageByHql(page, hqls.toString(), params);
+    }
 }

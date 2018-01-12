@@ -3,7 +3,7 @@ var model = {
 		showdimDetail: [],
 		sourcetableInfoList:[],
 		sourceInfoList:[{
-			sourceNameList :[],
+			dependIndexList : [],
 			dependIndex : "",
 			labelName : "",
 			labelTypeId : "",
@@ -70,9 +70,19 @@ window.loc_onload = function(){
 		el : '#dataD',
 	    data : model ,
 	    methods : {
-	    	del_form : function(index){
-	    		model.sourceInfoList.splice(index,1);
-	    	}
+	        del_sourceName : function(index,index1){
+	        	console.log(model.sourceInfoList)
+	        	model.sourceInfoList[index]['dependIndexList'].splice(index1,1);
+	        	var dependx="";
+	        	for(var i=0; i<model.sourceInfoList[index]['dependIndexList'].length; i++){
+	    			dependx += model.sourceInfoList[index]['dependIndexList']+","
+	    		}
+	        	if($(".label-lists span").length>1){
+					$("#dependIndex_"+index).val(dependx.substr(0,dependx.length-1));
+				}else{
+					$("#dependIndex_"+index).val("");
+				}
+	        }
 	    },
 	    mounted: function () {
 		    this.$nextTick(function () {
@@ -92,7 +102,7 @@ window.loc_onload = function(){
 			page:1
 		}]);
 	});
-	$(".ui-lc-mian").delegate(".create-main i.del-btn-icon","click",function(){
+	$(".ui-lc-mian").delegate(".create-main i.form-del-btn","click",function(){
 		$(this).parents("form.create-main").remove();
 	});
 }
@@ -101,40 +111,35 @@ function chooseKpi(obj){
 	var win = $.window('指标配置', $.ctx + '/aibi_lc/pages/label/sourceInfo_mgr.html', 900, 600);
 	win.addKpis = function(chooseKpis) {
 		model.sourceIdList = chooseKpis;
-		var index;
+		var index = obj.id;
 		var sourceName = [];
+		var dependIndexList = [];
 		var dependx="";
 		for(var i=0; i<chooseKpis.length; i++){
-			$.commAjax({
-				async : false,
-				url : $.ctx + '/api/source/sourceInfo/get',
-				postData : {
-					"sourceId" : chooseKpis[i]
-				},
-				onSuccess : function(data){
-					sourceName.push(data.data.sourceName);
-					dependx += data.data.sourceId+",";
-				}
-			});
+			dependIndexList.push(chooseKpis[i]);
 		}
-		index = obj.id;
-		model.sourceInfoList[index]['sourceNameList']= sourceName;
-		model.sourceInfoList[index]['dependIndex']= dependx.substr(0,dependx.length-1);
+		for(var i=0; i<dependIndexList.length; i++){
+			dependx += dependIndexList[i]+","
+		}
+		model.sourceInfoList[index]['dependIndexList'] = dependIndexList;
 		$("#dependIndex_"+index).val(dependx.substr(0,dependx.length-1));
 	}
 }
 
 function fun_to_dimdetail(){
 	var dimId = $("#dimId").val();
-	var win = $.window('维表详情',$.ctx + '/aibi_lc/pages/dimtable/dimtable_detail.html?dimId='+dimId, 500,
-			300);
-	win.reload = function(){
-		$("mainGrid").setGridParam({
-			postData : $("#formSearch").formToJson()
-		}).trigger("reloadGrid",[{
-			page : 1
-		}]);
-	}
+	$.commAjax({
+		ansyc : false,
+	    url : $.ctx + '/api/dimtable/dimTableInfo/get',
+	    postData : {
+	    	"dimId" : dimId
+	    },
+	    onSuccess : function(data){
+	    	var dimTableName = data.data.dimTableName;
+	    	var win = $.window('维表详情',$.ctx + '/aibi_lc/pages/dimtable/dimtable_detail.html?dimTableName='+dimTableName, 900,
+	    			600);
+	    }
+	});
 }
 function getTime(element){
 	console.log(element);
@@ -148,7 +153,7 @@ function getTime(element){
 }
 function fun_to_createRow(){
 	model.sourceInfoList.push({
-		 sourceNameList : [],
+		 dependIndexList : [],
 	     dependIndex : "",
 	     labelName : "",
 	     labelTypeId : "",

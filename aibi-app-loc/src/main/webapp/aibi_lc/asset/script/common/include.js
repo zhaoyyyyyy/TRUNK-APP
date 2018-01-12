@@ -144,6 +144,10 @@ var  mainPage={
 			Scripts.loadStyle({src:"../../asset/css/theme/"+theme+"/main.css"});
 			
 			Scripts.loadScript({src:[
+			        //图表组件            
+	  				"../../asset/script/component/echarts/echarts.min.js",
+	  				"../../asset/script/component/echarts/locChart.js",
+	 
 			        "../../asset/script/common/jquery.customs.js",
 			        "../../asset/script/common/jquery.util.js",
 			        "../../asset/script/component/form/jquery.form.js",
@@ -155,6 +159,8 @@ var  mainPage={
  			        "../../asset/script/component/jQueryUI/gird/js/i18n/grid.locale-cn.js",
  			        "../../asset/script/component/jQueryUI/gird/jquery.jqGrid.custom.js",
  			        "../../asset/script/component/tree/jquery.ztree.all.min.js",
+ 			        "../../asset/script/component/fileUpload/ajaxfileupload.js",
+			        "../../asset/script/component/fileUpload/jQuery.fileUpload.js",
 			        ],
 			        callback:function(){
 			        	Scripts.loadScript({src:[

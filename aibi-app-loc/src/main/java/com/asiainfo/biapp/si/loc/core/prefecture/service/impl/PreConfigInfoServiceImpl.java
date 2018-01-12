@@ -6,6 +6,7 @@
 
 package com.asiainfo.biapp.si.loc.core.prefecture.service.impl;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.transaction.Transactional;
@@ -90,12 +91,16 @@ public class PreConfigInfoServiceImpl extends BaseServiceImpl<PreConfigInfo, Str
     }
 
     public void addPreConfigInfo(PreConfigInfo preConfigInfo) throws BaseException {
+        preConfigInfo.setCreateTime(new Date());
+        preConfigInfo.setConfigStatus(0);
         super.saveOrUpdate(preConfigInfo);
         iMdaSysTableService.addDWTable(preConfigInfo);
     }
 
     public void modifyPreConfigInfo(PreConfigInfo preConfigInfo) throws BaseException {
-        super.saveOrUpdate(preConfigInfo);
+        PreConfigInfo oldPre;
+        oldPre = selectPreConfigInfoById(preConfigInfo.getConfigId());
+        super.saveOrUpdate(fromToBean(preConfigInfo, oldPre));
     }
 
     public void deletePreConfigInfo(String configId) throws BaseException {
@@ -106,6 +111,41 @@ public class PreConfigInfoServiceImpl extends BaseServiceImpl<PreConfigInfo, Str
             throw new ParamRequiredException("ID不存在");
         }
         super.delete(configId);
+    }
+    
+    /**
+     * 封装专区信息
+     * 
+     * @param pre
+     * @param oldPre
+     * @return
+     */
+    private PreConfigInfo fromToBean(PreConfigInfo pre, PreConfigInfo oldPre) {
+        if (StringUtils.isNotBlank(pre.getOrgId())) {
+            oldPre.setOrgId(pre.getOrgId());
+        }
+        if (null != pre.getDataAccessType()) {
+            oldPre.setDataAccessType(pre.getDataAccessType());
+        }
+        if (StringUtils.isNotBlank(pre.getSourceName())) {
+            oldPre.setSourceName(pre.getSourceName());
+        }
+        if (StringUtils.isNotBlank(pre.getSourceEnName())) {
+            oldPre.setSourceEnName(pre.getSourceEnName());
+        }
+        if (StringUtils.isNotBlank(pre.getContractName())) {
+            oldPre.setContractName(pre.getContractName());
+        }
+        if (StringUtils.isNotBlank(pre.getConfigDesc())) {
+            oldPre.setConfigDesc(pre.getConfigDesc());
+        }
+        if (null != pre.getInvalidTime()) {
+            oldPre.setInvalidTime(pre.getInvalidTime());
+        }
+        if (null != pre.getConfigStatus()) {
+            oldPre.setConfigStatus(pre.getConfigStatus());
+        }
+        return oldPre;
     }
 
 }

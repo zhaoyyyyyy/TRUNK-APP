@@ -5,6 +5,7 @@ var model = {
 		bqlx : [],
 		isbq : [],
 		gxzq : [],
+		sjlx : [],
 		showdimDetail: [],
 		isActive:false, 
 		arrs:[],
@@ -61,6 +62,10 @@ window.loc_onload = function() {
 	for(var i =0 ; i<dicgxzq.length; i++){
 		model.gxzq.push(dicgxzq[i]);
 	}
+	var dicsjlx = $.getDicData("ZDLXZD");
+	for(var i =0 ; i<dicsjlx.length; i++){
+		model.sjlx.push(dicsjlx[i]);
+	}
 	new Vue({
 		el : '#dataD',
 	    data : model ,
@@ -75,12 +80,19 @@ window.loc_onload = function() {
 	})
 	$.commAjax({
 		url : $.ctx + '/api/dimtable/dimTableInfo/queryList',
+		postData : {
+			"configId" : model.configId
+		},
 		onSuccess : function(data){
 			model.dimtableInfoList = data.data
 		}
 	});
 	$.commAjax({
+		async : false,
 		url : $.ctx + '/api/source/sourceTableInfo/queryList',
+		postData : {
+			"configId" : model.configId
+		},
 		onSuccess : function(data){
 			model.sourcetableInfoList = data.data,
 			model.sourceTableType = data.data.sourceTableType
@@ -93,13 +105,8 @@ window.loc_onload = function() {
 			onSuccess : function(data){
 				model.sourceInfoList = data.data.sourceInfoList;
 				model.readCycle=data.data.readCycle;
-				if(model.readCycle==1){
-					model.read="一次性";
-				}else if(model.readCycle==2){
-					model.read="月周期";
-				}else if(model.readCycle==3){
-					model.read="日周期";
-				}
+				model.read = $.getCodeDesc("GXZQZD",data.data.readCycle);
+				model.showdimDetail=[];
 			}
 		});
 	});
@@ -120,8 +127,7 @@ function fun_to_save(){
 	var flag = "";
 	var k = 1;
 	$("form[class~=active]").each(function(){
-		if($("form[class~=active]").validateForm()){
-			
+		if($("form[class~=active]").validateForm()){	
 			var labelInfo = $(this).formToJson();
 			var labelName = $('#labelName').val();
 			if(labelName==""){
@@ -142,22 +148,24 @@ function fun_to_save(){
 				}
 			}
 			k++;
-	
 		}
 	})
 }
 
 function fun_to_dimdetail(){
 	var dimId = $("#dimId").val();
-	var win = $.window('维表详情',$.ctx + '/aibi_lc/pages/dimtable/dimtable_detail.html?dimId='+dimId, 500,
-			350);
-	win.reload = function(){
-		$("mainGrid").setGridParam({
-			postData : $("#formSearch").formToJson()
-		}).trigger("reloadGrid",[{
-			page : 1
-		}]);
-	}
+	$.commAjax({
+		ansyc : false,
+	    url : $.ctx + '/api/dimtable/dimTableInfo/get',
+	    postData : {
+	    	"dimId" : dimId
+	    },
+	    onSuccess : function(data){
+	    	var dimTableName = data.data.dimTableName;
+	    	var win = $.window('维表详情',$.ctx + '/aibi_lc/pages/dimtable/dimtable_detail.html?dimTableName='+dimTableName, 900,
+	    			600);
+	    }
+	});
 }
 function getData(tag){	
 	if($(tag).parents(".create-main").hasClass("active")){

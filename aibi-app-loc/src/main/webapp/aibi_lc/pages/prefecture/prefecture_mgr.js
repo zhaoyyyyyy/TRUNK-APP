@@ -39,11 +39,13 @@ window.loc_onload = function() {
     var orgdata = [];
     
     $.commAjax({
-		url : $.ctx + '/api/user/privaliegeOrg/query',
+		url : $.ctx + '/api/user/get',
+		isShowMask : true,
+		maskMassage : 'Load...',
 		async : false,
 		onSuccess : function(data) {
-			if(data.data != null && data.data != undefined){
-				var orgobj = data.data;
+			if(data.data.orgPrivaliege != null && data.data.orgPrivaliege != undefined){
+				var orgobj = data.data.orgPrivaliege;
 				for(var i=0; i<4; i++){
 					if(orgobj[i]==undefined){
 						continue;
@@ -66,7 +68,7 @@ window.loc_onload = function() {
             name: 'sourceName',
             index: 'sourceName',
             width: 30,
-            sortable: true,
+            sortable: false,
             frozen: true,
             align: "center",
             formatter : function(value, opts, data) {
@@ -79,7 +81,7 @@ window.loc_onload = function() {
             name: 'configId',
             index: 'configId',
             width: 30,
-            sortable: true,
+            sortable: false,
             frozen: true,
             align: "center"
         },
@@ -87,7 +89,7 @@ window.loc_onload = function() {
             name: 'orgId',
             index: 'orgId',
             width: 30,
-            sortable: true,
+            sortable: false,
             frozen: true,
             align: "center",
             formatter : function(value){
@@ -98,7 +100,7 @@ window.loc_onload = function() {
             name: 'createTime',
             index: 'createTime',
             width: 60,
-            sortable: true,
+            sortable: false,
             frozen: true,
             align: "center",
         },
@@ -107,6 +109,7 @@ window.loc_onload = function() {
             index: 'dataAccessType',
             width: 30,
             align: "center",
+            sortable: false,
             formatter: function(v) {
                 return $.getCodeDesc('ZQLXZD', v);
             }
@@ -116,6 +119,7 @@ window.loc_onload = function() {
             index: 'configStatus',
             width: 30,
             align: "center",
+            sortable: false,
             formatter: function(v) {
                 return $.getCodeDesc('ZQZTZD', v);
             }
@@ -169,7 +173,7 @@ function fun_to_edit(id){
 }
 function fun_to_detail(id){
 	var wd = $.window('专区详情', $.ctx
-			+ '/aibi_lc/pages/prefecture/prefecture_detail.html?configId=' + id, 500, 300);
+			+ '/aibi_lc/pages/prefecture/prefecture_detail.html?configId=' + id, 500, 400);
 	wd.reload = function() {
 		$("#mainGrid").setGridParam({
 			postData : $("#formSearch").formToJson()

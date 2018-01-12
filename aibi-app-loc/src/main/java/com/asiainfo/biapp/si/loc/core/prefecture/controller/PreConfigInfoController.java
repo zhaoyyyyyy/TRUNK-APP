@@ -154,24 +154,14 @@ public class PreConfigInfoController extends BaseController<PreConfigInfo> {
     public WebResult<String> save(@ApiIgnore PreConfigInfo preConfigInfo) {
         WebResult<String> webResult = new WebResult<>();
         PreConfigInfo rePre = new PreConfigInfo();
-        try {
-            rePre = iPreConfigInfoService.selectOneBySourceName(preConfigInfo.getSourceName());
-        } catch (BaseException e) {
-            return webResult.fail(e);
-        }
-        if (null != rePre) {
-            return webResult.fail("专区名称已存在");
-        }
         User user = new User();
         try {
+            rePre = iPreConfigInfoService.selectOneBySourceName(preConfigInfo.getSourceName());
+            if (null != rePre) {
+                return webResult.fail("专区名称已存在");
+            }
             user = this.getLoginUser();
-        } catch (BaseException e) {
-            LOGGER.info("context", e);
-        }
-        preConfigInfo.setCreateUserId(user.getUserId());
-        preConfigInfo.setCreateTime(new Date());
-        preConfigInfo.setConfigStatus(0);
-        try {
+            preConfigInfo.setCreateUserId(user.getUserId());
             iPreConfigInfoService.addPreConfigInfo(preConfigInfo);
         } catch (BaseException e1) {
             return webResult.fail(e1);
@@ -199,15 +189,8 @@ public class PreConfigInfoController extends BaseController<PreConfigInfo> {
     @RequestMapping(value = "/preConfigInfo/update", method = RequestMethod.POST)
     public WebResult<String> edit(@ApiIgnore PreConfigInfo preConfigInfo) {
         WebResult<String> webResult = new WebResult<>();
-        PreConfigInfo oldPre;
         try {
-            oldPre = iPreConfigInfoService.selectPreConfigInfoById(preConfigInfo.getConfigId());
-        } catch (BaseException e) {
-            return webResult.fail(e);
-        }
-        oldPre = fromToBean(preConfigInfo, oldPre);
-        try {
-            iPreConfigInfoService.modifyPreConfigInfo(oldPre);
+            iPreConfigInfoService.modifyPreConfigInfo(preConfigInfo);
         } catch (BaseException e1) {
             return webResult.fail(e1);
         }
@@ -230,41 +213,6 @@ public class PreConfigInfoController extends BaseController<PreConfigInfo> {
             return webResult.fail(e);
         }
         return webResult.success("删除专区成功", SUCCESS);
-    }
-
-    /**
-     * 封装专区信息
-     * 
-     * @param pre
-     * @param oldPre
-     * @return
-     */
-    private PreConfigInfo fromToBean(PreConfigInfo pre, PreConfigInfo oldPre) {
-        if (StringUtils.isNotBlank(pre.getOrgId())) {
-            oldPre.setOrgId(pre.getOrgId());
-        }
-        if (null != pre.getDataAccessType()) {
-            oldPre.setDataAccessType(pre.getDataAccessType());
-        }
-        if (StringUtils.isNotBlank(pre.getSourceName())) {
-            oldPre.setSourceName(pre.getSourceName());
-        }
-        if (StringUtils.isNotBlank(pre.getSourceEnName())) {
-            oldPre.setSourceEnName(pre.getSourceEnName());
-        }
-        if (StringUtils.isNotBlank(pre.getContractName())) {
-            oldPre.setContractName(pre.getContractName());
-        }
-        if (StringUtils.isNotBlank(pre.getConfigDesc())) {
-            oldPre.setConfigDesc(pre.getConfigDesc());
-        }
-        if (null != pre.getInvalidTime()) {
-            oldPre.setInvalidTime(pre.getInvalidTime());
-        }
-        if (null != pre.getConfigStatus()) {
-            oldPre.setConfigStatus(pre.getConfigStatus());
-        }
-        return oldPre;
     }
 
 }

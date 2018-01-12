@@ -12,6 +12,7 @@ import com.asiainfo.biapp.si.loc.base.dao.BaseDao;
 import com.asiainfo.biapp.si.loc.base.page.Page;
 import com.asiainfo.biapp.si.loc.core.dimtable.entity.DimTableInfo;
 import com.asiainfo.biapp.si.loc.core.dimtable.vo.DimTableInfoVo;
+import com.asiainfo.biapp.si.loc.core.prefecture.entity.PreConfigInfo;
 
 /**
  * Title : IDimTableInfoDao
@@ -51,5 +52,13 @@ public interface IDimTableInfoDao extends BaseDao<DimTableInfo, String>{
      * @return
      */
     public List<DimTableInfo> selectDimTableInfoList(DimTableInfoVo dimTableInfoVo);
+    
+    /**
+     * 根据维表名称查询维表
+     * 
+     * @param dimTableName
+     * @return
+     */
+    public DimTableInfo selectOneByDimTableName(String dimTableName);
 
 }

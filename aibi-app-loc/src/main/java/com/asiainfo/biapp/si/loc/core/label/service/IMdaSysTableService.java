@@ -109,4 +109,19 @@ public interface IMdaSysTableService extends BaseService<MdaSysTable, String> {
      * @return
      */
     public List<MdaSysTable> selectMdaSysTableListByConfigAndType(String configId, Integer tableType);
+    
+    /**
+     * 
+     * Description: 
+     *
+     * @param configId	专区id
+     * @param updateCycle	更新周期
+     * @param tableType	宽表类型	（1、标签  2、客户群）
+     * @return
+     *
+     * @author  tianxy3
+     * @date 2018年1月11日
+     */
+    public MdaSysTable queryMdaSysTable(String configId,Integer updateCycle,Integer tableType);
+    
 }

@@ -65,6 +65,8 @@ window.loc_onload = function() {
 				$.commAjax({
 					url:$.ctx+"/api/source/sourceInfo/queryList",
 					async:false,
+					isShowMask : true,
+					maskMassage : 'Load...',
 					postData:{"sourceTableId":value},
 					onSuccess:function(data){
 						var is = "";
@@ -112,7 +114,7 @@ function fun_to_up(id) {
 	window.location = 'dataSource_add.html?isEdit=1&sourceTableId=' + id;
 }
 function fun_to_del(id) {
-	$.confirm("确定删除该数据源表吗？", function() {
+	$.confirm("确定删除该指标源表吗？", function() {
 		$.commAjax({
 			url : $.ctx + '/api/source/sourceTableInfo/delete',
 			postData : {
@@ -136,10 +138,10 @@ function fun_to_delAll() {
 	var ids = $('#jsonmap1').jqGrid('getGridParam', 'selarrrow');
 	var is = "";
 	if (!ids.length > 0) {
-		$.alert("请选择要删除的数据源表");
+		$.alert("请选择要删除的指标源表");
 		return;
 	}
-	$.confirm("您确定要继续删除吗？该操作会同时删除数据源表下的指标信息列", function() {
+	$.confirm("您确定要继续删除吗？该操作会同时删除指标源表下的指标信息列", function() {
 		for(var i=0;i<ids.length;i++){//判断选中的是否有被注册的
 			$.commAjax({
 				url:$.ctx+"/api/source/sourceInfo/queryList",

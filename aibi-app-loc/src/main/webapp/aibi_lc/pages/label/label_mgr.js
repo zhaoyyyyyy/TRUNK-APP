@@ -89,35 +89,35 @@ window.loc_onload = function(){
 			},
 	        colNames:['标签名称','标签类型','更新周期','数据状态','标签审批状态','创建时间','操作'],
 	        colModel:[
-	            {name:'labelName',index:'labelName', width:25, align:"center",
+	            {name:'labelName',index:'labelName', width:25, align:"center",sortable:false,
 	            	formatter : function(value, opts, data) {
 	            		return "<a href='###' onclick='fun_to_detail(\"" + data.labelId
 	        			+ "\")' ><font color='blue'>" + data.labelName
 	        			+ "</font></a>";
 	            	}
 	            },
-	            {name:'labelTypeId',index:'labelTypeId', width:15, align:"center",
+	            {name:'labelTypeId',index:'labelTypeId', width:15, align:"center",sortable:false,
 	            	formatter : function(value, opts, data) {
 	            		return $.getCodeDesc("BQLXZD",value);
 	            	}
 	            },
-	            {name:'updateCycle',index:'updateCycle', width:15, align:"center",
+	            {name:'updateCycle',index:'updateCycle', width:15, align:"center",sortable:false,
 	            	formatter : function(value, opts, data) {
 	            		return $.getCodeDesc("GXZQZD",value);
 	            	}
 	            },
-	            {name:'dataStatusId',index:'dataStatusId', width:15, align:"center",
+	            {name:'dataStatusId',index:'dataStatusId', width:15, align:"center",sortable:false,
 	            	formatter : function(value, opts, data) {
 	            		return $.getCodeDesc("BQZTZD",value);
 	            	}
 	            },
-	            {name:'approveInfo.approveStatusId',index:'approveInfo.approveStatusId', width:15, align:"center",
+	            {name:'approveInfo.approveStatusId',index:'approveInfo.approveStatusId', width:15, align:"center",sortable:false,
 	            	formatter : function(value, opts, data) {
 	            		return $.getCodeDesc("SPZTZD",value);
 	            	}
 	            },
-	            {name:'createTime',index:'createTime', width:20, align:"center"},
-	            {name:'labelId',index:'labelId', width:30, text_aling:"left", key:true,
+	            {name:'createTime',index:'createTime', width:20, align:"center",sortable:false},
+	            {name:'labelId',index:'labelId', width:30, text_aling:"left", key:true,sortable:false,
 	            	formatter : function(value, opts, data) {
 	            		var html = '';
 	            		if(data.dataStatusId !=6){
@@ -130,10 +130,10 @@ window.loc_onload = function(){
 	            		    	html+= '<button onclick="fun_to_start(\''+data.labelId+'\')" type="button" class="btn btn-default  ui-table-btn ui-table-btn" >启用</button>'+
 	            		    	       '<button onclick="fun_to_offline(\''+data.labelId+'\')" type="button" class="btn btn-default  ui-table-btn ui-table-btn" >下线</button>';
 	            		    }
-	            		    if(data.dataStatusId !=2){
+	            		    if(data.dataStatusId !=2 && data.dataStatusId !=5){
 	            		    	html+= '<button onclick="window.location=\'label_edit.html?labelId='+data.labelId+'\'" type="button" class="btn btn-default  ui-table-btn ui-table-btn" >修改</button>';
 	            		    }
-	            		    if(data.dataStatusId==1){
+	            		    if(data.dataStatusId==1 || data.dataStatusId ==5){
 	            			    html+= '<button onclick="fun_to_del(\''+data.labelId+'\')" type="button" class="btn btn-default  ui-table-btn ui-table-btn" >删除</button>';
 	            		    }  
 	            		}	

@@ -35,7 +35,7 @@ window.loc_onload = function() {
     	el : '#enumItemSet',
     	data : ruleDataModel
     });
-    
+    enumRule.initChooseData();
     enumRule.getDimtableName();
    
 }
@@ -45,6 +45,21 @@ window.loc_onload = function() {
  * ------------------------------------------------------------------
  */
 var enumRule = (function (model){
+	/**
+	 * 初始化已选择数据
+	 */
+	model.initChooseData = function(){
+		var attrVal = ruleDataModel.rule.attrVal ;
+		var attrName = ruleDataModel.rule.attrName ;
+		if(attrVal){
+			var attrVals = attrVal.split(",");
+			var attrNames = attrName.split(",");
+			for(var i=0;i<attrVals.length;i++){
+				model.addItem(attrVals[i],attrNames[i]);
+			}
+		}
+		
+	}
 	/**************
 	 * 根据标签查询维表表名
 	 */

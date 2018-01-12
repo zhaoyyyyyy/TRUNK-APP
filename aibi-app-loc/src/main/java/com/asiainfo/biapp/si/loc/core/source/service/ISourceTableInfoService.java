@@ -100,5 +100,7 @@ public interface ISourceTableInfoService extends BaseService<SourceTableInfo, St
      * @throws BaseException
      */
     public void deleteSourceTableInfo(String sourceTableId) throws BaseException;
+    
+//    public List<SourceInfo> parseColumnInfoFile(InputStream inputStream, String fileName) throws Exception;
 
 }

@@ -109,7 +109,7 @@ public class MdaSysTableColumn extends BaseEntity {
     private Integer columnDataTypeId;
 
     /**
-     * 对应维表表名
+     * 对应维表Id
      */
     @Column(name="DIM_TRANS_ID")
     @ApiParam(value="对应维表表名")

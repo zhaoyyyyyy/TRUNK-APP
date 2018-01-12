@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>数据日期设置</title>
+<!--[if IE]>
+    	<meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <![endif]-->
+	<link rel="stylesheet" theme="default" href="../../asset/css/theme/default/coc_frame.css" />
+	<script type="text/javascript" src="../../asset/script/common/include.js"></script>
+	<script type="text/javascript" src="shopCartDataDateSet.js"></script>
+<style type="text/css">
+[v-cloak] {
+	display: none;
+}
+</style>
+<!--[if lt IE 9]>
+	    <script src="../../asset/script/component/h5compatibility/html5shiv.min.js"></script>
+	    <script src="../../asset/script/component/h5compatibility/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+	<div id="dataDateSet" class="iframe-nest" v-cloak>
+      	<div class="ui-lc-mian"> 
+      		<form>
+      			<div class="ui-reg-search">
+						<div class="form-horizontal ui-form dimtable-table">
+							<div class="ui-form-group" v-if="existMonthLabel">
+								<label class="control-label fleft" for="labelMonth">数据日期（月）：</label> 
+								<div class="control-input">
+									<input id="labelMonth" name="labelMonth" type="text" class="form-control input-pointer easyui-validatebox" 
+									required="true"	 data-dismiss="formDatepicker#labelMonth"  placeholder="数据日期（月）" v-model="labelMonth"/>
+								</div>
+							</div>
+							<div class="ui-form-group" v-if="existDayLabel">
+								<label class="control-label fleft" for="labelDay">数据日期（日）：</label> 
+								<div class="control-input">
+									<input id="labelDay" name="labelDay" type="text" class="form-control input-pointer easyui-validatebox"
+									required="true"	 data-dismiss="formDatepicker#labelDay" placeholder="请选择失效日期" v-model="labelDay"/>
+								</div>
+							</div>
+							<div class="ui-form-group">
+								<span class="dataDateBox">标签数据日期默认设置规则，如下</span>
+								</div>
+							<div class="ui-form-group">
+								
+								<span class="dataDateBox">月标签：A标签最新日期为2015年1月，B标签最新日期为2015年2月，取2015年1月。</span>
+								</div>
+							<div class="ui-form-group">
+								<span class="dataDateBox">日标签：A标签最新日期为2015年1月1日，B标签最新日期为2015年1月2日，取2015年1月1日。</span>
+							</div>
+						</div>
+				</div>
+      		</form>
+        </div>
+    </div>     
+</body>
+</html>

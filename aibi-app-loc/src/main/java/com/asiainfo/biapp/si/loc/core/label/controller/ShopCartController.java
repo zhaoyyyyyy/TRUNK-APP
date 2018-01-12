@@ -20,6 +20,7 @@ import com.asiainfo.biapp.si.loc.base.utils.JsonUtil;
 import com.asiainfo.biapp.si.loc.base.utils.LogUtil;
 import com.asiainfo.biapp.si.loc.base.utils.StringUtil;
 import com.asiainfo.biapp.si.loc.base.utils.WebResult;
+import com.asiainfo.biapp.si.loc.bd.common.service.IBackSqlService;
 import com.asiainfo.biapp.si.loc.cache.CocCacheProxy;
 import com.asiainfo.biapp.si.loc.core.label.entity.LabelInfo;
 import com.asiainfo.biapp.si.loc.core.label.model.ExploreQueryParam;
@@ -66,6 +67,9 @@ public class ShopCartController extends BaseController {
 	@Autowired
 	private ILabelExploreService exploreServiceImpl;
 
+	@Autowired
+	private IBackSqlService backServiceImpl;
+	
 	private static final String SUCCESS = "success";
 
 	@ApiOperation(value = "判断所选日期是否早于标签生效日期")
@@ -110,9 +114,8 @@ public class ShopCartController extends BaseController {
 		Map<String, Object> result = new HashMap<String, Object>();
 		WebResult<Map<String, Object>> webResult = new WebResult<>();
 		try {
-			//TODO 缓存中读取
-			String monthDate = "201712";
-			String dayDate = "20171208";
+			String monthDate = CocCacheProxy.getCacheProxy().getNewLabelMonth();
+			String dayDate =CocCacheProxy.getCacheProxy().getNewLabelDay();
 			boolean existMonthLabel = false;//是否存在月周期标签
 		    boolean existDayLabel = false;//是否存在日周期标签
 			boolean isAllNewDate = true;//规则中标签是否都是最新数据日期
@@ -307,6 +310,29 @@ public class ShopCartController extends BaseController {
 		return webResult.success("读取购物车数据成功", result);
 	}
 
+	@ApiOperation(value = "校验sql")
+	@ApiImplicitParams({
+			@ApiImplicitParam(name = "dataDate", value = "日期", required = true, paramType = "query", dataType = "string"),
+			@ApiImplicitParam(name = "dayLabelDate", value = "数据日期(日)", required = true, paramType = "query", dataType = "string"),
+			@ApiImplicitParam(name = "monthLabelDate", value = "数据日期(月)", required = true, paramType = "query", dataType = "string") })
+	@RequestMapping(value = "/validateSql", method = RequestMethod.POST)
+	public WebResult<String> validateSql(String dataDate, String dayLabelDate,
+			String monthLabelDate) {
+		WebResult<String> webResult = new WebResult<>();
+		List<LabelRuleVo> labelRules = getSessionLabelRuleList();
+		ExploreQueryParam queryParam = new ExploreQueryParam(dataDate, monthLabelDate, dayLabelDate);
+		StringBuffer sql = new StringBuffer();
+		try {
+			//不包含纵表的探索
+			String querySql = exploreServiceImpl.getCountSqlStr(labelRules, queryParam);
+			sql.append("select count(1) ").append(querySql);
+			backServiceImpl.queryCount(sql.toString());
+		} catch (Exception e) {
+			LogUtil.error("校验sql异常", e);
+			return webResult.fail(e.getMessage());
+		}
+		return webResult.success("校验sql成功", SUCCESS);
+	}
 	/**
 	 * 
 	 * Description: 探索
@@ -322,23 +348,23 @@ public class ShopCartController extends BaseController {
 			@ApiImplicitParam(name = "dayLabelDate", value = "数据日期(日)", required = true, paramType = "query", dataType = "string"),
 			@ApiImplicitParam(name = "monthLabelDate", value = "数据日期(月)", required = true, paramType = "query", dataType = "string") })
 	@RequestMapping(value = "/explore", method = RequestMethod.POST)
-	public WebResult<String> explore(String dataDate, String dayLabelDate,
-			String monthLabelDate) {
+	public WebResult<String> explore(String dataDate, String dayLabelDate,String monthLabelDate) {
 		WebResult<String> webResult = new WebResult<>();
 		List<LabelRuleVo> labelRules = getSessionLabelRuleList();
 		ExploreQueryParam queryParam = new ExploreQueryParam(dataDate, monthLabelDate, dayLabelDate);
-		StringBuffer sql = new StringBuffer();
+		Integer num;
 		try {
+			StringBuffer sql = new StringBuffer();
 			//不包含纵表的探索
-			String querySql = exploreServiceImpl.getFromSqlForMultiLabel(labelRules, queryParam);
+			String querySql = exploreServiceImpl.getCountSqlStr(labelRules, queryParam);
 			sql.append("select count(1) ").append(querySql);
-			// TODO 目前直接返回数据后期调用后台接口
+			//调用后台接口
+			num = backServiceImpl.queryCount(sql.toString());
 		} catch (Exception e) {
 			LogUtil.error("探索异常", e);
 			return webResult.fail(e.getMessage());
 		}
-		return webResult.success("探索成功", sql.toString());
-
+		return webResult.success("探索成功", String.valueOf(num));
 	}
 
 	/**

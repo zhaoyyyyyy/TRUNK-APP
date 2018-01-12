@@ -2,6 +2,7 @@
  * Created by j on 2017/12/6.
  */
 window.loc_onload = function(){
+	var configId = $.getCurrentConfigId();
 	var frWin = frameElement.lhgDG;
 	frWin.removeBtn();
 	//获取选定的指标名称
@@ -21,6 +22,7 @@ window.loc_onload = function(){
 	
 	$("#btn_search").click(function(){
 		var txtValue = $("#form_search").val();
+		debugger
 		if(txtValue == null){
 			$("#mainGrid").setGridParam({
 				postData : {
@@ -43,14 +45,17 @@ window.loc_onload = function(){
 	
 
     $("#mainGrid").jqGrid({
-        url: $.ctx + "/api/source/sourceInfo/queryPage",
+        url: $.ctx + "/api/source/sourceInfo/queryPagebyconfigId",
+        postData : {
+        	"configId" : configId
+        },
         datatype: "json",
-        colNames:['指标Id','指标名称','源数据表字段', '源数据表名称','创建时间'],
+        colNames:['指标编码','指标名称','源数据表字段', '源数据表名称',"创建时间"],
         colModel:[
-            {name:'sourceId',index:'sourceId', wideth:20,align:"center",hidden:true, key:true},
+            {name:'sourceId',index:'sourceId', width:20,sortable:false,frozen : true,align:"center",key : true},
             {name:'sourceName',index:'sourceName', width:20, sortable:false,frozen : true,align:"center"},//frozen : true固定列
             {name:'columnName',index:'columnName', width:30, sortable:false,frozen : true,align:"center"},
-            {name:'sourceTableName',index:'sourceTableName', width:50,frozen : true,align:"center",
+            {name:'sourceTableName',index:'sourceTableName', width:40,sortable:false,frozen : true,align:"center",
                 formatter : function(value,opts,data){
                 	var sourceTableName = "";
 		        	$.commAjax({
@@ -73,11 +78,11 @@ window.loc_onload = function(){
                 		async : false,
                 		url : $.ctx + "/api/source/sourceTableInfo/get",
                 		postData : {
-		        			sourceTableId : data.sourceTableId
-		        		},
-		        		onSuccess : function(data){
-		        			createTime = data.data.createTime;
-		        		}
+                			sourceTableId : data.sourceTableId
+                		},
+                		onSuccess : function(data){
+                			createTime = data.data.createTime;
+                		}
                 	});
                 	return createTime;
                 }	
@@ -97,8 +102,4 @@ window.loc_onload = function(){
         },
         height: '100%'
     });  
-    function del(){
-        var html='<button type="button" class="btn btn-default  ui-table-btn ui-table-btn">删除</button><button type="button" class="btn btn-default ui-table-btn">修改</button>';
-        return html;
-    }
 }

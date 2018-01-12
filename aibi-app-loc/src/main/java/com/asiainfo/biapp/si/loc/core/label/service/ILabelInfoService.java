@@ -11,8 +11,11 @@ import java.util.List;
 import com.asiainfo.biapp.si.loc.base.exception.BaseException;
 import com.asiainfo.biapp.si.loc.base.page.Page;
 import com.asiainfo.biapp.si.loc.base.service.BaseService;
+import com.asiainfo.biapp.si.loc.core.label.entity.LabelExtInfo;
 import com.asiainfo.biapp.si.loc.core.label.entity.LabelInfo;
+import com.asiainfo.biapp.si.loc.core.label.model.ExploreQueryParam;
 import com.asiainfo.biapp.si.loc.core.label.vo.LabelInfoVo;
+import com.asiainfo.biapp.si.loc.core.label.vo.LabelRuleVo;
 
 /**
  * Title : ILabelInfoService
@@ -42,6 +45,17 @@ import com.asiainfo.biapp.si.loc.core.label.vo.LabelInfoVo;
  */
 public interface ILabelInfoService extends BaseService<LabelInfo, String> {
 
+	/**
+	 * 
+	 * Description: 保存客户群型标签
+	 *
+	 *
+	 * @author  tianxy3
+	 * @date 2018年1月11日
+	 */
+	public void saveCustomerLabelInfo(LabelExtInfo labelExtInfo,LabelInfo labelInfo,List<LabelRuleVo> labelRuleList, ExploreQueryParam queryParam) throws BaseException;
+
+	
     /**
      * Description:分页查询标签信息
      *
