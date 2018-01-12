@@ -258,8 +258,8 @@ function fun_to_dimdetail(){
 	    },
 	    onSuccess : function(data){
 	    	var dimTableName = data.data.dimTableName;
-	    	var win = $.window('维表详情',$.ctx + '/aibi_lc/pages/dimtable/dimtable_detail.html?dimTableName='+dimTableName, 800,
-	    			400);
+	    	var win = $.window('维表详情',$.ctx + '/aibi_lc/pages/dimtable/dimtable_detail.html?dimTableName='+dimTableName, 900,
+	    			600);
 	    }
 	});
 }

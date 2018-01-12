@@ -143,15 +143,18 @@ function chooseKpi(obj){
 
 function fun_to_dimdetail(){
 	var dimId = $("#dimId").val();
-	var win = $.window('维表详情',$.ctx + '/aibi_lc/pages/dimtable/dimtable_detail.html?dimId='+dimId, 500,
-			300);
-	win.reload = function(){
-		$("mainGrid").setGridParam({
-			postData : $("#formSearch").formToJson()
-		}).trigger("reloadGrid",[{
-			page : 1
-		}]);
-	}
+	$.commAjax({
+		ansyc : false,
+	    url : $.ctx + '/api/dimtable/dimTableInfo/get',
+	    postData : {
+	    	"dimId" : dimId
+	    },
+	    onSuccess : function(data){
+	    	var dimTableName = data.data.dimTableName;
+	    	var win = $.window('维表详情',$.ctx + '/aibi_lc/pages/dimtable/dimtable_detail.html?dimTableName='+dimTableName, 900,
+	    			600);
+	    }
+	});
 }
 function getTime(element){
 	console.log(element);
