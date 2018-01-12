@@ -49,8 +49,19 @@ import com.asiainfo.biapp.si.loc.core.label.vo.CategoryInfoVo;
 @Repository
 public class CategoryInfoDaoImpl extends BaseDaoImpl<CategoryInfo, String> implements ICategoryInfoDao {
 
-    public CategoryInfo selectCategoryInfoByCategoryName(String categoryName) {
-        return super.findOneByHql("from CategoryInfo c where c.categoryName = ?0", categoryName);
+    public CategoryInfo selectCategoryInfoByCategoryName(String categoryName,String sysId) {
+        StringBuffer hql = new StringBuffer("from CategoryInfo c where 1=1 ");
+        Map<String, Object> params = new HashMap<>();
+        if(StringUtil.isNotBlank(categoryName)){
+            hql.append("and c.categoryName = :categoryName ");
+            params.put("categoryName", categoryName);
+        }
+        if(StringUtil.isNotBlank(sysId)){
+            hql.append("and c.sysId = :sysId ");
+            params.put("sysId", sysId);
+        }
+        
+        return super.findOneByHql(hql.toString(),params );
     }
     
     public List<CategoryInfo> selectCategoryInfoList(CategoryInfoVo categoryInfoVo) {

@@ -54,5 +54,5 @@ public interface ICategoryInfoDao extends BaseDao<CategoryInfo, String> {
      * @param CategoryName
      * @return
      */
-    public CategoryInfo selectCategoryInfoByCategoryName(String categoryName);
+    public CategoryInfo selectCategoryInfoByCategoryName(String categoryName,String sysId);
 }

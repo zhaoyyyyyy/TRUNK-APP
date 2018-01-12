@@ -105,7 +105,7 @@ public class CategoryInfoController extends BaseController<CategoryInfo>{
     public WebResult<String> save(@ApiIgnore CategoryInfo categoryInfo) throws BaseException{
             WebResult<String> webResult = new WebResult<>();
             CategoryInfo category = new CategoryInfo();
-            category = iCategoryInfoService.selectCategoryInfoByCategoryName(categoryInfo.getCategoryName());
+            category = iCategoryInfoService.selectCategoryInfoByCategoryName(categoryInfo.getCategoryName(),categoryInfo.getSysId());
             if (null != category){
                 return webResult.fail("分类名称已存在");
             }
@@ -136,7 +136,7 @@ public class CategoryInfoController extends BaseController<CategoryInfo>{
         WebResult<String> webResult = new WebResult<>();
         CategoryInfo oldCat = new CategoryInfo();
         CategoryInfo category = new CategoryInfo();
-        category = iCategoryInfoService.selectCategoryInfoByCategoryName(categoryInfo.getCategoryName());
+        category = iCategoryInfoService.selectCategoryInfoByCategoryName(categoryInfo.getCategoryName(),categoryInfo.getSysId());
         try {
             oldCat = iCategoryInfoService.selectCategoryInfoById(categoryInfo.getCategoryId());
         } catch (BaseException e) {

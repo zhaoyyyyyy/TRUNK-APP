@@ -79,11 +79,14 @@ public class CategoryInfoServiceImpl extends BaseServiceImpl<CategoryInfo, Strin
         return super.get(categoryId);
     }
     
-    public CategoryInfo selectCategoryInfoByCategoryName(String categoryName) throws BaseException {
+    public CategoryInfo selectCategoryInfoByCategoryName(String categoryName,String sysId) throws BaseException {
         if (StringUtils.isBlank(categoryName)) {
             throw new ParamRequiredException("名称不能为空");
         }
-        return iCategoryInfoDao.selectCategoryInfoByCategoryName(categoryName);
+        if(StringUtils.isBlank(sysId)){
+            throw new ParamRequiredException("专区ID出错");
+        }
+        return iCategoryInfoDao.selectCategoryInfoByCategoryName(categoryName,sysId);
     }
 
     public void addCategoryInfo(CategoryInfo categoryInfo) throws BaseException {

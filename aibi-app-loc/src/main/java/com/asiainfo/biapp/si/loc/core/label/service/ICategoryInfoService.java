@@ -82,6 +82,6 @@ public interface ICategoryInfoService extends BaseService<CategoryInfo, String>{
      * @param categoryName
      * @throws BaseException
      */
-    public CategoryInfo selectCategoryInfoByCategoryName(String categoryName) throws BaseException;
+    public CategoryInfo selectCategoryInfoByCategoryName(String categoryName,String sysId) throws BaseException;
 
 }
