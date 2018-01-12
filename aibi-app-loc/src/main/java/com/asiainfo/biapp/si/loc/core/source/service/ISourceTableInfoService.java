@@ -6,13 +6,11 @@
 
 package com.asiainfo.biapp.si.loc.core.source.service;
 
-import java.io.InputStream;
 import java.util.List;
 
 import com.asiainfo.biapp.si.loc.base.exception.BaseException;
 import com.asiainfo.biapp.si.loc.base.page.Page;
 import com.asiainfo.biapp.si.loc.base.service.BaseService;
-import com.asiainfo.biapp.si.loc.core.source.entity.SourceInfo;
 import com.asiainfo.biapp.si.loc.core.source.entity.SourceTableInfo;
 import com.asiainfo.biapp.si.loc.core.source.vo.SourceTableInfoVo;
 
@@ -103,6 +101,6 @@ public interface ISourceTableInfoService extends BaseService<SourceTableInfo, St
      */
     public void deleteSourceTableInfo(String sourceTableId) throws BaseException;
     
-    public List<SourceInfo> parseColumnInfoFile(InputStream inputStream, String fileName) throws Exception;
+//    public List<SourceInfo> parseColumnInfoFile(InputStream inputStream, String fileName) throws Exception;
 
 }
