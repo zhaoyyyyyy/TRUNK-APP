@@ -145,13 +145,13 @@ public class BackMysqlDaoImpl extends BaseBackDaoImpl implements IBackSqlDao{
 	}
 
 	@Override
-	public boolean loadDataToTabByPartion(String sql, String tableName,String partionDate,String partionID) {
+	public boolean loadDataToTabByPartion(String sql, String tableName,String partionID) {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
-	public boolean insertDataToTabByPartion(String sql,String tableName,String partionDate,String partionID) {
+	public boolean insertDataToTabByPartion(String sql,String tableName,String partionID) {
 		// TODO Auto-generated method stub
 		return false;
 	}

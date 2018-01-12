@@ -153,7 +153,7 @@ public interface IBackSqlDao {
      * @param partionDate
      * @return
      */
-    public boolean loadDataToTabByPartion(String fileName, String tableName,String partionDate,String partionID) throws SqlRunException;
+    public boolean loadDataToTabByPartion(String fileName, String tableName,String partionID) throws SqlRunException;
     
     /**
      * 表数据方式  指定分区 覆盖式导入 指定表
@@ -162,7 +162,7 @@ public interface IBackSqlDao {
      * @param partionDate
      * @return
      */
-    public boolean insertDataToTabByPartion(String sql,String tableName,String partionDate,String partionID) throws SqlRunException;
+    public boolean insertDataToTabByPartion(String sql,String tableName,String partionID) throws SqlRunException;
     
     
     

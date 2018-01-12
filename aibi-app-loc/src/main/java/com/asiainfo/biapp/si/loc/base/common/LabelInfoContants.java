@@ -24,17 +24,21 @@ package com.asiainfo.biapp.si.loc.base.common;
 public interface LabelInfoContants {
 	
 	/**
-	 * 客户群标签当天写入纵表的表头， 后面需要拼写上 configid
+	 * 客户群标签纵表的表头， 后面需要拼写上 DW_KHQ_CROSS_configid_date
 	 */
 	public static final String KHQ_CROSS_TABLE = "DW_KHQ_CROSS_";
 	/**
+	 * 客户群标签纵表的表头， 后面需要拼写上 DW_KHQ_CROSS_ONCE_configid
+	 */
+	public static final String KHQ_CROSS_ONCE_TABLE = "DW_KHQ_CROSS_ONCE_";
+	/**
 	 * 客户群当天数据写入的纵表列名
 	 */
-	public static final String KHQ_CROSS_COLUMN = "USERID";
+	public static final String KHQ_CROSS_COLUMN = "userid";
 	/**
 	 * 客群群当天写入数据的纵表的分区字段名
 	 */
-	public static final String KHQ_CROSS_ID_PARTION = "CUSTOM_ID";
+	public static final String KHQ_CROSS_ID_PARTION = "custom_id";
 	/**
 	 * 客群群当天写入数据的纵表的分区字段名
 	 */
