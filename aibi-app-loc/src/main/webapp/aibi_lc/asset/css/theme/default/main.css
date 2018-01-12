@@ -646,6 +646,9 @@
 .create-main .ui-form  .ui-form-group > .control-input{
 	width:65%;
 }
+.create-main .ui-form  .ui-form-group > .control-select{
+	width:50%;
+}
 /*创建标签-多指标高佳佳*/
 
 .ui-create{
