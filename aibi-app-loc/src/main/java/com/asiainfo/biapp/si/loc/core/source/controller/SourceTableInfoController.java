@@ -197,16 +197,16 @@ public class SourceTableInfoController extends BaseController<SourceTableInfo> {
         return webResult.success("删除指标数据源信息配置成功", SUCCESS);
     }
 
-
     @ApiOperation(value = "导入列信息")
     @RequestMapping(value = "/sourceTableInfo/upload", consumes = "multipart/*", method = RequestMethod.POST, produces = { MediaType.APPLICATION_JSON_VALUE })
-    public WebResult<List<SourceInfo>> upload(@ApiParam(value = "文件上传", required = true) MultipartFile multipartFile) throws IOException{
+    public WebResult<List<SourceInfo>> upload(@ApiParam(value = "文件上传", required = true) MultipartFile multipartFile)
+            throws IOException {
         WebResult<List<SourceInfo>> webResult = new WebResult<>();
         List<SourceInfo> list = new ArrayList<>();
         if (multipartFile != null && !multipartFile.isEmpty()) {
-             String fileFileName = multipartFile.getOriginalFilename();
-             try {
-//                list = iSourceTableInfoService.parseColumnInfoFile(multipartFile.getInputStream(), fileFileName);
+            String fileFileName = multipartFile.getOriginalFilename();
+            try {
+                list = iSourceTableInfoService.parseColumnInfoFile(multipartFile.getInputStream(), fileFileName);
             } catch (Exception e) {
                 LogUtil.error(e);
             }

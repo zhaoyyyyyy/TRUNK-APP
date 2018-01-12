@@ -6,11 +6,13 @@
 
 package com.asiainfo.biapp.si.loc.core.source.service;
 
+import java.io.InputStream;
 import java.util.List;
 
 import com.asiainfo.biapp.si.loc.base.exception.BaseException;
 import com.asiainfo.biapp.si.loc.base.page.Page;
 import com.asiainfo.biapp.si.loc.base.service.BaseService;
+import com.asiainfo.biapp.si.loc.core.source.entity.SourceInfo;
 import com.asiainfo.biapp.si.loc.core.source.entity.SourceTableInfo;
 import com.asiainfo.biapp.si.loc.core.source.vo.SourceTableInfoVo;
 
@@ -43,7 +45,6 @@ import com.asiainfo.biapp.si.loc.core.source.vo.SourceTableInfoVo;
 public interface ISourceTableInfoService extends BaseService<SourceTableInfo, String> {
 
     /**
-     * 
      * Description: 分页查询指标数据源信息配置
      *
      * @param page
@@ -55,7 +56,6 @@ public interface ISourceTableInfoService extends BaseService<SourceTableInfo, St
             SourceTableInfoVo sourceTableInfoVo) throws BaseException;
 
     /**
-     * 
      * Description: 查询指标数据源信息列表
      *
      * @param sourceTableInfoVo
@@ -65,7 +65,6 @@ public interface ISourceTableInfoService extends BaseService<SourceTableInfo, St
     public List<SourceTableInfo> selectSourceTableInfoList(SourceTableInfoVo sourceTableInfoVo) throws BaseException;
 
     /**
-     * 
      * Description: 通过ID拿到指标数据源信息配置
      *
      * @param sourceTableId
@@ -75,7 +74,6 @@ public interface ISourceTableInfoService extends BaseService<SourceTableInfo, St
     public SourceTableInfo selectSourceTableInfoById(String sourceTableId) throws BaseException;
 
     /**
-     * 
      * Description: 新增一个指标数据源信息配置
      *
      * @param sourceTableInfo
@@ -84,7 +82,6 @@ public interface ISourceTableInfoService extends BaseService<SourceTableInfo, St
     public void addSourceTableInfo(SourceTableInfo sourceTableInfo) throws BaseException;
 
     /**
-     * 
      * Description: 修改指标数据源信息配置
      *
      * @param sourceTableInfo
@@ -93,14 +90,13 @@ public interface ISourceTableInfoService extends BaseService<SourceTableInfo, St
     public void modifySourceTableInfo(SourceTableInfo sourceTableInfo) throws BaseException;
 
     /**
-     * 
      * Description: 删除指标数据源信息配置
      *
      * @param sourceTableId
      * @throws BaseException
      */
     public void deleteSourceTableInfo(String sourceTableId) throws BaseException;
-    
-//    public List<SourceInfo> parseColumnInfoFile(InputStream inputStream, String fileName) throws Exception;
+
+    public List<SourceInfo> parseColumnInfoFile(InputStream inputStream, String fileName) throws Exception;
 
 }
