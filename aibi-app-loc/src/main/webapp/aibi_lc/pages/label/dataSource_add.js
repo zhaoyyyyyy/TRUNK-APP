@@ -367,7 +367,7 @@ function analysis(){
 }
 function fun_to_import(){
 	var wd = $.window('导入列信息', $.ctx
-			+ '/aibi_lc/pages/label/dataSource_import.html', 500, 200);
+			+ '/aibi_lc/pages/label/dataSource_import.html', 300, 200);
 	wd.addSourceList = function(sourceList) {
 		for(var i=0;i<sourceList.length;i++){
 			var bool = sourceList[i].cooColumnType.indexOf("VARCHAR")>0;

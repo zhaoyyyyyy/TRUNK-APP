@@ -1,0 +1,5 @@
+#字段类型;输入对应数据库的类型:如:INTEGER;NUMBER(10);VARCHAR2(32);TIMESTAMP(6);,,,
+#源字段名称,字段类型,指标名称,描述
+L_01,VARCHAR(32),L_01,L01字段
+L_02,"NUMBER(10,2)",L_02,L02字段
+L_03,INTEGER,L_03,L03字段
