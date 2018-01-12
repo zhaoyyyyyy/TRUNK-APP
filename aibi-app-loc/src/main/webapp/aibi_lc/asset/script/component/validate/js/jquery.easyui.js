@@ -317,7 +317,7 @@ String.prototype.length2 = function() {
 			},
 			radio: {
                 validator: function (value, param) {
-                    if ($("#radioList").find('input:checked').length==0) 
+                    if ($(".validate-radioList").find('input:checked').length==0) 
                     	{ 
                     		return false;
                     	}else{

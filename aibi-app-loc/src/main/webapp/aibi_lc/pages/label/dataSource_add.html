@@ -65,12 +65,10 @@
 			                <div class="ui-form-group">
 			                   	<label class="control-label" for="inputEmail4">数据更新周期</label>
 			                    <div class="control-input has-icon">
-			                        <ul>
-										<li class="" v-for="g in gxzq" style="display: inline">
-											<div class="radio circle success">
-												<input class="easyui-validatebox" :value="g.code"  :id="'code'+g.code" name="readCycle" type="radio"/>
-												<label><i class="default"></i>{{g.dataName}}</label>
-											</div>
+			                        <ul class="validate-radioList">
+										<li class="radio circle success" v-for="g in gxzq" style="display: inline">
+											<input class="easyui-validatebox" validType="radio" :value="g.code"  :id="'code'+g.code" name="readCycle" type="radio"/>
+											<label><i class="default"></i>{{g.dataName}}</label>
 										</li>
 									</ul>
 			                    </div>
