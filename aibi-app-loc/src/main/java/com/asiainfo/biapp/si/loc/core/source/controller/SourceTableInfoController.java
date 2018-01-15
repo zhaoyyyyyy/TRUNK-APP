@@ -213,7 +213,7 @@ public class SourceTableInfoController extends BaseController<SourceTableInfo> {
             try {
                 list = iSourceTableInfoService.parseColumnInfoFile(multipartFile.getInputStream(), fileName);
             } catch (Exception e) {
-                LogUtil.error(e);
+                return webResult.fail(e.getMessage());
             }
         }
         return webResult.success("读取指标信息列成功", list);
