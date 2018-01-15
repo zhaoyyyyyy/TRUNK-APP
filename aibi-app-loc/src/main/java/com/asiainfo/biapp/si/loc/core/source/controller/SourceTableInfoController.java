@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.derby.tools.sysinfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -204,9 +205,13 @@ public class SourceTableInfoController extends BaseController<SourceTableInfo> {
         WebResult<List<SourceInfo>> webResult = new WebResult<>();
         List<SourceInfo> list = new ArrayList<>();
         if (multipartFile != null && !multipartFile.isEmpty()) {
-            String fileFileName = multipartFile.getOriginalFilename();
+            String fileName = multipartFile.getOriginalFilename();
+            String fileSuffix = fileName.substring(fileName.lastIndexOf(".") + 1).toLowerCase();
+            if(!"csv".equals(fileSuffix)){
+                return webResult.fail("文件类型不正确");
+            }
             try {
-                list = iSourceTableInfoService.parseColumnInfoFile(multipartFile.getInputStream(), fileFileName);
+                list = iSourceTableInfoService.parseColumnInfoFile(multipartFile.getInputStream(), fileName);
             } catch (Exception e) {
                 LogUtil.error(e);
             }
