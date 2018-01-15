@@ -24,8 +24,9 @@ function changeStatus(elem){
 	if($(elem).val()==5){
 		$(elem).parents("form").find(".ui-form-hide").show();
 	}else{
+//		$("#dimId").removeAttr("name");
+//		$("#dataType").removeAttr("name");
 		$(elem).parents("form").find(".ui-form-hide").hide();
-		
 	}
 }
 //function changeStatus(obj){

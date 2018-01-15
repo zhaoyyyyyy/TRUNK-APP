@@ -174,6 +174,9 @@ window.loc_onload = function() {
 	}
 	$.commAjax({
 		url : $.ctx + '/api/dimtable/dimTableInfo/queryList',
+		postData : {
+			"configId" : model.configId
+		},
 		onSuccess : function(data){
 			model.dimtableInfoList = data.data
 		}
