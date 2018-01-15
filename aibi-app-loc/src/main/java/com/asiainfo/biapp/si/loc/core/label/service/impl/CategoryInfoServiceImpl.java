@@ -206,10 +206,8 @@ public class CategoryInfoServiceImpl extends BaseServiceImpl<CategoryInfo, Strin
                     success = false;
                     break;
                 }
-                CategoryInfoVo categoryInfoVo = new CategoryInfoVo();
-                categoryInfoVo.setCategoryName(nextLine[0]);
-                categoryInfoVo.setSysId(configId);
-                if(!selectCategoryInfoList(categoryInfoVo).isEmpty()){
+                CategoryInfo isExit = selectCategoryInfoByCategoryName(nextLine[0],configId);
+                if(isExit!=null){
                     error = "第" + currentRowNum + "行分类名称已存在!";
                     resultMap.put("error", error);
                     success = false;
@@ -221,17 +219,16 @@ public class CategoryInfoServiceImpl extends BaseServiceImpl<CategoryInfo, Strin
                     success = false;
                     break;
                 }
-                categoryInfoVo.setCategoryName(nextLine[1]);
-                if(selectCategoryInfoList(categoryInfoVo).isEmpty()){
+                isExit = selectCategoryInfoByCategoryName(nextLine[1],configId);
+                if(isExit==null){
                     error = "第" + currentRowNum + "行找不到父分类！";
                     resultMap.put("error", error);
                     success = false;
                     break;
                 }
-                CategoryInfo parentCategoryInfo = selectCategoryInfoList(categoryInfoVo).get(0);
                 CategoryInfo categoryInfo = new CategoryInfo();
                 categoryInfo.setCategoryName(nextLine[0]);
-                categoryInfo.setParentId(parentCategoryInfo.getCategoryId());
+                categoryInfo.setParentId(isExit.getCategoryId());
                 categoryInfo.setSysId(configId);
                 categoryInfoList.add(categoryInfo);
             }
