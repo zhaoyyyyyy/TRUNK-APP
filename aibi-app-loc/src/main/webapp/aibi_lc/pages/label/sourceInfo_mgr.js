@@ -22,7 +22,6 @@ window.loc_onload = function(){
 	
 	$("#btn_search").click(function(){
 		var txtValue = $("#form_search").val();
-		debugger
 		if(txtValue == null){
 			$("#mainGrid").setGridParam({
 				postData : {

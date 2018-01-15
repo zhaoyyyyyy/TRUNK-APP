@@ -93,24 +93,24 @@ window.loc_onload = function() {
 						}
 					}	
 				});
-				if(model.labelTypeId==5){
-					model.isemmu=true;
-					$.commAjax({
-						ansyc : false,
-						url : $.ctx + '/api/label/mdaSysTableCol/queryList',
-						postData : {
-							"labelId" : labelId
-						},
-						onSuccess : function(data1){
-							var list = data1.data;
-							if(list.length!=0){
+				$.commAjax({
+					ansyc : false,
+					url : $.ctx + '/api/label/mdaSysTableCol/queryList',
+					postData : {
+						"labelId" : labelId
+					},
+					onSuccess : function(data1){
+						var list = data1.data;
+						if(list.length!=0){
+							if(model.labelTypeId==5){
+								model.isemmu=true;
 								model.dataName = list[0].dataType;
 								model.dimId = list[0].dimTransId;
-								model.unit = list[0].unit
-							};
-						}
-					});
-				}
+							}
+							model.unit = list[0].unit
+						};
+					}
+				});
 				model.approveStatusId = data.data.approveInfo.approveStatusId;
 			},
 			maskMassage : 'load...'
