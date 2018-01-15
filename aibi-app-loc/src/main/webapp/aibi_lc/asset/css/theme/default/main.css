@@ -1005,4 +1005,64 @@ span.del-btn{
 	height:120px;
 	overflow-y:scroll;
 }
+/*客户群预览*/
+.ui-custom-info{
+    border:1px solid #DCE2E4;
+    padding: 10px;
+}
+.ui-custom-info > h3{
+    line-height: 35px;
+    font-size: 16px;
+    color: #000;
+}
+.ui-custom-info .ui-custom-item{
+	width:70%;
+	background: #F7F7F7;
+	padding:0px 10px;
+}
+.ui-custom-info .ui-custom-item > a{
+	height:30px;
+	line-height:30px;
+	width:50%;
+	color:#666;
+	display:block;
+	float:left;
+}
+.ui-custom-info  span.ui-label-date{
+	color: #666;
+	padding: 0px 10px 0 0;
+    line-height: 30px;
+}
+.ui-custom-info > .ui-custom-col{
+	width:30%;
+	border:1px solid #DCE2E4;
+}
+.ui-custom-col > h3{
+	padding: 6px;
+    font-size: 14px;
+    color: #FFFFFF;
+    background: #009444;
+    text-align:center;
+}
+.ui-custom-col > .ui-custom-mes{
+	padding:10px;
+	height:220px;
+}
+.ui-custom-col > .ui-custom-mes > p{
+	height: 34px;
+    line-height: 34px;
+    color: #000;
+    font-size: 14px;
+}
+.ui-custom-col > .ui-custom-mes > ul > li{
+	display:inline-block;
+}
+.ui-custom-col > .ui-custom-mes > ul > li > a{
+	display:block;
+	color: #666;
+	background: #F7F7F7;
+	padding:2px 6px;
+	margin:4px 10px;
+}
+
 
