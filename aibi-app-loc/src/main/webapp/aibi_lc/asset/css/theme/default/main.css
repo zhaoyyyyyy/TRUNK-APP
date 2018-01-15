@@ -1000,5 +1000,9 @@ span.del-btn{
 .label-detail label.control-label{
 	width:120px;
 }
-
+/*标签管理树*/
+.ui-form-ztree .ztree{
+	height:120px;
+	overflow-y:scroll;
+}
 

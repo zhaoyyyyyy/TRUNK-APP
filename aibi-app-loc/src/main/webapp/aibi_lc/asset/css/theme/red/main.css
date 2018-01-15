@@ -990,7 +990,6 @@ span.del-btn{
 	font-size: 11px;
 	zoom: 1;
 	background: #fff url(../../../images/loading.gif) no-repeat 20px center;
-	padding-left: 20px;
 	position: absolute;
 	filter: alpha(enabled=false);
 	text-align:center;
@@ -1001,5 +1000,9 @@ span.del-btn{
 .label-detail label.control-label{
 	width:120px;
 }
-
+/*标签管理树*/
+.ui-form-ztree .ztree{
+	height:120px;
+	overflow-y:scroll;
+}
 
