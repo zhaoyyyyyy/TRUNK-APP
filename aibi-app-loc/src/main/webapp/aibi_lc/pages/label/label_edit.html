@@ -98,6 +98,19 @@
                             </div>
                         </div>
                         <div class="ui-form-group ml70">
+                            <label for="categoryId" class="control-label">
+                            <span class="input-required">*</span>
+                                                         标签分类</label>
+                             <div class="control-input ui-form-ztree ml10">
+                             	<input type="hidden" name="categoryId">
+                                <input v-model="categoryName" type="text" class="form-control easyui-validatebox" id="categoryName" onclick="openTtee(this)" required="true" readonly>
+                                <div class="dropdown-menu">
+		                         	<ul id="ztree" class="ztree">
+							        </ul>
+                                </div>
+                            </div>                             
+                        </div>
+                        <div class="ui-form-group ml70">
 		            	    <!-- <input type="hidden" name="dependIndex" v-model="dependIndex"> -->
                             <label for="inputEmail3" class="control-label fleft">
                             <span class="input-required">*</span>
@@ -152,19 +165,7 @@
 				            </div>
                         </div>
 		            	
-						<div class="ui-form-group ml70">
-                            <label for="categoryId" class="control-label">
-                            <span class="input-required">*</span>
-                                                         标签分类</label>
-                             <div class="control-input ui-form-ztree ml10">
-                             	<input type="hidden" name="categoryId">
-                                <input v-model="categoryName" type="text" class="form-control easyui-validatebox" id="categoryName" onclick="openTtee(this)" required="true" readonly>
-                                <div class="dropdown-menu">
-		                         	<ul id="ztree" class="ztree">
-							        </ul>
-                                </div>
-                            </div>                             
-                        </div>
+						
                         
                         
 					</div>
