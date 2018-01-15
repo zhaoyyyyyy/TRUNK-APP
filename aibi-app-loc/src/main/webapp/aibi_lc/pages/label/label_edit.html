@@ -24,7 +24,12 @@
 	<div id="dataD" class="iframe-nest" v-cloak>
 		<div class="ui-reg-main">
 			<div class="ui-lc-mian">
-				<h3>标签编辑</h3>
+			    <div v-if="labelId==''" class="">
+			        <h3>标签新增</h3>
+			    </div>
+			    <div v-else class="">
+			        <h3>标签编辑</h3>
+			    </div>    
 				<form id="saveDataForm">
 				    <input type="hidden" v-model="configId" name="configId"> 
 					<input type="hidden" v-model="labelId" id="labelId" name="labelId" />
