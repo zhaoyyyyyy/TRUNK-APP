@@ -21,33 +21,42 @@ var model = {
 		gxzq : [],
 		sourceIdList : [],
 		configId : "",
+		checked:false,//添加radio属性
 }
-function changeStatus(obj){
-	if(obj.value==="5"){//枚举型标签字典value为5
-		const exit = model.showdimDetail.some(function(item){
-			return Object.keys(item)[0] === ('showdim'+obj.id);
-		});
-		if(!exit){
-			var a = {};
-			a['showdim'+obj.id] = true;
-			model.showdimDetail.push(a);
-		}else{
-			model.showdimDetail.forEach(function(item){
-				if(Object.keys(item)[0]===('showdim'+obj.id)){
-					item[('showdim'+obj.id)]=true
-				};
-			});
-		}
+function changeStatus(elem){
+	if($(elem).val()==5){
+		$(elem).parents("form").find(".ui-form-hide").show();
 	}else{
-		model.showdimDetail.some(function(item){
-			if(item[('showdim'+obj.id)]){
-				item[('showdim'+obj.id)]=false;
-				return true
-			}
-			return false
-		});
+		$(elem).parents("form").find(".ui-form-hide").hide();
+		
 	}
 }
+//function changeStatus(obj){
+//	if(obj.value==="5"){//枚举型标签字典value为5
+//		const exit = model.showdimDetail.some(function(item){
+//			return Object.keys(item)[0] === ('showdim'+obj.id);
+//		});
+//		if(!exit){
+//			var a = {};
+//			a['showdim'+obj.id] = true;
+//			model.showdimDetail.push(a);
+//		}else{
+//			model.showdimDetail.forEach(function(item){
+//				if(Object.keys(item)[0]===('showdim'+obj.id)){
+//					item[('showdim'+obj.id)]=true
+//				};
+//			});
+//		}
+//	}else{
+//		model.showdimDetail.some(function(item){
+//			if(item[('showdim'+obj.id)]){
+//				item[('showdim'+obj.id)]=false;
+//				return true
+//			}
+//			return false
+//		});
+//	}
+//}
 window.loc_onload = function(){
 	model.configId = $.getCurrentConfigId();
 	var dicBqlx = $.getDicData("BQLXZD");
@@ -86,6 +95,7 @@ window.loc_onload = function(){
 	    },
 	    mounted: function () {
 		    this.$nextTick(function () {
+		    	this.bqlx[0].checked=true;//默认第一个radio选中
 			    var r = $(".easyui-validatebox");
 	   			if (r.length){
 	   				r.validatebox();
