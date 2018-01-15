@@ -6,7 +6,9 @@
 
 package com.asiainfo.biapp.si.loc.core.label.service;
 
+import java.io.InputStream;
 import java.util.List;
+import java.util.Map;
 
 import com.asiainfo.biapp.si.loc.base.exception.BaseException;
 import com.asiainfo.biapp.si.loc.base.service.BaseService;
@@ -84,4 +86,7 @@ public interface ICategoryInfoService extends BaseService<CategoryInfo, String>{
      */
     public CategoryInfo selectCategoryInfoByCategoryName(String categoryName,String sysId) throws BaseException;
 
+    public Map<String,Object> parseColumnInfoFile(InputStream inputStream, String fileName,String configId) throws Exception;
+
+    
 }

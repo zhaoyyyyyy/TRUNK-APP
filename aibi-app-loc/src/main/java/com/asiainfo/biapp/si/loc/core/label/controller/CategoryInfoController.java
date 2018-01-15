@@ -10,9 +10,13 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -20,11 +24,13 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import springfox.documentation.annotations.ApiIgnore;
 
 import com.asiainfo.biapp.si.loc.base.controller.BaseController;
 import com.asiainfo.biapp.si.loc.base.exception.BaseException;
+import com.asiainfo.biapp.si.loc.base.utils.LogUtil;
 import com.asiainfo.biapp.si.loc.base.utils.StringUtil;
 import com.asiainfo.biapp.si.loc.base.utils.WebResult;
 import com.asiainfo.biapp.si.loc.core.label.entity.CategoryInfo;
@@ -207,5 +213,28 @@ public class CategoryInfoController extends BaseController<CategoryInfo>{
         }
         return oldCat;
     }
+    
+    @ApiOperation(value = "导入分类")
+    @RequestMapping(value = "/categoryInfo/upload", consumes = "multipart/*", method = RequestMethod.POST, produces = { MediaType.APPLICATION_JSON_VALUE })
+    public WebResult<String> upload(@ApiParam(value = "文件上传", required = true) MultipartFile multipartFile,@ApiParam(value = "专区ID", required = true) String configId)
+            throws IOException {
+        WebResult<String> webResult = new WebResult<>();
+        Map<String,Object> map = new HashMap<>();
+        String result = "";
+        if (multipartFile != null && !multipartFile.isEmpty()) {
+            String fileFileName = multipartFile.getOriginalFilename();
+            try {
+                map = iCategoryInfoService.parseColumnInfoFile(multipartFile.getInputStream(), fileFileName,configId);
+            } catch (Exception e) {
+                LogUtil.error(e);
+            }
+        }
+        result = map.get("msg").toString();
+        if((boolean) map.get("success")){
+            return webResult.fail(result);
+        }
+        return webResult.success(result, "success");
+    }
+    
 
 }

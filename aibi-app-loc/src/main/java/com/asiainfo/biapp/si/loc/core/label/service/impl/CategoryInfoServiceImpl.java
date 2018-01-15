@@ -6,7 +6,17 @@
 
 package com.asiainfo.biapp.si.loc.core.label.service.impl;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.charset.Charset;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import javax.transaction.Transactional;
 
@@ -14,10 +24,14 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import au.com.bytecode.opencsv.CSVReader;
+
 import com.asiainfo.biapp.si.loc.base.dao.BaseDao;
 import com.asiainfo.biapp.si.loc.base.exception.BaseException;
 import com.asiainfo.biapp.si.loc.base.exception.ParamRequiredException;
 import com.asiainfo.biapp.si.loc.base.service.impl.BaseServiceImpl;
+import com.asiainfo.biapp.si.loc.base.utils.FileUtil;
+import com.asiainfo.biapp.si.loc.base.utils.LogUtil;
 import com.asiainfo.biapp.si.loc.base.utils.StringUtil;
 import com.asiainfo.biapp.si.loc.core.label.dao.ICategoryInfoDao;
 import com.asiainfo.biapp.si.loc.core.label.dao.ILabelInfoDao;
@@ -125,11 +139,124 @@ public class CategoryInfoServiceImpl extends BaseServiceImpl<CategoryInfo, Strin
         }
         LabelInfoVo labelInfoVo = new LabelInfoVo();
         labelInfoVo.setCategoryId(categoryId);
-        if(iLabelInfoDao.selectLabelInfoList(labelInfoVo).size() != 0){
+        if(iLabelInfoDao.selectLabelAllEffectiveInfoList(labelInfoVo).size() != 0){
             throw new ParamRequiredException("该分类下还有标签，不可以删除");
         }
         super.delete(categoryId);
         
+    }
+    
+    public Map<String,Object> parseColumnInfoFile(InputStream inputStream, String fileName,String configId) throws Exception {
+        Map<String,Object> resultMap = new HashMap<>();
+        String error = "";
+        boolean success = true;
+        
+        String filePath = null;
+        try {
+            filePath = FileUtil.uploadTargetUserFile(inputStream, fileName);
+        } catch (Exception e1) {
+            LogUtil.error("获取文件目录信息报错", e1);
+        }
+        // 解析模版文件
+        CSVReader reader = null;
+        // 当前记录条数
+        int currentRowNum = 0;
+        // 列数
+        int columnSize = 2;
+        // 数据行数
+        int dataCount = 0;
+        
+        List<CategoryInfo> categoryInfoList = new ArrayList<>();
+        
+        InputStream in = new FileInputStream(new File(filePath));
+        Charset charset = FileUtil.getInputStreamCharset(in);
+        reader = new CSVReader(new InputStreamReader(new FileInputStream(new File(filePath)), charset));
+        String[] nextLine;
+        
+        try {
+            Set<String> set = new HashSet<String>();
+            while ((nextLine = reader.readNext()) != null) {
+                currentRowNum++;
+                // 跳过注释行
+                if (nextLine[0].startsWith("#")) {
+                    continue;
+                }else{
+                    dataCount++;
+                }
+                if (nextLine.length < columnSize) {
+                    throw new Exception("导入文件错误");
+                }
+                
+                if (StringUtil.isEmpty(nextLine[0])) {
+                    error = "第" + currentRowNum + "行分类名称不能为空!";
+                    resultMap.put("error", error);
+                    success = false;
+                    break;
+                }
+                if (nextLine[0].length() > 128) {
+                    error = "第" + currentRowNum + "行分类名称长度超长!";
+                    resultMap.put("error", error);
+                    success = false;
+                    break;
+                }
+                set.add(nextLine[0]);
+                if (set.size() < dataCount) {
+                    error = "第" + currentRowNum + "行分类名称重复!";
+                    resultMap.put("error", error);
+                    success = false;
+                    break;
+                }
+                CategoryInfoVo categoryInfoVo = new CategoryInfoVo();
+                categoryInfoVo.setCategoryName(nextLine[0]);
+                CategoryInfo selectExit = selectCategoryInfoList(categoryInfoVo).get(0);
+                if(selectExit!=null){
+                    error = "第" + currentRowNum + "行分类名称已存在!";
+                    resultMap.put("error", error);
+                    success = false;
+                    break;
+                }
+                if(nextLine.length < 2) {
+                    error = "第" + currentRowNum + "行父分类列为空!";
+                    resultMap.put("error", error);
+                    success = false;
+                    break;
+                }
+                categoryInfoVo.setCategoryName(nextLine[1]);
+                CategoryInfo parentCategoryInfo = selectCategoryInfoList(categoryInfoVo).get(0);
+                if(parentCategoryInfo==null){
+                    error = "第" + currentRowNum + "行找不到父分类！";
+                    resultMap.put("error", error);
+                    success = false;
+                    break;
+                }
+                CategoryInfo categoryInfo = new CategoryInfo();
+                categoryInfo.setCategoryName(nextLine[0]);
+                categoryInfo.setParentId(parentCategoryInfo.getCategoryId());
+                categoryInfo.setSysId(configId);
+                categoryInfoList.add(categoryInfo);
+            }
+            resultMap.put("success", success);
+            resultMap.put("msg", error);
+        } catch (Exception e) {
+            currentRowNum = -1;
+            throw new Exception("导入报错" + e.getMessage(), e);
+        } finally {
+            if (in != null) {
+                in.close();
+            }
+            if (reader != null) {
+                reader.close();
+                reader = null;
+            }
+        }
+        
+        if(success){
+            for(CategoryInfo c : categoryInfoList){
+                addCategoryInfo(c);
+            }
+        }
+        
+        return resultMap;
     }
 
 

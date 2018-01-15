@@ -363,7 +363,6 @@ public class SourceTableInfoServiceImpl extends BaseServiceImpl<SourceTableInfo,
                 sourceInfoList.add(sourceInfo);
             }
         } catch (Exception e) {
-            LogUtil.error("parseColumnInfoFile 行号：" + currentRowNum + ",error:", e);
             currentRowNum = -1;
             throw new Exception("导入报错" + e.getMessage(), e);
         } finally {
@@ -375,7 +374,6 @@ public class SourceTableInfoServiceImpl extends BaseServiceImpl<SourceTableInfo,
                 reader = null;
             }
         }
-        LogUtil.info("end parseColumnInfoFile ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
         return sourceInfoList;
     }
 
