@@ -430,6 +430,19 @@ public class LabelInfoController extends BaseController {
 		}
 		return rules;
 	}
+	
+	@ApiOperation(value = "查询标签有效列表")
+    @RequestMapping(value = "/labelInfo/queryListEffective", method = RequestMethod.POST)
+    public WebResult<List<LabelInfo>> findListByEffective(@ModelAttribute LabelInfoVo labelInfoVo) {
+        WebResult<List<LabelInfo>> webResult = new WebResult<>();
+        List<LabelInfo> labelInfoList = new ArrayList<>();
+        try {
+            labelInfoList = iLabelInfoService.selectLabelAllEffectiveInfoList(labelInfoVo);
+        } catch (BaseException e) {
+            e.printStackTrace();
+        }
+        return webResult.success("获取有效标签信息成功.", labelInfoList);
+    }
     
 
 }

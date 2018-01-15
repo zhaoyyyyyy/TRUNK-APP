@@ -151,16 +151,16 @@ window.loc_onload = function() {
 			    }
 			    if(treeNode.isParent){
 			    	var childrenNodes = treeNode.children;
-			    	$.alert("该分类下有标签分类,不可以删除");
+			    	$.alert("该分类下存在有效标签或者分类，不能删除",300,20);
 			    }else if(!treeNode.categoryId){
 			    	$.alert("此标签分类不可以删除");
 			    }else{
 			    	$.commAjax({
-						url : $.ctx + '/api/label/labelInfo/queryList',
+						url : $.ctx + '/api/label/labelInfo/queryListEffective',
 						isShowMask : true,
 						postData : {
 							"categoryId" : treeNode.categoryId,	
-							"configId" :labelId,								
+							"configId" :labelId,	
 						},onSuccess:function(data){
 							if(!data.data.length){
 								$.confirm('确定要删除该标签分类？', function() {
@@ -181,7 +181,7 @@ window.loc_onload = function() {
 									});
 								});
 							}else{
-								$.alert("该分类下还有标签，不可删除");
+								$.alert("该分类下存在有效标签或者分类，不能删除" ,300,20);
 							}
 						},
 						maskMassage : '删除中...'
@@ -451,7 +451,7 @@ window.loc_onload = function() {
 		var text = labelInfo;			//模糊查询时的关键字
 		if(number == 1){text = labelInfo; categoryId = "";}//全部分类下的标签模糊查询
 		$.commAjax({			
-		    url : $.ctx+'/api/label/labelInfo/queryList', 
+		    url : $.ctx+'/api/label/labelInfo/queryListEffective', 
 		    isShowMask : true,
 		    dataType : 'json', 
 		    async:true,
@@ -459,7 +459,6 @@ window.loc_onload = function() {
 					"labelName" :text,
 					"configId" :labelId,
 					"categoryId" :categoryId,
-					"dataStatusId" : 2,
 				},
 		    onSuccess: function(data){
 		    	$("#labelList").html("");

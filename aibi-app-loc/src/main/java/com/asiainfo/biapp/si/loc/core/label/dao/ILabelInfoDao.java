@@ -73,5 +73,13 @@ public interface ILabelInfoDao extends BaseDao<LabelInfo, String> {
      * @return
      */
     public LabelInfo selectOneByLabelName(String labelName);
+    
+    /**
+     * 取得所有状态为1,2,4状态的标签
+     * Description: 
+     *
+     * @return
+     */
+    public List<LabelInfo> selectLabelAllEffectiveInfoList(LabelInfoVo labelInfoVo);
 
 }

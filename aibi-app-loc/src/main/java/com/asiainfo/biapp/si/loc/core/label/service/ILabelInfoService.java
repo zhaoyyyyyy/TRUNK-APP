@@ -124,4 +124,12 @@ public interface ILabelInfoService extends BaseService<LabelInfo, String> {
      * @throws BaseException
      */
     public String selectDimNameBylabelId(String labelId) throws BaseException;
+    
+    /**
+     * Description:查询标签有效状态列表
+     *
+     * @return
+     * @throws BaseException
+     */
+    public List<LabelInfo> selectLabelAllEffectiveInfoList(LabelInfoVo labelInfoVo) throws BaseException;
 }

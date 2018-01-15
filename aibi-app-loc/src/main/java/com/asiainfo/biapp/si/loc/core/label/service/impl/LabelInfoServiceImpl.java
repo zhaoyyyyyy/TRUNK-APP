@@ -288,4 +288,14 @@ public class LabelInfoServiceImpl extends BaseServiceImpl<LabelInfo, String> imp
 		LabelInfoServiceImpl.context = applicationContext; 
 		
 	}
+	
+	/**
+	 * 查询所有状态为有效的标签
+	 * Description: 
+	 *
+	 * @return
+	 */
+	public List<LabelInfo> selectLabelAllEffectiveInfoList(LabelInfoVo labelInfoVo) {
+        return iLabelInfoDao.selectLabelAllEffectiveInfoList(labelInfoVo);
+    }
 }
