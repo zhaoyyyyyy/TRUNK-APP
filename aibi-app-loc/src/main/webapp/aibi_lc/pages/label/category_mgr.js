@@ -481,4 +481,33 @@ window.loc_onload = function() {
 		    maskMassage : '搜索中...'
 	   });
 	}
+	//导入
+	$("#import").click(function(){
+		var wd = $.window('导入列信息', $.ctx
+				+ '/aibi_lc/pages/label/category_import.html', 300, 150);
+		wd.addSourceList = function(sourceList) {
+			for(var i=0;i<sourceList.length;i++){
+				var bool = sourceList[i].cooColumnType.indexOf("VARCHAR")>0;
+				debugger;
+				if(sourceList[i].cooColumnType.indexOf("varchar") != -1 || sourceList[i].cooColumnType.indexOf("VARCHAR") != -1  ){
+					sourceList[i].cooColumnType = "2";
+				}else if(sourceList[i].cooColumnType.indexOf("integer") != -1 || sourceList[i].cooColumnType.indexOf("INTEGER") != -1){
+					sourceList[i].cooColumnType = "1";
+				}else{
+					sourceList[i].cooColumnType = "2";
+				}
+				var dataRow = {
+					"columnName" : sourceList[i].columnName,
+					"cooColumnType" : sourceList[i].cooColumnType,
+					"sourceName" : sourceList[i].sourceName,
+					"columnCaliber" : sourceList[i].columnCaliber,
+					"sourceId" : "",
+					"op" : ""
+				}
+				model.sortNum += 1;
+				$("#jsonmap").jqGrid("addRowData", model.sortNum, dataRow, "last");
+				$("#jsonmap").jqGrid("editRow", model.sortNum);
+			}
+		}
+	})
 }

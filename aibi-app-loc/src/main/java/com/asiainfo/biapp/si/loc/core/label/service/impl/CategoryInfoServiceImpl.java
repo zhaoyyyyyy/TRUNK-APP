@@ -135,12 +135,12 @@ public class CategoryInfoServiceImpl extends BaseServiceImpl<CategoryInfo, Strin
             throw new ParamRequiredException("ID不能为空");
         }
         if(selectCategoryInfoById(categoryId).getChildren().size() != 0){
-            throw new ParamRequiredException("该分类下还有分类，不可以删除");
+            throw new ParamRequiredException("该分类下存在有效标签或者分类，不能删除");
         }
         LabelInfoVo labelInfoVo = new LabelInfoVo();
         labelInfoVo.setCategoryId(categoryId);
         if(iLabelInfoDao.selectLabelAllEffectiveInfoList(labelInfoVo).size() != 0){
-            throw new ParamRequiredException("该分类下还有标签，不可以删除");
+            throw new ParamRequiredException("该分类下存在有效标签或者分类，不能删除");
         }
         super.delete(categoryId);
         
