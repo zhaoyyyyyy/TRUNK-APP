@@ -75,10 +75,10 @@
                                                                  标签类型</label>
                                 <div class="control-input fleft ml10">
                                  <ul class="validate-radioList">
-									<li class="" v-for="(g,index) in bqlx" style="display: inline">
+									<li class="" v-for="g in bqlx" style="display: inline">
 									<div class="radio circle success">
-										<input class="easyui-validatebox" validType="radio" :value="g.code" :id="index" name="labelTypeId"
-										:checked="g.checked" type="radio" onclick="changeStatus(this)" />				
+										<input class="easyui-validatebox" validType="radio" :value="g.code" name="labelTypeId"
+										type="radio" onclick="changeStatus(this)" />				
 										<label><i class="default"></i>{{g.dataName}}</label>
 										</div>											  	
 									</li>
