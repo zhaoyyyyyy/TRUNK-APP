@@ -193,7 +193,7 @@ public class CategoryInfoServiceImpl extends BaseServiceImpl<CategoryInfo, Strin
                     success = false;
                     break;
                 }
-                if (nextLine[0].length() > 128) {
+                if (nextLine[0].length() > 8) {
                     error = "第" + currentRowNum + "行分类名称长度超长!";
                     resultMap.put("error", error);
                     success = false;
@@ -208,8 +208,8 @@ public class CategoryInfoServiceImpl extends BaseServiceImpl<CategoryInfo, Strin
                 }
                 CategoryInfoVo categoryInfoVo = new CategoryInfoVo();
                 categoryInfoVo.setCategoryName(nextLine[0]);
-                CategoryInfo selectExit = selectCategoryInfoList(categoryInfoVo).get(0);
-                if(selectExit!=null){
+                categoryInfoVo.setSysId(configId);
+                if(!selectCategoryInfoList(categoryInfoVo).isEmpty()){
                     error = "第" + currentRowNum + "行分类名称已存在!";
                     resultMap.put("error", error);
                     success = false;
@@ -222,18 +222,21 @@ public class CategoryInfoServiceImpl extends BaseServiceImpl<CategoryInfo, Strin
                     break;
                 }
                 categoryInfoVo.setCategoryName(nextLine[1]);
-                CategoryInfo parentCategoryInfo = selectCategoryInfoList(categoryInfoVo).get(0);
-                if(parentCategoryInfo==null){
+                if(selectCategoryInfoList(categoryInfoVo).isEmpty()){
                     error = "第" + currentRowNum + "行找不到父分类！";
                     resultMap.put("error", error);
                     success = false;
                     break;
                 }
+                CategoryInfo parentCategoryInfo = selectCategoryInfoList(categoryInfoVo).get(0);
                 CategoryInfo categoryInfo = new CategoryInfo();
                 categoryInfo.setCategoryName(nextLine[0]);
                 categoryInfo.setParentId(parentCategoryInfo.getCategoryId());
                 categoryInfo.setSysId(configId);
                 categoryInfoList.add(categoryInfo);
+            }
+            if(success){
+                error = "成功";
             }
             resultMap.put("success", success);
             resultMap.put("msg", error);
@@ -252,7 +255,7 @@ public class CategoryInfoServiceImpl extends BaseServiceImpl<CategoryInfo, Strin
         
         if(success){
             for(CategoryInfo c : categoryInfoList){
-                addCategoryInfo(c);
+                this.addCategoryInfo(c);
             }
         }
         

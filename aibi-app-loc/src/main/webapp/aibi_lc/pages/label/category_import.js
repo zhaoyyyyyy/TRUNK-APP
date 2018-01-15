@@ -16,6 +16,26 @@ window.loc_onload = function() {
 	});
 	
 	wd.addBtn("ok", "导入", function() {
+		if(validateForm()){
+			$.fileUpload({
+				fileElementId: "multipartFile",
+				type: "post",
+		        url:$.ctx + "/api/label/categoryInfo/upload",
+		        data:{"configId":$.getCurrentConfigId},
+		        dataType:"json",
+		        isShowMask : true,
+				maskMassage : 'Load...',
+		        success: function(data){
+		        	if(data.status == "200"){
+		        		wd.success();
+						$.success(data.msg);
+						wd.cancel();
+					}else{
+						$.alert(data.msg);
+					}
+		        } 
+			});	
+		}
 	});
 	wd.addBtn("cancel", "取消", function() {
 		wd.cancel();
