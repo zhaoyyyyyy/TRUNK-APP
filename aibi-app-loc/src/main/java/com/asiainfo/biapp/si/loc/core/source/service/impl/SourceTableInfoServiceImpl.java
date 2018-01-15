@@ -195,12 +195,8 @@ public class SourceTableInfoServiceImpl extends BaseServiceImpl<SourceTableInfo,
         // 修改状态表
         TargetTableStatus targetTableStatus = iTargetTableStatusService.selectTargertTableStatusById(sourceTableInfo
             .getSourceTableId());
-        if (targetTableStatus != null) {
-            targetTableStatus.setSourceTableName(sourceTableInfo.getSourceTableName());
-            iTargetTableStatusService.modifyTargertTableStatus(targetTableStatus);
-        } else {
-            throw new ParamRequiredException("指标源表状态表数据错误");
-        }
+        targetTableStatus.setSourceTableName(sourceTableInfo.getSourceTableName());
+        iTargetTableStatusService.modifyTargertTableStatus(targetTableStatus);
 
         // 修改指标信息列
         List<String> newIds = new ArrayList<>();
