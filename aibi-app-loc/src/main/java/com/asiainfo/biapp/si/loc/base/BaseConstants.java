@@ -25,6 +25,11 @@ public class BaseConstants {
 	 * REDIS端口
 	 */
 	public static final String REDIS_PORT = "LOC_CONFIG_SYS_REDIS_PORT ";
+	/**
+	 * REDIS端口
+	 */
+	public static final String REDIS_PASSWORD = "LOC_CONFIG_SYS_REDIS_PASSWORD ";
+	
 	
 	public static final String SYS_BGDB_DRIVER = "LOC_CONFIG_SYS_BGDB_DRIVER";
 	

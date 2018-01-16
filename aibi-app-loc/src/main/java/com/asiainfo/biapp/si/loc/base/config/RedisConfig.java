@@ -9,15 +9,16 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.data.redis.cache.RedisCacheManager;
-import org.springframework.data.redis.connection.RedisClusterConfiguration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
-import org.springframework.data.redis.connection.RedisSentinelConfiguration;
 import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 
 import com.asiainfo.biapp.si.loc.auth.utils.LocConfigUtil;
 import com.asiainfo.biapp.si.loc.base.BaseConstants;
+import com.asiainfo.biapp.si.loc.base.LocCacheBase;
+import com.asiainfo.biapp.si.loc.base.utils.LogUtil;
+import com.asiainfo.biapp.si.loc.base.utils.StringUtil;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -40,6 +41,7 @@ public class RedisConfig extends CachingConfigurerSupport{
 	
     public static String host;
     public static Integer port;
+    public static String password;
     
     
     //缓存管理器
@@ -54,8 +56,11 @@ public class RedisConfig extends CachingConfigurerSupport{
 		try {
 			RedisConfig.host = LocConfigUtil.getInstance(BaseConstants.JAUTH_URL).getProperties(BaseConstants.REDIS_IP);
 			RedisConfig.port = Integer.valueOf(LocConfigUtil.getInstance(BaseConstants.JAUTH_URL).getProperties(BaseConstants.REDIS_PORT));
+			RedisConfig.password = LocConfigUtil.getInstance(BaseConstants.JAUTH_URL).getProperties(BaseConstants.REDIS_PASSWORD);
+			
+			//LocCacheBase.getInstance().init();
 		} catch (Exception e) {
-			e.printStackTrace();
+			LogUtil.error(e);
 		}
 		
 		 
@@ -73,11 +78,15 @@ public class RedisConfig extends CachingConfigurerSupport{
 		// 在borrow一个jedis实例时，是否提前进行validate操作；如果为true，则得到的jedis实例均是可用的；
 		poolConfig.setTestOnBorrow(true);
         
+		
+		
 		JedisConnectionFactory jedisConnectionFactory = new JedisConnectionFactory(poolConfig);  
         jedisConnectionFactory.setHostName(host);  
         jedisConnectionFactory.setPort(port);  
         
-        
+        if(StringUtil.isNotEmpty(password)){
+        	jedisConnectionFactory.setPassword(password);
+        }
         return jedisConnectionFactory;
     }
     

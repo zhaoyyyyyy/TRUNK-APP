@@ -164,10 +164,10 @@ public class LogUtil {
         		token = AuthUtils.getTokenByRequest(request);
             	userId = AuthUtils.getUserByToken(token).getUserName();
         	} catch (Exception e) {
-        		  StackTraceElement ste = getClassName();
-        	      String className = ste.getClassName();
-        	      Logger log = getLogger(className);
-        	      log.info("系统调用无法获取用户信息",e);
+//        		  StackTraceElement ste = getClassName();
+//        	      String className = ste.getClassName();
+//        	      Logger log = getLogger(className);
+//        	      log.info("系统调用无法获取用户信息",e);
 			}
         	
         	
