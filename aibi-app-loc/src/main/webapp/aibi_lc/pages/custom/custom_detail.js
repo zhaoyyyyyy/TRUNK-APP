@@ -9,7 +9,12 @@ var model = {
 		dayLabelDate : "",
 		monthLabelDate : ""
 }
+
 window.loc_onload = function() {
+	debugger;
+	var labelId = $.getUrlParam("labelId");
+	console.log(labelId);
+	debugger;
 	var configId = $.getCurrentConfigId();
 	model.configId = configId;
 	$.commAjax({

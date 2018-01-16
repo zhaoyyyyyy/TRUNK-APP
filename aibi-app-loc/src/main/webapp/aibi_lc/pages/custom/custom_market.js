@@ -140,6 +140,13 @@ var labelMarket = (function (model){
         	var wd = $.window("群体用户画像", $.ctx + '/aibi_lc/pages/custom/custom_protrait.html', 1000, 700);
         };
         
+        /**
+         * 查看客户群详情
+         */
+        model.customer_detail_dialog = function(option) {
+        	var wd = $.window('客户群详情', $.ctx
+        			+ '/aibi_lc/pages/custom/custom_detail.html?labelId=' + option);
+        };
         
         /**
          * @description 获取标签体系
