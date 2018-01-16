@@ -298,4 +298,10 @@ public class LabelInfoServiceImpl extends BaseServiceImpl<LabelInfo, String> imp
 	public List<LabelInfo> selectLabelAllEffectiveInfoList(LabelInfoVo labelInfoVo) {
         return iLabelInfoDao.selectLabelAllEffectiveInfoList(labelInfoVo);
     }
+
+	@Override
+	public void syncUpdateCustomGroupInfo(LabelInfo customGroupInfo) {
+		 iLabelInfoDao.saveOrUpdate(customGroupInfo);
+	}
+	
 }

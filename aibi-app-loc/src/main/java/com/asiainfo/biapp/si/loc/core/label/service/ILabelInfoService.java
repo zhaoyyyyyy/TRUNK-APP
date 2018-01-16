@@ -132,4 +132,10 @@ public interface ILabelInfoService extends BaseService<LabelInfo, String> {
      * @throws BaseException
      */
     public List<LabelInfo> selectLabelAllEffectiveInfoList(LabelInfoVo labelInfoVo) throws BaseException;
+    /**
+ 	 * 同步更新客户群信息
+ 	 * @param ciCustomGroupInfo
+ 	 * @version ZJ
+ 	 */
+ 	public void syncUpdateCustomGroupInfo(LabelInfo customGroupInfo);
 }

@@ -31,6 +31,7 @@ import com.asiainfo.biapp.si.loc.core.label.entity.LabelInfo;
 import com.asiainfo.biapp.si.loc.core.label.entity.LabelVerticalColumnRel;
 import com.asiainfo.biapp.si.loc.core.label.entity.MdaSysTableColumn;
 import com.asiainfo.biapp.si.loc.core.label.entity.NewestLabelDate;
+import com.asiainfo.biapp.si.loc.core.label.vo.NewestLabelDateVo;
 
 /**
  * LOC 缓存存取 工具类
@@ -55,7 +56,6 @@ public class LocCacheBase extends ICacheBase implements ApplicationContextAware{
 	}
 	
 	public static LocCacheBase getInstance() {
-		
 		if(instance == null) {
 			synchronized(LocCacheBase.class){
 	            if(instance == null) {
@@ -64,22 +64,16 @@ public class LocCacheBase extends ICacheBase implements ApplicationContextAware{
 	         }
 	      }
 		return instance;
-		
 	}
 	
 	public synchronized void init(){
-//		this.iLabelInfoDao= labelInfoDao;
 		this.iLabelInfoDao = (ILabelInfoDao)SpringContextHolder.getBean("labelInfoDaoImpl");
 		this.newestLabelDao = (INewestLabelDateDao)SpringContextHolder.getBean("newestLabelDateDaoImpl");
 		this.initAllLabelInfo();
 		this.initAllConfigInfo();
 		this.initAllDicData();
+		this.initCiNewestLabelDate();
 	}
-	
-//	public synchronized void refreshCache(){
-//		this.initAllLabelInfo();
-//		this.initAllConfigInfo();
-//	}
 	
 	/**
 	 * 将有效标签的相关属性类 数据刷入redis
@@ -132,15 +126,14 @@ public class LocCacheBase extends ICacheBase implements ApplicationContextAware{
 	}
 	
 	public void initCiNewestLabelDate(){
-		List<NewestLabelDate> labelDate = newestLabelDao.selectNewestLabelDateList(null);
+		List<NewestLabelDate> labelDate = newestLabelDao.selectNewestLabelDateList(new NewestLabelDateVo());
 		CopyOnWriteArrayList<NewestLabelDate> newDateList = new CopyOnWriteArrayList<NewestLabelDate>(labelDate);
-		Map<Object, Object> newDateMap = new ConcurrentHashMap<Object, Object>();
+		Map<String, Object> newDateMap = new ConcurrentHashMap<String, Object>();
 		for (NewestLabelDate newDate : newDateList) {
 			newDateMap.put(CommonConstants.NEW_DATE, newDate);
 		}
-		
 		try {
-			this.setObject(Prefix.LOC+Prefix.KV+CacheKey.TABLE_CI_NEWEST_LABEL_DATE, newDateMap);
+			this.setHashObject(Prefix.LOC+Prefix.KV+CacheKey.TABLE_CI_NEWEST_LABEL_DATE, newDateMap);
 			this.setObject(Prefix.LOC+Prefix.LIST+CacheKey.TABLE_CI_NEWEST_LABEL_DATE, newDateList);
 			this.set(Prefix.LOC+Prefix.CLAZZ+CacheKey.TABLE_CI_NEWEST_LABEL_DATE, NewestLabelDate.class.getName());
 		} catch (Exception e) {
@@ -154,10 +147,9 @@ public class LocCacheBase extends ICacheBase implements ApplicationContextAware{
 	 * @return
 	 */
 	public NewestLabelDate getNewestLabelDate() {
-		//initCiNewestLabelDate();
 		NewestLabelDate labelDate = null;
 		try {
-			labelDate = (NewestLabelDate)this.getObjectMap(CacheKey.TABLE_CI_NEWEST_LABEL_DATE, CommonConstants.NEW_DATE);
+			labelDate = (NewestLabelDate)this.getObjectMap2(CacheKey.TABLE_CI_NEWEST_LABEL_DATE, CommonConstants.NEW_DATE);
 		} catch (Exception e) {
 			log.error(e.getMessage(),e);
 		}
