@@ -188,7 +188,12 @@ public class SourceTableInfoServiceImpl extends BaseServiceImpl<SourceTableInfo,
         }
 
         SourceTableInfo oldSou = selectSourceTableInfoById(sourceTableInfo.getSourceTableId());
-
+        SourceTableInfoVo sourceTableInfoVo = new SourceTableInfoVo();
+        sourceTableInfoVo.setSourceTableName(sourceTableInfo.getSourceTableName());
+        List<SourceTableInfo> sourceTableInfoList = selectSourceTableInfoList(sourceTableInfoVo);
+        if (!sourceTableInfoList.isEmpty() && StringUtil.isNotBlank(sourceTableInfoVo.getSourceTableName())&&!oldSou.getSourceTableName().equals(sourceTableInfo.getSourceTableName())) {
+            throw new ParamRequiredException("表名称已存在");
+        }
         // 保存指标源表
         super.saveOrUpdate(fromToBean(sourceTableInfo, oldSou));
 

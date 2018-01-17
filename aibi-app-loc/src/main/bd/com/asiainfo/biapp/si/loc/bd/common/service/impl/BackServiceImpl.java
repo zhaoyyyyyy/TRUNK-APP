@@ -20,6 +20,7 @@ import com.asiainfo.biapp.si.loc.cache.CocCacheProxy;
 public class BackServiceImpl implements IBackSqlService{
 
     private static final String REGEX_BEVEL = "/";
+    private static final String REGEX_INTERRO = "?";
     
     /** 缓冲当前的schema */
     private static String SYS_BGDB_SCHEMA = null;
@@ -33,6 +34,9 @@ public class BackServiceImpl implements IBackSqlService{
         String schema = null;
         if (null == SYS_BGDB_SCHEMA) {
             String url = CocCacheProxy.getCacheProxy().getSYSConfigInfoByKey(BaseConstants.SYS_BGDB_URL);
+            if (url.contains(REGEX_INTERRO)) { //去掉[?]
+                url = new StringBuilder(url).delete(url.indexOf(REGEX_INTERRO) ,url.length()).toString();
+            }
             if (url.endsWith(REGEX_BEVEL)) { //去掉末尾[/]
                 url = new StringBuilder(url).deleteCharAt(url.length() - 1).toString();
             }
@@ -50,7 +54,7 @@ public class BackServiceImpl implements IBackSqlService{
      * @return
      */
     private IBackSqlDao getBackDaoBean() {
-    	String dbType = "Hive";
+    	String dbType = "Mysql";
     	String backDaoBeanId = "back"+dbType+"DaoImpl";
     	IBackSqlDao backSqlDao = (IBackSqlDao)SpringContextHolder.getBean(backDaoBeanId);
         return backSqlDao;

@@ -91,6 +91,10 @@ public class PreConfigInfoServiceImpl extends BaseServiceImpl<PreConfigInfo, Str
     }
 
     public void addPreConfigInfo(PreConfigInfo preConfigInfo) throws BaseException {
+        PreConfigInfo rePre = selectOneBySourceName(preConfigInfo.getSourceName());
+        if (null != rePre) {
+            throw new ParamRequiredException("专区名称已存在");
+        }
         preConfigInfo.setCreateTime(new Date());
         preConfigInfo.setConfigStatus(0);
         super.saveOrUpdate(preConfigInfo);
@@ -100,6 +104,10 @@ public class PreConfigInfoServiceImpl extends BaseServiceImpl<PreConfigInfo, Str
     public void modifyPreConfigInfo(PreConfigInfo preConfigInfo) throws BaseException {
         PreConfigInfo oldPre;
         oldPre = selectPreConfigInfoById(preConfigInfo.getConfigId());
+        PreConfigInfo rePre = selectOneBySourceName(preConfigInfo.getSourceName());
+        if (null != rePre && !oldPre.getSourceName().equals(preConfigInfo.getSourceName())) {
+            throw new ParamRequiredException("专区名称已存在");
+        }
         super.saveOrUpdate(fromToBean(preConfigInfo, oldPre));
     }
 

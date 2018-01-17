@@ -70,6 +70,7 @@ window.loc_onload = function() {
 		url : $.ctx + '/api/user/get',
 		onSuccess : function(data) {
 			if(data.data.orgPrivaliege != null && data.data.orgPrivaliege != undefined){
+				debugger;
 				var orgobj = data.data.orgPrivaliege;
 				for(var i=0; i<4; i++){
 					if(orgobj[i]==undefined){

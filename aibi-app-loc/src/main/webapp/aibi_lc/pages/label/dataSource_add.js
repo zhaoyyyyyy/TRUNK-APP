@@ -229,7 +229,7 @@ function fun_to_save() {
 				
 				if(data.data != null){
 					for(var u=0;u < data.data.length;u++){
-						colnames.push(data.data[u].col_name);
+						colnames.push(data.data[u].COLUMN_NAME);
 					}
 				}
 			}
@@ -310,14 +310,16 @@ function fun_to_save() {
 	}
 }
 function analysis(){
+	var tableName = "";
 	if(!$("#sourceTableName").val()){
 		$.alert("请输入表名");
 		return false;
-	}else if(!$("#tableSchema").val()){
-		$.alert("请输入SCHEMA");
-		return false;
 	}
-	var tableName = $("#tableSchema").val()+"."+$("#sourceTableName").val();
+	if(!$("#tableSchema").val()){
+		tableName = $("#tableSchema").val()+"."+$("#sourceTableName").val();
+	}else{
+		tableName = $("#sourceTableName").val();
+	}
 	$.commAjax({
 		url:$.ctx + "/backSql/columns",
 		postData:{"tableName" : tableName},
@@ -337,19 +339,19 @@ function analysis(){
 				exitColnames.push(list[num].columnName);
 			}
 			for(var i=0;i < data.data.length;i++){
-				if(isInArray(exitColnames, data.data[i].col_name)){//判断当前行是否已存在
+				if(isInArray(exitColnames, data.data[i].COLUMN_NAME)){//判断当前行是否已存在
 					continue;
 				}else{
-					if(data.data[i].data_type == "string"){
-						data.data[i].data_type = "2";
-					}else if(data.data[i].data_type == "integer"){
-						data.data[i].data_type = "1";
+					if(data.data[i].DATA_TYPE == "string"){
+						data.data[i].DATA_TYPE = "2";
+					}else if(data.data[i].DATA_TYPE == "integer"){
+						data.data[i].DATA_TYPE = "1";
 					}
 					var dataRow = {
-						"columnName" : data.data[i].col_name,
-						"cooColumnType" : data.data[i].data_type,
+						"columnName" : data.data[i].COLUMN_NAME,
+						"cooColumnType" : data.data[i].DATA_TYPE,
 						"sourceName" : "",
-						"columnCaliber" : data.data[i].comment,
+						"columnCaliber" : data.data[i].COLUMN_COMMENT,
 						"sourceId" : "",
 						"op" : ""
 					}
