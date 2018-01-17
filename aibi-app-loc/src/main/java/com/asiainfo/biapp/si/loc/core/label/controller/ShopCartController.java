@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.asiainfo.biapp.si.loc.auth.model.User;
 import com.asiainfo.biapp.si.loc.base.common.LabelInfoContants;
 import com.asiainfo.biapp.si.loc.base.common.LabelRuleContants;
 import com.asiainfo.biapp.si.loc.base.controller.BaseController;
@@ -326,6 +327,7 @@ public class ShopCartController extends BaseController {
 			//不包含纵表的探索
 			String querySql = exploreServiceImpl.getCountSqlStr(labelRules, queryParam);
 			sql.append("select count(1) ").append(querySql);
+			LogUtil.info("querySql SQL : " + querySql);
 			backServiceImpl.queryCount(sql.toString());
 		} catch (Exception e) {
 			LogUtil.error("校验sql异常", e);
@@ -359,8 +361,8 @@ public class ShopCartController extends BaseController {
 			StringBuffer sql = new StringBuffer();
 			//不包含纵表的探索
 			String countSql = exploreServiceImpl.getCountSqlStr(labelRules, queryParam);
-			LogUtil.info("count SQL : " + countSql);
 			sql.append("select count(1) ").append(countSql);
+			LogUtil.info("countSql SQL : " + countSql);
 			//调用后台接口
 			num = backServiceImpl.queryCount(sql.toString());
 		} catch (Exception e) {
