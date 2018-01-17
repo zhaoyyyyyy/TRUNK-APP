@@ -262,7 +262,10 @@ public class LabelInfoController extends BaseController {
         LabelInfo oldLab = new LabelInfo();
         try {
             oldLab = iLabelInfoService.selectLabelInfoById(labelInfo.getLabelId());
-            LabelInfo label = iLabelInfoService.selectOneByLabelName(labelInfo.getLabelName());
+            LabelInfo label = null;
+            if (StringUtil.isNoneBlank(labelInfo.getLabelName())) {
+                label = iLabelInfoService.selectOneByLabelName(labelInfo.getLabelName());
+            } 
             if (StringUtil.isNoneBlank(labelInfo.getLabelName())&&!oldLab.getLabelName().equals(labelInfo.getLabelName())&& null!= label) {
                 throw new ParamRequiredException("标签名称重复");
             } 
@@ -274,19 +277,6 @@ public class LabelInfoController extends BaseController {
         } catch (BaseException e) {
             return webResult.fail(e);
         }
-        /*oldLab = fromToBean(labelInfo, oldLab);
-        if (StringUtil.isNotEmpty(approveStatusId)) {
-            try {
-                iLabelInfoService.updateApproveInfo(approveStatusId, oldLab);
-            } catch (BaseException e) {
-                return webResult.fail(e);
-            }
-        }
-        try {
-            iLabelInfoService.modifyLabelInfo(oldLab);
-        } catch (BaseException e1) {
-            return webResult.fail(e1);
-        }*/
         return webResult.success("修改标签信息成功", SUCCESS);
     }
     
