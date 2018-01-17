@@ -9,8 +9,11 @@ package com.asiainfo.biapp.si.loc.bd.common.dao.impl;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
+
+import javax.sql.DataSource;
 
 import org.springframework.stereotype.Repository;
 
@@ -119,6 +122,12 @@ public class BackMysqlDaoImpl extends BaseBackDaoImpl implements IBackSqlDao{
         }
 		return null;
 	}
+	
+	@Override
+	public Connection getBackConnection() throws SQLException {
+		DataSource dataSource = this.getDataSourceBuilder("com.mysql.jdbc.Driver","jdbc:mysql://10.1.245.175:3306/cocdev?characterEncoding=utf8&useSSL=true","cocdev","cocdev").build();
+        return dataSource.getConnection();
+	}
 
 	@Override
 	public Integer queryCount(String selectSql) throws SqlRunException {
@@ -133,7 +142,7 @@ public class BackMysqlDaoImpl extends BaseBackDaoImpl implements IBackSqlDao{
                 rows = rs.getInt(1);
             }
         }catch (Exception e){
-            throw new SqlRunException("操作后台库出错");
+            throw new SqlRunException("操作后台库出错:"+e.getMessage());
         }
         
         return rows;
