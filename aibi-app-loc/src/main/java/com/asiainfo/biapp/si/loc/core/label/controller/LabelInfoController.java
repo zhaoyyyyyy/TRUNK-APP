@@ -22,6 +22,7 @@ import com.asiainfo.biapp.si.loc.auth.model.User;
 import com.asiainfo.biapp.si.loc.base.common.LabelRuleContants;
 import com.asiainfo.biapp.si.loc.base.controller.BaseController;
 import com.asiainfo.biapp.si.loc.base.exception.BaseException;
+import com.asiainfo.biapp.si.loc.base.exception.ParamRequiredException;
 import com.asiainfo.biapp.si.loc.base.page.Page;
 import com.asiainfo.biapp.si.loc.base.utils.JsonUtil;
 import com.asiainfo.biapp.si.loc.base.utils.LogUtil;
@@ -261,6 +262,10 @@ public class LabelInfoController extends BaseController {
         LabelInfo oldLab = new LabelInfo();
         try {
             oldLab = iLabelInfoService.selectLabelInfoById(labelInfo.getLabelId());
+            LabelInfo label = iLabelInfoService.selectOneByLabelName(labelInfo.getLabelName());
+            if (StringUtil.isNoneBlank(labelInfo.getLabelName())&&!oldLab.getLabelName().equals(labelInfo.getLabelName())&& null!= label) {
+                throw new ParamRequiredException("标签名称重复");
+            } 
             oldLab = fromToBean(labelInfo, oldLab);
             if (StringUtil.isNotEmpty(approveStatusId)) {
                 oldLab = iLabelInfoService.updateApproveInfo(approveStatusId, oldLab);
