@@ -13,6 +13,7 @@ var model={
 		dependIndex : "",
 		sourceName : "",
 		countRules : "",
+		unit : "",
 		sourceNameList : []
 }
 window.loc_onload = function() {
@@ -38,15 +39,15 @@ window.loc_onload = function() {
 			model.updateCycle = $.getCodeDesc("GXZQZD",data.data.updateCycle);
 			model.isRegular = $.getCodeDesc("SFZD",data.data.isRegular);
 			var labelId = data.data.labelId;
-			if(model.labelTypeId=="枚举型"){
-				$.commAjax({
-					ansyc : false,
-					url : $.ctx + '/api/label/mdaSysTableCol/queryList',
-					postData : {
-						"labelId" : labelId
-					},
-					onSuccess : function(data2){
-						var list = data2.data;
+			$.commAjax({
+				url : $.ctx + '/api/label/mdaSysTableCol/queryList',
+				postData : {
+					"labelId" : labelId
+				},
+				onSuccess : function(data2){
+					var list = data2.data;
+					model.unit = list[0].unit;
+					if(model.labelTypeId=="枚举型"){	
 						model.dataType = list[0].dataType;
 						var dimId = list[0].dimTransId;
 						$.commAjax({
@@ -59,9 +60,9 @@ window.loc_onload = function() {
 						    	model.dimTableName = data3.data.dimTableName;
 						    }
 						});
-					}
-				});
-			}
+					}	
+				}
+			});	
 			var categoryId = data.data.categoryId;
 			$.commAjax({
 				url : $.ctx + '/api/label/categoryInfo/get',
@@ -74,7 +75,7 @@ window.loc_onload = function() {
 			});
 			var countRulesCode = data.data.countRulesCode;
 			$.commAjax({
-				ansyc : false,
+//				ansyc : false,
 				url : $.ctx + '/api/label/labelCountRules/get',
 				postData : {
 					"countRulesCode" : countRulesCode
