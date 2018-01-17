@@ -216,12 +216,12 @@ public class LabelInfoServiceImpl extends BaseServiceImpl<LabelInfo, String> imp
         mdaSysTableColumn.setColumnName(labelInfo.getLabelId());
         mdaSysTableColumn.setColumnCnName(labelInfo.getLabelName());
         if (labelInfo.getDimId()!=null) {
-            DimTableInfo dimTable = iDimTableInfoService.selectDimTableInfoById(mdaSysTableColumn.getDimTransId());
+            DimTableInfo dimTable = iDimTableInfoService.selectDimTableInfoById(labelInfo.getDimId());
             mdaSysTableColumn.setDimTransId(labelInfo.getDimId());
             mdaSysTableColumn.setDataType(labelInfo.getDataType());
             int columnDataTypeId = Integer.parseInt(dimTable.getCodeColType());
             mdaSysTableColumn.setColumnDataTypeId(columnDataTypeId);
-        }else{
+        }else if(StringUtil.isNotBlank(labelInfo.getDependIndex())&&labelInfo.getDimId()==null){
             mdaSysTableColumn.setDimTransId(null);
             mdaSysTableColumn.setDataType(null);
             mdaSysTableColumn.setColumnDataTypeId(null);
