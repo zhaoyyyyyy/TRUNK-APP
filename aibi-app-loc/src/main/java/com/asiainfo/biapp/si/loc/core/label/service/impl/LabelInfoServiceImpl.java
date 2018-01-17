@@ -90,10 +90,13 @@ public class LabelInfoServiceImpl extends BaseServiceImpl<LabelInfo, String> imp
     private IMdaSysTableDao iMdaSysTableDao;
     
     @Autowired
-    private IDimTableInfoDao iDimTableInfoDao;
+    private IDimTableInfoDao iDimTableInfoDao;  
     
     @Autowired 
     private IApproveInfoService iApproveInfoService;
+    
+    @Autowired 
+    private ILabelInfoService iLabelInfoService;
     
     @Autowired 
     private ILabelCountRulesService iLabelCountRulesService;
@@ -135,7 +138,12 @@ public class LabelInfoServiceImpl extends BaseServiceImpl<LabelInfo, String> imp
         return super.get(labelId);
     }
 
-    public void addLabelInfo(LabelInfo labelInfo) throws BaseException {
+    public void addLabelInfo(LabelInfo labelInfo) throws BaseException { 
+        LabelInfo label = new LabelInfo();
+        label = iLabelInfoService.selectOneByLabelName(labelInfo.getLabelName());
+        if (null !=label) {
+            throw new ParamRequiredException("标签名称重复");
+        }
         //封装标签规则维表信息
         LabelCountRules labelCountRules = new LabelCountRules();
         labelCountRules.setDependIndex(labelInfo.getDependIndex());

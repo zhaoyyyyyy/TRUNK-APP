@@ -192,7 +192,7 @@ public class LabelInfoController extends BaseController {
     @RequestMapping(value = "/labelInfo/save", method = RequestMethod.POST)
     public WebResult<String> save(@ApiIgnore LabelInfo labelInfo){
         WebResult<String> webResult = new WebResult<>();
-        LabelInfo label = new LabelInfo();
+        /*LabelInfo label = new LabelInfo();
         try {
             label = iLabelInfoService.selectOneByLabelName(labelInfo.getLabelName());
         } catch (BaseException e1) {
@@ -200,15 +200,11 @@ public class LabelInfoController extends BaseController {
         }
         if (null !=label) {
             return webResult.fail("标签名称重复");
-        }
-        User user = new User();
+        }*/
+        User user = new User();  
         try {
             user = this.getLoginUser();
-        } catch (BaseException e) {
-            LOGGER.info("context", e);
-        }
-        labelInfo.setCreateUserId(user.getUserId());
-        try {
+            labelInfo.setCreateUserId(user.getUserId());
             iLabelInfoService.addLabelInfo(labelInfo);
         } catch (BaseException e) {
             return webResult.fail(e);
@@ -260,7 +256,7 @@ public class LabelInfoController extends BaseController {
                 oldLab.setApproveInfo(approveInfo);
                 oldLab.setPublishTime(new Date());
             } catch (BaseException e) {
-                e.printStackTrace();
+                return webResult.fail(e);
             }
         }
         try {

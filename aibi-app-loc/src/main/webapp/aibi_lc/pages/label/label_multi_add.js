@@ -288,6 +288,7 @@ function fun_to_save(){
 			if(k == $("form").size() && flag == "success"){	
 				$.success("创建成功",function(){
 					history.back(-1);
+//					window.location.href="label_mgr.html";
 				})
 			}
 			k++;

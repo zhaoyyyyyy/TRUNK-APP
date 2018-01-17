@@ -122,7 +122,7 @@ window.loc_onload = function(){
 	            		var html = '';
 	            		if(data.dataStatusId !=6){
 	            			if(data.approveInfo.approveStatusId==1){
-	            			    html+= '<button onclick="fun_to_publish(\''+data.labelId+'\')" type="button" class="btn btn-default  ui-table-btn ui-table-btn" >标签审批发布</button>';
+	            			    html+= '<button onclick="fun_to_publish(\''+data.labelId+'\')" type="button" class="btn btn-default  ui-table-btn ui-table-btn" >审批并发布</button>';
 	            		    }
 	            		    if(data.dataStatusId==2){
 	            			    html+= '<button onclick="fun_to_over(\''+data.labelId+'\')" type="button" class="btn btn-default  ui-table-btn ui-table-btn" >停用</button>';
