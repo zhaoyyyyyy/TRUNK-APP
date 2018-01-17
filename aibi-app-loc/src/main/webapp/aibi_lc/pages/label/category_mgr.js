@@ -268,11 +268,21 @@ window.loc_onload = function() {
 		};		
 	}
 	//标签全部选中
-	$("#selectAll").click(function(){				
-		$(".label-select-main ul li").find("input").each(function(){
-			$(this).prop("checked", true);
-			$(this).siblings("label").addClass("active");
-		})
+	$("#selectAll").click(function(){	
+		if($(this).hasClass("active")){
+			$(this).removeClass("active");
+			$(".label-select-main ul li").find("input").each(function(){
+				$(this).prop("checked", false);
+				$(this).siblings("label").removeClass("active");
+			})
+		}else{
+			$(this).addClass("active");
+			$(".label-select-main ul li").find("input").each(function(){
+				$(this).prop("checked", true);
+				$(this).siblings("label").addClass("active");
+			})
+		}
+		
 	})
 	
 	$("#labelList").delegate("input","click",function(){
