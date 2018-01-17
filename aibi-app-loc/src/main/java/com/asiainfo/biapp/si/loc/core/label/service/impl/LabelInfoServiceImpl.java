@@ -211,12 +211,20 @@ public class LabelInfoServiceImpl extends BaseServiceImpl<LabelInfo, String> imp
         
         //修改元数据表列信息
         MdaSysTableColumn mdaSysTableColumn = iMdaSysTableColService.selectMdaSysTableColBylabelId(labelInfo.getLabelId());
-        if (StringUtil.isNotBlank(labelInfo.getDimId())) {
+        MdaSysTable mdaSysTable = iMdaSysTableService.queryMdaSysTable(labelInfo.getConfigId(),labelInfo.getUpdateCycle(),1);
+        mdaSysTableColumn.setTableId(mdaSysTable.getTableId());
+        mdaSysTableColumn.setColumnName(labelInfo.getLabelId());
+        mdaSysTableColumn.setColumnCnName(labelInfo.getLabelName());
+        if (labelInfo.getLabelTypeId()==5) {
             DimTableInfo dimTable = iDimTableInfoService.selectDimTableInfoById(labelInfo.getDimId());
             mdaSysTableColumn.setDimTransId(labelInfo.getDimId());
             mdaSysTableColumn.setDataType(labelInfo.getDataType());
             int columnDataTypeId = Integer.parseInt(dimTable.getCodeColType());
             mdaSysTableColumn.setColumnDataTypeId(columnDataTypeId);
+        }else{
+            mdaSysTableColumn.setDimTransId(null);
+            mdaSysTableColumn.setDataType(null);
+            mdaSysTableColumn.setColumnDataTypeId(null);
         }
         if (StringUtil.isNotBlank(labelInfo.getUnit())) {
             mdaSysTableColumn.setUnit(labelInfo.getUnit());
@@ -243,6 +251,15 @@ public class LabelInfoServiceImpl extends BaseServiceImpl<LabelInfo, String> imp
         return iLabelInfoDao.selectOneByLabelName(labelName);
     }
 
+    public LabelInfo updateApproveInfo(String approveStatusId,LabelInfo oldLab) throws BaseException{
+        ApproveInfo approveInfo = iApproveInfoService.selectApproveInfo(oldLab.getLabelId());
+        approveInfo.setApproveStatusId(approveStatusId);
+        approveInfo.setApproveTime(new Date());
+        oldLab.setApproveInfo(approveInfo);
+        oldLab.setPublishTime(new Date());   
+        return oldLab;
+    }
+    
     @Override
     public String selectDimNameBylabelId(String labelId) throws BaseException{
         LabelInfo labelInfo = iLabelInfoDao.get(labelId);

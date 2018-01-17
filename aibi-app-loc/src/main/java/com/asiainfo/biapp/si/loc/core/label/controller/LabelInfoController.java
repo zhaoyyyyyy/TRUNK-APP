@@ -261,17 +261,18 @@ public class LabelInfoController extends BaseController {
         LabelInfo oldLab = new LabelInfo();
         try {
             oldLab = iLabelInfoService.selectLabelInfoById(labelInfo.getLabelId());
+            oldLab = fromToBean(labelInfo, oldLab);
+            if (StringUtil.isNotEmpty(approveStatusId)) {
+                oldLab = iLabelInfoService.updateApproveInfo(approveStatusId, oldLab);
+            }
+            iLabelInfoService.modifyLabelInfo(oldLab);
         } catch (BaseException e) {
             return webResult.fail(e);
         }
-        oldLab = fromToBean(labelInfo, oldLab);
+        /*oldLab = fromToBean(labelInfo, oldLab);
         if (StringUtil.isNotEmpty(approveStatusId)) {
             try {
-                ApproveInfo approveInfo = iApproveInfoService.selectApproveInfo(labelInfo.getLabelId());
-                approveInfo.setApproveStatusId(approveStatusId);
-                approveInfo.setApproveTime(new Date());
-                oldLab.setApproveInfo(approveInfo);
-                oldLab.setPublishTime(new Date());
+                iLabelInfoService.updateApproveInfo(approveStatusId, oldLab);
             } catch (BaseException e) {
                 return webResult.fail(e);
             }
@@ -280,7 +281,7 @@ public class LabelInfoController extends BaseController {
             iLabelInfoService.modifyLabelInfo(oldLab);
         } catch (BaseException e1) {
             return webResult.fail(e1);
-        }
+        }*/
         return webResult.success("修改标签信息成功", SUCCESS);
     }
     
@@ -412,6 +413,9 @@ public class LabelInfoController extends BaseController {
         }
         if (StringUtil.isNoneBlank(lab.getDimId())) {
             oldLab.setDimId(lab.getDimId());
+        }
+        if (StringUtil.isNoneBlank(lab.getDataType())) {
+            oldLab.setDataType(lab.getDataType());
         }
         if (StringUtil.isNoneBlank(lab.getUnit())) {
             oldLab.setUnit(lab.getUnit());

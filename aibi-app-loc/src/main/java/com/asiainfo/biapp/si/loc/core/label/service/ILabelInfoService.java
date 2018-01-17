@@ -126,6 +126,16 @@ public interface ILabelInfoService extends BaseService<LabelInfo, String> {
     public String selectDimNameBylabelId(String labelId) throws BaseException;
     
     /**
+     * Description:修改标签审批表信息 
+     *
+     * @param approveStatusId
+     * @param oldLab
+     * @return 
+     * @throws BaseException
+     */
+    public LabelInfo updateApproveInfo(String approveStatusId,LabelInfo oldLab) throws BaseException;
+    
+    /**
      * Description:查询标签有效状态列表
      *
      * @return
