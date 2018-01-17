@@ -20,7 +20,7 @@ $.extend({
 	commAjax	: function(options, el) {
 		options = $.extend({
 			url			: '',
-			isShowMask	: false,
+			isShowMask	: true,
 			type		: 'POST',
 			postData	: {},
 			beforeSend	: false,
