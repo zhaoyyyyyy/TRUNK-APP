@@ -228,6 +228,8 @@ public class LabelInfoServiceImpl extends BaseServiceImpl<LabelInfo, String> imp
         }
         if (StringUtil.isNotBlank(labelInfo.getUnit())) {
             mdaSysTableColumn.setUnit(labelInfo.getUnit());
+        }else {
+            mdaSysTableColumn.setUnit(null);
         }
         iMdaSysTableColService.modifyMdaSysTableColumn(mdaSysTableColumn);
     }
