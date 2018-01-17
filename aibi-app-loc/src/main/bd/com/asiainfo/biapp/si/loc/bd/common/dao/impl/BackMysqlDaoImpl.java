@@ -128,12 +128,6 @@ public class BackMysqlDaoImpl extends BaseBackDaoImpl implements IBackSqlDao{
 	}
 	
 	@Override
-	public Connection getBackConnection() throws SQLException {
-		DataSource dataSource = this.getDataSourceBuilder("com.mysql.jdbc.Driver","jdbc:mysql://10.1.245.175:3306/cocdev?characterEncoding=utf8&useSSL=true","cocdev","cocdev").build();
-        return dataSource.getConnection();
-	}
-
-	@Override
 	public Integer queryCount(String selectSql) throws SqlRunException {
 	    selectSql = selectSql.toUpperCase();
         if (!selectSql.contains("COUNT")) {
