@@ -1,5 +1,5 @@
 /*
- * @(#)ApproveInfoServiceImpl.java
+ * @(#)BackHiveDaoImpl.java
  *
  * CopyRight (c) 2017 北京亚信智慧数据科技有限公司 保留所有权利。
  */
@@ -16,20 +16,18 @@ import java.util.Map;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Repository;
 
-import com.asiainfo.biapp.si.loc.base.BaseConstants;
 import com.asiainfo.biapp.si.loc.base.common.LabelInfoContants;
 import com.asiainfo.biapp.si.loc.base.exception.SqlRunException;
 import com.asiainfo.biapp.si.loc.base.utils.LogUtil;
 import com.asiainfo.biapp.si.loc.base.utils.StringUtil;
 import com.asiainfo.biapp.si.loc.bd.common.dao.IBackSqlDao;
-import com.asiainfo.biapp.si.loc.cache.CocCacheProxy;
 
 /**
  * Title : BackHiveDaoImpl
  * <p/>
  * Description : 后台库HIVE的访问接口实现类
  * <p/>
- * CopyRight : CopyRight (c) 2017
+ * CopyRight : CopyRight (c) 2018
  * <p/>
  * Company : 北京亚信智慧数据科技有限公司
  * <p/>
@@ -50,6 +48,9 @@ public class BackHiveDaoImpl extends BaseBackDaoImpl implements IBackSqlDao{
 	private Logger log = Logger.getLogger(BackHiveDaoImpl.class);
 
 
+    public String getCurBackDbSchema() throws SqlRunException{
+        return super.getCurBackDbSchema();
+    }
 	
 	@Override
 	public List<Map<String, String>> queryTableLikeTableName(String tableName) throws SqlRunException {

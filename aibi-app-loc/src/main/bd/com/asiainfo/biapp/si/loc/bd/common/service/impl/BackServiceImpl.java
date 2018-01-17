@@ -1,3 +1,8 @@
+/*
+ * @(#)BackServiceImpl.java
+ *
+ * CopyRight (c) 2018 北京亚信智慧数据科技有限公司 保留所有权利。
+ */
 
 package com.asiainfo.biapp.si.loc.bd.common.service.impl;
 
@@ -8,22 +13,36 @@ import javax.transaction.Transactional;
 
 import org.springframework.stereotype.Service;
 
-import com.asiainfo.biapp.si.loc.base.BaseConstants;
 import com.asiainfo.biapp.si.loc.base.exception.SqlRunException;
 import com.asiainfo.biapp.si.loc.base.extend.SpringContextHolder;
 import com.asiainfo.biapp.si.loc.bd.common.dao.IBackSqlDao;
 import com.asiainfo.biapp.si.loc.bd.common.service.IBackSqlService;
-import com.asiainfo.biapp.si.loc.cache.CocCacheProxy;
+
+/**
+ * 后台库操作接口(业务层)
+ * Title : BackServiceImpl
+ * <p/>
+ * Description : 
+ * <p/>
+ * CopyRight : CopyRight (c) 2018
+ * <p/>
+ * Company : 北京亚信智慧数据科技有限公司
+ * <p/>
+ * JDK Version Used : JDK 1.8 +
+ * <p/>
+ * Modification History :
+ * <p/>
+ * <pre>NO.    Date    Modified By    Why & What is modified</pre>
+ * <pre>1    2017年12月26日    zhougz        Created</pre>
+ * <p/>
+ *
+ * @author  zhougz
+ * @version 1.0.0.2017年12月26日
+ */
 
 @Service
 @Transactional
 public class BackServiceImpl implements IBackSqlService{
-
-    private static final String REGEX_BEVEL = "/";
-    private static final String REGEX_INTERRO = "?";
-    
-    /** 缓冲当前的schema */
-    private static String SYS_BGDB_SCHEMA = null;
     
     /**
      * Description: 查询当前后台库的schema
@@ -31,22 +50,8 @@ public class BackServiceImpl implements IBackSqlService{
      * @return 查询当前后台库的schema
      */
     public String getCurBackDbSchema() throws SqlRunException{
-        String schema = null;
-        if (null == SYS_BGDB_SCHEMA) {
-            String url = CocCacheProxy.getCacheProxy().getSYSConfigInfoByKey(BaseConstants.SYS_BGDB_URL);
-            if (url.contains(REGEX_INTERRO)) { //去掉[?]
-                url = new StringBuilder(url).delete(url.indexOf(REGEX_INTERRO) ,url.length()).toString();
-            }
-            if (url.endsWith(REGEX_BEVEL)) { //去掉末尾[/]
-                url = new StringBuilder(url).deleteCharAt(url.length() - 1).toString();
-            }
-            String[] split = url.split(REGEX_BEVEL);
-            schema = split[split.length-1];
-        } else {
-            schema = SYS_BGDB_SCHEMA;
-        }
             
-        return schema;
+        return getBackDaoBean().getCurBackDbSchema();
     }
 
 	/**

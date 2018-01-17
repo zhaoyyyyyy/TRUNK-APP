@@ -1,5 +1,5 @@
 /*
- * @(#)BackGbaseDaoImpl.java
+ * @(#)BackMysqlDaoImpl.java
  *
  * CopyRight (c) 2018 北京亚信智慧数据科技有限公司 保留所有权利。
  */
@@ -36,7 +36,7 @@ import com.asiainfo.biapp.si.loc.bd.common.dao.IBackSqlDao;
  * Modification History :
  * <p/>
  * <pre>NO.    Date    Modified By    Why & What is modified</pre>
- * <pre>1    2017年12月26日    Administrator        Created</pre>
+ * <pre>1    2017年12月26日    zhougz3        Created</pre>
  * <p/>
  *
  * @author  zhougz3
@@ -45,7 +45,11 @@ import com.asiainfo.biapp.si.loc.bd.common.dao.IBackSqlDao;
 
 @Repository("backMysqlDaoImpl")
 public class BackMysqlDaoImpl extends BaseBackDaoImpl implements IBackSqlDao{
-    
+
+
+    public String getCurBackDbSchema() throws SqlRunException{
+        return super.getCurBackDbSchema();
+    }
 
 	@Override
 	public List<Map<String, String>> queryTableLikeTableName(String tableName) {
