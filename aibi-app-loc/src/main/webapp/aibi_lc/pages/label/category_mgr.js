@@ -261,6 +261,7 @@ window.loc_onload = function() {
 		};
 		//展示选中分类下的标签
 		function zTreeOnClick(event, treeId, treeNode) {
+			$("#selectAll").removeClass("active");
 			leftTreeCagyId =treeNode.categoryId;
 			$("#exampleInputAmount1").val("");
 			$("#leftCategoryName").html(treeNode.categoryName);
