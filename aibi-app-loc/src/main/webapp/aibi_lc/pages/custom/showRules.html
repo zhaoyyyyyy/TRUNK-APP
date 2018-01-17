@@ -2,14 +2,14 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>创建客户群</title>
+<title>客户群完整规则</title>
 <!--[if IE]>
     	<meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
     <![endif]-->
 	<link rel="stylesheet" theme="default" href="../../asset/css/theme/default/coc_frame.css" />
 	<link rel="stylesheet" theme="default" href="../../asset/css/theme/default/main.css" />
 	<script type="text/javascript" src="../../asset/script/common/include.js"></script>
-	<script type="text/javascript" src="custom_edit.js"></script>
+	<script type="text/javascript" src="showRules.js"></script>
 	<!--[if lt IE 9]>
 	    <script src="../../asset/script/component/h5compatibility/html5shiv.min.js"></script>
 	    <script src="../../asset/script/component/h5compatibility/respond.min.js"></script>
@@ -26,94 +26,26 @@
 		<div class="ui-reg-main" id="dataD"  v-cloak>
 			<div class="ui-lc-mian">
 				<h3>客户群信息配置</h3>
-				<form id="formData">
-					<input id="labelId" name="labelId" v-model="labelId" type="hidden" />
-					<div class="clearfix create-main mt10 dataSource-tab">
-			            <div class="form-horizontal fleft mt20 ml30">
-			            	<div class="ui-form-group ml70">
-			                    <a id="showRulesBtn" href="javascript:void(0);" class="prevBtn underLine fright" onclick="labelInfoModel.showRules()">客户群规则</a>  
-			                </div>
-			                <div class="ui-form-group ml70">
-			                    <label class="control-label" for="labelName" ><span class="input-required">*</span>客户群名称:</label>
-			                    <div class="control-input ml10">
-			                        <input type="text" id="labelName" v-model="labelInfo.labelName" 
-			                        required="true"	class="form-control easyui-validatebox" placeholder="客户群名称">
-			                    </div>
-			                </div>
-			                <div class="ui-form-group ml70">
-			                   <label class="control-label" for="tacticsId" ><span class="input-required">*</span>生成策略:</label>
-			                    <div class="control-input ml10">
-			                    	<select name="tacticsId" id="tacticsId" class="form-control easyui-validatebox" dicCode="LABELTACTICS"
-										required="true"	v-model="labelInfo.labelExtInfo.tacticsId" placeholder="请选择生成策略" onclick="labelInfoModel.changeTacticsId(this)">
-									</select>
-			                    </div>
-			                </div>
-			                <div class="ui-form-group ml70" v-if="isShowLabelMonthDiv">
-			                   <label class="control-label" for="labelMonth" ><span class="input-required">*</span>数据日期(月)</label>
-			                    <div class="control-input ml10">
-			                    	<input id="labelMonth" name="labelMonth" type="text" class="form-control input-pointer easyui-validatebox" 
-									required="true"	 placeholder="请选择数据日期（月）" v-model="labelInfo.labelMonth"/>
-			                    </div>
-			                </div>
-			                <div class="ui-form-group ml70" v-if="isShowLabelDayDiv">
-			                   <label class="control-label" for="labelDay" ><span class="input-required">*</span>数据日期(日)</label>
-			                    <div class="control-input ml10">
-			                    	<input id="labelDay" name="labelDay" type="text" class="form-control input-pointer easyui-validatebox"
-									required="true"	 data-dismiss="toDatepicker#labelDay" placeholder="请选择数据日期（日）" v-model="labelInfo.labelDay"/>
-			                    </div>
-			                </div>
-			                
-			                <div class="ui-form-group ml70">
-			                   	<label class="control-label"><span class="input-required">*</span>生成周期:</label>
-			                    <div class="control-input has-icon ml10">
-			                        <ul>
-										<li v-for="item in updateCycles" style="display: inline">
-											<div class="radio circle success">
-												<input type="radio" :id="'update_'+item.code" v-model="updateCycle" :value="item.code"  />
-												<label><i class="default"></i>{{item.dataName}}</label>
-											</div>
-										</li>
-									</ul>
-			                    </div>
-			                </div>
-			                <div class="ui-form-group ml70">
-								<label class="control-label" for="failTime"><span class="input-required">*</span>失效时间</label>
-								<div class="control-input ml10">
-									<input type="text" id="failTime" name="failTime"  required="true" class="easyui-validatebox form-control" 
-										data-dismiss="formDatepicker#failTime" placeholder="请选择失效日期" />
-								</div>
-							</div>
-			                <div class="ui-form-group ml70" v-if="isShowPrivaliegeDiv">
-			                   	<label class="control-label" for="inputEmail4"><span class="input-required">*</span>数据限制:</label>
-			                    <div class="control-input has-icon ml10">
-			                       <ul>
-										<li v-for="item in dataPrivaliegeList" style="display: inline">
-											<div class="radio circle success">
-												<input type="checkbox" v-model='checkedModelList' :value="item.id" />
-												<label>{{item.fullName}}</label>
-											</div>
-										</li>
-									</ul>
-			                    </div>
-			                </div>
-			                
-			                <div class="ui-form-group ml70">
-			                   	<label class="control-label" for="busiLegend">客户群描述:</label>
-			                    <div class="control-input ml10">
-			                         <textarea rows="4" id="busiLegend" name="busiLegend" v-model="labelInfo.busiLegend"
-                                   		class="easyui-validatebox form-control form-control-textarea" placeholder="客户群描述"></textarea>
-			                    </div>
-			                </div>
-			                
-				        </div>
-				     </div>
-				</form>
-				<div class="ui-reg-grid mt40">
-                    <div class="ui-grid-button clearfix mt20">
-                        <button type="button"  class="ui-btn ui-btn-second" onclick="window.location='../custom/label_market.html'">返回</button>
-                        <button type="button"  class="ui-btn ui-btn-default" onclick="labelInfoModel.save()" >保存</button>
-                    </div>
-	            </div>
+				<div id="ruleBox" class="" style="background:#fff;" >
+				    <div class="customer-rule-list-box" > 
+						<div class="clearfix customer-rule-list" > 
+							<ul id="customer-rules-ul" >
+			
+							</ul> 
+						</div>
+					</div>
+				    
+				    <div class="customer-rules-table-box" >
+						<table id="customer-rules-table" >
+						 <thead>
+							<tr>
+								<th width="20%" >名称</th>
+								<th width="80%" >已选条件</th>
+							</tr>
+						 </thead>
+						</table>
+					</div>
+				</div>
 			</div>
 
 		</div>
