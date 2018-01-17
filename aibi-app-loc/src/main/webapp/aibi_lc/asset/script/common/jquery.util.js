@@ -20,7 +20,7 @@ $.extend({
 	commAjax	: function(options, el) {
 		options = $.extend({
 			url			: '',
-			isShowMask	: true,
+			//isShowMask	: true,
 			type		: 'POST',
 			postData	: {},
 			beforeSend	: false,
@@ -29,7 +29,7 @@ $.extend({
 			timeout		: 1800000,
 			async		: true,
 			checkSubmitted:false,
-			maskMassage	: '数据加载中' // 等待提示信息
+			//maskMassage	: '数据加载中' // 等待提示信息
 		}, options);
 		
 		if(options.checkSubmitted){
