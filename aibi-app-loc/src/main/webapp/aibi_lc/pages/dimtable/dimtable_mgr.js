@@ -116,7 +116,7 @@ function fun_to_del(dimId) {
 	});
 }
 function fun_to_detail(dimTableName) {
-	var wd = $.window('维表详情', $.ctx
+	var wd = $.window('维值详情', $.ctx
 			+ '/aibi_lc/pages/dimtable/dimtable_detail.html?dimTableName=' + dimTableName, 900,
 			600);
 	wd.reload = function() {

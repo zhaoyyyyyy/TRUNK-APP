@@ -119,7 +119,7 @@ window.loc_onload = function() {
 	        	 	if (Ppname == null) {
 			            return;
 				    } else if (Ppname == "") {
-				            $.alert("节点名称不能为空");
+				            $.alert("标签分类名称不能为空");
 				    }else {
 				        $.commAjax({						
 							url : $.ctx + '/api/label/categoryInfo/save',
@@ -262,6 +262,8 @@ window.loc_onload = function() {
 		//展示选中分类下的标签
 		function zTreeOnClick(event, treeId, treeNode) {
 			leftTreeCagyId =treeNode.categoryId;
+			$("#exampleInputAmount1").val("");
+			$("#leftCategoryName").html(treeNode.categoryName);
 			showLabelInfo();
 		};		
 	}
@@ -394,15 +396,14 @@ window.loc_onload = function() {
 	//标签部分的模糊查询
 	$("#btn_serach1").click(function(){
 		var text =$("#exampleInputAmount1").val();
-		showLabelInfo(text);
-		/*if(labelCategory != 1){
+		if(labelCategory != 1){
 			showLabelInfo(text,1);
 		}else{
 			showLabelInfo(text);
-		}*/
+		}
 	})
 	//全部分类当前分类判断
-	/*var labelCategory; //1.当前分类     其他为全部分类
+	var labelCategory; //1.当前分类     其他为全部分类
 	function distIndex(dataId){
 		labelCategory = 0;
 		if(dataId != 0){
@@ -421,7 +422,7 @@ window.loc_onload = function() {
 				distIndex(e);
 			}
 		})
-	})*/
+	})
 	//右边树的模糊查询
 	$("#btn_serach2").click(function(){
 		$.commAjax({			
