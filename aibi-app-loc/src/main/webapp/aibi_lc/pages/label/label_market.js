@@ -538,54 +538,9 @@ var labelMarket = (function (model){
     		}else if(labelType == "11"){  //条件选择
     			
             }else if(labelType == "6"){//日期类型标签
-    			var startTime = "" ;
-    			var endTime ="" ;
-    			var leftZoneSign ="" ;
-    			var rightZoneSign = "" ;
-    			var isNeedOffset = mainObj.attr('isNeedOffset');
-    			startTime = mainObj.attr("startTime");
-    			endTime = mainObj.attr("endTime");
-    			leftZoneSign = mainObj.attr("leftZoneSign");
-    			rightZoneSign = mainObj.attr("rightZoneSign");
-    			queryWay = mainObj.attr("queryWay");
-    			exactValue = mainObj.attr("exactValue");
-    			
-    			var para = "?startTime="+startTime+"&endTime="+endTime+"&leftZoneSign="+leftZoneSign
-    						+"&rightZoneSign="+rightZoneSign+"&queryWay="+queryWay
-    						+"&exactValue="+exactValue + "&isNeedOffset=" + isNeedOffset;
-    			var ifmUrl ="${ctx}/aibi_ci/dialog/dateSettingsDialog.jsp"+para;
-    			dialogUtil.create_dialog("dateSettings", {
-    				"title" 		: name + "-条件设置",
-    				"height"		: "auto",
-    				"width" 		: 570,
-    				"frameSrc" 		: ifmUrl,
-    				"frameHeight"	: 290,
-    				"position" 		: ['center','center'] 
-    			});			
+    				
     		}else if(labelType == "7"){
-    			var darkValue = "" ;
-    			darkValue = mainObj.attr("darkValue");
-    			darkValue=encodeURIComponent(encodeURIComponent(darkValue));
-
-    			var queryWay = mainObj.attr("queryWay"); 
-    			var exactValue = mainObj.attr("exactValue"); 
-    			exactValue = encodeURIComponent(encodeURIComponent(exactValue));
     			
-    			var para = "?darkValue="+darkValue+"&exactValue="+exactValue+"&queryWay="+queryWay;
-    			var ifmUrl ="${ctx}/aibi_ci/dialog/darkValueSetDialog.jsp"+para;
-    			
-    			/* dialogUtil.create_dialog("darkValueSet", {
-    				"title" 		: name + "-条件设置",
-    				"height"		: "auto",
-    				"width" 		: 570,
-    				"frameSrc" 		: ifmUrl,
-    				"frameHeight"	: 290,
-    				"position" 		: ['center','center'] 
-    			}); */
-    			$(dialogId).dialog("option","title", name+"-条件设置");
-    			var ifmUrl ="${ctx}/aibi_ci/dialog/darkValueSetDialog.jsp"+para;
-    			$("#darkValueSetFrame").attr("src", ifmUrl).load(function(){ });
-    			$(dialogId).dialog("open");
     			
     		} else {
     			//showAlert("计算元素类型错误！", "failed");
@@ -694,6 +649,11 @@ var labelMarket = (function (model){
 		 * 校验
 		 */
 		model.validateForm  = function(){
+			//判断是否存在规则
+			if($('#sortable').children().length <1){
+				$.alert("没有规则无法计算！");
+				return false;
+			}
 			if(model.validateEnumCount() == false){
 				$.alert("配置的条件中值超过"+dataModel._EnumCount+"个，无法计算，可以保存客户群后查看客户数！");
 				return false;
@@ -744,8 +704,9 @@ var labelMarket = (function (model){
 		};
 		/**
 		 * sql验证
+		 * dataPrivaliege : 逗号分隔
 		 */
-		model.validateSql = function(labelMonth,labelDay){
+		model.validateSql = function(labelMonth,labelDay,dataPrivaliege){
 			var flag = false;				
 			//验证sql
 			var actionUrl = $.ctx + '/api/shopCart/validateSql';
@@ -754,7 +715,8 @@ var labelMarket = (function (model){
 				  async	: false,//同步
 				  postData:{
 					  "monthLabelDate":labelMonth,
-					  "dayLabelDate":labelDay
+					  "dayLabelDate":labelDay,
+					  "dataPrivaliege" : dataPrivaliege
 				  },
 				  onSuccess: function(returnObj){
 					  	var status = returnObj.status;
@@ -784,14 +746,14 @@ var labelMarket = (function (model){
 						  	var status = returnObj.status;
 						  	var result = returnObj.data;
 							if (status == '200'){
-								model.existMonthLabel = result.existMonthLabel;
-								model.existDayLabel = result.existDayLabel;
-								model.labelMonth = result.monthDate;
-								model.labelDay = result.dayDate;
-								if(!model.existMonthLabel && !model.existDayLabel){//不含标签时直接探索
+								dataModel.existMonthLabel = result.existMonthLabel;
+								dataModel.existDayLabel = result.existDayLabel;
+								dataModel.labelMonth = result.monthDate;
+								dataModel.labelDay = result.dayDate;
+								if(!dataModel.existMonthLabel && !dataModel.existDayLabel){//不含标签时直接探索
 									//验证sql
-									if(model.validateSql(model.labelMonth.replace(/-/g,""),model.labelDay.replace(/-/g,""))){
-										model.submitForExplore(model.labelMonth.replace(/-/g,""),model.labelDay.replace(/-/g,""));
+									if(model.validateSql(dataModel.labelMonth.replace(/-/g,""),dataModel.labelDay.replace(/-/g,""))){
+										model.submitForExplore(dataModel.labelMonth.replace(/-/g,""),dataModel.labelDay.replace(/-/g,""));
 									}
 									existLabel = false;
 								}
@@ -814,12 +776,13 @@ var labelMarket = (function (model){
 		/**
 		 * 提交探索
 		 */
-		model.submitForExplore = function(labelMonth,labelDay){
+		model.submitForExplore = function(labelMonth,labelDay,dataPrivaliege){
 			var actionUrl = "";
 			var param = {
 				"dataDate":labelMonth,
 				"monthLabelDate":labelMonth,
-				"dayLabelDate":labelDay
+				"dayLabelDate":labelDay,
+				"dataPrivaliege":dataPrivaliege
 			};
 			$.commAjax({
 				  url: $.ctx + "/api/shopCart/explore",
@@ -838,6 +801,32 @@ var labelMarket = (function (model){
 		 * 进入客户群编辑界面
 		 */
 		model.gotoSaveCustomer = function(e){
+			//修改客户群不验证数据是否存在
+			if(model.validateForm()){
+				var existLabel = true;
+				//只有清单时,不弹出对话框,直接探索
+				$.commAjax({
+					  url: $.ctx + "/api/shopCart/findEaliestDataDate",
+					  async	: false,//同步
+					  onSuccess: function(returnObj){
+						  	var status = returnObj.status;
+						  	var result = returnObj.data;
+							if (status == '200'){
+								dataModel.labelMonth = result.monthDate;
+								dataModel.labelDay = result.dayDate;
+							}else{
+								existLabel = false;
+							}
+					  }
+				});
+				if(!existLabel){
+					return false;
+				}
+				if(model.validateSql(dataModel.labelMonth.replace(/-/g,""),dataModel.labelDay.replace(/-/g,""))){
+					window.location='../custom/custom_edit.html?from=labelmarket';
+				}
+				
+			}
 			
 		};
         /**
