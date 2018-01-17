@@ -43,16 +43,18 @@ public class BaseConstants {
 
 	
 	/**
-	 * 后台数据库类型：MYSQL、TERA、GBASE、GBASE、sparksql、vertica、gaussmpp
+	 * 后台数据库类型：MYSQL、ADS、TERA、GBASE、GBASE、HIVE、vertica、gaussmpp
 	 */
     /** MYSQL */
     public static final String DBMS_MYSQL = "MYSQL";
+    /** ADS */
+    public static final String DBMS_ADS = "ADS";
     /** TERA */
     public static final String DBMS_TERA = "TERA";
     /** GBASE */
     public static final String DBMS_GBASE = "GBASE";
-    /** sparksql */
-    public static final String DBMS_SPARKSQL = "SPARKSQL";
+    /** HIVE(sparksql) */
+    public static final String DBMS_SPARKSQL = "HIVE";
     /** vertica */
     public static final String DBMS_VERTICA = "VERTICA";
     /** gaussmpp */
