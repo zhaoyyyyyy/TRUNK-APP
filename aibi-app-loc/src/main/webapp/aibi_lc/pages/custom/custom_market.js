@@ -141,14 +141,6 @@ var labelMarket = (function (model){
         };
         
         /**
-         * 查看客户群详情
-         */
-        model.customer_detail_dialog = function(option) {
-        	var wd = $.window('客户群详情', $.ctx
-        			+ '/aibi_lc/pages/custom/custom_detail.html?labelId=' + option);
-        };
-        
-        /**
          * @description 获取标签体系
          * @param  option
          * @return  

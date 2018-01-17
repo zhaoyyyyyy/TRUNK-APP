@@ -6,18 +6,12 @@
     <!--[if IE]>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
     <![endif]-->
-
-    <link href="../../asset/css/common/reset.css" rel="stylesheet"  />
-    <link href="../../asset/css/jQueryUI/jquery-ui-1.12.1.min.css" rel="stylesheet"  />
-    <link href="../../asset/css/theme/default/page.css" rel="stylesheet"  />
-    <link href="../../asset/css/theme/default/dialog.owner.css" rel="stylesheet"  />
-    <link href="../../asset/css/theme/default/button.css" rel="stylesheet"  />
-    <link href="../../asset/css/theme/default/form.css" rel="stylesheet"  />
-    <link href="../../asset/css/theme/default/tab.css" rel="stylesheet"  />
-    <link href="../../asset/css/theme/default/coc_frame.css" rel="stylesheet"  />
-    <link href="../../asset/css/theme/default/main.css" rel="stylesheet"  />
-    <script type="text/javascript" src="../../asset/script/component/jquery-1.12.4.js"></script>
-    <script type="text/javascript" src="../../asset/script/component/jQueryUI/jquery-ui-1.12.1.min.js"></script>
+    <link rel="stylesheet" theme="default"
+	href="../../asset/css/theme/default/coc_frame.css" />
+<link rel="stylesheet" theme="default"
+	href="../../asset/css/theme/default/main.css" />
+<script type="text/javascript"
+	src="../../asset/script/common/include.js"></script>
     <script type="text/javascript" src="custom_detail.js"></script>
     <!--
         H5兼容js CSS3 兼容JS
@@ -31,12 +25,12 @@
 <body>
 
 <!-- 计算中心弹框 -->
-<div class="iframe-nest">
+<div id="dataD" class="iframe-nest">
 	<div class="ui-lc-mian">
 		<h3>客户群基本信息</h3>
 		<div class="ui-custom-info">
 			<h3 class="clearfix">
-				<span class="fleft">三里屯附近用户</span>
+				<span class="fleft">{{model.labelName}}</span>
 				<span class="fright">39651</span>
 			</h3>
 			<div class="ui-custom-item clearfix">
@@ -57,7 +51,7 @@
 					</a>
 				</div>
 				<span class="ui-label-date fright">
-					2017.10.10
+					{{model.dataDate}}
 				</span>
 			</div>
 		</div>
@@ -84,7 +78,7 @@
 				<h3>标签体系</h3>
 				<div class="ui-custom-mes">
 					<p>基本信息</p>
-					<span class="ml20">个人基本信息</span>
+					<span class="ml20" id="basicInformation"></span>
 					<p>非基本信息</p>
 					<span class="ml20">个人基本信息</span>
 				</div>
@@ -92,9 +86,7 @@
 				<div class="ui-custom-col fleft">
 					<h3>可选标签</h3>
 					<div class="ui-custom-mes">
-						<ul>
-							<li><a href="">籍贯</a></li>
-							<li><a href="">性别</a></li>
+						<ul id="OptionalLabel">
 						</ul>
 					</div>
 				</div>
@@ -124,11 +116,11 @@
                 </div>
 	            <div class="radio circle success"> 
 				   <input type="radio" name="radio19" id="myr3" checked="checked"> 
-				   <label for="myr3"><i class="default"></i> 不带属性</label>
+				   <label for="myr3"><i class="default"></i> 升序</label>
 				</div>
 			    <div class="radio circle success">
 				   <input type="radio" name="radio19"  id="myr4"> 
-				   <label  for="myr4"><i class="default"></i> 带属性</label>
+				   <label  for="myr4"><i class="default"></i> 降序</label>
 				</div>
 				<button type="button" class="ui-btn ui-btn-second ml30">添加</button>
 			</div>
