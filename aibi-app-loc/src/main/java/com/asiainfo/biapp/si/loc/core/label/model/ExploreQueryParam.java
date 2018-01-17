@@ -41,6 +41,9 @@ public class ExploreQueryParam {
 	private Integer updateCycle;//客户群周期性
 	private boolean isValidate;//是否生成校验sql
 
+	/**数据权限 20180117 */
+	private String orgId;
+	
 	public ExploreQueryParam() {
 		super();
 	}
@@ -122,6 +125,14 @@ public class ExploreQueryParam {
 
 	public void setValidate(boolean isValidate) {
 		this.isValidate = isValidate;
+	}
+
+	public String getOrgId() {
+		return orgId;
+	}
+
+	public void setOrgId(String orgId) {
+		this.orgId = orgId;
 	}
 
 }

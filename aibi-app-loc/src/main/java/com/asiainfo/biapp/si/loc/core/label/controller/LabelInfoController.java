@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.asiainfo.biapp.si.loc.auth.model.User;
-import com.asiainfo.biapp.si.loc.base.common.LabelInfoContants;
 import com.asiainfo.biapp.si.loc.base.common.LabelRuleContants;
 import com.asiainfo.biapp.si.loc.base.controller.BaseController;
 import com.asiainfo.biapp.si.loc.base.exception.BaseException;
@@ -33,6 +32,7 @@ import com.asiainfo.biapp.si.loc.core.label.entity.LabelExtInfo;
 import com.asiainfo.biapp.si.loc.core.label.entity.LabelInfo;
 import com.asiainfo.biapp.si.loc.core.label.service.IApproveInfoService;
 import com.asiainfo.biapp.si.loc.core.label.service.ILabelInfoService;
+import com.asiainfo.biapp.si.loc.core.label.service.ILabelRuleService;
 import com.asiainfo.biapp.si.loc.core.label.vo.LabelInfoVo;
 import com.asiainfo.biapp.si.loc.core.label.vo.LabelRuleVo;
 
@@ -80,16 +80,33 @@ public class LabelInfoController extends BaseController {
     @Autowired 
     private IApproveInfoService iApproveInfoService;
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(LabelInfoController.class);
-
+    @Autowired
+	private ILabelRuleService ruleService;
+    
     private static final String SUCCESS = "success";
-
+    
+    @ApiOperation(value = "查询客户群规则")
+    @ApiImplicitParams({
+        @ApiImplicitParam(name = "customGroupId", value = "客户群ID", required = true, paramType = "query", dataType = "string") })
+    @RequestMapping(value = "/labelInfo/findCustomRuleById", method = RequestMethod.POST)
+    public WebResult<List<LabelRuleVo>> findCustomRuleById(String customGroupId) {
+        WebResult<List<LabelRuleVo>> webResult = new WebResult<>();
+        List<LabelRuleVo> ruleList = new ArrayList<>();
+        String msg="查询客户群规则失败！";
+        try {
+        	 ruleList = ruleService.queryCiLabelRuleList(customGroupId, LabelRuleContants.LABEL_RULE_FROM_COSTOMER);
+        } catch (Exception e) {
+            return webResult.fail(msg);
+        }
+        return webResult.success("查询客户群规则成功", ruleList);
+    }
+    
     
 	@ApiOperation(value = "保存客户群型标签")
 	@ApiImplicitParams({
 		    @ApiImplicitParam(name = "labelName", value = "客户群名称", required = true, paramType = "query", dataType = "string"),
             @ApiImplicitParam(name = "updateCycle", value = "更新周期", required = true, paramType = "query", dataType = "int"),
-            @ApiImplicitParam(name = "orgId", value = "数据限制", required = true, paramType = "query", dataType = "string"),
+            @ApiImplicitParam(name = "orgId", value = "数据范围", required = true, paramType = "query", dataType = "string"),
             @ApiImplicitParam(name = "tacticsId", value = "策略ID", required = true, paramType = "query", dataType = "string"),
             @ApiImplicitParam(name = "busiLegend", value = "客户群描述", required = true, paramType = "query", dataType = "string"),
             @ApiImplicitParam(name = "configId", value = "专区ID", required = false, paramType = "query", dataType = "string"),

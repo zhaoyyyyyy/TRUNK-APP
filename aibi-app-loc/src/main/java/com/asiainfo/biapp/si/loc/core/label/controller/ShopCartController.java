@@ -187,16 +187,15 @@ public class ShopCartController extends BaseController {
 	public WebResult<String> findLabelValidate( String labelId) {
 		WebResult<String> webResult = new WebResult<>();
 		boolean success = true;
-		String msg = "";
+		String msg = "抱歉，该标签数据未准备好，不能添加到收纳篮！";
 		try {
 			LabelInfo ciLabelInfo = CocCacheProxy.getCacheProxy().getLabelInfoById(labelId);
 			if (StringUtil.isEmpty(ciLabelInfo.getDataDate())) {
 				success = false;
-				msg = "抱歉，该标签数据未准备好，不能添加到收纳篮！";
 			}
 		} catch (Exception e) {
 			LogUtil.error("校验标签异常", e);
-			return webResult.fail(e.getMessage());
+			return webResult.fail(msg);
 		}
 		if (success) {
 			return webResult.success("查询标签是否能够加入到购物车成功", SUCCESS);
@@ -221,13 +220,12 @@ public class ShopCartController extends BaseController {
 	public WebResult<String> saveShopSession( String calculationsId, String typeId) {
 		WebResult<String> webResult = new WebResult<>();
 		boolean success = true;
-		String msg = "";
+		String msg = "抱歉，该标签数据未准备好，不能添加到收纳篮！";
 		try {
 			if (LabelRuleContants.LABEL_INFO_CALCULATIONS_TYPEID.equals(typeId)) {
 				LabelInfo ciLabelInfo = CocCacheProxy.getCacheProxy().getLabelInfoById(calculationsId);
 				if (StringUtil.isEmpty(ciLabelInfo.getDataDate())) {
 					success = false;
-					msg = "抱歉，该标签数据未准备好，不能添加到收纳篮！";
 				}
 				// 校验完之后的操作
 				if (success) {
@@ -251,7 +249,7 @@ public class ShopCartController extends BaseController {
 
 		} catch (Exception e) {
 			LogUtil.error("添加(规则)到购物车异常", e);
-			return webResult.fail(e.getMessage());
+			return webResult.fail(msg);
 		}
 		if (success) {
 			return webResult.success("加入购物车成功", SUCCESS);
@@ -314,13 +312,15 @@ public class ShopCartController extends BaseController {
 	@ApiImplicitParams({
 			@ApiImplicitParam(name = "dataDate", value = "日期", required = true, paramType = "query", dataType = "string"),
 			@ApiImplicitParam(name = "dayLabelDate", value = "数据日期(日)", required = true, paramType = "query", dataType = "string"),
-			@ApiImplicitParam(name = "monthLabelDate", value = "数据日期(月)", required = true, paramType = "query", dataType = "string") })
+			@ApiImplicitParam(name = "monthLabelDate", value = "数据日期(月)", required = true, paramType = "query", dataType = "string"),
+			@ApiImplicitParam(name = "orgId", value = "数据范围", required = true, paramType = "query", dataType = "string")})
 	@RequestMapping(value = "/validateSql", method = RequestMethod.POST)
 	public WebResult<String> validateSql(String dataDate, String dayLabelDate,
-			String monthLabelDate) {
+			String monthLabelDate,String orgId) {
 		WebResult<String> webResult = new WebResult<>();
 		List<LabelRuleVo> labelRules = getSessionLabelRuleList();
 		ExploreQueryParam queryParam = new ExploreQueryParam(dataDate, monthLabelDate, dayLabelDate);
+		queryParam.setOrgId(orgId);
 		StringBuffer sql = new StringBuffer();
 		try {
 			//不包含纵表的探索
@@ -346,18 +346,21 @@ public class ShopCartController extends BaseController {
 	@ApiImplicitParams({
 			@ApiImplicitParam(name = "dataDate", value = "日期", required = true, paramType = "query", dataType = "string"),
 			@ApiImplicitParam(name = "dayLabelDate", value = "数据日期(日)", required = true, paramType = "query", dataType = "string"),
-			@ApiImplicitParam(name = "monthLabelDate", value = "数据日期(月)", required = true, paramType = "query", dataType = "string") })
+			@ApiImplicitParam(name = "monthLabelDate", value = "数据日期(月)", required = true, paramType = "query", dataType = "string"),
+			@ApiImplicitParam(name = "orgId", value = "数据范围", required = true, paramType = "query", dataType = "string")})
 	@RequestMapping(value = "/explore", method = RequestMethod.POST)
-	public WebResult<String> explore(String dataDate, String dayLabelDate,String monthLabelDate) {
+	public WebResult<String> explore(String dataDate, String dayLabelDate,String monthLabelDate,String orgId) {
 		WebResult<String> webResult = new WebResult<>();
 		List<LabelRuleVo> labelRules = getSessionLabelRuleList();
 		ExploreQueryParam queryParam = new ExploreQueryParam(dataDate, monthLabelDate, dayLabelDate);
+		queryParam.setOrgId(orgId);
 		Integer num;
 		try {
 			StringBuffer sql = new StringBuffer();
 			//不包含纵表的探索
-			String querySql = exploreServiceImpl.getCountSqlStr(labelRules, queryParam);
-			sql.append("select count(1) ").append(querySql);
+			String countSql = exploreServiceImpl.getCountSqlStr(labelRules, queryParam);
+			LogUtil.info("count SQL : " + countSql);
+			sql.append("select count(1) ").append(countSql);
 			//调用后台接口
 			num = backServiceImpl.queryCount(sql.toString());
 		} catch (Exception e) {
