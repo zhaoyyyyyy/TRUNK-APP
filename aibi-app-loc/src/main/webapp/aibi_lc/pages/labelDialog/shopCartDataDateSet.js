@@ -55,12 +55,28 @@ window.loc_onload = function() {
 		    this.$nextTick(function () {
 		    	
 		    	$("#labelMonth").datepicker({
-		    		 changeMonth: true,
-	                 changeYear: true,
-	                 dateFormat: 'yy-MM',
-	                 showButtonPanel: true
-		    	});
-		    	
+		    		monthNamesShort: ["1月", "2月", "3月", "4月", "5月", "6月", "7月", "8月", "9月", "10月", "11月", "12月"],  // 区域化月名为中文  
+			        changeYear: true,          // 年下拉菜单  
+			        changeMonth: true,             // 月下拉菜单  
+			        showButtonPanel: true,         // 显示按钮面板  
+			        showMonthAfterYear: true,  // 月份显示在年后面  
+			        currentText: "本月",         // 当前日期按钮提示文字  
+			        closeText: "关闭",           // 关闭按钮提示文字  
+			        dateFormat: "yy-mm",       // 日期格式  
+			        onChangeMonthYear: function(dateText, inst) {
+					    var month = $("#ui-datepicker-div .ui-datepicker-month :selected").val();  
+					    var year = $("#ui-datepicker-div .ui-datepicker-year :selected").val();  
+					    $(this).datepicker('setDate', new Date(year, month, 1)); 
+						$(this).datepicker( "hide" );
+					}
+			    });
+		    	$("#labelDay").click(function(){
+		    		if($(".ui-datepicker-div").css("display")=="none"){
+		    			$('.ui-datepicker-calendar').hide();
+		    		}else{
+		    			$('.ui-datepicker-calendar').show();
+		    		}
+		    	})
 		    })
 		}
     });
