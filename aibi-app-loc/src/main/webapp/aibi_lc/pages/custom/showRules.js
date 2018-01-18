@@ -82,13 +82,13 @@ var showRulesModel = (function (model){
 					tableHtml += '<td  ><p class="ruleTitle" title="'+labelRule.customOrLabelName+'">'+ labelRule.customOrLabelName +'</p></td>';
 				}
 				var ruleStr = model.ruleAttrVal(labelRule);						
-				tableHtml += '<td   > <p class="ruleContent" style="width:570px;"  title="'+ruleStr+'">'+ ruleStr +'</p></td>';
+				tableHtml += '<td   > <p class="ruleContent"  title="'+ruleStr+'">'+ ruleStr +'</p></td>';
 				tableHtml += '</tr>';
 			}else if(labelRule.elementType == 5){//客户群清单
 				ruleHtml += '<li class="tag-item fleft">客户群：'+ labelRule.customOrLabelName +'</li>';
 				tableHtml += '<tr>';
 				tableHtml += '<td ><p class="ruleTitle" title="'+labelRule.customOrLabelName+'">'+ labelRule.customOrLabelName +'</p></td>';
-				tableHtml += '<td > <p class="ruleContent"  style="width:570px;" title="'+labelRule.attrVal+'">清单:'+ labelRule.attrVal +'</p></td>';
+				tableHtml += '<td > <p class="ruleContent"  title="'+labelRule.attrVal+'">清单:'+ labelRule.attrVal +'</p></td>';
 				tableHtml += '</tr>';
 			}else if(labelRule.elementType == 6){//客户群规则
 				ruleHtml += '<li class="tag-item-symbol fleft">(</li>';	

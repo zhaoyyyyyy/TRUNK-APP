@@ -1086,5 +1086,37 @@ span.del-btn{
 .ui-custom-btn{
 	text-align:right;
 }
-
+/*计算中心-显示规则*/
+.customer-rule-list > ul > li.tag-item{
+	border: 1px solid #ccc;
+	padding:5px 10px;
+	background: #eee;
+    color: #9b9b9b;
+}
+.customer-rule-list > ul > li.tag-item-symbol{
+	margin:0 8px;
+	padding:5px 10px;
+}
+.customer-rules-table-box > table {
+	width:100%;
+}
+.customer-rules-table-box > table th{
+	width:60%;
+    height: 40px;
+    background-color: #F7F7F7;
+    border-bottom: 1px solid #F7F7F7;
+    font-weight:bold;
+}
+.customer-rules-table-box > table th:first-child{
+	width:40%;
+	text-align:center;
+}
+.customer-rules-table-box table tr{
+	height: 37px !important;
+	border: 1px solid #ddd;
+    
+}
+.customer-rules-table-box table tr td:first-child{
+	text-align:center;
+}
 
