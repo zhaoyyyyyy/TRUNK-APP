@@ -279,6 +279,7 @@ public class LabelInfoServiceImpl extends BaseServiceImpl<LabelInfo, String> imp
 		//TODO  基本信息是否需要加入缓存?
 		customInfo.setLabelTypeId(LabelInfoContants.LABEL_TYPE_CUST);
 		customInfo.setDataStatusId(LabelInfoContants.CUSTOM_DATA_STATUS_WAIT);
+		customInfo.setCreateTime(new Date());
 		super.saveOrUpdate(customInfo);
 		String customId = customInfo.getLabelId();
 		labelExtInfo.setLabelId(customId);

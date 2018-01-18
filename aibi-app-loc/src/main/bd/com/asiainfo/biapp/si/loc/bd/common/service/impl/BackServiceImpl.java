@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 import com.asiainfo.biapp.si.loc.base.common.LabelInfoContants;
 import com.asiainfo.biapp.si.loc.base.exception.SqlRunException;
 import com.asiainfo.biapp.si.loc.base.extend.SpringContextHolder;
+import com.asiainfo.biapp.si.loc.base.utils.LogUtil;
 import com.asiainfo.biapp.si.loc.bd.common.dao.IBackSqlDao;
 import com.asiainfo.biapp.si.loc.bd.common.service.IBackSqlService;
 
@@ -157,8 +158,9 @@ public class BackServiceImpl implements IBackSqlService{
 		sqlBuffer.append(",'").append(customerId).append("' ");
 		sqlBuffer.append(sql);
 		log.debug("-------------------- BackServiceImpl.insertCustomerData sqlBuffer = " + sqlBuffer.toString());
+		LogUtil.info("-------------------- BackServiceImpl.insertCustomerData sqlBuffer = " + sqlBuffer.toString());
 		String insertcolumn = LabelInfoContants.KHQ_CROSS_COLUMN+","+LabelInfoContants.KHQ_CROSS_ID_PARTION;
-		isInsertTable = getBackDaoBean().insertDataToTabByPartion(sql, tableName, insertcolumn);
+		isInsertTable = getBackDaoBean().insertDataToTabByPartion(sqlBuffer.toString(), tableName, insertcolumn);
 		log.debug("-------------------- BackServiceImpl.insertCustomerData isInsertTable = " + isInsertTable);
 		return isInsertTable;
 	}

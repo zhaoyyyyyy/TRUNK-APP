@@ -84,7 +84,7 @@ public class BackMysqlDaoImpl extends BaseBackDaoImpl implements IBackSqlDao{
 	@Override
 	public boolean isExistsTable(String tableName) {
 		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 
 	@Override
@@ -172,8 +172,18 @@ public class BackMysqlDaoImpl extends BaseBackDaoImpl implements IBackSqlDao{
 
 	@Override
 	public boolean insertDataToTabByPartion(String sql,String tableName,String partionID) {
-		// TODO Auto-generated method stub
-		return false;
+		StringBuffer sb = new StringBuffer();
+		sb.append("insert into ").append(tableName).append("(").append(partionID).append(") ").append(sql);
+		Boolean res = true;
+		try {
+			Connection connection = this.getBackConnection();
+			PreparedStatement preparedStatement = connection.prepareStatement(sb.toString());
+			res = preparedStatement.execute();
+		} catch (Exception e) {
+			res = false;
+			e.printStackTrace();
+		}
+		return res;
 	}
 
 	@Override
