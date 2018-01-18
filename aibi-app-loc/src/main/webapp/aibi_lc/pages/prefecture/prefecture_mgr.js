@@ -73,7 +73,7 @@ window.loc_onload = function() {
             align: "center",
             formatter : function(value, opts, data) {
     			return "<a href='###' onclick='fun_to_detail(\"" + data.configId
-    			+ "\")' ><font color='blue'>" + data.sourceName
+    			+ "\")' ><font class='ui-table-fontColor'>" + data.sourceName
     			+ "</font></a>";
     		}
         },
