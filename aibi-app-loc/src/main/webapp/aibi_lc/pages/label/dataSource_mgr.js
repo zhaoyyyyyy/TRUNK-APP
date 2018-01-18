@@ -60,6 +60,7 @@ window.loc_onload = function() {
 			align: "center",
 			autowidth:false,
 			key:true,
+			title:false,
 			formatter: function(value, opts, data) {
 				var html = '<button onclick="fun_to_up(\'' + value + '\')" type="button" class="btn btn-default ui-table-btn">修改</button>'
 				+'<button onclick="fun_to_del(\'' + value + '\')" type="button" class="btn btn-default  ui-table-btn ui-table-btn">删除</button>';

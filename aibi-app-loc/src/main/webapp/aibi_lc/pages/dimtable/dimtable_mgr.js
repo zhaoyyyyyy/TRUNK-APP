@@ -82,6 +82,7 @@ window.loc_onload = function() {
 									width : 80,
 									sortable : false,
 									align : "center",
+									title:false,
 									formatter : function(value, opts, data) {
 										return "<button type='button' class='btn btn-default  ui-table-btn ui-table-btn' onclick='fun_to_edit(\""
 												+ value

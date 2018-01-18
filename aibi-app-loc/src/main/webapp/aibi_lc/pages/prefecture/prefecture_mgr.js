@@ -130,6 +130,7 @@ window.loc_onload = function() {
             sortable: false,
             width: 60,
             align: "left",
+            title:false,
             formatter: function(value, opts, data) {
             	var html = '';
             	if(data.configStatus != 3){
