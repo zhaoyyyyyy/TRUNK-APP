@@ -359,13 +359,25 @@ function analysis(){
 					}else if(data.data[i].DATA_TYPE.indexOf("int") != -1){
 						data.data[i].DATA_TYPE = "1";
 					}
-					var dataRow = {
-						"columnName" : data.data[i].COLUMN_NAME,
-						"cooColumnType" : data.data[i].DATA_TYPE,
-						"sourceName" : data.data[i].COLUMN_NAME,
-						"columnCaliber" : data.data[i].COLUMN_COMMENT,
-						"sourceId" : "",
-						"op" : ""
+					var dataRow = {}
+					if(data.data[i].COLUMN_COMMENT!=""&&data.data[i].COLUMN_COMMENT!=null){
+						dataRow = {
+							"columnName" : data.data[i].COLUMN_NAME,
+							"cooColumnType" : data.data[i].DATA_TYPE,
+							"sourceName" : data.data[i].COLUMN_COMMENT,
+							"columnCaliber" : data.data[i].COLUMN_COMMENT,
+							"sourceId" : "",
+							"op" : ""
+						}
+					}else{
+						dataRow = {
+							"columnName" : data.data[i].COLUMN_NAME,
+							"cooColumnType" : data.data[i].DATA_TYPE,
+							"sourceName" : data.data[i].COLUMN_NAME,
+							"columnCaliber" : data.data[i].COLUMN_NAME,
+							"sourceId" : "",
+							"op" : ""
+						}
 					}
 					model.sortNum += 1;
 					$("#jsonmap").jqGrid("addRowData", model.sortNum, dataRow, "last");
