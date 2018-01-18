@@ -69,6 +69,7 @@ window.loc_onload = function() {
 		pD = {
 			'sourceTableId' : id
 		}
+		$("#sourceTableName").attr("disabled",true);
 	}
 	
 	var dic = $.getDicData("ZDLXZD");
@@ -337,8 +338,8 @@ function analysis(){
 		postData:{"tableName" : tableName},
 		isShowMask : true,
 		onSuccess:function(data){
-			if(data.data==null){
-				$.alert("表不存在，无法解析");
+			if(data.data.length==0){
+				$.alert("无法获得列信息，请确认表名");
 				return false;
 			}
 			var ids = $("#jsonmap").jqGrid('getDataIDs');
