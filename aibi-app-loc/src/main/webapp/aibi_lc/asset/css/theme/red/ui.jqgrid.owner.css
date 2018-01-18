@@ -15,7 +15,7 @@
     border: 1px solid #ccc !important;
     background: #DB5864 !important;
     font-weight: normal !important;
-    color: #fff !important;
+    /*color: #fff !important;*/
 }
 .ui-jqgrid .ui-jqgrid-btable .ui-state-hover .btn-default,
 .ui-jqgrid .ui-jqgrid-btable .ui-state-hover .ui-table-fontColor{
@@ -167,9 +167,9 @@
     padding: 6px 12px;
     cursor: pointer;
 }
-.ui-table-btn:HOVER{
+/*.ui-table-btn:HOVER{
 	color: #fff !important;
-}
+}*/
 .ui-table-fontColor{
 	color: #108EEA;
 }
