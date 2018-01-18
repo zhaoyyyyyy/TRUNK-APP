@@ -141,9 +141,14 @@ var labelInfoModel = (function (model){
     		 data.orgId = dataModel.checkedModelList.join(',');
     		 data.configId = dataModel.configId ;
     		 data.failTime = $('#failTime').val() ;
-    		 dataModel.labelInfo.dayLabelDate = $('#labelDay').val().replace(/-/g,"");
-			 dataModel.labelInfo.monthLabelDate = $('#labelMonth').val().replace(/-/g,"");
-			 dataModel.labelInfo.dataDate = $('#labelMonth').val().replace(/-/g,"");
+    		 if($('#labelDay').val()){
+    			 dataModel.labelInfo.dayLabelDate = $('#labelDay').val().replace(/-/g,""); 
+    		 }
+    		 if($('#labelMonth').val()){
+    			 dataModel.labelInfo.monthLabelDate = $('#labelMonth').val().replace(/-/g,"");
+    			 dataModel.labelInfo.dataDate = $('#labelMonth').val().replace(/-/g,"");
+    		 }
+			 
     		 dataModel._submitFlag = true;
     		 $.commAjax({
     			  url: url,
@@ -244,15 +249,24 @@ var labelInfoModel = (function (model){
 	model.changeLabelDay = function(){
 		if(dataModel.labelDay){
     		var labelDays = dataModel.labelDay.split('-');
-	    	$("#labelDay" ).datepicker( "option", "minDate", new Date(labelDays[0]-1, labelDays[1] - 1, labelDays[2]) );
-	    	$("#labelDay" ).datepicker( "option", "maxDate", new Date(labelDays[0], labelDays[1] - 1, labelDays[2]) );
-	    	$("#labelDay").click(function(){
-	    		if($(".ui-datepicker-div").css("display")=="none"){
-	    			$('.ui-datepicker-calendar').hide();
-	    		}else{
-	    			$('.ui-datepicker-calendar').show();
-	    		}
-	    	})
+	    	if($(".ui-datepicker-div").css("display")=="none"){
+    			$('.ui-datepicker-calendar').hide();
+    		}else{
+    			$('.ui-datepicker-calendar').show();
+    		}
+	    	$("#labelDay" ).datepicker({
+		  		changeMonth: true,
+		  		changeYear: true,
+		  		dateFormat:"yy-mm-dd",
+		  		numberOfMonths:1,
+		  		showMonthAfterYear: true,  // 月份显示在年后面 
+		  		dayNamesMin: [ "日", "一", "二", "三", "四", "五", "六" ],
+		  		monthNamesShort: [ "一月", "二月", "三月", "四月", "五月", "六月", "七月", "八月", "九月", "十月", "十一月", "十二月" ],
+		    	maxDate: new Date(labelDays[0], labelDays[1] - 1, 1),//最大日期
+	            minDate: new Date(labelDays[0]-1, labelDays[1] - 1, 1)//最大日期
+	    	}).on( "change", function() {
+	    		$('.ui-datepicker-calendar').show();
+		    });
     	}
 	}
 	/**
