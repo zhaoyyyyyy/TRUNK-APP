@@ -224,11 +224,11 @@ public class LocCacheBase extends ICacheBase implements ApplicationContextAware{
 	public void initAllDicData(){
 		LogUtil.info("加载[数据字典]缓存start");
 		try {
-//			IDicDataService dataService = (IDicDataService)SpringContextHolder.getBean("dicDataService");
-//			List<DicData> allDicDataList = dataService.queryAllDicData();
+			IDicDataService dataService = (IDicDataService)SpringContextHolder.getBean("dicDataService");
+			List<DicData> allDicDataList = dataService.queryAllDicData();
 			
 			
-			List<DicData> allDicDataList = DicDataUtil.queryAllDicData();
+			//List<DicData> allDicDataList = DicDataUtil.queryAllDicData();
 			Map<String,Object> returnMap = new HashMap<String,Object>();
 			 for(DicData  dicData : allDicDataList){
 	            	if(returnMap.containsKey(dicData.getDicCode())){
