@@ -84,7 +84,7 @@ public class RedisConfig extends CachingConfigurerSupport{
         jedisConnectionFactory.setHostName(host);  
         jedisConnectionFactory.setPort(port);  
         
-        if(StringUtil.isNotEmpty(password)){
+        if(StringUtil.isNotEmpty(password) && !"null".equals(password)){
         	jedisConnectionFactory.setPassword(password);
         }
         return jedisConnectionFactory;
