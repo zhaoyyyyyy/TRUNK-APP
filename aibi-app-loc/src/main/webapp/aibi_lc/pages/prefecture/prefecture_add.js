@@ -66,11 +66,13 @@ window.loc_onload = function() {
 				$("#type"+model.dataAccessType).click();
 				$("#org").val(orgdata[model.orgId]);
 			}else{
-				if($("#type1")){
+				var orgValue = $("#org").val();
+				debugger;
+				if($("#type1")&&(orgValue==""||orgValue==null||orgValue==undefined)){
 					$("#type1").click();
-				}else if($("#type2")){
+				}else if($("#type2")&&(orgValue==""||orgValue==null||orgValue==undefined)){
 					$("#type2").click();
-				}else if($("#type3")){
+				}else if($("#type3")&&(orgValue==""||orgValue==null||orgValue==undefined)){
 					$("#type3").click();
 				}
 			}

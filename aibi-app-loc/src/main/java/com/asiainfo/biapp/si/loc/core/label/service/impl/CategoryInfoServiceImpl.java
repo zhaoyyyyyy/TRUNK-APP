@@ -23,7 +23,6 @@ import javax.transaction.Transactional;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
@@ -136,7 +135,7 @@ public class CategoryInfoServiceImpl extends BaseServiceImpl<CategoryInfo, Strin
         return iCategoryInfoDao.selectCategoryInfoByCategoryName(categoryName,sysId);
     }
 
-    @CacheEvict(value="LabelInfo")
+    @CacheEvict(value="LabelInfo",allEntries=true)
     public void addCategoryInfo(CategoryInfo categoryInfo) throws BaseException {
         if(categoryInfo != null && StringUtil.isEmpty(categoryInfo.getParentId())){
             categoryInfo.setParentId(null);
@@ -150,7 +149,7 @@ public class CategoryInfoServiceImpl extends BaseServiceImpl<CategoryInfo, Strin
         super.saveOrUpdate(categoryInfo);
     }
 
-    @CacheEvict(value="LabelInfo")
+    @CacheEvict(value="LabelInfo",allEntries=true)
     public void modifyCategoryInfo(CategoryInfo categoryInfo) throws BaseException{
         if(StringUtils.isBlank(categoryInfo.getCategoryName())){
             throw new ParamRequiredException("分类名称不能为空");
@@ -162,7 +161,7 @@ public class CategoryInfoServiceImpl extends BaseServiceImpl<CategoryInfo, Strin
         
     }
 
-    @CacheEvict(value="LabelInfo")
+    @CacheEvict(value="LabelInfo",allEntries=true)
     public void deleteCategoryInfoById(String categoryId) throws BaseException {
         if (selectCategoryInfoById(categoryId)==null){
             throw new ParamRequiredException("ID不存在");
