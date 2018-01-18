@@ -18,7 +18,7 @@
     color: #fff !important;
 }
 .ui-jqgrid .ui-jqgrid-btable .ui-state-hover .btn-default,
-.ui-jqgrid .ui-jqgrid-btable .ui-state-hover .ui-table-fontColor,{
+.ui-jqgrid .ui-jqgrid-btable .ui-state-hover .ui-table-fontColor{
 	 color: #fff !important;
 }
 .table>tbody>tr>td{
