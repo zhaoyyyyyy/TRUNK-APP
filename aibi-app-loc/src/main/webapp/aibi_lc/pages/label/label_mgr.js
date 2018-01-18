@@ -117,7 +117,7 @@ window.loc_onload = function(){
 	            	}
 	            },
 	            {name:'createTime',index:'createTime', width:20, align:"center",sortable:false},
-	            {name:'labelId',index:'labelId', width:30, text_aling:"left", key:true,sortable:false,
+	            {name:'labelId',index:'labelId', width:30, text_aling:"left", key:true,sortable:false,title:false,
 	            	formatter : function(value, opts, data) {
 	            		var html = '';
 	            		if(data.dataStatusId !=6){
