@@ -83,7 +83,7 @@ window.loc_onload = function() {
 	
 	$("#jsonmap").jqGrid({
 	    url: url,
-	    editurl: $.ctx +"/api/source/sourceInfo/save",
+	    editurl: "clientArray",
 	    postData: pD,
 	    datatype: "json",
 	    colNames: ['源字段名称', '字段类型', '指标名称', '描述','指标编码', '操作'],
@@ -332,19 +332,14 @@ function analysis(){
 	}else{
 		tableName = $("#sourceTableName").val();
 	}
-	var colnames=[];
 	$.commAjax({
 		url:$.ctx + "/backSql/columns",
 		postData:{"tableName" : tableName},
 		isShowMask : true,
 		onSuccess:function(data){
 			if(data.data==null){
-				$.alert("表不存在");
+				$.alert("表不存在，无法解析");
 				return false;
-			}else{
-				for(var u=0;u < data.data.length;u++){
-					colnames.push(data.data[u].COLUMN_NAME);
-				}
 			}
 			var ids = $("#jsonmap").jqGrid('getDataIDs');
 			for (var isi=0; isi<ids.length; isi++) {//让单元格可以获取内容
@@ -413,7 +408,8 @@ function fun_to_import(){
 function ajax_to_save(url,mesg){
 	$.commAjax({
 		url : url,
-		async : false,
+		isShowMask : true,
+		maskMassage : 'Load...',
 		postData : $('#formData').formToJson(),
 		onSuccess : function(data) {
 			if(data.data == "success"){
