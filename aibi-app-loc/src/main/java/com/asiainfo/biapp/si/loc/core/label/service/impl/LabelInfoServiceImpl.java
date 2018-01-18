@@ -192,11 +192,11 @@ public class LabelInfoServiceImpl extends BaseServiceImpl<LabelInfo, String> imp
     }
 
     public void modifyLabelInfo(LabelInfo labelInfo) throws BaseException {
-        if (labelInfo.getDataStatusId()==4 ||labelInfo.getDataStatusId()==5||labelInfo.getDataStatusId()==6) {
+        /*if (labelInfo.getDataStatusId()==4 ||labelInfo.getDataStatusId()==5||labelInfo.getDataStatusId()==6) {
             labelInfo.setFailTime(new Date());
         }else if (labelInfo.getDataStatusId()==2) {
             labelInfo.setEffecTime(new Date());
-        }
+        }*/
         super.saveOrUpdate(labelInfo);
         
         //修改标签规则维表信息
