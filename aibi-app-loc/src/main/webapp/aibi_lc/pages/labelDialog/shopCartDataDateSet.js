@@ -10,24 +10,26 @@ var dataModel = {
 }
 window.loc_onload = function() {
 	var wd = frameElement.lhgDG;
-	//dataModel.existMonthLabel = wd.curWin.labelMarket.existMonthLabel;
-	//dataModel.existDayLabel = wd.curWin.labelMarket.existDayLabel;
-	dataModel.labelMonth = wd.curWin.labelMarket.labelMonth;
-	dataModel.labelMonth = '2017-03';
-	dataModel.labelDay = wd.curWin.labelMarket.labelDay;
+	dataModel.existMonthLabel = wd.curWin.dataModel.existMonthLabel;
+	dataModel.existDayLabel = wd.curWin.dataModel.existDayLabel;
+	dataModel.labelMonth = wd.curWin.dataModel.labelMonth;
+	dataModel.labelDay = wd.curWin.dataModel.labelDay;
 	$('#labelMonth').val(dataModel.labelMonth);
 	$('#labelDay').val(dataModel.labelDay);
 	dataDateModel.getDataPrivaliege();
 
 	//获取数据rule
 	wd.addBtn("ok", "继续", function() {
-		var labelMonthTemp = $('#labelMonth').val().replace(/-/g,"");
+		var labelMonthTemp = "";
 		var labelDayTemp = "";
 		if($('#labelDay').val()){
 			labelDayTemp = $('#labelDay').val().replace(/-/g,"");
 		}
+		if($('#labelMonth').val()){
+			labelMonthTemp = $('#labelMonth').val().replace(/-/g,"");
+		}
 		if(dataModel.checkedModelList.length <1){
-			$.alert("当前没有数据权限，请联系管理员。");
+			$.alert("当前用户拥有多个数据权限，请选择需要使用的数据范围。");
 			return ;
 		}	
 		if(!dataDateModel.checkRuleEffectDate(labelMonthTemp,labelDayTemp)){
@@ -53,30 +55,40 @@ window.loc_onload = function() {
     	data : dataModel,
 		mounted: function () {
 		    this.$nextTick(function () {
+		    	if(dataModel.labelMonth){
+		    		var labelMonths = dataModel.labelMonth.split('-');
+			    	$("#labelMonth").datepicker({
+			    		monthNamesShort: ["1月", "2月", "3月", "4月", "5月", "6月", "7月", "8月", "9月", "10月", "11月", "12月"],  // 区域化月名为中文  
+				        changeYear: true,          // 年下拉菜单  
+				        changeMonth: true,             // 月下拉菜单  
+				        showButtonPanel: true,         // 显示按钮面板  
+				        showMonthAfterYear: true,  // 月份显示在年后面  
+				        currentText: "本月",         // 当前日期按钮提示文字  
+				        closeText: "关闭",           // 关闭按钮提示文字  
+				        dateFormat: "yy-mm",       // 日期格式  
+			            maxDate: new Date(labelMonths[0], labelMonths[1] - 1, 1),//最大日期
+			            minDate: new Date(labelMonths[0]-1, labelMonths[1] - 1, 1),//最大日期
+				        onChangeMonthYear: function(dateText, inst) {
+						    var month = $("#ui-datepicker-div .ui-datepicker-month :selected").val();  
+						    var year = $("#ui-datepicker-div .ui-datepicker-year :selected").val();  
+						    $(this).datepicker('setDate', new Date(year, month, 1)); 
+							$(this).datepicker( "hide" );
+						}
+				    });
+		    	}
+		    	if(dataModel.labelDay){
+		    		var labelDays = dataModel.labelDay.split('-');
+			    	$("#labelDay" ).datepicker( "option", "minDate", new Date(labelDays[0]-1, labelDays[1] - 1, labelDays[2]) );
+			    	$("#labelDay" ).datepicker( "option", "maxDate", new Date(labelDays[0], labelDays[1] - 1, labelDays[2]) );
+			    	$("#labelDay").click(function(){
+			    		if($(".ui-datepicker-div").css("display")=="none"){
+			    			$('.ui-datepicker-calendar').hide();
+			    		}else{
+			    			$('.ui-datepicker-calendar').show();
+			    		}
+			    	})
+		    	}
 		    	
-		    	$("#labelMonth").datepicker({
-		    		monthNamesShort: ["1月", "2月", "3月", "4月", "5月", "6月", "7月", "8月", "9月", "10月", "11月", "12月"],  // 区域化月名为中文  
-			        changeYear: true,          // 年下拉菜单  
-			        changeMonth: true,             // 月下拉菜单  
-			        showButtonPanel: true,         // 显示按钮面板  
-			        showMonthAfterYear: true,  // 月份显示在年后面  
-			        currentText: "本月",         // 当前日期按钮提示文字  
-			        closeText: "关闭",           // 关闭按钮提示文字  
-			        dateFormat: "yy-mm",       // 日期格式  
-			        onChangeMonthYear: function(dateText, inst) {
-					    var month = $("#ui-datepicker-div .ui-datepicker-month :selected").val();  
-					    var year = $("#ui-datepicker-div .ui-datepicker-year :selected").val();  
-					    $(this).datepicker('setDate', new Date(year, month, 1)); 
-						$(this).datepicker( "hide" );
-					}
-			    });
-		    	$("#labelDay").click(function(){
-		    		if($(".ui-datepicker-div").css("display")=="none"){
-		    			$('.ui-datepicker-calendar').hide();
-		    		}else{
-		    			$('.ui-datepicker-calendar').show();
-		    		}
-		    	})
 		    })
 		}
     });

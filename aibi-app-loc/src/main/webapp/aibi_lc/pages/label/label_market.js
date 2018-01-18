@@ -807,7 +807,7 @@ var labelMarket = (function (model){
 				//只有清单时,不弹出对话框,直接探索
 				$.commAjax({
 					  url: $.ctx + "/api/shopCart/findEaliestDataDate",
-					  async	: false,//同步
+					  async	: true,//同步
 					  onSuccess: function(returnObj){
 						  	var status = returnObj.status;
 						  	var result = returnObj.data;
@@ -817,14 +817,14 @@ var labelMarket = (function (model){
 							}else{
 								existLabel = false;
 							}
+							if(existLabel){
+								if(model.validateSql(dataModel.labelMonth.replace(/-/g,""),dataModel.labelDay.replace(/-/g,""))){
+									window.location='../custom/custom_edit.html?from=labelmarket';
+								}
+							}
+							
 					  }
 				});
-				if(!existLabel){
-					return false;
-				}
-				if(model.validateSql(dataModel.labelMonth.replace(/-/g,""),dataModel.labelDay.replace(/-/g,""))){
-					window.location='../custom/custom_edit.html?from=labelmarket';
-				}
 				
 			}
 			

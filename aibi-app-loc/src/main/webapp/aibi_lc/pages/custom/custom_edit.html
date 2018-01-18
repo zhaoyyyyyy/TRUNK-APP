@@ -18,6 +18,9 @@
 [v-cloak] {
 	display: none;
 }
+.ui-datepicker-calendar{
+	display:none;
+}
 </style>
 
 </head>
@@ -44,7 +47,7 @@
 			                   <label class="control-label" for="tacticsId" ><span class="input-required">*</span>生成策略:</label>
 			                    <div class="control-input ml10">
 			                    	<select name="tacticsId" id="tacticsId" class="form-control easyui-validatebox" dicCode="LABELTACTICS"
-										required="true"	v-model="labelInfo.labelExtInfo.tacticsId" placeholder="请选择生成策略" onclick="labelInfoModel.changeTacticsId(this)">
+										required="true"	v-model="labelInfo.tacticsId" placeholder="请选择生成策略" onclick="labelInfoModel.changeTacticsId(this)">
 									</select>
 			                    </div>
 			                </div>
@@ -52,14 +55,14 @@
 			                   <label class="control-label" for="labelMonth" ><span class="input-required">*</span>数据日期(月)</label>
 			                    <div class="control-input ml10">
 			                    	<input id="labelMonth" name="labelMonth" type="text" class="form-control input-pointer easyui-validatebox" 
-									required="true"	 placeholder="请选择数据日期（月）" v-model="labelInfo.labelMonth"/>
+									required="true"	 placeholder="请选择数据日期（月）" onclick="labelInfoModel.changeLabelMonth()"/>
 			                    </div>
 			                </div>
 			                <div class="ui-form-group ml70" v-if="isShowLabelDayDiv">
 			                   <label class="control-label" for="labelDay" ><span class="input-required">*</span>数据日期(日)</label>
 			                    <div class="control-input ml10">
 			                    	<input id="labelDay" name="labelDay" type="text" class="form-control input-pointer easyui-validatebox"
-									required="true"	 data-dismiss="toDatepicker#labelDay" placeholder="请选择数据日期（日）" v-model="labelInfo.labelDay"/>
+									required="true"	  data-dismiss="formDatepicker#labelDay" placeholder="请选择数据日期（日）" onclick="labelInfoModel.changeLabelMonth()"/>
 			                    </div>
 			                </div>
 			                
@@ -110,7 +113,7 @@
 				</form>
 				<div class="ui-reg-grid mt40">
                     <div class="ui-grid-button clearfix mt20">
-                        <button type="button"  class="ui-btn ui-btn-second" onclick="window.location='../custom/label_market.html'">返回</button>
+                        <button type="button"  class="ui-btn ui-btn-second" onclick="labelInfoModel.back()">返回</button>
                         <button type="button"  class="ui-btn ui-btn-default" onclick="labelInfoModel.save()" >保存</button>
                     </div>
 	            </div>

@@ -1,6 +1,6 @@
 var dataModel = {
 		labelId : "",
-		labelInfo : {labelExtInfo:{}},
+		labelInfo : {},
 		updateCycles :[],
 		updateCycle : 1,
 		dataPrivaliegeList : [],//用户数据权限
@@ -25,6 +25,7 @@ window.loc_onload = function() {
 	}
 	labelInfoModel.getDataPrivaliege();//加载数据权限
 	labelInfoModel.findEaliestDataDate();
+	
 	new Vue({
 		el : '#dataD',
 		data : dataModel,
@@ -34,6 +35,13 @@ window.loc_onload = function() {
 	   			if (r.length){
 	   				r.validatebox();
 	   			}
+	   			$("#failTime").click(function(){
+	   				if($(".ui-datepicker-div").css("display")=="none"){
+	   					$('.ui-datepicker-calendar').hide();
+	   				}else{
+	   					$('.ui-datepicker-calendar').show();
+	   				}
+	   			})
 		    })
 		}
 	})
@@ -95,7 +103,7 @@ var labelInfoModel = (function (model){
     		$.alert("请填写客户群名称。");
     		return false;
     	}
-    	if(!dataModel.labelInfo.labelExtInfo.tacticsId){
+    	if(!dataModel.labelInfo.tacticsId){
     		$.alert("请选择生成策略。");
     		return false;
     	}
@@ -108,7 +116,7 @@ var labelInfoModel = (function (model){
     		return false;
     	}
     	if(dataModel.checkedModelList.length <= 0 ){
-    		$.alert("用户没有数据限制，请选择数据限制。");
+    		$.alert("当前用户拥有多个数据权限，请选择需要使用的数据范围。");
     		return false;
     	}
     	return true;
@@ -133,6 +141,9 @@ var labelInfoModel = (function (model){
     		 data.orgId = dataModel.checkedModelList.join(',');
     		 data.configId = dataModel.configId ;
     		 data.failTime = $('#failTime').val() ;
+    		 dataModel.labelInfo.dayLabelDate = $('#labelDay').val();
+			 dataModel.labelInfo.monthLabelDate = $('#labelMonth').val();
+			 dataModel.labelInfo.dataDate = $('#labelMonth').val();
     		 dataModel._submitFlag = true;
     		 $.commAjax({
     			  url: url,
@@ -173,7 +184,7 @@ var labelInfoModel = (function (model){
 	model.back = function(){
 		var from = $.getUrlParam("from");
 		var returnUrl ="";
-		if(from == 'labelmarket'){
+		if(from == 'labelmarket'){//跳转到客户群集市
 			returnUrl = "../label/label_market.html";
 		}
 		window.location.href = returnUrl;
@@ -187,19 +198,63 @@ var labelInfoModel = (function (model){
 			//通过修改策略来联动变化数据日期
 			if(selVal == 1) {//预约策略，使用最新数据日期
 				dataModel.labelInfo.dayLabelDate = dataModel.newDayDate;
+				dataModel.labelInfo.monthLabelDate = dataModel.newMonthDate; 
 				dataModel.labelInfo.dataDate = dataModel.newMonthDate; 
-				$('#dayDataDate').attr('disabled', true);
-				$('#dataDate').attr('disabled', true);
+				$('#labelDay').attr('disabled', true);
+				$('#labelMonth').attr('disabled', true);
 			} else if(selVal == 2){//保守策略，使用最早数据日期
 				dataModel.labelInfo.dayLabelDate = dataModel.dayDate;
+				dataModel.labelInfo.monthLabelDate = dataModel.monthLabelDate;
 				dataModel.labelInfo.dataDate = dataModel.monthDate;
-				$('#dayDataDate').attr('disabled', false);
-				$('#dataDate').attr('disabled', false);
+				$('#labelDay').attr('disabled', false);
+				$('#labelMonth').attr('disabled', false);
 			}
 		}
 		
 		return false;
 	};
+	/**
+	 * 修改月份
+	 */
+	model.changeLabelMonth = function(){
+		if(dataModel.labelMonth){
+    		var labelMonths = dataModel.labelMonth.split('-');
+	    	$("#labelMonth").datepicker({
+	    		monthNamesShort: ["1月", "2月", "3月", "4月", "5月", "6月", "7月", "8月", "9月", "10月", "11月", "12月"],  // 区域化月名为中文  
+		        changeYear: true,          // 年下拉菜单  
+		        changeMonth: true,             // 月下拉菜单  
+		        showButtonPanel: true,         // 显示按钮面板  
+		        showMonthAfterYear: true,  // 月份显示在年后面 
+		        currentText: "本月",         // 当前日期按钮提示文字  
+		        closeText: "关闭",           // 关闭按钮提示文字  
+		        dateFormat: "yy-mm",       // 日期格式  
+	            maxDate: new Date(labelMonths[0], labelMonths[1] - 1, 1),//最大日期
+	            minDate: new Date(labelMonths[0]-1, labelMonths[1] - 1, 1),//最大日期
+		        onChangeMonthYear: function(year, month) {
+				    $(this).datepicker('setDate', new Date(year, month-1, 1)); 
+					$(this).datepicker( "hide" );
+				}
+					
+		    });
+    	}
+	}
+	/**
+	 * 修改月份
+	 */
+	model.changeLabelDay = function(){
+		if(dataModel.labelDay){
+    		var labelDays = dataModel.labelDay.split('-');
+	    	$("#labelDay" ).datepicker( "option", "minDate", new Date(labelDays[0]-1, labelDays[1] - 1, labelDays[2]) );
+	    	$("#labelDay" ).datepicker( "option", "maxDate", new Date(labelDays[0], labelDays[1] - 1, labelDays[2]) );
+	    	$("#labelDay").click(function(){
+	    		if($(".ui-datepicker-div").css("display")=="none"){
+	    			$('.ui-datepicker-calendar').hide();
+	    		}else{
+	    			$('.ui-datepicker-calendar').show();
+	    		}
+	    	})
+    	}
+	}
 	/**
 	 * 展示规则
 	 */
