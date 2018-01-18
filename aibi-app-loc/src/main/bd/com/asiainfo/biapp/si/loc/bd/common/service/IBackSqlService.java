@@ -43,15 +43,6 @@ public interface IBackSqlService {
 	 */
 	public boolean isExistsTable(String tableName) throws SqlRunException;
 	 
-	/**
-	 * 
-	 * Description: 通过模板创建新表
-	 *
-	 * @param newTableName 新表表名
-	 * @param templeteTableName  模板表表明
-	 * @return
-	 */
-	public boolean createTableByTemplete(String newTableName,final String templeteTableName) throws SqlRunException;
 	
 	 /**
      * 
@@ -121,4 +112,14 @@ public interface IBackSqlService {
      * @return
      */
     public boolean renameTable(String oldTableName, String newTableName) throws SqlRunException;
+    
+    /**
+     * 指定客户群id 以及 客户群表名 插入 指定sql 的数据
+     * @param sql   客户群数据 查询sql  只要给到 from 
+     * @param tableName
+     * @param customerId
+     * @return
+     * @throws SqlRunException
+     */
+    public boolean insertCustomerData(String sql,String tableName,String customerId) throws SqlRunException;
 }

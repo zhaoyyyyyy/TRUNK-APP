@@ -1,14 +1,15 @@
 
 package com.asiainfo.biapp.si.loc.bd.common.service.impl;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import javax.transaction.Transactional;
-
+import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
-
 import com.asiainfo.biapp.si.loc.base.BaseConstants;
+import com.asiainfo.biapp.si.loc.base.common.LabelInfoContants;
 import com.asiainfo.biapp.si.loc.base.exception.SqlRunException;
 import com.asiainfo.biapp.si.loc.base.extend.SpringContextHolder;
 import com.asiainfo.biapp.si.loc.bd.common.dao.IBackSqlDao;
@@ -18,7 +19,7 @@ import com.asiainfo.biapp.si.loc.cache.CocCacheProxy;
 @Service
 @Transactional
 public class BackServiceImpl implements IBackSqlService{
-
+	private Logger log = Logger.getLogger(BackServiceImpl.class);
     private static final String REGEX_BEVEL = "/";
     
     /** 缓冲当前的schema */
@@ -72,11 +73,6 @@ public class BackServiceImpl implements IBackSqlService{
 	}
 
 	@Override
-	public boolean createTableByTemplete(String newTableName, String templeteTableName) throws SqlRunException {
-		return getBackDaoBean().createTableByTemplete(newTableName,templeteTableName);
-	}
-
-	@Override
 	public boolean insertTableAsSelect(String tableName, String selectSql) throws SqlRunException {
 		return getBackDaoBean().insertTableAsSelect(tableName,selectSql);
 	}
@@ -117,6 +113,42 @@ public class BackServiceImpl implements IBackSqlService{
     public boolean renameTable(String oldTableName, String newTableName) throws SqlRunException {
         return getBackDaoBean().renameTable(oldTableName, newTableName);
     }
+
+	@Override
+	public boolean insertCustomerData(String sql, String tableName, String customerId) throws SqlRunException {
+		log.debug("-------------------- BackServiceImpl.insertCustomerData sql = " + sql);
+		log.debug("-------------------- BackServiceImpl.insertCustomerData tableName = " + tableName);
+		log.debug("-------------------- BackServiceImpl.insertCustomerData customerId = " + customerId);
+		
+		boolean isExistsTable = getBackDaoBean().isExistsTable(tableName);
+		boolean isCreateTable = true;
+		boolean isInsertTable = true;
+		log.debug("-------------------- BackServiceImpl.insertCustomerData isExistsTable = " + isExistsTable);
+		
+		Map<String,String> columnName = new HashMap<String,String>();
+		List<String> primaryKey = new ArrayList<String>();
+		primaryKey.add(LabelInfoContants.KHQ_CROSS_COLUMN);
+		primaryKey.add(LabelInfoContants.KHQ_CROSS_ID_PARTION);
+		columnName.put(LabelInfoContants.KHQ_CROSS_COLUMN, "varchar(32)");
+		columnName.put(LabelInfoContants.KHQ_CROSS_ID_PARTION, "varchar(32)");
+		if(!isExistsTable){
+			isCreateTable = getBackDaoBean().createTableByName(tableName, columnName, primaryKey);
+			log.debug("-------------------- BackServiceImpl.insertCustomerData isCreateTable = " + isCreateTable);
+			if(!isCreateTable){
+				//建表失败
+				return isCreateTable;
+			}
+		}
+		StringBuffer sqlBuffer = new StringBuffer();
+		sqlBuffer.append("SELECT ").append(LabelInfoContants.KHQ_CROSS_COLUMN);
+		sqlBuffer.append(",'").append(customerId).append("' ");
+		sqlBuffer.append(sql);
+		log.debug("-------------------- BackServiceImpl.insertCustomerData sqlBuffer = " + sqlBuffer.toString());
+		String insertcolumn = LabelInfoContants.KHQ_CROSS_COLUMN+","+LabelInfoContants.KHQ_CROSS_ID_PARTION;
+		isInsertTable = getBackDaoBean().insertDataToTabByPartion(sql, tableName, insertcolumn);
+		log.debug("-------------------- BackServiceImpl.insertCustomerData isInsertTable = " + isInsertTable);
+		return isInsertTable;
+	}
 
 
 }

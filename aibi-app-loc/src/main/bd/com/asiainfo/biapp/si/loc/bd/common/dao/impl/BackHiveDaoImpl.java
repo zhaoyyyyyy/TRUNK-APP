@@ -12,7 +12,9 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Repository;
 
@@ -329,6 +331,43 @@ public class BackHiveDaoImpl extends BaseBackDaoImpl implements IBackSqlDao{
 		sqlstr.append(" = ").append(partionID).append(") ").append(sql);
 		log.debug(" ----------------------  BackHiveDaoImpl.insertDataToTabByPartion  sql=" + sqlstr.toString());
 		return this.executeResBoolean(sqlstr.toString());
+	}
+
+	@Override
+	public boolean createTableByName(String tableName, Map<String, String> columnName, List<String> primaryKey)
+			throws SqlRunException {
+		StringBuffer primaryKeyStr = new StringBuffer();
+		boolean ifPartition = false;
+		//参数判断，表名，列名 主键不能为空； 主键必须存在与列名里
+		if(StringUtils.isNoneBlank(tableName)&&null != columnName && !columnName.isEmpty()){
+			if(null != primaryKey && !primaryKey.isEmpty()){
+				ifPartition = true;
+				for(String mykey:primaryKey){
+					primaryKeyStr.append(mykey).append(" ").append(columnName.get(mykey)).append(",");
+				}
+				
+			}
+			
+		}else{
+			return false;
+		}
+		StringBuffer sb = new StringBuffer();
+		sb.append("CREATE TABLE ").append(super.getCurBackDbSchema()).append(".").append(tableName);
+		sb.append("(");
+		Set<String> keySet = columnName.keySet();
+		for(String colName : keySet){
+			sb.append(colName).append(" ").append(columnName.get(colName)).append(",");
+		}
+		if(ifPartition){
+			sb.append("PARTITION BY (").append(primaryKeyStr.toString().substring(0,primaryKeyStr.toString().length()-1)).append(") stored as parquet  ");
+		}
+		
+		
+		try{
+            return this.executeResBoolean(sb.toString());
+        }catch (Exception e){
+            throw new SqlRunException("操作后台库出错");
+        }
 	}
 	
 	

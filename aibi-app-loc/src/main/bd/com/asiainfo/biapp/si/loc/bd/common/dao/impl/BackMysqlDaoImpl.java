@@ -169,6 +169,13 @@ public class BackMysqlDaoImpl extends BaseBackDaoImpl implements IBackSqlDao{
 		return false;
 	}
 
+	@Override
+	public boolean createTableByName(String tableName, Map<String, String> columnName, List<String> primaryKey)
+			throws SqlRunException {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
 
 
 

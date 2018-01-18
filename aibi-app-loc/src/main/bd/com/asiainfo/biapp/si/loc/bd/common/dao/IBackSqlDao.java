@@ -3,6 +3,7 @@ package com.asiainfo.biapp.si.loc.bd.common.dao;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import com.asiainfo.biapp.si.loc.base.exception.SqlRunException;
 
@@ -64,6 +65,7 @@ public interface IBackSqlDao {
 	 * @param newTableName 新表表名
 	 * @param templeteTableName  模板表表明
 	 * @return
+	 * @deprecated
 	 */
 	public boolean createTableByTemplete(String newTableName,final String templeteTableName) throws SqlRunException;
 	
@@ -143,6 +145,7 @@ public interface IBackSqlDao {
      * @param partionDate  分区字段 1：日期分区字段名 
      * @param partionID		分区字段2：客户群id分区字段名
      * @return
+     * @deprecated
      */
     public boolean createVerticalTable(String tableName,String columnName) throws SqlRunException;
     
@@ -163,6 +166,16 @@ public interface IBackSqlDao {
      * @return
      */
     public boolean insertDataToTabByPartion(String sql,String tableName,String partionID) throws SqlRunException;
+    
+    /**
+     * 指定表名， 列名，以及列名里谁是主键 建表
+     * @param tableName
+     * @param columnName key: 列名;value :；列属性
+     * @param primaryKey 针对ads 传入主键， 针对hive传入的是 分区字段，  这个参数里的字段名 必须在columnName 里存在
+     * @return
+     * @throws SqlRunException
+     */
+    public boolean createTableByName(String tableName,Map<String,String> columnName,List<String> primaryKey) throws SqlRunException;
     
     
     

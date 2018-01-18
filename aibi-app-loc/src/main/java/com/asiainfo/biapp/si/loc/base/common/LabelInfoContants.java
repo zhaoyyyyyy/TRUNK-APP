@@ -34,7 +34,7 @@ public interface LabelInfoContants {
 	/**
 	 * 客户群当天数据写入的纵表列名
 	 */
-	public static final String KHQ_CROSS_COLUMN = "userid";
+	public static final String KHQ_CROSS_COLUMN = "product_no";
 	/**
 	 * 客群群当天写入数据的纵表的分区字段名
 	 */
