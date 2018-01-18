@@ -217,6 +217,17 @@ function fun_to_del(id,sourceId) {
 }
 function fun_to_save() {
 	if($('#formData').validateForm()){
+		var tableName = "";
+		if(!$("#sourceTableName").val()){
+			$.alert("请输入表名");
+			return false;
+		}
+		var tableSchema = $("#tableSchema").val();
+		if(tableSchema!=""&&tableSchema!=null){
+			tableName = tableSchema+"."+$("#sourceTableName").val();
+		}else{
+			tableName = $("#sourceTableName").val();
+		}
 		var colnames = [];
 		var exe = true;
 		$.commAjax({
@@ -224,7 +235,7 @@ function fun_to_save() {
 			async : false,
 			isShowMask : true,
 			maskMassage : 'Load...',
-			postData:{"tableName" : $("#tableSchema").val()+"."+$("#sourceTableName").val()},
+			postData:{"tableName" : tableName},
 			onSuccess : function(data) {
 				
 				if(data.data != null){
@@ -315,11 +326,13 @@ function analysis(){
 		$.alert("请输入表名");
 		return false;
 	}
-	if(!$("#tableSchema").val()){
-		tableName = $("#tableSchema").val()+"."+$("#sourceTableName").val();
+	var tableSchema = $("#tableSchema").val();
+	if(tableSchema!=""&&tableSchema!=null){
+		tableName = tableSchema+"."+$("#sourceTableName").val();
 	}else{
 		tableName = $("#sourceTableName").val();
 	}
+	var colnames=[];
 	$.commAjax({
 		url:$.ctx + "/backSql/columns",
 		postData:{"tableName" : tableName},
@@ -328,6 +341,10 @@ function analysis(){
 			if(data.data==null){
 				$.alert("表不存在");
 				return false;
+			}else{
+				for(var u=0;u < data.data.length;u++){
+					colnames.push(data.data[u].COLUMN_NAME);
+				}
 			}
 			var ids = $("#jsonmap").jqGrid('getDataIDs');
 			for (var isi=0; isi<ids.length; isi++) {//让单元格可以获取内容
@@ -342,15 +359,15 @@ function analysis(){
 				if(isInArray(exitColnames, data.data[i].COLUMN_NAME)){//判断当前行是否已存在
 					continue;
 				}else{
-					if(data.data[i].DATA_TYPE == "string"){
+					if(data.data[i].DATA_TYPE == "varchar"){
 						data.data[i].DATA_TYPE = "2";
-					}else if(data.data[i].DATA_TYPE == "integer"){
+					}else if(data.data[i].DATA_TYPE.indexOf("int") != -1){
 						data.data[i].DATA_TYPE = "1";
 					}
 					var dataRow = {
 						"columnName" : data.data[i].COLUMN_NAME,
 						"cooColumnType" : data.data[i].DATA_TYPE,
-						"sourceName" : "",
+						"sourceName" : data.data[i].COLUMN_NAME,
 						"columnCaliber" : data.data[i].COLUMN_COMMENT,
 						"sourceId" : "",
 						"op" : ""
@@ -374,7 +391,7 @@ function fun_to_import(){
 		for(var i=0;i<sourceList.length;i++){
 			if(sourceList[i].cooColumnType.indexOf("varchar") != -1 || sourceList[i].cooColumnType.indexOf("VARCHAR") != -1  ){
 				sourceList[i].cooColumnType = "2";
-			}else if(sourceList[i].cooColumnType.indexOf("integer") != -1 || sourceList[i].cooColumnType.indexOf("INTEGER") != -1){
+			}else if(sourceList[i].cooColumnType.indexOf("int") != -1 || sourceList[i].cooColumnType.indexOf("INT") != -1){
 				sourceList[i].cooColumnType = "1";
 			}else{
 				sourceList[i].cooColumnType = "2";

@@ -71,7 +71,7 @@ public class BackMysqlDaoImpl extends BaseBackDaoImpl implements IBackSqlDao{
 	public List<Map<String, String>> queryTableColumn(String tableName) {
         try{
             Connection connection = this.getBackConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement("Select COLUMN_NAME, DATA_TYPE, COLUMN_COMMENT from INFORMATION_SCHEMA.COLUMNS Where table_name='"+tableName+"'");
+            PreparedStatement preparedStatement = connection.prepareStatement("Select distinct COLUMN_NAME, DATA_TYPE, COLUMN_COMMENT from INFORMATION_SCHEMA.COLUMNS Where table_name='"+tableName+"'");
             ResultSet resultSet =  preparedStatement.executeQuery();
             List ls = resultSetToList(resultSet);
             return ls;
