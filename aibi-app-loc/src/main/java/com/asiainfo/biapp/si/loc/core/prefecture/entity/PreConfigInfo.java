@@ -6,6 +6,8 @@
 
 package com.asiainfo.biapp.si.loc.core.prefecture.entity;
 
+import io.swagger.annotations.ApiParam;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -20,9 +22,6 @@ import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
 
 import com.asiainfo.biapp.si.loc.base.entity.BaseEntity;
-import com.asiainfo.biapp.si.loc.base.utils.StringUtil;
-
-import io.swagger.annotations.ApiParam;
 
 /**
  * Title : PreConfigInfo

@@ -183,7 +183,7 @@ public class SourceTableInfoServiceImpl extends BaseServiceImpl<SourceTableInfo,
             if (!nameList.contains(s.getColumnName())) {
                 nameList.add(s.getColumnName());
             } else {
-                throw new ParamRequiredException("字段名称不能重复");
+                throw new ParamRequiredException("字段名称["+s.getColumnName()+"]已存在");
             }
         }
 
