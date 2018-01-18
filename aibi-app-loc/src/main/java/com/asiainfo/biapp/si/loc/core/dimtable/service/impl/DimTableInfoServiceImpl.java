@@ -25,6 +25,8 @@ import com.asiainfo.biapp.si.loc.core.dimtable.dao.IDimTableInfoDao;
 import com.asiainfo.biapp.si.loc.core.dimtable.entity.DimTableInfo;
 import com.asiainfo.biapp.si.loc.core.dimtable.service.IDimTableInfoService;
 import com.asiainfo.biapp.si.loc.core.dimtable.vo.DimTableInfoVo;
+import com.asiainfo.biapp.si.loc.core.label.dao.IMdaSysTableColumnDao;
+import com.asiainfo.biapp.si.loc.core.label.vo.MdaSysTableColumnVo;
 import com.asiainfo.biapp.si.loc.core.prefecture.entity.PreConfigInfo;
 import com.asiainfo.biapp.si.loc.core.source.entity.SourceInfo;
 
@@ -114,8 +116,15 @@ public class DimTableInfoServiceImpl extends BaseServiceImpl<DimTableInfo, Strin
         }
         super.saveOrUpdate(dimTableInfo);
     }
-
+    
+    @Autowired
+    private IMdaSysTableColumnDao iMdaSysTableColumnDao ;
     public void deleteDimTableInfoById(String dimId) throws BaseException {
+        MdaSysTableColumnVo mdaSysTableColumnVo = new MdaSysTableColumnVo();
+        mdaSysTableColumnVo.setDimTransId(dimId);
+        if(0 != iMdaSysTableColumnDao.selectMdaSysTableColList(mdaSysTableColumnVo).size()){
+            throw new ParamRequiredException("维表正在使用，无法删除");
+        }
         if (selectDimTableInfoById(dimId)==null){
             throw new ParamRequiredException("ID不存在");
         }

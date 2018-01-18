@@ -73,7 +73,7 @@ window.loc_onload = function() {
             align: "center",
             formatter : function(value, opts, data) {
     			return "<a href='###' onclick='fun_to_detail(\"" + data.configId
-    			+ "\")' ><font color='blue'>" + data.sourceName
+    			+ "\")' ><font class='ui-table-fontColor'>" + data.sourceName
     			+ "</font></a>";
     		}
         },
@@ -130,6 +130,7 @@ window.loc_onload = function() {
             sortable: false,
             width: 60,
             align: "left",
+            title:false,
             formatter: function(value, opts, data) {
             	var html = '';
             	if(data.configStatus != 3){

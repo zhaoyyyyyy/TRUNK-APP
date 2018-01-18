@@ -41,9 +41,8 @@ $.extend({
 	},
 	// 根据状态获取数据
 	getDicData : function(code) {
-//		if($.kvGet(code)){
-//			return eval($.kvGet(code));
-//		}
+		if($.kvGet(code)){return eval($.kvGet(code));}
+		
 		var codes;
 		$.commAjax({
 			url : $.ctx + '/api/dicData/queryList',
@@ -54,7 +53,7 @@ $.extend({
 			onSuccess : function(data) {
 				if(data.status == 200){
 					codes = data.data;
-//					$.kvSet(code,JSON.stringify(codes));
+					$.kvSet(code,JSON.stringify(codes));
 				}
 			}
 		});

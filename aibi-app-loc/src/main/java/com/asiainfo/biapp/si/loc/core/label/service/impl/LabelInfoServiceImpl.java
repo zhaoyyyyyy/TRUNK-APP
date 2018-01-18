@@ -90,10 +90,13 @@ public class LabelInfoServiceImpl extends BaseServiceImpl<LabelInfo, String> imp
     private IMdaSysTableDao iMdaSysTableDao;
     
     @Autowired
-    private IDimTableInfoDao iDimTableInfoDao;
+    private IDimTableInfoDao iDimTableInfoDao;  
     
     @Autowired 
     private IApproveInfoService iApproveInfoService;
+    
+    @Autowired 
+    private ILabelInfoService iLabelInfoService;
     
     @Autowired 
     private ILabelCountRulesService iLabelCountRulesService;
@@ -135,7 +138,12 @@ public class LabelInfoServiceImpl extends BaseServiceImpl<LabelInfo, String> imp
         return super.get(labelId);
     }
 
-    public void addLabelInfo(LabelInfo labelInfo) throws BaseException {
+    public void addLabelInfo(LabelInfo labelInfo) throws BaseException { 
+        LabelInfo label = new LabelInfo();
+        label = iLabelInfoService.selectOneByLabelName(labelInfo.getLabelName());
+        if (null !=label) {
+            throw new ParamRequiredException("标签名称重复");
+        }
         //封装标签规则维表信息
         LabelCountRules labelCountRules = new LabelCountRules();
         labelCountRules.setDependIndex(labelInfo.getDependIndex());
@@ -171,7 +179,7 @@ public class LabelInfoServiceImpl extends BaseServiceImpl<LabelInfo, String> imp
     	mdaSysTableColumn.setTableId(mdaSysTable.getTableId());
         mdaSysTableColumn.setColumnName(labelInfo.getLabelId());
         mdaSysTableColumn.setColumnCnName(labelInfo.getLabelName());
-        if (StringUtil.isNotBlank(labelInfo.getDimId())) {
+        if (labelInfo.getLabelTypeId()==5) {
             DimTableInfo dimTable =iDimTableInfoService.selectDimTableInfoById(labelInfo.getDimId());
             mdaSysTableColumn.setDimTransId(labelInfo.getDimId());
             mdaSysTableColumn.setDataType(labelInfo.getDataType());
@@ -203,15 +211,25 @@ public class LabelInfoServiceImpl extends BaseServiceImpl<LabelInfo, String> imp
         
         //修改元数据表列信息
         MdaSysTableColumn mdaSysTableColumn = iMdaSysTableColService.selectMdaSysTableColBylabelId(labelInfo.getLabelId());
-        if (StringUtil.isNotBlank(labelInfo.getDimId())) {
+        MdaSysTable mdaSysTable = iMdaSysTableService.queryMdaSysTable(labelInfo.getConfigId(),labelInfo.getUpdateCycle(),1);
+        mdaSysTableColumn.setTableId(mdaSysTable.getTableId());
+        mdaSysTableColumn.setColumnName(labelInfo.getLabelId());
+        mdaSysTableColumn.setColumnCnName(labelInfo.getLabelName());
+        if (labelInfo.getDimId()!=null) {
             DimTableInfo dimTable = iDimTableInfoService.selectDimTableInfoById(labelInfo.getDimId());
             mdaSysTableColumn.setDimTransId(labelInfo.getDimId());
             mdaSysTableColumn.setDataType(labelInfo.getDataType());
             int columnDataTypeId = Integer.parseInt(dimTable.getCodeColType());
             mdaSysTableColumn.setColumnDataTypeId(columnDataTypeId);
+        }else if(StringUtil.isNotBlank(labelInfo.getDependIndex())&&labelInfo.getDimId()==null){
+            mdaSysTableColumn.setDimTransId(null);
+            mdaSysTableColumn.setDataType(null);
+            mdaSysTableColumn.setColumnDataTypeId(null);
         }
         if (StringUtil.isNotBlank(labelInfo.getUnit())) {
             mdaSysTableColumn.setUnit(labelInfo.getUnit());
+        }else {
+            mdaSysTableColumn.setUnit(null);
         }
         iMdaSysTableColService.modifyMdaSysTableColumn(mdaSysTableColumn);
     }
@@ -235,6 +253,15 @@ public class LabelInfoServiceImpl extends BaseServiceImpl<LabelInfo, String> imp
         return iLabelInfoDao.selectOneByLabelName(labelName);
     }
 
+    public LabelInfo updateApproveInfo(String approveStatusId,LabelInfo oldLab) throws BaseException{
+        ApproveInfo approveInfo = iApproveInfoService.selectApproveInfo(oldLab.getLabelId());
+        approveInfo.setApproveStatusId(approveStatusId);
+        approveInfo.setApproveTime(new Date());
+        oldLab.setApproveInfo(approveInfo);
+        oldLab.setPublishTime(new Date());   
+        return oldLab;
+    }
+    
     @Override
     public String selectDimNameBylabelId(String labelId) throws BaseException{
         LabelInfo labelInfo = iLabelInfoDao.get(labelId);
@@ -298,4 +325,10 @@ public class LabelInfoServiceImpl extends BaseServiceImpl<LabelInfo, String> imp
 	public List<LabelInfo> selectLabelAllEffectiveInfoList(LabelInfoVo labelInfoVo) {
         return iLabelInfoDao.selectLabelAllEffectiveInfoList(labelInfoVo);
     }
+
+	@Override
+	public void syncUpdateCustomGroupInfo(LabelInfo customGroupInfo) {
+		 iLabelInfoDao.saveOrUpdate(customGroupInfo);
+	}
+	
 }

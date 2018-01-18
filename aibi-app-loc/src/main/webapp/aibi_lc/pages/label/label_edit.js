@@ -76,6 +76,7 @@ window.loc_onload = function() {
 					onSuccess : function(data4){
 						model.countRules = data4.data.countRules;
 						var echodependIndex = data4.data.dependIndex;
+						$("#dependIndex").val(echodependIndex);
 						var dependList = echodependIndex.split(",");
 						for(var i=0; i<dependList.length ; i++){
 							/*$.commAjax({
@@ -174,6 +175,9 @@ window.loc_onload = function() {
 	}
 	$.commAjax({
 		url : $.ctx + '/api/dimtable/dimTableInfo/queryList',
+		postData : {
+			"configId" : model.configId
+		},
 		onSuccess : function(data){
 			model.dimtableInfoList = data.data
 		}

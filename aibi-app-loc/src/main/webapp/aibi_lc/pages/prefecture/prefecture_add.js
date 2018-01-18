@@ -62,8 +62,19 @@ window.loc_onload = function() {
 		    })
 		},
 		updated : function(){
+			if(configId != null && configId != "" && configId != undefined){
 				$("#type"+model.dataAccessType).click();
 				$("#org").val(orgdata[model.orgId]);
+			}else{
+				if($("#type1")){
+					$("#type1").click();
+				}else if($("#type2")){
+					$("#type2").click();
+				}else if($("#type3")){
+					$("#type3").click();
+				}
+			}
+				
 		}
 	})
 	$.commAjax({

@@ -30,7 +30,6 @@ import com.asiainfo.biapp.si.loc.auth.model.User;
 import com.asiainfo.biapp.si.loc.base.controller.BaseController;
 import com.asiainfo.biapp.si.loc.base.exception.BaseException;
 import com.asiainfo.biapp.si.loc.base.page.Page;
-import com.asiainfo.biapp.si.loc.base.utils.LogUtil;
 import com.asiainfo.biapp.si.loc.base.utils.WebResult;
 import com.asiainfo.biapp.si.loc.core.source.entity.SourceInfo;
 import com.asiainfo.biapp.si.loc.core.source.entity.SourceTableInfo;
@@ -204,11 +203,15 @@ public class SourceTableInfoController extends BaseController<SourceTableInfo> {
         WebResult<List<SourceInfo>> webResult = new WebResult<>();
         List<SourceInfo> list = new ArrayList<>();
         if (multipartFile != null && !multipartFile.isEmpty()) {
-            String fileFileName = multipartFile.getOriginalFilename();
+            String fileName = multipartFile.getOriginalFilename();
+            String fileSuffix = fileName.substring(fileName.lastIndexOf(".") + 1).toLowerCase();
+            if(!"csv".equals(fileSuffix)){
+                return webResult.fail("文件类型不正确");
+            }
             try {
-                list = iSourceTableInfoService.parseColumnInfoFile(multipartFile.getInputStream(), fileFileName);
+                list = iSourceTableInfoService.parseColumnInfoFile(multipartFile.getInputStream(), fileName);
             } catch (Exception e) {
-                LogUtil.error(e);
+                return webResult.fail(e.getMessage());
             }
         }
         return webResult.success("读取指标信息列成功", list);

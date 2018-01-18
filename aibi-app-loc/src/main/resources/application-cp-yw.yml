@@ -5,6 +5,6 @@ acrm-url:
 spring:
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:mysql://10.1.245.175:3306/cocdev?characterEncoding=utf8&useSSL=true
-    username: cocdev
-    password: cocdev
+    url: jdbc:mysql://192.168.248.142:3306/coc_suit?useUnicode=true&characterEncoding=utf-8
+    username: cocsuit
+    password: cocsuit

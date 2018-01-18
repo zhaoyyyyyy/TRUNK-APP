@@ -230,7 +230,7 @@ public class CategoryInfoController extends BaseController<CategoryInfo>{
             }
         }
         result = map.get("msg").toString();
-        if((boolean) map.get("success")){
+        if(!(boolean) map.get("success")){
             return webResult.fail(result);
         }
         return webResult.success(result, "success");

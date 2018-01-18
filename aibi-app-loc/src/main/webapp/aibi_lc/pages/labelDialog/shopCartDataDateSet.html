@@ -13,6 +13,9 @@
 [v-cloak] {
 	display: none;
 }
+.ui-datepicker-calendar{
+	display:none;
+}
 </style>
 <!--[if lt IE 9]>
 	    <script src="../../asset/script/component/h5compatibility/html5shiv.min.js"></script>
@@ -21,22 +24,22 @@
 </head>
 <body>
 	<div id="dataDateSet" class="iframe-nest" v-cloak>
-      	<div class="ui-lc-mian"> 
-      		<form>
+		<form>
+      		<div class="ui-lc-mian">
       			<div class="ui-reg-search">
 						<div class="form-horizontal ui-form dimtable-table">
 							<div class="ui-form-group" v-if="existMonthLabel">
 								<label class="control-label fleft" for="labelMonth">数据日期（月）：</label> 
 								<div class="control-input">
 									<input id="labelMonth" name="labelMonth" type="text" class="form-control input-pointer easyui-validatebox" 
-									required="true"	 data-dismiss="formDatepicker#labelMonth"  placeholder="数据日期（月）" v-model="labelMonth"/>
+									required="true"	 placeholder="请选择数据日期（月）" v-model="labelMonth"/>
 								</div>
 							</div>
 							<div class="ui-form-group" v-if="existDayLabel">
 								<label class="control-label fleft" for="labelDay">数据日期（日）：</label> 
 								<div class="control-input">
 									<input id="labelDay" name="labelDay" type="text" class="form-control input-pointer easyui-validatebox"
-									required="true"	 data-dismiss="formDatepicker#labelDay" placeholder="请选择失效日期" v-model="labelDay"/>
+									required="true"	 data-dismiss="formDatepicker#labelDay" placeholder="请选择数据日期（日）" v-model="labelDay"/>
 								</div>
 							</div>
 							<div class="ui-form-group">
@@ -51,8 +54,26 @@
 							</div>
 						</div>
 				</div>
-      		</form>
-        </div>
+	        </div>
+	        
+	        <div class="ui-lc-mian" v-if="isShowPrivaliegeDiv"> 
+	        	<div class="ui-reg-search">
+						<div class="form-horizontal ui-form dimtable-table">
+							<div class="ui-form-group">
+								<label class="control-label fleft" for="labelMonth">数据范围限制：</label> 
+								<div class="control-input">
+									<span v-for="(item,index) in dataPrivaliegeList" >
+										<input type="checkbox" v-model='checkedModelList' v-bind:value="item.id"/>{{item.fullName}}
+									</span>
+								</div>
+							</div>
+							<div class="ui-form-group">
+								<span class="dataDateBox">当前人员的使用数据权限，请进行选择。</span>
+							</div>
+						</div>
+				</div>
+	        </div>
+     	</form>
     </div>     
 </body>
 </html>

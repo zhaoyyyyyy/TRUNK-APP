@@ -92,7 +92,7 @@ window.loc_onload = function(){
 	            {name:'labelName',index:'labelName', width:25, align:"center",sortable:false,
 	            	formatter : function(value, opts, data) {
 	            		return "<a href='###' onclick='fun_to_detail(\"" + data.labelId
-	        			+ "\")' ><font color='blue'>" + data.labelName
+	        			+ "\")' ><font class='ui-table-fontColor'>" + data.labelName
 	        			+ "</font></a>";
 	            	}
 	            },
@@ -117,12 +117,12 @@ window.loc_onload = function(){
 	            	}
 	            },
 	            {name:'createTime',index:'createTime', width:20, align:"center",sortable:false},
-	            {name:'labelId',index:'labelId', width:30, text_aling:"left", key:true,sortable:false,
+	            {name:'labelId',index:'labelId', width:30, text_aling:"left", key:true,sortable:false,title:false,
 	            	formatter : function(value, opts, data) {
 	            		var html = '';
 	            		if(data.dataStatusId !=6){
-	            			if(data.approveInfo.approveStatusId==1){
-	            			    html+= '<button onclick="fun_to_publish(\''+data.labelId+'\')" type="button" class="btn btn-default  ui-table-btn ui-table-btn" >标签审批发布</button>';
+	            			if(data.approveInfo && data.approveInfo.approveStatusId==1){
+	            			    html+= '<button onclick="fun_to_publish(\''+data.labelId+'\')" type="button" class="btn btn-default  ui-table-btn ui-table-btn" >审批并发布</button>';
 	            		    }
 	            		    if(data.dataStatusId==2){
 	            			    html+= '<button onclick="fun_to_over(\''+data.labelId+'\')" type="button" class="btn btn-default  ui-table-btn ui-table-btn" >停用</button>';

@@ -20,6 +20,7 @@ import com.asiainfo.biapp.si.loc.base.exception.BaseException;
 import com.asiainfo.biapp.si.loc.base.exception.ParamRequiredException;
 import com.asiainfo.biapp.si.loc.base.page.Page;
 import com.asiainfo.biapp.si.loc.base.service.impl.BaseServiceImpl;
+import com.asiainfo.biapp.si.loc.base.utils.StringUtil;
 import com.asiainfo.biapp.si.loc.core.label.service.IMdaSysTableService;
 import com.asiainfo.biapp.si.loc.core.prefecture.dao.IPreConfigInfoDao;
 import com.asiainfo.biapp.si.loc.core.prefecture.entity.PreConfigInfo;
@@ -91,6 +92,10 @@ public class PreConfigInfoServiceImpl extends BaseServiceImpl<PreConfigInfo, Str
     }
 
     public void addPreConfigInfo(PreConfigInfo preConfigInfo) throws BaseException {
+        PreConfigInfo rePre = selectOneBySourceName(preConfigInfo.getSourceName());
+        if (null != rePre) {
+            throw new ParamRequiredException("专区名称已存在");
+        }
         preConfigInfo.setCreateTime(new Date());
         preConfigInfo.setConfigStatus(0);
         super.saveOrUpdate(preConfigInfo);
@@ -100,6 +105,13 @@ public class PreConfigInfoServiceImpl extends BaseServiceImpl<PreConfigInfo, Str
     public void modifyPreConfigInfo(PreConfigInfo preConfigInfo) throws BaseException {
         PreConfigInfo oldPre;
         oldPre = selectPreConfigInfoById(preConfigInfo.getConfigId());
+        PreConfigInfo rePre = null;
+        if(StringUtil.isNotBlank(preConfigInfo.getSourceName())){
+            rePre = selectOneBySourceName(preConfigInfo.getSourceName());
+        }
+        if (null != rePre &&StringUtil.isNotBlank(preConfigInfo.getSourceName())&& !oldPre.getSourceName().equals(preConfigInfo.getSourceName())) {
+            throw new ParamRequiredException("专区名称已存在");
+        }
         super.saveOrUpdate(fromToBean(preConfigInfo, oldPre));
     }
 

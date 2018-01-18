@@ -85,7 +85,9 @@ public class CustomerListCreaterThread extends Thread {
 	    	backSqlDao.createVerticalTable(tableName, LabelInfoContants.KHQ_CROSS_COLUMN);
 	    	backSqlDao.insertDataToTabByPartion(countSqlStr, tableName, customGroupId);
 			// 3.发通知
-			
+	    	customGroup.setDataStatusId(LabelInfoContants.CUSTOM_DATA_STATUS_SUCCESS);
+	    	customGroup.setLabelExtInfo(null);
+	    	labelInfoService.syncUpdateCustomGroupInfo(customGroup);
 		} catch (Exception e) {
 			LogUtil.error("生成客户群的清单异常", e);
 		}

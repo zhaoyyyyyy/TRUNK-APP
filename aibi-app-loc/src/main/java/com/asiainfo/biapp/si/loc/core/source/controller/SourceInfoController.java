@@ -28,11 +28,9 @@ import com.asiainfo.biapp.si.loc.base.page.Page;
 import com.asiainfo.biapp.si.loc.base.utils.StringUtil;
 import com.asiainfo.biapp.si.loc.base.utils.WebResult;
 import com.asiainfo.biapp.si.loc.core.source.entity.SourceInfo;
-import com.asiainfo.biapp.si.loc.core.source.entity.SourceTableInfo;
 import com.asiainfo.biapp.si.loc.core.source.service.ISourceInfoService;
 import com.asiainfo.biapp.si.loc.core.source.service.ISourceTableInfoService;
 import com.asiainfo.biapp.si.loc.core.source.vo.SourceInfoVo;
-import com.asiainfo.biapp.si.loc.core.source.vo.SourceTableInfoVo;
 
 /**
  * Title : SourceInfoController
@@ -94,7 +92,7 @@ public class SourceInfoController extends BaseController<SourceInfo> {
     public Page<SourceInfo> sourcelist(@ModelAttribute Page<SourceInfo> page,String configId,String sourceName){
         Page<SourceInfo> sourceInfoPage = new Page<>();
         try {
-            sourceInfoPage = iSourceInfoService.selectSourceInfoListByConfigId(sourceInfoPage, configId,sourceName);
+            sourceInfoPage = iSourceInfoService.selectSourceInfoListByConfigId(page, configId,sourceName);
         } catch (BaseException e) {
             sourceInfoPage.fail(e);
         }

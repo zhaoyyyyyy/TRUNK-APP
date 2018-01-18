@@ -19,10 +19,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.asiainfo.biapp.si.loc.auth.model.User;
-import com.asiainfo.biapp.si.loc.base.common.LabelInfoContants;
 import com.asiainfo.biapp.si.loc.base.common.LabelRuleContants;
 import com.asiainfo.biapp.si.loc.base.controller.BaseController;
 import com.asiainfo.biapp.si.loc.base.exception.BaseException;
+import com.asiainfo.biapp.si.loc.base.exception.ParamRequiredException;
 import com.asiainfo.biapp.si.loc.base.page.Page;
 import com.asiainfo.biapp.si.loc.base.utils.JsonUtil;
 import com.asiainfo.biapp.si.loc.base.utils.LogUtil;
@@ -33,6 +33,7 @@ import com.asiainfo.biapp.si.loc.core.label.entity.LabelExtInfo;
 import com.asiainfo.biapp.si.loc.core.label.entity.LabelInfo;
 import com.asiainfo.biapp.si.loc.core.label.service.IApproveInfoService;
 import com.asiainfo.biapp.si.loc.core.label.service.ILabelInfoService;
+import com.asiainfo.biapp.si.loc.core.label.service.ILabelRuleService;
 import com.asiainfo.biapp.si.loc.core.label.vo.LabelInfoVo;
 import com.asiainfo.biapp.si.loc.core.label.vo.LabelRuleVo;
 
@@ -80,16 +81,33 @@ public class LabelInfoController extends BaseController {
     @Autowired 
     private IApproveInfoService iApproveInfoService;
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(LabelInfoController.class);
-
+    @Autowired
+	private ILabelRuleService ruleService;
+    
     private static final String SUCCESS = "success";
-
+    
+    @ApiOperation(value = "查询客户群规则")
+    @ApiImplicitParams({
+        @ApiImplicitParam(name = "customGroupId", value = "客户群ID", required = true, paramType = "query", dataType = "string") })
+    @RequestMapping(value = "/labelInfo/findCustomRuleById", method = RequestMethod.POST)
+    public WebResult<List<LabelRuleVo>> findCustomRuleById(String customGroupId) {
+        WebResult<List<LabelRuleVo>> webResult = new WebResult<>();
+        List<LabelRuleVo> ruleList = new ArrayList<>();
+        String msg="查询客户群规则失败！";
+        try {
+        	 ruleList = ruleService.queryCiLabelRuleList(customGroupId, LabelRuleContants.LABEL_RULE_FROM_COSTOMER);
+        } catch (Exception e) {
+            return webResult.fail(msg);
+        }
+        return webResult.success("查询客户群规则成功", ruleList);
+    }
+    
     
 	@ApiOperation(value = "保存客户群型标签")
 	@ApiImplicitParams({
 		    @ApiImplicitParam(name = "labelName", value = "客户群名称", required = true, paramType = "query", dataType = "string"),
             @ApiImplicitParam(name = "updateCycle", value = "更新周期", required = true, paramType = "query", dataType = "int"),
-            @ApiImplicitParam(name = "orgId", value = "数据限制", required = true, paramType = "query", dataType = "string"),
+            @ApiImplicitParam(name = "orgId", value = "数据范围", required = true, paramType = "query", dataType = "string"),
             @ApiImplicitParam(name = "tacticsId", value = "策略ID", required = true, paramType = "query", dataType = "string"),
             @ApiImplicitParam(name = "busiLegend", value = "客户群描述", required = true, paramType = "query", dataType = "string"),
             @ApiImplicitParam(name = "configId", value = "专区ID", required = false, paramType = "query", dataType = "string"),
@@ -192,7 +210,7 @@ public class LabelInfoController extends BaseController {
     @RequestMapping(value = "/labelInfo/save", method = RequestMethod.POST)
     public WebResult<String> save(@ApiIgnore LabelInfo labelInfo){
         WebResult<String> webResult = new WebResult<>();
-        LabelInfo label = new LabelInfo();
+        /*LabelInfo label = new LabelInfo();
         try {
             label = iLabelInfoService.selectOneByLabelName(labelInfo.getLabelName());
         } catch (BaseException e1) {
@@ -200,15 +218,11 @@ public class LabelInfoController extends BaseController {
         }
         if (null !=label) {
             return webResult.fail("标签名称重复");
-        }
-        User user = new User();
+        }*/
+        User user = new User();  
         try {
             user = this.getLoginUser();
-        } catch (BaseException e) {
-            LOGGER.info("context", e);
-        }
-        labelInfo.setCreateUserId(user.getUserId());
-        try {
+            labelInfo.setCreateUserId(user.getUserId());
             iLabelInfoService.addLabelInfo(labelInfo);
         } catch (BaseException e) {
             return webResult.fail(e);
@@ -248,25 +262,20 @@ public class LabelInfoController extends BaseController {
         LabelInfo oldLab = new LabelInfo();
         try {
             oldLab = iLabelInfoService.selectLabelInfoById(labelInfo.getLabelId());
+            LabelInfo label = null;
+            if (StringUtil.isNoneBlank(labelInfo.getLabelName())) {
+                label = iLabelInfoService.selectOneByLabelName(labelInfo.getLabelName());
+            } 
+            if (StringUtil.isNoneBlank(labelInfo.getLabelName())&&!oldLab.getLabelName().equals(labelInfo.getLabelName())&& null!= label) {
+                throw new ParamRequiredException("标签名称重复");
+            } 
+            oldLab = fromToBean(labelInfo, oldLab);
+            if (StringUtil.isNotEmpty(approveStatusId)) {
+                oldLab = iLabelInfoService.updateApproveInfo(approveStatusId, oldLab);
+            }
+            iLabelInfoService.modifyLabelInfo(oldLab);
         } catch (BaseException e) {
             return webResult.fail(e);
-        }
-        oldLab = fromToBean(labelInfo, oldLab);
-        if (StringUtil.isNotEmpty(approveStatusId)) {
-            try {
-                ApproveInfo approveInfo = iApproveInfoService.selectApproveInfo(labelInfo.getLabelId());
-                approveInfo.setApproveStatusId(approveStatusId);
-                approveInfo.setApproveTime(new Date());
-                oldLab.setApproveInfo(approveInfo);
-                oldLab.setPublishTime(new Date());
-            } catch (BaseException e) {
-                e.printStackTrace();
-            }
-        }
-        try {
-            iLabelInfoService.modifyLabelInfo(oldLab);
-        } catch (BaseException e1) {
-            return webResult.fail(e1);
         }
         return webResult.success("修改标签信息成功", SUCCESS);
     }
@@ -399,6 +408,9 @@ public class LabelInfoController extends BaseController {
         }
         if (StringUtil.isNoneBlank(lab.getDimId())) {
             oldLab.setDimId(lab.getDimId());
+        }
+        if (StringUtil.isNoneBlank(lab.getDataType())) {
+            oldLab.setDataType(lab.getDataType());
         }
         if (StringUtil.isNoneBlank(lab.getUnit())) {
             oldLab.setUnit(lab.getUnit());

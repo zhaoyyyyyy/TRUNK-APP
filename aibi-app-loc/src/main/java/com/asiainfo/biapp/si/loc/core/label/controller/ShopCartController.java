@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.asiainfo.biapp.si.loc.auth.model.User;
 import com.asiainfo.biapp.si.loc.base.common.LabelInfoContants;
 import com.asiainfo.biapp.si.loc.base.common.LabelRuleContants;
 import com.asiainfo.biapp.si.loc.base.controller.BaseController;
@@ -82,20 +83,20 @@ public class ShopCartController extends BaseController {
 		boolean flag = false;
 		List<LabelRuleVo> rules = getSessionLabelRuleList();
 		for (LabelRuleVo rule : rules) {
-			if(LabelRuleContants.ELEMENT_TYPE_LABEL_ID == rule.getElementType()) {
-				   String effectDate = rule.getEffectDate();
-                   if(LabelInfoContants.LABEL_CYCLE_TYPE_M == rule.getUpdateCycle()) {
-                	   if(Integer.valueOf(newLabelMonthFormat) < Integer.valueOf(effectDate)) {
-                           flag = true;
-                           break;
-                       }
-                   }else{
-                	   if(Integer.valueOf(newLabelDayFormat) < Integer.valueOf(effectDate)) {
-                           flag = true;
-                           break;
-                       } 
-                   }
-			}//end getElementType
+			if (LabelRuleContants.ELEMENT_TYPE_LABEL_ID == rule.getElementType()) {
+				String effectDate = rule.getEffectDate();
+				if (LabelInfoContants.LABEL_CYCLE_TYPE_M == rule.getUpdateCycle()) {
+					if (Integer.valueOf(newLabelMonthFormat) < Integer.valueOf(effectDate)) {
+						flag = true;
+						break;
+					}
+				} else {
+					if (Integer.valueOf(newLabelDayFormat) < Integer.valueOf(effectDate)) {
+						flag = true;
+						break;
+					}
+				}
+			} // end getElementType
 		}
 		if (flag) {
 			return webResult.success("判断所选日期是否早于标签生效日期", SUCCESS);
@@ -120,54 +121,50 @@ public class ShopCartController extends BaseController {
 		    boolean existDayLabel = false;//是否存在日周期标签
 			boolean isAllNewDate = true;//规则中标签是否都是最新数据日期
 			List<LabelRuleVo> rules = getSessionLabelRuleList();
-			if(rules != null) {
-				for(int i=0; i<rules.size(); i++) {
-					LabelRuleVo rule = rules.get(i);
-					if(LabelRuleContants.ELEMENT_TYPE_LABEL_ID == rule.getElementType()) {
-						String dataDate = rule.getDataDate();
-						if(LabelInfoContants.LABEL_CYCLE_TYPE_M == rule.getUpdateCycle()) {
-							existMonthLabel = true;
-							if(Integer.valueOf(dataDate) < Integer.valueOf(monthDate)) {
-								monthDate = dataDate;
-								isAllNewDate = false;
-							}
-						} else {
-							existDayLabel = true;
-							if(Integer.valueOf(dataDate) < Integer.valueOf(dayDate)) {
-								dayDate = dataDate;
-								isAllNewDate = false;
-							}
+			for (LabelRuleVo rule : rules) {
+				if (LabelRuleContants.ELEMENT_TYPE_LABEL_ID == rule.getElementType()) {
+					String dataDate = rule.getDataDate();
+					if (LabelInfoContants.LABEL_CYCLE_TYPE_M == rule.getUpdateCycle()) {
+						existMonthLabel = true;
+						if (Integer.valueOf(dataDate) < Integer.valueOf(monthDate)) {
+							monthDate = dataDate;// 最新日数据日期
+							isAllNewDate = false;
 						}
-					} else if(LabelRuleContants.ELEMENT_TYPE_CUSTOM_RULES == rule.getElementType()){
-						List<LabelRuleVo> children = rule.getChildLabelRuleList();
-						for(int j=0; j<children.size(); j++) {
-							LabelRuleVo child = children.get(j);
-							if(LabelRuleContants.ELEMENT_TYPE_LABEL_ID == child.getElementType()) {
-								String dataDate = child.getDataDate();
-								if(LabelInfoContants.LABEL_CYCLE_TYPE_M == child.getUpdateCycle()) {
-									existMonthLabel = true;
-									if(Integer.valueOf(dataDate) < Integer.valueOf(monthDate)) {
-										monthDate = dataDate;
-										isAllNewDate = false;
-									}
-								} else {
-									existDayLabel = true;
-									if(Integer.valueOf(dataDate) < Integer.valueOf(dayDate)) {
-										dayDate = dataDate;
-										isAllNewDate = false;
-									}
+					} else {
+						existDayLabel = true;
+						if (Integer.valueOf(dataDate) < Integer.valueOf(dayDate)) {
+							dayDate = dataDate;
+							isAllNewDate = false;
+						}
+					}
+				} else if (LabelRuleContants.ELEMENT_TYPE_CUSTOM_RULES == rule.getElementType()) {
+					List<LabelRuleVo> children = rule.getChildLabelRuleList();
+					for (int j = 0; j < children.size(); j++) {
+						LabelRuleVo child = children.get(j);
+						if (LabelRuleContants.ELEMENT_TYPE_LABEL_ID == child.getElementType()) {
+							String dataDate = child.getDataDate();
+							if (LabelInfoContants.LABEL_CYCLE_TYPE_M == child.getUpdateCycle()) {
+								existMonthLabel = true;
+								if (Integer.valueOf(dataDate) < Integer.valueOf(monthDate)) {
+									monthDate = dataDate;
+									isAllNewDate = false;
+								}
+							} else {
+								existDayLabel = true;
+								if (Integer.valueOf(dataDate) < Integer.valueOf(dayDate)) {
+									dayDate = dataDate;
+									isAllNewDate = false;
 								}
 							}
 						}
 					}
-				}
+				} // else if
 			}
-			
 			result.put("monthDate", DateUtil.string2StringFormat(monthDate, DateUtil.FORMAT_YYYYMM, DateUtil.FORMAT_YYYY_MM));//规则中最早月数据日期
 			result.put("dayDate", DateUtil.string2StringFormat(dayDate, DateUtil.FORMAT_YYYYMMDD, DateUtil.FORMAT_YYYY_MM_DD));//规则中最早日数据日期
 			result.put("isAllNewDate", isAllNewDate);
-			result.put("newMonthDate", DateUtil.string2StringFormat(monthDate, DateUtil.FORMAT_YYYYMM, DateUtil.FORMAT_YYYY_MM));//最新月数据日期
-			result.put("newDayDate", DateUtil.string2StringFormat(dayDate, DateUtil.FORMAT_YYYYMMDD, DateUtil.FORMAT_YYYY_MM_DD));//最新日数据日期
+			result.put("newMonthDate", DateUtil.string2StringFormat(CocCacheProxy.getCacheProxy().getNewLabelMonth(), DateUtil.FORMAT_YYYYMM, DateUtil.FORMAT_YYYY_MM));//最新月数据日期
+			result.put("newDayDate", DateUtil.string2StringFormat(CocCacheProxy.getCacheProxy().getNewLabelDay(), DateUtil.FORMAT_YYYYMMDD, DateUtil.FORMAT_YYYY_MM_DD));//最新日数据日期
 			result.put("existMonthLabel", existMonthLabel);
 			result.put("existDayLabel", existDayLabel);
 		} catch (Exception e) {
@@ -187,16 +184,15 @@ public class ShopCartController extends BaseController {
 	public WebResult<String> findLabelValidate( String labelId) {
 		WebResult<String> webResult = new WebResult<>();
 		boolean success = true;
-		String msg = "";
+		String msg = "抱歉，该标签数据未准备好，不能添加到收纳篮！";
 		try {
 			LabelInfo ciLabelInfo = CocCacheProxy.getCacheProxy().getLabelInfoById(labelId);
 			if (StringUtil.isEmpty(ciLabelInfo.getDataDate())) {
 				success = false;
-				msg = "抱歉，该标签数据未准备好，不能添加到收纳篮！";
 			}
 		} catch (Exception e) {
 			LogUtil.error("校验标签异常", e);
-			return webResult.fail(e.getMessage());
+			return webResult.fail(msg);
 		}
 		if (success) {
 			return webResult.success("查询标签是否能够加入到购物车成功", SUCCESS);
@@ -208,7 +204,7 @@ public class ShopCartController extends BaseController {
 	/**
 	 * 添加(规则)到购物车
 	 * 
-	 * 先决0.1获取参数calculationsId typeId（标签，客户群区分） 1、查询缓存中标签是否有效 //TODO
+	 * 先决0.1获取参数calculationsId typeId（标签，客户群区分） 1、查询缓存中标签是否有效 
 	 * 如果是修改用户群，则清空购物车 2、从缓存读取购物车数据，如果已经有标签先添加运算符例如：and or 3、根据标签拼接规则
 	 * 4、查询规则条数放入缓存 5、括号的特殊处理
 	 * 
@@ -221,13 +217,12 @@ public class ShopCartController extends BaseController {
 	public WebResult<String> saveShopSession( String calculationsId, String typeId) {
 		WebResult<String> webResult = new WebResult<>();
 		boolean success = true;
-		String msg = "";
+		String msg = "抱歉，该标签数据未准备好，不能添加到收纳篮！";
 		try {
 			if (LabelRuleContants.LABEL_INFO_CALCULATIONS_TYPEID.equals(typeId)) {
 				LabelInfo ciLabelInfo = CocCacheProxy.getCacheProxy().getLabelInfoById(calculationsId);
 				if (StringUtil.isEmpty(ciLabelInfo.getDataDate())) {
 					success = false;
-					msg = "抱歉，该标签数据未准备好，不能添加到收纳篮！";
 				}
 				// 校验完之后的操作
 				if (success) {
@@ -251,7 +246,7 @@ public class ShopCartController extends BaseController {
 
 		} catch (Exception e) {
 			LogUtil.error("添加(规则)到购物车异常", e);
-			return webResult.fail(e.getMessage());
+			return webResult.fail(msg);
 		}
 		if (success) {
 			return webResult.success("加入购物车成功", SUCCESS);
@@ -314,18 +309,21 @@ public class ShopCartController extends BaseController {
 	@ApiImplicitParams({
 			@ApiImplicitParam(name = "dataDate", value = "日期", required = true, paramType = "query", dataType = "string"),
 			@ApiImplicitParam(name = "dayLabelDate", value = "数据日期(日)", required = true, paramType = "query", dataType = "string"),
-			@ApiImplicitParam(name = "monthLabelDate", value = "数据日期(月)", required = true, paramType = "query", dataType = "string") })
+			@ApiImplicitParam(name = "monthLabelDate", value = "数据日期(月)", required = true, paramType = "query", dataType = "string"),
+			@ApiImplicitParam(name = "dataPrivaliege", value = "数据范围", required = true, paramType = "query", dataType = "string")})
 	@RequestMapping(value = "/validateSql", method = RequestMethod.POST)
 	public WebResult<String> validateSql(String dataDate, String dayLabelDate,
-			String monthLabelDate) {
+			String monthLabelDate,String dataPrivaliege) {
 		WebResult<String> webResult = new WebResult<>();
 		List<LabelRuleVo> labelRules = getSessionLabelRuleList();
 		ExploreQueryParam queryParam = new ExploreQueryParam(dataDate, monthLabelDate, dayLabelDate);
+		queryParam.setOrgId(dataPrivaliege);
 		StringBuffer sql = new StringBuffer();
 		try {
 			//不包含纵表的探索
 			String querySql = exploreServiceImpl.getCountSqlStr(labelRules, queryParam);
 			sql.append("select count(1) ").append(querySql);
+			LogUtil.info("querySql SQL : " + querySql);
 			backServiceImpl.queryCount(sql.toString());
 		} catch (Exception e) {
 			LogUtil.error("校验sql异常", e);
@@ -346,18 +344,21 @@ public class ShopCartController extends BaseController {
 	@ApiImplicitParams({
 			@ApiImplicitParam(name = "dataDate", value = "日期", required = true, paramType = "query", dataType = "string"),
 			@ApiImplicitParam(name = "dayLabelDate", value = "数据日期(日)", required = true, paramType = "query", dataType = "string"),
-			@ApiImplicitParam(name = "monthLabelDate", value = "数据日期(月)", required = true, paramType = "query", dataType = "string") })
+			@ApiImplicitParam(name = "monthLabelDate", value = "数据日期(月)", required = true, paramType = "query", dataType = "string"),
+			@ApiImplicitParam(name = "dataPrivaliege", value = "数据范围", required = true, paramType = "query", dataType = "string")})
 	@RequestMapping(value = "/explore", method = RequestMethod.POST)
-	public WebResult<String> explore(String dataDate, String dayLabelDate,String monthLabelDate) {
+	public WebResult<String> explore(String dataDate, String dayLabelDate,String monthLabelDate,String dataPrivaliege) {
 		WebResult<String> webResult = new WebResult<>();
 		List<LabelRuleVo> labelRules = getSessionLabelRuleList();
 		ExploreQueryParam queryParam = new ExploreQueryParam(dataDate, monthLabelDate, dayLabelDate);
+		queryParam.setOrgId(dataPrivaliege);
 		Integer num;
 		try {
 			StringBuffer sql = new StringBuffer();
 			//不包含纵表的探索
-			String querySql = exploreServiceImpl.getCountSqlStr(labelRules, queryParam);
-			sql.append("select count(1) ").append(querySql);
+			String countSql = exploreServiceImpl.getCountSqlStr(labelRules, queryParam);
+			sql.append("select count(1) ").append(countSql);
+			LogUtil.info("countSql SQL : " + countSql);
 			//调用后台接口
 			num = backServiceImpl.queryCount(sql.toString());
 		} catch (Exception e) {

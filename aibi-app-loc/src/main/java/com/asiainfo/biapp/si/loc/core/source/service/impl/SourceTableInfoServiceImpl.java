@@ -183,24 +183,25 @@ public class SourceTableInfoServiceImpl extends BaseServiceImpl<SourceTableInfo,
             if (!nameList.contains(s.getColumnName())) {
                 nameList.add(s.getColumnName());
             } else {
-                throw new ParamRequiredException("字段名称不能重复");
+                throw new ParamRequiredException("字段名称["+s.getColumnName()+"]已存在");
             }
         }
 
         SourceTableInfo oldSou = selectSourceTableInfoById(sourceTableInfo.getSourceTableId());
-
+        SourceTableInfoVo sourceTableInfoVo = new SourceTableInfoVo();
+        sourceTableInfoVo.setSourceTableName(sourceTableInfo.getSourceTableName());
+        List<SourceTableInfo> sourceTableInfoList = selectSourceTableInfoList(sourceTableInfoVo);
+        if (!sourceTableInfoList.isEmpty() && StringUtil.isNotBlank(sourceTableInfoVo.getSourceTableName())&&!oldSou.getSourceTableName().equals(sourceTableInfo.getSourceTableName())) {
+            throw new ParamRequiredException("表名称已存在");
+        }
         // 保存指标源表
         super.saveOrUpdate(fromToBean(sourceTableInfo, oldSou));
 
         // 修改状态表
         TargetTableStatus targetTableStatus = iTargetTableStatusService.selectTargertTableStatusById(sourceTableInfo
             .getSourceTableId());
-        if (targetTableStatus != null) {
-            targetTableStatus.setSourceTableName(sourceTableInfo.getSourceTableName());
-            iTargetTableStatusService.modifyTargertTableStatus(targetTableStatus);
-        } else {
-            throw new ParamRequiredException("指标源表状态表数据错误");
-        }
+        targetTableStatus.setSourceTableName(sourceTableInfo.getSourceTableName());
+        iTargetTableStatusService.modifyTargertTableStatus(targetTableStatus);
 
         // 修改指标信息列
         List<String> newIds = new ArrayList<>();

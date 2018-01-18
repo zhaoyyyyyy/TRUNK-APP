@@ -1,3 +1,8 @@
+/*
+ * @(#)BaseBackDaoImpl.java
+ *
+ * CopyRight (c) 2018 北京亚信智慧数据科技有限公司 保留所有权利。
+ */
 
 package com.asiainfo.biapp.si.loc.bd.common.dao.impl;
 
@@ -5,6 +10,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
+import java.sql.SQLTimeoutException;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -15,6 +21,8 @@ import javax.sql.DataSource;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceBuilder;
 
 import com.asiainfo.biapp.si.loc.base.BaseConstants;
+
+import com.asiainfo.biapp.si.loc.base.exception.DbConnectException;
 import com.asiainfo.biapp.si.loc.base.exception.SqlRunException;
 import com.asiainfo.biapp.si.loc.cache.CocCacheProxy;
 
@@ -24,7 +32,7 @@ import com.asiainfo.biapp.si.loc.cache.CocCacheProxy;
  * <p/>
  * Description : 
  * <p/>
- * CopyRight : CopyRight (c) 2017
+ * CopyRight : CopyRight (c) 2018
  * <p/>
  * Company : 北京亚信智慧数据科技有限公司
  * <p/>
@@ -33,20 +41,20 @@ import com.asiainfo.biapp.si.loc.cache.CocCacheProxy;
  * Modification History	:
  * <p/>
  * <pre>NO.    Date    Modified By    Why & What is modified</pre>
- * <pre>1    2017年12月25日    Administrator        Created</pre>
+ * <pre>1    2017年12月25日    zhougz3        Created</pre>
  * <p/>
  *
  * @author  zhougz3
  * @version 1.0.0.2017年12月25日
  */
-public class BaseBackDaoImpl {
-	
-	
-	/** 缓冲当前的schema */
-    private static String SYS_BGDB_SCHEMA = null;
-    private static final String REGEX_BEVEL = "/";
-    
 
+public class BaseBackDaoImpl {
+
+    private static final String REGEX_BEVEL = "/";
+    private static final String REGEX_INTERRO = "?";
+    /** 缓冲当前的schema */
+    private static String SYS_BGDB_SCHEMA = null;
+    
     /**
      * Description: 查询当前后台库的schema
      *
@@ -56,6 +64,9 @@ public class BaseBackDaoImpl {
         String schema = null;
         if (null == SYS_BGDB_SCHEMA) {
             String url = CocCacheProxy.getCacheProxy().getSYSConfigInfoByKey(BaseConstants.SYS_BGDB_URL);
+            if (url.contains(REGEX_INTERRO)) { //去掉[?]之后的东西
+                url = new StringBuilder(url).delete(url.indexOf(REGEX_INTERRO) ,url.length()).toString();
+            }
             if (url.endsWith(REGEX_BEVEL)) { //去掉末尾[/]
                 url = new StringBuilder(url).deleteCharAt(url.length() - 1).toString();
             }
@@ -68,6 +79,8 @@ public class BaseBackDaoImpl {
         return schema;
     }
 	
+	
+	
 	/**
 	 * 
 	 * Description: 拿到后台数据DataSource
@@ -75,7 +88,7 @@ public class BaseBackDaoImpl {
 	 * @return
 	 * @throws SQLException 
 	 */
-	public Connection getBackConnection() throws SQLException{
+	public Connection getBackConnection() throws DbConnectException, SqlRunException{
 	        
 		//从配置缓存中拿到后台库的配置
 		String driverClassName = CocCacheProxy.getCacheProxy().getSYSConfigInfoByKey(BaseConstants.SYS_BGDB_DRIVER);
@@ -83,7 +96,16 @@ public class BaseBackDaoImpl {
 		String username = CocCacheProxy.getCacheProxy().getSYSConfigInfoByKey(BaseConstants.SYS_BGDB_USERNAME);
 		String password = CocCacheProxy.getCacheProxy().getSYSConfigInfoByKey(BaseConstants.SYS_BGDB_PASSWORD);
 		DataSource dataSource = this.getDataSourceBuilder(driverClassName,url,username,password).build();
-        return dataSource.getConnection();
+        Connection conn = null;
+        try {
+            conn = dataSource.getConnection();
+        } catch (SQLTimeoutException e) {
+            throw new DbConnectException("后台库连接异常");
+        } catch (SQLException e) {
+            throw new SqlRunException("sql执行异常");
+        }
+        
+        return conn;
     }
 	
 	

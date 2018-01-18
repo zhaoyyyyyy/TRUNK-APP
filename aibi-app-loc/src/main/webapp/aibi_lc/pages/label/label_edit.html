@@ -14,6 +14,13 @@
 [v-cloak] {
 	display: none;
 }
+.ui-edit-h3{
+	font-size: 18px;
+    font-weight: 400;
+    color: #000;
+    padding: 0 10px;
+    margin: 15px 0;
+}
 </style>
 <!--[if lt IE 9]>
 	    <script src="../../asset/script/component/h5compatibility/html5shiv.min.js"></script>
@@ -24,10 +31,10 @@
 	<div id="dataD" class="iframe-nest" v-cloak>
 		<div class="ui-reg-main">
 			<div class="ui-lc-mian">
-			    <div v-if="labelId==''" class="">
+			    <div v-if="labelId==''" class="ui-edit-h3">
 			        <h3>标签新增</h3>
 			    </div>
-			    <div v-else class="">
+			    <div v-else  class="ui-edit-h3">
 			        <h3>标签编辑</h3>
 			    </div>    
 				<form id="saveDataForm">
@@ -98,6 +105,19 @@
                             </div>
                         </div>
                         <div class="ui-form-group ml70">
+                            <label for="categoryId" class="control-label">
+                            <span class="input-required">*</span>
+                                                         标签分类</label>
+                             <div class="control-input ui-form-ztree ml10">
+                             	<input type="hidden" name="categoryId">
+                                <input v-model="categoryName" type="text" class="form-control easyui-validatebox" id="categoryName" onclick="openTtee(this)" required="true" readonly>
+                                <div class="dropdown-menu">
+		                         	<ul id="ztree" class="ztree">
+							        </ul>
+                                </div>
+                            </div>                             
+                        </div>
+                        <div class="ui-form-group ml70">
 		            	    <!-- <input type="hidden" name="dependIndex" v-model="dependIndex"> -->
                             <label for="inputEmail3" class="control-label fleft">
                             <span class="input-required">*</span>
@@ -152,19 +172,7 @@
 				            </div>
                         </div>
 		            	
-						<div class="ui-form-group ml70">
-                            <label for="categoryId" class="control-label">
-                            <span class="input-required">*</span>
-                                                         标签分类</label>
-                             <div class="control-input ui-form-ztree ml10">
-                             	<input type="hidden" name="categoryId">
-                                <input v-model="categoryName" type="text" class="form-control easyui-validatebox" id="categoryName" onclick="openTtee(this)" required="true" readonly>
-                                <div class="dropdown-menu">
-		                         	<ul id="ztree" class="ztree">
-							        </ul>
-                                </div>
-                            </div>                             
-                        </div>
+						
                         
                         
 					</div>

@@ -62,7 +62,7 @@
 	
 	                    </div>
 	                </div>
-	                <form class="clearfix create-main mt10"  v-for="(sourceInfo,index) in sourceInfoList">
+	                <form class="clearfix create-main active mt10"  v-for="(sourceInfo,index) in sourceInfoList">
 	                    <input type="hidden" name="configId" v-model="configId">
 	                    <div class="progress fleft">
 	                        <span class="progress-label">
@@ -86,9 +86,9 @@
 	                                                                        标签类型</label>
 	                                    <div class="control-input fleft ml10">
 	                                       <ul class="validate-radioList">
-											  <li class="" v-for="(g,index) in bqlx" style="display: inline">
+											  <li class="" v-for="g in bqlx" style="display: inline">
 											  	<div class="radio circle success">
-											  		<input class="easyui-validatebox" :value="g.code" :id="index" name="labelTypeId" type="radio" validType="radio"  
+											  		<input class="easyui-validatebox" :value="g.code" name="labelTypeId" type="radio" validType="radio"  
 											  		 :checked="g.checked" onclick="changeStatus(this)"/>
 													<label><i class="default"></i>{{g.dataName}}</label>
 											  	</div>											  	
@@ -199,7 +199,7 @@
 		                                    <span class="input-required">*</span>                                    
 		                                                                        数据类型</label>
 		                                       <div class="control-input">
-		                                            <select name="dataType" required="true" class="easyui-validatebox form-control" selected>
+		                                            <select name="dataType" id="dataType" required="true" class="easyui-validatebox form-control" selected>
 									                   <option v-for = "h in sjlx" :value="h.dataName">{{h.dataName}}</option>
 								                    </select>
 		                                      </div>

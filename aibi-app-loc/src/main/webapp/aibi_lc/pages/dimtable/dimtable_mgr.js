@@ -82,6 +82,7 @@ window.loc_onload = function() {
 									width : 80,
 									sortable : false,
 									align : "center",
+									title:false,
 									formatter : function(value, opts, data) {
 										return "<button type='button' class='btn btn-default  ui-table-btn ui-table-btn' onclick='fun_to_edit(\""
 												+ value
@@ -116,7 +117,7 @@ function fun_to_del(dimId) {
 	});
 }
 function fun_to_detail(dimTableName) {
-	var wd = $.window('维表详情', $.ctx
+	var wd = $.window('维值详情', $.ctx
 			+ '/aibi_lc/pages/dimtable/dimtable_detail.html?dimTableName=' + dimTableName, 900,
 			600);
 	wd.reload = function() {

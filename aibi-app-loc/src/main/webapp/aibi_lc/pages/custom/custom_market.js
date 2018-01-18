@@ -140,7 +140,6 @@ var labelMarket = (function (model){
         	var wd = $.window("群体用户画像", $.ctx + '/aibi_lc/pages/custom/custom_protrait.html', 1000, 700);
         };
         
-        
         /**
          * @description 获取标签体系
          * @param  option

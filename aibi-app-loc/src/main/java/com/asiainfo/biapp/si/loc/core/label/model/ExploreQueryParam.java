@@ -37,10 +37,13 @@ public class ExploreQueryParam {
 	private Integer configId;// 专区ID
 	private String cityId;// 地市ID
 
-	private Integer interval;//偏移量
-	private Integer updateCycle;//客户群周期性
+	private Integer interval;//偏移量	日期型标签使用	
+	private Integer updateCycle;//客户群周期性	日期型标签使用
 	private boolean isValidate;//是否生成校验sql
 
+	/**数据权限 20180117 */
+	private String orgId;
+	
 	public ExploreQueryParam() {
 		super();
 	}
@@ -122,6 +125,14 @@ public class ExploreQueryParam {
 
 	public void setValidate(boolean isValidate) {
 		this.isValidate = isValidate;
+	}
+
+	public String getOrgId() {
+		return orgId;
+	}
+
+	public void setOrgId(String orgId) {
+		this.orgId = orgId;
 	}
 
 }

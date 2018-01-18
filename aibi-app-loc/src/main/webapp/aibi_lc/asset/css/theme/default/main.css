@@ -1005,4 +1005,86 @@ span.del-btn{
 	height:120px;
 	overflow-y:scroll;
 }
+/*客户群预览*/
+.ui-custom-info{
+    border:1px solid #DCE2E4;
+    padding: 10px;
+    width:800px;
+}
+.ui-custom-info > h3{
+    line-height: 35px;
+    font-size: 16px;
+    color: #000;
+}
+.ui-custom-info .ui-custom-item{
+	width:70%;
+	background: #F7F7F7;
+	padding:0px 10px;
+}
+.ui-custom-info .ui-custom-item > a{
+	height:30px;
+	line-height:30px;
+	width:50%;
+	color:#666;
+	display:block;
+	float:left;
+}
+.ui-custom-info  span.ui-label-date{
+	color: #666;
+	padding: 0px 10px 0 0;
+    line-height: 30px;
+}
+.ui-custom-info > .form-group,
+.ui-custom-info > div > .form-group{
+	width:200px;
+}
+.ui-custom-col{
+	width:32%;
+	border:1px solid #DCE2E4;
+}
+.ui-custom-col > h3{
+	padding: 6px;
+    font-size: 14px;
+    color: #FFFFFF;
+    background: #009444;
+    text-align:center;
+}
+.ui-custom-col > .ui-custom-mes{
+	padding:10px;
+	height:320px;
+}
+.ui-custom-col > .ui-custom-mes > p{
+	height: 34px;
+    line-height: 34px;
+    color: #000;
+    font-size: 14px;
+}
+.ui-custom-col > .ui-custom-mes > ul > li > a{
+	display:inline-block;
+	color: #666;
+	background: #F7F7F7;
+	padding:2px 10px 2px;
+	margin:4px 10px;
+}
+.ui-custom-move{
+	width:4%;
+	padding:40px 0;
+}
+.ui-custom-move > a{
+	display:block;
+	width:30px;
+	height:30px;
+	background:url(images/icons.png) no-repeat;
+	margin:50px auto 0;
+}
+.ui-custom-move > a.ui-custom-left{
+	background-position:-30px -90px;
+}
+.ui-custom-move > a.ui-custom-right{
+	background-position:-81px -90px;
+}
+.ui-custom-btn{
+	text-align:right;
+}
+
 

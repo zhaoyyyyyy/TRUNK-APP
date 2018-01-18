@@ -142,7 +142,7 @@
 	 						<li v-bind:class="{open:item.isOpen}" @click="toggleDropdown(item)">
 	 							<a class="label-icon4" herf="javascript:"></a>
 	 							<ul class="dropdown-menu">
-							       <li><a href="#">Action</a></li>
+							       <li><a  href="javascript:;" @click = "window.location='custom_detail.html?labelId='+item.labelId+''">Action</a></li>
 							       <li><a href="#">Another action</a></li>
 							       <li><a href="#">Something else here</a></li>
 						        </ul> 

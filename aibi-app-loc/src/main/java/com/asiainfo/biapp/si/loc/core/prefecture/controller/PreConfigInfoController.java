@@ -12,10 +12,8 @@ import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
-import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -153,13 +151,8 @@ public class PreConfigInfoController extends BaseController<PreConfigInfo> {
     @RequestMapping(value = "/preConfigInfo/save", method = RequestMethod.POST)
     public WebResult<String> save(@ApiIgnore PreConfigInfo preConfigInfo) {
         WebResult<String> webResult = new WebResult<>();
-        PreConfigInfo rePre = new PreConfigInfo();
         User user = new User();
         try {
-            rePre = iPreConfigInfoService.selectOneBySourceName(preConfigInfo.getSourceName());
-            if (null != rePre) {
-                return webResult.fail("专区名称已存在");
-            }
             user = this.getLoginUser();
             preConfigInfo.setCreateUserId(user.getUserId());
             iPreConfigInfoService.addPreConfigInfo(preConfigInfo);

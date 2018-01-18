@@ -83,7 +83,7 @@ window.loc_onload = function() {
 	
 	$("#jsonmap").jqGrid({
 	    url: url,
-	    editurl: $.ctx +"/api/source/sourceInfo/save",
+	    editurl: "clientArray",
 	    postData: pD,
 	    datatype: "json",
 	    colNames: ['源字段名称', '字段类型', '指标名称', '描述','指标编码', '操作'],
@@ -217,6 +217,17 @@ function fun_to_del(id,sourceId) {
 }
 function fun_to_save() {
 	if($('#formData').validateForm()){
+		var tableName = "";
+		if(!$("#sourceTableName").val()){
+			$.alert("请输入表名");
+			return false;
+		}
+		var tableSchema = $("#tableSchema").val();
+		if(tableSchema!=""&&tableSchema!=null){
+			tableName = tableSchema+"."+$("#sourceTableName").val();
+		}else{
+			tableName = $("#sourceTableName").val();
+		}
 		var colnames = [];
 		var exe = true;
 		$.commAjax({
@@ -224,12 +235,12 @@ function fun_to_save() {
 			async : false,
 			isShowMask : true,
 			maskMassage : 'Load...',
-			postData:{"tableName" : $("#tableSchema").val()+"."+$("#sourceTableName").val()},
+			postData:{"tableName" : tableName},
 			onSuccess : function(data) {
 				
 				if(data.data != null){
 					for(var u=0;u < data.data.length;u++){
-						colnames.push(data.data[u].col_name);
+						colnames.push(data.data[u].COLUMN_NAME);
 					}
 				}
 			}
@@ -310,21 +321,24 @@ function fun_to_save() {
 	}
 }
 function analysis(){
+	var tableName = "";
 	if(!$("#sourceTableName").val()){
 		$.alert("请输入表名");
 		return false;
-	}else if(!$("#tableSchema").val()){
-		$.alert("请输入SCHEMA");
-		return false;
 	}
-	var tableName = $("#tableSchema").val()+"."+$("#sourceTableName").val();
+	var tableSchema = $("#tableSchema").val();
+	if(tableSchema!=""&&tableSchema!=null){
+		tableName = tableSchema+"."+$("#sourceTableName").val();
+	}else{
+		tableName = $("#sourceTableName").val();
+	}
 	$.commAjax({
 		url:$.ctx + "/backSql/columns",
 		postData:{"tableName" : tableName},
 		isShowMask : true,
 		onSuccess:function(data){
 			if(data.data==null){
-				$.alert("表不存在");
+				$.alert("表不存在，无法解析");
 				return false;
 			}
 			var ids = $("#jsonmap").jqGrid('getDataIDs');
@@ -337,21 +351,33 @@ function analysis(){
 				exitColnames.push(list[num].columnName);
 			}
 			for(var i=0;i < data.data.length;i++){
-				if(isInArray(exitColnames, data.data[i].col_name)){//判断当前行是否已存在
+				if(isInArray(exitColnames, data.data[i].COLUMN_NAME)){//判断当前行是否已存在
 					continue;
 				}else{
-					if(data.data[i].data_type == "string"){
-						data.data[i].data_type = "2";
-					}else if(data.data[i].data_type == "integer"){
-						data.data[i].data_type = "1";
+					if(data.data[i].DATA_TYPE == "varchar"){
+						data.data[i].DATA_TYPE = "2";
+					}else if(data.data[i].DATA_TYPE.indexOf("int") != -1){
+						data.data[i].DATA_TYPE = "1";
 					}
-					var dataRow = {
-						"columnName" : data.data[i].col_name,
-						"cooColumnType" : data.data[i].data_type,
-						"sourceName" : "",
-						"columnCaliber" : data.data[i].comment,
-						"sourceId" : "",
-						"op" : ""
+					var dataRow = {}
+					if(data.data[i].COLUMN_COMMENT!=""&&data.data[i].COLUMN_COMMENT!=null){
+						dataRow = {
+							"columnName" : data.data[i].COLUMN_NAME,
+							"cooColumnType" : data.data[i].DATA_TYPE,
+							"sourceName" : data.data[i].COLUMN_COMMENT,
+							"columnCaliber" : data.data[i].COLUMN_COMMENT,
+							"sourceId" : "",
+							"op" : ""
+						}
+					}else{
+						dataRow = {
+							"columnName" : data.data[i].COLUMN_NAME,
+							"cooColumnType" : data.data[i].DATA_TYPE,
+							"sourceName" : data.data[i].COLUMN_NAME,
+							"columnCaliber" : data.data[i].COLUMN_NAME,
+							"sourceId" : "",
+							"op" : ""
+						}
 					}
 					model.sortNum += 1;
 					$("#jsonmap").jqGrid("addRowData", model.sortNum, dataRow, "last");
@@ -370,11 +396,9 @@ function fun_to_import(){
 			+ '/aibi_lc/pages/label/dataSource_import.html', 300, 200);
 	wd.addSourceList = function(sourceList) {
 		for(var i=0;i<sourceList.length;i++){
-			var bool = sourceList[i].cooColumnType.indexOf("VARCHAR")>0;
-			debugger;
 			if(sourceList[i].cooColumnType.indexOf("varchar") != -1 || sourceList[i].cooColumnType.indexOf("VARCHAR") != -1  ){
 				sourceList[i].cooColumnType = "2";
-			}else if(sourceList[i].cooColumnType.indexOf("integer") != -1 || sourceList[i].cooColumnType.indexOf("INTEGER") != -1){
+			}else if(sourceList[i].cooColumnType.indexOf("int") != -1 || sourceList[i].cooColumnType.indexOf("INT") != -1){
 				sourceList[i].cooColumnType = "1";
 			}else{
 				sourceList[i].cooColumnType = "2";
@@ -396,7 +420,8 @@ function fun_to_import(){
 function ajax_to_save(url,mesg){
 	$.commAjax({
 		url : url,
-		async : false,
+		isShowMask : true,
+		maskMassage : 'Load...',
 		postData : $('#formData').formToJson(),
 		onSuccess : function(data) {
 			if(data.data == "success"){

@@ -16,26 +16,6 @@ window.loc_onload = function() {
 	});
 	
 	wd.addBtn("ok", "导入", function() {
-//		$.fileUpload({
-//			fileElementId: "upfile",    //需要上传的文件域的ID，即<input type="file">的ID。
-//			url : $.ctx + "/api/source/sourceTableInfo/upload",
-//			dataType: 'json',
-//			isShowMask : true,
-//			maskMassage : 'Load...',
-//			success: function(data) {
-//				debugger;
-//				if(data.status == "success"){
-//					wd.addSourceList(data.data);
-//					$.success(data.msg);
-//					wd.cancel();
-//				}else{
-//					$.alert(data.msg);
-//				}
-//				
-//			},
-//			error: function(data, status, e) {  //提交失败自动执行的处理函数。
-//			}
-//		})
 		if(validateForm()){
 			$.fileUpload({
 				fileElementId: "multipartFile",

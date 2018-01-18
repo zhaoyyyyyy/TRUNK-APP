@@ -13,10 +13,14 @@
 }
 .ui-jqgrid .ui-jqgrid-btable .ui-state-hover {
     border: 1px solid #ccc !important;
-    background: #DB5864 !important;
+    background: #FBEEEF !important;
     font-weight: normal !important;
-    color: #fff !important;
+    /*color: #fff !important;*/
 }
+/*.ui-jqgrid .ui-jqgrid-btable .ui-state-hover .btn-default,
+.ui-jqgrid .ui-jqgrid-btable .ui-state-hover .ui-table-fontColor{
+	 color: #fff !important;
+}*/
 .table>tbody>tr>td{
 	border-top: 0px;
 }
@@ -164,7 +168,13 @@
     cursor: pointer;
 }
 .ui-table-btn:HOVER{
-	color: #108EEA !important;
+	color: #D02433 !important;
+}
+.ui-table-fontColor{
+	color: #108EEA;
+}
+.ui-table-fontColor:HOVER{
+	color: #D02433;
 }
 .ui-table-static .ui-jqgrid tr.jqgrow td:not([style *="none"]){
 	border-left: 0px;

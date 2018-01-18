@@ -119,7 +119,7 @@ window.loc_onload = function() {
 	        	 	if (Ppname == null) {
 			            return;
 				    } else if (Ppname == "") {
-				            $.alert("节点名称不能为空");
+				            $.alert("标签分类名称不能为空");
 				    }else {
 				        $.commAjax({						
 							url : $.ctx + '/api/label/categoryInfo/save',
@@ -261,16 +261,29 @@ window.loc_onload = function() {
 		};
 		//展示选中分类下的标签
 		function zTreeOnClick(event, treeId, treeNode) {
+			$("#selectAll").removeClass("active");
 			leftTreeCagyId =treeNode.categoryId;
+			$("#exampleInputAmount1").val("");
+			$("#leftCategoryName").html(treeNode.categoryName);
 			showLabelInfo();
 		};		
 	}
 	//标签全部选中
-	$("#selectAll").click(function(){				
-		$(".label-select-main ul li").find("input").each(function(){
-			$(this).prop("checked", true);
-			$(this).siblings("label").addClass("active");
-		})
+	$("#selectAll").click(function(){	
+		if($(this).hasClass("active")){
+			$(this).removeClass("active");
+			$(".label-select-main ul li").find("input").each(function(){
+				$(this).prop("checked", false);
+				$(this).siblings("label").removeClass("active");
+			})
+		}else{
+			$(this).addClass("active");
+			$(".label-select-main ul li").find("input").each(function(){
+				$(this).prop("checked", true);
+				$(this).siblings("label").addClass("active");
+			})
+		}
+		
 	})
 	
 	$("#labelList").delegate("input","click",function(){
@@ -394,15 +407,14 @@ window.loc_onload = function() {
 	//标签部分的模糊查询
 	$("#btn_serach1").click(function(){
 		var text =$("#exampleInputAmount1").val();
-		showLabelInfo(text);
-		/*if(labelCategory != 1){
+		if(labelCategory != 1){
 			showLabelInfo(text,1);
 		}else{
 			showLabelInfo(text);
-		}*/
+		}
 	})
 	//全部分类当前分类判断
-	/*var labelCategory; //1.当前分类     其他为全部分类
+	var labelCategory; //1.当前分类     其他为全部分类
 	function distIndex(dataId){
 		labelCategory = 0;
 		if(dataId != 0){
@@ -421,7 +433,7 @@ window.loc_onload = function() {
 				distIndex(e);
 			}
 		})
-	})*/
+	})
 	//右边树的模糊查询
 	$("#btn_serach2").click(function(){
 		$.commAjax({			
@@ -481,4 +493,12 @@ window.loc_onload = function() {
 		    maskMassage : '搜索中...'
 	   });
 	}
+	//导入
+	$("#import").click(function(){
+		var wd = $.window('导入分类信息', $.ctx
+				+ '/aibi_lc/pages/label/category_import.html', 300, 300);
+		wd.success = function(){
+			ztreeFunc();
+		}
+	})
 }

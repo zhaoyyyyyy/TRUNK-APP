@@ -12,6 +12,7 @@ import javax.transaction.Transactional;
 
 import org.springframework.stereotype.Service;
 
+import com.asiainfo.biapp.si.loc.auth.model.User;
 import com.asiainfo.biapp.si.loc.base.common.LabelInfoContants;
 import com.asiainfo.biapp.si.loc.base.common.LabelRuleContants;
 import com.asiainfo.biapp.si.loc.base.exception.BaseException;
@@ -56,14 +57,10 @@ public class LabelExploreServiceImpl implements ILabelExploreService {
 					wherelabel.append(labelConditionSql);
 				}
 			} else if (LabelRuleContants.ELEMENT_TYPE_LIST_ID == rule.getElementType()) {
-				//TODO 客户群清单
 				
 			}
 			
 		}//end for
-
-		
-		
 		
 		return null;
 	}
@@ -131,6 +128,7 @@ public class LabelExploreServiceImpl implements ILabelExploreService {
 		Map<String, String> tableAliasMap = new LinkedHashMap<String, String>();
 		// 别名，要查询的字段集合 map (key:表别名 value：要查询的字段集合)
 		Map<String, Set<String>> aliasColumnMap = new HashMap<String, Set<String>>();
+		String dataTabelAlias = null;//表的别名（拼接where中的cityId，用于权限）
 		StringBuffer wherelabel = new StringBuffer(" (");
 		for (int i = 0; i < ciLabelRuleList.size(); i++) {
 			LabelRuleVo ciLabelRule = ciLabelRuleList.get(i);
@@ -142,6 +140,9 @@ public class LabelExploreServiceImpl implements ILabelExploreService {
 				MdaSysTable table = column.getMdaSysTable();
 				String tableName = table.getTableName();
 				String alias = "t_" + table.getTableId(); // 表的别名:t_tabelId
+				if (StringUtil.isEmpty(dataTabelAlias)) {
+					dataTabelAlias=alias;
+				}
 				/** 1、别名、字段集合 map处理 	*/
 				Set<String> columnSet = new HashSet<String>();
 				if (aliasColumnMap.get(alias) != null) {
@@ -168,10 +169,17 @@ public class LabelExploreServiceImpl implements ILabelExploreService {
 		} // end for
 		wherelabel.append(")");
 		// 省专区，地市专区需要权限,普通专区不需要权限、 拼接where中的cityId，用于权限
-		boolean isNeedAuthen = false;// TODO
+		boolean isNeedAuthen = false;
 		StringBuffer whereSb = new StringBuffer("where 1=1 and ");
+		String cityColumn = "CITY_COLUMN";// TODO ( t_401.CITY_COLUMN in( 571))
+		if (StringUtil.isNotEmpty(dataTabelAlias)&&StringUtil.isNotEmpty(queryParam.getOrgId())) {
+			String orgId = queryParam.getOrgId();
+			whereSb.append(" (").append(dataTabelAlias).append(".").append(cityColumn)
+			.append(" in ").append("(").append(orgId).append(")) and ");
+			isNeedAuthen = true;
+		}
 		whereSb.append(wherelabel);
-		String leftJoinSqlStr = this.getLeftJoinSqlStr(tableAliasMap, aliasColumnMap, andFlag, whereSb, isNeedAuthen);
+		String leftJoinSqlStr = this.getLeftJoinSqlStr(tableAliasMap, aliasColumnMap, andFlag, whereSb, isNeedAuthen,cityColumn);
 		StringBuffer fromSqlSb = new StringBuffer("");
 		fromSqlSb.append(" from ").append(leftJoinSqlStr).append(" ");
 		return fromSqlSb.toString();
@@ -185,7 +193,6 @@ public class LabelExploreServiceImpl implements ILabelExploreService {
 		// 日表、月表表名提取
 		if (LabelInfoContants.LABEL_CYCLE_TYPE_D == ciLabelInfo.getUpdateCycle()) {
 			String dayDate = queryParam.getDayDate();
-			// TODO log.warn("使用日标签时，日期为空");
 			String tablePostfix = "_" + dayDate;
 			tableName += tablePostfix;
 		} else if (LabelInfoContants.LABEL_CYCLE_TYPE_M == ciLabelInfo.getUpdateCycle()) {
@@ -214,12 +221,12 @@ public class LabelExploreServiceImpl implements ILabelExploreService {
 	 * @version ZJ
 	 */
 	private String getLeftJoinSqlStr(Map<String, String> tableAlias, Map<String, Set<String>> aliasColumn,
-			boolean andFlag, StringBuffer whereSb, boolean isNeedAuthen) throws BaseException {
+			boolean andFlag, StringBuffer whereSb, boolean isNeedAuthen, String cityColumn) throws BaseException {
 		if (tableAlias == null || tableAlias.size() == 0) {
 			throw new RuntimeException("没有需要的表");
 		}
 		StringBuffer joinSb = new StringBuffer("");
-		String relatedColumn = "PRODUCT_NO";// TODO RELATED_COLUMN
+		String relatedColumn = LabelInfoContants.KHQ_CROSS_COLUMN;
 		int i = 0;
 		String firstAlias = "";
 		for (String table : tableAlias.keySet()) {
@@ -227,9 +234,7 @@ public class LabelExploreServiceImpl implements ILabelExploreService {
 			Set<String> columnSet = aliasColumn.get(alias);
 			String sql = " (select " + relatedColumn;
 			if (isNeedAuthen == true) {
-				String cityColumn = "CITY_COLUMN";
-				String countyColumn = "COUNTY_COLUMN";
-				sql = sql + "," + cityColumn + "," + countyColumn;
+				sql = sql + "," + cityColumn;
 			}
 			for (String str : columnSet) {
 				sql = sql + "," + str;

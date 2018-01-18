@@ -60,33 +60,10 @@ window.loc_onload = function() {
 			align: "center",
 			autowidth:false,
 			key:true,
+			title:false,
 			formatter: function(value, opts, data) {
-				var html = '<button onclick="fun_to_up(\'' + value + '\')" type="button" class="btn btn-default ui-table-btn">修改</button>';
-				$.commAjax({
-					url:$.ctx+"/api/source/sourceInfo/queryList",
-					async:false,
-					isShowMask : true,
-					maskMassage : 'Load...',
-					postData:{"sourceTableId":value},
-					onSuccess:function(data){
-						var is = "";
-						for(var num = 0 ;num <data.data.length; num++){
-							$.commAjax({
-								url:$.ctx+"/api/label/labelCountRules/queryList",
-								async:false,
-								postData:{"dependIndex":data.data[num].sourceId},
-								onSuccess:function(data){
-									if(data.data.length!=0){
-										is="have";
-									}
-								}
-							})
-						}
-						if(is != "have"){
-							html += '<button onclick="fun_to_del(\'' + value + '\')" type="button" class="btn btn-default  ui-table-btn ui-table-btn">删除</button>';
-						}
-					}
-				})
+				var html = '<button onclick="fun_to_up(\'' + value + '\')" type="button" class="btn btn-default ui-table-btn">修改</button>'
+				+'<button onclick="fun_to_del(\'' + value + '\')" type="button" class="btn btn-default  ui-table-btn ui-table-btn">删除</button>';
 				return html;
 			}
 		}],
@@ -116,18 +93,43 @@ function fun_to_up(id) {
 function fun_to_del(id) {
 	$.confirm("确定删除该指标源表吗？", function() {
 		$.commAjax({
-			url : $.ctx + '/api/source/sourceTableInfo/delete',
-			postData : {
-				"sourceTableId" : id
-			},
-			onSuccess : function(data) {
-				if (data.data == "success") {
-					$.success("删除成功", function() {
-						$("#jsonmap1").setGridParam({
-							postData : $("#formSearch").formToJson()
-						}).trigger("reloadGrid", [ {
-							page : 1
-						} ]);
+			url:$.ctx+"/api/source/sourceInfo/queryList",
+			isShowMask : true,
+			maskMassage : '正在校验...',
+			postData:{"sourceTableId":id},
+			onSuccess:function(data){
+				var is = "";
+				for(var num = 0 ;num <data.data.length; num++){
+					$.commAjax({
+						url:$.ctx+"/api/label/labelCountRules/queryList",
+						async:false,
+						postData:{"dependIndex":data.data[num].sourceId},
+						onSuccess:function(data){
+							if(data.data.length!=0){
+								is="have";
+							}
+						}
+					})
+				}
+				if(is=="have"){
+					$.alert("该指标已被注册");
+				}else{
+					$.commAjax({
+						url : $.ctx + '/api/source/sourceTableInfo/delete',
+						postData : {
+							"sourceTableId" : id
+						},
+						onSuccess : function(data) {
+							if (data.data == "success") {
+								$.success("删除成功", function() {
+									$("#jsonmap1").setGridParam({
+										postData : $("#formSearch").formToJson()
+									}).trigger("reloadGrid", [ {
+										page : 1
+									} ]);
+								})
+							}
+						}
 					})
 				}
 			}

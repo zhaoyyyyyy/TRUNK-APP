@@ -19,6 +19,7 @@ var model = {
 		bqlx : [],
 		isbq : [],
 		gxzq : [],
+		sjlx : [],
 		sourceIdList : [],
 		configId : "",
 		checked:false,//添加radio属性
@@ -27,6 +28,8 @@ function changeStatus(elem){
 	if($(elem).val()==5){
 		$(elem).parents("form").find(".ui-form-hide").show();
 	}else{
+		$("#dimId").removeAttr("name");
+		$("#dataType").removeAttr("name");
 		$(elem).parents("form").find(".ui-form-hide").hide();
 		
 	}
@@ -75,6 +78,10 @@ window.loc_onload = function(){
 			model.gxzq.push(dicgxzq[i]);
 		}
 	}
+	var dicsjlx = $.getDicData("ZDLXZD");
+	for(var i =0 ; i<dicsjlx.length; i++){
+		model.sjlx.push(dicsjlx[i]);
+	}
 	new Vue({
 		el : '#dataD',
 	    data : model ,
@@ -95,14 +102,23 @@ window.loc_onload = function(){
 	    },
 	    mounted: function () {
 		    this.$nextTick(function () {
-		    	this.bqlx[0].checked=true;//默认第一个radio选中
+//		    	this.bqlx[0].checked=true;//默认第一个radio选中
 			    var r = $(".easyui-validatebox");
 	   			if (r.length){
 	   				r.validatebox();
 	   			}
 		    })
 		}
-	})
+	});
+	$.commAjax({
+		url : $.ctx + '/api/dimtable/dimTableInfo/queryList',
+		postData : {
+			"configId" : model.configId
+		},
+		onSuccess : function(data){
+			model.dimtableInfoList = data.data
+		}
+	});
 	$("#dataStatusId").change(function(){
 		$("#mainGrid").setGridParam({
 			postData:{
@@ -272,6 +288,7 @@ function fun_to_save(){
 			if(k == $("form").size() && flag == "success"){	
 				$.success("创建成功",function(){
 					history.back(-1);
+//					window.location.href="label_mgr.html";
 				})
 			}
 			k++;
