@@ -121,7 +121,7 @@ window.loc_onload = function(){
 	            	formatter : function(value, opts, data) {
 	            		var html = '';
 	            		if(data.dataStatusId !=6){
-	            			if(data.approveInfo.approveStatusId==1){
+	            			if(data.approveInfo && data.approveInfo.approveStatusId==1){
 	            			    html+= '<button onclick="fun_to_publish(\''+data.labelId+'\')" type="button" class="btn btn-default  ui-table-btn ui-table-btn" >审批并发布</button>';
 	            		    }
 	            		    if(data.dataStatusId==2){
