@@ -22,13 +22,13 @@ import javax.transaction.Transactional;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
-
-import au.com.bytecode.opencsv.CSVReader;
 
 import com.asiainfo.biapp.si.loc.base.dao.BaseDao;
 import com.asiainfo.biapp.si.loc.base.exception.BaseException;
 import com.asiainfo.biapp.si.loc.base.exception.ParamRequiredException;
+import com.asiainfo.biapp.si.loc.base.extend.SpringContextHolder;
 import com.asiainfo.biapp.si.loc.base.service.impl.BaseServiceImpl;
 import com.asiainfo.biapp.si.loc.base.utils.FileUtil;
 import com.asiainfo.biapp.si.loc.base.utils.LogUtil;
@@ -39,6 +39,8 @@ import com.asiainfo.biapp.si.loc.core.label.entity.CategoryInfo;
 import com.asiainfo.biapp.si.loc.core.label.service.ICategoryInfoService;
 import com.asiainfo.biapp.si.loc.core.label.vo.CategoryInfoVo;
 import com.asiainfo.biapp.si.loc.core.label.vo.LabelInfoVo;
+
+import au.com.bytecode.opencsv.CSVReader;
 
 /**
  * Title : CategoryInfoServiceImpl
@@ -85,12 +87,38 @@ public class CategoryInfoServiceImpl extends BaseServiceImpl<CategoryInfo, Strin
 //        }
         return iCategoryInfoDao.selectCategoryInfoList(categoryInfoVo);
     }
-
+    
+    @Cacheable(value="LabelInfo", key="'selectCategoryPath_'+#categoryId")
+    @Override
+    public String selectCategoryPath(String categoryId) throws BaseException{
+    	return getParentName(categoryId,"");
+    }
+    private String getParentName(String categoryId,String lastPath) throws BaseException {
+    	ICategoryInfoService categoryInfoService = (ICategoryInfoService)SpringContextHolder.getBean("categoryInfoServiceImpl");
+    	CategoryInfo categoryInfo = categoryInfoService.selectCategoryInfoById(categoryId);
+    	if(categoryInfo != null){
+    		categoryInfo.getChildren();
+    		if(categoryInfo != null && categoryInfo.getParentId() != null){
+        		String parentId = categoryInfo.getParentId();
+        		return getParentName(parentId,categoryInfo.getCategoryName()+"/"+lastPath);
+        	}else{
+        		return categoryInfo.getCategoryName()+"/"+lastPath;
+        	}
+    	}else{
+    		return lastPath;
+    	}
+    }
+    
+    @Override
     public CategoryInfo selectCategoryInfoById(String categoryId) throws BaseException {
         if(StringUtils.isBlank(categoryId)){
             throw new ParamRequiredException("ID不能为空");
         }
-        return super.get(categoryId);
+        CategoryInfo categoryInfo = this.findOneByHql("from CategoryInfo b where b.categoryId = ?0 ", categoryId);
+        if(categoryInfo != null){
+        	categoryInfo.getChildren();
+        }
+        return categoryInfo;
     }
     
     public CategoryInfo selectCategoryInfoByCategoryName(String categoryName,String sysId) throws BaseException {

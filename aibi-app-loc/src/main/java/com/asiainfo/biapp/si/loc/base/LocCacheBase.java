@@ -16,6 +16,7 @@ import org.springframework.context.ApplicationContextAware;
 
 import com.asiainfo.biapp.si.loc.auth.model.DicData;
 import com.asiainfo.biapp.si.loc.auth.service.IDicDataService;
+import com.asiainfo.biapp.si.loc.auth.utils.DicDataUtil;
 import com.asiainfo.biapp.si.loc.auth.utils.LocConfigUtil;
 import com.asiainfo.biapp.si.loc.base.common.CommonConstants;
 import com.asiainfo.biapp.si.loc.base.common.LabelInfoContants;
@@ -90,6 +91,13 @@ public class LocCacheBase extends ICacheBase implements ApplicationContextAware{
 		//		Map<Object, Object> cityLabelMap = new ConcurrentHashMap<Object, Object>();
 		CopyOnWriteArrayList<String> labelIds = new CopyOnWriteArrayList<String>();
 		for (LabelInfo c : LabelInfoList) {
+			//执行关联查询，否则因为懒加载无法入缓存
+			c.getApproveInfo();
+			c.getLabelExtInfo();
+			c.getVerticalColumnRels();
+			c.getMdaSysTableColumn();
+			c.getLabelIdLevelDesc();
+			
 			labelIds.add(c.getLabelId() + "");
 			LabelInfoMap.put(CacheKey.EFFECTIVE_LABEL_PREFIX + c.getLabelId(), c);
 			
@@ -216,8 +224,11 @@ public class LocCacheBase extends ICacheBase implements ApplicationContextAware{
 	public void initAllDicData(){
 		LogUtil.info("加载[数据字典]缓存start");
 		try {
-			IDicDataService dataService = (IDicDataService)SpringContextHolder.getBean("dicDataService");
-			List<DicData> allDicDataList = dataService.queryAllDicData();
+//			IDicDataService dataService = (IDicDataService)SpringContextHolder.getBean("dicDataService");
+//			List<DicData> allDicDataList = dataService.queryAllDicData();
+			
+			
+			List<DicData> allDicDataList = DicDataUtil.queryAllDicData();
 			Map<String,Object> returnMap = new HashMap<String,Object>();
 			 for(DicData  dicData : allDicDataList){
 	            	if(returnMap.containsKey(dicData.getDicCode())){

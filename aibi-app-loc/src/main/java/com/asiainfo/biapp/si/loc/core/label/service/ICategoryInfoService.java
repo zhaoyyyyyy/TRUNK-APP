@@ -45,6 +45,16 @@ public interface ICategoryInfoService extends BaseService<CategoryInfo, String>{
      */
     public List<CategoryInfo> selectCategoryInfoList(CategoryInfoVo categoryInfoVo) throws BaseException;
 
+   /**
+    * 
+    * Description: 获取分类路径
+    *
+    * @param categoryId
+    * @return
+    * @throws BaseException
+    */
+    public String selectCategoryPath(String categoryId) throws BaseException;
+    
     /**
      * 通过ID得到一个实体 Description:
      *
