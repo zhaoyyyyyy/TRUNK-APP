@@ -167,11 +167,14 @@
     padding: 6px 12px;
     cursor: pointer;
 }
-/*.ui-table-btn:HOVER{
-	color: #fff !important;
-}*/
+.ui-table-btn:HOVER{
+	color: #D02433 !important;
+}
 .ui-table-fontColor{
 	color: #108EEA;
+}
+.ui-table-fontColor:HOVER{
+	color: #D02433;
 }
 .ui-table-static .ui-jqgrid tr.jqgrow td:not([style *="none"]){
 	border-left: 0px;
