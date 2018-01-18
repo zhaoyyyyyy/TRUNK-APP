@@ -141,9 +141,9 @@ var labelInfoModel = (function (model){
     		 data.orgId = dataModel.checkedModelList.join(',');
     		 data.configId = dataModel.configId ;
     		 data.failTime = $('#failTime').val() ;
-    		 dataModel.labelInfo.dayLabelDate = $('#labelDay').val();
-			 dataModel.labelInfo.monthLabelDate = $('#labelMonth').val();
-			 dataModel.labelInfo.dataDate = $('#labelMonth').val();
+    		 dataModel.labelInfo.dayLabelDate = $('#labelDay').val().replace(/-/g,"");
+			 dataModel.labelInfo.monthLabelDate = $('#labelMonth').val().replace(/-/g,"");
+			 dataModel.labelInfo.dataDate = $('#labelMonth').val().replace(/-/g,"");
     		 dataModel._submitFlag = true;
     		 $.commAjax({
     			  url: url,
