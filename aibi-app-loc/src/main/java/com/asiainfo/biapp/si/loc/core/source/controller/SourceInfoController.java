@@ -92,7 +92,7 @@ public class SourceInfoController extends BaseController<SourceInfo> {
     public Page<SourceInfo> sourcelist(@ModelAttribute Page<SourceInfo> page,String configId,String sourceName){
         Page<SourceInfo> sourceInfoPage = new Page<>();
         try {
-            sourceInfoPage = iSourceInfoService.selectSourceInfoListByConfigId(sourceInfoPage, configId,sourceName);
+            sourceInfoPage = iSourceInfoService.selectSourceInfoListByConfigId(page, configId,sourceName);
         } catch (BaseException e) {
             sourceInfoPage.fail(e);
         }
