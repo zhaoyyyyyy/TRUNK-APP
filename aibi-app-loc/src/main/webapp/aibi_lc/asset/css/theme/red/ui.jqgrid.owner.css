@@ -13,14 +13,14 @@
 }
 .ui-jqgrid .ui-jqgrid-btable .ui-state-hover {
     border: 1px solid #ccc !important;
-    background: #DB5864 !important;
+    background: #FBEEEF !important;
     font-weight: normal !important;
     /*color: #fff !important;*/
 }
-.ui-jqgrid .ui-jqgrid-btable .ui-state-hover .btn-default,
+/*.ui-jqgrid .ui-jqgrid-btable .ui-state-hover .btn-default,
 .ui-jqgrid .ui-jqgrid-btable .ui-state-hover .ui-table-fontColor{
 	 color: #fff !important;
-}
+}*/
 .table>tbody>tr>td{
 	border-top: 0px;
 }
