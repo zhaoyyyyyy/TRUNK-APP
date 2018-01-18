@@ -62,15 +62,25 @@ window.loc_onload = function() {
 		    })
 		},
 		updated : function(){
+			if(configId != null && configId != "" && configId != undefined){
 				$("#type"+model.dataAccessType).click();
 				$("#org").val(orgdata[model.orgId]);
+			}else{
+				if($("#type1")){
+					$("#type1").click();
+				}else if($("#type2")){
+					$("#type2").click();
+				}else if($("#type3")){
+					$("#type3").click();
+				}
+			}
+				
 		}
 	})
 	$.commAjax({
 		url : $.ctx + '/api/user/get',
 		onSuccess : function(data) {
 			if(data.data.orgPrivaliege != null && data.data.orgPrivaliege != undefined){
-				debugger;
 				var orgobj = data.data.orgPrivaliege;
 				for(var i=0; i<4; i++){
 					if(orgobj[i]==undefined){
