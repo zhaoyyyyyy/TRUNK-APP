@@ -92,7 +92,7 @@ window.loc_onload = function(){
 	            {name:'labelName',index:'labelName', width:25, align:"center",sortable:false,
 	            	formatter : function(value, opts, data) {
 	            		return "<a href='###' onclick='fun_to_detail(\"" + data.labelId
-	        			+ "\")' ><font color='blue'>" + data.labelName
+	        			+ "\")' ><font class='ui-table-fontColor'>" + data.labelName
 	        			+ "</font></a>";
 	            	}
 	            },
