@@ -74,7 +74,7 @@ window.loc_onload = function(){
 	}
 	var dicgxzq = $.getDicData("GXZQZD");
 	for(var i =0 ; i<dicgxzq.length; i++){
-		if(dicgxzq[i].code!=1){
+		if(dicgxzq[i].code!=3){
 			model.gxzq.push(dicgxzq[i]);
 		}
 	}

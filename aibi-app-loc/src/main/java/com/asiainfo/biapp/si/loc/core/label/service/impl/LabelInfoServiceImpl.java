@@ -197,6 +197,9 @@ public class LabelInfoServiceImpl extends BaseServiceImpl<LabelInfo, String> imp
         }else if (labelInfo.getDataStatusId()==2) {
             labelInfo.setEffecTime(new Date());
         }*/
+        if (labelInfo.getDataStatusId()==2) {
+            labelInfo.setEffecTime(new Date());
+        }
         super.saveOrUpdate(labelInfo);
         
         //修改标签规则维表信息

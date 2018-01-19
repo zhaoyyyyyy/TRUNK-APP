@@ -141,7 +141,7 @@ window.loc_onload = function(){
 	            	}
 	            },
 	        ],
-	        rowNum:12,
+//	        rowNum:10,
 	        rowList:[10,20,30],
 	        viewrecords: true,
 //	        multiselect:true,
