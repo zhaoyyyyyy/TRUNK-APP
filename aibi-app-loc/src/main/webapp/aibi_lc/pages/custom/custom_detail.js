@@ -11,6 +11,33 @@ var model = {
 }
 
 window.loc_onload = function() {
+	$("#dialog").dialog({
+	    height:240,
+	    width: 400,
+	    modal: true,
+	    autoOpen: true,
+	    title:"推送设置",
+	    buttons: [
+    	    {
+    	       text: "取消",
+    	       "class":"ui-btn ui-btn-second",
+    	        click: function() {
+    	        	$( this ).dialog( "close" );
+    	     	}
+	  	    },
+	  	    {
+    	        text: "确定",
+    	        "id":"add-dialog-btn",
+    	        "class":"ui-btn ui-btn-default",
+    	        click: function() {
+    	        	$( this ).dialog( "close" );	    	        
+    	        }
+	    	}
+  		],
+	    open:function(){
+	      	$(".form-horizontal").show();
+	    }
+    });
 	var labelId = $.getUrlParam("labelId");
 	var configId = $.getCurrentConfigId();
 	model.configId = configId;
