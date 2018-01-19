@@ -230,7 +230,7 @@ public class LabelInfo extends BaseEntity {
      * 标签ID层级描述
      */
     @Column(name = "LABEL_ID_LEVEL_DESC")
-    @ApiParam(value = "标签ID层级描述")
+    @ApiParam(value = "标签层级描述(只能展示，无法用作查询条件)")
     private String labelIdLevelDesc;
 
     /**
