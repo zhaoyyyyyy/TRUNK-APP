@@ -1009,7 +1009,6 @@ span.del-btn{
 .ui-custom-info{
     border:1px solid #DCE2E4;
     padding: 10px;
-    width:800px;
 }
 .ui-custom-info > h3{
     line-height: 35px;
@@ -1019,7 +1018,7 @@ span.del-btn{
 .ui-custom-info .ui-custom-item{
 	width:70%;
 	background: #F7F7F7;
-	padding:0px 10px;
+	padding:6px 10px;
 }
 .ui-custom-info .ui-custom-item > a{
 	height:30px;
@@ -1031,7 +1030,7 @@ span.del-btn{
 }
 .ui-custom-info  span.ui-label-date{
 	color: #666;
-	padding: 0px 10px 0 0;
+	padding: 6px 10px 0 0;
     line-height: 30px;
 }
 .ui-custom-info > .form-group,
@@ -1039,14 +1038,13 @@ span.del-btn{
 	width:200px;
 }
 .ui-custom-col{
-	width:32%;
+	width:22%;
 	border:1px solid #DCE2E4;
 }
 .ui-custom-col > h3{
-	padding: 6px;
+	padding: 10px;
     font-size: 14px;
-    color: #FFFFFF;
-    background: #009444;
+    background: #F7F7F7;
     text-align:center;
 }
 .ui-custom-col > .ui-custom-mes{
