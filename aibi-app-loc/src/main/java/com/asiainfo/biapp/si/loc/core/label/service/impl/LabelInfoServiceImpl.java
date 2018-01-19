@@ -210,7 +210,7 @@ public class LabelInfoServiceImpl extends BaseServiceImpl<LabelInfo, String> imp
         if (StringUtil.isNotBlank(labelInfo.getCountRules())) {
             labelCountRules.setCountRules(labelInfo.getCountRules());
         }
-        iLabelCountRulesService.modifyLabelCountRules(labelCountRules);
+        iLabelCountRulesService.modifyLabelCountRules(labelCountRules); 
         
         //修改元数据表列信息
         MdaSysTableColumn mdaSysTableColumn = iMdaSysTableColService.selectMdaSysTableColBylabelId(labelInfo.getLabelId());
