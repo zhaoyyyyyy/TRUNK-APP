@@ -25,7 +25,6 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
-import springfox.documentation.annotations.ApiIgnore;
 
 /**
  * Title : DimTableDataController
@@ -94,16 +93,16 @@ public class DimTableDataController extends BaseController<DimTableData>{
     
     @ApiOperation(value = "维表信息跑数")
     @RequestMapping(value = "/dimtableinfo2data", method = RequestMethod.POST)
-    @ApiImplicitParam(name = "tableName", value = "表名称(可选，不传是全量跑)",paramType = "query", dataType = "string")
-    public WebResult<String> execute(String tableName) {
+    @ApiImplicitParam(name = "tableName", value = "表名称(可变参数，可选，不传是全量跑)",paramType = "query", dataType = "string")
+    public WebResult<String> execute(String ...tableName) {
         WebResult<String> webResult = new WebResult<>();
         try {
             iDimTableDataService.dimTableInfo2Data(tableName);
         } catch (BaseException e) {
             return webResult.fail(e);
         }
+
         return webResult.success("维表信息跑数成功", SUCCESS);
-        
     }
 
 }

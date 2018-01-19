@@ -61,7 +61,7 @@ public interface IDimTableDataService extends BaseService<DimTableData, DimTable
      * @param String tableName 维表表名
      *
      */
-    public void dimTableInfo2Data(String tableName) throws BaseException;
+    public void dimTableInfo2Data(String ...tableName) throws BaseException;
  
 
 }
