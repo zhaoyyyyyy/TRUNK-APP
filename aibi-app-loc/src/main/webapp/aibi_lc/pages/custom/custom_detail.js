@@ -15,7 +15,7 @@ window.loc_onload = function() {
 	    height:240,
 	    width: 400,
 	    modal: true,
-	    autoOpen: true,
+	    autoOpen: false,
 	    title:"推送设置",
 	    buttons: [
     	    {
@@ -38,6 +38,7 @@ window.loc_onload = function() {
 	      	$(".form-horizontal").show();
 	    }
     });
+    
 	var labelId = $.getUrlParam("labelId");
 	var configId = $.getCurrentConfigId();
 	model.configId = configId;
@@ -61,6 +62,13 @@ window.loc_onload = function() {
 	new Vue({
 		el : '#dataD',
 		data : model,
+		methods:{
+			showDialog:function(){
+				$("#dialog").dialog({
+		    		autoOpen: true,
+		    	})
+			}
+		},
 		mounted: function () {
 		    this.$nextTick(function () {
 			    var r = $(".easyui-validatebox");
@@ -70,6 +78,8 @@ window.loc_onload = function() {
 		    })
 		}
 	})
+	
+	
 	
 	//标签体系
 	labeltree();
