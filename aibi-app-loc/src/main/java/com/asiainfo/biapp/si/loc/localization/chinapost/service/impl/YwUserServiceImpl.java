@@ -16,6 +16,7 @@ import com.asiainfo.biapp.si.loc.auth.model.Resource;
 import com.asiainfo.biapp.si.loc.auth.model.TokenModel;
 import com.asiainfo.biapp.si.loc.auth.model.User;
 import com.asiainfo.biapp.si.loc.auth.service.IUserService;
+import com.asiainfo.biapp.si.loc.auth.service.impl.DevUserServiceImpl;
 import com.asiainfo.biapp.si.loc.base.dao.BaseDao;
 import com.asiainfo.biapp.si.loc.base.exception.BaseException;
 import com.asiainfo.biapp.si.loc.base.exception.ParamRequiredException;
@@ -51,7 +52,7 @@ import net.sf.json.JSONObject;
 @Profile("cp-yw")
 @Service("userService")
 @Transactional
-public class YwUserServiceImpl extends BaseServiceImpl<User, String> implements IUserService{
+public class YwUserServiceImpl extends DevUserServiceImpl implements IUserService{
 
 	@Value("${jauth-url}")  
     private String jauthUrl; 
@@ -63,35 +64,19 @@ public class YwUserServiceImpl extends BaseServiceImpl<User, String> implements 
 	protected BaseDao<User, String> getBaseDao() {
 		return null;
 	}
-
+	
 	/**
-	 * 
+	 * 通过用户名拿到token
+	 * 要经过现场的服务认证
 	 * {@inheritDoc}
-	 * @see com.asiainfo.biapp.si.loc.auth.service.IUserService#getTokenByUsernamePassword(java.lang.String, java.lang.String)
+	 * @see com.asiainfo.biapp.si.loc.auth.service.impl.DevUserServiceImpl#getTokenByUsername(java.lang.String)
 	 */
 	@Override
-	public TokenModel getTokenByUsernamePassword(String username, String password) throws BaseException{
-		if(StringUtil.isEmpty(username)){
-			throw new ParamRequiredException("用户名不能为空");
-		}
-		if(StringUtil.isEmpty(password)){
-			throw new ParamRequiredException("密码不能为空");
-		}
-		Map<String,Object> map = new HashMap<String,Object>();
-		map.put("username", username);
-		map.put("password", password);
-		
-		try{
-			String	tokenStr = HttpUtil.sendPost(jauthUrl+"/api/auth/login", map);
-			JSONObject jsObject = JSONObject.fromObject(tokenStr);
-			TokenModel tokenModel = new TokenModel();
-			tokenModel.setToken(jsObject.getString("token"));
-			tokenModel.setRefreshToken(jsObject.getString("refreshToken"));
-			return tokenModel;
-		}catch(Exception e){
-			throw new UserAuthException("错误的用户名/密码");
-			
-		}
+	public TokenModel getTokenByUsername(String username) throws BaseException{
+		//TODO 1 去cookie里面得到签名
+		//TODO 2 访问acrm尽兴签名认证
+		//DOEN 3  签名认证成功后通过后返回
+		return super.getTokenByUsername(username);
 	}
 
 	/**
@@ -109,7 +94,6 @@ public class YwUserServiceImpl extends BaseServiceImpl<User, String> implements 
 		
 		//拿到用户名
 		try{
-			
 			String tokenStr = HttpUtil.sendGet(jauthUrl+"/api/auth/me", params);
 			JSONObject jsObject = JSONObject.fromObject(tokenStr);
 			username = jsObject.getString("username");
