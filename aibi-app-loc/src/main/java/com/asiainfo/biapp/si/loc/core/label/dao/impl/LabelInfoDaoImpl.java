@@ -145,10 +145,11 @@ public class LabelInfoDaoImpl extends BaseDaoImpl<LabelInfo, String> implements 
             hql.append("and l.applySuggest = :applySuggest ");
             params.put("applySuggest", labelInfoVo.getApplySuggest());
         }
-        if (StringUtil.isNotBlank(labelInfoVo.getLabelIdLevelDesc())) {
-            hql.append("and l.labelIdLevelDesc = :labelIdLevelDesc ");
-            params.put("labelIdLevelDesc", labelInfoVo.getLabelIdLevelDesc());
-        }
+        //modify by zhougz3 此配置异步生成，暂时不访问数据库 20180119
+//        if (StringUtil.isNotBlank(labelInfoVo.getLabelIdLevelDesc())) {
+//            hql.append("and l.labelIdLevelDesc = :labelIdLevelDesc ");
+//            params.put("labelIdLevelDesc", labelInfoVo.getLabelIdLevelDesc());
+//        }
         if (null != labelInfoVo.getIsRegular()) {
             hql.append("and l.isRegular = :isRegular ");
             params.put("isRegular", labelInfoVo.getIsRegular());
@@ -271,10 +272,11 @@ public class LabelInfoDaoImpl extends BaseDaoImpl<LabelInfo, String> implements 
             hql.append("and l.applySuggest = :applySuggest ");
             params.put("applySuggest", labelInfoVo.getApplySuggest());
         }
-        if (StringUtil.isNotBlank(labelInfoVo.getLabelIdLevelDesc())) {
-            hql.append("and l.labelIdLevelDesc = :labelIdLevelDesc ");
-            params.put("labelIdLevelDesc", labelInfoVo.getLabelIdLevelDesc());
-        }
+      //modify by zhougz3 此配置异步生成，暂时不访问数据库 20180119
+//        if (StringUtil.isNotBlank(labelInfoVo.getLabelIdLevelDesc())) {
+//            hql.append("and l.labelIdLevelDesc = :labelIdLevelDesc ");
+//            params.put("labelIdLevelDesc", labelInfoVo.getLabelIdLevelDesc());
+//        }
         if (null != labelInfoVo.getIsRegular()) {
             hql.append("and l.isRegular = :isRegular ");
             params.put("isRegular", labelInfoVo.getIsRegular());
