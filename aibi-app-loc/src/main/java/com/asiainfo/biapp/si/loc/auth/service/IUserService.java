@@ -11,6 +11,14 @@ import com.asiainfo.biapp.si.loc.base.exception.BaseException;
 public interface IUserService {
 	
 	/**
+	 * 登录方法，单点登录通过用户名获取token
+	 * @param userName 用户名
+	 * @param password 密码
+	 * @return TokenModel   秘钥  包括当前秘钥跟刷新秘钥
+	 */
+	public TokenModel getTokenByUsername(String username) throws BaseException;
+	
+	/**
 	 * 登录方法，通过用户名密码拿到token
 	 * @param userName 用户名
 	 * @param password 密码

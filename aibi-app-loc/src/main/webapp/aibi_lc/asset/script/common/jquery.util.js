@@ -64,7 +64,7 @@ $.extend({
 		}
 		if(!tokenStr){
 			alert('token失效，请重新登录');
-			window.location.href = $.loginURL;
+			window.location.href = $.ctx ? $.ctx : "/";
 		}
 		$.ajax({
 			headers 	: {'X-Authorization': tokenStr},
@@ -109,7 +109,7 @@ $.extend({
 						$.alert('未找到对应请求。');
 					}else if(req.status == "401"){
 						$.alert('登录超时，点击确认重新登录。',function(){
-							 location.href = $.ctx ==""?"/":$.ctx;
+							 location.href = $.ctx ? $.ctx : "/";
 						});
 					}
 				} else if (st == 'timeout') {

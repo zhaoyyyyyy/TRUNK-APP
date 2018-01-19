@@ -17,7 +17,7 @@ public class UserAuthException extends BaseException{
 	}
 	
 	public UserAuthException(String message,Exception e){
-		LogUtil.error("获取用户权限异常",e);
+		//LogUtil.error("获取用户权限异常",e);
 		super.setMsg(message);
 		super.setCode(errorCode);
 	}
