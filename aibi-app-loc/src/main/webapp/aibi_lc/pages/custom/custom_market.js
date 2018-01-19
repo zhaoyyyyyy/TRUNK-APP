@@ -168,9 +168,12 @@ var labelMarket = (function (model){
 			// $("#configId").val($.getCurrentConfigId());
 			var obj = $("#formSearch").formToJson();
 			obj.pageSize = 20;
+			obj.groupType = 0;
 			$.commAjax({
 				url: $.ctx + "/api/label/labelInfo/queryPage",
 				postData:obj,
+				isShowMask : true,
+				maskMassage : '正在查找...',
 				onSuccess: function(data){
 					dataModel.page.currentPageNo=data.currentPageNo;
 					dataModel.page.totalCount=data.totalCount;
@@ -181,6 +184,8 @@ var labelMarket = (function (model){
 						}else{
 							data.rows[i].customNum = "0";
 						}
+						data.rows[i].customRuleShow = data.rows[i].labelExtInfo.labelOptRuleShow;
+						data.rows[i].customComment = data.rows[i].labelExtInfo.techCaliber;
 					}
 					dataModel.labelInfoList = data.rows;
 				}
@@ -304,6 +309,22 @@ var labelMarket = (function (model){
 		model.btn_search = function(){
 			$("#labelName").val($("#labelNameText").val());
 			model.loadLabelInfoList();
+		}
+		
+		//查找我创建的客户群
+		model.myCreateCustom = function(obj){
+			if(obj.checked){
+				$.commAjax({
+					url: $.ctx + "/api/user/get",
+					onSuccess: function(data){
+						$("#createUserId").val(data.data.userId);
+						model.loadLabelInfoList();
+					}
+				});
+			}else{
+				$("#createUserId").val("");
+				model.loadLabelInfoList();
+			}
 		}
         
 		/**

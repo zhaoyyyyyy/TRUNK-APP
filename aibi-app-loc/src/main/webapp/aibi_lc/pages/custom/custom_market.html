@@ -51,6 +51,7 @@
 					<input id="sortOrder" name="sortOrder" type="hidden" />
 					<input id="publishTimeStart" name="publishTimeStart" type="hidden">
 					<input id="publishTimeEnd" name="publishTimeEnd" type="hidden">
+					<input id="createUserId" name="createUserId" type="hidden">
 				</form>
 				<form>
 					<ul class="ui-label-system" >
@@ -99,6 +100,7 @@
 			<div class="ui-filter-bar ui-lc-mian">
 				<a onclick="labelMarket.changeSortCol(this)" id="customNum" name="labelExtInfo.customNum" class="fleft active">人气</a>
 				<a onclick="labelMarket.changeSortCol(this)" id="sortPublishTime" name="publishTime" class="fleft">创建时间</a>
+				<div class="fright mr10"><input type="checkbox" id="mySelf" onclick="labelMarket.myCreateCustom(this)"><span>我创建的客户群</span></input></div>
 			</div>
 			<ul id="labelList" class="clearfix ui-label-list" >
 				<li v-for="(item,index) in labelInfoList" :class="{padding0 : (index+1)%4 ==0 }" >
@@ -121,7 +123,7 @@
 								</a>
 							</div>
 							<h4 class="ui-business-caliber">
-								规则
+								规则<span>{{item.customRuleShow}}</span>
 							</h4>
 							<h4 class="ui-business-caliber">
 								描述

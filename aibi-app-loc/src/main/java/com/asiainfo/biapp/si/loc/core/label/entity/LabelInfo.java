@@ -306,7 +306,6 @@ public class LabelInfo extends BaseEntity {
     //@JoinColumn(name = "LABEL_ID", referencedColumnName = "LABEL_ID", insertable = false, updatable = false)
     private Set<LabelVerticalColumnRel> verticalColumnRels;
 
-    @JsonIgnore
     @Transient
 //    @OneToOne(fetch = FetchType.EAGER)
 //    @JoinColumn(name = "LABEL_ID", referencedColumnName = "LABEL_ID", insertable = false, updatable = false)
