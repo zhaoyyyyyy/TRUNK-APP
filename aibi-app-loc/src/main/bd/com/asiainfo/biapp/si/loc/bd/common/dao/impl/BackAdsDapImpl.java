@@ -10,11 +10,13 @@ import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
+import org.springframework.stereotype.Repository;
 
 import com.asiainfo.biapp.si.loc.base.exception.SqlRunException;
 import com.asiainfo.biapp.si.loc.base.utils.LogUtil;
 import com.asiainfo.biapp.si.loc.bd.common.dao.IBackSqlDao;
 
+@Repository("backAdsDaoImpl")
 public class BackAdsDapImpl  extends BaseBackDaoImpl implements IBackSqlDao{
 	private Logger log = Logger.getLogger(BackAdsDapImpl.class);
 	@Override
@@ -41,7 +43,7 @@ public class BackAdsDapImpl  extends BaseBackDaoImpl implements IBackSqlDao{
         if (null != datas && !datas.isEmpty()) {
             LogUtil.debug("There are "+datas.size()+" cols in the table."+datas.toString());
             for (Map<String, String> map : datas) {
-                if (!map.get("col_name").contains("#")) {
+                if ((map.get("col_name")!=null)&&(!map.get("col_name").contains("#"))) {
                     res.add(map);
                 } else {    //在hive的rs中去掉以[#]开始的以下的列
                     break;
@@ -64,6 +66,7 @@ public class BackAdsDapImpl  extends BaseBackDaoImpl implements IBackSqlDao{
             }
         }catch (Exception e){
             res = false;
+            LogUtil.error("isExistsTable出错！"+e);
             throw new SqlRunException("操作后台库出错");
         }
         
@@ -124,6 +127,7 @@ public class BackAdsDapImpl  extends BaseBackDaoImpl implements IBackSqlDao{
                 }
             }
         }catch (Exception e){
+        	LogUtil.error("操作后台库出错", e);
             throw new SqlRunException("操作后台库出错");
         }
 		return rows;
@@ -162,8 +166,10 @@ public class BackAdsDapImpl  extends BaseBackDaoImpl implements IBackSqlDao{
 		
 		log.debug(" ----------   BackAdsDapImpl.insertDataToTabByPartion sql =  " + sb.toString());
 		try{
+			Thread.sleep(1000);
             return this.executeResBoolean(sb.toString());
         }catch (Exception e){
+        	LogUtil.error("插入数据出错！"+e);
             throw new SqlRunException("操作后台库出错");
         }
 	}
@@ -201,6 +207,7 @@ public class BackAdsDapImpl  extends BaseBackDaoImpl implements IBackSqlDao{
 		try{
             return this.executeResBoolean(sb.toString());
         }catch (Exception e){
+        	LogUtil.error("createTableByName出错！"+e);
             throw new SqlRunException("操作后台库出错");
         }
 	}
@@ -212,11 +219,13 @@ public class BackAdsDapImpl  extends BaseBackDaoImpl implements IBackSqlDao{
         try{
             Connection connection = this.getBackConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
-            res =  preparedStatement.execute();
+           // res =  preparedStatement.execute();
+            preparedStatement.execute();
             log.debug(" ----------   BackAdsDapImpl.executeResBoolean res =  " + res);
             LogUtil.debug(new StringBuffer(sql).append(" cost:").append(System.currentTimeMillis()-s).append("ms."));
             
         }catch (Exception e){
+        	LogUtil.error("executeResBoolean出错！"+e);
             res = false;
             throw new SqlRunException("操作后台库出错");
         }
