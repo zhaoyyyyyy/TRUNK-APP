@@ -58,6 +58,8 @@ window.loc_onload = function() {
     			ulListId=index;
     			$.commAjax({
 				    url: $.ctx + "/api/label/categoryInfo/queryList",
+				    isShowMask : true,
+					maskMassage : '加载分类...',
 				    postData:{
 				    	"sysId" :dataModel.configId,
 					    parentId :categoryId
@@ -211,6 +213,8 @@ var labelMarket = (function (model){
 			$.commAjax({
 				url: $.ctx + "/api/label/labelInfo/queryPage",
 				postData:obj,
+				isShowMask : true,
+				maskMassage : '正在查找...',
 				onSuccess: function(data){
 					dataModel.page.currentPageNo=data.currentPageNo;
 					dataModel.page.totalCount=data.totalCount;
