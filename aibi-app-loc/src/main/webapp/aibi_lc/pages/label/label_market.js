@@ -117,8 +117,10 @@ window.loc_onload = function() {
 		onClose: function(dateText, inst) {// 关闭事件  
 			if($(this).hasClass("publishStar")){
 				$("#publishTimeStart").val($(this).val());
+				labelMarket.loadLabelInfoList();
 			}else if($(this).hasClass("publishEnd")){
 				$("#publishTimeEnd").val($( this).val());
+				labelMarket.loadLabelInfoList();
 			}
 		}
 	})
