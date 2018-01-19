@@ -127,24 +127,21 @@
 								描述
 							</h4>
 							</br>
-							<a name="custom_portrait_btn" onclick="labelMarket.customer_portrait_dialog(this)" href="javascript:void(0);">[群体画像图标]</a>
 						</div>
 						<ul class="ui-lable-icon">
 	 						<li>
-	 							<a class="label-icon1" herf=""></a>
+	 							<a class="label-icon1" title="推送" href="javascript:$.alert('[推送]功能暂未完成');"></a>
 	 						</li>
 	 						<li>
-	 							<a class="label-icon2" herf=""></a>
+	 							<a class="label-icon2" title="分享" href="javascript:$.alert('[分享]功能暂未完成');"></a>
 	 						</li>
 	 						<li>
-	 							<a class="label-icon3" herf=""></a>
+	 							<a class="label-icon3" title="群体画像" onclick="labelMarket.customer_portrait_dialog(this)" href="javascript:void(0);"></a>
 	 						</li>
-	 						<li v-bind:class="{open:item.isOpen}" @click="toggleDropdown(item)">
+	 						<li v-bind:class="{open:item.isOpen}" title="更多" @click="toggleDropdown(item)">
 	 							<a class="label-icon4" herf="javascript:"></a>
 	 							<ul class="dropdown-menu">
-							       <li><a  href="javascript:;" @click = "window.location='custom_detail.html?labelId='+item.labelId+''">Action</a></li>
-							       <li><a href="#">Another action</a></li>
-							       <li><a href="#">Something else here</a></li>
+							       <li><a  href="javascript:;" @click = "window.location='custom_detail.html?labelId='+item.labelId+''">详情</a></li>
 						        </ul> 
 	 						</li>
 	 						<li>
