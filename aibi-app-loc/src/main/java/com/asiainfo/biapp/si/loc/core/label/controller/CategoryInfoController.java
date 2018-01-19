@@ -226,13 +226,10 @@ public class CategoryInfoController extends BaseController<CategoryInfo>{
             try {
                 map = iCategoryInfoService.parseColumnInfoFile(multipartFile.getInputStream(), fileFileName,configId);
             } catch (Exception e) {
-                LogUtil.error(e);
+                return webResult.fail(e.getMessage());
             }
         }
         result = map.get("msg").toString();
-        if(!(boolean) map.get("success")){
-            return webResult.fail(result);
-        }
         return webResult.success(result, "success");
     }
     

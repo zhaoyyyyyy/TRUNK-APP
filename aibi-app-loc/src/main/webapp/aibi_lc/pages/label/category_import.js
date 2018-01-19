@@ -26,6 +26,7 @@ window.loc_onload = function() {
 		        isShowMask : true,
 				maskMassage : 'Load...',
 		        success: function(data){
+		        	debugger;
 		        	if(data.status == "200"){
 		        		wd.success();
 						$.success(data.msg);

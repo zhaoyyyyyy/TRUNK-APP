@@ -11,7 +11,6 @@ import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.Charset;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -181,6 +180,8 @@ public class CategoryInfoServiceImpl extends BaseServiceImpl<CategoryInfo, Strin
         
     }
     
+    @CacheEvict(value="LabelInfo",allEntries=true)
+    @Transactional(rollbackOn = Exception.class)
     public Map<String,Object> parseColumnInfoFile(InputStream inputStream, String fileName,String configId) throws Exception {
         Map<String,Object> resultMap = new HashMap<>();
         String error = "";
@@ -201,8 +202,6 @@ public class CategoryInfoServiceImpl extends BaseServiceImpl<CategoryInfo, Strin
         // 数据行数
         int dataCount = 0;
         
-        List<CategoryInfo> categoryInfoList = new ArrayList<>();
-        
         InputStream in = new FileInputStream(new File(filePath));
         Charset charset = FileUtil.getInputStreamCharset(in);
         reader = new CSVReader(new InputStreamReader(new FileInputStream(new File(filePath)), charset));
@@ -219,62 +218,44 @@ public class CategoryInfoServiceImpl extends BaseServiceImpl<CategoryInfo, Strin
                     dataCount++;
                 }
                 if (nextLine.length < columnSize) {
-                    throw new Exception("导入文件错误");
+                    throw new ParamRequiredException("导入文件错误");
                 }
                 
                 if (StringUtil.isEmpty(nextLine[0])) {
-                    error = "第" + currentRowNum + "行分类名称不能为空!";
-                    resultMap.put("error", error);
-                    success = false;
-                    break;
+                    throw new ParamRequiredException("第" + currentRowNum + "行分类名称不能为空!");
                 }
                 if (nextLine[0].length() > 8) {
-                    error = "第" + currentRowNum + "行分类名称长度超长!";
-                    resultMap.put("error", error);
-                    success = false;
-                    break;
+                    throw new ParamRequiredException("第" + currentRowNum + "行分类名称长度超长!");
                 }
                 set.add(nextLine[0]);
                 if (set.size() < dataCount) {
-                    error = "第" + currentRowNum + "行分类名称重复!";
-                    resultMap.put("error", error);
-                    success = false;
-                    break;
+                    throw new ParamRequiredException("第" + currentRowNum + "行分类名称重复!");
                 }
                 CategoryInfo isExit = selectCategoryInfoByCategoryName(nextLine[0],configId);
                 if(isExit!=null){
-                    error = "第" + currentRowNum + "行分类名称已存在!";
-                    resultMap.put("error", error);
-                    success = false;
-                    break;
+                    throw new ParamRequiredException("第" + currentRowNum + "行分类名称已存在!");
                 }
                 if(nextLine.length < 2) {
-                    error = "第" + currentRowNum + "行父分类列为空!";
-                    resultMap.put("error", error);
-                    success = false;
-                    break;
+                    throw new ParamRequiredException("第" + currentRowNum + "行父分类列为空!");
                 }
                 isExit = selectCategoryInfoByCategoryName(nextLine[1],configId);
-                if(isExit==null){
-                    error = "第" + currentRowNum + "行找不到父分类！";
-                    resultMap.put("error", error);
-                    success = false;
-                    break;
+                if(isExit==null&&!"根".equals(nextLine[1])){
+                    throw new ParamRequiredException("第" + currentRowNum + "行找不到父分类！");
                 }
                 CategoryInfo categoryInfo = new CategoryInfo();
                 categoryInfo.setCategoryName(nextLine[0]);
-                categoryInfo.setParentId(isExit.getCategoryId());
+                if(isExit!=null){
+                    categoryInfo.setParentId(isExit.getCategoryId());
+                }
+                
                 categoryInfo.setSysId(configId);
-                categoryInfoList.add(categoryInfo);
+                super.saveOrUpdate(categoryInfo);
             }
             if(success){
-                error = "成功";
+                error = "导入成功";
             }
             resultMap.put("success", success);
             resultMap.put("msg", error);
-        } catch (Exception e) {
-            currentRowNum = -1;
-            throw new Exception("导入报错" + e.getMessage(), e);
         } finally {
             if (in != null) {
                 in.close();
@@ -284,13 +265,6 @@ public class CategoryInfoServiceImpl extends BaseServiceImpl<CategoryInfo, Strin
                 reader = null;
             }
         }
-        
-        if(success){
-            for(CategoryInfo c : categoryInfoList){
-                this.addCategoryInfo(c);
-            }
-        }
-        
         return resultMap;
     }
 
