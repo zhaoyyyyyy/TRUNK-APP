@@ -199,7 +199,9 @@ public class BackAdsDapImpl  extends BaseBackDaoImpl implements IBackSqlDao{
 		sb.append("OPTIONS (UPDATETYPE='realtime') ");
 		
 		try{
-            return this.executeResBoolean(sb.toString());
+            boolean res = this.executeResBoolean(sb.toString());
+            Thread.sleep(50000);
+            return res;
         }catch (Exception e){
             throw new SqlRunException("操作后台库出错");
         }
