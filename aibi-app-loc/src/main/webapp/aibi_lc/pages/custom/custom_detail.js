@@ -7,13 +7,12 @@ var model = {
 		configId : "",
 		dataDate:"",
 		dayLabelDate : "",
-		monthLabelDate : ""
+		monthLabelDate : "",
 }
 
 window.loc_onload = function() {
 	$("#dialog").dialog({
-	    height:240,
-	    width: 400,
+	    width: 450,
 	    modal: true,
 	    autoOpen: false,
 	    title:"推送设置",
@@ -66,6 +65,22 @@ window.loc_onload = function() {
 			showDialog:function(){
 				$("#dialog").dialog({
 		    		autoOpen: true,
+		    	});
+		    	$.commAjax({
+		    		url: $.ctx + "/api/syspush/sysInfo/queryList",
+		    		onSuccess:function(data){
+		    			console.log(data.data)
+		    			for(var i=0;i<data.data.length;i++){
+		    				var html="<li class='checkbox fleft'>"+
+					    		"<input type='checkbox' id='"+data.data[i].sysId+"' class='checkbix'>"+
+					    		"<label for='"+data.data[i].sysId+"' aria-label role='checkbox' class='checkbix' data-id='"+data.data[i].sysId+"'>"+
+					    		"<span class='large'></span>"+
+					    		data.data[i].sysName+
+					    		"</label>"+
+					    		"</li>";
+					    	$("#checkboxList").append(html);
+			    		}
+		    		}
 		    	})
 			}
 		},
