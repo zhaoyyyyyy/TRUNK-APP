@@ -161,6 +161,7 @@ var  mainPage={
  			        "../../asset/script/component/tree/jquery.ztree.all.min.js",
  			        "../../asset/script/component/fileUpload/ajaxfileupload.js",
 			        "../../asset/script/component/fileUpload/jQuery.fileUpload.js",
+			        "../../asset/script/component/My97DatePicker/WdatePicker.js",
 			        ],
 			        callback:function(){
 			        	Scripts.loadScript({src:[

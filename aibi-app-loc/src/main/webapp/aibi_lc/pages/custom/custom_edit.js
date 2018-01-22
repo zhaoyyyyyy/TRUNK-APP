@@ -36,12 +36,8 @@ window.loc_onload = function() {
 	   				r.validatebox();
 	   			}
 	   			$("#failTime").click(function(){
-	   				if($(".ui-datepicker-div").css("display")=="none"){
-	   					$('.ui-datepicker-calendar').hide();
-	   				}else{
-	   					$('.ui-datepicker-calendar').show();
-	   				}
-	   			})
+		    		WdatePicker({isShowClear:false,dateFmt:'yyyy-MM-dd'});
+		    	})
 		    })
 		}
 	})
@@ -223,50 +219,22 @@ var labelInfoModel = (function (model){
 	 */
 	model.changeLabelMonth = function(){
 		if(dataModel.labelMonth){
-    		var labelMonths = dataModel.labelMonth.split('-');
-	    	$("#labelMonth").datepicker({
-	    		monthNamesShort: ["1月", "2月", "3月", "4月", "5月", "6月", "7月", "8月", "9月", "10月", "11月", "12月"],  // 区域化月名为中文  
-		        changeYear: true,          // 年下拉菜单  
-		        changeMonth: true,             // 月下拉菜单  
-		        showButtonPanel: true,         // 显示按钮面板  
-		        showMonthAfterYear: true,  // 月份显示在年后面 
-		        currentText: "本月",         // 当前日期按钮提示文字  
-		        closeText: "关闭",           // 关闭按钮提示文字  
-		        dateFormat: "yy-mm",       // 日期格式  
-	            maxDate: new Date(labelMonths[0], labelMonths[1] - 1, 1),//最大日期
-	            minDate: new Date(labelMonths[0]-1, labelMonths[1] - 1, 1),//最大日期
-		        onChangeMonthYear: function(year, month) {
-				    $(this).datepicker('setDate', new Date(year, month-1, 1)); 
-					$(this).datepicker( "hide" );
-				}
-					
-		    });
+    		$("#labelMonth").click(function(){
+	    		WdatePicker({isShowClear:false,dateFmt:'yyyy-MM',
+	    			maxDate:dataModel.labelMonth,minDate:'#F{$dp.$DV(\''+dataModel.labelMonth+'\',{y:-1});}'});
+	    	})
     	}
 	}
 	/**
-	 * 修改月份
+	 * 修改日
 	 */
 	model.changeLabelDay = function(){
 		if(dataModel.labelDay){
-    		var labelDays = dataModel.labelDay.split('-');
-	    	if($(".ui-datepicker-div").css("display")=="none"){
-    			$('.ui-datepicker-calendar').hide();
-    		}else{
-    			$('.ui-datepicker-calendar').show();
-    		}
-	    	$("#labelDay" ).datepicker({
-		  		changeMonth: true,
-		  		changeYear: true,
-		  		dateFormat:"yy-mm-dd",
-		  		numberOfMonths:1,
-		  		showMonthAfterYear: true,  // 月份显示在年后面 
-		  		dayNamesMin: [ "日", "一", "二", "三", "四", "五", "六" ],
-		  		monthNamesShort: [ "一月", "二月", "三月", "四月", "五月", "六月", "七月", "八月", "九月", "十月", "十一月", "十二月" ],
-		    	maxDate: new Date(labelDays[0], labelDays[1] - 1, 1),//最大日期
-	            minDate: new Date(labelDays[0]-1, labelDays[1] - 1, 1)//最大日期
-	    	}).on( "change", function() {
-	    		$('.ui-datepicker-calendar').show();
-		    });
+    		$("#labelDay").click(function(){
+	    		WdatePicker({isShowClear:false,dateFmt:'yyyy-MM-dd',
+	    			maxDate:dataModel.labelDay,minDate:'#F{$dp.$DV(\''+dataModel.labelDay+'\',{d:-2});}'});
+	    	})
+	    	
     	}
 	}
 	/**
