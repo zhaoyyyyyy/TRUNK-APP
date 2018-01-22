@@ -28,8 +28,9 @@ var dataModel = {
 		existMonthLabel : true,//规则中是否包含月标签
 		existDayLabel : true,//规则中是否包含月标签
 		labelMonth : '',//规则中月日期
-		labelDay : ''//规则中日日期
-		
+		labelDay : '',//规则中日日期
+		updateCycleList : [] ,//更新周期
+		labelTypeIdList : [] //创建类型
 }
 window.loc_onload = function() {
 	//初始化参数
@@ -85,6 +86,11 @@ window.loc_onload = function() {
 	labelMarket.loadLabelInfoList();
 	//加载购物车
 	labelMarket.refreshShopCart();
+	
+	//标签创建周期
+	dataModel.updateCycleList = $.getDicData("GXZQZD");
+	//标签创建类型
+	dataModel.labelTypeIdList = $.getDicData("BQLXZD");
 	//搜索框回车
 	$('#labelNameText').keyup(function(event){
     	if(event.keyCode == 13){
