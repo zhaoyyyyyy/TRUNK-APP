@@ -1,5 +1,6 @@
 window.loc_onload = function() {
 	var wd = frameElement.lhgDG;
+	var sortNum = 0;
 
 	// 统一浏览器对FILE 文件获取上传路径的差异
 	$("#multipartFile").change(function() {
@@ -38,9 +39,10 @@ window.loc_onload = function() {
 						$("#fnameTip").show().append("导入数据有误,请修改后重新导入");
 						var msg = data.msg.split(";");
 						for(var i=0;i<msg.length;i++){
+							sortNum ++ ;
 							if(msg[i]!=""&&msg[i]!=null){
 								var dataRow = {'datamsg' : msg[i]}
-								$("#jsonmap1").jqGrid("addRowData", 1,dataRow, "last");
+								$("#jsonmap1").jqGrid("addRowData", sortNum,dataRow, "last");
 							}
 						}
 					}
