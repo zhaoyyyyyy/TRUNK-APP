@@ -10,7 +10,7 @@ window.loc_onload = function() {
 					name : 'dimKey',
 					index : 'dimKey',
 					width : 50,
-					sortable : true,
+					sortable : false,
 					frozen : true,
 					align : "center"
 				},
@@ -18,7 +18,7 @@ window.loc_onload = function() {
 					name : 'dimValue',
 					index : 'dimValue',
 					width : 50,
-					sortable : true,
+					sortable : false,
 					align : "center"
 				} ],
 		rowList: [10, 20, 30],
