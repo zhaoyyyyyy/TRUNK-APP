@@ -65,11 +65,11 @@ public class LabelPushCycleServiceImpl extends BaseServiceImpl<LabelPushCycle, S
         return iLabelPushCycleDao.selectLabelPushCycleList(labelPushCycleVo);
     }
 
-    public LabelPushCycle selectLabelPushCycleById(String recodeId) throws BaseException {
-        if(StringUtil.isBlank(recodeId)){
+    public LabelPushCycle selectLabelPushCycleById(String recordId) throws BaseException {
+        if(StringUtil.isBlank(recordId)){
             throw new ParamRequiredException("ID不能为空");
         }
-        return super.get(recodeId);
+        return super.get(recordId);
     }
 
     public void addLabelPushCycle(LabelPushCycle labelPushCycle) throws BaseException {
@@ -80,10 +80,10 @@ public class LabelPushCycleServiceImpl extends BaseServiceImpl<LabelPushCycle, S
         super.saveOrUpdate(labelPushCycle);
     }
 
-    public void deleteLabelPushCycleById(String recodeId) throws BaseException {
-        if(StringUtil.isBlank(recodeId)){
+    public void deleteLabelPushCycleById(String recordId) throws BaseException {
+        if(StringUtil.isBlank(recordId)){
             throw new ParamRequiredException("ID不能为空");
         }
-        super.delete(recodeId);
+        super.delete(recordId);
     }
 }

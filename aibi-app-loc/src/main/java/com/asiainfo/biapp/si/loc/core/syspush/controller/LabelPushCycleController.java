@@ -87,13 +87,13 @@ public class LabelPushCycleController extends BaseController<LabelPushCycle>{
     }
     
     @ApiOperation(value = "根据ID查询推送设置信息")
-    @ApiImplicitParam(name = "recodeId", value = "ID", required = true, paramType = "query", dataType = "string")
+    @ApiImplicitParam(name = "recordId", value = "ID", required = true, paramType = "query", dataType = "string")
     @RequestMapping(value = "/labelPushCycle/get",method = RequestMethod.POST)
-    public WebResult<LabelPushCycle> findById(String recodeId) throws BaseException{
+    public WebResult<LabelPushCycle> findById(String recordId) throws BaseException{
         WebResult<LabelPushCycle> webResult = new WebResult<>();
         LabelPushCycle labelPushCycle = new LabelPushCycle();
         try {
-            labelPushCycle = iLabelPushCycleService.selectLabelPushCycleById(recodeId);
+            labelPushCycle = iLabelPushCycleService.selectLabelPushCycleById(recordId);
         } catch (BaseException e) {
             return webResult.fail(e);
         }
@@ -102,7 +102,7 @@ public class LabelPushCycleController extends BaseController<LabelPushCycle>{
     
     @ApiOperation(value = "新增推送设置信息")
     @ApiImplicitParams({
-        @ApiImplicitParam(name = "recodeId", value = "推送设置记录ID", required = false, paramType = "query", dataType = "string"),
+        @ApiImplicitParam(name = "recordId", value = "推送设置记录ID", required = false, paramType = "query", dataType = "string"),
         @ApiImplicitParam(name = "customGroupId", value = "客户群ID", required = false, paramType = "query", dataType = "string"),
         @ApiImplicitParam(name = "sysId", value = "对端系统ID", required = false, paramType = "query", dataType = "string"),
         @ApiImplicitParam(name = "keyType", value = "主键标识类型", required = false, paramType = "query", dataType = "int"),
@@ -123,7 +123,7 @@ public class LabelPushCycleController extends BaseController<LabelPushCycle>{
     
     @ApiOperation(value = "修改推送设置信息")
     @ApiImplicitParams({
-        @ApiImplicitParam(name = "recodeId", value = "推送设置记录ID", required = true, paramType = "query", dataType = "string"),
+        @ApiImplicitParam(name = "recordId", value = "推送设置记录ID", required = true, paramType = "query", dataType = "string"),
         @ApiImplicitParam(name = "customGroupId", value = "客户群ID", required = false, paramType = "query", dataType = "string"),
         @ApiImplicitParam(name = "sysId", value = "对端系统ID", required = false, paramType = "query", dataType = "string"),
         @ApiImplicitParam(name = "keyType", value = "主键标识类型", required = false, paramType = "query", dataType = "int"),
@@ -136,7 +136,7 @@ public class LabelPushCycleController extends BaseController<LabelPushCycle>{
         labelPushCycle.setModifyTime(new Date());
         LabelPushCycle oldLab = new LabelPushCycle();
         try {
-            oldLab = iLabelPushCycleService.selectLabelPushCycleById(labelPushCycle.getRecodeId());
+            oldLab = iLabelPushCycleService.selectLabelPushCycleById(labelPushCycle.getRecordId());
         } catch (BaseException e) {
             return webResult.fail(e);
         }
@@ -146,12 +146,12 @@ public class LabelPushCycleController extends BaseController<LabelPushCycle>{
     }
     
     @ApiOperation(value = "删除推送设置信息")
-    @ApiImplicitParam(name = "recodeId", value = "ID", required = true, paramType = "query", dataType = "string")
+    @ApiImplicitParam(name = "recordId", value = "ID", required = true, paramType = "query", dataType = "string")
     @RequestMapping(value = "/labelPushCycle/delete", method = RequestMethod.POST)
-    public WebResult<String> del(String recodeId) throws BaseException{
+    public WebResult<String> del(String recordId) throws BaseException{
         WebResult<String> webResult = new WebResult<>();
         try {
-            iLabelPushCycleService.deleteLabelPushCycleById(recodeId);
+            iLabelPushCycleService.deleteLabelPushCycleById(recordId);
         } catch (BaseException e) {
             return webResult.fail(e);
         }
@@ -166,8 +166,8 @@ public class LabelPushCycleController extends BaseController<LabelPushCycle>{
      * @return
      */
     public LabelPushCycle fromToBean(LabelPushCycle lab, LabelPushCycle oldLab){
-        if(StringUtil.isNoneBlank(lab.getRecodeId())){
-            oldLab.setRecodeId(lab.getRecodeId());
+        if(StringUtil.isNoneBlank(lab.getRecordId())){
+            oldLab.setRecordId(lab.getRecordId());
         }
         if(StringUtil.isNoneBlank(lab.getCustomGroupId())){
             oldLab.setCustomGroupId(lab.getCustomGroupId());

@@ -71,9 +71,9 @@ public class LabelPushCycleDaoImpl extends BaseDaoImpl<LabelPushCycle, String> i
         Map<String, Object> reMap = new HashMap<>();
         Map<String, Object> params = new HashMap<>();
         StringBuffer hql = new StringBuffer("from LabelPushCycle l where 1=1 ");
-        if(StringUtil.isNoneBlank(labelPushCycleVo.getRecodeId())){
-            hql.append("and l.recodeId = :recodeId ");
-            params.put("recodeId", labelPushCycleVo.getRecodeId());
+        if(StringUtil.isNoneBlank(labelPushCycleVo.getRecordId())){
+            hql.append("and l.recordId = :recordId ");
+            params.put("recordId", labelPushCycleVo.getRecordId());
         }
         if(StringUtil.isNoneBlank(labelPushCycleVo.getCustomGroupId())){
             hql.append("and l.customGroupId = :customGroupId ");

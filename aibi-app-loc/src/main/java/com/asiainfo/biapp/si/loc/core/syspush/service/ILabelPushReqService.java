@@ -1,5 +1,5 @@
 /*
- * @(#)ILabelPushCycleService.java
+ * @(#)ILabelPushReqService.java
  *
  * CopyRight (c) 2018 北京亚信智慧数据科技有限公司 保留所有权利。
  */
@@ -11,11 +11,11 @@ import java.util.List;
 import com.asiainfo.biapp.si.loc.base.exception.BaseException;
 import com.asiainfo.biapp.si.loc.base.page.Page;
 import com.asiainfo.biapp.si.loc.base.service.BaseService;
-import com.asiainfo.biapp.si.loc.core.syspush.entity.LabelPushCycle;
-import com.asiainfo.biapp.si.loc.core.syspush.vo.LabelPushCycleVo;
+import com.asiainfo.biapp.si.loc.core.syspush.entity.LabelPushReq;
+import com.asiainfo.biapp.si.loc.core.syspush.vo.LabelPushReqVo;
 
 /**
- * Title : ILabelPushCycleService
+ * Title : ILabelPushReqService
  * <p/>
  * Description : 
  * <p/>
@@ -28,62 +28,62 @@ import com.asiainfo.biapp.si.loc.core.syspush.vo.LabelPushCycleVo;
  * Modification History	:
  * <p/>
  * <pre>NO.    Date    Modified By    Why & What is modified</pre>
- * <pre>1    2018年1月17日    wangrd        Created</pre>
+ * <pre>1    2018年1月18日    wangrd        Created</pre>
  * <p/>
  *
  * @author  wangrd
- * @version 1.0.0.2018年1月17日
+ * @version 1.0.0.2018年1月18日
  */
-public interface ILabelPushCycleService extends BaseService<LabelPushCycle, String>{
+public interface ILabelPushReqService extends BaseService<LabelPushReq, String>{
 
     /**
      * 根据条件分页查询 
      *
      * @param page
-     * @param labelPushCycle
+     * @param LabelPushReq
      * @return
      */
-    public Page<LabelPushCycle> selectLabelPushCyclePageList(Page<LabelPushCycle> page, LabelPushCycleVo labelPushCycleVo) throws BaseException;
+    public Page<LabelPushReq> selectLabelPushReqPageList(Page<LabelPushReq> page, LabelPushReqVo labelPushReqVo) throws BaseException;
     
     /**
      * 
      * 根据条件查询列表
      *
-     * @param labelPushCycleVo
+     * @param labelPushReqVo
      * @return
      */
-    public List<LabelPushCycle> selectLabelPushCycleList(LabelPushCycleVo labelPushCycleVo) throws BaseException;
+    public List<LabelPushReq> selectLabelPushReqList(LabelPushReqVo labelPushReqVo) throws BaseException;
     
     /**
      * 通过ID得到一个实体 Description:
      *
-     * @param recordId
+     * @param reqId
      * @return
      * @throws BaseException
      */
-    public LabelPushCycle selectLabelPushCycleById(String recordId) throws BaseException;
+    public LabelPushReq selectLabelPushReqById(String reqId) throws BaseException;
     
     /**
      * 新增或修改一个实体 Description:
      *
-     * @param labelPushCycle
+     * @param labelPushReq
      * @throws BaseException
      */
-    public void addLabelPushCycle(LabelPushCycle labelPushCycle) throws BaseException;
+    public void addLabelPushReq(LabelPushReq labelPushReq) throws BaseException;
 
     /**
      * 修改一个实体 Description:
      *
-     * @param labelPushCycle
+     * @param labelPushReq
      * @throws BaseException
      */
-    public void modifyLabelPushCycle(LabelPushCycle labelPushCycle) throws BaseException;
+    public void modifyLabelPushReq(LabelPushReq labelPushReq) throws BaseException;
 
     /**
      * 通过ID删除一个实体 Description:
      *
-     * @param recordId
+     * @param reqId
      * @throws BaseException
      */
-    public void deleteLabelPushCycleById(String recordId) throws BaseException;
+    public void deleteLabelPushReqById(String reqId) throws BaseException;
 }

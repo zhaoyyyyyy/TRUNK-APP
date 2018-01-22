@@ -54,7 +54,7 @@ public class LabelPushCycle extends BaseEntity{
     @GenericGenerator(name = "idGenerator", strategy = "uuid")
     @GeneratedValue(generator = "idGenerator")
     @ApiParam(value = "推送设置记录ID")
-    private String recodeId;
+    private String recordId;
     
     /**
      * 客户群ID
@@ -106,13 +106,13 @@ public class LabelPushCycle extends BaseEntity{
     private Integer status;
 
     
-    public String getRecodeId() {
-        return recodeId;
+    public String getRecordId() {
+        return recordId;
     }
 
     
-    public void setRecodeId(String recodeId) {
-        this.recodeId = recodeId;
+    public void setRecordId(String recordId) {
+        this.recordId = recordId;
     }
 
     
