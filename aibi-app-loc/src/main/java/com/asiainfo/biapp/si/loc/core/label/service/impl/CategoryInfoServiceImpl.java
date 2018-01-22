@@ -11,11 +11,10 @@ import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.Charset;
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import javax.transaction.Transactional;
 
@@ -24,6 +23,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 import com.asiainfo.biapp.si.loc.base.dao.BaseDao;
 import com.asiainfo.biapp.si.loc.base.exception.BaseException;
@@ -182,11 +182,7 @@ public class CategoryInfoServiceImpl extends BaseServiceImpl<CategoryInfo, Strin
     
     @CacheEvict(value="LabelInfo",allEntries=true)
     @Transactional(rollbackOn = Exception.class)
-    public Map<String,Object> parseColumnInfoFile(InputStream inputStream, String fileName,String configId) throws Exception {
-        Map<String,Object> resultMap = new HashMap<>();
-        String error = "";
-        boolean success = true;
-        
+    public String parseColumnInfoFile(InputStream inputStream, String fileName,String configId) throws Exception {
         String filePath = null;
         try {
             filePath = FileUtil.uploadTargetUserFile(inputStream, fileName);
@@ -197,10 +193,21 @@ public class CategoryInfoServiceImpl extends BaseServiceImpl<CategoryInfo, Strin
         CSVReader reader = null;
         // 当前记录条数
         int currentRowNum = 0;
-        // 列数
-        int columnSize = 2;
         // 数据行数
         int dataCount = 0;
+        //存放要返回的错误信息
+        StringBuffer result = new StringBuffer();
+        //存放分类名称
+        List<String> nameList = new ArrayList<>();
+        //存放分类名称和分类ID
+        Map<String,String> map = new HashMap<>();
+        CategoryInfoVo categoryInfoVo = new CategoryInfoVo();
+        categoryInfoVo.setSysId(configId);
+        List<CategoryInfo> categoryInfoList = this.selectCategoryInfoList(categoryInfoVo);
+        for(CategoryInfo c : categoryInfoList){
+            nameList.add(c.getCategoryName());
+            map.put(c.getCategoryName(), c.getCategoryId());
+        }
         
         InputStream in = new FileInputStream(new File(filePath));
         Charset charset = FileUtil.getInputStreamCharset(in);
@@ -208,54 +215,52 @@ public class CategoryInfoServiceImpl extends BaseServiceImpl<CategoryInfo, Strin
         String[] nextLine;
         
         try {
-            Set<String> set = new HashSet<String>();
             while ((nextLine = reader.readNext()) != null) {
                 currentRowNum++;
+                int num = 0;
                 // 跳过注释行
                 if (nextLine[0].startsWith("#")) {
                     continue;
                 }else{
                     dataCount++;
                 }
-                if (nextLine.length < columnSize) {
-                    throw new ParamRequiredException("导入文件错误");
+                
+                if(StringUtil.isBlank(nextLine[0])){
+                    result.append("第["+currentRowNum+"]行[1]级分类名称不能为空");
+                    continue;
                 }
                 
-                if (StringUtil.isEmpty(nextLine[0])) {
-                    throw new ParamRequiredException("第" + currentRowNum + "行分类名称不能为空!");
+                if(StringUtil.isNotBlank(nextLine[1])){
+                    num++;
                 }
-                if (nextLine[0].length() > 8) {
-                    throw new ParamRequiredException("第" + currentRowNum + "行分类名称长度超长!");
+                if(StringUtil.isNotBlank(nextLine[2])){
+                    num++;
                 }
-                set.add(nextLine[0]);
-                if (set.size() < dataCount) {
-                    throw new ParamRequiredException("第" + currentRowNum + "行分类名称重复!");
+                
+                if(nextLine[num].length()>8){
+                    result.append("第["+currentRowNum+"]行["+(num+1)+"]级分类名称过长");
+                    continue;
                 }
-                CategoryInfo isExit = selectCategoryInfoByCategoryName(nextLine[0],configId);
-                if(isExit!=null){
-                    throw new ParamRequiredException("第" + currentRowNum + "行分类名称已存在!");
-                }
-                if(nextLine.length < 2) {
-                    throw new ParamRequiredException("第" + currentRowNum + "行父分类列为空!");
-                }
-                isExit = selectCategoryInfoByCategoryName(nextLine[1],configId);
-                if(isExit==null&&!"根".equals(nextLine[1])){
-                    throw new ParamRequiredException("第" + currentRowNum + "行找不到父分类！");
-                }
+                
                 CategoryInfo categoryInfo = new CategoryInfo();
-                categoryInfo.setCategoryName(nextLine[0]);
-                if(isExit!=null){
-                    categoryInfo.setParentId(isExit.getCategoryId());
-                }
-                
+                categoryInfo.setCategoryName(nextLine[num]);
                 categoryInfo.setSysId(configId);
-                super.saveOrUpdate(categoryInfo);
+                if(num!=0){
+                    String parentId = map.get(nextLine[num-1]);
+                    if(StringUtil.isBlank(parentId)){
+                        result.append("第["+currentRowNum+"]行["+num+"]级分类名称不存在");
+                        continue;
+                    }
+                    categoryInfo.setParentId(map.get(nextLine[num-1]));
+                }
+                if(!nameList.contains(categoryInfo.getCategoryName())){
+                    super.saveOrUpdate(categoryInfo);
+                }else{
+                    continue;
+                }
+                map.put(categoryInfo.getCategoryName(), categoryInfo.getCategoryId());
+                nameList.add(categoryInfo.getCategoryName());
             }
-            if(success){
-                error = "导入成功";
-            }
-            resultMap.put("success", success);
-            resultMap.put("msg", error);
         } finally {
             if (in != null) {
                 in.close();
@@ -265,7 +270,10 @@ public class CategoryInfoServiceImpl extends BaseServiceImpl<CategoryInfo, Strin
                 reader = null;
             }
         }
-        return resultMap;
+        if(StringUtil.isNotBlank(result)){
+            throw new ParamRequiredException(result.toString());
+        }
+        return "成功导入["+dataCount+"]个分类";
     }
 
 

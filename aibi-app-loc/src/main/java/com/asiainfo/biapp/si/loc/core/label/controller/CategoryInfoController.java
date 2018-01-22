@@ -6,17 +6,9 @@
 
 package com.asiainfo.biapp.si.loc.core.label.controller;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
-
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -26,16 +18,20 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import springfox.documentation.annotations.ApiIgnore;
-
 import com.asiainfo.biapp.si.loc.base.controller.BaseController;
 import com.asiainfo.biapp.si.loc.base.exception.BaseException;
-import com.asiainfo.biapp.si.loc.base.utils.LogUtil;
 import com.asiainfo.biapp.si.loc.base.utils.StringUtil;
 import com.asiainfo.biapp.si.loc.base.utils.WebResult;
 import com.asiainfo.biapp.si.loc.core.label.entity.CategoryInfo;
 import com.asiainfo.biapp.si.loc.core.label.service.ICategoryInfoService;
 import com.asiainfo.biapp.si.loc.core.label.vo.CategoryInfoVo;
+
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+import springfox.documentation.annotations.ApiIgnore;
 
 /**
  * Title : CategoryInfoController
@@ -216,21 +212,23 @@ public class CategoryInfoController extends BaseController<CategoryInfo>{
     
     @ApiOperation(value = "导入分类")
     @RequestMapping(value = "/categoryInfo/upload", consumes = "multipart/*", method = RequestMethod.POST, produces = { MediaType.APPLICATION_JSON_VALUE })
-    public WebResult<String> upload(@ApiParam(value = "文件上传", required = true) MultipartFile multipartFile,@ApiParam(value = "专区ID", required = true) String configId)
+    public WebResult<List<String>> upload(@ApiParam(value = "文件上传", required = true) MultipartFile multipartFile,@ApiParam(value = "专区ID", required = true) String configId)
             throws IOException {
-        WebResult<String> webResult = new WebResult<>();
-        Map<String,Object> map = new HashMap<>();
-        String result = "";
+        WebResult<List<String>> webResult = new WebResult<>();
+        String msg = new String();
         if (multipartFile != null && !multipartFile.isEmpty()) {
-            String fileFileName = multipartFile.getOriginalFilename();
+            String fileName = multipartFile.getOriginalFilename();
+            String fileSuffix = fileName.substring(fileName.lastIndexOf(".") + 1).toLowerCase();
+            if(!"csv".equals(fileSuffix)){
+                return webResult.fail("文件类型不正确");
+            }
             try {
-                map = iCategoryInfoService.parseColumnInfoFile(multipartFile.getInputStream(), fileFileName,configId);
+                msg = iCategoryInfoService.parseColumnInfoFile(multipartFile.getInputStream(), fileName,configId);
             } catch (Exception e) {
                 return webResult.fail(e.getMessage());
             }
         }
-        result = map.get("msg").toString();
-        return webResult.success(result, "success");
+        return webResult.success(msg, null);
     }
     
 
