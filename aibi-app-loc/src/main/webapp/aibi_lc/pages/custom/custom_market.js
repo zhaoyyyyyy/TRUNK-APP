@@ -191,6 +191,22 @@ var labelMarket = (function (model){
 						console.log(data.rows[i].labelExtInfo)
 					}
 					dataModel.labelInfoList = data.rows;
+					$("#jsonmap1_pager").createPage({
+						pageCount:data.totalPageCount,  
+  	   					backFn : function(pageIndex){
+  	   						obj.pageStart = pageIndex;
+  	   						$.commAjax({
+  	   							url: $.ctx + "/api/label/labelInfo/queryPage",
+								postData:obj,
+								isShowMask : true,
+								maskMassage : '正在查找...',
+								onSuccess: function(res){
+									dataModel.page.currentPageNo=pageIndex;
+									dataModel.labelInfoList = res.rows;
+								}
+  	   						})
+  	   					}
+   					});
 				}
 			});
 		};

@@ -15,6 +15,9 @@
 	[v-cloak] {
 		display: none;
 	}
+	#jsonmap1_pager select{
+		display:none;
+	}
 	</style>
     <!--[if lt IE 9]>
 	    <script src="../../asset/script/component/h5compatibility/html5shiv.min.js"></script>
@@ -159,16 +162,16 @@
 						<span class="fleft">共{{page.totalCount}}条记录，共{{page.totalPageCount}}页，当前第{{page.currentPageNo}}页</span>
 					</div>
 					<div id="jsonmap1_pager" class="tcdPageCode">
-						<a href="javascript:;" class="prevPage">上一页</a>
+						<!--<a href="javascript:;" class="prevPage">上一页</a>
 						<a href="javascript:;" class="current tcdNumber">1</a>
-						<span class="disabled">下一页</span>
+						<span class="disabled">下一页</span>-->
 						<!-- <select class="ui-pg-selbox ui-widget-content ui-corner-all" title="每页记录数">
 							<option role="option" value="10" selected="selected">10</option>
 							<option role="option" value="20">20</option>
 							<option role="option" value="30">30</option>
 						</select> -->
-						<span class="inputPageNum">第<input type="text" id="jsonmap1_pageNum">页</span>
-						<a href="javascript:;" class="jumpPageNum">跳转</a>
+						<!--<span class="inputPageNum">第<input type="text" id="jsonmap1_pageNum">页</span>
+						<a href="javascript:;" class="jumpPageNum">跳转</a>-->
 					</div>
 				</div>
 			</div>
