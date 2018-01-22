@@ -56,6 +56,7 @@ public class LabelInfoDaoImpl extends BaseDaoImpl<LabelInfo, String> implements 
     public Page<LabelInfo> selectLabelInfoPageList(Page<LabelInfo> page, LabelInfoVo labelInfoVo) {
         Map<String, Object> reMap = fromBean(labelInfoVo,page);
         Map<String, Object> params = (Map<String, Object>) reMap.get("params");
+        String sql = reMap.get("hql").toString();
         return super.findPageByHql(page, reMap.get("hql").toString(), params);
     }
 
@@ -145,10 +146,11 @@ public class LabelInfoDaoImpl extends BaseDaoImpl<LabelInfo, String> implements 
             hql.append("and l.applySuggest = :applySuggest ");
             params.put("applySuggest", labelInfoVo.getApplySuggest());
         }
-        if (StringUtil.isNotBlank(labelInfoVo.getLabelIdLevelDesc())) {
-            hql.append("and l.labelIdLevelDesc = :labelIdLevelDesc ");
-            params.put("labelIdLevelDesc", labelInfoVo.getLabelIdLevelDesc());
-        }
+        //modify by zhougz3 此配置异步生成，暂时不访问数据库 20180119
+//        if (StringUtil.isNotBlank(labelInfoVo.getLabelIdLevelDesc())) {
+//            hql.append("and l.labelIdLevelDesc = :labelIdLevelDesc ");
+//            params.put("labelIdLevelDesc", labelInfoVo.getLabelIdLevelDesc());
+//        }
         if (null != labelInfoVo.getIsRegular()) {
             hql.append("and l.isRegular = :isRegular ");
             params.put("isRegular", labelInfoVo.getIsRegular());
@@ -167,11 +169,11 @@ public class LabelInfoDaoImpl extends BaseDaoImpl<LabelInfo, String> implements 
         }
         if (StringUtils.isNotBlank(labelInfoVo.getpublishTimeStart())) {
             hql.append("and l.publishTime >= :publishTimeStart ");
-            params.put("publishTimeStart", DateUtil.string2Date(labelInfoVo.getpublishTimeStart(), DateUtil.DATETIME_FORMAT));
+            params.put("publishTimeStart", DateUtil.string2Date(labelInfoVo.getpublishTimeStart(), DateUtil.FORMAT_YYYY_MM_DD));
         }
         if (StringUtils.isNotBlank(labelInfoVo.getpublishTimeEnd())) {
             hql.append("and l.publishTime <= :publishTimeEnd ");
-            params.put("publishTimeEnd", DateUtil.string2Date(labelInfoVo.getpublishTimeEnd(), DateUtil.DATETIME_FORMAT));
+            params.put("publishTimeEnd", DateUtil.string2Date(labelInfoVo.getpublishTimeEnd(), DateUtil.FORMAT_YYYY_MM_DD));
         }
         if(StringUtil.isNotBlank(page.getSortCol())){
             hql.append(" order by l."+page.getSortCol()+" "+page.getSortOrder());
@@ -271,10 +273,11 @@ public class LabelInfoDaoImpl extends BaseDaoImpl<LabelInfo, String> implements 
             hql.append("and l.applySuggest = :applySuggest ");
             params.put("applySuggest", labelInfoVo.getApplySuggest());
         }
-        if (StringUtil.isNotBlank(labelInfoVo.getLabelIdLevelDesc())) {
-            hql.append("and l.labelIdLevelDesc = :labelIdLevelDesc ");
-            params.put("labelIdLevelDesc", labelInfoVo.getLabelIdLevelDesc());
-        }
+      //modify by zhougz3 此配置异步生成，暂时不访问数据库 20180119
+//        if (StringUtil.isNotBlank(labelInfoVo.getLabelIdLevelDesc())) {
+//            hql.append("and l.labelIdLevelDesc = :labelIdLevelDesc ");
+//            params.put("labelIdLevelDesc", labelInfoVo.getLabelIdLevelDesc());
+//        }
         if (null != labelInfoVo.getIsRegular()) {
             hql.append("and l.isRegular = :isRegular ");
             params.put("isRegular", labelInfoVo.getIsRegular());

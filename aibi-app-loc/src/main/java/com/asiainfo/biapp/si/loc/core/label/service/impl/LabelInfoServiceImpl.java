@@ -197,6 +197,9 @@ public class LabelInfoServiceImpl extends BaseServiceImpl<LabelInfo, String> imp
         }else if (labelInfo.getDataStatusId()==2) {
             labelInfo.setEffecTime(new Date());
         }*/
+        if (labelInfo.getDataStatusId()==2) {
+            labelInfo.setEffecTime(new Date());
+        }
         super.saveOrUpdate(labelInfo);
         
         //修改标签规则维表信息
@@ -207,7 +210,7 @@ public class LabelInfoServiceImpl extends BaseServiceImpl<LabelInfo, String> imp
         if (StringUtil.isNotBlank(labelInfo.getCountRules())) {
             labelCountRules.setCountRules(labelInfo.getCountRules());
         }
-        iLabelCountRulesService.modifyLabelCountRules(labelCountRules);
+        iLabelCountRulesService.modifyLabelCountRules(labelCountRules); 
         
         //修改元数据表列信息
         MdaSysTableColumn mdaSysTableColumn = iMdaSysTableColService.selectMdaSysTableColBylabelId(labelInfo.getLabelId());
@@ -279,6 +282,7 @@ public class LabelInfoServiceImpl extends BaseServiceImpl<LabelInfo, String> imp
 		//TODO  基本信息是否需要加入缓存?
 		customInfo.setLabelTypeId(LabelInfoContants.LABEL_TYPE_CUST);
 		customInfo.setDataStatusId(LabelInfoContants.CUSTOM_DATA_STATUS_WAIT);
+		customInfo.setCreateTime(new Date());
 		super.saveOrUpdate(customInfo);
 		String customId = customInfo.getLabelId();
 		labelExtInfo.setLabelId(customId);

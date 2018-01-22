@@ -92,67 +92,71 @@ public class DimTableDataServiceImpl extends BaseServiceImpl<DimTableData, DimTa
      * @Description: dim_table的跑数入口，数据流是：DimTableInfo ——> DimTableData
      * @param String tableName 维表表名
      */
-    public void dimTableInfo2Data(String tableName) throws BaseException {
+    public void dimTableInfo2Data(String ...tableNames) throws BaseException {
         LogUtil.info("dimTableInfo2Data--------->>>>>>>begin");
         long s = System.currentTimeMillis();
-        
-        //1.获取DimTableInfo数据
-        DimTableInfoVo dimTableInfoVo = new DimTableInfoVo();
-        if (StringUtil.isNoneBlank(tableName)) {
-            dimTableInfoVo.setDimTableName(tableName);
-        } else {
-            LogUtil.info("本次维表跑数不指定表名，全量跑。");
-        }
-        List<DimTableInfo> dimTableInfos = iDimTableInfoDao.selectDimTableInfoList(dimTableInfoVo);
-        if (null != dimTableInfos && !dimTableInfos.isEmpty()) {
-            String schema = backServiceImpl.getCurBackDbSchema();
-            String sql = null;
-            int num = 0;
-            int forNum = 1; //读取次数
-            List<Map<String, String>> datas = null;
-            DimTableData entity = null;
-            DimTableDataId id = null;
-            DimTableData dimTableData = null;
-            for (DimTableInfo dimTableInfo : dimTableInfos) {
-                //获取sql，并查询，入库
-                sql = this.getSql(schema, dimTableInfo, new StringBuilder());
-                LogUtil.info("查询维表("+dimTableInfo.getDimTableName()+"):"+sql);
-                try {
-                    num = backServiceImpl.queryCount(sql);
-                } catch (SqlRunException e) {
-                    //本维表注册的有问题，跳过
-                    LogUtil.warn("查询维表("+dimTableInfo.getDimTableName()+")总条数出错！");
+
+        String schema = backServiceImpl.getCurBackDbSchema();
+        String sql = null;
+        int num = 0;
+        int forNum = 1; //读取次数
+        List<Map<String, String>> datas = null;
+        DimTableData entity = null;
+        DimTableDataId id = null;
+        DimTableData dimTableData = null;
+        if (null != tableNames && tableNames.length > 0) {  //指定同步表
+            for (String tableName : tableNames) {
+                //1.获取DimTableInfo数据
+                DimTableInfoVo dimTableInfoVo = new DimTableInfoVo();
+                if (StringUtil.isNoneBlank(tableName)) {
+                    dimTableInfoVo.setDimTableName(tableName);
+                } else {
                     continue;
                 }
-                if (num > PAGE_SIZE) {
-                    forNum = Integer.parseInt(String.valueOf(Math.ceil(num / PAGE_SIZE)));
+                List<DimTableInfo> dimTableInfos = iDimTableInfoDao.selectDimTableInfoList(dimTableInfoVo);
+                if (null != dimTableInfos && !dimTableInfos.isEmpty()) {
+                    for (DimTableInfo dimTableInfo : dimTableInfos) {
+                        //获取sql，并查询，入库
+                        sql = this.getSql(schema, dimTableInfo, new StringBuilder());
+                        LogUtil.info("查询维表(" + dimTableInfo.getDimTableName() + "):" + sql);
+                        try {
+                            num = backServiceImpl.queryCount(sql);
+                        } catch (SqlRunException e) {
+                            //本维表注册的有问题，跳过
+                            LogUtil.warn("查询维表(" + dimTableInfo.getDimTableName() + ")总条数出错！");
+                            continue;
+                        }
+                        if (num > PAGE_SIZE) {
+                            forNum = Integer.parseInt(String.valueOf(Math.ceil(num / PAGE_SIZE)));
+                        }
+                        this.dimTableInfo2Data(dimTableInfo, schema, sql, forNum, datas, entity, id, dimTableData);
+                    }
+                } else {
+                    LogUtil.info("维表("+tableName+")没有注册或没有数据。");
+                    continue;
                 }
-                //循环读取，防止后台跑不动
-                for (int i = 0; i < forNum; i++) {
+            } 
+        } else {
+            LogUtil.info("本次维表跑数不指定表名，全量跑。");
+            
+            //1.获取DimTableInfo数据
+            List<DimTableInfo> dimTableInfos = iDimTableInfoDao.selectDimTableInfoList(new DimTableInfoVo());
+            if (null != dimTableInfos && !dimTableInfos.isEmpty()) {
+                for (DimTableInfo dimTableInfo : dimTableInfos) {
+                    //获取sql，并查询，入库
+                    sql = this.getSql(schema, dimTableInfo, new StringBuilder());
+                    LogUtil.info("查询维表(" + dimTableInfo.getDimTableName() + "):" + sql);
                     try {
-                        datas = backServiceImpl.queryForPage(sql.toString(), i+1, PAGE_SIZE);
+                        num = backServiceImpl.queryCount(sql);
                     } catch (SqlRunException e) {
-                        //本维表的数据有问题，跳过
-                        LogUtil.warn("查询维表("+dimTableInfo.getDimTableName()+")数据出错！");
+                        //本维表注册的有问题，跳过
+                        LogUtil.warn("查询维表(" + dimTableInfo.getDimTableName() + ")总条数出错！");
                         continue;
                     }
-                    if (null != datas && !datas.isEmpty()) {
-                        for (Map<String, String> map : datas) {
-                            //入库
-                            id = new DimTableDataId(dimTableInfo.getDimTableName(), map.get(dimTableInfo.getDimCodeCol()));
-                            entity = new DimTableData(id, map.get(dimTableInfo.getDimValueCol()));
-                            dimTableData = iDimTableDataDao.get(id);
-                            if (null != dimTableData) {
-                                if (!dimTableData.equals(entity)) {
-                                    iDimTableDataDao.update(entity);
-                                }
-                            } else {
-                                iDimTableDataDao.save(entity);
-                            }
-                        } 
-                    } else {
-                        LogUtil.info("维表("+dimTableInfo.getDimTableName()+")没有数据。");
+                    if (num > PAGE_SIZE) {
+                        forNum = Integer.parseInt(String.valueOf(Math.ceil(num / PAGE_SIZE)));
                     }
+                    this.dimTableInfo2Data(dimTableInfo, schema, sql, forNum, datas, entity, id, dimTableData);
                 }
             }
         }
@@ -182,6 +186,38 @@ public class DimTableDataServiceImpl extends BaseServiceImpl<DimTableData, DimTa
         }
         
         return sql.toString(); 
+    }
+    private void dimTableInfo2Data(DimTableInfo dimTableInfo, String schema, String sql, int forNum,
+        List<Map<String, String>> datas,DimTableData entity,DimTableDataId id,DimTableData dimTableData) throws BaseException {
+
+        //循环读取，防止后台跑不动
+        for (int i = 0; i < forNum; i++) {
+            try {
+                datas = backServiceImpl.queryForPage(sql.toString(), i+1, PAGE_SIZE);
+            } catch (SqlRunException e) {
+                //本维表的数据有问题，跳过
+                LogUtil.warn("查询维表("+dimTableInfo.getDimTableName()+")数据出错！");
+                continue;
+            }
+            if (null != datas && !datas.isEmpty()) {
+                for (Map<String, String> map : datas) {
+                    //入库
+                    id = new DimTableDataId(dimTableInfo.getDimTableName(), map.get(dimTableInfo.getDimCodeCol()));
+                    entity = new DimTableData(id, map.get(dimTableInfo.getDimValueCol()));
+                    dimTableData = iDimTableDataDao.get(id);
+                    if (null != dimTableData) {
+                        if (!dimTableData.equals(entity)) {
+                            iDimTableDataDao.update(entity);
+                        }
+                    } else {
+                        iDimTableDataDao.save(entity);
+                    }
+                } 
+            } else {
+                LogUtil.info("维表("+dimTableInfo.getDimTableName()+")没有数据。");
+            }
+        }
+    
     }
     
 }

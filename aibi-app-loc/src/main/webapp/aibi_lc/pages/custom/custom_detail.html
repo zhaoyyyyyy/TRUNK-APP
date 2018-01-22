@@ -21,10 +21,15 @@
     <script src="http://apps.bdimg.com/libs/html5shiv/3.7/html5shiv.min.js"></script>
     <script src="http://apps.bdimg.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
+    
+    <style>
+    	.ui-dialog > .form-horizontal{
+    		display:none;
+    	}
+    </style>
 </head>
 <body>
 
-<!-- 计算中心弹框 -->
 <div id="dataD" class="iframe-nest">
 	<div class="ui-lc-mian">
 		<h3>客户群基本信息</h3>
@@ -73,7 +78,7 @@
                     <div class="input-group-addon input-group-icon right-child" id="btn_search"></div>
                 </div>
             </div>
-		    <div class="clearfix mt10">
+		    <div class="clearfix mt20">
 		    	<div class="ui-custom-col fleft">
 				<h3>标签体系</h3>
 				<div class="ui-custom-mes">
@@ -124,10 +129,11 @@
 				</div>
 				<button type="button" class="ui-btn ui-btn-second ml30">添加</button>
 			</div>
-			<div class="ui-custom-btn">
-				<button type="button" class="ui-btn ui-btn-ghost-brand">预览</button>
-				<button type="button" class="ui-btn ui-btn-ghost-brand">推送</button>
-			</div>
+		</div>
+		<div class="ui-custom-btn mt10">
+				<button type="button" class="ui-btn ui-btn-ghost-brand mr10" onclick="window.history.go(-1)">取消</button>
+				<button type="button" class="ui-btn ui-btn-default mr10">预览</button>
+				<button type="button" class="ui-btn ui-btn-default" @click="showDialog()">推送</button>
 		</div>
 	</div>
 </div>
@@ -135,20 +141,42 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+<div class="ui-dialog" id="dialog">
+	<div class="form-horizontal mt10 ui-lc-mian">
+		<div class="ui-form-group clearfix">
+	        <label for="inputEmail3" class="control-label fleft">推送周期:</label>
+	        <div class="radio circle success"> 
+			   	<input type="radio" name="radio19" id="myr3"> 
+				<label for="myr3"><i class="default"></i> 一次性</label>
+			</div>
+		    <div class="radio circle success">
+			   <input type="radio" name="radio19"  id="myr4"> 
+			   <label  for="myr4"><i class="default"></i> 日周期</label>
+			</div>
+			<div class="radio circle success">
+			   <input type="radio" name="radio19"  id="myr4"> 
+			   <label  for="myr4"><i class="default"></i> 月周期</label>
+			</div>
+	    </div>
+	    <div class="ui-form-group clearfix mt10">
+	        <label for="inputEmail3" class="control-label fleft">推送到:</label>
+	        <div class="clearfix fleft">
+        		<div class="checkbox fleft">
+				    <input id="mycheckbox12" type="checkbox" class="checkbix">
+				    <label aria-label="" role="checkbox" for="mycheckbox12" class="checkbix">
+				    		<span class="large"></span>推送到FTP
+				    </label>
+				</div>
+		       	<div class="checkbox fleft">
+				     <input id="mycheckbox13" type="checkbox" class="checkbix">
+				    <label aria-label="" role="checkbox" for="mycheckbox13" class="checkbix">
+				    		<span class="large"></span>营销管理平台
+				    </label>
+				</div>
+	        </div>
+	    </div>
+	</div>
+</div>
 
 
 </body>

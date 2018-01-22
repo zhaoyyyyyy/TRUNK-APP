@@ -6,25 +6,28 @@
 
 package com.asiainfo.biapp.si.loc.core.label.entity;
 
-import io.swagger.annotations.ApiParam;
-
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
-import javax.persistence.OrderBy;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
 
 import com.asiainfo.biapp.si.loc.base.entity.BaseEntity;
+import com.asiainfo.biapp.si.loc.base.exception.BaseException;
+import com.asiainfo.biapp.si.loc.base.extend.SpringContextHolder;
+import com.asiainfo.biapp.si.loc.base.utils.LogUtil;
+import com.asiainfo.biapp.si.loc.core.label.service.ICategoryInfoService;
+import com.asiainfo.biapp.si.loc.core.label.vo.CategoryInfoVo;
+
+import io.swagger.annotations.ApiParam;
 
 /**
  * Title : CategoryInfo
@@ -147,13 +150,25 @@ public class CategoryInfo extends BaseEntity {
     private Integer levelId;
     
     @ApiParam(value = "子分类")
-    @OrderBy(value = "SORT_NUM")
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "PARENT_ID", insertable = false, updatable = false)
+    @Transient
+//    @OrderBy(value = "sortNum")
+//    @OneToMany(cascade = CascadeType.ALL ,fetch=FetchType.EAGER)
+//    @JoinColumn(name = "PARENT_ID", insertable = false, updatable = false)
     private Set<CategoryInfo> children = new HashSet<>();
 
     public Set<CategoryInfo> getChildren() {
-        return children;
+    	List<CategoryInfo> list = null;
+    	try {
+			ICategoryInfoService categoryInfoService = (ICategoryInfoService) SpringContextHolder.getBean("categoryInfoServiceImpl");
+	    	CategoryInfoVo categoryInfoVo = new CategoryInfoVo();
+	    	categoryInfoVo.setParentId(categoryId);
+	    	categoryInfoVo.setSysId(sysId);
+			list = categoryInfoService.selectCategoryInfoList(categoryInfoVo);
+			for(CategoryInfo categoryInfo: list){
+				categoryInfo.getChildren();
+			}
+		} catch (Exception e) {LogUtil.error("标签目录以父查子异常",e);}
+        return new HashSet<CategoryInfo>(list);
     }
 
     public void setChildren(Set<CategoryInfo> children) {

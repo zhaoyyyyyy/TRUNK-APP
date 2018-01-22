@@ -56,6 +56,10 @@ public class DevUserServiceImpl extends BaseServiceImpl<User, String> implements
 	@Value("${jauth-url}")  
     private String jauthUrl; 
 
+	//自动登录标识
+	@Value("${autoLoginSign}")  
+    protected String autoLoginSign; 
+	
 	@Override
 	protected BaseDao<User, String> getBaseDao() {
 		return null;
@@ -91,6 +95,11 @@ public class DevUserServiceImpl extends BaseServiceImpl<User, String> implements
 		}
 	}
 
+	@Override
+	public TokenModel getTokenByUsername(String username) throws BaseException {
+		return getTokenByUsernamePassword(username, autoLoginSign);
+	}
+	
 	/**
 	 * 
 	 * {@inheritDoc}
@@ -185,6 +194,8 @@ public class DevUserServiceImpl extends BaseServiceImpl<User, String> implements
 		
 		return user;
 	}
+
+	
 
 	
 	

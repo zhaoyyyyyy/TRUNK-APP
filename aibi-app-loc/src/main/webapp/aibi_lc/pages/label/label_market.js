@@ -58,6 +58,8 @@ window.loc_onload = function() {
     			ulListId=index;
     			$.commAjax({
 				    url: $.ctx + "/api/label/categoryInfo/queryList",
+				    isShowMask : true,
+					maskMassage : '加载分类...',
 				    postData:{
 				    	"sysId" :dataModel.configId,
 					    parentId :categoryId
@@ -109,7 +111,21 @@ window.loc_onload = function() {
 		})
 	})
 	
+
 	
+	
+	$( '[data-dismiss*="Datepicker"]' ).datepicker({
+		dateFormat: "yy-mm-dd",
+		onClose: function(dateText, inst) {// 关闭事件  
+			if($(this).hasClass("publishStar")){
+				$("#publishTimeStart").val($(this).val());
+				labelMarket.loadLabelInfoList();
+			}else if($(this).hasClass("publishEnd")){
+				$("#publishTimeEnd").val($( this).val());
+				labelMarket.loadLabelInfoList();
+			}
+		}
+	})
 	
 	//计算中心弹出/收起（下面）
 	$(".ui-shop-cart").click(function(){
@@ -197,6 +213,8 @@ var labelMarket = (function (model){
 			$.commAjax({
 				url: $.ctx + "/api/label/labelInfo/queryPage",
 				postData:obj,
+				isShowMask : true,
+				maskMassage : '正在查找...',
 				onSuccess: function(data){
 					dataModel.page.currentPageNo=data.currentPageNo;
 					dataModel.page.totalCount=data.totalCount;

@@ -4,7 +4,7 @@ var model = {
 		sourceInfoList:[],
 		bqlx : [],
 		isbq : [],
-		gxzq : [],
+//		gxzq : [],
 		sjlx : [],
 		showdimDetail: [],
 		isActive:false, 
@@ -67,10 +67,10 @@ window.loc_onload = function() {
 	for(var i = 0; i<dicIsbq.length; i++){
 		model.isbq.push(dicIsbq[i]);
 	}
-	var dicgxzq = $.getDicData("GXZQZD");
+	/*var dicgxzq = $.getDicData("GXZQZD");
 	for(var i =0 ; i<dicgxzq.length; i++){
 		model.gxzq.push(dicgxzq[i]);
-	}
+	}*/
 	var dicsjlx = $.getDicData("ZDLXZD");
 	for(var i =0 ; i<dicsjlx.length; i++){
 		model.sjlx.push(dicsjlx[i]);

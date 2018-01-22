@@ -77,17 +77,16 @@ public class CustomerListCreaterThread extends Thread {
 			}
 			// 1.获取sql
 			LabelInfo customGroup = labelInfoService.get(customGroupId);
+			customRunModel.setOrgId(customGroup.getOrgId());//权限
 			List<LabelRuleVo> labelRuleList = ruleService.queryCiLabelRuleList(customGroupId, LabelRuleContants.LABEL_RULE_FROM_COSTOMER);
 			String countSqlStr = exploreServiceImpl.getCountSqlStr(labelRuleList, customRunModel);
 			// 2.生成表
 			String tableName=LabelInfoContants.KHQ_CROSS_ONCE_TABLE+customGroup.getConfigId()+"_"+customGroup.getDataDate();
-	    	IBackSqlDao backSqlDao = (IBackSqlDao)SpringContextHolder.getBean("backMysqlDaoImpl");
-	    	backSqlDao.createVerticalTable(tableName, LabelInfoContants.KHQ_CROSS_COLUMN);
-	    	backSqlDao.insertDataToTabByPartion(countSqlStr, tableName, customGroupId);
+	    	backServiceImpl.insertCustomerData(countSqlStr, tableName, customGroupId);
+	    	
 			// 3.发通知
 	    	customGroup.setDataStatusId(LabelInfoContants.CUSTOM_DATA_STATUS_SUCCESS);
-	    	customGroup.setLabelExtInfo(null);
-	    	labelInfoService.syncUpdateCustomGroupInfo(customGroup);
+	    	//labelInfoService.syncUpdateCustomGroupInfo(customGroup);
 		} catch (Exception e) {
 			LogUtil.error("生成客户群的清单异常", e);
 		}

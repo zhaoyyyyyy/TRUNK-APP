@@ -171,7 +171,7 @@ public class LabelExploreServiceImpl implements ILabelExploreService {
 		// 省专区，地市专区需要权限,普通专区不需要权限、 拼接where中的cityId，用于权限
 		boolean isNeedAuthen = false;
 		StringBuffer whereSb = new StringBuffer("where 1=1 and ");
-		String cityColumn = "CITY_COLUMN";// TODO ( t_401.CITY_COLUMN in( 571))
+		String cityColumn = "city_id";// TODO ( t_401.CITY_COLUMN in( 571))
 		if (StringUtil.isNotEmpty(dataTabelAlias)&&StringUtil.isNotEmpty(queryParam.getOrgId())) {
 			String orgId = queryParam.getOrgId();
 			whereSb.append(" (").append(dataTabelAlias).append(".").append(cityColumn)
@@ -193,12 +193,10 @@ public class LabelExploreServiceImpl implements ILabelExploreService {
 		// 日表、月表表名提取
 		if (LabelInfoContants.LABEL_CYCLE_TYPE_D == ciLabelInfo.getUpdateCycle()) {
 			String dayDate = queryParam.getDayDate();
-			String tablePostfix = "_" + dayDate;
-			tableName += tablePostfix;
+			tableName += dayDate;
 		} else if (LabelInfoContants.LABEL_CYCLE_TYPE_M == ciLabelInfo.getUpdateCycle()) {
 			String monthDate = queryParam.getMonthDate();
-			String tablePostfix = "_" + monthDate;
-			tableName += tablePostfix;
+			tableName += monthDate;
 		}
 		return tableName;
 	}

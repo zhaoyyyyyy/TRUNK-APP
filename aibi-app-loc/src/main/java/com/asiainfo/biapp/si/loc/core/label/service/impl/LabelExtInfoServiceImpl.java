@@ -12,6 +12,8 @@ import javax.transaction.Transactional;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import com.asiainfo.biapp.si.loc.base.dao.BaseDao;
@@ -91,6 +93,8 @@ public class LabelExtInfoServiceImpl extends BaseServiceImpl<LabelExtInfo, Strin
         return iLabelExtInfoDao.selectLabelExtInfoList(labelExtInfoVo);
     }
 
+    @Cacheable(value="LabelInfo", key="'selectLabelExtInfoById_'+#labelId")
+    @Override
     public LabelExtInfo selectLabelExtInfoById(String labelId) throws BaseException {
         if (StringUtils.isBlank(labelId)) {
             throw new ParamRequiredException("ID不能为空");
@@ -98,6 +102,7 @@ public class LabelExtInfoServiceImpl extends BaseServiceImpl<LabelExtInfo, Strin
         return super.get(labelId);
     }
 
+    @CacheEvict(value="LabelInfo",allEntries=true)
     public void addLabelExtInfo(LabelExtInfo labelExtInfo) throws BaseException {
         if (labelExtInfo.getLabelPrecision() != null) {
             if (labelExtInfo.getLabelPrecision() >= 1) {
@@ -112,6 +117,7 @@ public class LabelExtInfoServiceImpl extends BaseServiceImpl<LabelExtInfo, Strin
         super.saveOrUpdate(labelExtInfo);
     }
 
+    @CacheEvict(value="LabelInfo",allEntries=true)
     public void modifyLabelExtInfo(LabelExtInfo labelExtInfo) throws BaseException {
         if (labelExtInfo.getLabelPrecision() >= 1) {
             throw new ParamRequiredException("标签准确率需要小于1");
@@ -122,6 +128,7 @@ public class LabelExtInfoServiceImpl extends BaseServiceImpl<LabelExtInfo, Strin
         super.saveOrUpdate(labelExtInfo);
     }
 
+    @CacheEvict(value="LabelInfo",allEntries=true)
     public void deleteLabelExtInfo(String labelId) throws BaseException {
         if (StringUtils.isBlank(labelId)) {
             throw new ParamRequiredException("ID不能为空");

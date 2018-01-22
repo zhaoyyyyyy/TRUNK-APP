@@ -35,6 +35,7 @@ public class UserController extends BaseController<User>{
 	 * @param userName
 	 * @param password
 	 */
+	@ApiOperation(value = "通过用户名密码登录")
 	@ApiImplicitParams({
 		@ApiImplicitParam(name = "username", value = "用户名", required = true, paramType = "query", dataType = "string"),
 		@ApiImplicitParam(name = "password", value = "密码", required = true, paramType = "query", dataType = "string") 
@@ -46,6 +47,28 @@ public class UserController extends BaseController<User>{
 		TokenModel token = null;
 		try {
 			token = userService.getTokenByUsernamePassword(username, password);
+		} catch (BaseException e) {
+			return webResult.fail(e);
+		}
+		return webResult.success("登录成功",token );
+	}
+	
+	
+	/**
+	 * 
+	 * @param userName
+	 * @param password
+	 */
+	@ApiOperation(value = "单点登录:根据不同现场的规则会进行校验")
+	@ApiImplicitParams({
+		@ApiImplicitParam(name = "username", value = "用户名", required = true, paramType = "query", dataType = "string"),
+	})
+	@RequestMapping(value="/autoLogin", method=RequestMethod.POST, produces={ MediaType.APPLICATION_JSON_VALUE })
+	public WebResult<TokenModel> autoLogin(String username){
+		WebResult<TokenModel> webResult = new WebResult<>();
+		TokenModel token = null;
+		try {
+			token = userService.getTokenByUsername(username);
 		} catch (BaseException e) {
 			return webResult.fail(e);
 		}

@@ -78,14 +78,11 @@ window.loc_onload = function() {
 		    	}
 		    	if(dataModel.labelDay){
 		    		var labelDays = dataModel.labelDay.split('-');
+		    		$("#labelDay" ).datepicker({ showOn: 'focus'})
 			    	$("#labelDay" ).datepicker( "option", "minDate", new Date(labelDays[0]-1, labelDays[1] - 1, labelDays[2]) );
 			    	$("#labelDay" ).datepicker( "option", "maxDate", new Date(labelDays[0], labelDays[1] - 1, labelDays[2]) );
-			    	$("#labelDay").click(function(){
-			    		if($(".ui-datepicker-div").css("display")=="none"){
-			    			$('.ui-datepicker-calendar').hide();
-			    		}else{
-			    			$('.ui-datepicker-calendar').show();
-			    		}
+			    	$("#labelDay").focus(function(){
+			    		$('.ui-datepicker-calendar').show();
 			    	})
 		    	}
 		    	
