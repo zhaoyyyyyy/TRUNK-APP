@@ -45,21 +45,13 @@ window.loc_onload = function() {
 						url : $.ctx + "/api/dimtable/dimTableInfo/queryPage",
 						datatype : "json",
 						postData :{"configId": configId},
-						colNames : [ '序号', '维表表名',"维表中文名", '操作' ],
+						colNames : [ '维表表名',"维表中文名", '操作' ],
 						colModel : [
-								{
-									name : 'dataName',
-									index : 'dataName',
-									width : 50,
-									sortable : true,
-									frozen : true,
-									align : "right"
-								},
 								{
 									name : 'dimTableName',
 									index : 'dimTableName',
-									width : 50,
-									sortable : true,
+									width : 80,
+									sortable : false,
 									frozen : true,
 									align : "center",
 									formatter : function(value, opts, data) {
@@ -72,7 +64,7 @@ window.loc_onload = function() {
 									name : 'dimComment',
 									index : 'dimComment',
 									width : 50,
-									sortable : true,
+									sortable : false,
 									frozen : true,
 									align : "center"
 								},
