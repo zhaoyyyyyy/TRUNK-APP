@@ -186,6 +186,9 @@ var labelMarket = (function (model){
 						}
 						data.rows[i].customRuleShow = data.rows[i].labelExtInfo.labelOptRuleShow;
 						data.rows[i].customComment = data.rows[i].labelExtInfo.techCaliber;
+						console.log(data.rows[i].labelExtInfo.labelId);
+						console.log(data.rows[i].labelExtInfo.labelOptRuleShow);
+						console.log(data.rows[i].labelExtInfo)
 					}
 					dataModel.labelInfoList = data.rows;
 				}
