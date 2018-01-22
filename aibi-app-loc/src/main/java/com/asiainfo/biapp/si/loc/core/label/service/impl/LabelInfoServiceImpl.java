@@ -6,6 +6,8 @@
 
 package com.asiainfo.biapp.si.loc.core.label.service.impl;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -27,9 +29,11 @@ import com.asiainfo.biapp.si.loc.base.exception.ParamRequiredException;
 import com.asiainfo.biapp.si.loc.base.page.Page;
 import com.asiainfo.biapp.si.loc.base.service.impl.BaseServiceImpl;
 import com.asiainfo.biapp.si.loc.base.task.CustomerListCreaterThread;
+import com.asiainfo.biapp.si.loc.base.utils.DateUtil;
 import com.asiainfo.biapp.si.loc.base.utils.LogUtil;
 import com.asiainfo.biapp.si.loc.base.utils.StringUtil;
 import com.asiainfo.biapp.si.loc.base.utils.ThreadPool;
+import com.asiainfo.biapp.si.loc.cache.CocCacheProxy;
 import com.asiainfo.biapp.si.loc.core.dimtable.dao.IDimTableInfoDao;
 import com.asiainfo.biapp.si.loc.core.dimtable.entity.DimTableInfo;
 import com.asiainfo.biapp.si.loc.core.dimtable.service.IDimTableInfoService;
@@ -191,14 +195,15 @@ public class LabelInfoServiceImpl extends BaseServiceImpl<LabelInfo, String> imp
         iMdaSysTableColService.addMdaSysTableColumn(mdaSysTableColumn);
     }
 
-    public void modifyLabelInfo(LabelInfo labelInfo) throws BaseException {
-        /*if (labelInfo.getDataStatusId()==4 ||labelInfo.getDataStatusId()==5||labelInfo.getDataStatusId()==6) {
-            labelInfo.setFailTime(new Date());
-        }else if (labelInfo.getDataStatusId()==2) {
-            labelInfo.setEffecTime(new Date());
-        }*/
+    public void modifyLabelInfo(LabelInfo labelInfo) throws BaseException{
         if (labelInfo.getDataStatusId()==2) {
-            labelInfo.setEffecTime(new Date());
+            String LabelDay = DateUtil.dateFormat(CocCacheProxy.getCacheProxy().getNewLabelDay());
+            String LabelMonth = DateUtil.dateFormat(CocCacheProxy.getCacheProxy().getNewLabelMonth());
+            if (labelInfo.getUpdateCycle()==1) {
+                   labelInfo.setEffecTime(DateUtil.string2Date(LabelDay, "yyyy-MM-ddd"));
+               }else {
+                   labelInfo.setEffecTime(DateUtil.string2Date(LabelMonth, "yyyy-MM"));
+               }
         }
         super.saveOrUpdate(labelInfo);
         
