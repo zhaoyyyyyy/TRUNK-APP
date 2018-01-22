@@ -85,7 +85,8 @@
 				});
 				//跳转
 				obj.off("click","a.jumpPageNum").on("click","a.jumpPageNum",function(){
-					var current = parseInt($("#"+args.gridId+"_pageNum").val());
+//					var current = parseInt($("#"+args.gridId+"_pageNum").val());
+					var current = parseInt($(".inputPageNum input").val());
 					if(!$.isNumeric(current) ){
 						return false;
 					}

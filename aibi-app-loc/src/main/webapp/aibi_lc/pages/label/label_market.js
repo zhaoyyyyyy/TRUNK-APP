@@ -29,6 +29,7 @@ var dataModel = {
 		existDayLabel : true,//规则中是否包含月标签
 		labelMonth : '',//规则中月日期
 		labelDay : ''//规则中日日期
+		
 }
 window.loc_onload = function() {
 	//初始化参数
@@ -163,6 +164,9 @@ window.loc_onload = function() {
 	    	}
   	  ]
   });
+  
+   
+  
 	
 }
 
@@ -210,6 +214,7 @@ var labelMarket = (function (model){
 			// $("#configId").val($.getCurrentConfigId());
 			var obj = $("#formSearch").formToJson();
 			obj.pageSize = 20;
+			obj.groupType = 0;
 			$.commAjax({
 				url: $.ctx + "/api/label/labelInfo/queryPage",
 				postData:obj,
@@ -227,6 +232,22 @@ var labelMarket = (function (model){
 						}
 					}
 					dataModel.labelInfoList = data.rows;
+					$("#jsonmap1_pager").createPage({
+						pageCount:data.totalPageCount,  
+  	   					backFn : function(pageIndex){
+  	   						obj.pageStart = pageIndex;
+  	   						$.commAjax({
+  	   							url: $.ctx + "/api/label/labelInfo/queryPage",
+								postData:obj,
+								isShowMask : true,
+								maskMassage : '正在查找...',
+								onSuccess: function(res){
+									dataModel.page.currentPageNo=pageIndex;
+									dataModel.labelInfoList = res.rows;
+								}
+  	   						})
+  	   					}
+   					});
 				}
 			});
 		};
