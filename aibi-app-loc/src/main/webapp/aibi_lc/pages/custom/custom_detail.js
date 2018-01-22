@@ -37,7 +37,6 @@ window.loc_onload = function() {
 	      	$(".form-horizontal").show();
 	    }
     });
-    
 	var labelId = $.getUrlParam("labelId");
 	var configId = $.getCurrentConfigId();
 	model.configId = configId;
@@ -66,10 +65,10 @@ window.loc_onload = function() {
 				$("#dialog").dialog({
 		    		autoOpen: true,
 		    	});
+		    	$("#checkboxList").html("");
 		    	$.commAjax({
 		    		url: $.ctx + "/api/syspush/sysInfo/queryList",
 		    		onSuccess:function(data){
-		    			console.log(data.data)
 		    			for(var i=0;i<data.data.length;i++){
 		    				var html="<li class='checkbox fleft'>"+
 					    		"<input type='checkbox' id='"+data.data[i].sysId+"' class='checkbix'>"+
@@ -151,7 +150,8 @@ window.loc_onload = function() {
 		    },
 		    maskMassage : '搜索中...'
 	   });
-	}
+	};
+	
 	$("#radioList .radio").each(function(){
 		$(this).find("input").click(function(){
 			$(this).siblings("label").addClass("active");
@@ -160,7 +160,16 @@ window.loc_onload = function() {
 			$(this).prop("checked", true);
 		})
 	});
+	$("#checkboxList").delegate("input","click",function(){
+		if($(this).siblings("label").hasClass("active")){
+			$(this).siblings("label").removeClass("active");
+			$(this).prop("checked", false);
+		}else{
+			$(this).siblings("label").addClass("active");
+			$(this).prop("checked", true);
+		}
+	})
 	$("#add-dialog-btn").click(function(){
-		console.log($("#radioList label[class~=active]"))
+		console.log($("#radioList label[class~=active]"),$("#checkboxList label[class~=active]"))
 	})
 }
