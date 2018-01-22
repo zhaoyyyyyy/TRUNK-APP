@@ -23,7 +23,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 import com.asiainfo.biapp.si.loc.base.dao.BaseDao;
 import com.asiainfo.biapp.si.loc.base.exception.BaseException;
@@ -195,6 +194,8 @@ public class CategoryInfoServiceImpl extends BaseServiceImpl<CategoryInfo, Strin
         int currentRowNum = 0;
         // 数据行数
         int dataCount = 0;
+        // 重复行数
+        int exitCount = 0;
         //存放要返回的错误信息
         StringBuffer result = new StringBuffer();
         //存放分类名称
@@ -203,7 +204,7 @@ public class CategoryInfoServiceImpl extends BaseServiceImpl<CategoryInfo, Strin
         Map<String,String> map = new HashMap<>();
         CategoryInfoVo categoryInfoVo = new CategoryInfoVo();
         categoryInfoVo.setSysId(configId);
-        List<CategoryInfo> categoryInfoList = this.selectCategoryInfoList(categoryInfoVo);
+        List<CategoryInfo> categoryInfoList = iCategoryInfoDao.selectAllCategoryInfoList(categoryInfoVo);
         for(CategoryInfo c : categoryInfoList){
             nameList.add(c.getCategoryName());
             map.put(c.getCategoryName(), c.getCategoryId());
@@ -221,24 +222,25 @@ public class CategoryInfoServiceImpl extends BaseServiceImpl<CategoryInfo, Strin
                 // 跳过注释行
                 if (nextLine[0].startsWith("#")) {
                     continue;
-                }else{
-                    dataCount++;
-                }
-                
-                if(StringUtil.isBlank(nextLine[0])){
-                    result.append("第["+currentRowNum+"]行[1]级分类名称不能为空");
-                    continue;
                 }
                 
                 if(StringUtil.isNotBlank(nextLine[1])){
+                    if(StringUtil.isBlank(nextLine[0])){
+                        result.append("第["+currentRowNum+"]行[1]级分类名称不能为空;");
+                        continue;
+                    }
                     num++;
                 }
                 if(StringUtil.isNotBlank(nextLine[2])){
+                    if(StringUtil.isBlank(nextLine[1])){
+                        result.append("第["+currentRowNum+"]行[2]级分类名称不能为空;");
+                        continue;
+                    }
                     num++;
                 }
                 
                 if(nextLine[num].length()>8){
-                    result.append("第["+currentRowNum+"]行["+(num+1)+"]级分类名称过长");
+                    result.append("第["+currentRowNum+"]行["+(num+1)+"]级分类名称过长;");
                     continue;
                 }
                 
@@ -248,14 +250,16 @@ public class CategoryInfoServiceImpl extends BaseServiceImpl<CategoryInfo, Strin
                 if(num!=0){
                     String parentId = map.get(nextLine[num-1]);
                     if(StringUtil.isBlank(parentId)){
-                        result.append("第["+currentRowNum+"]行["+num+"]级分类名称不存在");
+                        result.append("第["+currentRowNum+"]行["+num+"]级分类名称不存在;");
                         continue;
                     }
                     categoryInfo.setParentId(map.get(nextLine[num-1]));
                 }
                 if(!nameList.contains(categoryInfo.getCategoryName())){
                     super.saveOrUpdate(categoryInfo);
+                    dataCount++;
                 }else{
+                    exitCount++;
                     continue;
                 }
                 map.put(categoryInfo.getCategoryName(), categoryInfo.getCategoryId());
@@ -273,7 +277,13 @@ public class CategoryInfoServiceImpl extends BaseServiceImpl<CategoryInfo, Strin
         if(StringUtil.isNotBlank(result)){
             throw new ParamRequiredException(result.toString());
         }
-        return "成功导入["+dataCount+"]个分类";
+        String msg;
+        if(exitCount!=0){
+            msg = "成功导入["+dataCount+"]个分类,共有["+exitCount+"]个分类已存在"; 
+        }else{
+            msg = "成功导入["+dataCount+"]个分类";
+        }
+        return msg;
     }
 
 

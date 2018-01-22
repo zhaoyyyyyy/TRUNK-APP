@@ -48,6 +48,8 @@ public interface ICategoryInfoDao extends BaseDao<CategoryInfo, String> {
      */
     public List<CategoryInfo> selectCategoryInfoList(CategoryInfoVo categoryInfoVo);
     
+    public List<CategoryInfo> selectAllCategoryInfoList(CategoryInfoVo categoryInfoVo);
+    
     /**
      * 根据分类名称查询
      *
