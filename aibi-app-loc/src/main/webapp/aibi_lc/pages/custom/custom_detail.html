@@ -35,7 +35,7 @@
 		<h3>客户群基本信息</h3>
 		<div class="ui-custom-info">
 			<h3 class="clearfix">
-				<span class="fleft">{{model.labelName}}</span>
+				<span class="fleft" v-text="model.labelName"></span>
 				<span class="fright">39651</span>
 			</h3>
 			<div class="ui-custom-item clearfix">
@@ -55,8 +55,7 @@
 						大于<b>10</b>岁 且 小于<b>20</b>岁
 					</a>
 				</div>
-				<span class="ui-label-date fright">
-					{{model.dataDate}}
+				<span class="ui-label-date fright" v-text="model.dataDate">
 				</span>
 			</div>
 		</div>
@@ -147,22 +146,31 @@
 	<div class="form-horizontal mt10 ui-lc-mian">
 		<div class="ui-form-group clearfix" id="radioList">
 	        <label for="inputEmail3" class="control-label fleft">推送周期:</label>
-	        <div class="radio circle success"> 
-			   	<input type="radio" name="radio19" id="myr3"> 
-				<label for="myr3"><i class="default"></i> 一次性</label>
-			</div>
-		    <div class="radio circle success">
-			   <input type="radio" name="radio19"  id="myr4"> 
-			   <label  for="myr4"><i class="default"></i> 日周期</label>
-			</div>
-			<div class="radio circle success">
-			   <input type="radio" name="radio19"  id="myr4"> 
-			   <label  for="myr4"><i class="default"></i> 月周期</label>
-			</div>
+	        <ul id="radioList" class="clearfix fleft">
+		        <li class="radio circle success" v-for="item in dataName"> 
+				   	<input type="radio" name="radio19" id="myr3"> 
+					<label for="myr3"><i class="default"></i>{{item.dataName}}</label>
+				</li>
+			    <!-- <div class="radio circle success">
+				   <input type="radio" name="radio19"  id="myr4"> 
+				   <label  for="myr4"><i class="default"></i> 日周期</label>
+				</div>
+				<div class="radio circle success">
+				   <input type="radio" name="radio19"  id="myr4"> 
+				   <label  for="myr4"><i class="default"></i> 月周期</label>
+				</div>  -->
+	        </ul>
+	       
 	    </div>
 	    <div class="ui-form-group clearfix mt10">
 	        <label for="inputEmail3" class="control-label fleft">推送到:</label>
 	        <ul class="clearfix fleft" id="checkboxList">
+	        	<li class="checkbox fleft" v-for="item in sysName">
+				    <input :id="item.sysId" type="checkbox" class="checkbix">
+				    <label aria-label="" role="checkbox" :for="item.sysId" class="checkbix">
+				    		<span class="large"></span>{{item.sysName}}
+				    </label>
+				</li>
         		<!--<li class="checkbox fleft">
 				    <input id="mycheckbox12" type="checkbox" class="checkbix">
 				    <label aria-label="" role="checkbox" for="mycheckbox12" class="checkbix">
