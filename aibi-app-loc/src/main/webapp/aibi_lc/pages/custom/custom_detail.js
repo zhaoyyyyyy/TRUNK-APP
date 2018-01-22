@@ -137,5 +137,15 @@ window.loc_onload = function() {
 		    maskMassage : '搜索中...'
 	   });
 	}
-	
+	$("#radioList .radio").each(function(){
+		$(this).find("input").click(function(){
+			$(this).siblings("label").addClass("active");
+			$(this).parent(".radio").siblings(".radio").find("label").removeClass("active");
+			$(this).parent(".radio").siblings(".radio").find("input").prop("checked", false);
+			$(this).prop("checked", true);
+		})
+	});
+	$("#add-dialog-btn").click(function(){
+		console.log($("#radioList label[class~=active]"))
+	})
 }
