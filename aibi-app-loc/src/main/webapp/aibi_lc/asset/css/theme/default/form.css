@@ -581,6 +581,13 @@ radio样式
 	border-radius:50%;
 	cursor:pointer;
 }
+.form-input60 .form-control{
+	width:60px;
+}
+.form-input100 .form-control{
+	width:100px;
+}
+
 
 
 

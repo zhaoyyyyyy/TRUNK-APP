@@ -25,34 +25,39 @@
       		<form>
       			<h3>标签数据范围</h3>
       			<div class="form-horizontal mt20">
-      				<div class="ui-form-group">
+      				<div class="ui-form-group ml30">
 				        <div class="radio circle success fleft"> 
 						   <input type="radio" name="radio19" id="myr3" v-model="rule.queryWay" value="1"> 
 						   <label for="myr3"><i class="default"></i>日期范围</label>
 						</div>
-				        <div class="control-input">
-					       	<div class='form-inline fleft clearfix'>
-					       		<span class="file-up-name fleft">开始时间 :</span>
-							    <input id="mycheckbox2" type="text" class="form-control fleft ml10"  placeholder="输入下线" v-model="rule.startTime" 
-							    	readonly="readonly" >
-							</div>
-					       	<div class='checkbox fleft ml10'>
-							    <input id="mycheckbox3" type="checkbox" class="checkbix" v-model="leftClosed" value="true">
-							    <label aria-label="" role="checkbox" for="mycheckbox3" class="checkbix">
-							    		<span class="large"></span>包含当前值
-							    </label>
-							</div>
-							<div class='form-inline fleft mt10 clearfix'>
+				        <div class="fleft">
+				        	<div class="clearfix">
+				        		<div class='form-inline fleft clearfix form-input100'>
+						       		<span class="file-up-name fleft">开始时间 :</span>
+								    <input id="mycheckbox2" type="text" class="form-control fleft ml10"  placeholder="输入下线" v-model="rule.startTime" 
+								    	readonly="readonly" >
+								</div>
+						       	<div class='checkbox fleft ml10'>
+								    <input id="mycheckbox3" type="checkbox" class="checkbix" v-model="leftClosed" value="true">
+								    <label aria-label="" role="checkbox" for="mycheckbox3" class="checkbix">
+								    		<span class="large"></span>包含当前值
+								    </label>
+								</div>
+				        	</div>
+					       	<div class="clearfix">
+					       		<div class='form-inline fleft mt10 clearfix form-input100'>
 								<span class="file-up-name fleft">结束时间 :</span>
-							    <input id="mycheckbox2" type="text" class="form-control fleft ml10" placeholder="输入上线" v-model="rule.endTime"
-							    	readonly="readonly" >
-							</div>
-					       	<div class='checkbox fleft mt10 ml10'>
-							     <input id="mycheckbox4" type="checkbox" class="checkbix" v-model="rightClosed" value="true">
-							    <label aria-label="" role="checkbox" for="mycheckbox4" class="checkbix">
-							    		<span class="large"></span>包含当前值
-							    </label>
-							</div>
+								    <input id="mycheckbox2" type="text" class="form-control fleft ml10" placeholder="输入上线" v-model="rule.endTime"
+								    	readonly="readonly" >
+								</div>
+						       	<div class='checkbox fleft mt10 ml10'>
+								     <input id="mycheckbox4" type="checkbox" class="checkbix" v-model="rightClosed" value="true">
+								    <label aria-label="" role="checkbox" for="mycheckbox4" class="checkbix">
+								    		<span class="large"></span>包含当前值
+								    </label>
+								</div>
+					       	</div>
+							
 							<div class='checkbox fleft mt10'>
 							    <input  type="checkbox" class="checkbix" id="dynamicUpdate" v-model="dynamicUpdate" value="1">
 							    <label aria-label="" role="checkbox" for="mycheckbox4" class="checkbix">
@@ -61,19 +66,19 @@
 							</div>
 				   		 </div>
 				    </div>
-					<div class="ui-form-group">
+					<div class="ui-form-group ml30">
 				        <div class="radio circle success fleft"> 
 						   <input type="radio" name="radio19" id="myr3" v-model="rule.queryWay" value="2"> 
-						   <label for="myr3"><i class="default"></i> 精确值</label>
+						   <label for="myr3"><i class="default"></i>精确值</label>
 						</div>
-				        <div class="control-input ml10">
-					       	<div class='checkbox'>
-							    <input type="text" id="exactValueDateYear"  v-model="exactValueDateYear" class="form-control fleft ml10"/>
-								<span class="fleft padding10">年</span>
+				        <div class="fleft ml10">
+					       	<div class='form-inline clearfix form-input60'>
+							    <input type="text" id="exactValueDateYear"  v-model="exactValueDateYear" class="form-control fleft"/>
+								<span class="fleft  ml10 mt5">年</span>
 								<input type="text" id="exactValueDateMonth" v-model="exactValueDateMonth" class="form-control fleft ml10"/>
-								<span class="fleft padding10">月</span>
+								<span class="fleft  ml10 mt5">月</span>
 								<input type="text" id="exactValueDateDay" v-model="exactValueDateDay" class="form-control fleft ml10"/>
-								<span class="fleft padding10">日</span>
+								<span class="fleft  ml10 mt5">日</span>
 							</div>
 					       	<p class="mt10">多条件用","分割,且不能用","结尾</p>
 							

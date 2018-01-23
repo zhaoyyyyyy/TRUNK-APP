@@ -583,7 +583,7 @@ var labelMarket = (function (model){
     		}else if(labelType == "11"){  //条件选择
     			
             }else if(labelType == "6"){//日期类型标签
-            	var wd = $.window(name + "-条件设置", $.ctx + '/aibi_lc/pages/labelDialog/dateValueSet.html?index='+index, 600, 500);
+            	var wd = $.window(name + "-条件设置", $.ctx + '/aibi_lc/pages/labelDialog/dateValueSet.html?index='+index, 550, 420);
 		    	wd.reload = function() {
 		    		model.refreshShopCart();
 		    	}	
