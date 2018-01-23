@@ -16,28 +16,8 @@ var model = {
 
 window.loc_onload = function() {
 	$("#dialog").dialog({
-	    width: 450,
-	    modal: true,
 	    autoOpen: false,
 	    title:"推送设置",
-	    buttons: [
-    	    {
-    	       text: "取消",
-    	       "class":"ui-btn ui-btn-second",
-    	        click: function() {
-    	        	$( this ).dialog( "close" );
-    	     	}
-	  	    },
-	  	    {
-    	        text: "确定",
-    	        "id":"add-dialog-btn",
-    	        "class":"ui-btn ui-btn-default",
-    	        click: function() {
-    	        	$( this ).dialog( "close" );
-    	        	
-    	        }
-	    	}
-  		],
 	    open:function(){
 	      	$(".form-horizontal").show();
 	      	new Vue({
@@ -61,7 +41,6 @@ window.loc_onload = function() {
     });
 	var labelId = $.getUrlParam("labelId");
 	var configId = $.getCurrentConfigId();
-//	var gxzqzd=$.getDicData("GXZQZD");
 	model.configId = configId;
 	$.commAjax({
 		postData : {
@@ -102,8 +81,7 @@ window.loc_onload = function() {
 			    	        "class":"ui-btn ui-btn-default",
 			    	        click: function() {
 			    	        	$( this ).dialog( "close" );	
-
-									console.log($("#radioList label[class~=active]").text()+","+$("#checkboxList label[class~=active]").text())
+								console.log($("#radioList label[class~=active]").text()+","+$("#checkboxList label[class~=active]").text())
 			    	        }
 				    	}
 			  		]
