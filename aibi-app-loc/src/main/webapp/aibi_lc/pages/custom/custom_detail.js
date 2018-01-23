@@ -10,6 +10,8 @@ var model = {
 		monthLabelDate : "",
 		dataName:"",//推送周期
 		sysName:"",//推送系统
+		curentIndex:false,//radio选中
+		isActive:false,//check选中
 }
 
 window.loc_onload = function() {
@@ -31,7 +33,8 @@ window.loc_onload = function() {
     	        "id":"add-dialog-btn",
     	        "class":"ui-btn ui-btn-default",
     	        click: function() {
-    	        	$( this ).dialog( "close" );	    	        
+    	        	$( this ).dialog( "close" );
+    	        	
     	        }
 	    	}
   		],
@@ -40,6 +43,18 @@ window.loc_onload = function() {
 	      	new Vue({
 		      	el : '#dialog',
 				data : model,
+				methods:{
+					radioSelect:function(index){
+						model.curentIndex=index;
+					},
+					checkSelect:function(item){
+						if(typeof item.isActive=='undefined'){
+							this.$set(item,"isActive",true)
+						}else if(typeof item.isActive!='undefined'){
+							item.isActive=!item.isActive;
+						}
+					}
+				}
 	      	});
 	      	model.dataName=$.getDicData("GXZQZD");
 	    }
@@ -72,31 +87,31 @@ window.loc_onload = function() {
 			showDialog:function(){
 				$("#dialog").dialog({
 		    		autoOpen: true,
+		    		width: 450,
+		    		buttons: [
+			    	    {
+			    	       text: "取消",
+			    	       "class":"ui-btn ui-btn-second",
+			    	        click: function() {
+			    	        	$( this ).dialog( "close" );
+			    	     	}
+				  	    },
+				  	    {
+			    	        text: "确定",
+			    	        "id":"add-dialog-btn",
+			    	        "class":"ui-btn ui-btn-default",
+			    	        click: function() {
+			    	        	$( this ).dialog( "close" );	
+
+									console.log($("#radioList label[class~=active]").text()+","+$("#checkboxList label[class~=active]").text())
+			    	        }
+				    	}
+			  		]
 		    	});
 		    	$.commAjax({
 		    		url: $.ctx + "/api/syspush/sysInfo/queryList",
 		    		onSuccess:function(data){
 		    			model.sysName=data.data;
-//		    			for(var i=0;i<data.data.length;i++){
-//		    				var html="<li class='checkbox fleft'>"+
-//					    		"<input type='checkbox' id='"+data.data[i].sysId+"' class='checkbix'>"+
-//					    		"<label for='"+data.data[i].sysId+"' aria-label role='checkbox' class='checkbix' data-id='"+data.data[i].sysId+"'>"+
-//					    		"<span class='large'></span>"+
-//					    		data.data[i].sysName+
-//					    		"</label>"+
-//					    		"</li>";
-//					    	$("#checkboxList").append(html);
-//			    		}
-//		    			for(var i=0;i<gxzqzd.length;i++){
-//		    				var html="<li class='radio circle success'>"+
-//				    		"<input name='radio19' type='radio' id='"+gxzqzd[i].id+"' >"+
-//				    		"<label for='"+gxzqzd[i].id+"'   data-id='"+gxzqzd[i].id+"'>"+
-//				    		"<i class='default'></i>"+
-//				    		gxzqzd[i].dataName+
-//				    		"</label>"+
-//				    		"</li>";
-//		    				$("#radioList").append(html);
-//		    			}
 		    		}
 		    	})
 			}
@@ -169,30 +184,7 @@ window.loc_onload = function() {
 		    maskMassage : '搜索中...'
 	   });
 	};
-	
-//	$("#radioList .radio").each(function(){
-//		$(this).find("input").click(function(){
-//			$(this).siblings("label").addClass("active");
-//			$(this).parent(".radio").siblings(".radio").find("label").removeClass("active");
-//			$(this).parent(".radio").siblings(".radio").find("input").prop("checked", false);
-//			$(this).prop("checked", true);
-//		})
-//	});
-	$("#radioList").delegate(".radio input","click",function(){
-		$(this).siblings("label").addClass("active");
-		$(this).parent(".radio").siblings(".radio").find("label").removeClass("active");
-		$(this).parent(".radio").siblings(".radio").find("input").prop("checked", false);
-		$(this).prop("checked", true);
-	})
-	$("#checkboxList").delegate("input","click",function(){
-		if($(this).siblings("label").hasClass("active")){
-			$(this).siblings("label").removeClass("active");
-			$(this).prop("checked", false);
-		}else{
-			$(this).siblings("label").addClass("active");
-			$(this).prop("checked", true);
-		}
-	})
+
 	$("#add-dialog-btn").click(function(){
 		for(var i=0;i<$("#checkboxList label[class~=active]").length;i++){
 			var sysId = $("#checkboxList label[class~=active]")[i].htmlFor;
@@ -210,6 +202,5 @@ window.loc_onload = function() {
 //			    maskMassage : '推送中...'
 //		   });
 		}
-		console.log($("#radioList label[class~=active]").text(),$("#checkboxList label[class~=active]").text())
 	})
 }

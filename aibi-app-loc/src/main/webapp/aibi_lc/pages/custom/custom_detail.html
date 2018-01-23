@@ -147,9 +147,9 @@
 		<div class="ui-form-group clearfix" id="radioList">
 	        <label for="inputEmail3" class="control-label fleft">推送周期:</label>
 	        <ul id="radioList" class="clearfix fleft">
-		        <li class="radio circle success" v-for="item in dataName"> 
+		        <li class="radio circle success"  v-for="(item,index) in dataName" @click="radioSelect(index)"> 
 				   	<input type="radio" name="radio19" id="myr3"> 
-					<label for="myr3"><i class="default"></i>{{item.dataName}}</label>
+					<label for="myr3" v-bind:class="{active:index==curentIndex}"><i class="default"></i>{{item.dataName}}</label>
 				</li>
 			    <!-- <div class="radio circle success">
 				   <input type="radio" name="radio19"  id="myr4"> 
@@ -165,9 +165,9 @@
 	    <div class="ui-form-group clearfix mt10">
 	        <label for="inputEmail3" class="control-label fleft">推送到:</label>
 	        <ul class="clearfix fleft" id="checkboxList">
-	        	<li class="checkbox fleft" v-for="item in sysName">
-				    <input :id="item.sysId" type="checkbox" class="checkbix">
-				    <label aria-label="" role="checkbox" :for="item.sysId" class="checkbix">
+	        	<li class="checkbox fleft" v-for="(item,index) in sysName" @click.stop.prevent="checkSelect(item)" >
+				    <input :id="item.sysId" type="checkbox" class="checkbix"  :checked="item.isActive">
+				    <label  v-bind:class="{active:item.isActive}" aria-label="" role="checkbox" :for="item.sysId" class="checkbix">
 				    		<span class="large"></span>{{item.sysName}}
 				    </label>
 				</li>
