@@ -288,6 +288,7 @@ public class LabelInfoServiceImpl extends BaseServiceImpl<LabelInfo, String> imp
 		customInfo.setLabelTypeId(LabelInfoContants.LABEL_TYPE_CUST);
 		customInfo.setDataStatusId(LabelInfoContants.CUSTOM_DATA_STATUS_WAIT);
 		customInfo.setCreateTime(new Date());
+		customInfo.setGroupType(1);
 		super.saveOrUpdate(customInfo);
 		String customId = customInfo.getLabelId();
 		labelExtInfo.setLabelId(customId);
