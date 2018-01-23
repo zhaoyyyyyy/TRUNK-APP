@@ -2,7 +2,11 @@ var ruleDataModel = {
 		rule : {},
 		ruleIndex : -1,
 		leftClosed : false,
-		rightClosed : false
+		rightClosed : false,
+		exactValueDateYear : '',
+		exactValueDateMonth : '',
+		exactValueDateDay : '',
+		dynamicUpdate : ''
 }
 window.loc_onload = function() {
 	var wd = frameElement.lhgDG;
