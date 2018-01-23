@@ -505,7 +505,7 @@ window.loc_onload = function() {
 	//导入
 	$("#import").click(function(){
 		var wd = $.window('导入分类信息', $.ctx
-				+ '/aibi_lc/pages/label/category_import.html', 350, 400);
+				+ '/aibi_lc/pages/label/category_import.html', 500, 300);
 		wd.success = function(){
 			ztreeFunc();
 		}
