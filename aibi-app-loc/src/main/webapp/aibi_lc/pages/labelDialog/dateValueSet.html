@@ -31,24 +31,23 @@
 						   <label for="myr3"><i class="default"></i>日期范围</label>
 						</div>
 				        <div class="control-input">
-					       	<div class='checkbox fleft'>
-					       		<span class="file-up-name">开始时间</span>
-							    <input id="mycheckbox2" type="text" class="form-control fleft mr10"  placeholder="输入下线" v-model="rule.startTime" 
+					       	<div class='form-inline fleft clearfix'>
+					       		<span class="file-up-name fleft">开始时间 :</span>
+							    <input id="mycheckbox2" type="text" class="form-control fleft ml10"  placeholder="输入下线" v-model="rule.startTime" 
 							    	readonly="readonly" >
 							</div>
-					       	<div class='checkbox fleft'>
+					       	<div class='checkbox fleft ml10'>
 							    <input id="mycheckbox3" type="checkbox" class="checkbix" v-model="leftClosed" value="true">
 							    <label aria-label="" role="checkbox" for="mycheckbox3" class="checkbix">
 							    		<span class="large"></span>包含当前值
 							    </label>
 							</div>
-							<div class='checkbox fleft mt10'>
-								
-								<span class="file-up-name">结束时间</span>
-							    <input id="mycheckbox2" type="text" class="form-control fleft mr10" placeholder="输入上线" v-model="rule.endTime"
+							<div class='form-inline fleft mt10 clearfix'>
+								<span class="file-up-name fleft">结束时间 :</span>
+							    <input id="mycheckbox2" type="text" class="form-control fleft ml10" placeholder="输入上线" v-model="rule.endTime"
 							    	readonly="readonly" >
 							</div>
-					       	<div class='checkbox fleft mt10'>
+					       	<div class='checkbox fleft mt10 ml10'>
 							     <input id="mycheckbox4" type="checkbox" class="checkbix" v-model="rightClosed" value="true">
 							    <label aria-label="" role="checkbox" for="mycheckbox4" class="checkbix">
 							    		<span class="large"></span>包含当前值
