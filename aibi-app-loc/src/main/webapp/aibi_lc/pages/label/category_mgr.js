@@ -130,8 +130,12 @@ window.loc_onload = function() {
 								"categoryName":Ppname,
 								"parentId":treeNode.categoryId,
 							},
-							onSuccess:function(data){							
-								ztreeFunc();
+							onSuccess:function(data){		
+								console.log(data);
+								var treeObj = $.fn.zTree.getZTreeObj("ztree");
+								var newNode = {categoryName:Ppname};
+								var nodes = treeObj.getNodesByParam("tId", treeNode.tId, null);
+								newNode = treeObj.addNodes(nodes[0], newNode);
 								labeltree();
 								$.alert("新增标签分类成功");
 							},

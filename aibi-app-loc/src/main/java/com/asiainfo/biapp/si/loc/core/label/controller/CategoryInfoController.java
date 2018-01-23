@@ -104,8 +104,8 @@ public class CategoryInfoController extends BaseController<CategoryInfo>{
         @ApiImplicitParam(name = "sortNum", value = "排序", required = false, paramType = "query", dataType = "int"),
         @ApiImplicitParam(name = "levelId", value = "层级", required = false, paramType = "query", dataType = "int") })
     @RequestMapping(value = "/categoryInfo/save", method = RequestMethod.POST)
-    public WebResult<String> save(@ApiIgnore CategoryInfo categoryInfo) throws BaseException{
-            WebResult<String> webResult = new WebResult<>();
+    public WebResult<CategoryInfo> save(@ApiIgnore CategoryInfo categoryInfo) throws BaseException{
+            WebResult<CategoryInfo> webResult = new WebResult<>();
             CategoryInfo category = new CategoryInfo();
             category = iCategoryInfoService.selectCategoryInfoByCategoryName(categoryInfo.getCategoryName(),categoryInfo.getSysId());
             if (null != category){
@@ -113,10 +113,11 @@ public class CategoryInfoController extends BaseController<CategoryInfo>{
             }
             try {
                 iCategoryInfoService.addCategoryInfo(categoryInfo);
+                category = iCategoryInfoService.selectCategoryInfoByCategoryName(categoryInfo.getCategoryName(),categoryInfo.getSysId());
             } catch (BaseException e) {
                 return webResult.fail(e);
             }
-            return webResult.success("新增标签分类成功", SUCCESS);
+            return webResult.success("新增标签分类成功", category);
     }
     
     
@@ -148,7 +149,7 @@ public class CategoryInfoController extends BaseController<CategoryInfo>{
             return webResult.fail("分类名称已存在");
         }
         oldCat = fromToBean(categoryInfo, oldCat);
-        iCategoryInfoService.update(oldCat);
+        iCategoryInfoService.modifyCategoryInfo(oldCat);
         return webResult.success("修改标签分类成功", SUCCESS);
     }
     
