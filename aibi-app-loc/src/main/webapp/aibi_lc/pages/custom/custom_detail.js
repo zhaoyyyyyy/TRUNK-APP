@@ -87,17 +87,18 @@ window.loc_onload = function() {
 									$.commAjax({			
 									    url : $.ctx+'/api/syspush/labelPushCycle/save',
 									    dataType : 'json', 
-									    async:true,
 									    postData : {
 												"customGroupId" :labelId,
 												"sysId" :sysId,
 												"pushCycle" :$("#radioList label[class~=active]").siblings("input").val(),
 											},
-									    onSuccess: function(data){
-									    	$.alert("推送完成");
-									    },
 									    maskMassage : '推送中...'
 								   });
+									if(i == $("#checkboxList label[class~=active]").length-1){
+										$.success("推送成功",function(){
+											//history.back(-1);
+										});
+									}
 								}
 			    	        }
 				    	}
