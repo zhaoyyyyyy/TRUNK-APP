@@ -13,7 +13,6 @@ var model = {
 		curentIndex:false,//radio选中
 		isActive:false,//check选中
 }
-
 window.loc_onload = function() {
 	$("#dialog").dialog({
 	    autoOpen: false,
@@ -37,6 +36,7 @@ window.loc_onload = function() {
 				}
 	      	});
 	      	model.dataName=$.getDicData("GXZQZD");
+	      	console.log(model.dataName.code)
 	    }
     });
 	var labelId = $.getUrlParam("labelId");
@@ -81,7 +81,24 @@ window.loc_onload = function() {
 			    	        "class":"ui-btn ui-btn-default",
 			    	        click: function() {
 			    	        	$( this ).dialog( "close" );	
-								console.log($("#radioList label[class~=active]").text()+","+$("#checkboxList label[class~=active]").text())
+								//console.log($("#radioList label[class~=active]").siblings("input").val()+$("#checkboxList label[class~=active]"))
+								for(var i=0;i<$("#checkboxList label[class~=active]").length;i++){
+									var sysId = $("#checkboxList label[class~=active]")[i].htmlFor;
+									$.commAjax({			
+									    url : $.ctx+'/api/syspush/labelPushCycle/save',
+									    dataType : 'json', 
+									    async:true,
+									    postData : {
+												"customGroupId" :labelId,
+												"sysId" :sysId,
+												"pushCycle" :$("#radioList label[class~=active]").siblings("input").val(),
+											},
+									    onSuccess: function(data){
+									    	$.alert("推送完成");
+									    },
+									    maskMassage : '推送中...'
+								   });
+								}
 			    	        }
 				    	}
 			  		]
@@ -103,9 +120,6 @@ window.loc_onload = function() {
 		    })
 		}
 	})
-	
-	
-	
 	//标签体系
 	labeltree();
 	function labeltree(){
@@ -162,23 +176,4 @@ window.loc_onload = function() {
 		    maskMassage : '搜索中...'
 	   });
 	};
-
-	$("#add-dialog-btn").click(function(){
-		for(var i=0;i<$("#checkboxList label[class~=active]").length;i++){
-			var sysId = $("#checkboxList label[class~=active]")[i].htmlFor;
-//			$.commAjax({			
-//			    url : $.ctx+'/api/syspush/labelPushCycle/save',
-//			    dataType : 'json', 
-//			    async:true,
-//			    postData : {
-//						"customGroupId" :labelId,
-//						"sysId" :sysId,
-//					},
-//			    onSuccess: function(data){
-//			    	$.alert("推送完成");
-//			    },
-//			    maskMassage : '推送中...'
-//		   });
-		}
-	})
 }
