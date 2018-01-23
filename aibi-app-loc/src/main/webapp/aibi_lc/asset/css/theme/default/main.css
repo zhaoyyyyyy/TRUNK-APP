@@ -1053,6 +1053,7 @@ span.del-btn{
 .ui-custom-col > .ui-custom-mes{
 	padding:10px;
 	height:320px;
+	overflow-y:auto;
 }
 .ui-custom-col > .ui-custom-mes > p{
 	height: 34px;
