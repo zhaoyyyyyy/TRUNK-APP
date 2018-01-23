@@ -953,7 +953,7 @@ span.del-btn{
 	width:100%;
 }
 /*页面最小高度*/
-.ui-table-static{
+.ui-lc-mian .ui-table-static{
 	min-height:600px;
 }
 /*dataSource页面*/
