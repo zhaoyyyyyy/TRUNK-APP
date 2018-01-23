@@ -115,12 +115,26 @@
 }
 .ui-filter-bar > a{
 	border-right: 1px solid #dce3e4;
-	padding: 0 20px;
+	padding: 0 25px 0 10px;
 	color: #666;
 	float: left;
+	position:relative;
+}
+.ui-filter-bar > a .f-ico-arrow-d{
+    width: 14px;
+    height: 18px;
+    display:inline-block;
+    line-height: 18px;
+    position:absolute;
+    top: 9px;
+    right: 5px;
+    background: url(./images/lc-icon.png) no-repeat -536px -200px;
 }
 .ui-filter-bar > a.active{
 	color: #009241;
+}
+.ui-filter-bar > a.active .f-ico-arrow-d{
+    background-position:-536px -216px;
 }
 .ui-refresh{
 	width: 20px;
