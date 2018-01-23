@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>文本标签规则设置</title>
+<!--[if IE]>
+    	<meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <![endif]-->
+	<link rel="stylesheet" theme="default" href="../../asset/css/theme/default/coc_frame.css" />
+	<script type="text/javascript" src="../../asset/script/common/include.js"></script>
+	<script type="text/javascript" src="textValueSet.js"></script>
+<style type="text/css">
+[v-cloak] {
+	display: none;
+}
+</style>
+<!--[if lt IE 9]>
+	    <script src="../../asset/script/component/h5compatibility/html5shiv.min.js"></script>
+	    <script src="../../asset/script/component/h5compatibility/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+	<div id="textValueSet" class="iframe-nest" v-cloak>
+      	<div class="ui-lc-mian"> 
+      		<form>
+      			<div class="form-horizontal mt20">
+      				<div class="ui-form-group">
+				        <div class="radio circle success fleft"> 
+						   <input type="radio" name="queryWay" v-model="rule.queryWay" value="1"> 
+						   <label for="myr3"><i class="default"></i> 模糊值</label>
+						</div>
+				        <div class="control-input ml10">
+					       	<div class='checkbox'>
+							    <input type="text" class="form-control fleft mr10"  id="darkValue" v-model="rule.darkValue">
+							</div>
+							<p class="mt10">输入您想查询的任意内容</p>
+				   		 </div>
+				    </div>
+					<div class="ui-form-group">
+				        <div class="radio circle success fleft"> 
+						   <input type="radio" name="queryWay" v-model="rule.queryWay" value="2"> 
+						   <label for="myr3"><i class="default"></i> 精确值</label>
+						</div>
+				        <div class="control-input ml10">
+					       	<div class='checkbox'>
+							    <input type="text" class="form-control fleft mr10" id="exactValue" v-model="rule.exactValue">
+							</div>
+					       	<p class="mt10">多条件用","分割,且不能用","结尾</p>
+							
+				   		 </div>
+				    </div>
+				      						      		
+      			</div>
+				
+      		</form>    
+        </div>
+    </div>     
+</body>
+</html>

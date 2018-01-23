@@ -583,9 +583,15 @@ var labelMarket = (function (model){
     		}else if(labelType == "11"){  //条件选择
     			
             }else if(labelType == "6"){//日期类型标签
-    				
-    		}else if(labelType == "7"){
-    			
+            	var wd = $.window(name + "-条件设置", $.ctx + '/aibi_lc/pages/labelDialog/dateValueSet.html?index='+index, 600, 500);
+		    	wd.reload = function() {
+		    		model.refreshShopCart();
+		    	}	
+    		}else if(labelType == "7"){//文本类型
+    			var wd = $.window(name + "-条件设置", $.ctx + '/aibi_lc/pages/labelDialog/textValueSet.html?index='+index, 600, 500);
+		    	wd.reload = function() {
+		    		model.refreshShopCart();
+		    	}
     			
     		} else {
     			//showAlert("计算元素类型错误！", "failed");
