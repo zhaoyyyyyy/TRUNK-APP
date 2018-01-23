@@ -131,9 +131,14 @@ window.loc_onload = function() {
 								"parentId":treeNode.categoryId,
 							},
 							onSuccess:function(data){		
-								console.log(data);
 								var treeObj = $.fn.zTree.getZTreeObj("ztree");
-								var newNode = {categoryName:Ppname};
+								var newNode = {
+									categoryName:Ppname,
+									categoryId:data.data.categoryId,
+									sysId:data.data.sysId,
+									categoryName:data.data.categoryName,
+									parentId:data.data.parentId
+								};
 								var nodes = treeObj.getNodesByParam("tId", treeNode.tId, null);
 								newNode = treeObj.addNodes(nodes[0], newNode);
 								labeltree();
