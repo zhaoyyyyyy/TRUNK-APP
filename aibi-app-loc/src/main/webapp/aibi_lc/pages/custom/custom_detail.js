@@ -17,6 +17,7 @@ window.loc_onload = function() {
 	$("#dialog").dialog({
 	    autoOpen: false,
 	    title:"推送设置",
+	    modal: true,
 	    open:function(){
 	      	$(".form-horizontal").show();
 	      	new Vue({
@@ -36,7 +37,6 @@ window.loc_onload = function() {
 				}
 	      	});
 	      	model.dataName=$.getDicData("GXZQZD");
-	      	console.log(model.dataName.code)
 	    }
     });
 	var labelId = $.getUrlParam("labelId");
@@ -133,7 +133,7 @@ window.loc_onload = function() {
 				},
 		    onSuccess: function(data){ 		    			    			    	
 			    	var ztreeObj=data.data;
-			    	$.fn.zTree.init($("#basicInformation"), install, ztreeObj);
+			    	$.fn.zTree.init($("#ztree"), install, ztreeObj);
 		    	}  
 	   });
 		install = {

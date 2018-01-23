@@ -1061,7 +1061,7 @@ span.del-btn{
     color: #000;
     font-size: 14px;
 }
-.ui-custom-col > .ui-custom-mes > ul > li > a{
+.ui-custom-col > .ui-custom-mes > ul.label-selected > li > a{
 	display:inline-block;
 	color: #666;
 	background: #F7F7F7;
