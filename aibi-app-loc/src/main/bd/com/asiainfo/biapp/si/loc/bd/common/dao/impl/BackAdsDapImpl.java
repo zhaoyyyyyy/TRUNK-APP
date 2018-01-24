@@ -166,10 +166,9 @@ public class BackAdsDapImpl  extends BaseBackDaoImpl implements IBackSqlDao{
 		
 		log.debug(" ----------   BackAdsDapImpl.insertDataToTabByPartion sql =  " + sb.toString());
 		try{
-			Thread.sleep(1000);
             return this.executeResBoolean(sb.toString());
         }catch (Exception e){
-        	LogUtil.error("插入数据出错！"+e);
+        	LogUtil.error("插入数据出错！"+e+"----executeSql:----"+sb.toString());
             throw new SqlRunException("操作后台库出错");
         }
 	}
@@ -206,7 +205,7 @@ public class BackAdsDapImpl  extends BaseBackDaoImpl implements IBackSqlDao{
 		
 		try{
             boolean res = this.executeResBoolean(sb.toString());
-            Thread.sleep(50000);
+            Thread.sleep(5000);
             return res;
         }catch (Exception e){
         	LogUtil.error("createTableByName出错！"+e);
@@ -227,7 +226,7 @@ public class BackAdsDapImpl  extends BaseBackDaoImpl implements IBackSqlDao{
             LogUtil.debug(new StringBuffer(sql).append(" cost:").append(System.currentTimeMillis()-s).append("ms."));
             
         }catch (Exception e){
-        	LogUtil.error("executeResBoolean出错！"+e);
+        	LogUtil.error("executeResBoolean出错！"+e+"----executeSql:----"+sql);
             res = false;
             throw new SqlRunException("操作后台库出错");
         }
@@ -246,6 +245,7 @@ public class BackAdsDapImpl  extends BaseBackDaoImpl implements IBackSqlDao{
             
             return this.resultSetToList(resultSet);
         }catch (Exception e){
+        	LogUtil.error("BackAdsDapImpl.executeResList出错！"+e+"----executeQuerySql:----"+sql);
             throw new SqlRunException("操作后台库出错");
         }
     }

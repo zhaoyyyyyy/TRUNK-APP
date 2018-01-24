@@ -10,8 +10,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,16 +17,17 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.asiainfo.biapp.si.loc.auth.model.User;
+import com.asiainfo.biapp.si.loc.base.common.LabelInfoContants;
 import com.asiainfo.biapp.si.loc.base.common.LabelRuleContants;
 import com.asiainfo.biapp.si.loc.base.controller.BaseController;
 import com.asiainfo.biapp.si.loc.base.exception.BaseException;
 import com.asiainfo.biapp.si.loc.base.exception.ParamRequiredException;
 import com.asiainfo.biapp.si.loc.base.page.Page;
+import com.asiainfo.biapp.si.loc.base.utils.DateUtil;
 import com.asiainfo.biapp.si.loc.base.utils.JsonUtil;
 import com.asiainfo.biapp.si.loc.base.utils.LogUtil;
 import com.asiainfo.biapp.si.loc.base.utils.StringUtil;
 import com.asiainfo.biapp.si.loc.base.utils.WebResult;
-import com.asiainfo.biapp.si.loc.core.label.entity.ApproveInfo;
 import com.asiainfo.biapp.si.loc.core.label.entity.LabelExtInfo;
 import com.asiainfo.biapp.si.loc.core.label.entity.LabelInfo;
 import com.asiainfo.biapp.si.loc.core.label.service.IApproveInfoService;
@@ -125,8 +124,14 @@ public class LabelInfoController extends BaseController {
 			labelInfo.setOrgId(orgId);
 			labelInfo.setBusiLegend(busiLegend);
 			labelInfo.setConfigId(configId);
-			labelInfo.setDataDate(dataDate);
-			//拓展信息
+			if (LabelInfoContants.CUSTOM_CYCLE_TYPE_D == updateCycle) {
+				labelInfo.setDataDate(dayLabelDate);
+			} else if (LabelInfoContants.CUSTOM_CYCLE_TYPE_D == updateCycle) {
+				labelInfo.setDataDate(monthLabelDate);
+			} else if (LabelInfoContants.CUSTOM_CYCLE_TYPE_ONE == updateCycle) {
+				labelInfo.setDataDate(DateUtil.date2String(new Date(), DateUtil.FORMAT_YYYYMMDD));
+			}
+			// 拓展信息
 			LabelExtInfo labelExtInfo = new LabelExtInfo();
 	        labelExtInfo.setTacticsId(tacticsId);
 	        labelExtInfo.setDayLabelDate(dayLabelDate);

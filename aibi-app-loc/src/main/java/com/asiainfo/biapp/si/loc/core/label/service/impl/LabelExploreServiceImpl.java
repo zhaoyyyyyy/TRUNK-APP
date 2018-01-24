@@ -172,10 +172,18 @@ public class LabelExploreServiceImpl implements ILabelExploreService {
 		boolean isNeedAuthen = false;
 		StringBuffer whereSb = new StringBuffer("where 1=1 and ");
 		String cityColumn = "city_id";// TODO ( t_401.CITY_COLUMN in( 571))
-		if (StringUtil.isNotEmpty(dataTabelAlias)&&StringUtil.isNotEmpty(queryParam.getOrgId())) {
+		if (StringUtil.isNotEmpty(dataTabelAlias) && StringUtil.isNotEmpty(queryParam.getOrgId())) {
 			String orgId = queryParam.getOrgId();
-			whereSb.append(" (").append(dataTabelAlias).append(".").append(cityColumn)
-			.append(" in ").append("(").append(orgId).append(")) and ");
+			StringBuffer orgSql = new StringBuffer();
+			String[] split = orgId.split(",");
+			for (int i = 0; i < split.length; i++) {
+				orgSql.append("'").append(split[i]).append("'");
+				if (i != (split.length - 1)) {
+					orgSql.append(",");
+				}
+			}
+			whereSb.append(" (").append(dataTabelAlias).append(".").append(cityColumn).append(" in ").append("(")
+					.append(orgSql.toString()).append(")) and ");
 			isNeedAuthen = true;
 		}
 		whereSb.append(wherelabel);

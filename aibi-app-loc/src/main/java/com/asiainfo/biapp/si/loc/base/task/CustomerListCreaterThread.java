@@ -81,9 +81,13 @@ public class CustomerListCreaterThread extends Thread {
 			List<LabelRuleVo> labelRuleList = ruleService.queryCiLabelRuleList(customGroupId, LabelRuleContants.LABEL_RULE_FROM_COSTOMER);
 			String countSqlStr = exploreServiceImpl.getCountSqlStr(labelRuleList, customRunModel);
 			// 2.生成表
-			String tableName=LabelInfoContants.KHQ_CROSS_ONCE_TABLE+customGroup.getConfigId()+"_"+customGroup.getDataDate();
+			String tableName="no table";
+			if(LabelInfoContants.CUSTOM_CYCLE_TYPE_ONE==customGroup.getUpdateCycle()){
+				 tableName=LabelInfoContants.KHQ_CROSS_ONCE_TABLE+customGroup.getConfigId()+"_"+customGroup.getDataDate();
+			}else{
+				 tableName=LabelInfoContants.KHQ_CROSS_TABLE+customGroup.getConfigId()+"_"+customGroup.getDataDate();
+			}
 	    	backServiceImpl.insertCustomerData(countSqlStr, tableName, customGroupId);
-	    	
 			// 3.发通知
 	    	customGroup.setDataStatusId(LabelInfoContants.CUSTOM_DATA_STATUS_SUCCESS);
 	    	//labelInfoService.syncUpdateCustomGroupInfo(customGroup);

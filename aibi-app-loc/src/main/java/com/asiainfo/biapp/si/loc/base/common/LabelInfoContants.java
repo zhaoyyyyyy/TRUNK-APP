@@ -44,7 +44,10 @@ public interface LabelInfoContants {
 	 */
 	public static final String KHQ_CROSS_DATE_PARTION = "STAT_DATE";
 	
-	
+	/**LABELINFO 群类型 0、标签;1、客户群 */
+    public static final int LABEL_GROUP_TYPE_LABEL = 0;
+  
+    public static final int LABEL_GROUP_TYPE_CUST = 1;
 	
 	/**
 	 * 标签类型
@@ -120,11 +123,11 @@ public interface LabelInfoContants {
 	 * 客户群生成周期:1,一次性;2,月周期;3,日周期;4,无周期
 	 */
 	/** 客户群生成周期:1,一次性; */
-	public static final int CUSTOM_CYCLE_TYPE_ONE = 1;
+	public static final int CUSTOM_CYCLE_TYPE_ONE = 3;
 	/** 客户群生成周期:2,月周期; */
 	public static final int CUSTOM_CYCLE_TYPE_M = 2;
 	/** 客户群生成周期:3,日周期 */
-	public static final int CUSTOM_CYCLE_TYPE_D = 3;
+	public static final int CUSTOM_CYCLE_TYPE_D = 1;
 	/** 客户群生成周期:4,无周期 */
 	public static final int CUSTOM_CYCLE_TYPE_N = 4;
 
