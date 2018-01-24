@@ -198,6 +198,10 @@
 }
 .ui-label-list > li .ui-label-info > h3 > span{
 	float: left;
+	width: 80%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 .ui-label-list > li:HOVER .ui-label-info > h3 > i,
 .ui-label-list > li.active .ui-label-info > h3 > i{
