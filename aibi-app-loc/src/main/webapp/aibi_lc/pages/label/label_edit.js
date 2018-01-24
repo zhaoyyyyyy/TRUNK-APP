@@ -159,7 +159,7 @@ window.loc_onload = function() {
 
 	var dicBqlx = $.getDicData("BQLXZD");
 	for(var i = 0; i<dicBqlx.length; i++){
-		if(dicBqlx[i].code!=10&&dicBqlx[i].code!=12&&dicBqlx[i].code!=8&&dicBqlx[i].code!=2){
+		if(dicBqlx[i].code!=10&&dicBqlx[i].code!=12&&dicBqlx[i].code!=8){
 			model.bqlx.push(dicBqlx[i]);
 		}		 
 	}
