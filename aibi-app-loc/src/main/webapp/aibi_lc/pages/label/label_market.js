@@ -4,8 +4,6 @@
  */
 /**初始化*/
 var dataModel = {
-		zqlxList:[],
-		xzqhList:[],
 		gxzqList:[],
 		page:[],
 		categoryInfoList : [],
@@ -78,8 +76,6 @@ window.loc_onload = function() {
 	labelMarket.loadLabelCategoryList();
 	//初始化计算中心事件
 	labelMarket.setClacCenter();
-	//初始化地市
-	labelMarket.loadOrg();
 	
 	labelMarket.loadUpdateCycle();
 	//加载标签集市
@@ -261,31 +257,6 @@ var labelMarket = (function (model){
 				}
 			});
 		};
-		
-		//获取地市
-		model.loadOrg = function(){
-    		$.commAjax({
-    			url: $.ctx + "/api/user/privaliegeData/query",
-    			onSuccess: function(data){
-    				if(data.data != null && data.data != undefined){
-    					var dataobj = data.data;
-						for(var e=0 ; e<4 ; e++){
-							if(dataobj[e]==undefined){
-								continue;
-							}
-							for(var l=0 ; l<dataobj[e].length ; l++){
-								var od = dataobj[e][l];
-								if(od.parentId == "999"){
-									dataModel.zqlxList.push(od);
-								}else if(od.orgType == "3"){
-									dataModel.xzqhList.push(od);
-								}
-							}
-						}
-    				}
-    			}
-    		});
-	    };
 	    
 	    //取消标签体系选择
 		model.selectAllCategoryId = function(elem){
@@ -680,6 +651,24 @@ var labelMarket = (function (model){
 			return index;
 			
 		}
+		/**
+		 * 清空规则
+		 */
+		model.clearShopRules = function(){
+			$.confirm('确定要清空？', function() {
+				$.commAjax({
+					url : $.ctx + "/api/shopCart/delShopSession",
+					onSuccess:function(returnObj){
+						var status = returnObj.status;
+						if (status == '200'){
+							model.refreshShopCart();
+						}else{
+							$.alert(returnObj.msg);
+						}
+					},
+				});
+			});
+		};
 		/**
 		 * 枚举或者文本类精确匹配时需要验证个数不能大于100个（oracle数据库超过1000个报错，而且过多影响数据探索，没有实际意义）
 		 */

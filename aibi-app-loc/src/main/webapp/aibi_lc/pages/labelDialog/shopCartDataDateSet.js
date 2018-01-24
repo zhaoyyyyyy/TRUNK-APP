@@ -118,7 +118,7 @@ var dataDateModel = (function (model){
 			  url: $.ctx + "/api/user/get",
 			  onSuccess: function(returnObj){
 				  if(returnObj.status == '200'){
-					  dataModel.dataPrivaliegeList = returnObj.data.dataPrivaliege[3];
+					  dataModel.dataPrivaliegeList = returnObj.data.dataPrivaliege[$.xzqh];
 					  if(dataModel.dataPrivaliegeList && dataModel.dataPrivaliegeList.length > 1){
 						  dataModel.isShowPrivaliegeDiv = true;
 					  }else if(dataModel.dataPrivaliegeList && dataModel.dataPrivaliegeList.length == 1){
