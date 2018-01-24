@@ -109,6 +109,7 @@ window.loc_onload = function() {
 		$.commAjax({
 			url : $.ctx + '/api/source/sourceTableInfo/get?sourceTableId='+sourceTableId,
 			onSuccess : function(data){
+				$(".ui-form-hide").hide();
 				model.sourceInfoList = data.data.sourceInfoList;
 				model.readCycle=data.data.readCycle;
 				model.read = $.getCodeDesc("GXZQZD",data.data.readCycle);

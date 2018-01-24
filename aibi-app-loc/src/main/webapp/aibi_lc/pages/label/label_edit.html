@@ -80,7 +80,7 @@
                                                                维表选择</label>
                                 <div class="control-input ml10">
                                  	<select v-model="dimId" name="dimId" id="dimId" required="true" class="easyui-validatebox form-control">
-                                         <option>请选择维表</option>
+                                         <option disabled value="">请选择维表</option>
                                          <option v-for = "dim in dimtableInfoList" :value="dim.dimId">{{dim.dimTableName}}</option>
                                      </select>
                                 </div>
