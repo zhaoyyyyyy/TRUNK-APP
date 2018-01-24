@@ -79,7 +79,7 @@ public class CategoryInfoController extends BaseController<CategoryInfo>{
     @ApiOperation(value = "根据ID查询标签分类")
     @ApiImplicitParam(name = "categoryId", value = "ID", required = true, paramType = "query", dataType = "string")
     @RequestMapping(value = "/categoryInfo/get",method = RequestMethod.POST)
-    public WebResult<CategoryInfo> findById(String categoryId) throws BaseException{
+    public WebResult<CategoryInfo> findById(String categoryId) {
         WebResult<CategoryInfo> webResult = new WebResult<>();
         CategoryInfo categoryInfo = new CategoryInfo();
         try {
@@ -104,14 +104,14 @@ public class CategoryInfoController extends BaseController<CategoryInfo>{
         @ApiImplicitParam(name = "sortNum", value = "排序", required = false, paramType = "query", dataType = "int"),
         @ApiImplicitParam(name = "levelId", value = "层级", required = false, paramType = "query", dataType = "int") })
     @RequestMapping(value = "/categoryInfo/save", method = RequestMethod.POST)
-    public WebResult<CategoryInfo> save(@ApiIgnore CategoryInfo categoryInfo) throws BaseException{
+    public WebResult<CategoryInfo> save(@ApiIgnore CategoryInfo categoryInfo){
             WebResult<CategoryInfo> webResult = new WebResult<>();
             CategoryInfo category = new CategoryInfo();
-            category = iCategoryInfoService.selectCategoryInfoByCategoryName(categoryInfo.getCategoryName(),categoryInfo.getSysId());
-            if (null != category){
-                return webResult.fail("分类名称已存在");
-            }
             try {
+                category = iCategoryInfoService.selectCategoryInfoByCategoryName(categoryInfo.getCategoryName(),categoryInfo.getSysId());
+                if (null != category){
+                    return webResult.fail("分类名称已存在");
+                }
                 iCategoryInfoService.addCategoryInfo(categoryInfo);
                 category = iCategoryInfoService.selectCategoryInfoByCategoryName(categoryInfo.getCategoryName(),categoryInfo.getSysId());
             } catch (BaseException e) {
@@ -135,28 +135,28 @@ public class CategoryInfoController extends BaseController<CategoryInfo>{
         @ApiImplicitParam(name = "sortNum", value = "排序", required = false, paramType = "query", dataType = "int"),
         @ApiImplicitParam(name = "levelId", value = "层级", required = false, paramType = "query", dataType = "int") })
     @RequestMapping(value = "/categoryInfo/update", method = RequestMethod.POST)
-    public WebResult<String> edit(@ApiIgnore CategoryInfo categoryInfo) throws BaseException{
+    public WebResult<String> edit(@ApiIgnore CategoryInfo categoryInfo){
         WebResult<String> webResult = new WebResult<>();
         CategoryInfo oldCat = new CategoryInfo();
         CategoryInfo category = new CategoryInfo();
-        category = iCategoryInfoService.selectCategoryInfoByCategoryName(categoryInfo.getCategoryName(),categoryInfo.getSysId());
         try {
+            category = iCategoryInfoService.selectCategoryInfoByCategoryName(categoryInfo.getCategoryName(),categoryInfo.getSysId());
             oldCat = iCategoryInfoService.selectCategoryInfoById(categoryInfo.getCategoryId());
+            if(!categoryInfo.getCategoryName().equals(oldCat.getCategoryName()) && null != category){
+                return webResult.fail("分类名称已存在");
+            }
+            oldCat = fromToBean(categoryInfo, oldCat);
+            iCategoryInfoService.modifyCategoryInfo(oldCat);
         } catch (BaseException e) {
             return webResult.fail(e);
         }
-        if(!categoryInfo.getCategoryName().equals(oldCat.getCategoryName()) && null != category){
-            return webResult.fail("分类名称已存在");
-        }
-        oldCat = fromToBean(categoryInfo, oldCat);
-        iCategoryInfoService.modifyCategoryInfo(oldCat);
         return webResult.success("修改标签分类成功", SUCCESS);
     }
     
     @ApiOperation(value = "删除标签分类")
     @ApiImplicitParam(name = "categoryId", value = "ID", required = true, paramType = "query", dataType = "string")
     @RequestMapping(value = "/categoryInfo/delete", method = RequestMethod.POST)
-    public WebResult<String> del(String categoryId) throws BaseException{
+    public WebResult<String> del(String categoryId){
         WebResult<String> webResult = new WebResult<>();
         try {
             iCategoryInfoService.deleteCategoryInfoById(categoryId);
