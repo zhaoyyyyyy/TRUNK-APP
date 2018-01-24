@@ -37,10 +37,14 @@ window.loc_onload = function(){
 			
 			//点击菜单
 			$('#accordion a').click(function(){
-				
+				var self = this;
 				if(!$(this).parent().parent().is("#accordion")){
 					$('#accordion li').removeClass("active");
 					$(this).parent().addClass("active");
+				}
+				//点击一级分类
+				if($(self).attr('href').indexOf("#") > -1){
+					window.location.hash = $(self).attr('href');
 				}
 			});
 		}

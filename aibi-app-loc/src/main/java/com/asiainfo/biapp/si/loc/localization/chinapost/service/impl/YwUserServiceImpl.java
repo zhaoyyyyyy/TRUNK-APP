@@ -120,7 +120,7 @@ public class YwUserServiceImpl extends DevUserServiceImpl implements IUserServic
 					for(Organization organization : organizationPrivaliege){
 						if("3".equals(organization.getOrgType())){
 							String xzqh = organization.getOrgType();
-							organization.setLevel(2);
+							//organization.setLevel(2);
 							if(dataPrivaliege.containsKey(xzqh)){
 								List<Organization> organizationList = dataPrivaliege.get(xzqh);
 								organizationList.add(organization);

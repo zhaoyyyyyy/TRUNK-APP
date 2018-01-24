@@ -49,8 +49,10 @@
  		<ul class="ui-menu-ul" id="accordion" style="display:none;">
 				
 			<li v-for="resource in resourceList">
- 				<a  v-bind:href="'#'+resource.address" v-text="resource.resourceName">标签集市</a>
- 				<div>
+ 				<a v-if="resource.address" v-bind:href="'#'+resource.address" v-text="resource.resourceName">标签集市</a>
+ 				<a v-if="!resource.address" href="javascript:void(0);" v-text="resource.resourceName">标签集市</a>
+ 				
+ 				<div v-if="resource.children.length > 0">
  					<ul class="ui-menu-ul">
  						<li v-for="r in resource.children">
  							<a  v-bind:href="'#'+r.address" v-text="r.resourceName"></a>
