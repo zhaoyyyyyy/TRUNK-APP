@@ -6,8 +6,6 @@
 
 package com.asiainfo.biapp.si.loc.core.label.service.impl;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -38,7 +36,6 @@ import com.asiainfo.biapp.si.loc.core.dimtable.dao.IDimTableInfoDao;
 import com.asiainfo.biapp.si.loc.core.dimtable.entity.DimTableInfo;
 import com.asiainfo.biapp.si.loc.core.dimtable.service.IDimTableInfoService;
 import com.asiainfo.biapp.si.loc.core.label.dao.ILabelInfoDao;
-import com.asiainfo.biapp.si.loc.core.label.dao.IMdaSysTableDao;
 import com.asiainfo.biapp.si.loc.core.label.entity.ApproveInfo;
 import com.asiainfo.biapp.si.loc.core.label.entity.LabelCountRules;
 import com.asiainfo.biapp.si.loc.core.label.entity.LabelExtInfo;
@@ -91,9 +88,6 @@ public class LabelInfoServiceImpl extends BaseServiceImpl<LabelInfo, String> imp
     private ILabelInfoDao iLabelInfoDao;
     
     @Autowired
-    private IMdaSysTableDao iMdaSysTableDao;
-    
-    @Autowired
     private IDimTableInfoDao iDimTableInfoDao;  
     
     @Autowired 
@@ -144,7 +138,7 @@ public class LabelInfoServiceImpl extends BaseServiceImpl<LabelInfo, String> imp
 
     public void addLabelInfo(LabelInfo labelInfo) throws BaseException { 
         LabelInfo label = new LabelInfo();
-        label = iLabelInfoService.selectOneByLabelName(labelInfo.getLabelName());
+        label = iLabelInfoService.selectOneByLabelName(labelInfo.getLabelName(),labelInfo.getConfigId());
         if (null !=label) {
             throw new ParamRequiredException("标签名称重复");
         }
@@ -254,11 +248,11 @@ public class LabelInfoServiceImpl extends BaseServiceImpl<LabelInfo, String> imp
     }
 
     @Override
-    public LabelInfo selectOneByLabelName(String labelName) throws BaseException {
+    public LabelInfo selectOneByLabelName(String labelName,String configId) throws BaseException {
         if (StringUtils.isBlank(labelName)) {
             throw new ParamRequiredException("名称不许为空");
         }
-        return iLabelInfoDao.selectOneByLabelName(labelName);
+        return iLabelInfoDao.selectOneByLabelName(labelName,configId);
     }
 
     public LabelInfo updateApproveInfo(String approveStatusId,LabelInfo oldLab) throws BaseException{

@@ -264,7 +264,7 @@ public class LabelInfoController extends BaseController {
             oldLab = iLabelInfoService.selectLabelInfoById(labelInfo.getLabelId());
             LabelInfo label = null;
             if (StringUtil.isNoneBlank(labelInfo.getLabelName())) {
-                label = iLabelInfoService.selectOneByLabelName(labelInfo.getLabelName());
+                label = iLabelInfoService.selectOneByLabelName(labelInfo.getLabelName(),labelInfo.getConfigId());
             } 
             if (StringUtil.isNoneBlank(labelInfo.getLabelName())&&!oldLab.getLabelName().equals(labelInfo.getLabelName())&& null!= label) {
                 throw new ParamRequiredException("标签名称重复");

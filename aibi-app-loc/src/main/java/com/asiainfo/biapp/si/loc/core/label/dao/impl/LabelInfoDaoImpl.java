@@ -99,8 +99,8 @@ public class LabelInfoDaoImpl extends BaseDaoImpl<LabelInfo, String> implements 
             params.put("updateCycle", labelInfoVo.getUpdateCycle());
         }
         if (null != labelInfoVo.getLabelTypeId()) {
-            hql.append("and l.labelTypeId LIKE :labelTypeId ");
-            params.put("labelTypeId","%"+labelInfoVo.getLabelTypeId()+"%");
+            hql.append("and l.labelTypeId = :labelTypeId ");
+            params.put("labelTypeId", labelInfoVo.getLabelTypeId());
         }
         if (StringUtil.isNotBlank(labelInfoVo.getCategoryId())) {
             hql.append("and l.categoryId = :categoryId ");
@@ -194,8 +194,8 @@ public class LabelInfoDaoImpl extends BaseDaoImpl<LabelInfo, String> implements 
     }
 
     @Override
-    public LabelInfo selectOneByLabelName(String labelName) {     
-        return super.findOneByHql("from LabelInfo l where l.labelName =?0",labelName);
+    public LabelInfo selectOneByLabelName(String labelName,String configId) {     
+        return super.findOneByHql("from LabelInfo l where l.labelName =?0 and l.configId =?0",labelName,configId);
     }
     
     public List<LabelInfo> selectLabelAllEffectiveInfoList(LabelInfoVo labelInfoVo) {
@@ -230,8 +230,8 @@ public class LabelInfoDaoImpl extends BaseDaoImpl<LabelInfo, String> implements 
             params.put("updateCycle", labelInfoVo.getUpdateCycle());
         }
         if (null != labelInfoVo.getLabelTypeId()) {
-            hql.append("and l.labelTypeId LIKE :labelTypeId ");
-            params.put("labelTypeId","%"+labelInfoVo.getLabelTypeId()+"%");
+            hql.append("and l.labelTypeId = :labelTypeId ");
+            params.put("labelTypeId", labelInfoVo.getLabelTypeId());
         }
         if (StringUtil.isNotBlank(labelInfoVo.getCategoryId())) {
             hql.append("and l.categoryId = :categoryId ");

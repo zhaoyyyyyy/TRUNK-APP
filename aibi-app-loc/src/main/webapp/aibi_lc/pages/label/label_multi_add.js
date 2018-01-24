@@ -64,7 +64,7 @@ window.loc_onload = function(){
 	model.configId = $.getCurrentConfigId();
 	var dicBqlx = $.getDicData("BQLXZD");
 	for(var i = 0; i<dicBqlx.length; i++){
-		if(dicBqlx[i].code!=10&&dicBqlx[i].code!=12&&dicBqlx[i].code!=8){
+		if(dicBqlx[i].code!=10&&dicBqlx[i].code!=12&&dicBqlx[i].code!=8&&dicBqlx[i].code!=2){
 			model.bqlx.push(dicBqlx[i]);
 		}		 
 	}
@@ -288,7 +288,7 @@ function fun_to_save(){
 			if(k == $("form").size() && flag == "success"){	
 				$.success("创建成功",function(){
 					history.back(-1);
-//					window.location.href="label_mgr.html";
+//					frame.html.location.href='label_mgr.html';
 				})
 			}
 			k++;

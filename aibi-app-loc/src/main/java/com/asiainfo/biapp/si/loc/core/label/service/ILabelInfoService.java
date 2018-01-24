@@ -87,11 +87,11 @@ public interface ILabelInfoService extends BaseService<LabelInfo, String> {
     /**
      * Description:通过标签名称拿到标签信息
      *
-     * @param labelname
+     * @param labelname,configId
      * @return
      * @throws BaseException
      */
-    public LabelInfo selectOneByLabelName(String labelName) throws BaseException;
+    public LabelInfo selectOneByLabelName(String labelName,String configId) throws BaseException;
 
     /**
      * Description:新增一个标签信息

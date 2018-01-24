@@ -69,10 +69,10 @@ public interface ILabelInfoDao extends BaseDao<LabelInfo, String> {
      * 
      * Description: 
      *
-     * @param labelname
+     * @param labelname,configId
      * @return
      */
-    public LabelInfo selectOneByLabelName(String labelName);
+    public LabelInfo selectOneByLabelName(String labelName,String configId);
     
     /**
      * 取得所有状态为1,2,4状态的标签
