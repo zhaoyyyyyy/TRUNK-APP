@@ -110,6 +110,10 @@
 					<div class="ul-label-box">
 						<div class="ui-label-info">
 							<h3 class="clearfix">
+								<div class="tooltip top" role="tooltip">
+									<div class="tooltip-arrow"></div>
+									<div class="tooltip-inner" v-text="item.labelName"></div>
+								</div>
 								<span v-text="item.labelName"></span>
 								<i v-on:click="select(index)"></i>
 							</h3>
