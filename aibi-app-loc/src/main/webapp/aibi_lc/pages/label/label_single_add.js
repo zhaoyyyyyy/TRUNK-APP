@@ -104,6 +104,7 @@ window.loc_onload = function() {
 		}
 	});	
 	$('#sourceTableId').change(function(){
+		$(".ui-form-hide").hide();
 		var sourceTableId = $("#sourceTableId").val();
 		$.commAjax({
 			url : $.ctx + '/api/source/sourceTableInfo/get?sourceTableId='+sourceTableId,
