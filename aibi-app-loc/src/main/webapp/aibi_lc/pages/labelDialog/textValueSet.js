@@ -29,18 +29,27 @@ window.loc_onload = function() {
      */
     var ruleApp = new Vue({
     	el : '#textValueSet',
-    	data : ruleDataModel
+    	data : ruleDataModel,
+		mounted: function () {
+		    this.$nextTick(function () {
+			    var r = $(".easyui-validatebox");
+	   			if (r.length){
+	   				r.validatebox();
+	   			}
+	   			$("input[name=queryWay]").click(function(){
+	   		    	if($(this).val()==1){
+	   		    		$('#darkValue').removeAttr('disabled');
+	   		    		$('#exactValue').attr('disabled',true);
+	   		    	}else{
+	   		    		$('#exactValue').removeAttr('disabled');
+	   		    		$('#darkValue').attr('disabled',true);
+	   		    	}
+	   		    	
+	   			});
+		    })
+		}
     });
-    $("input[name=queryWay]").click(function(){
-    	if($(this).val()==1){
-    		$('#darkValue').removeAttr('disabled');
-    		$('#exactValue').attr('disabled',true);
-    	}else{
-    		$('#exactValue').removeAttr('disabled');
-    		$('#darkValue').attr('disabled',true);
-    	}
-    	
-	});
+    
 }
 
 /**

@@ -136,8 +136,12 @@ window.loc_onload = function() {
 	
 	//计算中心弹出/收起（下面）
 	$(".ui-shop-cart").click(function(){
-		labelMarket.refreshShopCart();
-		$(".ui-calculate-center").addClass("heightAuto");
+		if($(".ui-calculate-center").hasClass("heightAuto")){
+			$(".ui-calculate-center").removeClass("heightAuto");
+		}else{
+			labelMarket.refreshShopCart();
+			$(".ui-calculate-center").addClass("heightAuto");
+		}
 	});
 	$(".J-min").click(function(){
 		$(".ui-calculate-center").removeClass("heightAuto");
