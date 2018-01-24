@@ -119,15 +119,16 @@ public class YwUserServiceImpl extends DevUserServiceImpl implements IUserServic
 					//通过组织类型来赋予用户的组织权限跟数据权限
 					for(Organization organization : organizationPrivaliege){
 						if("3".equals(organization.getOrgType())){
-							String level = organization.getOrgCode().length()+"";
-							if(dataPrivaliege.containsKey(level)){
-								List<Organization> organizationList = dataPrivaliege.get(level);
+							String xzqh = organization.getOrgType();
+							organization.setLevel(2);
+							if(dataPrivaliege.containsKey(xzqh)){
+								List<Organization> organizationList = dataPrivaliege.get(xzqh);
 								organizationList.add(organization);
-								dataPrivaliege.put(level, organizationList);
+								dataPrivaliege.put(xzqh, organizationList);
 							}else{
 								List<Organization> organizationList = new ArrayList<Organization>();
 								organizationList.add(organization);
-								dataPrivaliege.put(level, organizationList);
+								dataPrivaliege.put(xzqh, organizationList);
 							}
 						}else{
 							if(orgPrivaliege.containsKey(organization.getOrgType())){

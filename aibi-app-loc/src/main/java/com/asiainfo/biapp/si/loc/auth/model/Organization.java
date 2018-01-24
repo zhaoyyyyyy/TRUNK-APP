@@ -10,9 +10,11 @@ import com.asiainfo.biapp.si.loc.base.entity.BaseEntity;
 public class Organization extends BaseEntity{
 	private String id;
 	private String simpleName;
-	private String orgCode;
-	private String orgType;
 	
+	private String orgCode; //组织编码（重要）  
+	private Integer level;  //组织级别（重要）
+	
+	private String orgType;
 	private String fullName;
 	private Integer orderNum;
 	private Organization parentOrg;
@@ -40,6 +42,12 @@ public class Organization extends BaseEntity{
 	}
 	public String getOrgCode() {
 		return orgCode;
+	}
+	public Integer getLevel() {
+		return level;
+	}
+	public void setLevel(Integer level) {
+		this.level = level;
 	}
 	public String getId() {
 		return id;
