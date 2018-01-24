@@ -759,7 +759,12 @@ var labelMarket = (function (model){
 		 * 探索标签
 		 */
 		model.explore = function(){
-			
+			var e=arguments.callee.caller.arguments[0]||event;
+			    if (e && e.stopPropagation) {
+			       e.stopPropagation();
+			    } else if (window.event) {
+			       window.event.cancelBubble = true;
+			}
 			if(model.validateForm()){
 				var existLabel = true;
 				//只有清单时,不弹出对话框,直接探索
@@ -824,7 +829,12 @@ var labelMarket = (function (model){
 		 * 进入客户群编辑界面
 		 */
 		model.gotoSaveCustomer = function(e){
-			
+			var e=arguments.callee.caller.arguments[0]||event;
+			    if (e && e.stopPropagation) {
+			       e.stopPropagation();
+			    } else if (window.event) {
+			       window.event.cancelBubble = true;
+			}
 		};
         /**
          * @description 计算中心
