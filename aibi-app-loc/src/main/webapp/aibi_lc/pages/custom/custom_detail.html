@@ -38,15 +38,19 @@
 				<span class="fleft" v-text="model.labelName"></span>
 				<span class="fright">39651</span>
 			</h3>
-			<div class="ui-custom-item clearfix">
-				<a href="javascript:;">
-					性别
+			<div class="clearfix">
+			<div class="ui-custom-item clearfix clearfix">
+				<a >
+					<span v-text="model.calcuElement"></span>
 				</a>
-				<a href="javascript:;">
-					男
+				<a >
+					大于<span v-text="model.minVal"></span>
+					 且 小于<span v-text="model.maxVal"></span>
 				</a>
 			</div>
-			<div class="clearfix">
+			<span class="ui-label-date fright" v-text="model.dataDate">
+			</div>
+			 <!-- <div class="clearfix">
 				<div class="ui-custom-item fleft clearfix">
 					<a href="javascript:;">
 						年龄
@@ -57,7 +61,7 @@
 				</div>
 				<span class="ui-label-date fright" v-text="model.dataDate">
 				</span>
-			</div>
+			</div> -->
 		</div>
 		<div class="mt10">
 			<div class="radio circle success"> 
@@ -85,8 +89,8 @@
 					<ul id="ztree" class="ztree">
 			
 					</ul>
-					<p>非基本信息</p>
-					<span class="ml20">个人基本信息</span>
+					<!-- <p>非基本信息</p>
+					<span class="ml20">个人基本信息</span> -->
 				</div>
 			</div>
 				<div class="ui-custom-col fleft">
@@ -104,10 +108,13 @@
 					<h3>已选标签</h3>
 					<div class="ui-custom-mes">
 						<ul class="label-selected">
-							<li><a href="">籍贯</a></li>
+						<li><a href="">
+							<span v-text="model.calcuElement"></span>
+						</a></li>
+							<!-- <li><a href="">籍贯</a></li>
 							<li><a href="">性别</a></li>
 							<li><a href="">品牌</a></li>
-							<li><a href="">是否学生</a></li>
+							<li><a href="">是否学生</a></li> -->
 						</ul>
 					</div>
 				</div>

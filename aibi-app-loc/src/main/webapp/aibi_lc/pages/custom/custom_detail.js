@@ -12,6 +12,10 @@ var model = {
 		sysName:"",//推送系统
 		curentIndex:false,//radio选中
 		isActive:false,//check选中
+		calcuElement:[],//客户群规则计算元素
+		minVal:[],//客户群规则计算的最小值
+		maxVal:[],//客户群规则计算的最大值
+		
 }
 window.loc_onload = function() {
 	$("#dialog").dialog({
@@ -57,6 +61,27 @@ window.loc_onload = function() {
 			model.dataDate = data.data.dataDate;
 			model.dayLabelDate = data.data.dayLabelDate;
 			model.monthLabelDate = data.data.monthLabelDate;
+		}
+	})
+	$.commAjax({
+		postData : {
+			"customGroupId": labelId,
+		},
+		url : $.ctx + '/api/label/labelInfo/findCustomRuleById',
+		onSuccess : function(data) {
+			for(var i=0;i<data.data.length;i++){
+				$.commAjax({
+					postData : {
+						"labelId": data.data[i].calcuElement,
+					},
+					url : $.ctx + '/api/label/labelInfo/get',
+					onSuccess : function(data) {
+						model.calcuElement = data.data.labelName;
+					}
+				})
+				model.minVal = data.data[i].minVal;
+				model.maxVal = data.data[i].maxVal;
+			}
 		}
 	})
 	new Vue({
