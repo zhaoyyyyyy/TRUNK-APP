@@ -204,9 +204,9 @@ var labelInfoModel = (function (model){
 				$('#labelDay').attr('disabled', true);
 				$('#labelMonth').attr('disabled', true);
 			} else if(selVal == 2){//保守策略，使用最早数据日期
-				dataModel.labelInfo.dayLabelDate = dataModel.dayDate;
-				dataModel.labelInfo.monthLabelDate = dataModel.monthLabelDate;
-				dataModel.labelInfo.dataDate = dataModel.monthDate;
+				dataModel.labelInfo.dayLabelDate = dataModel.labelDay;
+				dataModel.labelInfo.monthLabelDate = dataModel.labelMonth;
+				dataModel.labelInfo.dataDate = dataModel.labelMonth;
 				$('#labelDay').attr('disabled', false);
 				$('#labelMonth').attr('disabled', false);
 			}
