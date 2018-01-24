@@ -203,6 +203,12 @@ add-dialog@charset "utf-8";
     text-overflow: ellipsis;
     white-space: nowrap;
 }
+.ui-label-list > li .ui-label-info > h3 > .tooltip.top{
+	margin-top:-25px;
+}
+.ui-label-list > li:HOVER .ui-label-info > h3 > .tooltip.top{
+	opacity:1;
+} 
 .ui-label-list > li:HOVER .ui-label-info > h3 > i,
 .ui-label-list > li.active .ui-label-info > h3 > i{
 	height: 35px;
