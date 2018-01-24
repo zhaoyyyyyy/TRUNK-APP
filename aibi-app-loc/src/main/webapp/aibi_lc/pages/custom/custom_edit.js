@@ -169,7 +169,7 @@ var labelInfoModel = (function (model){
 			  url: $.ctx + "/api/user/get",
 			  onSuccess: function(returnObj){
 				  if(returnObj.status == '200'){
-					  dataModel.dataPrivaliegeList = returnObj.data.dataPrivaliege[2];
+					  dataModel.dataPrivaliegeList = returnObj.data.dataPrivaliege[3];
 					  if(dataModel.dataPrivaliegeList && dataModel.dataPrivaliegeList.length > 1){
 						  dataModel.isShowPrivaliegeDiv = true;
 					  }else if(dataModel.dataPrivaliegeList && dataModel.dataPrivaliegeList.length == 1){

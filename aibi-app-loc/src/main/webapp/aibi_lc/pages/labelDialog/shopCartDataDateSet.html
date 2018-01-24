@@ -60,7 +60,7 @@
 								<label class="control-label fleft" for="labelMonth">数据范围限制：</label> 
 								<div class="control-input">
 									<span v-for="(item,index) in dataPrivaliegeList" >
-										<input type="checkbox" v-model='checkedModelList' v-bind:value="item.id"/>{{item.fullName}}
+										<input type="checkbox" v-model='checkedModelList' v-bind:value="item.orgCode"/>{{item.fullName}}
 									</span>
 								</div>
 							</div>
