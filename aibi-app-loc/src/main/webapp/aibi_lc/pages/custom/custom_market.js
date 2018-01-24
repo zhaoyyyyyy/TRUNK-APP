@@ -101,6 +101,19 @@ window.loc_onload = function() {
 		})
 	})
 
+	$( '[data-dismiss*="Datepicker"]' ).datepicker({
+		dateFormat: "yy-mm-dd",
+		onClose: function(dateText, inst) {// 关闭事件  
+			if($(this).hasClass("publishStar")){
+				$("#publishTimeStart").val($(this).val());
+				labelMarket.loadLabelInfoList();
+			}else if($(this).hasClass("publishEnd")){
+				$("#publishTimeEnd").val($( this).val());
+				labelMarket.loadLabelInfoList();
+			}
+		}
+	})
+
 	
 	//计算中心弹出/收起（下面）
 	$(".ui-shop-cart").click(function(){
