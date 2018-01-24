@@ -15,6 +15,7 @@ var model = {
 		calcuElement:[],//客户群规则计算元素
 		minVal:[],//客户群规则计算的最小值
 		maxVal:[],//客户群规则计算的最大值
+		haveAttr:false,
 		
 }
 window.loc_onload = function() {

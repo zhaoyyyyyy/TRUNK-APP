@@ -64,78 +64,80 @@
 			</div> -->
 		</div>
 		<div class="mt10">
-			<div class="radio circle success"> 
+			<div class="radio circle success" @click="haveAttr=false"> 
 			   <input type="radio" name="radio19" id="myr3" checked="checked"> 
 			   <label for="myr3"><i class="default"></i> 不带属性</label>
 			</div>
-		    <div class="radio circle success">
+		    <div class="radio circle success" @click="haveAttr=true">
 			   <input type="radio" name="radio19"  id="myr4"> 
 			   <label  for="myr4"><i class="default"></i> 带属性</label>
 			</div>
 		</div>
-		<h3>带出标签属性</h3>
-		<div class="ui-custom-info">
-		    <div class="form-group">
-                <div class="input-group">
-                    <input type="text" class="form-control" placeholder="标签名称" id="labelName" >
-                    <div class="input-group-addon input-group-icon right-child" id="btn_search"></div>
-                </div>
-            </div>
-		    <div class="clearfix mt20">
-		    	<div class="ui-custom-col fleft">
-				<h3>标签体系</h3>
-				<div class="ui-custom-mes">
-					<p>基本信息</p>
-					<ul id="ztree" class="ztree">
-			
-					</ul>
-					<!-- <p>非基本信息</p>
-					<span class="ml20">个人基本信息</span> -->
-				</div>
-			</div>
-				<div class="ui-custom-col fleft">
-					<h3>可选标签</h3>
+		<div class="ui-edit-h3" v-show="haveAttr" style="display:none;">
+			<h3>带出标签属性</h3>
+			<div class="ui-custom-info">
+			    <div class="form-group">
+	                <div class="input-group">
+	                    <input type="text" class="form-control" placeholder="标签名称" id="labelName" >
+	                    <div class="input-group-addon input-group-icon right-child" id="btn_search"></div>
+	                </div>
+	            </div>
+			    <div class="clearfix mt20">
+			    	<div class="ui-custom-col fleft">
+					<h3>标签体系</h3>
 					<div class="ui-custom-mes">
-						<ul id="OptionalLabel" class="label-selected">
+						<p>基本信息</p>
+						<ul id="ztree" class="ztree">
+				
 						</ul>
+						<!-- <p>非基本信息</p>
+						<span class="ml20">个人基本信息</span> -->
 					</div>
 				</div>
-				<div class="ui-custom-move fleft">
-					<a class="ui-custom-left" href=""></a>
-					<a class="ui-custom-right" href=""></a>
-				</div>
-				<div class="ui-custom-col fleft">
-					<h3>已选标签</h3>
-					<div class="ui-custom-mes">
-						<ul class="label-selected">
-						<li><a href="">
-							<span v-text="model.calcuElement"></span>
-						</a></li>
-							<!-- <li><a href="">籍贯</a></li>
-							<li><a href="">性别</a></li>
-							<li><a href="">品牌</a></li>
-							<li><a href="">是否学生</a></li> -->
-						</ul>
+					<div class="ui-custom-col fleft">
+						<h3>可选标签</h3>
+						<div class="ui-custom-mes">
+							<ul id="OptionalLabel" class="label-selected">
+							</ul>
+						</div>
 					</div>
+					<div class="ui-custom-move fleft">
+						<a class="ui-custom-left" href=""></a>
+						<a class="ui-custom-right" href=""></a>
+					</div>
+					<div class="ui-custom-col fleft">
+						<h3>已选标签</h3>
+						<div class="ui-custom-mes">
+							<ul class="label-selected">
+							<li><a href="">
+								<span v-text="model.calcuElement"></span>
+							</a></li>
+								<!-- <li><a href="">籍贯</a></li>
+								<li><a href="">性别</a></li>
+								<li><a href="">品牌</a></li>
+								<li><a href="">是否学生</a></li> -->
+							</ul>
+						</div>
+					</div>
+				</div>	
+				<div class="mt20">
+					 <div class="form-group mr100">
+	                    <div class="">
+	                        <select class="form-control input-pointer" name="dataStatusId">
+	                        	<option>姓名</option>
+	                        </select>
+	                    </div>
+	                </div>
+		            <div class="radio circle success"> 
+					   <input type="radio" name="radio20" id="myr3" checked="checked"> 
+					   <label for="myr3"><i class="default"></i> 升序</label>
+					</div>
+				    <div class="radio circle success">
+					   <input type="radio" name="radio20"  id="myr4"> 
+					   <label  for="myr4"><i class="default"></i> 降序</label>
+					</div>
+					<button type="button" class="ui-btn ui-btn-second ml30">添加</button>
 				</div>
-			</div>	
-			<div class="mt20">
-				 <div class="form-group mr100">
-                    <div class="">
-                        <select class="form-control input-pointer" name="dataStatusId">
-                        	<option>姓名</option>
-                        </select>
-                    </div>
-                </div>
-	            <div class="radio circle success"> 
-				   <input type="radio" name="radio19" id="myr3" checked="checked"> 
-				   <label for="myr3"><i class="default"></i> 升序</label>
-				</div>
-			    <div class="radio circle success">
-				   <input type="radio" name="radio19"  id="myr4"> 
-				   <label  for="myr4"><i class="default"></i> 降序</label>
-				</div>
-				<button type="button" class="ui-btn ui-btn-second ml30">添加</button>
 			</div>
 		</div>
 		<div class="ui-custom-btn mt10">
