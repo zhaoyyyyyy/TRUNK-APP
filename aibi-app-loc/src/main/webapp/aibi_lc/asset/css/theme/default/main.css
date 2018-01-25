@@ -127,16 +127,6 @@
 	float: left;
 	position:relative;
 }
-.ui-filter-bar > a .f-ico-arrow-d{
-    width: 14px;
-    height: 18px;
-    display:inline-block;
-    line-height: 18px;
-    position:absolute;
-    top: 9px;
-    right: 5px;
-    background: url(./images/lc-icon.png) no-repeat -536px -200px;
-}
 .ui-filter-bar > a .f-ico-triangle-mt,
 .ui-filter-bar > a .f-ico-triangle-mb{
 	border: 4px solid transparent;
@@ -162,9 +152,6 @@
 }
 .ui-filter-bar > a .f-ico-triangle-mb.active{
 	border-top: 4px solid #009241;
-}
-.ui-filter-bar > a .f-ico-arrow-d.active{
-    background-position:-536px -216px;
 }
 .ui-refresh{
 	width: 20px;
