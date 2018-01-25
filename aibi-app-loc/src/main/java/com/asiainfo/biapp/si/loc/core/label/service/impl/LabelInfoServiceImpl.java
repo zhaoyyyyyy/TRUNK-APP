@@ -210,7 +210,7 @@ public class LabelInfoServiceImpl extends BaseServiceImpl<LabelInfo, String> imp
         MdaSysTableColumn mdaSysTableColumn = iMdaSysTableColService.selectMdaSysTableColBylabelId(labelInfo.getLabelId());
         MdaSysTable mdaSysTable = iMdaSysTableService.queryMdaSysTable(labelInfo.getConfigId(),labelInfo.getUpdateCycle(),1);
         mdaSysTableColumn.setTableId(mdaSysTable.getTableId());
-        mdaSysTableColumn.setColumnName(labelInfo.getLabelId());
+//      mdaSysTableColumn.setColumnName(labelInfo.getLabelId());
         mdaSysTableColumn.setColumnCnName(labelInfo.getLabelName());
         if (StringUtil.isNotBlank(labelInfo.getDimId())) {
             DimTableInfo dimTable = iDimTableInfoService.selectDimTableInfoById(labelInfo.getDimId());
@@ -234,7 +234,6 @@ public class LabelInfoServiceImpl extends BaseServiceImpl<LabelInfo, String> imp
         if (StringUtil.isNotBlank(labelInfo.getCountRules())) {
             labelCountRules.setCountRules(labelInfo.getCountRules());
         }
-        iLabelCountRulesService.modifyLabelCountRules(labelCountRules); 
         iMdaSysTableColService.modifyMdaSysTableColumn(mdaSysTableColumn);
     }
 
@@ -255,7 +254,10 @@ public class LabelInfoServiceImpl extends BaseServiceImpl<LabelInfo, String> imp
         label.setLabelName(labelName);
         label.setConfigId(configId);
         List<LabelInfo> labelList = iLabelInfoService.selectLabelInfoList(label);
-        return labelList.get(0);
+        if (labelList !=null && labelList.size()>0) {
+            return labelList.get(0);
+        }
+        return null;
     }
 
     public LabelInfo updateApproveInfo(String approveStatusId,LabelInfo oldLab) throws BaseException{

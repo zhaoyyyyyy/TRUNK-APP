@@ -6,7 +6,6 @@ var model={
 		applySuggest : "",
 		busiCaliber : "",
 		labelTypeId : "",
-		isRegular : "",
 		categoryName : "",
 		dimTableName : "",
 		dataType : "",
@@ -37,15 +36,32 @@ window.loc_onload = function() {
 			model.applySuggest = data.data.applySuggest;
 			model.labelTypeId = $.getCodeDesc("BQLXZD",data.data.labelTypeId);
 			model.updateCycle = $.getCodeDesc("GXZQZD",data.data.updateCycle);
-			model.isRegular = $.getCodeDesc("SFZD",data.data.isRegular);
 			var labelId = data.data.labelId;
 			$.commAjax({
+				ansyc : false,
 				url : $.ctx + '/api/label/mdaSysTableCol/queryList',
 				postData : {
 					"labelId" : labelId
 				},
 				onSuccess : function(data2){
 					var list = data2.data;
+					var countRulesCode = list[0].countRulesCode;
+					$.commAjax({
+						ansyc : false,
+						url : $.ctx + '/api/label/labelCountRules/get',
+						postData : {
+							"countRulesCode" : countRulesCode
+						},
+						onSuccess : function(data4){
+							model.dependIndex = data4.data.dependIndex;
+							model.countRules = data4.data.countRules;
+							var dependList = model.dependIndex.split(",");
+							for(var i=0; i<dependList.length ; i++){
+								model.sourceName += dependList[i]+","
+							}
+							model.sourceName = model.sourceName.substr(0,model.sourceName.length-1);
+						}	
+					}); 
 					model.unit = list[0].unit;
 					if(model.labelTypeId=="枚举型"){	
 						model.dataType = list[0].dataType;
@@ -73,33 +89,22 @@ window.loc_onload = function() {
 			    	model.categoryName = data1.data.categoryName
 			    }
 			});
-			var countRulesCode = data.data.countRulesCode;
-			$.commAjax({
-//				ansyc : false,
+			/*$.commAjax({
+				ansyc : false,
 				url : $.ctx + '/api/label/labelCountRules/get',
 				postData : {
-					"countRulesCode" : countRulesCode
+					"countRulesCode" : model.countRulesCode
 				},
 				onSuccess : function(data4){
 					model.dependIndex = data4.data.dependIndex;
 					model.countRules = data4.data.countRules;
 					var dependList = model.dependIndex.split(",");
 					for(var i=0; i<dependList.length ; i++){
-						/*$.commAjax({
-							ansyc : false,
-							url : $.ctx + '/api/source/sourceInfo/get',
-							postData : {
-								"sourceId" : dependList[i]
-							},
-							onSuccess : function(data5){
-								model.sourceName += data5.data.sourceName+""
-							}
-						});*/
 						model.sourceName += dependList[i]+","
 					}
 					model.sourceName = model.sourceName.substr(0,model.sourceName.length-1);
 				}	
-			}); 	
+			});*/ 	
 		},
 		maskMassage : 'load...'
 	})
