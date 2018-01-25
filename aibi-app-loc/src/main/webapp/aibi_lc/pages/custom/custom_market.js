@@ -282,17 +282,29 @@ var labelMarket = (function (model){
 				if(dataModel.sortOrder == "ASC"){
 					dataModel.sortOrder = "DESC";
 					$("#sortOrder").val("DESC");
+					$("#"+obj.id+"Asc").removeClass("active");
+					$("#"+obj.id+"Desc").addClass("active");
 				}else if(dataModel.sortOrder == "DESC"){
 					dataModel.sortOrder = "ASC";
 					$("#sortOrder").val("ASC");
+					$("#"+obj.id+"Desc").removeClass("active");
+					$("#"+obj.id+"Asc").addClass("active");
 				}
 			}else{
 				if(obj.id == "customNum"){
 					$("#sortPublishTime").removeClass("active");
+					$("#sortPublishTimeAsc").removeClass("active");
+					$("#sortPublishTimeDesc").removeClass("active");
 					$("#customNum").addClass("active");
+					$("#customNumAsc").addClass("active");
+					$("#customNumDesc").removeClass("active");
 				}else{
 					$("#customNum").removeClass("active");
+					$("#customNumAsc").removeClass("active");
+					$("#customNumDesc").removeClass("active");
 					$("#sortPublishTime").addClass("active");
+					$("#sortPublishTimeAsc").addClass("active");
+					$("#sortPublishTimeDesc").removeClass("active");
 				}
 				dataModel.sortCol = obj.name;
 				$("#sortCol").val(obj.name);
