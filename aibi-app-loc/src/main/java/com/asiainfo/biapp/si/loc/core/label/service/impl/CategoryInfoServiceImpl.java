@@ -141,7 +141,7 @@ public class CategoryInfoServiceImpl extends BaseServiceImpl<CategoryInfo, Strin
         if(StringUtils.isBlank(categoryInfo.getCategoryName())){
             throw new ParamRequiredException("分类名称不能为空");
         }
-        if(categoryInfo.getCategoryName().length()>8){
+        if(categoryInfo.getCategoryName().length()>10){
             throw new ParamRequiredException("分类名称过长");
         }
         super.saveOrUpdate(categoryInfo);
@@ -218,28 +218,32 @@ public class CategoryInfoServiceImpl extends BaseServiceImpl<CategoryInfo, Strin
         try {
             while ((nextLine = reader.readNext()) != null) {
                 currentRowNum++;
-                int num = 0;
+                int num = -1;//从前到后有几个连续的有效单元格
+                int len = -1;//一共有几个有效的单元格
                 // 跳过注释行
                 if (nextLine[0].startsWith("#")) {
                     continue;
                 }
                 
-                if(StringUtil.isNotBlank(nextLine[1])){
-                    if(StringUtil.isBlank(nextLine[0])){
-                        result.append("第["+currentRowNum+"]行[1]级分类名称不能为空;");
-                        continue;
+                for(int i=0;i<nextLine.length;i++){
+                    if(StringUtil.isNotBlank(nextLine[i])){
+                        num++;
+                    }else{
+                        break;
                     }
-                    num++;
                 }
-                if(StringUtil.isNotBlank(nextLine[2])){
-                    if(StringUtil.isBlank(nextLine[1])){
-                        result.append("第["+currentRowNum+"]行[2]级分类名称不能为空;");
-                        continue;
+                for(int i=0;i<nextLine.length;i++){
+                    if(StringUtil.isNotBlank(nextLine[i])){
+                        len++;
                     }
-                    num++;
                 }
                 
-                if(nextLine[num].length()>8){
+                if(num!=len){
+                    result.append("第["+currentRowNum+"]行数据错误存在空的单元格;");
+                    continue;
+                }
+                
+                if(nextLine[num].length()>10){
                     result.append("第["+currentRowNum+"]行["+(num+1)+"]级分类名称过长;");
                     continue;
                 }
