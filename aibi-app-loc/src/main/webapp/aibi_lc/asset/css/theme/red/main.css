@@ -529,6 +529,10 @@ add-dialog@charset "utf-8";
 	background: #fff;
 	height: 40px !important;
 }
+.ui-calc-content > .ui-conditionCT > .ui-conditionCT-h4 > span{
+    position:relative;
+    z-index:1;
+}
 .ui-calc-content > .ui-conditionCT > .ui-conditionCT-h4 > i{
     width: 30px;
     height: 36px;
@@ -578,12 +582,14 @@ add-dialog@charset "utf-8";
 	padding:6px 0 0px;
 }
 .ui-calc-content > .ui-conditionCT > .ui-conditionCT-h4 > em{
-    width: 30px;
+     width: 72%;
     height: 36px;
     background: url(./images/lc-icon.png) no-repeat -497px -17px;
     display: inline-block;
     vertical-align: middle;
     cursor: pointer;
+    position:absolute;
+    left:0;
 }
 .ui-calc-content > .ui-conditionCT > .ui-conditionCT-content{
     height: 98px;
