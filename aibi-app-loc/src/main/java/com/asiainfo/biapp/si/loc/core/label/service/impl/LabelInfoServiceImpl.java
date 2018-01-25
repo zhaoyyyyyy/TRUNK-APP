@@ -222,21 +222,18 @@ public class LabelInfoServiceImpl extends BaseServiceImpl<LabelInfo, String> imp
         mdaSysTableColumn.setTableId(mdaSysTable.getTableId());
         mdaSysTableColumn.setColumnName(labelInfo.getLabelId());
         mdaSysTableColumn.setColumnCnName(labelInfo.getLabelName());
-        if (labelInfo.getDimId()!=null) {
+        if (StringUtil.isNotBlank(labelInfo.getDimId())) {
             DimTableInfo dimTable = iDimTableInfoService.selectDimTableInfoById(labelInfo.getDimId());
             mdaSysTableColumn.setDimTransId(labelInfo.getDimId());
             mdaSysTableColumn.setDataType(labelInfo.getDataType());
             int columnDataTypeId = Integer.parseInt(dimTable.getCodeColType());
             mdaSysTableColumn.setColumnDataTypeId(columnDataTypeId);
-        }else if(StringUtil.isNotBlank(labelInfo.getDependIndex())&&labelInfo.getDimId()==null){
+            mdaSysTableColumn.setUnit(labelInfo.getUnit());
+        }else if(StringUtil.isNotBlank(labelInfo.getDependIndex())&&StringUtil.isBlank(labelInfo.getDimId())){
             mdaSysTableColumn.setDimTransId(null);
             mdaSysTableColumn.setDataType(null);
             mdaSysTableColumn.setColumnDataTypeId(null);
-        }
-        if (StringUtil.isNotBlank(labelInfo.getUnit())) {
             mdaSysTableColumn.setUnit(labelInfo.getUnit());
-        }else {
-            mdaSysTableColumn.setUnit(null);
         }
         iMdaSysTableColService.modifyMdaSysTableColumn(mdaSysTableColumn);
     }
@@ -254,10 +251,11 @@ public class LabelInfoServiceImpl extends BaseServiceImpl<LabelInfo, String> imp
 
     @Override
     public LabelInfo selectOneByLabelName(String labelName,String configId) throws BaseException {
-        if (StringUtils.isBlank(labelName)) {
-            throw new ParamRequiredException("名称不许为空");
-        }
-        return iLabelInfoDao.selectOneByLabelName(labelName,configId);
+        LabelInfoVo label = new LabelInfoVo();
+        label.setLabelName(labelName);
+        label.setConfigId(configId);
+        List<LabelInfo> labelList = iLabelInfoService.selectLabelInfoList(label);
+        return labelList.get(0);
     }
 
     public LabelInfo updateApproveInfo(String approveStatusId,LabelInfo oldLab) throws BaseException{

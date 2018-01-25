@@ -408,16 +408,16 @@ public class LabelInfoController extends BaseController {
         if (StringUtil.isNotBlank(lab.getDependIndex())) {
             oldLab.setDependIndex(lab.getDependIndex());
         }
-        if (StringUtil.isNoneBlank(lab.getCountRules())) {
+        if (StringUtil.isNotBlank(lab.getCountRules())) {
             oldLab.setCountRules(lab.getCountRules());
         }
-        if (StringUtil.isNoneBlank(lab.getDimId())) {
+        if (StringUtil.isNotBlank(lab.getDimId())) {
             oldLab.setDimId(lab.getDimId());
         }
-        if (StringUtil.isNoneBlank(lab.getDataType())) {
+        if (StringUtil.isNotBlank(lab.getDataType())) {
             oldLab.setDataType(lab.getDataType());
         }
-        if (StringUtil.isNoneBlank(lab.getUnit())) {
+        if (StringUtil.isNotBlank(lab.getUnit())) {
             oldLab.setUnit(lab.getUnit());
         }
         return oldLab;

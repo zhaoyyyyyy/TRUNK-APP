@@ -192,11 +192,6 @@ public class LabelInfoDaoImpl extends BaseDaoImpl<LabelInfo, String> implements 
         }
         return labelInfoList;
     }
-
-    @Override
-    public LabelInfo selectOneByLabelName(String labelName,String configId) {     
-        return super.findOneByHql("from LabelInfo l where l.labelName =?0 and l.configId =?0",labelName,configId);
-    }
     
     public List<LabelInfo> selectLabelAllEffectiveInfoList(LabelInfoVo labelInfoVo) {
         Map<String, Object> params = new HashMap<>();
