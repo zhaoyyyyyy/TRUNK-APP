@@ -59,9 +59,16 @@
 							<div class="ui-form-group">
 								<label class="control-label fleft" for="labelMonth">数据范围限制：</label> 
 								<div class="control-input">
-									<span v-for="(item,index) in dataPrivaliegeList" >
-										<input type="checkbox" v-model='checkedModelList' v-bind:value="item.orgCode"/>{{item.fullName}}
-									</span>
+									<ul class="clearfix">
+										<li v-for="(item,index) in dataPrivaliegeList" class="checkbox fleft">
+											<input  :id="index" class="checkbix" type="checkbox"  v-model='checkedModelList' v-bind:value="item.orgCode"/>
+											 <label aria-label="" role="checkbox" :for="index" class="checkbix">
+									    		<span class="large"></span>{{item.fullName}}
+									    	</label>
+										</li>
+										
+									</ul>
+									
 								</div>
 							</div>
 							<div class="ui-form-group">
