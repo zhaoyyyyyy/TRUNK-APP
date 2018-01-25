@@ -143,6 +143,7 @@ public class PreConfigInfo extends BaseEntity {
     @Transient
     private String createUserId;
 
+    @Transient
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinTable(name = "LOC_CONFIG_TABLE_REL", joinColumns = { @JoinColumn(name = "CONFIG_ID") }, inverseJoinColumns = {
             @JoinColumn(name = "PRI_KEY") })

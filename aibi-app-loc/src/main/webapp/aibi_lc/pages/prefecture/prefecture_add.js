@@ -34,6 +34,7 @@ window.loc_onload = function() {
 	
 	if (configId != null && configId != "" && configId != undefined) {
 		model.configId = configId;
+		debugger;
 		$.commAjax({
 			url : $.ctx + '/api/prefecture/preConfigInfo/get',
 			postData : {

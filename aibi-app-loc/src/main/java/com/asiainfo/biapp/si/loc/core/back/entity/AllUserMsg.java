@@ -23,7 +23,6 @@ import org.hibernate.annotations.GenericGenerator;
 
 import com.asiainfo.biapp.si.loc.base.entity.BaseEntity;
 import com.asiainfo.biapp.si.loc.core.prefecture.entity.PreConfigInfo;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import io.swagger.annotations.ApiParam;
 
@@ -106,7 +105,6 @@ public class AllUserMsg extends BaseEntity {
     @Transient
     private String dimOrgLevelStr;
 
-    @JsonIgnore
     @OneToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "LOC_CONFIG_TABLE_REL", joinColumns = { @JoinColumn(name = "PRI_KEY") }, inverseJoinColumns = {
             @JoinColumn(name = "CONFIG_ID") })

@@ -273,9 +273,6 @@ public class SourceTableInfoServiceImpl extends BaseServiceImpl<SourceTableInfo,
         if (StringUtil.isNotBlank(sou.getSourceTableName())) {
             oldSou.setSourceTableName(sou.getSourceTableName());
         }
-        if (StringUtil.isNotBlank(sou.getTableSchema())) {
-            oldSou.setTableSchema(sou.getTableSchema());
-        }
         if (StringUtil.isNotBlank(sou.getSourceTableCnName())) {
             oldSou.setSourceTableCnName(sou.getSourceTableCnName());
         }
@@ -313,15 +310,14 @@ public class SourceTableInfoServiceImpl extends BaseServiceImpl<SourceTableInfo,
         if (StringUtil.isNotBlank(sou.getDateColumnName())) {
             oldSou.setDateColumnName(sou.getDateColumnName());
         }
-        if (StringUtil.isNotBlank(sou.getWhereSql())) {
-            oldSou.setWhereSql(sou.getWhereSql());
-        }
         if (null != sou.getStatusId()) {
             oldSou.setStatusId(sou.getStatusId());
         }
         if (null != sou.getSourceInfoList()) {
             oldSou.setSourceInfoList(sou.getSourceInfoList());
         }
+        oldSou.setWhereSql(sou.getWhereSql());
+        oldSou.setTableSchema(sou.getTableSchema());
         return oldSou;
     }
 
