@@ -13,6 +13,7 @@ var model = {
 		curentIndex:false,//radio选中
 		isActive:false,//check选中
 		calcuElement:[],//客户群规则计算元素
+		customAttrbute:[],//客户群推送带的属性的参数
 		minVal:[],//客户群规则计算的最小值
 		maxVal:[],//客户群规则计算的最大值
 		haveAttr:false,
@@ -70,21 +71,28 @@ window.loc_onload = function() {
 		},
 		url : $.ctx + '/api/label/labelInfo/findCustomRuleById',
 		onSuccess : function(data) {
+			var j =0,k=0;
 			for(var i=0;i<data.data.length;i++){
-				$.commAjax({
-					postData : {
-						"labelId": data.data[i].calcuElement,
-					},
-					url : $.ctx + '/api/label/labelInfo/get',
-					onSuccess : function(data) {
-						model.calcuElement = data.data.labelName;
-					}
-				})
-				model.minVal = data.data[i].minVal;
-				model.maxVal = data.data[i].maxVal;
+				if(i%2 == 0){
+					$.commAjax({
+						postData : {
+							"labelId": data.data[i].calcuElement,
+						},
+						url : $.ctx + '/api/label/labelInfo/get',
+						onSuccess : function(data) {
+							model.calcuElement[j] = data.data.labelName;
+							model.customAttrbute[j] = data.data;
+							j++;
+						}
+					})
+					model.minVal[k] = data.data[i].contiueMinVal;
+					model.maxVal[k] = data.data[i].contiueMaxVal;
+					k++;
+				}
 			}
 		}
 	})
+	
 	new Vue({
 		el : '#dataD',
 		data : model,
@@ -106,7 +114,7 @@ window.loc_onload = function() {
 			    	        "id":"add-dialog-btn",
 			    	        "class":"ui-btn ui-btn-default",
 			    	        click: function() {
-			    	        	$( this ).dialog( "close" );	
+			    	        	$( this ).dialog( "close" );
 								//console.log($("#radioList label[class~=active]").siblings("input").val()+$("#checkboxList label[class~=active]"))
 								for(var i=0;i<$("#checkboxList label[class~=active]").length;i++){
 									var sysId = $("#checkboxList label[class~=active]")[i].htmlFor;
@@ -117,6 +125,7 @@ window.loc_onload = function() {
 												"customGroupId" :labelId,
 												"sysId" :sysId,
 												"pushCycle" :$("#radioList label[class~=active]").siblings("input").val(),
+												//"customAttrbute" : model.customAttrbute,
 											},
 									    maskMassage : '推送中...'
 								   });
