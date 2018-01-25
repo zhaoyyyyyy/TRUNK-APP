@@ -137,8 +137,31 @@ add-dialog@charset "utf-8";
     right: 5px;
     background: url(./images/lc-icon.png) no-repeat -536px -200px;
 }
+.ui-filter-bar > a .f-ico-triangle-mt,
+.ui-filter-bar > a .f-ico-triangle-mb{
+	border: 4px solid transparent;
+    height: 0;
+    width: 0;
+    position:absolute;
+    right:10px;
+}
+.ui-filter-bar > a .f-ico-triangle-mt{
+	border-bottom: 4px solid #999;
+    top: 8px;
+}
+.ui-filter-bar > a .f-ico-triangle-mb{
+	border-top: 4px solid #999;
+    top: 19px;
+}
 .ui-filter-bar > a.active{
-	color: #D02433;;
+	color: #D02433;
+}
+.ui-filter-bar > a .f-ico-triangle-mt.active
+{
+	border-bottom: 4px solid #D02433;
+}
+.ui-filter-bar > a .f-ico-triangle-mb.active{
+	border-top: 4px solid #D02433;
 }
 .ui-filter-bar > a.active .f-ico-arrow-d{
     background-position:-536px -216px;
