@@ -34,6 +34,10 @@ public class BackAdsDapImpl  extends BaseBackDaoImpl implements IBackSqlDao{
         List<Map<String, String>> datas = null;
         try{
             datas = this.executeResList(sql);
+            for (Map<String, String> map :  datas) {
+            	map.put("COLUMN_NAME", map.get("FIELD"));
+            	map.put("DATA_TYPE", map.get("TYPE"));
+			}
             log.debug(" ----------   BackAdsDapImpl.queryTableColumn datas.size =  " + datas.size() );
         }catch (Exception e){
             throw new SqlRunException("操作后台库出错");
@@ -44,7 +48,7 @@ public class BackAdsDapImpl  extends BaseBackDaoImpl implements IBackSqlDao{
 	@Override
 	public boolean isExistsTable(String tableName) throws SqlRunException {
         boolean res = true;
-        log.debug(" ----------   BackAdsDapImpl.isExistsTable tableName =  " + tableName);
+       // log.debug(" ----------   BackAdsDapImpl.isExistsTable tableName =  " + tableName);
         try{
             List<Map<String, String>> cols = this.queryTableColumn(tableName);
             log.debug(" ----------   BackAdsDapImpl.isExistsTable cols.size =  " + cols.size());
@@ -222,12 +226,12 @@ public class BackAdsDapImpl  extends BaseBackDaoImpl implements IBackSqlDao{
 	
 	private List<Map<String, String>> executeResList(String sql) throws SqlRunException {
         long s = System.currentTimeMillis();
-        log.debug(" ----------   BackAdsDapImpl.executeResList sql =  " + sql);
+       // log.debug(" ----------   BackAdsDapImpl.executeResList sql =  " + sql);
         try{
             Connection connection = this.getBackConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             ResultSet resultSet =  preparedStatement.executeQuery();
-            log.debug(" ----------   BackAdsDapImpl.executeResList resultSet.getRow() =  " + resultSet.getRow());
+           // log.debug(" ----------   BackAdsDapImpl.executeResList resultSet.getRow() =  " + resultSet.getRow());
             LogUtil.debug(new StringBuffer(sql).append(" cost:").append(System.currentTimeMillis()-s).append("ms."));
             
             return this.resultSetToList(resultSet);
