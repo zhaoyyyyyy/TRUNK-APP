@@ -6,12 +6,19 @@
 
 package com.asiainfo.biapp.si.loc.core.back.service.impl;
 
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+
 import com.asiainfo.biapp.si.loc.base.dao.BaseDao;
 import com.asiainfo.biapp.si.loc.base.exception.BaseException;
+import com.asiainfo.biapp.si.loc.base.page.Page;
 import com.asiainfo.biapp.si.loc.base.service.impl.BaseServiceImpl;
+import com.asiainfo.biapp.si.loc.core.back.dao.IDimOrgLevelDao;
 import com.asiainfo.biapp.si.loc.core.back.entity.DimOrgLevel;
 import com.asiainfo.biapp.si.loc.core.back.entity.DimOrgLevelId;
 import com.asiainfo.biapp.si.loc.core.back.service.IDimOrgLevelService;
+import com.asiainfo.biapp.si.loc.core.back.vo.DimOrgLevelVo;
 
 /**
  * Title : DimOrgLevelServiceImpl
@@ -41,10 +48,25 @@ import com.asiainfo.biapp.si.loc.core.back.service.IDimOrgLevelService;
  */
 public class DimOrgLevelServiceImpl extends BaseServiceImpl<DimOrgLevel, String>implements IDimOrgLevelService {
 
+    @Autowired
+    private IDimOrgLevelDao iDimOrgLevelDao;
+
     @Override
     protected BaseDao<DimOrgLevel, String> getBaseDao() {
-        // TODO Auto-generated method stub
-        return null;
+        return iDimOrgLevelDao;
+    }
+
+    public Page<DimOrgLevel> selectDimOrgLevelPageList(Page<DimOrgLevel> page, DimOrgLevelVo dimOrgLevelVo)
+            throws BaseException {
+        return iDimOrgLevelDao.selectDimOrgLevelPageList(page, dimOrgLevelVo);
+    }
+
+    public List<DimOrgLevel> selectDimOrgLevelList(DimOrgLevelVo dimOrgLevelVo) throws BaseException {
+        return iDimOrgLevelDao.selectDimOrgLevelList(dimOrgLevelVo);
+    }
+    
+    public DimOrgLevel selectDimOrgLevelById(DimOrgLevelId dimOrgLevelId) throws BaseException{
+        return super.get(dimOrgLevelId);
     }
 
     public void addDimOrgLevel(DimOrgLevel dimOrgLevel) throws BaseException {

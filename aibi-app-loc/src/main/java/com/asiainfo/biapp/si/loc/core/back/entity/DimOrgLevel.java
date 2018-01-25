@@ -46,16 +46,40 @@ import io.swagger.annotations.ApiParam;
 public class DimOrgLevel extends BaseEntity {
 
     private static final long serialVersionUID = 1L;
-    
+
     @EmbeddedId
     private DimOrgLevelId dimOrgLevelId;
-    
+
     @Column(name = "LEVEL_ID")
     @ApiParam(value = "层级")
     private Integer levelId;
-    
+
     @Column(name = "SORT_NUM")
     @ApiParam(value = "排序")
     private Integer sortNum;
+
+    public DimOrgLevelId getDimOrgLevelId() {
+        return dimOrgLevelId;
+    }
+
+    public void setDimOrgLevelId(DimOrgLevelId dimOrgLevelId) {
+        this.dimOrgLevelId = dimOrgLevelId;
+    }
+
+    public Integer getLevelId() {
+        return levelId;
+    }
+
+    public void setLevelId(Integer levelId) {
+        this.levelId = levelId;
+    }
+
+    public Integer getSortNum() {
+        return sortNum;
+    }
+
+    public void setSortNum(Integer sortNum) {
+        this.sortNum = sortNum;
+    }
 
 }

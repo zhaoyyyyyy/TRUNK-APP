@@ -6,10 +6,14 @@
 
 package com.asiainfo.biapp.si.loc.core.back.service;
 
+import java.util.List;
+
 import com.asiainfo.biapp.si.loc.base.exception.BaseException;
+import com.asiainfo.biapp.si.loc.base.page.Page;
 import com.asiainfo.biapp.si.loc.base.service.BaseService;
 import com.asiainfo.biapp.si.loc.core.back.entity.DimOrgLevel;
 import com.asiainfo.biapp.si.loc.core.back.entity.DimOrgLevelId;
+import com.asiainfo.biapp.si.loc.core.back.vo.DimOrgLevelVo;
 
 /**
  * Title : IDimOrgLevelService
@@ -38,10 +42,17 @@ import com.asiainfo.biapp.si.loc.core.back.entity.DimOrgLevelId;
  * @version 1.0.0.2018年1月24日
  */
 public interface IDimOrgLevelService extends BaseService<DimOrgLevel, String> {
+    
+    public Page<DimOrgLevel> selectDimOrgLevelPageList(Page<DimOrgLevel> page, DimOrgLevelVo dimOrgLevelVo)
+            throws BaseException;
+
+    public List<DimOrgLevel> selectDimOrgLevelList(DimOrgLevelVo dimOrgLevelVo) throws BaseException;
+    
+    public DimOrgLevel selectDimOrgLevelById(DimOrgLevelId dimOrgLevelId) throws BaseException;
 
     public void addDimOrgLevel(DimOrgLevel dimOrgLevel) throws BaseException;
 
-    public void modifyDimOrgLevel(DimOrgLevel allUserMsg) throws BaseException;
+    public void modifyDimOrgLevel(DimOrgLevel DimOrgLevel) throws BaseException;
 
     public void deleteDimOrgLevel(DimOrgLevelId dimOrgLevelId) throws BaseException;
 
