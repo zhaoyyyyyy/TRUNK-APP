@@ -147,5 +147,5 @@ public interface ILabelInfoService extends BaseService<LabelInfo, String> {
  	 * @param ciCustomGroupInfo
  	 * @version ZJ
  	 */
- 	public void syncUpdateCustomGroupInfo(LabelInfo customGroupInfo);
+ 	public void syncUpdateCustomGroupInfo(LabelInfo customGroupInfo,LabelExtInfo labelExtInfo);
 }

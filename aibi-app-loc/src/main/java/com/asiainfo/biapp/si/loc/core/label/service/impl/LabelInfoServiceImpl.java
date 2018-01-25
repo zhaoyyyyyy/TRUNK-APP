@@ -7,6 +7,7 @@
 package com.asiainfo.biapp.si.loc.core.label.service.impl;
 
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.transaction.Transactional;
@@ -122,7 +123,11 @@ public class LabelInfoServiceImpl extends BaseServiceImpl<LabelInfo, String> imp
     }
 
     public Page<LabelInfo> selectLabelInfoPageList(Page<LabelInfo> page, LabelInfoVo labelInfoVo) {
-        return iLabelInfoDao.selectLabelInfoPageList(page, labelInfoVo);
+    	Page<LabelInfo> pageList = iLabelInfoDao.selectLabelInfoPageList(page, labelInfoVo);
+    	for (LabelInfo labelInfo : pageList.getData()) {
+    		labelInfo.setLabelExtInfo(labelInfo.getLabelExtInfo());
+		}
+        return pageList;
     }
 
     public List<LabelInfo> selectLabelInfoList(LabelInfoVo labelInfoVo) {
@@ -331,8 +336,9 @@ public class LabelInfoServiceImpl extends BaseServiceImpl<LabelInfo, String> imp
     }
 
 	@Override
-	public void syncUpdateCustomGroupInfo(LabelInfo customGroupInfo) {
+	public void syncUpdateCustomGroupInfo(LabelInfo customGroupInfo,LabelExtInfo labelExtInfo) {
 		 iLabelInfoDao.update(customGroupInfo);
+		 iLabelExtInfoService.update(labelExtInfo);
 	}
 	
 }

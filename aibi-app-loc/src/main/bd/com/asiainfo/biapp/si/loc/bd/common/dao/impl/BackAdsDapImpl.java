@@ -28,7 +28,6 @@ public class BackAdsDapImpl  extends BaseBackDaoImpl implements IBackSqlDao{
 
 	@Override
 	public List<Map<String, String>> queryTableColumn(String tableName) throws SqlRunException {
-        List<Map<String, String>> res = new ArrayList<>();
         //desc tableName;
         String sql = new StringBuilder("SHOW COLUMNS IN ").append(tableName).toString();
         log.debug(" ----------   BackAdsDapImpl.queryTableColumn sql =  " + sql );
@@ -39,19 +38,7 @@ public class BackAdsDapImpl  extends BaseBackDaoImpl implements IBackSqlDao{
         }catch (Exception e){
             throw new SqlRunException("操作后台库出错");
         }
-        
-        if (null != datas && !datas.isEmpty()) {
-            LogUtil.debug("There are "+datas.size()+" cols in the table."+datas.toString());
-            for (Map<String, String> map : datas) {
-                if ((map.get("col_name")!=null)&&(!map.get("col_name").contains("#"))) {
-                    res.add(map);
-                } else {    //在hive的rs中去掉以[#]开始的以下的列
-                    break;
-                }
-            }
-        }
-        
-		return res;
+		return datas;
 	}
 
 	@Override
