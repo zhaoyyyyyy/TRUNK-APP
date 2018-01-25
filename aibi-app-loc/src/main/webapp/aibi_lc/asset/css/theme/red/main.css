@@ -536,6 +536,31 @@ add-dialog@charset "utf-8";
     float: right;
     cursor: pointer;
 }
+.ui-calc-content > .ui-conditionCT > .ui-conditionCT-h4 > b{
+	display:inline-block;
+	width:12px;
+	height:12px;
+	border-radius:50%;
+	background: #FFBF00;
+	color:#fff;
+	text-align:center;
+	line-height:12px;
+	cursor:pointer;
+	float:right;
+	margin:14px 8px 0 0;
+}
+.ui-calc-content > .ui-conditionCT > .ui-conditionBox{
+	position:absolute;
+	left:1px;
+	right:1px;
+	bottom:1px;
+	top:41px;
+	background:#fff;
+	display:none;
+}
+.ui-calc-content > .ui-conditionCT > .ui-conditionBox > p{
+	padding:6px 0 0px;
+}
 .ui-calc-content > .ui-conditionCT > .ui-conditionCT-h4 > em{
     width: 30px;
     height: 36px;
