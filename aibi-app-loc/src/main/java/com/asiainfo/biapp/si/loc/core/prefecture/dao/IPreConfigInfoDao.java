@@ -8,6 +8,7 @@ package com.asiainfo.biapp.si.loc.core.prefecture.dao;
 
 import java.util.List;
 
+import com.asiainfo.biapp.si.loc.auth.model.User;
 import com.asiainfo.biapp.si.loc.base.dao.BaseDao;
 import com.asiainfo.biapp.si.loc.base.page.Page;
 import com.asiainfo.biapp.si.loc.core.prefecture.entity.PreConfigInfo;
@@ -48,7 +49,7 @@ public interface IPreConfigInfoDao extends BaseDao<PreConfigInfo, String> {
      * @param dataSourceInfo
      * @return
      */
-    public Page<PreConfigInfo> selectPreConfigInfoPageList(Page<PreConfigInfo> page, PreConfigInfoVo preConfigInfoVo);
+    public Page<PreConfigInfo> selectPreConfigInfoPageList(Page<PreConfigInfo> page, PreConfigInfoVo preConfigInfoVo,User user);
 
     /**
      * 根据条件查询专区列表
@@ -57,7 +58,7 @@ public interface IPreConfigInfoDao extends BaseDao<PreConfigInfo, String> {
      * @param dataSourceInfo
      * @return
      */
-    public List<PreConfigInfo> selectPreConfigInfoList(PreConfigInfoVo preConfigInfoVo);
+    public List<PreConfigInfo> selectPreConfigInfoList(PreConfigInfoVo preConfigInfoVo,User user);
 
     /**
      * 根据专区名称查询专区

@@ -6,6 +6,7 @@
 
 package com.asiainfo.biapp.si.loc.core.prefecture.dao.impl;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,6 +14,8 @@ import java.util.Map;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Repository;
 
+import com.asiainfo.biapp.si.loc.auth.model.Organization;
+import com.asiainfo.biapp.si.loc.auth.model.User;
 import com.asiainfo.biapp.si.loc.base.dao.BaseDaoImpl;
 import com.asiainfo.biapp.si.loc.base.page.Page;
 import com.asiainfo.biapp.si.loc.core.prefecture.dao.IPreConfigInfoDao;
@@ -48,14 +51,14 @@ import com.asiainfo.biapp.si.loc.core.prefecture.vo.PreConfigInfoVo;
 @Repository
 public class PreConfigInfoDaoImpl extends BaseDaoImpl<PreConfigInfo, String> implements IPreConfigInfoDao {
 
-    public Page<PreConfigInfo> selectPreConfigInfoPageList(Page<PreConfigInfo> page, PreConfigInfoVo preConfigInfoVo) {
-        Map<String, Object> reMap = fromBean(preConfigInfoVo);
+    public Page<PreConfigInfo> selectPreConfigInfoPageList(Page<PreConfigInfo> page, PreConfigInfoVo preConfigInfoVo,User user) {
+        Map<String, Object> reMap = fromBean(preConfigInfoVo,user);
         Map<String, Object> params = (Map<String, Object>) reMap.get("params");
         return super.findPageByHql(page, reMap.get("hql").toString(), params);
     }
 
-    public List<PreConfigInfo> selectPreConfigInfoList(PreConfigInfoVo preConfigInfoVo) {
-        Map<String, Object> reMap = fromBean(preConfigInfoVo);
+    public List<PreConfigInfo> selectPreConfigInfoList(PreConfigInfoVo preConfigInfoVo,User user) {
+        Map<String, Object> reMap = fromBean(preConfigInfoVo,user);
         Map<String, Object> params = (Map<String, Object>) reMap.get("params");
         return super.findListByHql(reMap.get("hql").toString(), params);
     }
@@ -64,10 +67,29 @@ public class PreConfigInfoDaoImpl extends BaseDaoImpl<PreConfigInfo, String> imp
         return super.findOneByHql("from PreConfigInfo p where p.sourceName = ?0", sourceName);
     }
 
-    public Map<String, Object> fromBean(PreConfigInfoVo preConfigInfoVo) {
+    public Map<String, Object> fromBean(PreConfigInfoVo preConfigInfoVo,User user) {
         Map<String, Object> reMap = new HashMap<>();
         Map<String, Object> params = new HashMap<>();
-        StringBuffer hql = new StringBuffer("from PreConfigInfo p where 1=1 ");
+        List<String> orgIdList = new ArrayList<>();
+        Map<String, List<Organization>> orgMap = user.getOrgPrivaliege();
+        for(int i=1;i<=3;i++){
+            List<Organization> orgList = new ArrayList<>();
+            if(i==1){
+                orgList = orgMap.get("1");
+            }else if(i==2){
+                orgList = orgMap.get("2");
+            }else if(i==3){
+                orgList = orgMap.get("3");
+            }
+            if(orgList==null){
+                continue;
+            }
+            for(Organization org : orgList){
+                orgIdList.add(org.getOrgCode());
+            }
+        }
+        StringBuffer hql = new StringBuffer("from PreConfigInfo p where 1=1 and p.orgId in (:orgIdList)");
+        params.put("orgIdList", orgIdList);
         if (StringUtils.isNotBlank(preConfigInfoVo.getConfigId())) {
             hql.append("and p.configId = :configId ");
             params.put("configId", preConfigInfoVo.getConfigId());

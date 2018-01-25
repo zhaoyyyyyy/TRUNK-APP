@@ -8,6 +8,7 @@ package com.asiainfo.biapp.si.loc.core.prefecture.service;
 
 import java.util.List;
 
+import com.asiainfo.biapp.si.loc.auth.model.User;
 import com.asiainfo.biapp.si.loc.base.exception.BaseException;
 import com.asiainfo.biapp.si.loc.base.page.Page;
 import com.asiainfo.biapp.si.loc.base.service.BaseService;
@@ -50,7 +51,7 @@ public interface IPreConfigInfoService extends BaseService<PreConfigInfo, String
      * @return
      * @throws BaseException
      */
-    public Page<PreConfigInfo> selectPreConfigInfoPageList(Page<PreConfigInfo> page, PreConfigInfoVo preConfigInfoVo)
+    public Page<PreConfigInfo> selectPreConfigInfoPageList(Page<PreConfigInfo> page, PreConfigInfoVo preConfigInfoVo,User user)
             throws BaseException;
 
     /**
@@ -60,7 +61,7 @@ public interface IPreConfigInfoService extends BaseService<PreConfigInfo, String
      * @return
      * @throws BaseException
      */
-    public List<PreConfigInfo> selectPreConfigInfoList(PreConfigInfoVo preConfigInfoVo) throws BaseException;
+    public List<PreConfigInfo> selectPreConfigInfoList(PreConfigInfoVo preConfigInfoVo,User user) throws BaseException;
 
     /**
      * Description: 根据名称查询专区

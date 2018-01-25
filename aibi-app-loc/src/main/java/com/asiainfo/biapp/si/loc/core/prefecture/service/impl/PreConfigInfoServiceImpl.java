@@ -15,6 +15,7 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.asiainfo.biapp.si.loc.auth.model.User;
 import com.asiainfo.biapp.si.loc.base.dao.BaseDao;
 import com.asiainfo.biapp.si.loc.base.exception.BaseException;
 import com.asiainfo.biapp.si.loc.base.exception.ParamRequiredException;
@@ -69,13 +70,13 @@ public class PreConfigInfoServiceImpl extends BaseServiceImpl<PreConfigInfo, Str
         return iPreConfigInfoDao;
     }
 
-    public Page<PreConfigInfo> selectPreConfigInfoPageList(Page<PreConfigInfo> page, PreConfigInfoVo preConfigInfoVo)
+    public Page<PreConfigInfo> selectPreConfigInfoPageList(Page<PreConfigInfo> page, PreConfigInfoVo preConfigInfoVo,User user)
             throws BaseException {
-        return iPreConfigInfoDao.selectPreConfigInfoPageList(page, preConfigInfoVo);
+        return iPreConfigInfoDao.selectPreConfigInfoPageList(page, preConfigInfoVo,user);
     }
 
-    public List<PreConfigInfo> selectPreConfigInfoList(PreConfigInfoVo preConfigInfoVo) throws BaseException {
-        return iPreConfigInfoDao.selectPreConfigInfoList(preConfigInfoVo);
+    public List<PreConfigInfo> selectPreConfigInfoList(PreConfigInfoVo preConfigInfoVo,User user) throws BaseException {
+        return iPreConfigInfoDao.selectPreConfigInfoList(preConfigInfoVo,user);
     }
 
     public PreConfigInfo selectOneBySourceName(String sourceName) throws BaseException {

@@ -6,33 +6,30 @@
 
 package com.asiainfo.biapp.si.loc.core.prefecture.controller;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
-
 import java.util.ArrayList;
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import springfox.documentation.annotations.ApiIgnore;
-
 import com.asiainfo.biapp.si.loc.auth.model.User;
+import com.asiainfo.biapp.si.loc.auth.utils.AuthUtils;
 import com.asiainfo.biapp.si.loc.base.controller.BaseController;
 import com.asiainfo.biapp.si.loc.base.exception.BaseException;
 import com.asiainfo.biapp.si.loc.base.page.Page;
 import com.asiainfo.biapp.si.loc.base.utils.WebResult;
-import com.asiainfo.biapp.si.loc.core.label.entity.MdaSysTable;
 import com.asiainfo.biapp.si.loc.core.prefecture.entity.PreConfigInfo;
 import com.asiainfo.biapp.si.loc.core.prefecture.service.IPreConfigInfoService;
 import com.asiainfo.biapp.si.loc.core.prefecture.vo.PreConfigInfoVo;
+
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
+import springfox.documentation.annotations.ApiIgnore;
 
 /**
  * Title : PreConfigInfoController
@@ -71,8 +68,6 @@ public class PreConfigInfoController extends BaseController<PreConfigInfo> {
 
     private static final String SUCCESS = "success";
     
-    private static final Logger LOGGER = LoggerFactory.getLogger(MdaSysTable.class);
-
     /**
      * 分页查询
      * 
@@ -85,8 +80,10 @@ public class PreConfigInfoController extends BaseController<PreConfigInfo> {
     public Page<PreConfigInfo> queryPage(@ModelAttribute Page<PreConfigInfo> page,
             @ModelAttribute PreConfigInfoVo preConfigInfoVo) {
         Page<PreConfigInfo> preConfigInfoPage = new Page<>();
+        User user = new User();
         try {
-            preConfigInfoPage = iPreConfigInfoService.selectPreConfigInfoPageList(page, preConfigInfoVo);
+            user=this.getLoginUser();
+            preConfigInfoPage = iPreConfigInfoService.selectPreConfigInfoPageList(page, preConfigInfoVo,user);
         } catch (BaseException e) {
             preConfigInfoPage.fail(e);
         }
@@ -104,8 +101,10 @@ public class PreConfigInfoController extends BaseController<PreConfigInfo> {
     public WebResult<List<PreConfigInfo>> findList(@ModelAttribute PreConfigInfoVo preConfigInfoVo) {
         WebResult<List<PreConfigInfo>> webResult = new WebResult<>();
         List<PreConfigInfo> preConfigInfoList = new ArrayList<>();
+        User user = new User();
         try {
-            preConfigInfoList = iPreConfigInfoService.selectPreConfigInfoList(preConfigInfoVo);
+            user=this.getLoginUser();
+            preConfigInfoList = iPreConfigInfoService.selectPreConfigInfoList(preConfigInfoVo,user);
         } catch (BaseException e) {
             return webResult.fail(e);
         }
