@@ -204,17 +204,7 @@ public class LabelInfoServiceImpl extends BaseServiceImpl<LabelInfo, String> imp
                    labelInfo.setEffecTime(DateUtil.string2Date(LabelMonth, "yyyy-MM"));
                }
         }
-        super.saveOrUpdate(labelInfo);
-        
-        //修改标签规则维表信息
-        LabelCountRules labelCountRules = iLabelCountRulesService.selectLabelCountRulesById(labelInfo.getCountRulesCode());
-        if (StringUtil.isNotBlank(labelInfo.getDependIndex())) {
-            labelCountRules.setDependIndex(labelInfo.getDependIndex());
-        }
-        if (StringUtil.isNotBlank(labelInfo.getCountRules())) {
-            labelCountRules.setCountRules(labelInfo.getCountRules());
-        }
-        iLabelCountRulesService.modifyLabelCountRules(labelCountRules); 
+        super.saveOrUpdate(labelInfo); 
         
         //修改元数据表列信息
         MdaSysTableColumn mdaSysTableColumn = iMdaSysTableColService.selectMdaSysTableColBylabelId(labelInfo.getLabelId());
@@ -235,6 +225,16 @@ public class LabelInfoServiceImpl extends BaseServiceImpl<LabelInfo, String> imp
             mdaSysTableColumn.setColumnDataTypeId(null);
             mdaSysTableColumn.setUnit(labelInfo.getUnit());
         }
+        
+        //修改标签规则维表信息
+        LabelCountRules labelCountRules = iLabelCountRulesService.selectLabelCountRulesById(mdaSysTableColumn.getCountRulesCode());
+        if (StringUtil.isNotBlank(labelInfo.getDependIndex())) {
+            labelCountRules.setDependIndex(labelInfo.getDependIndex());
+        }
+        if (StringUtil.isNotBlank(labelInfo.getCountRules())) {
+            labelCountRules.setCountRules(labelInfo.getCountRules());
+        }
+        iLabelCountRulesService.modifyLabelCountRules(labelCountRules); 
         iMdaSysTableColService.modifyMdaSysTableColumn(mdaSysTableColumn);
     }
 
