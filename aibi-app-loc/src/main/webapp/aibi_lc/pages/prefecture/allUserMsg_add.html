@@ -38,67 +38,73 @@
 							<div class="ui-form-group">
 								<label class="control-label fleft">是否分区</label>
 								<div class="control-input">
-									<input type="checkbox" id="isPartitionCheckedInput" onclick="isPartitionChecked(this)"></input> <input class="form-control" id="isPartition"
+									<input type="checkbox" class="mt5" id="isPartitionCheckedInput" onclick="isPartitionChecked(this)"></input> 
+									<input class="form-control mt" id="isPartition"
 										name="isPartition" type="hidden" value="否"></input>
 								</div>
 							</div>
-							<h3>-----日表-------------------------------</h3>
-							<div class="ui-form-group">
-								<label class="control-label fleft"><span class="input-required">*</span>表名</label>
-								<div class="control-input">
-									<input class="form-control easyui-validatebox" required="true" placeholder="日表表名" v-model="dayTableName" id="dayTableName" name="dayTableName"
-										type="text"></input>
+							<fieldset>
+								<legend>日表</legend>
+								<div class="ui-form-group">
+									<label class="control-label fleft"><span class="input-required">*</span>表名</label>
+									<div class="control-input">
+										<input class="form-control easyui-validatebox" required="true" placeholder="日表表名" v-model="dayTableName" id="dayTableName" name="dayTableName"
+											type="text"></input>
+									</div>
 								</div>
-							</div>
-							<div class="ui-form-group">
-								<label class="control-label fleft"><span class="input-required">*</span>主键字段</label>
-								<div class="control-input">
-									<input class="form-control easyui-validatebox" required="true" placeholder="日表主键字段" v-model="dayMainColumn" id="dayMainColumn" name="dayMainColumn"
-										type="text"></input>
+								<div class="ui-form-group">
+									<label class="control-label fleft"><span class="input-required">*</span>主键字段</label>
+									<div class="control-input">
+										<input class="form-control easyui-validatebox" required="true" placeholder="日表主键字段" v-model="dayMainColumn" id="dayMainColumn" name="dayMainColumn"
+											type="text"></input>
+									</div>
 								</div>
-							</div>
-							<div class="ui-form-group">
-								<label class="control-label fleft">分区字段</label>
-								<div class="control-input">
-									<input class="form-control" placeholder="日表分区字段" v-model="dayPartitionColumn" id="dayPartitionColumn" name="dayPartitionColumn" type="text"></input>
+								<div class="ui-form-group">
+									<label class="control-label fleft">分区字段</label>
+									<div class="control-input">
+										<input class="form-control" placeholder="日表分区字段" v-model="dayPartitionColumn" id="dayPartitionColumn" name="dayPartitionColumn" type="text"></input>
+									</div>
 								</div>
-							</div>
-							<h3>-----月表-------------------------------</h3>
-							<div class="ui-form-group">
-								<label class="control-label fleft"><span class="input-required">*</span>表名</label>
-								<div class="control-input">
-									<input class="form-control easyui-validatebox" required="true" placeholder="月表表名" v-model="monthTableName" id="monthTableName" name="monthTableName"
-										type="text"></input>
+							</fieldset>
+							<fieldset class="mt10">
+								<legend>月表</legend>
+								<div class="ui-form-group">
+									<label class="control-label fleft"><span class="input-required">*</span>表名</label>
+									<div class="control-input">
+										<input class="form-control easyui-validatebox" required="true" placeholder="月表表名" v-model="monthTableName" id="monthTableName" name="monthTableName"
+											type="text"></input>
+									</div>
 								</div>
-							</div>
-							<div class="ui-form-group">
-								<label class="control-label fleft"><span class="input-required">*</span>主键字段</label>
-								<div class="control-input">
-									<input class="form-control easyui-validatebox" required="true" placeholder="月表主键字段" v-model="monthMainColumn" id="monthMainColumn"
-										name="monthMainColumn" type="text"></input>
+								<div class="ui-form-group">
+									<label class="control-label fleft"><span class="input-required">*</span>主键字段</label>
+									<div class="control-input">
+										<input class="form-control easyui-validatebox" required="true" placeholder="月表主键字段" v-model="monthMainColumn" id="monthMainColumn"
+											name="monthMainColumn" type="text"></input>
+									</div>
 								</div>
-							</div>
-							<div class="ui-form-group">
-								<label class="control-label fleft">分区字段</label>
-								<div class="control-input">
-									<input class="form-control" placeholder="月表分区字段" v-model="monthPartitionColumn" id="monthPartitionColumn" name="monthPartitionColumn" type="text"></input>
+								<div class="ui-form-group">
+									<label class="control-label fleft">分区字段</label>
+									<div class="control-input">
+										<input class="form-control" placeholder="月表分区字段" v-model="monthPartitionColumn" id="monthPartitionColumn" name="monthPartitionColumn" type="text"></input>
+									</div>
 								</div>
-							</div>
-							<h3>----------------------------------------</h3>
-							<div class="ui-form-group">
+							</fieldset>
+							<div class="ui-form-group mt10">
 								<label class="control-label fleft">其他字段</label>
 								<div class="control-input">
 									<input class="form-control" placeholder="其他字段" v-model="otherColumn" id="otherColumn" name="otherColumn" type="type"></input>
 								</div>
 							</div>
-							<h3>-----组织字段名称-----------------------</h3>
 						</div>
 					</div>
-					<div class="ui-reg-grid mt10 ml10">
-						<div class=" ui-table-title mt10">
-							<table id="myjqgrid" class="table"></table>
+					<fieldset>
+						<legend>组织字段名称</legend>
+						<div class="ui-reg-grid mt10 ml10 mr10">
+							<div class=" ui-table-title mt10">
+								<table id="myjqgrid" class="table"></table>
+							</div>
 						</div>
-					</div>
+					</fieldset>
 				</form>
 			</div>
 		</div>
