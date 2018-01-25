@@ -126,15 +126,15 @@
 			</div>
 			<!-------------------查询条件 end ------------------------>
 			<div class="ui-filter-bar ui-lc-mian">
-				<a onclick="labelMarket.changeSortCol(this)" id="customNum" name="labelExtInfo.customNum" class="fleft active">
+				<a onclick="labelMarket.changeSortCol(this)" id="customNum" name="labelExtInfo.customNum" class="fleft">
 					人气
-					<i class="f-ico-triangle-mt"></i>
-					<i class="f-ico-triangle-mb"></i>
+					<i id="customNumAsc" class="f-ico-triangle-mt"></i>
+					<i id="customNumDesc" class="f-ico-triangle-mb"></i>
 				</a>
 				<a onclick="labelMarket.changeSortCol(this)" id="sortPublishTime" name="publishTime" class="fleft">
 					发布时间
-					<i class="f-ico-triangle-mt"></i>
-					<i class="f-ico-triangle-mb"></i>
+					<i id="sortPublishTimeAsc" class="f-ico-triangle-mt"></i>
+					<i id="sortPublishTimeDesc" class="f-ico-triangle-mb"></i>
 				</a>
 				
 			</div>
@@ -204,7 +204,7 @@
 					</span>
 				</h3>
 				<div class="ui-calc-content clearfix" id="sortable">
-					<div v-for="(item,index) in ruleList" :class="{
+					<div onmouseleave="labelMarket.hideBox(this)" v-for="(item,index) in ruleList" :class="{
 						'ui-chaining' : item.elementType ==1,
 						'ui-conditionCT' : item.elementType == 2,
                 		'ui-bracket': item.elementType == 3,
@@ -228,9 +228,26 @@
 						<!-- 标签 -->
 						<h4 :class="{'ui-conditionCT-h4': 1==1 , 'ui-inverse': item.labelFlag == 0}"  >
 							<span v-text="item.customOrLabelName" onclick="labelMarket.againstLabel(this)"></span>
+							
 							<em onclick="labelMarket.againstLabel(this)"></em>
 							<i onclick="labelMarket.deleteRule(this)"></i>
+							<b onmouseenter="labelMarket.showBox(this)" class="ml10">!</b>
 						</h4>
+						<!--鼠标经过弹窗-->
+						<div class="ui-conditionBox">
+							<p class="ui-advanced-sreach">已选条件</p>
+							<ul class="ui-enum-item clearfix">
+								<li class="fleft mr10">
+									<span class="del-btn">测试数据测试数据</a>
+								</li>
+								<li class="fleft mr10">
+									<span class="del-btn">浙江同济科技院</a>
+								</li>
+								<li class="fleft mr10">
+									<span class="del-btn">杭州下城区阳光装修学院</a>
+								</li>
+							</ul>
+						</div>
 						<!-- 标签体内容 -->
 						<!-- 标志性-->
 						<div class="ui-conditionCT-content align_center" v-if="item.labelTypeId == 1">

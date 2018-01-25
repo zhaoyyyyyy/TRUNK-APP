@@ -632,6 +632,13 @@ var labelMarket = (function (model){
 			dataModel.ruleList.splice(index,1);
     		model.submitRules();
 		};
+		//鼠标经过弹窗
+		model.showBox=function(elem){
+			$(elem).parents(".ui-conditionCT").find(".ui-conditionBox").show();
+		}
+		model.hideBox=function(elem){
+			$(elem).find(".ui-conditionBox").hide();
+		}
 		/**
 		 * 删除匹配的括号【与条件直接关联的括号】,待测试
 		 */
