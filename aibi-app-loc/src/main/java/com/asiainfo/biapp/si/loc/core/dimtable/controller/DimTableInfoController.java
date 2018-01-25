@@ -63,7 +63,7 @@ public class DimTableInfoController extends BaseController<DimTableInfo>{
     
     @ApiOperation(value = "分页查询维表信息")
     @RequestMapping(value = "/dimTableInfo/queryPage", method = RequestMethod.POST)
-    public Page<DimTableInfo> list(@ModelAttribute Page<DimTableInfo> page,@ModelAttribute DimTableInfoVo dimTableInfoVo) throws BaseException{
+    public Page<DimTableInfo> list(@ModelAttribute Page<DimTableInfo> page,@ModelAttribute DimTableInfoVo dimTableInfoVo) {
         Page<DimTableInfo> dimTableInfoPage = new Page<>();
         try {
             dimTableInfoPage = iDimTableInfoService.selectDimTableInfoPageList(page, dimTableInfoVo);
@@ -75,7 +75,7 @@ public class DimTableInfoController extends BaseController<DimTableInfo>{
     
     @ApiOperation(value = "不分页查询维表信息列表")
     @RequestMapping(value = "/dimTableInfo/queryList", method = RequestMethod.POST)
-    public WebResult<List<DimTableInfo>> findList(@ModelAttribute DimTableInfoVo dimTableInfoVo) throws BaseException{
+    public WebResult<List<DimTableInfo>> findList(@ModelAttribute DimTableInfoVo dimTableInfoVo) {
         WebResult<List<DimTableInfo>> webResult = new WebResult<>();
         List<DimTableInfo> dimTableInfoList = new ArrayList<>();
         try {
@@ -89,7 +89,7 @@ public class DimTableInfoController extends BaseController<DimTableInfo>{
     @ApiOperation(value = "根据ID查询维表信息")
     @ApiImplicitParam(name = "dimId", value = "ID", required = true, paramType = "query", dataType = "string")
     @RequestMapping(value = "/dimTableInfo/get",method = RequestMethod.POST)
-    public WebResult<DimTableInfo> findById(String dimId) throws BaseException{
+    public WebResult<DimTableInfo> findById(String dimId) {
         WebResult<DimTableInfo> webResult = new WebResult<>();
         DimTableInfo dimTableInfo = new DimTableInfo();
         try {
@@ -112,19 +112,15 @@ public class DimTableInfoController extends BaseController<DimTableInfo>{
         @ApiImplicitParam(name = "dimWhere", value = "Where条件", required = false, paramType = "query", dataType = "string"),
         @ApiImplicitParam(name = "createUserId", value = "创建人", required = false, paramType = "query", dataType = "string") })
     @RequestMapping(value = "/dimTableInfo/save", method = RequestMethod.POST)
-    public WebResult<String> save(@ApiIgnore DimTableInfo dimTableInfo) throws BaseException{
+    public WebResult<String> save(@ApiIgnore DimTableInfo dimTableInfo) {
             WebResult<String> webResult = new WebResult<>();
             dimTableInfo.setCreateTime(new Date());
             DimTableInfo dimTable = new DimTableInfo();
             try {
                 dimTable = iDimTableInfoService.selectOneByDimTableName(dimTableInfo.getDimTableName());
-            } catch (BaseException e) {
-                return webResult.fail(e);
-            }
-            if (null != dimTable) {
-                return webResult.fail("维表名称已存在");
-            }
-            try {
+                if (null != dimTable) {
+                    return webResult.fail("维表名称已存在");
+                }
                 iDimTableInfoService.addDimTableInfo(dimTableInfo);
             } catch (BaseException e) {
                 return webResult.fail(e);
@@ -144,28 +140,29 @@ public class DimTableInfoController extends BaseController<DimTableInfo>{
         @ApiImplicitParam(name = "dimWhere", value = "Where条件", required = false, paramType = "query", dataType = "string"),
         @ApiImplicitParam(name = "createUserId", value = "创建人", required = false, paramType = "query", dataType = "string") })
     @RequestMapping(value = "/dimTableInfo/update", method = RequestMethod.POST)
-    public WebResult<String> edit(@ApiIgnore DimTableInfo dimTableInfo) throws BaseException{
+    public WebResult<String> edit(@ApiIgnore DimTableInfo dimTableInfo){
         WebResult<String> webResult = new WebResult<>();
         DimTableInfo oldDim = new DimTableInfo();
         DimTableInfo dimTable = new DimTableInfo();
-        dimTable = iDimTableInfoService.selectOneByDimTableName(dimTableInfo.getDimTableName());
         try {
+            dimTable = iDimTableInfoService.selectOneByDimTableName(dimTableInfo.getDimTableName());
             oldDim = iDimTableInfoService.selectDimTableInfoById(dimTableInfo.getDimId());
+            if(!dimTableInfo.getDimTableName().equals(oldDim.getDimTableName()) && null != dimTable){
+                return webResult.fail("维表名称已存在");
+            }
+            oldDim = fromToBean(dimTableInfo, oldDim);
+            iDimTableInfoService.modifyDimTableInfo(oldDim);
         } catch (BaseException e) {
             return webResult.fail(e);
         }
-        if(!dimTableInfo.getDimTableName().equals(oldDim.getDimTableName()) && null != dimTable){
-            return webResult.fail("维表名称已存在");
-        }
-        oldDim = fromToBean(dimTableInfo, oldDim);
-        iDimTableInfoService.update(oldDim);
+        
         return webResult.success("修改维表信息成功", SUCCESS);
     }
     
     @ApiOperation(value = "删除维表信息")
     @ApiImplicitParam(name = "dimId", value = "ID", required = true, paramType = "query", dataType = "string")
     @RequestMapping(value = "/dimTableInfo/delete", method = RequestMethod.POST)
-    public WebResult<String> del(String dimId) throws BaseException{
+    public WebResult<String> del(String dimId) {
         WebResult<String> webResult = new WebResult<>();
         try {
             iDimTableInfoService.deleteDimTableInfoById(dimId);
