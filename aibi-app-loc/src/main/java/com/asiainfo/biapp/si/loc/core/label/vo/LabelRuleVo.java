@@ -54,6 +54,8 @@ public class LabelRuleVo extends LabelRule {
 	//标签数Param
 	private String effectDate;
 	
+	private String unit;
+	
 	public Integer getLabelTypeId() {
 		return labelTypeId;
 	}
@@ -113,6 +115,12 @@ public class LabelRuleVo extends LabelRule {
 	}
 	public void setEffectDate(String effectDate) {
 		this.effectDate = effectDate;
+	}
+	public String getUnit() {
+		return unit;
+	}
+	public void setUnit(String unit) {
+		this.unit = unit;
 	}
 	
 	

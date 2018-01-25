@@ -88,9 +88,10 @@ public class CustomerListCreaterThread extends Thread {
 				 tableName=LabelInfoContants.KHQ_CROSS_TABLE+customGroup.getConfigId()+"_"+customGroup.getDataDate();
 			}
 	    	backServiceImpl.insertCustomerData(countSqlStr, tableName, customGroupId);
-			// 3.发通知
+			// 3.发通知  TODO setCustomNum
+			//int num = backServiceImpl.queryCount("select count(1) "+ countSqlStr);
 	    	customGroup.setDataStatusId(LabelInfoContants.CUSTOM_DATA_STATUS_SUCCESS);
-	    	//labelInfoService.syncUpdateCustomGroupInfo(customGroup);
+	    	labelInfoService.syncUpdateCustomGroupInfo(customGroup);
 		} catch (Exception e) {
 			LogUtil.error("生成客户群的清单异常", e);
 		}

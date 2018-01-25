@@ -103,7 +103,7 @@ public class BaseDaoImpl<T, ID extends Serializable>  implements BaseDao<T,ID> {
 
 	@Override
 	public void update(T entity) {
-		em.persist(entity);
+		em.merge(entity);
 	}
 
 	@Override

@@ -332,7 +332,7 @@ public class LabelInfoServiceImpl extends BaseServiceImpl<LabelInfo, String> imp
 
 	@Override
 	public void syncUpdateCustomGroupInfo(LabelInfo customGroupInfo) {
-		 iLabelInfoDao.saveOrUpdate(customGroupInfo);
+		 iLabelInfoDao.update(customGroupInfo);
 	}
 	
 }

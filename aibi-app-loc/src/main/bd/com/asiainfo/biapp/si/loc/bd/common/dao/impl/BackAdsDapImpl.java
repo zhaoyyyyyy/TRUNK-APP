@@ -205,7 +205,7 @@ public class BackAdsDapImpl  extends BaseBackDaoImpl implements IBackSqlDao{
 		
 		try{
             boolean res = this.executeResBoolean(sb.toString());
-            Thread.sleep(5000);
+            Thread.sleep(50000);
             return res;
         }catch (Exception e){
         	LogUtil.error("createTableByName出错！"+e);
