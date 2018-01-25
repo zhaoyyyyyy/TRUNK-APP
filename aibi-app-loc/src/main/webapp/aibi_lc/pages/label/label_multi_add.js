@@ -34,32 +34,6 @@ function changeStatus(elem){
 		
 	}
 }
-//function changeStatus(obj){
-//	if(obj.value==="5"){//枚举型标签字典value为5
-//		const exit = model.showdimDetail.some(function(item){
-//			return Object.keys(item)[0] === ('showdim'+obj.id);
-//		});
-//		if(!exit){
-//			var a = {};
-//			a['showdim'+obj.id] = true;
-//			model.showdimDetail.push(a);
-//		}else{
-//			model.showdimDetail.forEach(function(item){
-//				if(Object.keys(item)[0]===('showdim'+obj.id)){
-//					item[('showdim'+obj.id)]=true
-//				};
-//			});
-//		}
-//	}else{
-//		model.showdimDetail.some(function(item){
-//			if(item[('showdim'+obj.id)]){
-//				item[('showdim'+obj.id)]=false;
-//				return true
-//			}
-//			return false
-//		});
-//	}
-//}
 window.loc_onload = function(){
 	model.configId = $.getCurrentConfigId();
 	var dicBqlx = $.getDicData("BQLXZD");

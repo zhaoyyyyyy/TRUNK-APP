@@ -89,10 +89,10 @@ public class SourceInfoController extends BaseController<SourceInfo> {
         @ApiImplicitParam(name = "sourceName", value = "指标名称", required = false, paramType = "query", dataType = "string")
     }) 
     @RequestMapping(value="/sourceInfo/queryPagebyconfigId", method = RequestMethod.POST)
-    public Page<SourceInfo> sourcelist(@ModelAttribute Page<SourceInfo> page,String configId,String sourceName){
+    public Page<SourceInfo> sourcelist(@ModelAttribute Page<SourceInfo> page,String configId,int readCycle,String sourceName){
         Page<SourceInfo> sourceInfoPage = new Page<>();
         try {
-            sourceInfoPage = iSourceInfoService.selectSourceInfoListByConfigId(page, configId,sourceName);
+            sourceInfoPage = iSourceInfoService.selectSourceInfoListByConfigId(page, configId,readCycle,sourceName);
         } catch (BaseException e) {
             sourceInfoPage.fail(e);
         }

@@ -26,6 +26,7 @@ import springfox.documentation.annotations.ApiIgnore;
 import com.asiainfo.biapp.si.loc.base.controller.BaseController;
 import com.asiainfo.biapp.si.loc.base.exception.BaseException;
 import com.asiainfo.biapp.si.loc.base.page.Page;
+import com.asiainfo.biapp.si.loc.base.utils.StringUtil;
 import com.asiainfo.biapp.si.loc.base.utils.WebResult;
 import com.asiainfo.biapp.si.loc.core.label.entity.MdaSysTableColumn;
 import com.asiainfo.biapp.si.loc.core.label.service.IMdaSysTableColService;
@@ -202,10 +203,13 @@ public class MdaSysTableColumnController extends BaseController<MdaSysTableColum
             oldmda.setUnit(mda.getUnit());
         }
         if (StringUtils.isNotBlank(mda.getDataType())) {
-            oldmda.setDataType(oldmda.getDataType());
+            oldmda.setDataType(mda.getDataType());
         }
         if (null != mda.getColumnStatus()) {
             oldmda.setColumnStatus(mda.getColumnStatus());
+        }
+        if (StringUtil.isNotBlank(mda.getCountRulesCode())) {
+            oldmda.setCountRulesCode(mda.getCountRulesCode());
         }
         return oldmda;
     }

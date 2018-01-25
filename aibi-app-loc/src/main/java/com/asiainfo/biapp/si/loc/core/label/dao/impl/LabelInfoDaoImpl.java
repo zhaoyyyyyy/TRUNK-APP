@@ -86,10 +86,6 @@ public class LabelInfoDaoImpl extends BaseDaoImpl<LabelInfo, String> implements 
             hql.append("and l.orgId = :orgId ");
             params.put("orgId", labelInfoVo.getOrgId());
         }
-        if (StringUtil.isNotBlank(labelInfoVo.getCountRulesCode())) {
-            hql.append("and l.countRulesCode = :countRulesCode ");
-            params.put("countRulesCode", labelInfoVo.getCountRulesCode());
-        }
         if (StringUtil.isNotBlank(labelInfoVo.getLabelName())) {
             hql.append("and l.labelName Like :labelName ");
             params.put("labelName", "%"+labelInfoVo.getLabelName()+"%");
@@ -211,10 +207,6 @@ public class LabelInfoDaoImpl extends BaseDaoImpl<LabelInfo, String> implements 
         if (StringUtil.isNotBlank(labelInfoVo.getOrgId())) {
             hql.append("and l.orgId = :orgId ");
             params.put("orgId", labelInfoVo.getOrgId());
-        }
-        if (StringUtil.isNotBlank(labelInfoVo.getCountRulesCode())) {
-            hql.append("and l.countRulesCode = :countRulesCode ");
-            params.put("countRulesCode", labelInfoVo.getCountRulesCode());
         }
         if (StringUtil.isNotBlank(labelInfoVo.getLabelName())) {
             hql.append("and l.labelName Like :labelName ");

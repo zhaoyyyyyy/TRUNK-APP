@@ -63,23 +63,22 @@ public class MdaSysTableColumn extends BaseEntity {
     @Id
     @Column(name = "COLUMN_ID")
     @GeneratedValue(generator = "idGenerator")
-    @GenericGenerator(name = "idGenerator", 
-    strategy = "com.asiainfo.biapp.si.loc.base.extend.LocGenerateId",
-    parameters = {
-        @Parameter(name = "name", value = "COLUMN_SEQ"), //  来自DIM_SEQUECE_INFO表的 SEQUECE_NAME
-        @Parameter(name = "prefix", value = "COl"), // ID前缀
-        @Parameter(name = "size", value = "7") // 占位符表示 
-    }) 
+    @GenericGenerator(name = "idGenerator", strategy = "com.asiainfo.biapp.si.loc.base.extend.LocGenerateId", parameters = {
+            @Parameter(name = "name", value = "COLUMN_SEQ"), // 来自DIM_SEQUECE_INFO表的
+                                                             // SEQUECE_NAME
+            @Parameter(name = "prefix", value = "COl"), // ID前缀
+            @Parameter(name = "size", value = "7") // 占位符表示
+    })
     @ApiParam(value = "列Id")
     private String columnId;
-    
+
     /**
      * 标签Id
      */
     @Column(name = "LABEL_ID")
     @ApiParam(value = "标签Id")
-    private String labelId; 
-    
+    private String labelId;
+
     /**
      * 所属表Id
      */
@@ -87,7 +86,7 @@ public class MdaSysTableColumn extends BaseEntity {
     @ApiParam(value = "所属表id")
     private String tableId;
 
-	/**
+    /**
      * 列名
      */
     @Column(name = "COLUMN_NAME")
@@ -111,10 +110,10 @@ public class MdaSysTableColumn extends BaseEntity {
     /**
      * 对应维表Id
      */
-    @Column(name="DIM_TRANS_ID")
-    @ApiParam(value="对应维表表名")
+    @Column(name = "DIM_TRANS_ID")
+    @ApiParam(value = "对应维表表名")
     private String dimTransId;
-    
+
     /**
      * 单位
      */
@@ -128,72 +127,75 @@ public class MdaSysTableColumn extends BaseEntity {
     @Column(name = "DATA_TYPE")
     @ApiParam(value = "数据类型")
     private String dataType;
-    
+
     /**
      * 列状态
      */
     @Column(name = "COLUMN_STATUS")
     @ApiParam(value = "列状态")
     private Integer columnStatus;
-    
+
+    /**
+     * 规则编码
+     */
+    @Column(name = "COUNT_RULES_CODE")
+    @ApiParam(value = "规则编码")
+    private String countRulesCode;
+
     @Transient
     private DimTableInfo dimtableInfo;
-    
-    @ManyToOne(cascade = CascadeType.REFRESH, optional = false)  
-    @JoinColumn(name="TABLE_ID",insertable=false,updatable=false)  
+
+    @ManyToOne(cascade = CascadeType.REFRESH, optional = false)
+    @JoinColumn(name = "TABLE_ID", insertable = false, updatable = false)
     private MdaSysTable mdaSysTable;
-    
-	public String getTableId() {
-		return tableId;
-	}
 
-	public void setTableId(String tableId) {
-		this.tableId = tableId;
-	}
+    public String getTableId() {
+        return tableId;
+    }
 
-	public String getLabelId() {
-		return labelId;
-	}
+    public void setTableId(String tableId) {
+        this.tableId = tableId;
+    }
 
-	public void setLabelId(String labelId) {
-		this.labelId = labelId;
-	}
+    public String getLabelId() {
+        return labelId;
+    }
+
+    public void setLabelId(String labelId) {
+        this.labelId = labelId;
+    }
 
     public String getDimTransId() {
-		return dimTransId;
-	}
+        return dimTransId;
+    }
 
-	public void setDimTransId(String dimTransId) {
-		this.dimTransId = dimTransId;
-	}
+    public void setDimTransId(String dimTransId) {
+        this.dimTransId = dimTransId;
+    }
 
+    public DimTableInfo getDimtableInfo() {
+        return dimtableInfo;
+    }
 
+    public void setDimtableInfo(DimTableInfo dimtableInfo) {
+        this.dimtableInfo = dimtableInfo;
+    }
 
-	public DimTableInfo getDimtableInfo() {
-		return dimtableInfo;
-	}
+    public MdaSysTable getMdaSysTable() {
+        return mdaSysTable;
+    }
 
-	public void setDimtableInfo(DimTableInfo dimtableInfo) {
-		this.dimtableInfo = dimtableInfo;
-	}
+    public void setMdaSysTable(MdaSysTable mdaSysTable) {
+        this.mdaSysTable = mdaSysTable;
+    }
 
-	public MdaSysTable getMdaSysTable() {
-		return mdaSysTable;
-	}
-
-	public void setMdaSysTable(MdaSysTable mdaSysTable) {
-		this.mdaSysTable = mdaSysTable;
-	}
-
-	public String getColumnId() {
+    public String getColumnId() {
         return columnId;
     }
 
     public void setColumnId(String columnId) {
         this.columnId = columnId;
     }
-
-
 
     public String getColumnName() {
         return columnName;
@@ -241,6 +243,14 @@ public class MdaSysTableColumn extends BaseEntity {
 
     public void setColumnStatus(Integer columnStatus) {
         this.columnStatus = columnStatus;
+    }
+
+    public String getCountRulesCode() {
+        return countRulesCode;
+    }
+
+    public void setCountRulesCode(String countRulesCode) {
+        this.countRulesCode = countRulesCode;
     }
 
 }

@@ -108,13 +108,6 @@ public class LabelInfo extends BaseEntity {
     private String orgId;
 
     /**
-     * 规则编码
-     */
-    @Column(name = "COUNT_RULES_CODE")
-    @ApiParam(value = "规则编码")
-    private String countRulesCode;
-
-    /**
      * 标签名称
      */
     @Column(name = "LABEL_NAME")
@@ -362,14 +355,6 @@ public class LabelInfo extends BaseEntity {
 
     public void setOrgId(String orgId) {
         this.orgId = orgId;
-    }
-
-    public String getCountRulesCode() {
-        return countRulesCode;
-    }
-
-    public void setCountRulesCode(String countRulesCode) {
-        this.countRulesCode = countRulesCode;
     }
 
     public String getLabelName() {

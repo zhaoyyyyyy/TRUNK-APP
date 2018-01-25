@@ -15,6 +15,7 @@ import org.springframework.stereotype.Repository;
 
 import com.asiainfo.biapp.si.loc.base.dao.BaseDaoImpl;
 import com.asiainfo.biapp.si.loc.base.page.Page;
+import com.asiainfo.biapp.si.loc.base.utils.StringUtil;
 import com.asiainfo.biapp.si.loc.core.label.dao.IMdaSysTableColumnDao;
 import com.asiainfo.biapp.si.loc.core.label.entity.MdaSysTableColumn;
 import com.asiainfo.biapp.si.loc.core.label.vo.MdaSysTableColumnVo;
@@ -98,6 +99,10 @@ public class MdaSysTableColumnDaoImpl extends BaseDaoImpl<MdaSysTableColumn, Str
         if (StringUtils.isNotBlank(mdaSysTableColumnVo.getDataType())) {
             hql.append(" and m.dataType = :dataType");
             params.put("datatype", mdaSysTableColumnVo.getDataType());
+        }
+        if (StringUtil.isNotBlank(mdaSysTableColumnVo.getCountRulesCode())) {
+            hql.append(" and m.countRulesCode = :countRulesCode");
+            params.put("countRulesCode", mdaSysTableColumnVo.getCountRulesCode());
         }
         reMap.put("hql", hql);
         reMap.put("params", params);

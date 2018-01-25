@@ -102,6 +102,6 @@ public interface ISourceInfoService extends BaseService<SourceInfo, String> {
      * @param configId
      * @return
      */
-    public Page<SourceInfo> selectSourceInfoListByConfigId(Page<SourceInfo> page,String configId,String sourceName) throws BaseException;
+    public Page<SourceInfo> selectSourceInfoListByConfigId(Page<SourceInfo> page,String configId,int readCycle,String sourceName) throws BaseException;
 
 }

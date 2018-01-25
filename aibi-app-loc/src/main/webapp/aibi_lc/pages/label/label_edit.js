@@ -79,17 +79,6 @@ window.loc_onload = function() {
 						$("#dependIndex").val(echodependIndex);
 						var dependList = echodependIndex.split(",");
 						for(var i=0; i<dependList.length ; i++){
-							/*$.commAjax({
-								ansyc : false,
-								url : $.ctx + '/api/source/sourceInfo/get',
-								postData : {
-									"sourceId" : dependList[i]
-								},
-								onSuccess : function(data5){
-									model.sourceNameList.push(data5.data.sourceName)
-								}
-							});*/
-//							model.sourceNameList.push(dependList[i])
 							model.dependIndexList.push(dependList[i])
 						}
 					}	
@@ -185,33 +174,24 @@ window.loc_onload = function() {
 	
 	//指标选择
 	$('#btn_index_select').click(function() {
-		var win = $.window('指标配置', $.ctx + '/aibi_lc/pages/label/sourceInfo_mgr.html', 900, 600);
-		win.addKpis = function(chooseKpis) {
-			model.sourceIdList = chooseKpis;
-			var dependx="";
-//			model.sourceNameList = [];
-			model.dependIndexList=[];
-			for(var i=0; i<chooseKpis.length; i++){
-				model.dependIndexList.push(chooseKpis[i])
-			/*	$.commAjax({
-					async : false,
-					url : $.ctx + '/api/source/sourceInfo/get',
-					postData : {
-						"sourceId" : chooseKpis[i]
-					},
-					onSuccess : function(data){
-						model.sourceNameList.push(data.data.sourceName),
-						model.dependIndexList.push(data.data.sourceId)
-					    dependx += data.data.sourceId+","
-					}
-				});*/
+		if(model.updateCycle==""){
+			$.alert("请先选择更新周期")
+		}else {
+			var win = $.window('指标配置', $.ctx + '/aibi_lc/pages/label/sourceInfo_mgr.html?readCycle='+model.updateCycle, 900, 600);
+			win.addKpis = function(chooseKpis) {
+				model.sourceIdList = chooseKpis;
+				var dependx="";
+				model.dependIndexList=[];
+				for(var i=0; i<chooseKpis.length; i++){
+					model.dependIndexList.push(chooseKpis[i])
+				}
+				for(var i=0; i<model.dependIndexList.length; i++){
+					dependx += model.dependIndexList[i]+","
+				}
+				model.dependIndex= dependx.substr(0,dependx.length-1);
+				$("#dependIndex").val(dependx.substr(0,dependx.length-1));
 			}
-			for(var i=0; i<model.dependIndexList.length; i++){
-				dependx += model.dependIndexList[i]+","
-			}
-			model.dependIndex= dependx.substr(0,dependx.length-1);
-			$("#dependIndex").val(dependx.substr(0,dependx.length-1));
-		}
+		}	
 	});
 	
 }

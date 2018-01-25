@@ -348,9 +348,6 @@ public class LabelInfoController extends BaseController {
         if (StringUtil.isNotBlank(lab.getOrgId())) {
             oldLab.setOrgId(lab.getOrgId());
         }
-        if (StringUtil.isNotBlank(lab.getCountRulesCode())) {
-            oldLab.setCountRulesCode(lab.getCountRulesCode());
-        }
         if (StringUtil.isNotBlank(lab.getLabelName())) {
             oldLab.setLabelName(lab.getLabelName());
         }

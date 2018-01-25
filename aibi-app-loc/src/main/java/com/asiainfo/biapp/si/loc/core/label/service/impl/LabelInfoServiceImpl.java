@@ -158,7 +158,6 @@ public class LabelInfoServiceImpl extends BaseServiceImpl<LabelInfo, String> imp
         labelInfo.setDataStatusId(1);
         labelInfo.setGroupType(0);
         labelInfo.setCategoryId(labelInfo.getCategoryId());
-        labelInfo.setCountRulesCode(labelCountRules.getCountRulesCode());
         super.saveOrUpdate(labelInfo);
         
         //封装审批信息
@@ -182,6 +181,7 @@ public class LabelInfoServiceImpl extends BaseServiceImpl<LabelInfo, String> imp
     	mdaSysTableColumn.setTableId(mdaSysTable.getTableId());
         mdaSysTableColumn.setColumnName(labelInfo.getLabelId());
         mdaSysTableColumn.setColumnCnName(labelInfo.getLabelName());
+        mdaSysTableColumn.setCountRulesCode(labelCountRules.getCountRulesCode());
         if (labelInfo.getLabelTypeId()==5) {
             DimTableInfo dimTable =iDimTableInfoService.selectDimTableInfoById(labelInfo.getDimId());
             mdaSysTableColumn.setDimTransId(labelInfo.getDimId());
