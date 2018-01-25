@@ -134,6 +134,7 @@ add-dialog@charset "utf-8";
     width: 0;
     position:absolute;
     right:10px;
+    z-index:9;
 }
 .ui-filter-bar > a .f-ico-triangle-mt{
 	border-bottom: 4px solid #999;
@@ -146,11 +147,11 @@ add-dialog@charset "utf-8";
 .ui-filter-bar > a.active{
 	color: #D02433;
 }
-.ui-filter-bar > a .f-ico-triangle-mt.active
+.ui-filter-bar > a.active .f-ico-triangle-mt.active
 {
 	border-bottom: 4px solid #D02433;
 }
-.ui-filter-bar > a .f-ico-triangle-mb.active{
+.ui-filter-bar > a.active .f-ico-triangle-mb.active{
 	border-top: 4px solid #D02433;
 }
 .ui-refresh{
