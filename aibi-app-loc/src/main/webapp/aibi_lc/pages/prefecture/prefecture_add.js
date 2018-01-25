@@ -103,7 +103,6 @@ window.loc_onload = function() {
 			}
 		}
 	});
-	console.log(orgdata);
 	wd.addBtn("ok", "保存", function() {
 		if($('#saveDataForm').validateForm()){
 			var url_ = "";

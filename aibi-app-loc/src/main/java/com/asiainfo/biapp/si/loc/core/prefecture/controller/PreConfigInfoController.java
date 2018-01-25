@@ -156,8 +156,8 @@ public class PreConfigInfoController extends BaseController<PreConfigInfo> {
             user = this.getLoginUser();
             preConfigInfo.setCreateUserId(user.getUserId());
             iPreConfigInfoService.addPreConfigInfo(preConfigInfo);
-        } catch (BaseException e1) {
-            return webResult.fail(e1);
+        } catch (BaseException e) {
+            return webResult.fail(e);
         }
         return webResult.success("新增专区成功", SUCCESS);
     }
@@ -184,8 +184,8 @@ public class PreConfigInfoController extends BaseController<PreConfigInfo> {
         WebResult<String> webResult = new WebResult<>();
         try {
             iPreConfigInfoService.modifyPreConfigInfo(preConfigInfo);
-        } catch (BaseException e1) {
-            return webResult.fail(e1);
+        } catch (BaseException e) {
+            return webResult.fail(e);
         }
         return webResult.success("修改专区成功", SUCCESS);
     }
