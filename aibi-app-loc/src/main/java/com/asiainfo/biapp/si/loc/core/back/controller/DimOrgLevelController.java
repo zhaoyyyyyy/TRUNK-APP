@@ -70,13 +70,13 @@ public class DimOrgLevelController extends BaseController<DimOrgLevel> {
     @RequestMapping(value = "/dimOrgLevel/queryPage", method = RequestMethod.POST)
     public Page<DimOrgLevel> queryPage(@ModelAttribute Page<DimOrgLevel> page,
             @ModelAttribute DimOrgLevelVo DimOrgLevelVo) {
-        Page<DimOrgLevel> DimOrgLevelPage = new Page<>();
+        Page<DimOrgLevel> dimOrgLevelPage = new Page<>();
         try {
-            DimOrgLevelPage = iDimOrgLevelService.selectDimOrgLevelPageList(page, DimOrgLevelVo);
+            dimOrgLevelPage = iDimOrgLevelService.selectDimOrgLevelPageList(page, DimOrgLevelVo);
         } catch (BaseException e) {
-            DimOrgLevelPage.fail(e);
+            dimOrgLevelPage.fail(e);
         }
-        return DimOrgLevelPage;
+        return dimOrgLevelPage;
     }
 
     @ApiOperation(value = "不分页查询数据权限组织层级信息")

@@ -15,13 +15,15 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.hibernate.annotations.GenericGenerator;
 
 import com.asiainfo.biapp.si.loc.base.entity.BaseEntity;
 import com.asiainfo.biapp.si.loc.core.prefecture.entity.PreConfigInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import io.swagger.annotations.ApiParam;
 
@@ -68,7 +70,7 @@ public class AllUserMsg extends BaseEntity {
     @Column(name = "TABLE_DESC")
     @ApiParam(value = "表描述信息")
     private String tableDesc;
-    
+
     @Column(name = "IS_PARTITION")
     @ApiParam(value = "是否分区")
     private String isPartition;
@@ -76,11 +78,11 @@ public class AllUserMsg extends BaseEntity {
     @Column(name = "DAY_TABLE_NAME")
     @ApiParam(value = "日表表名")
     private String dayTableName;
-    
+
     @Column(name = "DAY_MAIN_COLUMN")
     @ApiParam(value = "日表主键字段")
     private String dayMainColumn;
-    
+
     @Column(name = "DAY_PARTITION_COLUMN")
     @ApiParam(value = "日表分区字段")
     private String dayPartitionColumn;
@@ -101,10 +103,22 @@ public class AllUserMsg extends BaseEntity {
     @ApiParam(value = "其他字段")
     private String otherColumn;
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @Transient
+    private String dimOrgLevelStr;
+
+    @JsonIgnore
+    @OneToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "LOC_CONFIG_TABLE_REL", joinColumns = { @JoinColumn(name = "PRI_KEY") }, inverseJoinColumns = {
             @JoinColumn(name = "CONFIG_ID") })
     private Set<PreConfigInfo> preConfigInfoSet;
+
+    public String getDimOrgLevelStr() {
+        return dimOrgLevelStr;
+    }
+
+    public void setDimOrgLevelStr(String dimOrgLevelStr) {
+        this.dimOrgLevelStr = dimOrgLevelStr;
+    }
 
     public Set<PreConfigInfo> getPreConfigInfoSet() {
         return preConfigInfoSet;

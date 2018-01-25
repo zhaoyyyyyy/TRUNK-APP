@@ -21,8 +21,14 @@ import com.asiainfo.biapp.si.loc.base.page.Page;
 import com.asiainfo.biapp.si.loc.base.service.impl.BaseServiceImpl;
 import com.asiainfo.biapp.si.loc.core.back.dao.IAllUserMsgDao;
 import com.asiainfo.biapp.si.loc.core.back.entity.AllUserMsg;
+import com.asiainfo.biapp.si.loc.core.back.entity.DimOrgLevel;
+import com.asiainfo.biapp.si.loc.core.back.entity.DimOrgLevelId;
 import com.asiainfo.biapp.si.loc.core.back.service.IAllUserMsgService;
+import com.asiainfo.biapp.si.loc.core.back.service.IDimOrgLevelService;
 import com.asiainfo.biapp.si.loc.core.back.vo.AllUserMsgVo;
+import com.asiainfo.biapp.si.loc.core.back.vo.DimOrgLevelVo;
+
+import net.sf.json.JSONObject;
 
 /**
  * Title : AllUserMsgServiceImpl
@@ -56,6 +62,9 @@ public class AllUserMsgServiceImpl extends BaseServiceImpl<AllUserMsg, String>im
 
     @Autowired
     private IAllUserMsgDao iAllUserMsgDao;
+    
+    @Autowired
+    private IDimOrgLevelService iDimOrgLevelService;
 
     @Override
     protected BaseDao<AllUserMsg, String> getBaseDao() {
@@ -79,12 +88,44 @@ public class AllUserMsgServiceImpl extends BaseServiceImpl<AllUserMsg, String>im
     }
 
     public void addAllUserMsg(AllUserMsg allUserMsg) throws BaseException {
+        String[] dimOrgStr = allUserMsg.getDimOrgLevelStr().split(";");
         super.saveOrUpdate(allUserMsg);
+        for(String d : dimOrgStr){
+            JSONObject obj = JSONObject.fromObject(d);
+            DimOrgLevel dimOrgLevel = new DimOrgLevel();
+            DimOrgLevelId newDimOrgLevelId = new DimOrgLevelId();
+            newDimOrgLevelId.setOrgColumnName(obj.getString("dimOrgLevelId.orgColumnName"));
+            newDimOrgLevelId.setPriKey(allUserMsg.getPriKey());
+            dimOrgLevel.setDimOrgLevelId(newDimOrgLevelId);
+            dimOrgLevel.setLevelId(Integer.parseInt(obj.getString("levelId")));
+            dimOrgLevel.setSortNum(Integer.parseInt(obj.getString("sortNum")));
+            iDimOrgLevelService.addDimOrgLevel(dimOrgLevel);
+        }
     }
 
     public void modifyAllUserMsg(AllUserMsg allUserMsg) throws BaseException {
         AllUserMsg oldAll = super.get(allUserMsg.getPriKey());
         oldAll = fromToBean(allUserMsg,oldAll);
+        DimOrgLevelId dimOrgLevelId = new DimOrgLevelId();
+        dimOrgLevelId.setPriKey(oldAll.getPriKey());
+        DimOrgLevelVo dimOrgLevelVo = new DimOrgLevelVo();
+        dimOrgLevelVo.setDimOrgLevelId(dimOrgLevelId);
+        List<DimOrgLevel> dimOrgLevelList = iDimOrgLevelService.selectDimOrgLevelList(dimOrgLevelVo);
+        for(DimOrgLevel d : dimOrgLevelList){
+            iDimOrgLevelService.delete(d.getDimOrgLevelId());
+        }
+        String[] dimOrgStr = allUserMsg.getDimOrgLevelStr().split(";");
+        for(String d : dimOrgStr){
+            JSONObject obj = JSONObject.fromObject(d);
+            DimOrgLevel dimOrgLevel = new DimOrgLevel();
+            DimOrgLevelId newDimOrgLevelId = new DimOrgLevelId();
+            newDimOrgLevelId.setOrgColumnName(obj.getString("dimOrgLevelId.orgColumnName"));
+            newDimOrgLevelId.setPriKey(allUserMsg.getPriKey());
+            dimOrgLevel.setDimOrgLevelId(newDimOrgLevelId);
+            dimOrgLevel.setLevelId(Integer.parseInt(obj.getString("levelId")));
+            dimOrgLevel.setSortNum(Integer.parseInt(obj.getString("sortNum")));
+            iDimOrgLevelService.addDimOrgLevel(dimOrgLevel);
+        }
         super.saveOrUpdate(oldAll);
     }
 
@@ -93,6 +134,14 @@ public class AllUserMsgServiceImpl extends BaseServiceImpl<AllUserMsg, String>im
             throw new ParamRequiredException("ID不能为空");
         }
         super.delete(priKey);
+        DimOrgLevelId dimOrgLevelId = new DimOrgLevelId();
+        dimOrgLevelId.setPriKey(priKey);
+        DimOrgLevelVo dimOrgLevelVo = new DimOrgLevelVo();
+        dimOrgLevelVo.setDimOrgLevelId(dimOrgLevelId);
+        List<DimOrgLevel> dimOrgLevelList = iDimOrgLevelService.selectDimOrgLevelList(dimOrgLevelVo);
+        for(DimOrgLevel d : dimOrgLevelList){
+            iDimOrgLevelService.delete(d.getDimOrgLevelId());
+        }
     }
     
     private AllUserMsg fromToBean(AllUserMsg all, AllUserMsg oldAll) {

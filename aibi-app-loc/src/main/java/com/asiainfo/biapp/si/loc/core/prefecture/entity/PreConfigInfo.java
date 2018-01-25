@@ -6,15 +6,17 @@
 
 package com.asiainfo.biapp.si.loc.core.prefecture.entity;
 
-import io.swagger.annotations.ApiParam;
-
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
@@ -22,6 +24,9 @@ import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
 
 import com.asiainfo.biapp.si.loc.base.entity.BaseEntity;
+import com.asiainfo.biapp.si.loc.core.back.entity.AllUserMsg;
+
+import io.swagger.annotations.ApiParam;
 
 /**
  * Title : PreConfigInfo
@@ -63,15 +68,13 @@ public class PreConfigInfo extends BaseEntity {
     @Id
     @Column(name = "CONFIG_ID")
     @GeneratedValue(generator = "idGenerator")
-    //COC自定义主键自增
-    @GenericGenerator(name = "idGenerator",
-        strategy = "com.asiainfo.biapp.si.loc.base.extend.LocGenerateId",
-        parameters = {
-                @Parameter(name = "name", value = "CONFIG_SEQ"), //来自DIM_SEQUECE_INFO表的 SEQUECE_NAME
-                @Parameter(name = "prefix", value = "P"), //ID前缀
-                @Parameter(name = "size", value = "3") //占位符表示 001-999
-        }
-    )
+    // COC自定义主键自增
+    @GenericGenerator(name = "idGenerator", strategy = "com.asiainfo.biapp.si.loc.base.extend.LocGenerateId", parameters = {
+            @Parameter(name = "name", value = "CONFIG_SEQ"), // 来自DIM_SEQUECE_INFO表的
+                                                             // SEQUECE_NAME
+            @Parameter(name = "prefix", value = "P"), // ID前缀
+            @Parameter(name = "size", value = "3") // 占位符表示 001-999
+    })
     private String configId;
 
     /**
@@ -140,6 +143,19 @@ public class PreConfigInfo extends BaseEntity {
     @Transient
     private String createUserId;
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinTable(name = "LOC_CONFIG_TABLE_REL", joinColumns = { @JoinColumn(name = "CONFIG_ID") }, inverseJoinColumns = {
+            @JoinColumn(name = "PRI_KEY") })
+    private AllUserMsg allUserMsg;
+
+    public AllUserMsg getAllUserMsg() {
+        return allUserMsg;
+    }
+
+    public void setAllUserMsg(AllUserMsg allUserMsg) {
+        this.allUserMsg = allUserMsg;
+    }
+
     public String getCreateUserId() {
         return createUserId;
     }
@@ -206,10 +222,10 @@ public class PreConfigInfo extends BaseEntity {
 
     public String getCreateTime() {
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss");
-        if(createTime != null){
-        	 return formatter.format(createTime);
+        if (createTime != null) {
+            return formatter.format(createTime);
         }
-       return "";
+        return "";
     }
 
     public void setCreateTime(Date createTime) {

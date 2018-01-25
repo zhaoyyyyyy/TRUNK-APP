@@ -15,13 +15,23 @@ var model = {
 		invalidTime : "",
 		configId : "",
 		orgId : "",
-		ztreeObj : []
+		ztreeObj : [],
+		allUserMsg : [],
+		priKey:""
 }
 window.loc_onload = function() {
 	var orgdata = [];
 	orgdata["allnull"] = "";
 	var configId = $.getUrlParam("configId");
 	var wd = frameElement.lhgDG;
+	
+	$.commAjax({
+		url: $.ctx + '/api/back/allUserMsg/queryList',
+		onSuccess : function(data){
+			model.allUserMsg = data.data;
+		}
+	})
+	
 	if (configId != null && configId != "" && configId != undefined) {
 		model.configId = configId;
 		$.commAjax({
@@ -41,6 +51,7 @@ window.loc_onload = function() {
 				var m = (time.getMonth()+1<10 ? '0'+(time.getMonth()+1):time.getMonth()+1);//月
 				var d = (time.getDate()+1<10 ? '0' +(time.getDate()):time.getDate());//日	
 				$("#invalidTime").val(y+"-"+m+"-"+d);
+				$("#priKey").val(data.data.allUserMsg.priKey);
 			}
 		})
 	}else{
@@ -49,6 +60,7 @@ window.loc_onload = function() {
 		model.sourceName = "";
 		model.sourceEnName = "";
 		model.orgId = "";
+		model.priKey = "";
 	}
 	new Vue({
 		el : '#dataD',

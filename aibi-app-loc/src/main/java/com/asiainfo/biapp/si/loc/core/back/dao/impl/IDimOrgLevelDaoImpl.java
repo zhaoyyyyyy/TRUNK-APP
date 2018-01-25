@@ -14,6 +14,7 @@ import org.springframework.stereotype.Repository;
 
 import com.asiainfo.biapp.si.loc.base.dao.BaseDaoImpl;
 import com.asiainfo.biapp.si.loc.base.page.Page;
+import com.asiainfo.biapp.si.loc.base.utils.StringUtil;
 import com.asiainfo.biapp.si.loc.core.back.dao.IDimOrgLevelDao;
 import com.asiainfo.biapp.si.loc.core.back.entity.DimOrgLevel;
 import com.asiainfo.biapp.si.loc.core.back.vo.DimOrgLevelVo;
@@ -58,8 +59,19 @@ public class IDimOrgLevelDaoImpl extends BaseDaoImpl<DimOrgLevel, String> implem
         Map<String, Object> params = new HashMap<>();
         StringBuffer hql = new StringBuffer("from DimOrgLevel d where 1=1 ");
         if (null!=dimOrgLevelVo.getDimOrgLevelId()) {
-            hql.append("and d.dimOrgLevelId = :dimOrgLevelId ");
-            params.put("dimOrgLevelId",dimOrgLevelVo.getDimOrgLevelId());
+            if(StringUtil.isNotBlank(dimOrgLevelVo.getDimOrgLevelId().getPriKey())&&StringUtil.isNotBlank(dimOrgLevelVo.getDimOrgLevelId().getOrgColumnName())){
+                hql.append("and d.dimOrgLevelId = :dimOrgLevelId ");
+                params.put("dimOrgLevelId",dimOrgLevelVo.getDimOrgLevelId());
+            }else{
+                if(StringUtil.isNotBlank(dimOrgLevelVo.getDimOrgLevelId().getPriKey())){
+                    hql.append("and d.dimOrgLevelId.priKey = :priKey ");
+                    params.put("priKey",dimOrgLevelVo.getDimOrgLevelId().getPriKey());
+                }
+                if(StringUtil.isNotBlank(dimOrgLevelVo.getDimOrgLevelId().getOrgColumnName())){
+                    hql.append("and d.dimOrgLevelId.orgColumnName = :orgColumnName ");
+                    params.put("orgColumnName",dimOrgLevelVo.getDimOrgLevelId().getOrgColumnName());
+                }
+            }
         }
         if (null!=dimOrgLevelVo.getLevelId()) {
             hql.append("and d.levelId = :levelId ");

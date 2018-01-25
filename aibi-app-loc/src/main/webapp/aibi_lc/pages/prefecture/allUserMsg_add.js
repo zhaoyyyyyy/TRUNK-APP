@@ -16,6 +16,7 @@ var model = {
 window.loc_onload = function() {
 	var priKey = $.getUrlParam("priKey");
 	var wd = frameElement.lhgDG;
+	var number = "1:1;2:2;3:3;4:4;5:5";
 	if (priKey != null && priKey != "" && priKey != undefined) {
 		model.priKey = priKey;
 		$.commAjax({
@@ -39,6 +40,8 @@ window.loc_onload = function() {
 				model.otherColumn = data.data.otherColumn;
 			}
 		})
+	}else{
+		priKey = "selectNull";
 	}
 
 	new Vue({
@@ -56,15 +59,30 @@ window.loc_onload = function() {
 
 	wd.addBtn("ok", "保存", function() {
 		if ($('#saveDataForm').validateForm()) {
-			var ids = $("#jsonmap").jqGrid('getDataIDs');
+			var ids = $("#myjqgrid").jqGrid('getDataIDs');
 			for (var i = 0; i < ids.length; i++) {
-				$("#jsonmap").jqGrid("saveRow", ids[i]);
-				var rowData = JSON.stringify($("#jsonmap").jqGrid("getRowData",
+				$("#myjqgrid").jqGrid("saveRow", ids[i]);
+				var rowData = JSON.stringify($("#myjqgrid").jqGrid("getRowData",
 						ids[i]));
 				if (rowData.indexOf('input') > 0) {
 					return false;
 				}
 			}
+			//拼接批量信息
+			var list = $("#myjqgrid").jqGrid("getRowData");
+			var dimOrgLevelStr = "";
+			for(var k = 0; k<list.length; k++){
+				if(!$.isNull(list[k]["dimOrgLevelId.orgColumnName"])){
+					dimOrgLevelStr += JSON.stringify(list[k]); 
+					var l = k+1;
+					if(l!=list.length){
+						dimOrgLevelStr += ";";
+					}
+				}else{
+					break;
+				}
+			}
+			$("#dimOrgLevelStr").val(dimOrgLevelStr);
 			var url_ = "";
 			var msss = "";
 			if (model.priKey != null && model.priKey != undefined
@@ -101,13 +119,13 @@ window.loc_onload = function() {
 
 	$("#myjqgrid").jqGrid({
 		url : $.ctx + '/api/back/dimOrgLevel/queryPage',
-		postData : {"priKey":priKey},
+		postData : {"dimOrgLevelId.priKey":priKey},
 		editurl : "clientArray",
 		datatype : "json",
 		colNames : [ '组织字段名称', '层级', '排序' ],
 		colModel : [ {
-			name : 'orgColumnName',
-			index : 'orgColumnName',
+			name : 'dimOrgLevelId.orgColumnName',
+			index : 'dimOrgLevelId.orgColumnName',
 			width : 60,
 			sortable : false,
 			editable: true,
@@ -121,6 +139,11 @@ window.loc_onload = function() {
 			editable: true,
 			frozen : true,
 			align : "center",
+			edittype: 'select',
+	        formatter: 'select',
+			editoptions: {
+	            value: number
+	        },
 		}, {
 			name : 'sortNum',
 			index : 'sortNum',
@@ -129,6 +152,11 @@ window.loc_onload = function() {
 			editable: true,
 			frozen : true,
 			align : "center",
+			edittype: 'select',
+	        formatter: 'select',
+			editoptions: {
+	            value: number
+	        },
 		} ],
 		cellEdit : true,
 		jsonReader: {
@@ -136,9 +164,9 @@ window.loc_onload = function() {
 	        id: "0"
 	    },
 		afterGridLoad : function() {
-			if ($.isNull(priKey)) {
+			if (priKey == "selectNull") {
 				var dataRow = {
-					"orgColumnName" : "",
+					"dimOrgLevelId.orgColumnName" : "",
 					"levelId" : "",
 					"sortNum" : "",
 				}
@@ -146,6 +174,11 @@ window.loc_onload = function() {
 					$("#myjqgrid").jqGrid("addRowData", i, dataRow, "last");
 					$("#myjqgrid").jqGrid("editRow", i);
 				}
+			}else{
+				var ids = $("#myjqgrid").jqGrid('getDataIDs');
+			    for (var i = 0; i < ids.length; i++) {
+			    	$("#myjqgrid").jqGrid("editRow", ids[i]);
+			    }
 			}
 		}
 	});

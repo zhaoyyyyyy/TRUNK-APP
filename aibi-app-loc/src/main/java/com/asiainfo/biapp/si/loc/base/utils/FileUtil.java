@@ -82,7 +82,7 @@ public class FileUtil {
     public static String getMpmStoreFilePath() {
         String mpmPath = "";
         try {
-            mpmPath = getProperties("SYS_COMMON_UPLOAD_PATH");
+            mpmPath = getProperties("LOC_CONFIG_SYS_TEMP_PATH");
         } catch (BaseException e) {
             LogUtil.error(e);
         }

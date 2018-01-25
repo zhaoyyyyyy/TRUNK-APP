@@ -62,6 +62,7 @@ public class PreConfigInfoServiceImpl extends BaseServiceImpl<PreConfigInfo, Str
     
     @Autowired
     private IMdaSysTableService iMdaSysTableService;
+    
 
     @Override
     protected BaseDao<PreConfigInfo, String> getBaseDao() {
