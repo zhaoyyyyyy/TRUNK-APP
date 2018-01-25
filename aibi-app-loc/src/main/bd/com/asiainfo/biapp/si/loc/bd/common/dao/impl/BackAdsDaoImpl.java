@@ -17,8 +17,8 @@ import com.asiainfo.biapp.si.loc.base.utils.LogUtil;
 import com.asiainfo.biapp.si.loc.bd.common.dao.IBackSqlDao;
 
 @Repository("backAdsDaoImpl")
-public class BackAdsDapImpl  extends BaseBackDaoImpl implements IBackSqlDao{
-	private Logger log = Logger.getLogger(BackAdsDapImpl.class);
+public class BackAdsDaoImpl  extends BaseBackDaoImpl implements IBackSqlDao{
+	private Logger log = Logger.getLogger(BackAdsDaoImpl.class);
 	@Override
 	public List<Map<String, String>> queryTableLikeTableName(String tableName) throws SqlRunException {
 		// TODO Auto-generated method stub
@@ -91,7 +91,17 @@ public class BackAdsDapImpl  extends BaseBackDaoImpl implements IBackSqlDao{
 	@Override
 	public List<Map<String, String>> queryForPage(String selectSql, Integer pageStart, Integer pageSize)
 			throws SqlRunException {
-		// TODO Auto-generated method stub
+        pageStart = pageStart == null? 0 : pageStart;
+        String limitSql = pageSize == null ? " ": " limit "+ pageStart+","+pageStart+pageSize;
+        try{
+            Connection connection = this.getBackConnection();
+            String sql = selectSql+limitSql;
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            ResultSet resultSet =  preparedStatement.executeQuery();
+            return resultSetToList(resultSet);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
 		return null;
 	}
 
@@ -126,8 +136,8 @@ public class BackAdsDapImpl  extends BaseBackDaoImpl implements IBackSqlDao{
 
 	@Override
 	public boolean dropTable(String tableName) throws SqlRunException {
-		// TODO Auto-generated method stub
-		return false;
+		String sql = "drop table " + tableName;
+		return this.executeResBoolean(sql);
 	}
 
 	/**
