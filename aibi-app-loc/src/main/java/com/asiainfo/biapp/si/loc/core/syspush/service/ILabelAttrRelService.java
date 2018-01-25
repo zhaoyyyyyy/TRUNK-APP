@@ -58,11 +58,11 @@ public interface ILabelAttrRelService extends BaseService<LabelAttrRel, String>{
     /**
      * 通过主键得到一个实体 Description:
      *
-     * @param recordId,  labelId, attrCol, modifyTime
+     * @param priKey
      * @return
      * @throws BaseException
      */
-    public LabelAttrRel selectLabelAttrRelById(String recordId,String labelId, String attrCol, Date modifyTime) throws BaseException;
+    public LabelAttrRel selectLabelAttrRelById(String priKey) throws BaseException;
     
     /**
      * 新增或修改一个实体 Description:
@@ -83,8 +83,8 @@ public interface ILabelAttrRelService extends BaseService<LabelAttrRel, String>{
     /**
      * 通过主键删除一个实体 Description:
      *
-     * @param recordId,  labelId, attrCol, modifyTime
+     * @param priKey
      * @throws BaseException
      */
-    public void deleteLabelAttrRelById(String recordId,String labelId, String attrCol, Date modifyTime) throws BaseException;
+    public void deleteLabelAttrRelById(String priKey) throws BaseException;
 }

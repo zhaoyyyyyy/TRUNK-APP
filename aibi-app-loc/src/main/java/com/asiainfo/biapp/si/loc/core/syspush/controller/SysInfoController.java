@@ -62,7 +62,7 @@ public class SysInfoController extends BaseController<SysInfo>{
     
     @ApiOperation(value = "分页查询推送信息")
     @RequestMapping(value = "/sysInfo/queryPage", method = RequestMethod.POST)
-    public Page<SysInfo> list(@ModelAttribute Page<SysInfo> page,@ModelAttribute SysInfoVo sysInfoVo) throws BaseException{
+    public Page<SysInfo> list(@ModelAttribute Page<SysInfo> page,@ModelAttribute SysInfoVo sysInfoVo) {
         Page<SysInfo> sysInfoPage = new Page<>();
         try {
             sysInfoPage = iSysInfoService.selectSysInfoPageList(page, sysInfoVo);
@@ -74,7 +74,7 @@ public class SysInfoController extends BaseController<SysInfo>{
     
     @ApiOperation(value = "不分页查询推送信息列表")
     @RequestMapping(value = "/sysInfo/queryList", method = RequestMethod.POST)
-    public WebResult<List<SysInfo>> findList(@ModelAttribute SysInfoVo sysInfoVo) throws BaseException{
+    public WebResult<List<SysInfo>> findList(@ModelAttribute SysInfoVo sysInfoVo) {
         WebResult<List<SysInfo>> webResult = new WebResult<>();
         List<SysInfo> sysInfoList = new ArrayList<>();
         try {
@@ -88,7 +88,7 @@ public class SysInfoController extends BaseController<SysInfo>{
     @ApiOperation(value = "根据ID查询推送信息")
     @ApiImplicitParam(name = "sysId", value = "ID", required = true, paramType = "query", dataType = "string")
     @RequestMapping(value = "/sysInfo/get",method = RequestMethod.POST)
-    public WebResult<SysInfo> findById(String sysId) throws BaseException{
+    public WebResult<SysInfo> findById(String sysId) {
         WebResult<SysInfo> webResult = new WebResult<>();
         SysInfo sysInfo = new SysInfo();
         try {
@@ -131,7 +131,7 @@ public class SysInfoController extends BaseController<SysInfo>{
         @ApiImplicitParam(name = "tableNamePre", value = "推送清单表前缀", required = false, paramType = "query", dataType = "string"),
         @ApiImplicitParam(name = "customTaskTable", value = "客户群调度信息表", required = false, paramType = "query", dataType = "string")})
     @RequestMapping(value = "/sysInfo/save", method = RequestMethod.POST)
-    public WebResult<String> save(@ApiIgnore SysInfo sysInfo) throws BaseException{
+    public WebResult<String> save(@ApiIgnore SysInfo sysInfo) {
             WebResult<String> webResult = new WebResult<>();
             try {
                 iSysInfoService.addSysInfo(sysInfo);
@@ -173,23 +173,23 @@ public class SysInfoController extends BaseController<SysInfo>{
         @ApiImplicitParam(name = "tableNamePre", value = "推送清单表前缀", required = false, paramType = "query", dataType = "string"),
         @ApiImplicitParam(name = "customTaskTable", value = "客户群调度信息表", required = false, paramType = "query", dataType = "string") })
     @RequestMapping(value = "/sysInfo/update", method = RequestMethod.POST)
-    public WebResult<String> edit(@ApiIgnore SysInfo sysInfo) throws BaseException{
+    public WebResult<String> edit(@ApiIgnore SysInfo sysInfo) {
         WebResult<String> webResult = new WebResult<>();
         SysInfo oldSys = new SysInfo();
         try {
             oldSys = iSysInfoService.selectSysInfoById(sysInfo.getSysId());
+            oldSys = fromToBean(sysInfo, oldSys);
+            iSysInfoService.modifySysInfo(oldSys);
         } catch (BaseException e) {
             return webResult.fail(e);
         }
-        oldSys = fromToBean(sysInfo, oldSys);
-        iSysInfoService.update(oldSys);
         return webResult.success("修改推送信息成功", SUCCESS);
     }
     
     @ApiOperation(value = "删除推送信息")
     @ApiImplicitParam(name = "sysId", value = "ID", required = true, paramType = "query", dataType = "string")
     @RequestMapping(value = "/sysInfo/delete", method = RequestMethod.POST)
-    public WebResult<String> del(String sysId) throws BaseException{
+    public WebResult<String> del(String sysId) {
         WebResult<String> webResult = new WebResult<>();
         try {
             iSysInfoService.deleteSysInfoById(sysId);

@@ -62,7 +62,7 @@ public class TemplateAttrRelController extends BaseController<TemplateAttrRel>{
     
     @ApiOperation(value = "分页查询模板与带出属性关系")
     @RequestMapping(value = "/templateAttrRel/queryPage", method = RequestMethod.POST)
-    public Page<TemplateAttrRel> list(@ModelAttribute Page<TemplateAttrRel> page,@ModelAttribute TemplateAttrRelVo templateAttrRelVo) throws BaseException{
+    public Page<TemplateAttrRel> list(@ModelAttribute Page<TemplateAttrRel> page,@ModelAttribute TemplateAttrRelVo templateAttrRelVo) {
         Page<TemplateAttrRel> templateAttrRelPage = new Page<>();
         try {
             templateAttrRelPage = iTemplateAttrRelService.selectTemplateAttrRelPageList(page, templateAttrRelVo);
@@ -74,7 +74,7 @@ public class TemplateAttrRelController extends BaseController<TemplateAttrRel>{
     
     @ApiOperation(value = "不分页查询模板与带出属性关系列表")
     @RequestMapping(value = "/templateAttrRel/queryList", method = RequestMethod.POST)
-    public WebResult<List<TemplateAttrRel>> findList(@ModelAttribute TemplateAttrRelVo templateAttrRelVo) throws BaseException{
+    public WebResult<List<TemplateAttrRel>> findList(@ModelAttribute TemplateAttrRelVo templateAttrRelVo) {
         WebResult<List<TemplateAttrRel>> webResult = new WebResult<>();
         List<TemplateAttrRel> templateAttrRelList = new ArrayList<>();
         try {
@@ -91,7 +91,7 @@ public class TemplateAttrRelController extends BaseController<TemplateAttrRel>{
         @ApiImplicitParam(name = "labelId", value = "标签ID", required = true, paramType = "query", dataType = "string"),
         @ApiImplicitParam(name = "labelColumnId", value = "标签列名", required = true, paramType = "query", dataType = "string") })
     @RequestMapping(value = "/templateAttrRel/get",method = RequestMethod.POST)
-    public WebResult<TemplateAttrRel> findById(String templateId, String labelId, String labelColumnId) throws BaseException{
+    public WebResult<TemplateAttrRel> findById(String templateId, String labelId, String labelColumnId) {
         WebResult<TemplateAttrRel> webResult = new WebResult<>();
         TemplateAttrRel templateAttrRel = new TemplateAttrRel();
         try {
@@ -110,7 +110,7 @@ public class TemplateAttrRelController extends BaseController<TemplateAttrRel>{
         @ApiImplicitParam(name = "sortNum", value = "排序", required = false, paramType = "query", dataType = "int"),
         @ApiImplicitParam(name = "status", value = "状态", required = false, paramType = "query", dataType = "int") })    
     @RequestMapping(value = "/templateAttrRel/save", method = RequestMethod.POST)
-    public WebResult<String> save(@ApiIgnore TemplateAttrRel templateAttrRel) throws BaseException{
+    public WebResult<String> save(@ApiIgnore TemplateAttrRel templateAttrRel) {
             WebResult<String> webResult = new WebResult<>();
             try {
                 iTemplateAttrRelService.addTemplateAttrRel(templateAttrRel);
@@ -129,16 +129,16 @@ public class TemplateAttrRelController extends BaseController<TemplateAttrRel>{
         @ApiImplicitParam(name = "sortNum", value = "排序", required = false, paramType = "query", dataType = "int"),
         @ApiImplicitParam(name = "status", value = "状态", required = false, paramType = "query", dataType = "int") })
     @RequestMapping(value = "/templateAttrRel/update", method = RequestMethod.POST)
-    public WebResult<String> edit(@ApiIgnore TemplateAttrRel templateAttrRel) throws BaseException{
+    public WebResult<String> edit(@ApiIgnore TemplateAttrRel templateAttrRel) {
         WebResult<String> webResult = new WebResult<>();
         TemplateAttrRel oldTem = new TemplateAttrRel();
         try {
             oldTem = iTemplateAttrRelService.selectTemplateAttrRelById(templateAttrRel.getTemplateId(),templateAttrRel.getLabelId(),templateAttrRel.getLabelColumnId());
+            oldTem = fromToBean(templateAttrRel, oldTem);
+            iTemplateAttrRelService.modifyTemplateAttrRel(oldTem);
         } catch (BaseException e) {
             return webResult.fail(e);
         }
-        oldTem = fromToBean(templateAttrRel, oldTem);
-        iTemplateAttrRelService.update(oldTem);
         return webResult.success("修改模板与带出属性关系成功", SUCCESS);
     }
     
@@ -148,7 +148,7 @@ public class TemplateAttrRelController extends BaseController<TemplateAttrRel>{
         @ApiImplicitParam(name = "labelId", value = "标签ID", required = true, paramType = "query", dataType = "string"),
         @ApiImplicitParam(name = "labelColumnId", value = "标签列名", required = true, paramType = "query", dataType = "string") })
     @RequestMapping(value = "/templateAttrRel/delete", method = RequestMethod.POST)
-    public WebResult<String> del(String templateId, String labelId, String labelColumnId) throws BaseException{
+    public WebResult<String> del(String templateId, String labelId, String labelColumnId) {
         WebResult<String> webResult = new WebResult<>();
         try {
             iTemplateAttrRelService.deleteTemplateAttrRelById(templateId,labelId,labelColumnId);

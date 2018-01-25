@@ -6,7 +6,6 @@
 
 package com.asiainfo.biapp.si.loc.core.syspush.service.impl;
 
-import java.util.Date;
 import java.util.List;
 
 import javax.transaction.Transactional;
@@ -21,13 +20,9 @@ import com.asiainfo.biapp.si.loc.base.page.Page;
 import com.asiainfo.biapp.si.loc.base.service.impl.BaseServiceImpl;
 import com.asiainfo.biapp.si.loc.base.utils.StringUtil;
 import com.asiainfo.biapp.si.loc.core.syspush.dao.ILabelAttrRelDao;
-import com.asiainfo.biapp.si.loc.core.syspush.dao.ISysInfoDao;
 import com.asiainfo.biapp.si.loc.core.syspush.entity.LabelAttrRel;
-import com.asiainfo.biapp.si.loc.core.syspush.entity.SysInfo;
 import com.asiainfo.biapp.si.loc.core.syspush.service.ILabelAttrRelService;
-import com.asiainfo.biapp.si.loc.core.syspush.service.ISysInfoService;
 import com.asiainfo.biapp.si.loc.core.syspush.vo.LabelAttrRelVo;
-import com.asiainfo.biapp.si.loc.core.syspush.vo.SysInfoVo;
 
 /**
  * Title : LabelAttrRelServiceImpl
@@ -69,20 +64,11 @@ public class LabelAttrRelServiceImpl extends BaseServiceImpl<LabelAttrRel, Strin
         return iLabelAttrRelDao.selectLabelAttrRelList(labelAttrRelVo);
     }
 
-    public LabelAttrRel selectLabelAttrRelById(String recordId,String labelId, String attrCol, Date modifyTime) throws BaseException {
-        if(StringUtil.isBlank(recordId)){
-            throw new ParamRequiredException("推送设计记录ID为空");
+    public LabelAttrRel selectLabelAttrRelById(String priKey) throws BaseException {
+        if(StringUtil.isBlank(priKey)){
+            throw new ParamRequiredException("主键为空");
         }
-        if(StringUtil.isBlank(labelId)){
-            throw new ParamRequiredException("客户群标签ID为空");
-        }
-        if(StringUtil.isBlank(attrCol)){
-            throw new ParamRequiredException("属性名为空");
-        }
-        if(null == modifyTime){
-            throw new ParamRequiredException("修改时间错误");
-        }
-        return super.get(recordId);
+        return super.get(priKey);
     }
 
     public void addLabelAttrRel(LabelAttrRel labelAttrRel) throws BaseException {
@@ -93,19 +79,10 @@ public class LabelAttrRelServiceImpl extends BaseServiceImpl<LabelAttrRel, Strin
         super.saveOrUpdate(labelAttrRel);
     }
 
-    public void deleteLabelAttrRelById(String recordId,String labelId, String attrCol, Date modifyTime) throws BaseException {
-        if(StringUtil.isBlank(recordId)){
-            throw new ParamRequiredException("推送设计记录ID为空");
+    public void deleteLabelAttrRelById(String priKey) throws BaseException {
+        if(StringUtil.isBlank(priKey)){
+            throw new ParamRequiredException("主键为空");
         }
-        if(StringUtil.isBlank(labelId)){
-            throw new ParamRequiredException("客户群标签ID为空");
-        }
-        if(StringUtil.isBlank(attrCol)){
-            throw new ParamRequiredException("属性名为空");
-        }
-        if(null == modifyTime){
-            throw new ParamRequiredException("修改时间错误");
-        }
-        super.delete(recordId);
+        super.delete(priKey);
     }
 }

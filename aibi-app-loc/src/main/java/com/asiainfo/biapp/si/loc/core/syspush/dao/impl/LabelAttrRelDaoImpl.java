@@ -71,6 +71,10 @@ public class LabelAttrRelDaoImpl extends BaseDaoImpl<LabelAttrRel, String> imple
         Map<String, Object> reMap = new HashMap<>();
         Map<String, Object> params = new HashMap<>();
         StringBuffer hql = new StringBuffer("from LabelAttrRel l where 1=1 ");
+        if(StringUtil.isNoneBlank(labelAttrRelVo.getPriKey())){
+            hql.append("and l.priKey = :priKey ");
+            params.put("priKey", labelAttrRelVo.getPriKey());
+        }
         if(StringUtil.isNoneBlank(labelAttrRelVo.getRecordId())){
             hql.append("and l.recordId = :recordId ");
             params.put("recordId", labelAttrRelVo.getRecordId());

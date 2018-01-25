@@ -45,14 +45,21 @@ import io.swagger.annotations.ApiParam;
 public class LabelAttrRel extends BaseEntity{
 
     private static final long serialVersionUID = 1L;
+
+    /**
+     * 主键
+     */
+    @Id
+    @Column(name = "PRI_KEY")
+    @GenericGenerator(name = "idGenerator", strategy = "uuid")
+    @GeneratedValue(generator = "idGenerator")
+    @ApiParam(value = "主键")
+    private String priKey;
     
     /**
      * 推送设置记录ID
      */
-    @Id
     @Column(name = "RECORD_ID")
-    @GenericGenerator(name = "idGenerator", strategy = "uuid")
-    @GeneratedValue(generator = "idGenerator")
     @ApiParam(value = "推送设置记录ID")
     private String recordId;
     
@@ -162,6 +169,17 @@ public class LabelAttrRel extends BaseEntity{
     private Integer sortNum;
 
     
+    
+    public String getPriKey() {
+        return priKey;
+    }
+
+    
+    public void setPriKey(String priKey) {
+        this.priKey = priKey;
+    }
+
+
     public String getRecordId() {
         return recordId;
     }

@@ -63,7 +63,7 @@ public class LabelPushCycleController extends BaseController<LabelPushCycle>{
     
     @ApiOperation(value = "分页查询推送设置信息")
     @RequestMapping(value = "/labelPushCycle/queryPage", method = RequestMethod.POST)
-    public Page<LabelPushCycle> list(@ModelAttribute Page<LabelPushCycle> page,@ModelAttribute LabelPushCycleVo labelPushCycleVo) throws BaseException{
+    public Page<LabelPushCycle> list(@ModelAttribute Page<LabelPushCycle> page,@ModelAttribute LabelPushCycleVo labelPushCycleVo) {
         Page<LabelPushCycle> labelPushCyclePage = new Page<>();
         try {
             labelPushCyclePage = iLabelPushCycleService.selectLabelPushCyclePageList(page, labelPushCycleVo);
@@ -75,7 +75,7 @@ public class LabelPushCycleController extends BaseController<LabelPushCycle>{
     
     @ApiOperation(value = "不分页查询推送设置信息列表")
     @RequestMapping(value = "/labelPushCycle/queryList", method = RequestMethod.POST)
-    public WebResult<List<LabelPushCycle>> findList(@ModelAttribute LabelPushCycleVo labelPushCycleVo) throws BaseException{
+    public WebResult<List<LabelPushCycle>> findList(@ModelAttribute LabelPushCycleVo labelPushCycleVo) {
         WebResult<List<LabelPushCycle>> webResult = new WebResult<>();
         List<LabelPushCycle> labelPushCycleList = new ArrayList<>();
         try {
@@ -89,7 +89,7 @@ public class LabelPushCycleController extends BaseController<LabelPushCycle>{
     @ApiOperation(value = "根据ID查询推送设置信息")
     @ApiImplicitParam(name = "recordId", value = "ID", required = true, paramType = "query", dataType = "string")
     @RequestMapping(value = "/labelPushCycle/get",method = RequestMethod.POST)
-    public WebResult<LabelPushCycle> findById(String recordId) throws BaseException{
+    public WebResult<LabelPushCycle> findById(String recordId) {
         WebResult<LabelPushCycle> webResult = new WebResult<>();
         LabelPushCycle labelPushCycle = new LabelPushCycle();
         try {
@@ -110,7 +110,7 @@ public class LabelPushCycleController extends BaseController<LabelPushCycle>{
         @ApiImplicitParam(name = "pushUserIds", value = "推送目标用户", required = false, paramType = "query", dataType = "string"),
         @ApiImplicitParam(name = "status", value = "状态", required = false, paramType = "query", dataType = "int") })
     @RequestMapping(value = "/labelPushCycle/save", method = RequestMethod.POST)
-    public WebResult<String> save(@ApiIgnore LabelPushCycle labelPushCycle) throws BaseException{
+    public WebResult<String> save(@ApiIgnore LabelPushCycle labelPushCycle) {
             WebResult<String> webResult = new WebResult<>();
             labelPushCycle.setModifyTime(new Date());
             try {
@@ -131,24 +131,24 @@ public class LabelPushCycleController extends BaseController<LabelPushCycle>{
         @ApiImplicitParam(name = "pushUserIds", value = "推送目标用户", required = false, paramType = "query", dataType = "string"),
         @ApiImplicitParam(name = "status", value = "状态", required = false, paramType = "query", dataType = "int") })
     @RequestMapping(value = "/labelPushCycle/update", method = RequestMethod.POST)
-    public WebResult<String> edit(@ApiIgnore LabelPushCycle labelPushCycle) throws BaseException{
+    public WebResult<String> edit(@ApiIgnore LabelPushCycle labelPushCycle){
         WebResult<String> webResult = new WebResult<>();
         labelPushCycle.setModifyTime(new Date());
         LabelPushCycle oldLab = new LabelPushCycle();
         try {
             oldLab = iLabelPushCycleService.selectLabelPushCycleById(labelPushCycle.getRecordId());
+            oldLab = fromToBean(labelPushCycle, oldLab);
+            iLabelPushCycleService.modifyLabelPushCycle(oldLab);
         } catch (BaseException e) {
             return webResult.fail(e);
         }
-        oldLab = fromToBean(labelPushCycle, oldLab);
-        iLabelPushCycleService.update(oldLab);
         return webResult.success("修改推送设置信息成功", SUCCESS);
     }
     
     @ApiOperation(value = "删除推送设置信息")
     @ApiImplicitParam(name = "recordId", value = "ID", required = true, paramType = "query", dataType = "string")
     @RequestMapping(value = "/labelPushCycle/delete", method = RequestMethod.POST)
-    public WebResult<String> del(String recordId) throws BaseException{
+    public WebResult<String> del(String recordId) {
         WebResult<String> webResult = new WebResult<>();
         try {
             iLabelPushCycleService.deleteLabelPushCycleById(recordId);

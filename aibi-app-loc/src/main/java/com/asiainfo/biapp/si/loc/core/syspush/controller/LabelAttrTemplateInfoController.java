@@ -63,7 +63,7 @@ public class LabelAttrTemplateInfoController extends BaseController<LabelAttrTem
     
     @ApiOperation(value = "分页查询客户群标签属性模板信息")
     @RequestMapping(value = "/labelAttrTemplateInfo/queryPage", method = RequestMethod.POST)
-    public Page<LabelAttrTemplateInfo> list(@ModelAttribute Page<LabelAttrTemplateInfo> page,@ModelAttribute LabelAttrTemplateInfoVo labelAttrTemplateInfoVo) throws BaseException{
+    public Page<LabelAttrTemplateInfo> list(@ModelAttribute Page<LabelAttrTemplateInfo> page,@ModelAttribute LabelAttrTemplateInfoVo labelAttrTemplateInfoVo) {
         Page<LabelAttrTemplateInfo> labelAttrTemplateInfoPage = new Page<>();
         try {
             labelAttrTemplateInfoPage = iLabelAttrTemplateInfoService.selectLabelAttrTemplateInfoPageList(page, labelAttrTemplateInfoVo);
@@ -75,7 +75,7 @@ public class LabelAttrTemplateInfoController extends BaseController<LabelAttrTem
     
     @ApiOperation(value = "不分页查询客户群标签属性模板信息")
     @RequestMapping(value = "/labelAttrTemplateInfo/queryList", method = RequestMethod.POST)
-    public WebResult<List<LabelAttrTemplateInfo>> findList(@ModelAttribute LabelAttrTemplateInfoVo labelAttrTemplateInfoVo) throws BaseException{
+    public WebResult<List<LabelAttrTemplateInfo>> findList(@ModelAttribute LabelAttrTemplateInfoVo labelAttrTemplateInfoVo) {
         WebResult<List<LabelAttrTemplateInfo>> webResult = new WebResult<>();
         List<LabelAttrTemplateInfo> labelAttrTemplateInfoList = new ArrayList<>();
         try {
@@ -89,7 +89,7 @@ public class LabelAttrTemplateInfoController extends BaseController<LabelAttrTem
     @ApiOperation(value = "根据ID查询客户群标签属性模板信息")
         @ApiImplicitParam(name = "templateId", value = "模板编码", required = true, paramType = "query", dataType = "string")
     @RequestMapping(value = "/labelAttrTemplateInfo/get",method = RequestMethod.POST)
-    public WebResult<LabelAttrTemplateInfo> findById(String templateId) throws BaseException{
+    public WebResult<LabelAttrTemplateInfo> findById(String templateId) {
         WebResult<LabelAttrTemplateInfo> webResult = new WebResult<>();
         LabelAttrTemplateInfo labelAttrTemplateInfo = new LabelAttrTemplateInfo();
         try {
@@ -107,7 +107,7 @@ public class LabelAttrTemplateInfoController extends BaseController<LabelAttrTem
         @ApiImplicitParam(name = "configId", value = "专区ID", required = false, paramType = "query", dataType = "int"),
         @ApiImplicitParam(name = "createUserId", value = "创建用户", required = false, paramType = "query", dataType = "string"),
         @ApiImplicitParam(name = "status", value = "状态", required = false, paramType = "query", dataType = "int")})    @RequestMapping(value = "/labelAttrTemplateInfo/save", method = RequestMethod.POST)
-    public WebResult<String> save(@ApiIgnore LabelAttrTemplateInfo labelAttrTemplateInfo) throws BaseException{
+    public WebResult<String> save(@ApiIgnore LabelAttrTemplateInfo labelAttrTemplateInfo) {
             WebResult<String> webResult = new WebResult<>();
             labelAttrTemplateInfo.setCreateTime(new Date());
             try {
@@ -126,23 +126,23 @@ public class LabelAttrTemplateInfoController extends BaseController<LabelAttrTem
         @ApiImplicitParam(name = "createUserId", value = "创建用户", required = false, paramType = "query", dataType = "string"),
         @ApiImplicitParam(name = "status", value = "状态", required = false, paramType = "query", dataType = "int")})
     @RequestMapping(value = "/labelAttrTemplateInfo/update", method = RequestMethod.POST)
-    public WebResult<String> edit(@ApiIgnore LabelAttrTemplateInfo labelAttrTemplateInfo) throws BaseException{
+    public WebResult<String> edit(@ApiIgnore LabelAttrTemplateInfo labelAttrTemplateInfo) {
         WebResult<String> webResult = new WebResult<>();
         LabelAttrTemplateInfo oldLab = new LabelAttrTemplateInfo();
         try {
             oldLab = iLabelAttrTemplateInfoService.selectLabelAttrTemplateInfoById(labelAttrTemplateInfo.getTemplateId());
+            oldLab = fromToBean(labelAttrTemplateInfo, oldLab);
+            iLabelAttrTemplateInfoService.modifyLabelAttrTemplateInfo(oldLab);
         } catch (BaseException e) {
             return webResult.fail(e);
         }
-        oldLab = fromToBean(labelAttrTemplateInfo, oldLab);
-        iLabelAttrTemplateInfoService.update(oldLab);
         return webResult.success("修改客户群标签属性模板信息成功", SUCCESS);
     }
     
     @ApiOperation(value = "删除客户群标签属性模板信息")
         @ApiImplicitParam(name = "templateId", value = "模板编码", required = true, paramType = "query", dataType = "string")
     @RequestMapping(value = "/labelAttrTemplateInfo/delete", method = RequestMethod.POST)
-    public WebResult<String> del(String templateId) throws BaseException{
+    public WebResult<String> del(String templateId) {
         WebResult<String> webResult = new WebResult<>();
         try {
             iLabelAttrTemplateInfoService.deleteLabelAttrTemplateInfoById(templateId);

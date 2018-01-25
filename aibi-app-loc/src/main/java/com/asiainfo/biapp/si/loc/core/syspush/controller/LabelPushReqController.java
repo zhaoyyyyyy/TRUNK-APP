@@ -62,7 +62,7 @@ public class LabelPushReqController extends BaseController<LabelPushReq>{
     
     @ApiOperation(value = "分页查询推送请求信息")
     @RequestMapping(value = "/labelPushReq/queryPage", method = RequestMethod.POST)
-    public Page<LabelPushReq> list(@ModelAttribute Page<LabelPushReq> page,@ModelAttribute LabelPushReqVo labelPushReqVo) throws BaseException{
+    public Page<LabelPushReq> list(@ModelAttribute Page<LabelPushReq> page,@ModelAttribute LabelPushReqVo labelPushReqVo) {
         Page<LabelPushReq> labelPushReqPage = new Page<>();
         try {
             labelPushReqPage = iLabelPushReqService.selectLabelPushReqPageList(page, labelPushReqVo);
@@ -74,7 +74,7 @@ public class LabelPushReqController extends BaseController<LabelPushReq>{
     
     @ApiOperation(value = "不分页查询推送请求信息列表")
     @RequestMapping(value = "/labelPushReq/queryList", method = RequestMethod.POST)
-    public WebResult<List<LabelPushReq>> findList(@ModelAttribute LabelPushReqVo labelPushReqVo) throws BaseException{
+    public WebResult<List<LabelPushReq>> findList(@ModelAttribute LabelPushReqVo labelPushReqVo) {
         WebResult<List<LabelPushReq>> webResult = new WebResult<>();
         List<LabelPushReq> labelPushReqList = new ArrayList<>();
         try {
@@ -88,7 +88,7 @@ public class LabelPushReqController extends BaseController<LabelPushReq>{
     @ApiOperation(value = "根据ID查询推送请求信息")
     @ApiImplicitParam(name = "reqId", value = "ID", required = true, paramType = "query", dataType = "string")
     @RequestMapping(value = "/labelPushReq/get",method = RequestMethod.POST)
-    public WebResult<LabelPushReq> findById(String reqId) throws BaseException{
+    public WebResult<LabelPushReq> findById(String reqId) {
         WebResult<LabelPushReq> webResult = new WebResult<>();
         LabelPushReq labelPushReq = new LabelPushReq();
         try {
@@ -111,7 +111,7 @@ public class LabelPushReqController extends BaseController<LabelPushReq>{
         @ApiImplicitParam(name = "listTableName", value = "清单表名", required = false, paramType = "query", dataType = "string"),
         @ApiImplicitParam(name = "exceInfo", value = "失败异常信息", required = false, paramType = "query", dataType = "string")})
     @RequestMapping(value = "/labelPushReq/save", method = RequestMethod.POST)
-    public WebResult<String> save(@ApiIgnore LabelPushReq labelPushReq) throws BaseException{
+    public WebResult<String> save(@ApiIgnore LabelPushReq labelPushReq) {
             WebResult<String> webResult = new WebResult<>();
             try {
                 iLabelPushReqService.addLabelPushReq(labelPushReq);
@@ -133,23 +133,23 @@ public class LabelPushReqController extends BaseController<LabelPushReq>{
         @ApiImplicitParam(name = "listTableName", value = "文件类型", required = false, paramType = "query", dataType = "string"),
         @ApiImplicitParam(name = "exceInfo", value = "是否推送重复记录数", required = false, paramType = "query", dataType = "string")})
     @RequestMapping(value = "/labelPushReq/update", method = RequestMethod.POST)
-    public WebResult<String> edit(@ApiIgnore LabelPushReq labelPushReq) throws BaseException{
+    public WebResult<String> edit(@ApiIgnore LabelPushReq labelPushReq) {
         WebResult<String> webResult = new WebResult<>();
         LabelPushReq oldLab = new LabelPushReq();
         try {
             oldLab = iLabelPushReqService.selectLabelPushReqById(labelPushReq.getReqId());
+            oldLab = fromToBean(labelPushReq, oldLab);
+            iLabelPushReqService.modifyLabelPushReq(oldLab);
         } catch (BaseException e) {
             return webResult.fail(e);
         }
-        oldLab = fromToBean(labelPushReq, oldLab);
-        iLabelPushReqService.update(oldLab);
         return webResult.success("修改推送请求信息成功", SUCCESS);
     }
     
     @ApiOperation(value = "删除推送请求信息")
     @ApiImplicitParam(name = "reqId", value = "ID", required = true, paramType = "query", dataType = "string")
     @RequestMapping(value = "/labelPushReq/delete", method = RequestMethod.POST)
-    public WebResult<String> del(String reqId) throws BaseException{
+    public WebResult<String> del(String reqId) {
         WebResult<String> webResult = new WebResult<>();
         try {
             iLabelPushReqService.deleteLabelPushReqById(reqId);

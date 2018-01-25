@@ -63,7 +63,7 @@ public class LabelAttrRelController extends BaseController<LabelAttrRel>{
     
     @ApiOperation(value = "分页查询客户群标签与属性对应关系")
     @RequestMapping(value = "/labelAttrRel/queryPage", method = RequestMethod.POST)
-    public Page<LabelAttrRel> list(@ModelAttribute Page<LabelAttrRel> page,@ModelAttribute LabelAttrRelVo labelAttrRelVo) throws BaseException{
+    public Page<LabelAttrRel> list(@ModelAttribute Page<LabelAttrRel> page,@ModelAttribute LabelAttrRelVo labelAttrRelVo){
         Page<LabelAttrRel> labelAttrRelPage = new Page<>();
         try {
             labelAttrRelPage = iLabelAttrRelService.selectLabelAttrRelPageList(page, labelAttrRelVo);
@@ -75,7 +75,7 @@ public class LabelAttrRelController extends BaseController<LabelAttrRel>{
     
     @ApiOperation(value = "不分页查询客户群标签与属性对应关系")
     @RequestMapping(value = "/labelAttrRel/queryList", method = RequestMethod.POST)
-    public WebResult<List<LabelAttrRel>> findList(@ModelAttribute LabelAttrRelVo labelAttrRelVo) throws BaseException{
+    public WebResult<List<LabelAttrRel>> findList(@ModelAttribute LabelAttrRelVo labelAttrRelVo) {
         WebResult<List<LabelAttrRel>> webResult = new WebResult<>();
         List<LabelAttrRel> labelAttrRelList = new ArrayList<>();
         try {
@@ -87,17 +87,13 @@ public class LabelAttrRelController extends BaseController<LabelAttrRel>{
     }
     
     @ApiOperation(value = "根据ID查询客户群标签与属性对应关系")
-    @ApiImplicitParams({
-        @ApiImplicitParam(name = "recordId", value = "推送设置记录ID", required = true, paramType = "query", dataType = "string"),
-        @ApiImplicitParam(name = "labelId", value = "客户群标签ID", required = true, paramType = "query", dataType = "string"),
-        @ApiImplicitParam(name = "attrCol", value = "属性名", required = true, paramType = "query", dataType = "string"),
-        @ApiImplicitParam(name = "modifyTime", value = "修改时间", required = true, paramType = "query", dataType = "date")})
+    @ApiImplicitParam(name = "priKey", value = "主键", required = true, paramType = "query", dataType = "string")
     @RequestMapping(value = "/LabelAttrRel/get",method = RequestMethod.POST)
-    public WebResult<LabelAttrRel> findById(String recordId,String labelId, String attrCol, Date modifyTime) throws BaseException{
+    public WebResult<LabelAttrRel> findById(String priKey) {
         WebResult<LabelAttrRel> webResult = new WebResult<>();
         LabelAttrRel labelAttrRel = new LabelAttrRel();
         try {
-            labelAttrRel = iLabelAttrRelService.selectLabelAttrRelById(recordId,labelId,attrCol,modifyTime);
+            labelAttrRel = iLabelAttrRelService.selectLabelAttrRelById(priKey);
         } catch (BaseException e) {
             return webResult.fail(e);
         }
@@ -106,6 +102,7 @@ public class LabelAttrRelController extends BaseController<LabelAttrRel>{
     
     @ApiOperation(value = "新增客户群标签与属性对应关系")
     @ApiImplicitParams({
+        @ApiImplicitParam(name = "priKey", value = "主键", required = false, paramType = "query", dataType = "string"),
         @ApiImplicitParam(name = "recordId", value = "推送设置记录ID", required = false, paramType = "query", dataType = "string"),
         @ApiImplicitParam(name = "labelId", value = "客户群标签ID", required = false, paramType = "query", dataType = "string"),
         @ApiImplicitParam(name = "attrCol", value = "属性名", required = false, paramType = "query", dataType = "string"),
@@ -122,7 +119,7 @@ public class LabelAttrRelController extends BaseController<LabelAttrRel>{
         @ApiImplicitParam(name = "sortType", value = "排序类型", required = false, paramType = "query", dataType = "string"),
         @ApiImplicitParam(name = "sortNum", value = "排序优先级", required = false, paramType = "query", dataType = "int")})
     @RequestMapping(value = "/labelAttrRel/save", method = RequestMethod.POST)
-    public WebResult<String> save(@ApiIgnore LabelAttrRel labelAttrRel) throws BaseException{
+    public WebResult<String> save(@ApiIgnore LabelAttrRel labelAttrRel) {
             WebResult<String> webResult = new WebResult<>();
             labelAttrRel.setModifyTime(new Date());
             try {
@@ -135,9 +132,10 @@ public class LabelAttrRelController extends BaseController<LabelAttrRel>{
     
     @ApiOperation(value = "修改客户群标签与属性对应关系")
     @ApiImplicitParams({
-        @ApiImplicitParam(name = "recordId", value = "推送设置记录ID", required = true, paramType = "query", dataType = "string"),
-        @ApiImplicitParam(name = "labelId", value = "客户群标签ID", required = true, paramType = "query", dataType = "string"),
-        @ApiImplicitParam(name = "attrCol", value = "属性名", required = true, paramType = "query", dataType = "string"),
+        @ApiImplicitParam(name = "priKey", value = "主键", required = true, paramType = "query", dataType = "string"),
+        @ApiImplicitParam(name = "recordId", value = "推送设置记录ID", required = false, paramType = "query", dataType = "string"),
+        @ApiImplicitParam(name = "labelId", value = "客户群标签ID", required = false, paramType = "query", dataType = "string"),
+        @ApiImplicitParam(name = "attrCol", value = "属性名", required = false, paramType = "query", dataType = "string"),
         @ApiImplicitParam(name = "attrColType", value = "属性字段类型", required = false, paramType = "query", dataType = "string"),
         @ApiImplicitParam(name = "attrColName", value = "属性中文名称", required = false, paramType = "query", dataType = "string"),
         @ApiImplicitParam(name = "attrSource", value = "属性来源", required = false, paramType = "query", dataType = "int"),
@@ -151,31 +149,27 @@ public class LabelAttrRelController extends BaseController<LabelAttrRel>{
         @ApiImplicitParam(name = "sortType", value = "排序类型", required = false, paramType = "query", dataType = "string"),
         @ApiImplicitParam(name = "sortNum", value = "排序优先级", required = false, paramType = "query", dataType = "int")})
     @RequestMapping(value = "/labelAttrRel/update", method = RequestMethod.POST)
-    public WebResult<String> edit(@ApiIgnore LabelAttrRel labelAttrRel) throws BaseException{
+    public WebResult<String> edit(@ApiIgnore LabelAttrRel labelAttrRel) {
         WebResult<String> webResult = new WebResult<>();
         labelAttrRel.setModifyTime(new Date());
         LabelAttrRel oldLab = new LabelAttrRel();
         try {
-            oldLab = iLabelAttrRelService.selectLabelAttrRelById(labelAttrRel.getRecordId(),labelAttrRel.getLabelId(),labelAttrRel.getAttrCol(),labelAttrRel.getModifyTime());
+            oldLab = iLabelAttrRelService.selectLabelAttrRelById(labelAttrRel.getPriKey());
+            oldLab = fromToBean(labelAttrRel, oldLab);
+            iLabelAttrRelService.modifyLabelAttrRel(oldLab);
         } catch (BaseException e) {
             return webResult.fail(e);
         }
-        oldLab = fromToBean(labelAttrRel, oldLab);
-        iLabelAttrRelService.update(oldLab);
         return webResult.success("修改客户群标签与属性对应关系成功", SUCCESS);
     }
     
     @ApiOperation(value = "删除客户群标签与属性对应关系")
-    @ApiImplicitParams({
-        @ApiImplicitParam(name = "recordId", value = "推送设置记录ID", required = true, paramType = "query", dataType = "string"),
-        @ApiImplicitParam(name = "labelId", value = "客户群标签ID", required = true, paramType = "query", dataType = "string"),
-        @ApiImplicitParam(name = "attrCol", value = "属性名", required = true, paramType = "query", dataType = "string"),
-        @ApiImplicitParam(name = "modifyTime", value = "修改时间", required = true, paramType = "query", dataType = "date")})
+    @ApiImplicitParam(name = "priKey", value = "主键", required = true, paramType = "query", dataType = "string")
     @RequestMapping(value = "/labelAttrRel/delete", method = RequestMethod.POST)
-    public WebResult<String> del(String recordId,String labelId,String attrCol,Date modifyTime) throws BaseException{
+    public WebResult<String> del(String priKey) {
         WebResult<String> webResult = new WebResult<>();
         try {
-            iLabelAttrRelService.deleteLabelAttrRelById(recordId,labelId,attrCol,modifyTime);
+            iLabelAttrRelService.deleteLabelAttrRelById(priKey);
         } catch (BaseException e) {
             return webResult.fail(e);
         }
@@ -190,6 +184,9 @@ public class LabelAttrRelController extends BaseController<LabelAttrRel>{
      * @return
      */
     public LabelAttrRel fromToBean(LabelAttrRel lab, LabelAttrRel oldLab){
+        if(StringUtil.isNoneBlank(lab.getPriKey())){
+            oldLab.setPriKey(lab.getPriKey());
+        }
         if(StringUtil.isNoneBlank(lab.getRecordId())){
             oldLab.setRecordId(lab.getRecordId());
         }
