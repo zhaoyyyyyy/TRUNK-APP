@@ -616,6 +616,12 @@
 .ui-calc-content > .ui-chaining  .dropdown-menu{
 	min-width: auto;
 }
+.ui-calc-content > .ui-chaining > .ui-conditionBox{
+	display:none;
+}
+.ui-calc-content > .ui-chaining > .ui-conditionCT-h4 >b{
+	display:none;
+}
 .ui-calc-content > .ui-conditionCT > .ui-conditionCT-content > h5{
 	font-size: 12px;
 	color: #009241;
