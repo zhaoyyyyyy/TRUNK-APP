@@ -634,10 +634,12 @@ var labelMarket = (function (model){
 		};
 		//鼠标经过弹窗
 		model.showBox=function(elem){
-			$(elem).parents(".ui-conditionCT").find(".ui-conditionBox").show();
-		}
-		model.hideBox=function(elem){
-			$(elem).find(".ui-conditionBox").hide();
+			if($(elem).parents(".ui-conditionCT").find(".ui-conditionBox").css("display")=="none"){
+				$(elem).parents(".ui-conditionCT").find(".ui-conditionBox").show();
+			}else{
+				$(elem).parents(".ui-conditionCT").find(".ui-conditionBox").hide();
+			}
+			
 		}
 		/**
 		 * 删除匹配的括号【与条件直接关联的括号】,待测试

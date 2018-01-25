@@ -204,7 +204,7 @@
 					</span>
 				</h3>
 				<div class="ui-calc-content clearfix" id="sortable">
-					<div onmouseleave="labelMarket.hideBox(this)" v-for="(item,index) in ruleList" :class="{
+					<div v-for="(item,index) in ruleList" :class="{
 						'ui-chaining' : item.elementType ==1,
 						'ui-conditionCT' : item.elementType == 2,
                 		'ui-bracket': item.elementType == 3,
@@ -231,10 +231,11 @@
 							
 							<em onclick="labelMarket.againstLabel(this)"></em>
 							<i onclick="labelMarket.deleteRule(this)"></i>
-							<b onmouseenter="labelMarket.showBox(this)" class="ml10">!</b>
+							<b onclick="labelMarket.showBox(this)" class="ml10">!</b>
 						</h4>
 						<!--鼠标经过弹窗-->
 						<div class="ui-conditionBox">
+							<i></i>
 							<p class="ui-advanced-sreach">已选条件</p>
 							<ul class="ui-enum-item clearfix">
 								<li class="fleft mr10">
