@@ -79,7 +79,6 @@ window.loc_onload = function() {
 				$("#org").val(orgdata[model.orgId]);
 			}else{
 				var orgValue = $("#org").val();
-				debugger;
 				if($("#type1")&&(orgValue==""||orgValue==null||orgValue==undefined)){
 					$("#type1").click();
 				}else if($("#type2")&&(orgValue==""||orgValue==null||orgValue==undefined)){

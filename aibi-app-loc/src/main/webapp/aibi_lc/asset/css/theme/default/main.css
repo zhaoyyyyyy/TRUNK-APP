@@ -560,7 +560,6 @@
 	position:absolute;
 	left:-10px;
 	right:-10px;
-	bottom:-10px;
 	top:42px;
 	background:#fff;
 	border-top:5px solid #009241;
@@ -568,6 +567,7 @@
 	border-right:1px solid #E9E9E9;
 	border-bottom:1px solid #E9E9E9;
 	display:none;
+	padding:10px 0 0;
 }
 .ui-calc-content > .ui-conditionCT > .ui-conditionBox > i{
 	border: 5px solid transparent;
@@ -578,8 +578,14 @@
     top:-15px;
     right:58px;
 }
-.ui-calc-content > .ui-conditionCT > .ui-conditionBox > p{
-	padding:6px 0 0px;
+.ui-calc-content > .ui-conditionCT > .ui-conditionBox .ui-contidion-info{
+	padding:0px 10px;
+}
+.ui-calc-content > .ui-conditionCT > .ui-conditionBox .marketTipBottomBox{
+	background-color: #f4f9fe;
+	height:27px;
+	line-height:27px;
+	padding:0 10px;
 }
 .ui-calc-content > .ui-conditionCT > .ui-conditionCT-h4 > em{
     width: 72%;

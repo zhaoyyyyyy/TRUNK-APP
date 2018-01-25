@@ -2,9 +2,9 @@
 /* clear brower html attribute value */
 body, dl, dt, dd, ul, ol, li,
 h1, h2, h3, h4, h5, h6, pre, code,
-form, fieldset, legend, input, button,
+form, fieldset, input, button,
 textarea, p, blockquote, th, td,div{margin: 0; padding: 0;}
-fieldset, img,form{border: 0; display:block;}
+img,form{border: 0; display:block;}
 img{vertical-align: top;}
 /* remember to define focus styles! */
 :focus{outline: 0;}
@@ -36,6 +36,8 @@ button,input{outline: none; border: none;}
 a ,input[type=button]{cursor: pointer}
 i{font-style:normal;}
 b{font-weight:normal;}
+fieldset{border:1px solid #ccc;}
+legend{margin:0 20px;}
 a {
     background-color: transparent;
 }
