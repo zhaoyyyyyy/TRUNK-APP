@@ -17,7 +17,6 @@ var model = {
 		    categoryName : ""
 		}],
 		bqlx : [],
-		isbq : [],
 		gxzq : [],
 		sjlx : [],
 		sourceIdList : [],
@@ -38,13 +37,10 @@ window.loc_onload = function(){
 	model.configId = $.getCurrentConfigId();
 	var dicBqlx = $.getDicData("BQLXZD");
 	for(var i = 0; i<dicBqlx.length; i++){
-		if(dicBqlx[i].code!=10&&dicBqlx[i].code!=12&&dicBqlx[i].code!=8){
+		if(dicBqlx[i].code!=10&&dicBqlx[i].code!=12&&dicBqlx[i].code!=11&&dicBqlx[i].code!=8){
 			model.bqlx.push(dicBqlx[i]);
-		}		 
-	}
-	var dicIsbq = $.getDicData("SFZD");
-	for(var i = 0; i<dicIsbq.length; i++){
-		model.isbq.push(dicIsbq[i]);
+		}	
+//		model.bqlx.push(dicBqlx[i]);
 	}
 	var dicgxzq = $.getDicData("GXZQZD");
 	for(var i =0 ; i<dicgxzq.length; i++){
@@ -108,21 +104,26 @@ window.loc_onload = function(){
 }
 //指标选择
 function chooseKpi(obj){
-	var win = $.window('指标配置', $.ctx + '/aibi_lc/pages/label/sourceInfo_mgr.html', 900, 600);
-	win.addKpis = function(chooseKpis) {
-		model.sourceIdList = chooseKpis;
-		var index = obj.id;
-		var sourceName = [];
-		var dependIndexList = [];
-		var dependx="";
-		for(var i=0; i<chooseKpis.length; i++){
-			dependIndexList.push(chooseKpis[i]);
+	var readCycle = model.sourceInfoList[obj.id].updateCycle;
+	if(readCycle ==undefined ||readCycle==null || readCycle==""){
+		$.alert("请选择更新周期")
+	}else{
+		var win = $.window('指标配置', $.ctx + '/aibi_lc/pages/label/sourceInfo_mgr.html?readCycle='+readCycle, 900, 600);
+		win.addKpis = function(chooseKpis) {
+			model.sourceIdList = chooseKpis;
+			var index = obj.id;
+			var sourceName = [];
+			var dependIndexList = [];
+			var dependx="";
+			for(var i=0; i<chooseKpis.length; i++){
+				dependIndexList.push(chooseKpis[i]);
+			}
+			for(var i=0; i<dependIndexList.length; i++){
+				dependx += dependIndexList[i]+","
+			}
+			model.sourceInfoList[index]['dependIndexList'] = dependIndexList;
+			$("#dependIndex_"+index).val(dependx.substr(0,dependx.length-1));
 		}
-		for(var i=0; i<dependIndexList.length; i++){
-			dependx += dependIndexList[i]+","
-		}
-		model.sourceInfoList[index]['dependIndexList'] = dependIndexList;
-		$("#dependIndex_"+index).val(dependx.substr(0,dependx.length-1));
 	}
 }
 

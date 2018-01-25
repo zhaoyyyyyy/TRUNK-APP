@@ -158,6 +158,7 @@ public class LabelInfoServiceImpl extends BaseServiceImpl<LabelInfo, String> imp
         labelInfo.setDataStatusId(1);
         labelInfo.setGroupType(0);
         labelInfo.setCategoryId(labelInfo.getCategoryId());
+        labelInfo.setIsRegular(1);
         super.saveOrUpdate(labelInfo);
         
         //封装审批信息

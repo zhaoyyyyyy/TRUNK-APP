@@ -2,7 +2,7 @@ var model = {
 	bqlx : [],
 	gxzq : [],
 	spzt : [],
-	isbq : [],
+//	isbq : [],
 	sjlx : [],
 	dimtableInfoList : [],
 	sourceIdList : [],
@@ -148,20 +148,18 @@ window.loc_onload = function() {
 
 	var dicBqlx = $.getDicData("BQLXZD");
 	for(var i = 0; i<dicBqlx.length; i++){
-		if(dicBqlx[i].code!=10&&dicBqlx[i].code!=12&&dicBqlx[i].code!=8){
+		if(dicBqlx[i].code!=10&&dicBqlx[i].code!=12&&dicBqlx[i].code!=11){
 			model.bqlx.push(dicBqlx[i]);
-		}		 
+		}	
+//		model.bqlx.push(dicBqlx[i]);
 	}
+	
 	var dicspzt = $.getDicData("SPZTZD");
 	for(var i = 0; i<dicspzt.length; i++){
 		if(dicspzt[i].code!=3){
 			model.spzt.push(dicspzt[i]); 
 		}
 	}	
-	var dicIsbq = $.getDicData("SFZD");
-	for(var i = 0; i<dicIsbq.length; i++){
-		model.isbq.push(dicIsbq[i]);
-	}
 	$.commAjax({
 		url : $.ctx + '/api/dimtable/dimTableInfo/queryList',
 		postData : {

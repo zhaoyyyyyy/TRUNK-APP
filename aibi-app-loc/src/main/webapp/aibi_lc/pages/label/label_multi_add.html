@@ -85,7 +85,7 @@
 								</ul>
 								</div>
                             </div>
-                            <div class="ui-form-group tag-radio clearfix">
+                            <!-- <div class="ui-form-group tag-radio clearfix">
                                   <label class="control-label fleft">
                                    <span class="input-required">*</span>                                  
                                                                      是否正式标签</label>
@@ -99,7 +99,7 @@
 										 </li>
 							         </ul>
 							     </div>
-                            </div>
+                            </div> -->
                             <div class="ui-form-group clearfix">
                                 <label for="categoryId" class="control-label">
                                  <span class="input-required">*</span>                                
@@ -157,8 +157,7 @@
 					             <span class="input-required">*</span>            
 					                         更新周期</label>
 					            <div class="control-input has-icon">
-					            <select required="true" name="updateCycle" class="form-control input-pointer easyui-validatebox" v-model="sourceInfo.updateCycle">
-									<!-- <option v-model="updateCycle">请选择更新周期</option> -->
+					            <select  v-model="sourceInfo.updateCycle" required="true" name="updateCycle" class="form-control input-pointer easyui-validatebox">
 									<option v-for="h in gxzq" :value="h.code">{{h.dataName}}</option>
 								</select>
 								</div>
