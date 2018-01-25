@@ -10,6 +10,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.stereotype.Repository;
+
 import com.asiainfo.biapp.si.loc.base.dao.BaseDaoImpl;
 import com.asiainfo.biapp.si.loc.base.page.Page;
 import com.asiainfo.biapp.si.loc.core.back.dao.IDimOrgLevelDao;
@@ -36,6 +38,7 @@ import com.asiainfo.biapp.si.loc.core.back.vo.DimOrgLevelVo;
  * @author  zhangnan7
  * @version 1.0.0.2018年1月25日
  */
+@Repository
 public class IDimOrgLevelDaoImpl extends BaseDaoImpl<DimOrgLevel, String> implements IDimOrgLevelDao {
     
     public Page<DimOrgLevel> selectDimOrgLevelPageList(Page<DimOrgLevel> page, DimOrgLevelVo dimOrgLevelVo){

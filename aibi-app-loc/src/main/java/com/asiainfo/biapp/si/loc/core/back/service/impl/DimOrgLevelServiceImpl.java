@@ -8,7 +8,10 @@ package com.asiainfo.biapp.si.loc.core.back.service.impl;
 
 import java.util.List;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.asiainfo.biapp.si.loc.base.dao.BaseDao;
 import com.asiainfo.biapp.si.loc.base.exception.BaseException;
@@ -46,6 +49,8 @@ import com.asiainfo.biapp.si.loc.core.back.vo.DimOrgLevelVo;
  * @author zhangnan7
  * @version 1.0.0.2018年1月24日
  */
+@Service
+@Transactional
 public class DimOrgLevelServiceImpl extends BaseServiceImpl<DimOrgLevel, String>implements IDimOrgLevelService {
 
     @Autowired
