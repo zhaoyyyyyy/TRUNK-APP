@@ -74,5 +74,13 @@ public interface ILabelRuleService extends BaseService<LabelRule, String> {
 	 * @throws BaseException
 	 */
 	public void deleteLabelRule(String ruleId) throws BaseException;
+	
+	/**
+	 * 拼session所有规则
+	 * @param ciLabelRuleListTemp
+	 * @return
+	 */
+	public String shopCartRule(List<LabelRuleVo> labelRuleVos);
+	
 
 }

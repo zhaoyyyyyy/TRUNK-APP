@@ -130,8 +130,9 @@
 									<b v-text="item.customNum" ></b>人
 								</a>
 								<a href="javascript:;" class="ui-label-time">
-									<span v-if="item.updateCycle == 3 ">日</span>
+									<span v-if="item.updateCycle == 1 ">日</span>
 									<span v-if="item.updateCycle == 2 ">月</span>
+									<span v-if="item.updateCycle == 3 ">一次性</span>
 								</a>
 								<a href="javascript:;" class="not-border ui-label-date">
 									<span v-text="item.dataDate"></span>

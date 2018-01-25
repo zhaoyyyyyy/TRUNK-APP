@@ -117,6 +117,17 @@ public class LabelExtInfoServiceImpl extends BaseServiceImpl<LabelExtInfo, Strin
         super.saveOrUpdate(labelExtInfo);
     }
 
+    /**
+     * Description: 更新标签拓展表
+     *
+     * @param labelId
+     * @throws BaseException
+     */
+    @CacheEvict(value="LabelInfo",allEntries=true)
+    public void updateLabelExtInfo(LabelExtInfo labelExtInfo){
+    	super.update(labelExtInfo);
+    }
+    
     @CacheEvict(value="LabelInfo",allEntries=true)
     public void modifyLabelExtInfo(LabelExtInfo labelExtInfo) throws BaseException {
         if (labelExtInfo.getLabelPrecision() >= 1) {

@@ -283,7 +283,6 @@ public class LabelInfoServiceImpl extends BaseServiceImpl<LabelInfo, String> imp
 
 	@Override
 	public void saveCustomerLabelInfo(LabelExtInfo labelExtInfo, LabelInfo customInfo, List<LabelRuleVo> labelRuleList) throws BaseException {
-		//TODO  基本信息是否需要加入缓存?
 		customInfo.setLabelTypeId(LabelInfoContants.LABEL_TYPE_CUST);
 		customInfo.setDataStatusId(LabelInfoContants.CUSTOM_DATA_STATUS_WAIT);
 		customInfo.setCreateTime(new Date());
@@ -291,6 +290,7 @@ public class LabelInfoServiceImpl extends BaseServiceImpl<LabelInfo, String> imp
 		super.saveOrUpdate(customInfo);
 		String customId = customInfo.getLabelId();
 		labelExtInfo.setLabelId(customId);
+		labelExtInfo.setLabelOptRuleShow(ruleService.shopCartRule(labelRuleList));
 		iLabelExtInfoService.addLabelExtInfo(labelExtInfo);
 		// 保存标签规则
 		for (LabelRuleVo labelRuleVo : labelRuleList) {
@@ -338,7 +338,9 @@ public class LabelInfoServiceImpl extends BaseServiceImpl<LabelInfo, String> imp
 	@Override
 	public void syncUpdateCustomGroupInfo(LabelInfo customGroupInfo,LabelExtInfo labelExtInfo) {
 		 iLabelInfoDao.update(customGroupInfo);
-		 iLabelExtInfoService.update(labelExtInfo);
+		 if(labelExtInfo!=null){
+			 iLabelExtInfoService.updateLabelExtInfo(labelExtInfo);
+		 }
 	}
 	
 }

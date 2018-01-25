@@ -77,4 +77,16 @@ public interface LabelRuleContants {
 	/** 2模板 */
 	public static final int LABEL_RULE_FROM_TEMPLATE = 2;
 	
+	/**
+	 * 标签运算运算符规则
+	 */
+	/** 运算符 and */
+	public static final String CALCULATE_ELEMENT_TYPE_OPT_AND = "and";
+	/** 运算符 or */
+	public static final String CALCULATE_ELEMENT_TYPE_OPT_OR = "or";
+	/** 运算符 剔除 */
+	public static final String CALCULATE_ELEMENT_TYPE_OPT_EXCEPT = "-";
+	/** 运算符 剔除 */
+	public static final String CUSTOM_CALC_ELEMENT_TYPE_OPT_REMOVE = "REMOVE";
+	
 }

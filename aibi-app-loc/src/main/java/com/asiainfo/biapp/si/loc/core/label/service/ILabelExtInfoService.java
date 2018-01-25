@@ -94,5 +94,13 @@ public interface ILabelExtInfoService extends BaseService<LabelExtInfo, String> 
      * @throws BaseException
      */
     public void deleteLabelExtInfo(String labelId) throws BaseException;
+    
+    /**
+     * Description: 更新标签拓展表
+     *
+     * @param labelId
+     * @throws BaseException
+     */
+    public void updateLabelExtInfo(LabelExtInfo labelExtInfo);
 
 }

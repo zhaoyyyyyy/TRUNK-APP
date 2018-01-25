@@ -198,7 +198,7 @@ var labelMarket = (function (model){
 							data.rows[i].customNum = "0";
 						}
 						data.rows[i].customRuleShow = data.rows[i].labelExtInfo.labelOptRuleShow;
-						data.rows[i].customComment = data.rows[i].labelExtInfo.techCaliber;
+						data.rows[i].customComment = data.rows[i].labelExtInfo.busiLegend;
 					}
 					dataModel.labelInfoList = data.rows;
 					$("#jsonmap1_pager").createPage({
