@@ -155,7 +155,9 @@ public class CategoryInfoServiceImpl extends BaseServiceImpl<CategoryInfo, Strin
         if(categoryInfo.getCategoryName().length()>8){
             throw new ParamRequiredException("分类名称过长");
         }
-        super.saveOrUpdate(categoryInfo);
+        CategoryInfo categoryInfo2 = iCategoryInfoDao.get(categoryInfo.getCategoryId());
+        categoryInfo2.setCategoryName(categoryInfo.getCategoryName());
+        super.saveOrUpdate(categoryInfo2);
         
     }
 
