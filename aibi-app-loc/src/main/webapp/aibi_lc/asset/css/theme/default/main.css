@@ -337,6 +337,7 @@
 }
 .ui-shop-cart.nest{
 	padding: 0 0 0 74px;
+	cursor:pointer;
 }
 .ui-shop-cart-icon{
 	color: #fff;
