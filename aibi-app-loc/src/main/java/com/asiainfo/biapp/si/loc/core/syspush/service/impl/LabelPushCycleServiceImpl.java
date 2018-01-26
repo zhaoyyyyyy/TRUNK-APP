@@ -19,8 +19,12 @@ import com.asiainfo.biapp.si.loc.base.exception.ParamRequiredException;
 import com.asiainfo.biapp.si.loc.base.page.Page;
 import com.asiainfo.biapp.si.loc.base.service.impl.BaseServiceImpl;
 import com.asiainfo.biapp.si.loc.base.utils.StringUtil;
+import com.asiainfo.biapp.si.loc.core.label.entity.LabelInfo;
+import com.asiainfo.biapp.si.loc.core.label.service.ILabelInfoService;
 import com.asiainfo.biapp.si.loc.core.syspush.dao.ILabelPushCycleDao;
+import com.asiainfo.biapp.si.loc.core.syspush.entity.LabelAttrRel;
 import com.asiainfo.biapp.si.loc.core.syspush.entity.LabelPushCycle;
+import com.asiainfo.biapp.si.loc.core.syspush.service.ILabelAttrRelService;
 import com.asiainfo.biapp.si.loc.core.syspush.service.ILabelPushCycleService;
 import com.asiainfo.biapp.si.loc.core.syspush.vo.LabelPushCycleVo;
 
@@ -51,6 +55,12 @@ public class LabelPushCycleServiceImpl extends BaseServiceImpl<LabelPushCycle, S
     @Autowired
     private ILabelPushCycleDao iLabelPushCycleDao;
     
+    @Autowired
+    private ILabelInfoService iLabelInfoService;
+    
+    @Autowired
+    private ILabelAttrRelService iLabelAttrRelService;
+    
     @Override
     protected BaseDao<LabelPushCycle, String> getBaseDao() {
         return iLabelPushCycleDao;
@@ -73,6 +83,16 @@ public class LabelPushCycleServiceImpl extends BaseServiceImpl<LabelPushCycle, S
     }
 
     public void addLabelPushCycle(LabelPushCycle labelPushCycle) throws BaseException {
+        String[] attrbuteIdList = labelPushCycle.getAttrbuteId().split(",");
+        for(int i=0;i<attrbuteIdList.length;i++){
+            LabelInfo labelInfo = iLabelInfoService.selectLabelInfoById(attrbuteIdList[i]);
+            LabelAttrRel labelAttrRel = new LabelAttrRel();
+            labelAttrRel.setRecordId(labelPushCycle.getRecordId());
+            labelAttrRel.setLabelId(labelPushCycle.getCustomGroupId());
+            labelAttrRel.setAttrCol(labelInfo.getLabelName());
+            labelAttrRel.setAttrColType(labelInfo.getLabelTypeId().toString());
+            iLabelAttrRelService.addLabelAttrRel(labelAttrRel);
+        }
         super.saveOrUpdate(labelPushCycle);
     }
 
