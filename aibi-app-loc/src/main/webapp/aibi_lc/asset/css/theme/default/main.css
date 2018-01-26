@@ -395,7 +395,7 @@
 
 /**计算中心**/
 .ui-calculate-center{
-	position: absolute;
+	position: fixed;
 /*     height: 100%; */
     left: 0px;
     right: 0px;
