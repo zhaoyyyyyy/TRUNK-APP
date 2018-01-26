@@ -7,6 +7,7 @@ var dataModel = {
 		zqlxList:[],
 		xzqhList:[],
 		gxzqList:[],
+		dataStatusList:[],
 		page:[],
 		categoryInfoList : [],
 		labelInfoList : [],//标签
@@ -70,6 +71,8 @@ window.loc_onload = function() {
 	labelMarket.loadOrg();
 	
 	labelMarket.loadUpdateCycle();
+	
+	labelMarket.loadDataStatus();
 	//加载标签集市
 	labelMarket.loadLabelInfoList();
 	//加载购物车
@@ -271,6 +274,32 @@ var labelMarket = (function (model){
 				$("#updateCycle").val(obj.name);
 				$("#allUc").removeClass("all-active");
 				$("#updateCycle"+obj.name).addClass("all-active");
+			}
+			model.loadLabelInfoList();
+		}
+		
+		model.loadDataStatus = function(){
+	    	var dataStatusList = [];
+	    	var dicDs = $.getDicData("QTZTZD");
+	    	for(var i=0; i<dicDs.length; i++){
+	    		dataStatusList.push(dicDs[i]);
+	    	}
+	    	dataModel.dataStatusList = dataStatusList;
+	    };
+		
+		//更改数据状态
+		model.dataStatusSearch = function(obj){
+			if(obj.id == "allDs"){
+				$("#dataStatus"+dataModel.dataStatus).removeClass("all-active");
+				dataModel.dataStatus = "";
+				$("#dataStatusId").val("");
+				$("#allDs").addClass("all-active");
+			}else{
+				$("#dataStatus"+dataModel.dataStatus).removeClass("all-active");
+				dataModel.dataStatus = obj.name;
+				$("#dataStatusId").val(obj.name);
+				$("#allDs").removeClass("all-active");
+				$("#dataStatus"+obj.name).addClass("all-active");
 			}
 			model.loadLabelInfoList();
 		}

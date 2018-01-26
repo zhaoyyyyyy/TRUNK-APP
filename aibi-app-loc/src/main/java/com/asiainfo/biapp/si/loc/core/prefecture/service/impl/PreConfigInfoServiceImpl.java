@@ -159,6 +159,9 @@ public class PreConfigInfoServiceImpl extends BaseServiceImpl<PreConfigInfo, Str
         if (null != pre.getConfigStatus()) {
             oldPre.setConfigStatus(pre.getConfigStatus());
         }
+        if (null != pre.getAllUserMsg()){
+            oldPre.setAllUserMsg(pre.getAllUserMsg());
+        }
         return oldPre;
     }
 

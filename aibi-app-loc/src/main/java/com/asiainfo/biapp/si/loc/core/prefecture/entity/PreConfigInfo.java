@@ -143,17 +143,20 @@ public class PreConfigInfo extends BaseEntity {
     @Transient
     private String createUserId;
 
-    @Transient
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinTable(name = "LOC_CONFIG_TABLE_REL", joinColumns = { @JoinColumn(name = "CONFIG_ID") }, inverseJoinColumns = {
             @JoinColumn(name = "PRI_KEY") })
     private AllUserMsg allUserMsg;
 
     public AllUserMsg getAllUserMsg() {
+        if(allUserMsg!=null){
+            allUserMsg.setPreConfigInfoSet(null);
+        }
         return allUserMsg;
     }
 
     public void setAllUserMsg(AllUserMsg allUserMsg) {
+        allUserMsg.setPreConfigInfoSet(null);
         this.allUserMsg = allUserMsg;
     }
 

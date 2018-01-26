@@ -17,7 +17,8 @@ var model = {
 		orgId : "",
 		ztreeObj : [],
 		allUserMsg : [],
-		priKey:""
+		priKey:"",
+		selectNum:0
 }
 window.loc_onload = function() {
 	var orgdata = [];
@@ -34,7 +35,6 @@ window.loc_onload = function() {
 	
 	if (configId != null && configId != "" && configId != undefined) {
 		model.configId = configId;
-		debugger;
 		$.commAjax({
 			url : $.ctx + '/api/prefecture/preConfigInfo/get',
 			postData : {
@@ -52,7 +52,7 @@ window.loc_onload = function() {
 				var m = (time.getMonth()+1<10 ? '0'+(time.getMonth()+1):time.getMonth()+1);//月
 				var d = (time.getDate()+1<10 ? '0' +(time.getDate()):time.getDate());//日	
 				$("#invalidTime").val(y+"-"+m+"-"+d);
-				$("#priKey").val(data.data.allUserMsg.priKey);
+				model.priKey = data.data.allUserMsg.priKey;
 			}
 		})
 	}else{
@@ -78,6 +78,9 @@ window.loc_onload = function() {
 			if(configId != null && configId != "" && configId != undefined){
 				$("#type"+model.dataAccessType).click();
 				$("#org").val(orgdata[model.orgId]);
+				if(model.selectNum==0){
+					$("#priKey").val(model.priKey);
+				}
 			}else{
 				var orgValue = $("#org").val();
 				if($("#type1")&&(orgValue==""||orgValue==null||orgValue==undefined)){
@@ -217,4 +220,7 @@ function openTtee(tag){
 		$(model.tagNode).val(treeNode.simpleName);
 		$(".ui-form-ztree").removeClass("open");
 	};	
+}
+function changeSelect(){
+	model.selectNum = 1;
 }
