@@ -13,6 +13,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.hibernate.annotations.GenericGenerator;
 
@@ -105,7 +106,25 @@ public class LabelPushCycle extends BaseEntity{
     @ApiParam(value = "状态")
     private Integer status;
 
+    /**
+     * 推送属性ID
+     */
+    @Transient
+    private String AttrbuteId;
     
+    
+    
+    
+    public String getAttrbuteId() {
+        return AttrbuteId;
+    }
+
+    
+    public void setAttrbuteId(String attrbuteId) {
+        AttrbuteId = attrbuteId;
+    }
+
+
     public String getRecordId() {
         return recordId;
     }

@@ -12,11 +12,11 @@ var model = {
 		sysName:"",//推送系统
 		curentIndex:false,//radio选中
 		isActive:false,//check选中
+		customRule:[],//客户群规则
 		calcuElement:[],//客户群规则计算元素
 		customAttrbute:[],//客户群推送带的属性的参数
-		minVal:[],//客户群规则计算的最小值
-		maxVal:[],//客户群规则计算的最大值
 		haveAttr:false,
+		customNum:"",//客户群人数
 		
 }
 window.loc_onload = function() {
@@ -63,6 +63,7 @@ window.loc_onload = function() {
 			model.dataDate = data.data.dataDate;
 			model.dayLabelDate = data.data.dayLabelDate;
 			model.monthLabelDate = data.data.monthLabelDate;
+			model.customNum = data.data.labelExtInfo.customNum;
 		}
 	})
 	$.commAjax({
@@ -81,12 +82,10 @@ window.loc_onload = function() {
 						url : $.ctx + '/api/label/labelInfo/get',
 						onSuccess : function(data) {
 							model.calcuElement[j] = data.data.labelName;
-							model.customAttrbute[j] = data.data;
-							j++;
+							model.customAttrbute[j] = data.data;j++;
 						}
 					})
-					model.minVal[k] = data.data[i].contiueMinVal;
-					model.maxVal[k] = data.data[i].contiueMaxVal;
+					model.customRule[k]=data.data[i];
 					k++;
 				}
 			}
@@ -115,17 +114,26 @@ window.loc_onload = function() {
 			    	        "class":"ui-btn ui-btn-default",
 			    	        click: function() {
 			    	        	$( this ).dialog( "close" );
+			    	        	var AttrbuteId = "";
+			    	        	for (var j=0;j<model.customAttrbute.length;j++){
+			    	        		if(j==0){
+			    	        			AttrbuteId = model.customAttrbute[j].labelId
+			    	        		}else{
+			    	        			AttrbuteId +=","+model.customAttrbute[j].labelId;
+			    	        		}
+								}
 								//console.log($("#radioList label[class~=active]").siblings("input").val()+$("#checkboxList label[class~=active]"))
 								for(var i=0;i<$("#checkboxList label[class~=active]").length;i++){
 									var sysId = $("#checkboxList label[class~=active]")[i].htmlFor;
 									$.commAjax({			
 									    url : $.ctx+'/api/syspush/labelPushCycle/save',
 									    dataType : 'json', 
+									    async : false,
 									    postData : {
 												"customGroupId" :labelId,
 												"sysId" :sysId,
 												"pushCycle" :$("#radioList label[class~=active]").siblings("input").val(),
-												//"customAttrbute" : model.customAttrbute,
+												"AttrbuteId" :AttrbuteId,
 											},
 									    maskMassage : '推送中...'
 								   });
