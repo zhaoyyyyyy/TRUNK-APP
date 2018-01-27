@@ -39,13 +39,13 @@
 				<span class="fright" v-text="model.customNum"></span>
 			</h3>
 			<div class="clearfix">
-			<div class="ui-custom-item clearfix clearfix">
+			<div class="ui-custom-item clearfix clearfix"  v-for="(item,index) in customRule">
 				<a >
-					<span v-text="model.calcuElementName"></span>
+					<span>{{item.attrName}}</span>
 				</a>
 				<a >
-					大于<span v-text="model.minVal"></span>
-					 且 小于<span v-text="model.maxVal"></span>
+					{{item.leftZoneSign}}<span>{{item.contiueMinVal}}</span>
+					 且 {{item.rightZoneSign}}<span>{{item.contiueMaxVal}}</span>
 				</a>
 			</div>
 			<span class="ui-label-date fright" v-text="model.dataDate">
@@ -114,9 +114,7 @@
 						<div class="ui-custom-mes">
 							<ul class="label-selected">
 							<li>
-								<a href="">
 									<span v-text="model.calcuElementName"></span>
-								</a>
 							</li>
 								<!-- <li><a href="">籍贯</a></li>
 								<li><a href="">性别</a></li>

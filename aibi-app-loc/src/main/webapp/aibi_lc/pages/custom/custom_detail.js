@@ -12,7 +12,7 @@ var model = {
 		sysName:"",//推送系统
 		curentIndex:false,//radio选中
 		isActive:false,//check选中
-		customRule:[],//客户群规则
+		customRule:"",//客户群规则
 		haveAttr:false,
 		customNum:"",//客户群人数
 		
@@ -70,13 +70,7 @@ window.loc_onload = function() {
 		},
 		url : $.ctx + '/api/label/labelInfo/findCustomRuleById',
 		onSuccess : function(data) {
-			var j =0;
-			for(var i=0;i<data.data.length;i++){
-				if(i%2 == 0){
-					model.customRule[j]=data.data[i];
-					j++;
-				}
-			}
+			model.customRule=data.data;
 		}
 	})
 	new Vue({
@@ -93,6 +87,7 @@ window.loc_onload = function() {
 			    	       "class":"ui-btn ui-btn-second",
 			    	        click: function() {
 			    	        	$( this ).dialog( "close" );
+			    	        	console.log(model.customRule);
 			    	     	}
 				  	    },
 				  	    {
@@ -103,12 +98,15 @@ window.loc_onload = function() {
 			    	        	$( this ).dialog( "close" );
 			    	        	var AttrbuteId = "";
 			    	        	for (var j=0;j<model.customRule.length;j++){
-			    	        		if(j==0){
-			    	        			AttrbuteId = model.customRule[j].calcuElement
-			    	        		}else{
-			    	        			AttrbuteId +=","+model.customRule[j].calcuElement;
+			    	        		if(j%2 == 0){
+				    	        		if(j==0){
+				    	        			AttrbuteId = model.customRule[j].calcuElement
+				    	        		}else{
+				    	        			AttrbuteId +=","+model.customRule[j].calcuElement;
+				    	        		}
 			    	        		}
 								}
+			    	        	console.log(AttrbuteId);
 								//console.log($("#radioList label[class~=active]").siblings("input").val()+$("#checkboxList label[class~=active]"))
 								for(var i=0;i<$("#checkboxList label[class~=active]").length;i++){
 									var sysId = $("#checkboxList label[class~=active]")[i].htmlFor;
