@@ -87,6 +87,7 @@ public class LabelRuleServiceImpl extends BaseServiceImpl<LabelRule, String> imp
 				String labelIdStr = entity.getCalcuElement();
 				LabelInfo labelInfo = CocCacheProxy.getCacheProxy().getLabelInfoById(labelIdStr);
 				labelRuleVo.setLabelTypeId(labelInfo.getLabelTypeId());
+				labelRuleVo.setAttrName(labelInfo.getLabelName());
 				//TODO 设置其他参数
 			}
 			list.add(labelRuleVo);

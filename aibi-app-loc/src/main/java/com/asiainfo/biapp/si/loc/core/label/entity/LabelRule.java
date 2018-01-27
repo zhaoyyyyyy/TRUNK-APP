@@ -13,6 +13,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.hibernate.annotations.GenericGenerator;
 
@@ -206,6 +207,21 @@ public class LabelRule extends BaseEntity {
     @Column(name = "VIRTUAL_LABEL_NAME")
     @ApiParam(value = "虚标签名称")
     private String virtualLabelName;
+    /**
+     * 属性名称
+     */
+    @Transient
+    private String attrName;
+
+    
+    public String getAttrName() {
+        return attrName;
+    }
+
+    
+    public void setAttrName(String attrName) {
+        this.attrName = attrName;
+    }
 
     public String getRuleId() {
         return ruleId;

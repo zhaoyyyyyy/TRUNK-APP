@@ -13,8 +13,6 @@ var model = {
 		curentIndex:false,//radio选中
 		isActive:false,//check选中
 		customRule:[],//客户群规则
-		calcuElement:[],//客户群规则计算元素
-		customAttrbute:[],//客户群推送带的属性的参数
 		haveAttr:false,
 		customNum:"",//客户群人数
 		
@@ -72,26 +70,15 @@ window.loc_onload = function() {
 		},
 		url : $.ctx + '/api/label/labelInfo/findCustomRuleById',
 		onSuccess : function(data) {
-			var j =0,k=0;
+			var j =0;
 			for(var i=0;i<data.data.length;i++){
 				if(i%2 == 0){
-					$.commAjax({
-						postData : {
-							"labelId": data.data[i].calcuElement,
-						},
-						url : $.ctx + '/api/label/labelInfo/get',
-						onSuccess : function(data) {
-							model.calcuElement[j] = data.data.labelName;
-							model.customAttrbute[j] = data.data;j++;
-						}
-					})
-					model.customRule[k]=data.data[i];
-					k++;
+					model.customRule[j]=data.data[i];
+					j++;
 				}
 			}
 		}
 	})
-	
 	new Vue({
 		el : '#dataD',
 		data : model,
@@ -115,11 +102,11 @@ window.loc_onload = function() {
 			    	        click: function() {
 			    	        	$( this ).dialog( "close" );
 			    	        	var AttrbuteId = "";
-			    	        	for (var j=0;j<model.customAttrbute.length;j++){
+			    	        	for (var j=0;j<model.customRule.length;j++){
 			    	        		if(j==0){
-			    	        			AttrbuteId = model.customAttrbute[j].labelId
+			    	        			AttrbuteId = model.customRule[j].calcuElement
 			    	        		}else{
-			    	        			AttrbuteId +=","+model.customAttrbute[j].labelId;
+			    	        			AttrbuteId +=","+model.customRule[j].calcuElement;
 			    	        		}
 								}
 								//console.log($("#radioList label[class~=active]").siblings("input").val()+$("#checkboxList label[class~=active]"))
@@ -209,6 +196,7 @@ window.loc_onload = function() {
 		    postData : {
 					"configId" :configId,
 					"categoryId" :treeNode.categoryId,
+					"groupType" :0,
 				},
 		    onSuccess: function(data){
 		    	$("#OptionalLabel").html("");
@@ -220,4 +208,32 @@ window.loc_onload = function() {
 		    maskMassage : '搜索中...'
 	   });
 	};
+	$('#form_search').keyup(function(event){
+    	if(event.keyCode == 13){
+    		$("#btn_search").click();
+    	}
+    })
+    $("#btn_search").click(function() {
+    	var txt = $("#labelName").val();
+    	console.log(txt);
+    	$.commAjax({			
+		    url : $.ctx+'/api/label/labelInfo/queryListEffective', 
+		    dataType : 'json', 
+		    async:true,
+		    postData : {
+		    		"labelName":txt,
+					"configId" :configId,
+					//"categoryId" :treeNode.categoryId,
+					"groupType" :0,
+				},
+		    onSuccess: function(data){
+		    	$("#OptionalLabel").html("");
+		    	for(var i=0;i<data.data.length;i++){
+		    		var html="<li><a>"+data.data[i].labelName+"</a></li>";
+		    		$("#OptionalLabel").append(html);
+		    	}
+		    },
+		    maskMassage : '搜索中...'
+	   });
+    })
 }
