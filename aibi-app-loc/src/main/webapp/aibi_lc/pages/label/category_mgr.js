@@ -480,6 +480,7 @@ window.loc_onload = function() {
 					"labelName" :text,
 					"configId" :labelId,
 					"categoryId" :categoryId,
+					"groupType" :0,
 				},
 		    onSuccess: function(data){
 		    	$("#labelList").html("");
