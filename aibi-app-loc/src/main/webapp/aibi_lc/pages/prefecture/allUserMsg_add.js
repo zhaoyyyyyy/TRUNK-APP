@@ -26,7 +26,7 @@ window.loc_onload = function() {
 			},
 			onSuccess : function(data) {
 				model.tableDesc = data.data.tableDesc;
-				if (data.data.isPartition == "是") {
+				if (data.data.isPartition == "0") {
 					$("#isPartitionCheckedInput").click();
 				}
 				model.dayTableName = data.data.dayTableName;
@@ -185,8 +185,8 @@ window.loc_onload = function() {
 }
 function isPartitionChecked(obj) {
 	if (obj.checked) {
-		$("#isPartition").val("是");
+		$("#isPartition").val("0");
 	} else {
-		$("#isPartition").val("否");
+		$("#isPartition").val("1");
 	}
 }

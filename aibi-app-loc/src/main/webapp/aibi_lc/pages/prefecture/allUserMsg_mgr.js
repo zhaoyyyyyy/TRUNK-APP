@@ -11,6 +11,10 @@ window.loc_onload = function() {
 			} ]);
     	}
     })
+    
+    var isPdata = [];
+	isPdata[0] = "是";
+	isPdata[1] = "否";
 	
     $("#mainGrid").jqGrid({
         url: $.ctx + "/api/back/allUserMsg/queryPage",
@@ -31,6 +35,9 @@ window.loc_onload = function() {
             sortable: false,
             frozen: true,
             align: "center",
+            formatter : function(value){
+            	return isPdata[value];
+            }
         },
         {
             name: 'dayTableName',
