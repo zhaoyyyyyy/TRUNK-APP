@@ -509,6 +509,7 @@ window.loc_onload = function() {
 				+ '/aibi_lc/pages/label/category_import.html', 500, 300);
 		wd.success = function(){
 			ztreeFunc();
+			labeltree();
 		}
 	})
 }
