@@ -117,12 +117,12 @@ window.loc_onload = function() {
 		wd.cancel();
 	});
 
-	$("#myjqgrid").jqGrid({
+	$('#myjqgrid').jqGrid({
 		url : $.ctx + '/api/back/dimOrgLevel/queryPage',
-		postData : {"dimOrgLevelId.priKey":priKey},
-		editurl : "clientArray",
-		datatype : "json",
-		colNames : [ '组织字段名称', '层级', '排序' ],
+		postData : {'dimOrgLevelId.priKey':priKey},
+		editurl : 'clientArray',
+		datatype : 'json',
+		colNames : [ '组织字段名称', '层级', '排序','隐藏列' ],
 		colModel : [ {
 			name : 'dimOrgLevelId.orgColumnName',
 			index : 'dimOrgLevelId.orgColumnName',
@@ -130,54 +130,59 @@ window.loc_onload = function() {
 			sortable : false,
 			editable: true,
 			frozen : true,
-			align : "center"
+			align : 'center'
 		}, {
 			name : 'levelId',
 			index : 'levelId',
-			width : 40,
+			width : 20,
 			sortable : false,
 			editable: true,
 			frozen : true,
-			align : "center",
+			align : 'center',
 			edittype: 'select',
-	        formatter: 'select',
 			editoptions: {
 	            value: number
 	        },
+	        formatter: 'select',
 		}, {
 			name : 'sortNum',
 			index : 'sortNum',
-			width : 40,
+			width : 20,
 			sortable : false,
 			editable: true,
 			frozen : true,
-			align : "center",
+			align : 'center',
 			edittype: 'select',
-	        formatter: 'select',
 			editoptions: {
 	            value: number
 	        },
+	        formatter: 'select',
+		}, {
+			name : 'hidden',
+			index : 'hidden',
+			width : 20,
+			hidden : true,
 		} ],
 		cellEdit : true,
 		jsonReader: {
 	        repeatitems: false,
-	        id: "0"
+	        id: '0'
 	    },
 		afterGridLoad : function() {
-			if (priKey == "selectNull") {
+			if (priKey == 'selectNull') {
 				var dataRow = {
-					"dimOrgLevelId.orgColumnName" : "",
-					"levelId" : "",
-					"sortNum" : "",
+					'dimOrgLevelId.orgColumnName' : '',
+					'levelId' : '',
+					'sortNum' : '',
 				}
 				for (var i = 1; i <= 5; i++) {
-					$("#myjqgrid").jqGrid("addRowData", i, dataRow, "last");
-					$("#myjqgrid").jqGrid("editRow", i);
+					$('#myjqgrid').jqGrid('addRowData', i, dataRow, 'last');
+					$('#myjqgrid').jqGrid('editRow', i);
 				}
 			}else{
-				var ids = $("#myjqgrid").jqGrid('getDataIDs');
+				var ids = $('#myjqgrid').jqGrid('getDataIDs');
 			    for (var i = 0; i < ids.length; i++) {
-			    	$("#myjqgrid").jqGrid("editRow", ids[i]);
+			    	$('#myjqgrid').jqGrid('editRow', ids[i]);
 			    }
 			}
 		}
