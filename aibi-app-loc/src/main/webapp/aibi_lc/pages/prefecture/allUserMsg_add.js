@@ -73,12 +73,12 @@ window.loc_onload = function() {
 			var dimOrgLevelStr = "";
 			var levelList = [];
 			var exitLevel = false;
+			var nullNum = 0;
 			for (var k = 0; k < list.length; k++) {
 				if (!$.isNull(list[k]["dimOrgLevelId.orgColumnName"])) {
 					if (!isInArray(levelList, list[k].levelId)) {
 						levelList.push(list[k].levelId);
-					}
- 					 else {
+					}else {
 						$.alert("层级不能重复");
 						for (var i = 1; i <= 5; i++) {
 							$('#myjqgrid').jqGrid('editRow', i);
@@ -91,7 +91,15 @@ window.loc_onload = function() {
 						dimOrgLevelStr += ";";
 					}
 				} else {
-					break;
+					nullNum++;
+					if(nullNum == 5){
+						$.alert("请填写组织字段名称");
+						for (var i = 1; i <= 5; i++) {
+							$('#myjqgrid').jqGrid('editRow', i);
+						}
+						return false;
+					}
+					continue;
 				}
 			}
 			$("#dimOrgLevelStr").val(dimOrgLevelStr);
