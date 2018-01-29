@@ -103,6 +103,7 @@ public class AllUserMsgServiceImpl extends BaseServiceImpl<AllUserMsg, String>im
         }
     }
 
+    @Transactional(rollbackOn = Exception.class)
     public void modifyAllUserMsg(AllUserMsg allUserMsg) throws BaseException {
         AllUserMsg oldAll = super.get(allUserMsg.getPriKey());
         oldAll = fromToBean(allUserMsg,oldAll);

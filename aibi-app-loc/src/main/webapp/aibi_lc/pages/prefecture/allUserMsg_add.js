@@ -40,7 +40,7 @@ window.loc_onload = function() {
 				model.otherColumn = data.data.otherColumn;
 			}
 		})
-	}else{
+	} else {
 		priKey = "selectNull";
 	}
 
@@ -62,23 +62,35 @@ window.loc_onload = function() {
 			var ids = $("#myjqgrid").jqGrid('getDataIDs');
 			for (var i = 0; i < ids.length; i++) {
 				$("#myjqgrid").jqGrid("saveRow", ids[i]);
-				var rowData = JSON.stringify($("#myjqgrid").jqGrid("getRowData",
-						ids[i]));
+				var rowData = JSON.stringify($("#myjqgrid").jqGrid(
+						"getRowData", ids[i]));
 				if (rowData.indexOf('input') > 0) {
 					return false;
 				}
 			}
-			//拼接批量信息
+			// 拼接批量信息
 			var list = $("#myjqgrid").jqGrid("getRowData");
 			var dimOrgLevelStr = "";
-			for(var k = 0; k<list.length; k++){
-				if(!$.isNull(list[k]["dimOrgLevelId.orgColumnName"])){
-					dimOrgLevelStr += JSON.stringify(list[k]); 
-					var l = k+1;
-					if(l!=list.length){
+			var levelList = [];
+			var exitLevel = false;
+			for (var k = 0; k < list.length; k++) {
+				if (!$.isNull(list[k]["dimOrgLevelId.orgColumnName"])) {
+					if (!isInArray(levelList, list[k].levelId)) {
+						levelList.push(list[k].levelId);
+					}
+ 					 else {
+						$.alert("层级不能重复");
+						for (var i = 1; i <= 5; i++) {
+							$('#myjqgrid').jqGrid('editRow', i);
+						}
+						return false;
+					}
+					dimOrgLevelStr += JSON.stringify(list[k]);
+					var l = k + 1;
+					if (l != list.length) {
 						dimOrgLevelStr += ";";
 					}
-				}else{
+				} else {
 					break;
 				}
 			}
@@ -107,9 +119,12 @@ window.loc_onload = function() {
 							wd.reload();
 						});
 					}
+				},
 
-				}
 			})
+			for (var i = 1; i <= 5; i++) {
+				$('#myjqgrid').jqGrid('editRow', i);
+			}
 		}
 	});
 
@@ -117,76 +132,87 @@ window.loc_onload = function() {
 		wd.cancel();
 	});
 
-	$('#myjqgrid').jqGrid({
-		url : $.ctx + '/api/back/dimOrgLevel/queryPage',
-		postData : {'dimOrgLevelId.priKey':priKey},
-		editurl : 'clientArray',
-		datatype : 'json',
-		colNames : [ '组织字段名称', '层级', '排序','隐藏列' ],
-		colModel : [ {
-			name : 'dimOrgLevelId.orgColumnName',
-			index : 'dimOrgLevelId.orgColumnName',
-			width : 60,
-			sortable : false,
-			editable: true,
-			frozen : true,
-			align : 'center'
-		}, {
-			name : 'levelId',
-			index : 'levelId',
-			width : 20,
-			sortable : false,
-			editable: true,
-			frozen : true,
-			align : 'center',
-			edittype: 'select',
-			editoptions: {
-	            value: number
-	        },
-	        formatter: 'select',
-		}, {
-			name : 'sortNum',
-			index : 'sortNum',
-			width : 20,
-			sortable : false,
-			editable: true,
-			frozen : true,
-			align : 'center',
-			edittype: 'select',
-			editoptions: {
-	            value: number
-	        },
-	        formatter: 'select',
-		}, {
-			name : 'hidden',
-			index : 'hidden',
-			width : 20,
-			hidden : true,
-		} ],
-		cellEdit : true,
-		jsonReader: {
-	        repeatitems: false,
-	        id: '0'
-	    },
-		afterGridLoad : function() {
-			if (priKey == 'selectNull') {
-				var dataRow = {
-					'dimOrgLevelId.orgColumnName' : '',
-					'levelId' : '',
-					'sortNum' : '',
+	$('#myjqgrid').jqGrid(
+			{
+				url : $.ctx + '/api/back/dimOrgLevel/queryPage',
+				postData : {
+					'dimOrgLevelId.priKey' : priKey
+				},
+				editurl : 'clientArray',
+				datatype : 'json',
+				colNames : [ '组织字段名称', '层级', '排序', '隐藏列' ],
+				colModel : [ {
+					name : 'dimOrgLevelId.orgColumnName',
+					index : 'dimOrgLevelId.orgColumnName',
+					width : 60,
+					sortable : false,
+					editable : true,
+					frozen : true,
+					align : 'center'
+				}, {
+					name : 'levelId',
+					index : 'levelId',
+					width : 20,
+					sortable : false,
+					editable : true,
+					frozen : true,
+					align : 'center',
+					edittype : 'select',
+					editoptions : {
+						value : number
+					},
+					formatter : 'select',
+				}, {
+					name : 'sortNum',
+					index : 'sortNum',
+					width : 20,
+					sortable : false,
+					editable : true,
+					frozen : true,
+					align : 'center',
+					edittype : 'select',
+					editoptions : {
+						value : number
+					},
+					formatter : 'select',
+				}, {
+					name : 'hidden',
+					index : 'hidden',
+					width : 20,
+					hidden : true,
+				} ],
+				cellEdit : true,
+				jsonReader : {
+					repeatitems : false,
+					id : '0'
+				},
+				afterGridLoad : function() {
+					var dataRow = {
+						'dimOrgLevelId.orgColumnName' : '',
+						'levelId' : '',
+						'sortNum' : '',
+					}
+					if (priKey == 'selectNull') {
+						for (var i = 1; i <= 5; i++) {
+							$('#myjqgrid').jqGrid('addRowData', i, dataRow,
+									'last');
+							$('#myjqgrid').jqGrid('editRow', i);
+						}
+					} else {
+						var ids = $('#myjqgrid').jqGrid('getDataIDs');
+						for (var i = 0; i < ids.length; i++) {
+							$('#myjqgrid').jqGrid('editRow', ids[i]);
+						}
+						if (ids.length < 5) {
+							for (var num = ids.length + 1; num <= 5; num++) {
+								$('#myjqgrid').jqGrid('addRowData', num,
+										dataRow, 'last');
+								$('#myjqgrid').jqGrid('editRow', num);
+							}
+						}
+					}
 				}
-				for (var i = 1; i <= 5; i++) {
-					$('#myjqgrid').jqGrid('addRowData', i, dataRow, 'last');
-					$('#myjqgrid').jqGrid('editRow', i);
-				}
-			}else{
-				var ids = $('#myjqgrid').jqGrid('getDataIDs');
-			    for (var i = 0; i < ids.length; i++) {
-			    	$('#myjqgrid').jqGrid('editRow', ids[i]);
-			    }
-			}
-		}
-	});
+			});
 }
 function isPartitionChecked(obj) {
 	if (obj.checked) {
@@ -194,4 +220,12 @@ function isPartitionChecked(obj) {
 	} else {
 		$("#isPartition").val("1");
 	}
+}
+function isInArray(arr, value) {
+	for (var i = 0; i < arr.length; i++) {
+		if (value === arr[i]) {
+			return true;
+		}
+	}
+	return false;
 }

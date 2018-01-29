@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import com.asiainfo.biapp.si.loc.base.dao.BaseDao;
 import com.asiainfo.biapp.si.loc.base.exception.BaseException;
+import com.asiainfo.biapp.si.loc.base.exception.ParamRequiredException;
 import com.asiainfo.biapp.si.loc.base.page.Page;
 import com.asiainfo.biapp.si.loc.base.service.impl.BaseServiceImpl;
 import com.asiainfo.biapp.si.loc.core.back.dao.IDimOrgLevelDao;
@@ -75,6 +76,15 @@ public class DimOrgLevelServiceImpl extends BaseServiceImpl<DimOrgLevel, String>
     }
 
     public void addDimOrgLevel(DimOrgLevel dimOrgLevel) throws BaseException {
+        DimOrgLevelVo dimOrgLevelVo = new DimOrgLevelVo();
+        DimOrgLevelId dimOrgLevelId = new DimOrgLevelId();
+        dimOrgLevelId.setPriKey(dimOrgLevel.getDimOrgLevelId().getPriKey());
+        dimOrgLevelVo.setDimOrgLevelId(dimOrgLevelId);
+        dimOrgLevelVo.setLevelId(dimOrgLevel.getLevelId());
+        List<DimOrgLevel> dimOrgLevelList = selectDimOrgLevelList(dimOrgLevelVo);
+        if(!dimOrgLevelList.isEmpty()){
+            throw new ParamRequiredException("该层级已存在");
+        }
         super.saveOrUpdate(dimOrgLevel);
     }
 
