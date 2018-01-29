@@ -133,7 +133,7 @@ window.loc_onload = function() {
 			showDialog:function(){
 				$("#dialog").dialog({
 		    		autoOpen: true,
-		    		width: 450,
+		    		width: 550,
 		    		buttons: [
 			    	    {
 			    	       text: "取消",
