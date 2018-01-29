@@ -39,7 +39,8 @@
 				<span class="fright" v-text="model.customNum"></span>
 			</h3>
 			<div class="clearfix">
-			<div class="ui-custom-item clearfix clearfix"  v-for="(item,index) in customRule">
+			<div id = "labelDetail"></div>
+			<!-- <div class="ui-custom-item clearfix clearfix" >
 				<a >
 					<span>{{item.attrName}}</span>
 				</a>
@@ -47,7 +48,7 @@
 					{{item.leftZoneSign}}<span>{{item.contiueMinVal}}</span>
 					 且 {{item.rightZoneSign}}<span>{{item.contiueMaxVal}}</span>
 				</a>
-			</div>
+			</div> -->
 			<span class="ui-label-date fright" v-text="model.dataDate">
 			</div>
 			 <!-- <div class="clearfix">
@@ -106,16 +107,16 @@
 						</div>
 					</div>
 					<div class="ui-custom-move fleft">
-						<a class="ui-custom-left" href=""></a>
-						<a class="ui-custom-right" href=""></a>
+						<a class="ui-custom-left" id="custom_left"></a>
+						<a class="ui-custom-right" id="custom_right"></a>
 					</div>
 					<div class="ui-custom-col fleft">
 						<h3>已选标签</h3>
 						<div class="ui-custom-mes">
-							<ul class="label-selected">
-							<li>
+							<ul class="label-selected" id="selectedLabel">
+							<!-- <li >
 									<span v-text="model.calcuElementName"></span>
-							</li>
+							</li> -->
 								<!-- <li><a href="">籍贯</a></li>
 								<li><a href="">性别</a></li>
 								<li><a href="">品牌</a></li>
@@ -124,7 +125,7 @@
 						</div>
 					</div>
 				</div>	
-				<div class="mt20">
+				 <!-- <div class="mt20">
 					 <div class="form-group mr100">
 	                    <div class="">
 	                        <select class="form-control input-pointer" name="dataStatusId">
@@ -141,7 +142,7 @@
 					   <label  for="myr4"><i class="default"></i> 降序</label>
 					</div>
 					<button type="button" class="ui-btn ui-btn-second ml30">添加</button>
-				</div>
+				</div> -->
 			</div>
 		</div>
 		<div class="ui-custom-btn mt10">
