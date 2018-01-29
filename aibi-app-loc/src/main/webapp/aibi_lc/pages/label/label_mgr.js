@@ -85,7 +85,8 @@ window.loc_onload = function(){
 	    	url: $.ctx + "/api/label/labelInfo/queryPage",
 	        datatype: "json",
 	        postData: {
-				"configId" : obj.attr("configId")
+				"configId" : obj.attr("configId"),
+				"groupType" : 0
 			},
 	        colNames:['标签名称','标签类型','更新周期','数据状态','标签审批状态','创建时间','操作'],
 	        colModel:[
