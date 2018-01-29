@@ -79,5 +79,17 @@ public interface ILabelExploreService {
 	 */
 	public String getVerticalLabelSql(LabelRuleVo verticalLabelRule, ExploreQueryParam queryParam)
 			throws BaseException;
-
+	/**
+	 * Description: 获取客户群清单sql
+	 * 				(FROM dw_khq_cross_once_p002_20180125 where custom_id='L0000071')
+	 * @param customId
+	 * @param dataDate
+	 * @return
+	 * @throws BaseException
+	 *
+	 * @author  tianxy3
+	 * @date 2018年1月29日
+	 */
+	public String getListTableSql(String customId,String dataDate)throws BaseException;
+	
 }

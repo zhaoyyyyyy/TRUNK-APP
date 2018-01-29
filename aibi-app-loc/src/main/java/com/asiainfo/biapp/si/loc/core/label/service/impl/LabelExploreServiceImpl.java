@@ -1,6 +1,7 @@
 
 package com.asiainfo.biapp.si.loc.core.label.service.impl;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
@@ -10,9 +11,10 @@ import java.util.Set;
 
 import javax.transaction.Transactional;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.asiainfo.biapp.si.loc.auth.model.User;
+import com.asiainfo.biapp.si.loc.base.common.CommonConstants;
 import com.asiainfo.biapp.si.loc.base.common.LabelInfoContants;
 import com.asiainfo.biapp.si.loc.base.common.LabelRuleContants;
 import com.asiainfo.biapp.si.loc.base.exception.BaseException;
@@ -24,45 +26,78 @@ import com.asiainfo.biapp.si.loc.core.label.entity.MdaSysTable;
 import com.asiainfo.biapp.si.loc.core.label.entity.MdaSysTableColumn;
 import com.asiainfo.biapp.si.loc.core.label.model.ExploreQueryParam;
 import com.asiainfo.biapp.si.loc.core.label.model.LabelElementFactory;
+import com.asiainfo.biapp.si.loc.core.label.service.IGroupCalcSqlPaser;
 import com.asiainfo.biapp.si.loc.core.label.service.ILabelExploreService;
+import com.asiainfo.biapp.si.loc.core.label.service.ILabelInfoService;
 import com.asiainfo.biapp.si.loc.core.label.vo.LabelRuleVo;
 
 @Service
 @Transactional
 public class LabelExploreServiceImpl implements ILabelExploreService {
 
-
+	@Autowired
+	private IGroupCalcSqlPaser sqlPaser;
+	
+	@Autowired
+	private ILabelInfoService labelInfoService;
+	
 	@Override
 	public String getFromSqlForMultiLabel(List<LabelRuleVo> labelRuleList, ExploreQueryParam queryParam) throws BaseException {
-		LabelElementFactory fac = new LabelElementFactory();
-		StringBuffer wherelabel = new StringBuffer(" (");
+		Map<String, String> labelRuleToSql = new HashMap<String, String>();
+		StringBuffer calcExpr = new StringBuffer();
+		Integer duplicateLabelIdCount = 1;
 		/***/
 		for (LabelRuleVo rule : labelRuleList) {
-			if (LabelRuleContants.ELEMENT_TYPE_LABEL_ID == rule.getElementType()) {
+			if (LabelRuleContants.ELEMENT_TYPE_OPERATOR==rule.getElementType()) {
+				if (LabelRuleContants.CALCULATE_ELEMENT_TYPE_OPT_OR
+						.equalsIgnoreCase(rule.getCalcuElement())) {
+					calcExpr.append(CommonConstants.UNION);// 并
+				} else if (LabelRuleContants.CALCULATE_ELEMENT_TYPE_OPT_AND
+						.equalsIgnoreCase(rule.getCalcuElement())) {
+					calcExpr.append(CommonConstants.INTERSECT);// 交
+				} else if (LabelRuleContants.CALCULATE_ELEMENT_TYPE_OPT_EXCEPT
+						.equalsIgnoreCase(rule.getCalcuElement())) {
+					calcExpr.append(CommonConstants.EXCEPT);// 差
+				}
+			} else if (LabelRuleContants.ELEMENT_TYPE_BRACKET==rule.getElementType()) {
+				calcExpr.append(rule.getCalcuElement());// 括号
+			} else if (LabelRuleContants.ELEMENT_TYPE_LABEL_ID == rule.getElementType()) {
 				String labelIdStr = rule.getCalcuElement();
 				LabelInfo labelInfo = CocCacheProxy.getCacheProxy().getLabelInfoById(labelIdStr);
+				String singleLabelSql = "";
 				if (labelInfo.getLabelTypeId() == LabelInfoContants.LABEL_TYPE_VERT) {
-					String verticalLabelSql = this.getVerticalLabelSql(rule, queryParam);
-					
-					
+					singleLabelSql = this.getVerticalLabelSql(rule, queryParam);
 				}else{
-					MdaSysTableColumn column = labelInfo.getMdaSysTableColumn();
-					MdaSysTable table = column.getMdaSysTable();
-					String alias = "t_" + table.getTableId(); // 表的别名:t_tabelId
-					/** 1、获取where标签 sql条件	 */
-					String asName = alias + "." + column.getColumnName(); // 格式为：“别名.字段名”
-					fac.setLabelElement(labelInfo.getLabelTypeId());
-					String labelConditionSql = fac.getLabelElement().getConditionSql(rule, column, asName,
-							queryParam.getInterval(), queryParam.getUpdateCycle(), queryParam.isValidate());
-					wherelabel.append(labelConditionSql);
+					List<LabelRuleVo> singleCiLabelRuleList = new ArrayList<LabelRuleVo>();
+					singleCiLabelRuleList.add(rule);
+					singleLabelSql = this.getCountSqlStr(singleCiLabelRuleList, queryParam);
+				}
+				String trimSql = singleLabelSql.trim();
+				if (trimSql.startsWith("from")) {
+					singleLabelSql = trimSql.substring(4);
+				}
+				System.out.println("根据标签ID获得混合运算生成客户群,标签Id为："
+						+ rule.getCalcuElement() + ",生成的sql为："+ singleLabelSql);
+				if (labelRuleToSql.keySet().contains(rule.getCalcuElement())) {
+					labelRuleToSql.put(rule.getCalcuElement() + "_"+ duplicateLabelIdCount, singleLabelSql);
+					calcExpr.append(rule.getCalcuElement() + "_"+ duplicateLabelIdCount);
+					duplicateLabelIdCount++;
+				} else {
+					labelRuleToSql.put(rule.getCalcuElement(),singleLabelSql);
+					calcExpr.append(rule.getCalcuElement());
 				}
 			} else if (LabelRuleContants.ELEMENT_TYPE_LIST_ID == rule.getElementType()) {
-				
-			}
+				String listTableId = rule.getCalcuElement();
+				String customId = rule.getCustomId();
+				String singleLabelSql = this.getListTableSql(customId,rule.getAttrVal());
+				labelRuleToSql.put(listTableId,singleLabelSql);
+				calcExpr.append(listTableId);
+			}//end ELEMENT_TYPE
 			
 		}//end for
-		
-		return null;
+		String sql =" from ("+ sqlPaser.parseExprToSql(calcExpr.toString(), labelRuleToSql)+")";
+		System.out.println(sql);
+		return sql;
 	}
 
 	
@@ -171,7 +206,7 @@ public class LabelExploreServiceImpl implements ILabelExploreService {
 		// 省专区，地市专区需要权限,普通专区不需要权限、 拼接where中的cityId，用于权限
 		boolean isNeedAuthen = false;
 		StringBuffer whereSb = new StringBuffer("where 1=1 and ");
-		String cityColumn = "city_id";// TODO ( t_401.CITY_COLUMN in( 571))
+		String cityColumn = "city_id";// TODO 权限
 		if (StringUtil.isNotEmpty(dataTabelAlias) && StringUtil.isNotEmpty(queryParam.getOrgId())) {
 			String orgId = queryParam.getOrgId();
 			StringBuffer orgSql = new StringBuffer();
@@ -266,5 +301,19 @@ public class LabelExploreServiceImpl implements ILabelExploreService {
 			joinSb.append(whereSb.toString());
 		}
 		return joinSb.toString();
+	}
+
+
+	@Override
+	public String getListTableSql(String customId, String dataDate) throws BaseException {
+		LabelInfo customGroup = labelInfoService.get(customId);
+		String tableName = "no table";
+		if (LabelInfoContants.CUSTOM_CYCLE_TYPE_ONE == customGroup.getUpdateCycle()) {
+			tableName = LabelInfoContants.KHQ_CROSS_ONCE_TABLE + customGroup.getConfigId() + "_"+ customGroup.getDataDate();
+		} else {
+			tableName = LabelInfoContants.KHQ_CROSS_TABLE + customGroup.getConfigId() + "_"+ customGroup.getDataDate();
+		}
+		String singleLabelSql = tableName+" where "+LabelInfoContants.KHQ_CROSS_ID_PARTION+" = '"+customId+"' ";
+		return singleLabelSql;
 	}
 }
