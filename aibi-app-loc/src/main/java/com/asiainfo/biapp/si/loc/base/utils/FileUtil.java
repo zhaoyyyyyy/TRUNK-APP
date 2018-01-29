@@ -6,12 +6,6 @@
 
 package com.asiainfo.biapp.si.loc.base.utils;
 
-import info.monitorenter.cpdetector.io.ASCIIDetector;
-import info.monitorenter.cpdetector.io.ByteOrderMarkDetector;
-import info.monitorenter.cpdetector.io.CodepageDetectorProxy;
-import info.monitorenter.cpdetector.io.JChardetFacade;
-import info.monitorenter.cpdetector.io.UnicodeDetector;
-
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -23,7 +17,13 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import com.asiainfo.biapp.si.loc.base.common.CommonConstants;
-import com.asiainfo.biapp.si.loc.base.exception.BaseException;
+import com.asiainfo.biapp.si.loc.cache.CocCacheProxy;
+
+import info.monitorenter.cpdetector.io.ASCIIDetector;
+import info.monitorenter.cpdetector.io.ByteOrderMarkDetector;
+import info.monitorenter.cpdetector.io.CodepageDetectorProxy;
+import info.monitorenter.cpdetector.io.JChardetFacade;
+import info.monitorenter.cpdetector.io.UnicodeDetector;
 
 
 /**
@@ -81,15 +81,10 @@ public class FileUtil {
     
     public static String getMpmStoreFilePath() {
         String mpmPath = "";
-        try {
-            mpmPath = getProperties("LOC_CONFIG_SYS_TEMP_PATH");
-        } catch (BaseException e) {
-            LogUtil.error(e);
-        }
+        mpmPath = CocCacheProxy.getCacheProxy().getSYSConfigInfoByKey("LOC_CONFIG_SYS_TEMP_PATH");
         if (!mpmPath.endsWith(File.separator)) {
             mpmPath += File.separator;
         }
-        mpmPath += CommonConstants.CI_STORE_SUB_PATH;
         File pathFile = new File(mpmPath);
         if (!pathFile.exists()) {
             if (!pathFile.mkdirs()) {
@@ -97,17 +92,6 @@ public class FileUtil {
             }
         }
         return mpmPath;
-    }
-    
-    public static String getProperties(String key) throws BaseException {
-        String value = null;
-        for (String fileKey : fileNames.keySet()) {
-            Map<String, String> prop = props.get(fileKey);
-            if (prop != null && (value = prop.get(key)) != null) {
-                break;
-            }
-        }
-        return StringUtil.isEmpty(value)? "" :value.trim();
     }
     
     private static String generateNewFilename(String fileName) {
