@@ -76,21 +76,6 @@ window.loc_onload = function() {
 			for (var i=0;i<model.customRule.length;i++){
 				var html="";
         		if(model.customRule[i].elementType ==2){
-        			if(model.AttrbuteId==""){
-	        			model.AttrbuteId = model.customRule[i].calcuElement;
-	        		}else{
-	        			model.AttrbuteId +=","+model.customRule[i].calcuElement;
-	        		}
-        			html="<li>"+
-		    		"<div class='checkbox'>"+
-		    		"<input type='checkbox' id='"+model.customRule[i].calcuElement+"R' class='checkbix'>"+
-		    		"<label for='"+model.customRule[i].calcuElement+"R' aria-label role='checkbox' class='checkbix' data-id='"+model.customRule[i].calcuElement+"R' data-name='"+model.customRule[i].attrName+"'>"+
-		    		"<span class='large'></span>"+
-		    		model.customRule[i].attrName+
-		    		"</label>"+
-		    		"</div>"+
-		    		"</li>";
-        			$("#selectedLabel").append(html);
         			if(model.customRule[i].labelTypeId ==4 &&model.customRule[i].contiueMinVal!="" &&model.customRule[i].contiueMaxVal!=""&&model.customRule[i].contiueMinVal!=null &&model.customRule[i].contiueMaxVal!=null){
         				html = "<div class='ui-custom-item clearfix clearfix' ><a><span> "+model.customRule[i].attrName+"</span></a><a><span>"+model.customRule[i].leftZoneSign+model.customRule[i].contiueMinVal+"且"+model.customRule[i].rightZoneSign+model.customRule[i].contiueMaxVal+"</span></div>"
         				$("#labelDetail").append(html);
@@ -130,6 +115,18 @@ window.loc_onload = function() {
 		el : '#dataD',
 		data : model,
 		methods:{
+			previewDialog:function (dimTableName) {
+				var wd = $.window('客户群预览', $.ctx
+						+ '/aibi_lc/pages/custom/custom_preview.html', 900,
+						600);
+				wd.reload = function() {
+					$("#mainGrid").setGridParam({
+						postData : $("#formSearch").formToJson()
+					}).trigger("reloadGrid", [ {
+						page : 1
+					} ]);
+				}
+			},
 			showDialog:function(){
 				$("#dialog").dialog({
 		    		autoOpen: true,
@@ -148,31 +145,27 @@ window.loc_onload = function() {
 			    	        "class":"ui-btn ui-btn-default",
 			    	        click: function() {
 			    	        	$( this ).dialog( "close" );
-			    	        	if(model.AttrbuteId ==""){
-			    	        		$.alert("请选择推送的属性");
-			    	        	}else{
-									//console.log($("#radioList label[class~=active]").siblings("input").val()+$("#checkboxList label[class~=active]"))
-									for(var i=0;i<$("#checkboxList label[class~=active]").length;i++){
-										var sysId = $("#checkboxList label[class~=active]")[i].htmlFor;
-										$.commAjax({			
-										    url : $.ctx+'/api/syspush/labelPushCycle/save',
-										    dataType : 'json', 
-										    async : false,
-										    postData : {
-													"customGroupId" :labelId,
-													"sysId" :sysId,
-													"pushCycle" :$("#radioList label[class~=active]").siblings("input").val(),
-													"AttrbuteId" :model.AttrbuteId,
-												},
-										    maskMassage : '推送中...'
-									   });
-										if(i == $("#checkboxList label[class~=active]").length-1){
-											$.success("推送成功",function(){
-												//history.back(-1);
-											});
-										}
+								//console.log($("#radioList label[class~=active]").siblings("input").val()+$("#checkboxList label[class~=active]"))
+								for(var i=0;i<$("#checkboxList label[class~=active]").length;i++){
+									var sysId = $("#checkboxList label[class~=active]")[i].htmlFor;
+									$.commAjax({			
+									    url : $.ctx+'/api/syspush/labelPushCycle/save',
+									    dataType : 'json', 
+									    async : false,
+									    postData : {
+												"customGroupId" :labelId,
+												"sysId" :sysId,
+												"pushCycle" :$("#radioList label[class~=active]").siblings("input").val(),
+												"AttrbuteId" :model.AttrbuteId,
+											},
+									    maskMassage : '推送中...'
+								   });
+									if(i == $("#checkboxList label[class~=active]").length-1){
+										$.success("推送成功",function(){
+											//history.back(-1);
+										});
 									}
-			    	        	}
+								}
 			    	        }
 				    	}
 			  		]
@@ -183,7 +176,7 @@ window.loc_onload = function() {
 		    			model.sysName=data.data;
 		    		}
 		    	})
-			}
+			},
 		},
 		mounted: function () {
 		    this.$nextTick(function () {
@@ -194,11 +187,13 @@ window.loc_onload = function() {
 		    })
 		}
 	})
+	$("#fun_to_add").click(function(){
+		var i=0;
+		var html ="<div class='mt20'> <div class='form-group mr100'> <div class=''><select class='form-control input-pointer' name='dataStatusId' ><option>1</option><option>2</option><option>3</option></select></div></div><div class='radio circle success'> <input type='radio' name='radio20' id='myr"+i+"' checked='checked'> <label for='myr"+i+++"'><i class='default'></i> 升序</label</div></div><div class='radio circle success'><input type='radio' name='radio20'  id='myr"+i+"'> <label  for='myr"+i+++"'> <i class='default'></i> 降序</label></div></div> ";
+		$("#addALine").append(html);
+	})
 	//标签体系
 	labeltree();
-//	function custom_left(){
-//    	console.log(1);
-//    }
 	function labeltree(){
 		var ztreeObj;
 		$.commAjax({			

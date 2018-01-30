@@ -84,15 +84,17 @@ public class LabelPushCycleServiceImpl extends BaseServiceImpl<LabelPushCycle, S
 
     public void addLabelPushCycle(LabelPushCycle labelPushCycle) throws BaseException {
         String[] attrbuteIdList = labelPushCycle.getAttrbuteId().split(",");
-        for(int i=0;i<attrbuteIdList.length;i++){
-            LabelInfo labelInfo = iLabelInfoService.selectLabelInfoById(attrbuteIdList[i]);
-            LabelAttrRel labelAttrRel = new LabelAttrRel();
-            labelAttrRel.setRecordId(labelPushCycle.getRecordId());
-            labelAttrRel.setLabelId(labelPushCycle.getCustomGroupId());
-            labelAttrRel.setAttrCol(labelInfo.getLabelName());
-            labelAttrRel.setAttrColType(labelInfo.getLabelTypeId().toString());
-            iLabelAttrRelService.addLabelAttrRel(labelAttrRel);
-        }
+            for(int i=0;i<attrbuteIdList.length;i++){
+                if(!("").equals(attrbuteIdList[i])){
+                    LabelInfo labelInfo = iLabelInfoService.selectLabelInfoById(attrbuteIdList[i]);
+                    LabelAttrRel labelAttrRel = new LabelAttrRel();
+                    labelAttrRel.setRecordId(labelPushCycle.getRecordId());
+                    labelAttrRel.setLabelId(labelPushCycle.getCustomGroupId());
+                    labelAttrRel.setAttrCol(labelInfo.getLabelName());
+                    labelAttrRel.setAttrColType(labelInfo.getLabelTypeId().toString());
+                    iLabelAttrRelService.addLabelAttrRel(labelAttrRel);
+                }
+            }
         super.saveOrUpdate(labelPushCycle);
     }
 

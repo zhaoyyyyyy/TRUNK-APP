@@ -125,11 +125,14 @@
 						</div>
 					</div>
 				</div>	
-				 <!-- <div class="mt20">
+				<div id="addALine">
+				 <div class="mt20">
 					 <div class="form-group mr100">
 	                    <div class="">
-	                        <select class="form-control input-pointer" name="dataStatusId">
-	                        	<option>姓名</option>
+	                        <select class="form-control input-pointer" name="dataStatusId" >
+	                        <option>1</option>
+	                         <option>2</option>
+	                          <option>3</option>
 	                        </select>
 	                    </div>
 	                </div>
@@ -141,13 +144,14 @@
 					   <input type="radio" name="radio20"  id="myr4"> 
 					   <label  for="myr4"><i class="default"></i> 降序</label>
 					</div>
-					<button type="button" class="ui-btn ui-btn-second ml30">添加</button>
-				</div> -->
+					<button type="button" class="ui-btn ui-btn-second ml30" id="fun_to_add">添加</button>
+				</div> 
+				</div>
 			</div>
 		</div>
 		<div class="ui-custom-btn mt10">
 				<button type="button" class="ui-btn ui-btn-ghost-brand mr10" onclick="window.history.go(-1)">取消</button>
-				<button type="button" class="ui-btn ui-btn-default mr10">预览</button>
+				<button type="button" class="ui-btn ui-btn-default mr10" @click="previewDialog()" >预览</button>
 				<button type="button" class="ui-btn ui-btn-default" @click="showDialog()">推送</button>
 		</div>
 	</div>
@@ -185,7 +189,5 @@
 	    </div>
 	</div>
 </div>
-
-
 </body>
 </html>
