@@ -31,7 +31,7 @@ public class TokenAuthFilter implements Filter {
     Log log = LogFactory.getLog(TokenAuthFilter.class);
 
     /** 忽略地址 **/
-    private final String ignoreUrls = "/api/user/login;/api/user/autoLogin;/api/shopCart/saveShopSession;/api/shopCart/findShopCart";
+    private final String ignoreUrls = "/api/user/login;/api/user/applyToken;/api/shopCart/saveShopSession;/api/shopCart/findShopCart";
     
     private String[] excludedPageArray;
    

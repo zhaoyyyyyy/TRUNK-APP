@@ -83,6 +83,7 @@ public class YwUserServiceImpl extends DevUserServiceImpl implements IUserServic
 	@Override
 	public User getUserByToken(String token) throws BaseException{
 		
+		User user = new User();
 		String username = null;
 		String userId = null;
 		Map<String,Object> params = new HashMap<String,Object>();
@@ -92,15 +93,15 @@ public class YwUserServiceImpl extends DevUserServiceImpl implements IUserServic
 		try{
 			String tokenStr = HttpUtil.sendGet(jauthUrl+"/api/auth/me", params);
 			JSONObject jsObject = JSONObject.fromObject(tokenStr);
-			username = jsObject.getString("username");
 			userId = jsObject.getString("userId");
+			username = jsObject.getString("username");
+			user.setUserId(userId);
+			user.setUserName(username);
 		}catch(Exception e){
 			throw new UserAuthException("无效的token");
 		}
-		User user = new User();
-		user.setUserName(username);
-		user.setUserId(userId);
 		
+				
 		//拿到数据权限
 				try{
 					params.put("orgCode", "1");
@@ -170,8 +171,11 @@ public class YwUserServiceImpl extends DevUserServiceImpl implements IUserServic
 			List<Resource> domResource = new ArrayList<Resource>();
 			List<Resource> menuResource = new ArrayList<Resource>();
 			List<Resource> apiResource = new ArrayList<Resource>();
-			String resourceJson = HttpUtil.sendGet(jauthUrl+"/api/resource/parentResource/get", params);
-			List<Resource> resourcePrivaliege = (List<Resource>) JsonUtil.json2CollectionBean(resourceJson, List.class, Resource.class);
+			params.put("id","LOC_MENU");
+			String resourceJson = HttpUtil.sendPost(jauthUrl+"/api/resource/get", params);
+			Resource resAll = (Resource) JsonUtil.json2CollectionBean(resourceJson, Resource.class);
+			Set<Resource> resourcePrivaliege = new HashSet<Resource>();
+			resourcePrivaliege.addAll(resAll.getChildren());
 			if(resourcePrivaliege != null && resourcePrivaliege.size() > 0){
 				for(Resource resource : resourcePrivaliege){
 					if(Resource.API.equals(resource.getParentId()) ){

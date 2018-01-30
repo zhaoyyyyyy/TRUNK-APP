@@ -1,7 +1,7 @@
 /* 单点登录重写类 */
 var auto_Login = (function (model){
         
-		model.active  = "jauth"; //jauth  chinapost
+		model.active  = "jauth"; //jauth  cpyw
         
         /***************默认开饭版本的实现(基于jauth的) ****************/
         model.jauth = {
@@ -12,8 +12,8 @@ var auto_Login = (function (model){
         		}
         }
         
-        /***************中邮版本的实现(基于ocrm的) ****************/
-        model.chinapost = {
+        /***************中邮(yw)版本的实现 ****************/
+        model.cpyw = {
         		failLoginUrl: "http://crm.chinapost.com:18880/login",
         		autoLoginFun:function(callback){
         			var flag = false;
@@ -26,7 +26,8 @@ var auto_Login = (function (model){
         			     },
      					 async: false,
         				 success: function(data){
-        					 flag = callback(data.cnpost.username);
+        					 debugger;
+        					 flag = callback(data.cnpost.id);
         				 }
         			 })
                 	return flag;
@@ -54,10 +55,10 @@ var auto_Login = (function (model){
         		    else 
         		        return null; 
         		},
-        		login : function(username){
+        		applyToken : function(username){
         			var flag = true;
         			$.ajax({
-  					  url: $.ctx + "/api/user/autoLogin",
+  					  url: $.ctx + "/api/user/applyToken",
   					  type: 'post',
   					  async: false,
   					  data :{"username":username},
@@ -96,7 +97,7 @@ $(function(){
 		if(ssg){
 			var token = ssg.getItem("token");
 			if(!token){
-				if(auto_Login[auto_Login.active].autoLoginFun(auto_Login._util.login)){
+				if(auto_Login[auto_Login.active].autoLoginFun(auto_Login._util.applyToken)){
 					window.location.href = "./aibi_lc/pages/"+ href+ ".html"
 				}else{
 					window.location.href = auto_Login[auto_Login.active].failLoginUrl

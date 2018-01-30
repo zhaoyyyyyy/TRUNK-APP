@@ -59,12 +59,12 @@ public class UserController extends BaseController<User>{
 	 * @param userName
 	 * @param password
 	 */
-	@ApiOperation(value = "单点登录:根据不同现场的规则会进行校验")
+	@ApiOperation(value = "单纯的申请一个token")
 	@ApiImplicitParams({
 		@ApiImplicitParam(name = "username", value = "用户名", required = true, paramType = "query", dataType = "string"),
 	})
-	@RequestMapping(value="/autoLogin", method=RequestMethod.POST, produces={ MediaType.APPLICATION_JSON_VALUE })
-	public WebResult<TokenModel> autoLogin(String username){
+	@RequestMapping(value="/applyToken", method=RequestMethod.POST, produces={ MediaType.APPLICATION_JSON_VALUE })
+	public WebResult<TokenModel> applyToken(String username){
 		WebResult<TokenModel> webResult = new WebResult<>();
 		TokenModel token = null;
 		try {
