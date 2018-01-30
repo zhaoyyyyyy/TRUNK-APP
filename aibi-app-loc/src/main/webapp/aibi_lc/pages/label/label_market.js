@@ -646,30 +646,31 @@ var labelMarket = (function (model){
 		 * 展示标签信息
 		 */
 		model.showLabelInfo = function(elem){
-			$(".ui-conditionCT").find(".ui-conditionBox").hide();
 			var index = $(elem).parent().parent().attr("index");
 			var rule = dataModel.ruleList[index];
-			if(rule){
-				$.commAjax({
-					url : $.ctx + "/api/label/labelInfo/get",
-					postData:{
-						labelId : rule.calcuElement
-	  				},
-					onSuccess:function(returnObj){
-						var status = returnObj.status;
-						if (status == '200'){
-							if($(elem).parents(".ui-conditionCT").find(".ui-conditionBox").css("display")=="none"){
+			if($(elem).parents(".ui-conditionCT").find(".ui-conditionBox").css("display") =="none"){//如果原来隐藏，则显示
+				$("#sortable").find(".ui-conditionBox").hide();
+				if(rule){
+					$.commAjax({
+						url : $.ctx + "/api/label/labelInfo/get",
+						postData:{
+							labelId : rule.calcuElement
+		  				},
+						onSuccess:function(returnObj){
+							var status = returnObj.status;
+							if (status == '200'){
 								$(elem).parents(".ui-conditionCT").find(".ui-conditionBox").show();
+								dataModel.labelInfoViewObj = returnObj.data;
 							}else{
-								$(elem).parents(".ui-conditionCT").find(".ui-conditionBox").hide();
+								$.alert(returnObj.msg);
 							}
-							dataModel.labelInfoViewObj = returnObj.data;
-						}else{
-							$.alert(returnObj.msg);
-						}
-					},
-				});
+						},
+					});
+				}
+			}else{
+				$("#sortable").find(".ui-conditionBox").hide();
 			}
+			
 		}
 		/**
 		 * 删除匹配的括号【与条件直接关联的括号】,待测试
