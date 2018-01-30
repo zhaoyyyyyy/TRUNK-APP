@@ -11,7 +11,9 @@ var model = {
 	monthMainColumn : "",// 月表主键字段
 	monthPartitionColumn : "",// 月表分区字段
 
-	otherColumn : ""// 其他字段
+	otherColumn : "",// 其他字段
+	
+	showPartition : false,//显示分区字段
 }
 window.loc_onload = function() {
 	var priKey = $.getUrlParam("priKey");
@@ -195,13 +197,13 @@ window.loc_onload = function() {
 					id : '0'
 				},
 				afterGridLoad : function() {
-					var dataRow = {
-						'dimOrgLevelId.orgColumnName' : '',
-						'levelId' : '',
-						'sortNum' : '',
-					}
 					if (priKey == 'selectNull') {
 						for (var i = 1; i <= 5; i++) {
+							var dataRow = {
+									'dimOrgLevelId.orgColumnName' : '',
+									'levelId' : i,
+									'sortNum' : i,
+								}
 							$('#myjqgrid').jqGrid('addRowData', i, dataRow,
 									'last');
 							$('#myjqgrid').jqGrid('editRow', i);
@@ -213,6 +215,11 @@ window.loc_onload = function() {
 						}
 						if (ids.length < 5) {
 							for (var num = ids.length + 1; num <= 5; num++) {
+								var dataRow = {
+										'dimOrgLevelId.orgColumnName' : '',
+										'levelId' : num,
+										'sortNum' : num,
+									}
 								$('#myjqgrid').jqGrid('addRowData', num,
 										dataRow, 'last');
 								$('#myjqgrid').jqGrid('editRow', num);
@@ -225,8 +232,10 @@ window.loc_onload = function() {
 function isPartitionChecked(obj) {
 	if (obj.checked) {
 		$("#isPartition").val("0");
+		model.showPartition = true;
 	} else {
 		$("#isPartition").val("1");
+		model.showPartition = false;
 	}
 }
 function isInArray(arr, value) {

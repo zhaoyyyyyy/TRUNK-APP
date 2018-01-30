@@ -59,10 +59,10 @@
 											type="text"></input>
 									</div>
 								</div>
-								<div class="ui-form-group">
-									<label class="control-label fleft">分区字段</label>
+								<div v-if="showPartition" class="ui-form-group">
+									<label class="control-label fleft"><span class="input-required">*</span>分区字段</label>
 									<div class="control-input">
-										<input class="form-control" placeholder="日表分区字段" v-model="dayPartitionColumn" id="dayPartitionColumn" name="dayPartitionColumn" type="text"></input>
+										<input class="form-control easyui-validatebox" required="true" placeholder="日表分区字段" v-model="dayPartitionColumn" id="dayPartitionColumn" name="dayPartitionColumn" type="text"></input>
 									</div>
 								</div>
 							</fieldset>
@@ -82,10 +82,10 @@
 											name="monthMainColumn" type="text"></input>
 									</div>
 								</div>
-								<div class="ui-form-group">
-									<label class="control-label fleft">分区字段</label>
+								<div v-if="showPartition" class="ui-form-group">
+									<label class="control-label fleft"><span class="input-required">*</span>分区字段</label>
 									<div class="control-input">
-										<input class="form-control" placeholder="月表分区字段" v-model="monthPartitionColumn" id="monthPartitionColumn" name="monthPartitionColumn" type="text"></input>
+										<input class="form-control easyui-validatebox" required="true" placeholder="月表分区字段" v-model="monthPartitionColumn" id="monthPartitionColumn" name="monthPartitionColumn" type="text"></input>
 									</div>
 								</div>
 							</fieldset>
