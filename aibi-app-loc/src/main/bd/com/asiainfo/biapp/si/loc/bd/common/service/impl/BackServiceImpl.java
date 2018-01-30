@@ -66,8 +66,7 @@ public class BackServiceImpl implements IBackSqlService{
      * @return
      */
     private IBackSqlDao getBackDaoBean() {
-    	String dbType = CocCacheProxy.getCacheProxy().getSYSConfigInfoByKey("LOC_CONFIG_SYS_BGDB_TYPE").toLowerCase();
-    	dbType = dbType.replace(dbType.substring(0,1), dbType.substring(0,1).toUpperCase());
+    	String dbType = CocCacheProxy.getCacheProxy().getSYSConfigInfoByKey("LOC_CONFIG_SYS_BGDB_TYPE");
     	String backDaoBeanId = "back"+dbType+"DaoImpl";
     	IBackSqlDao backSqlDao = (IBackSqlDao)SpringContextHolder.getBean(backDaoBeanId);
         return backSqlDao;
