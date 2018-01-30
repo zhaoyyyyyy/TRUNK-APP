@@ -32,7 +32,7 @@
 							<div class="ui-form-group">
 								<label class="control-label fleft"><span class="input-required">*</span>全量表名称</label>
 								<div class="control-input">
-									<input v-model="tableDesc" name="tableDesc" type="text" class="fleft form-control easyui-validatebox" required="true" placeholder="全量表描述" />
+									<input v-model="tableDesc" id="tableDesc" name="tableDesc" type="text" class="fleft form-control easyui-validatebox" required="true" placeholder="全量表描述" />
 								</div>
 							</div>
 							<div class="ui-form-group">
@@ -99,7 +99,7 @@
 					</div>
 					<fieldset>
 						<legend>组织字段名称</legend>
-						<div class="ui-reg-grid mt10 ml10 mr10">
+						<div class="ui-reg-grid mt10 ml10 mr10 mb10" style="margin-bottom:10px">
 							<div class=" ui-table-title mt10">
 								<table id="myjqgrid" class="table"></table>
 							</div>

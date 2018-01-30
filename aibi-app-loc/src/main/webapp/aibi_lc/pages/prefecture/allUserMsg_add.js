@@ -197,7 +197,6 @@ window.loc_onload = function() {
 					id : '0'
 				},
 				afterGridLoad : function() {
-					var back = 0;
 					if (priKey == 'selectNull') {
 						for (var i = 1; i <= 5; i++) {
 							var dataRow = {
@@ -208,7 +207,6 @@ window.loc_onload = function() {
 							$('#myjqgrid').jqGrid('addRowData', i, dataRow,
 									'last');
 							$('#myjqgrid').jqGrid('editRow', i);
-							back++;
 						}
 					} else {
 						var ids = $('#myjqgrid').jqGrid('getDataIDs');
@@ -227,10 +225,6 @@ window.loc_onload = function() {
 								$('#myjqgrid').jqGrid('editRow', num);
 							}
 						}
-						back++;
-					}
-					if(back==5){
-						
 					}
 				}
 			});
