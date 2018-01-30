@@ -18,15 +18,16 @@ var auto_Login = (function (model){
         		autoLoginFun:function(callback){
         			var flag = false;
         			
+        			//获取spring的acrmUrl 配置
+        			var acrmUrl = auto_Login._util.getSpringConfig("acrm-url");
         			 $.ajax({
-        				 url:'http://crm.chinapost.com:8442/api/sso/userinfo',
+        				 url: acrmUrl+'/api/sso/userinfo',
         				 type: 'get',
         				 xhrFields: {
         			            withCredentials: true
         			     },
      					 async: false,
         				 success: function(data){
-        					 debugger;
         					 flag = callback(data.cnpost.id);
         				 }
         			 })
@@ -77,6 +78,23 @@ var auto_Login = (function (model){
   					   }
         			});
         			return flag;
+        		},
+        		getSpringConfig : function(key){
+        			var value = "";
+        			$.ajax({
+  					  url: $.ctx + "/api/config/springConfig",
+  					  type: 'post',
+  					  async: false,
+  					  data :{"key":key},
+  					  success: function(returnObj){
+  						 if(returnObj && returnObj.status == '200'){
+  							value = returnObj.data;
+ 						  }else{
+ 							  alert(returnObj.msg);
+ 						  }
+  					   }
+        			});
+        			return value;
         		}
         }
         return model;
@@ -90,8 +108,16 @@ var auto_Login = (function (model){
 $(function(){
 	var hash = window.location.hash;
 	var href = "";
+	//获取spring的active配置
+	var springActive = auto_Login._util.getSpringConfig("spring.profiles.active");
+	if(springActive && springActive != ""){
+		auto_Login.active = springActive.replace("-","");
+	}
+	
+	
 	//存  #label/label_mgr 则走单点登录逻辑
 	if(hash){
+		
 		href = hash.split("#")[1];
 		var ssg = window.sessionStorage;
 		if(ssg){
@@ -102,6 +128,8 @@ $(function(){
 				}else{
 					window.location.href = auto_Login[auto_Login.active].failLoginUrl
 				}
+			}else{
+				window.location.href = "./aibi_lc/pages/"+ href+ ".html"
 			}
 		}
 	}else{
