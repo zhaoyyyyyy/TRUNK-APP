@@ -12,11 +12,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.nio.charset.Charset;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Map;
 
-import com.asiainfo.biapp.si.loc.base.common.CommonConstants;
 import com.asiainfo.biapp.si.loc.cache.CocCacheProxy;
 
 import info.monitorenter.cpdetector.io.ASCIIDetector;
@@ -47,10 +43,6 @@ import info.monitorenter.cpdetector.io.UnicodeDetector;
  * @version 1.0.0.2018年1月11日
  */
 public class FileUtil {
-    
-    private static Map<String, Map<String, String>> props = new HashMap<>();
-    
-    private static Map<String,String> fileNames = new LinkedHashMap<>();
     
     public static String uploadTargetUserFile(InputStream in, String fileName) throws Exception{
         String uploadName = "";

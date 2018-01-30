@@ -22,6 +22,7 @@ import com.asiainfo.biapp.si.loc.base.extend.SpringContextHolder;
 import com.asiainfo.biapp.si.loc.base.utils.LogUtil;
 import com.asiainfo.biapp.si.loc.bd.common.dao.IBackSqlDao;
 import com.asiainfo.biapp.si.loc.bd.common.service.IBackSqlService;
+import com.asiainfo.biapp.si.loc.cache.CocCacheProxy;
 
 /**
  * 后台库操作接口(业务层)
@@ -65,7 +66,8 @@ public class BackServiceImpl implements IBackSqlService{
      * @return
      */
     private IBackSqlDao getBackDaoBean() {
-    	String dbType = "Ads";
+    	String dbType = CocCacheProxy.getCacheProxy().getSYSConfigInfoByKey("LOC_CONFIG_SYS_BGDB_TYPE").toLowerCase();
+    	dbType = dbType.replace(dbType.substring(0,1), dbType.substring(0,1).toUpperCase());
     	String backDaoBeanId = "back"+dbType+"DaoImpl";
     	IBackSqlDao backSqlDao = (IBackSqlDao)SpringContextHolder.getBean(backDaoBeanId);
         return backSqlDao;
