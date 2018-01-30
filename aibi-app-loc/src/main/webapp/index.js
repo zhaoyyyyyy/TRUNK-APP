@@ -6,27 +6,30 @@ var auto_Login = (function (model){
         /***************默认开饭版本的实现(基于jauth的) ****************/
         model.jauth = {
         		failLoginUrl: "./aibi_lc/pages/common/login.html",
-        		autoLoginFun:function(){
-        			var guid = model._util.getUrlParam("guid");
-        			return model._util.login(guid);
+        		autoLoginFun:function(callback){
+        			var guid = model._util.getUrlParam("username");
+        			return callback(username);
         		}
         }
         
         /***************中邮版本的实现(基于ocrm的) ****************/
         model.chinapost = {
-        		failLoginUrl: "./aibi_lc/pages/common/login.html",
-        		autoLoginFun:function(){ 
-        			 //如果sessionStroy 里面存在token，则直接返回
-        			 //model._util.setCookie("sign","455f029d6cd214cd2a5de2c974b2b804");
-        			 //model._util.setCookie("cnpost","%7B%22username%22%3A%2210ADMIN%22%2C%22id%22%3A%222000001%22%2C%22responseMsg%22%3A%22success%22%2C%22orgId%22%3A%2210006404%22%2C%22orgName%22%3A%22%E4%B8%AD%E5%9B%BD%E9%82%AE%E6%94%BF%E9%9B%86%E5%9B%A2%E5%85%AC%E5%8F%B8%22%2C%22distinctId%22%3A%22110000%22%2C%22distinctTypeId%22%3A%2210%22%2C%22serviceCode%22%3A%2200%22%2C%22avatar%22%3A%22%22%2C%22success%22%3Atrue%7D");
-        			 
-        			 var cookie_cnpost = model._util.getCookie("cnpost");
-        			 if(cookie_cnpost != null){
-        				var cnpost = decodeURIComponent(cookie_cnpost);
-        				var username = JSON.parse(cnpost).username; //拿到用户名
-        				return model._util.login(username);
-        			 }
-                	return false;
+        		failLoginUrl: "http://crm.chinapost.com:18880/login",
+        		autoLoginFun:function(callback){
+        			var flag = false;
+        			
+        			 $.ajax({
+        				 url:'http://crm.chinapost.com:8442/api/sso/userinfo',
+        				 type: 'get',
+        				 xhrFields: {
+        			            withCredentials: true
+        			     },
+     					 async: false,
+        				 success: function(data){
+        					 flag = callback(data.cnpost.username);
+        				 }
+        			 })
+                	return flag;
         		}
         }
         
@@ -86,12 +89,19 @@ var auto_Login = (function (model){
 $(function(){
 	var hash = window.location.hash;
 	var href = "";
-	if(hash){//存  #label/label_mgr 则走单点登录逻辑
+	//存  #label/label_mgr 则走单点登录逻辑
+	if(hash){
 		href = hash.split("#")[1];
-		if(auto_Login[auto_Login.active].autoLoginFun()){
-			window.location.href = "./aibi_lc/pages/"+ href+ ".html"
-		}else{
-			window.location.href = auto_Login[auto_Login.active].failLoginUrl
+		var ssg = window.sessionStorage;
+		if(ssg){
+			var token = ssg.getItem("token");
+			if(!token){
+				if(auto_Login[auto_Login.active].autoLoginFun(auto_Login._util.login)){
+					window.location.href = "./aibi_lc/pages/"+ href+ ".html"
+				}else{
+					window.location.href = auto_Login[auto_Login.active].failLoginUrl
+				}
+			}
 		}
 	}else{
 		window.location.href = auto_Login[auto_Login.active].failLoginUrl

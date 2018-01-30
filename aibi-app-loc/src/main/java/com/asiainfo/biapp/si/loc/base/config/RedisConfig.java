@@ -28,7 +28,7 @@ import redis.clients.jedis.JedisPoolConfig;
 
 /**
  * Redis缓存配置类
- * @author szekinwin
+ * @author zhougz3
  *
  */
 @Configuration

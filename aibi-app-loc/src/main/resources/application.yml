@@ -23,6 +23,7 @@ eureka:
   instance:
     leaseExpirationDurationInSeconds: 1
     leaseRenewalIntervalInSeconds: 1
+autoLoginSign: xm8EV6Hy5RMFK4EEACIDAwQus
 context:
   component-scan:
     base-package: com.asiainfo.biapp.si.loc.*

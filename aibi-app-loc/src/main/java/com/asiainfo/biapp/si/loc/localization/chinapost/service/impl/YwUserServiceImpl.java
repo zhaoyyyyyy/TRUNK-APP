@@ -2,8 +2,10 @@ package com.asiainfo.biapp.si.loc.localization.chinapost.service.impl;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.transaction.Transactional;
 
@@ -19,12 +21,9 @@ import com.asiainfo.biapp.si.loc.auth.service.IUserService;
 import com.asiainfo.biapp.si.loc.auth.service.impl.DevUserServiceImpl;
 import com.asiainfo.biapp.si.loc.base.dao.BaseDao;
 import com.asiainfo.biapp.si.loc.base.exception.BaseException;
-import com.asiainfo.biapp.si.loc.base.exception.ParamRequiredException;
 import com.asiainfo.biapp.si.loc.base.exception.UserAuthException;
-import com.asiainfo.biapp.si.loc.base.service.impl.BaseServiceImpl;
 import com.asiainfo.biapp.si.loc.base.utils.HttpUtil;
 import com.asiainfo.biapp.si.loc.base.utils.JsonUtil;
-import com.asiainfo.biapp.si.loc.base.utils.StringUtil;
 
 import net.sf.json.JSONObject;
 
@@ -73,9 +72,6 @@ public class YwUserServiceImpl extends DevUserServiceImpl implements IUserServic
 	 */
 	@Override
 	public TokenModel getTokenByUsername(String username) throws BaseException{
-		//TODO 1 去cookie里面得到签名
-		//TODO 2 访问acrm尽兴签名认证
-		//DOEN 3  签名认证成功后通过后返回
 		return super.getTokenByUsername(username);
 	}
 
@@ -107,8 +103,29 @@ public class YwUserServiceImpl extends DevUserServiceImpl implements IUserServic
 		
 		//拿到数据权限
 				try{
-					String dataJson = HttpUtil.sendGet(jauthUrl+"/api/auth/permission/data", params);
-					List<Organization> organizationPrivaliege = (List<Organization>) JsonUtil.json2CollectionBean(dataJson, List.class, Organization.class);
+					params.put("orgCode", "1");
+					String dataJsonXzqh = HttpUtil.sendPost(jauthUrl+"/api/organization/get", params);
+					Organization organizationXzqh = (Organization) JsonUtil.json2CollectionBean(dataJsonXzqh, Organization.class);
+					Set<Organization> organizationSetXzqh = organizationXzqh.getChildren();
+					
+					params.put("orgCode", "2");
+					String dataJsonYwx = HttpUtil.sendPost(jauthUrl+"/api/organization/get", params);
+					Organization organizationYwx = (Organization) JsonUtil.json2CollectionBean(dataJsonYwx, Organization.class);
+					Set<Organization> organizationSetYwx = organizationYwx.getChildren();
+					
+					
+					Set<Organization> organizationPrivaliege = new HashSet<Organization>();
+					organizationPrivaliege.addAll(organizationSetXzqh);
+					organizationPrivaliege.addAll(organizationSetYwx);
+					
+					for(Organization organization : organizationSetXzqh){
+						organizationPrivaliege.addAll(organization.getChildren());
+					}
+					for(Organization organization : organizationSetYwx){
+						organizationPrivaliege.addAll(organization.getChildren());
+					}
+					
+					
 					
 					//组织权限
 					Map<String,List<Organization>> orgPrivaliege = new HashMap<String,List<Organization>>();
@@ -153,22 +170,24 @@ public class YwUserServiceImpl extends DevUserServiceImpl implements IUserServic
 			List<Resource> domResource = new ArrayList<Resource>();
 			List<Resource> menuResource = new ArrayList<Resource>();
 			List<Resource> apiResource = new ArrayList<Resource>();
-			String resourceJson = HttpUtil.sendGet(jauthUrl+"/api/auth/permission/resource", params);
+			String resourceJson = HttpUtil.sendGet(jauthUrl+"/api/resource/parentResource/get", params);
 			List<Resource> resourcePrivaliege = (List<Resource>) JsonUtil.json2CollectionBean(resourceJson, List.class, Resource.class);
-			for(Resource resource : resourcePrivaliege){
-				if(Resource.API.equals(resource.getParentId()) ){
-					apiResource.add(resource);
-				}else if(Resource.MENU.equals(resource.getParentId()) ){
-					menuResource.add(resource);
-				}else if(Resource.DOM.equals(resource.getParentId()) ){
-					domResource.add(resource);
+			if(resourcePrivaliege != null && resourcePrivaliege.size() > 0){
+				for(Resource resource : resourcePrivaliege){
+					if(Resource.API.equals(resource.getParentId()) ){
+						apiResource.add(resource);
+					}else if(Resource.MENU.equals(resource.getParentId()) ){
+						menuResource.add(resource);
+					}else if(Resource.DOM.equals(resource.getParentId()) ){
+						domResource.add(resource);
+					}
 				}
+				user.setDomResource(domResource);
+				user.setMenuResource(menuResource);
+				user.setApiResource(apiResource);
 			}
-			user.setDomResource(domResource);
-			user.setMenuResource(menuResource);
-			user.setApiResource(apiResource);
 		}catch(Exception e){
-			throw new UserAuthException("获取用户资源权限失败",e);
+			//throw new UserAuthException("获取用户资源权限失败",e);
 		}
 		
 		return user;
