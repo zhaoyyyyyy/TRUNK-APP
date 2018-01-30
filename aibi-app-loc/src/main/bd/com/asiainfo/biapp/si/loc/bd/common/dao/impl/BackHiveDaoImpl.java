@@ -45,7 +45,7 @@ import com.asiainfo.biapp.si.loc.bd.common.dao.IBackSqlDao;
  * @version 1.0.0.2017年12月25日
  */
 
-@Repository("backSparkSqlDaoImpl")
+@Repository("backHiveDaoImpl")
 public class BackHiveDaoImpl extends BaseBackDaoImpl implements IBackSqlDao{
 	private Logger log = Logger.getLogger(BackHiveDaoImpl.class);
 
