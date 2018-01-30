@@ -36,7 +36,7 @@ import com.asiainfo.biapp.si.loc.bd.common.dao.IBackSqlDao;
  * @author zhangnan7
  * @version 1.0.0.2018年1月30日
  */
-@Repository("backSparkDaoImpl")
+@Repository("backSparkSqlDaoImpl")
 public class BackSparkSqlDaoImpl extends BackHiveDaoImpl implements IBackSqlDao {
 
 }
