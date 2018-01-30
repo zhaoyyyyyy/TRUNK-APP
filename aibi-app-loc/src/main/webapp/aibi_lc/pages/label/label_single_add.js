@@ -95,8 +95,7 @@ window.loc_onload = function() {
 			"configId" : model.configId
 		},
 		onSuccess : function(data){
-			model.sourcetableInfoList = data.data,
-			model.sourceTableType = data.data.sourceTableType
+			model.sourcetableInfoList = data.data
 		}
 	});	
 	$('#sourceTableId').change(function(){
@@ -106,6 +105,7 @@ window.loc_onload = function() {
 			url : $.ctx + '/api/source/sourceTableInfo/get?sourceTableId='+sourceTableId,
 			onSuccess : function(data){
 				$(".ui-form-hide").hide();
+				model.sourceTableType = data.data.sourceTableType
 				model.sourceInfoList = data.data.sourceInfoList;
 				model.readCycle=data.data.readCycle;
 				model.read = $.getCodeDesc("GXZQZD",data.data.readCycle);
