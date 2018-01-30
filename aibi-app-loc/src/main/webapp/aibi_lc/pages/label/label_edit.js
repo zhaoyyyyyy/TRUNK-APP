@@ -66,23 +66,6 @@ window.loc_onload = function() {
 				    	model.categoryName = data2.data.categoryName
 				    }
 				});
-				var countRulesCode = data.data.countRulesCode;
-				$.commAjax({
-					ansyc : false,
-					url : $.ctx + '/api/label/labelCountRules/get',
-					postData : {
-						"countRulesCode" : countRulesCode
-					},
-					onSuccess : function(data4){
-						model.countRules = data4.data.countRules;
-						var echodependIndex = data4.data.dependIndex;
-						$("#dependIndex").val(echodependIndex);
-						var dependList = echodependIndex.split(",");
-						for(var i=0; i<dependList.length ; i++){
-							model.dependIndexList.push(dependList[i])
-						}
-					}	
-				});
 				$.commAjax({
 					ansyc : false,
 					url : $.ctx + '/api/label/mdaSysTableCol/queryList',
@@ -90,6 +73,7 @@ window.loc_onload = function() {
 						"labelId" : labelId
 					},
 					onSuccess : function(data1){
+						debugger
 						var list = data1.data;
 						if(list.length!=0){
 							if(model.labelTypeId==5){
@@ -99,6 +83,23 @@ window.loc_onload = function() {
 							}
 							model.unit = list[0].unit
 						};
+						var countRulesCode = list[0].countRulesCode;
+						$.commAjax({
+							ansyc : false,
+							url : $.ctx + '/api/label/labelCountRules/get',
+							postData : {
+								"countRulesCode" : countRulesCode
+							},
+							onSuccess : function(data4){
+								model.countRules = data4.data.countRules;
+								var echodependIndex = data4.data.dependIndex;
+								$("#dependIndex").val(echodependIndex);
+								var dependList = echodependIndex.split(",");
+								for(var i=0; i<dependList.length ; i++){
+									model.dependIndexList.push(dependList[i])
+								}
+							}	
+						});
 					}
 				});
 				model.approveStatusId = data.data.approveInfo.approveStatusId;
