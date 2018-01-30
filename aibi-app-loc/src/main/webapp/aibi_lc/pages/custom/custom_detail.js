@@ -15,7 +15,8 @@ var model = {
 		customRule:"",//客户群规则
 		haveAttr:false,
 		customNum:"",//客户群人数
-		calcuElementName:[],//已选属性名称
+		calcuElementName:"",//已选属性名称
+		calcuElementNames:[],//已选属性名称
 		AttrbuteId : "",//推送的属性标签ID
 		
 }
@@ -187,10 +188,15 @@ window.loc_onload = function() {
 		    })
 		}
 	})
+	var nameNumber=0;
 	$("#fun_to_add").click(function(){
-		var i=0;
-		var html ="<div class='mt20'> <div class='form-group mr100'> <div class=''><select class='form-control input-pointer' name='dataStatusId' ><option>1</option><option>2</option><option>3</option></select></div></div><div class='radio circle success'> <input type='radio' name='radio20' id='myr"+i+"' checked='checked'> <label for='myr"+i+++"'><i class='default'></i> 升序</label</div></div><div class='radio circle success'><input type='radio' name='radio20'  id='myr"+i+"'> <label  for='myr"+i+++"'> <i class='default'></i> 降序</label></div></div> ";
+		var html ="<div class='mt20'> <div class='form-group mr100 optionhtml'> <div class=''><select class='form-control input-pointer' name='dataStatusId' ></select></div></div><div class='radio circle success'> <input type='radio' name='radio"+nameNumber+"' id='myr'> <label for='myr'><i class='default'></i> 升序</label</div></div><div class='radio circle success'><input type='radio' name='radio"+nameNumber+++"'  id='myr1'> <label  for='myr1'> <i class='default'></i> 降序</label></div></div> ";
 		$("#addALine").append(html);
+		$(".optionhtml").find("select").html("");
+		for(var i=0;i<model.calcuElementNames.length;i++){
+			var option = "<option>"+model.calcuElementNames[i]+"</option>";
+			$(".optionhtml").find("select").append(option);
+		}
 	})
 	//标签体系
 	labeltree();
@@ -300,13 +306,23 @@ window.loc_onload = function() {
     $("#custom_left").click(function(){
     	var attrId ="",attrName="";
 		$("#selectedLabel label[class~=active]").each(function(){
+			$("#addALine").html("");
 			attrId = $(this).attr('data-id').substring(0,$(this).attr('data-id').length-1);
 			attrName = $(this).attr('data-name');
-			if(model.AttrbuteId.length>10){
-				model.AttrbuteId = model.AttrbuteId.replace(","+attrId,"")
+			if(model.AttrbuteId.indexOf(attrId)!=0){
+				model.AttrbuteId = model.AttrbuteId.replace(","+attrId,"");
+				model.calcuElementName = model.calcuElementName.replace(","+attrName,"");
 			}else{
-				model.AttrbuteId = model.AttrbuteId.replace(attrId,"")
+				if(model.AttrbuteId.indexOf(",")!=-1){
+					model.AttrbuteId = model.AttrbuteId.replace(attrId+",","");
+					model.calcuElementName = model.calcuElementName.replace(attrName+",","");
+				}else{
+					model.AttrbuteId = model.AttrbuteId.replace(attrId,"");
+					model.calcuElementName = model.calcuElementName.replace(attrName,"");
+				}
 			}
+			model.calcuElementNames=model.calcuElementName.split(",");
+			console.log(model.calcuElementNames);
 			var  html="<li>"+
     		"<div class='checkbox'>"+
     		"<input type='checkbox' id='"+attrId+"L' class='checkbix'>"+
@@ -335,13 +351,17 @@ window.loc_onload = function() {
     $("#custom_right").click(function(){
     	var attrId ="",attrName="";
 		$("#OptionalLabel label[class~=active]").each(function(){
+			$("#addALine").html("");
 			attrId = $(this).attr('data-id').substring(0,$(this).attr('data-id').length-1);
 			attrName = $(this).attr('data-name');
 			if(model.AttrbuteId!=""){
 				model.AttrbuteId +=","+attrId;
+				model.calcuElementName +=","+attrName;
 			}else{
 				model.AttrbuteId +=attrId;
+				model.calcuElementName +=attrName;
 			}
+			model.calcuElementNames=model.calcuElementName.split(",");
 			var  html="<li>"+
     		"<div class='checkbox'>"+
     		"<input type='checkbox' id='"+attrId+"R' class='checkbix'>"+

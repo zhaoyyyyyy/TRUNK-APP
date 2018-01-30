@@ -40,29 +40,8 @@
 			</h3>
 			<div class="clearfix">
 			<div id = "labelDetail"></div>
-			<!-- <div class="ui-custom-item clearfix clearfix" >
-				<a >
-					<span>{{item.attrName}}</span>
-				</a>
-				<a >
-					{{item.leftZoneSign}}<span>{{item.contiueMinVal}}</span>
-					 且 {{item.rightZoneSign}}<span>{{item.contiueMaxVal}}</span>
-				</a>
-			</div> -->
 			<span class="ui-label-date fright" v-text="model.dataDate">
 			</div>
-			 <!-- <div class="clearfix">
-				<div class="ui-custom-item fleft clearfix">
-					<a href="javascript:;">
-						年龄
-					</a>
-					<a href="javascript:;">
-						大于<b>10</b>岁 且 小于<b>20</b>岁
-					</a>
-				</div>
-				<span class="ui-label-date fright" v-text="model.dataDate">
-				</span>
-			</div> -->
 		</div>
 		<div class="mt10">
 			<div class="radio circle success" @click="haveAttr=false"> 
@@ -95,8 +74,6 @@
 						<ul id="ztree" class="ztree">
 				
 						</ul>
-						<!-- <p>非基本信息</p>
-						<span class="ml20">个人基本信息</span> -->
 					</div>
 				</div>
 					<div class="ui-custom-col fleft">
@@ -114,25 +91,16 @@
 						<h3>已选标签</h3>
 						<div class="ui-custom-mes">
 							<ul class="label-selected" id="selectedLabel">
-							<!-- <li >
-									<span v-text="model.calcuElementName"></span>
-							</li> -->
-								<!-- <li><a href="">籍贯</a></li>
-								<li><a href="">性别</a></li>
-								<li><a href="">品牌</a></li>
-								<li><a href="">是否学生</a></li> -->
 							</ul>
 						</div>
 					</div>
 				</div>	
-				<div id="addALine">
+				<div>
 				 <div class="mt20">
 					 <div class="form-group mr100">
 	                    <div class="">
 	                        <select class="form-control input-pointer" name="dataStatusId" >
-	                        <option>1</option>
-	                         <option>2</option>
-	                          <option>3</option>
+	                        <option v-for="(item,index) in calcuElementNames">{{calcuElementNames[index]}}</option>
 	                        </select>
 	                    </div>
 	                </div>
@@ -145,7 +113,9 @@
 					   <label  for="myr4"><i class="default"></i> 降序</label>
 					</div>
 					<button type="button" class="ui-btn ui-btn-second ml30" id="fun_to_add">添加</button>
+				</div>
 				</div> 
+				<div id="addALine">
 				</div>
 			</div>
 		</div>
