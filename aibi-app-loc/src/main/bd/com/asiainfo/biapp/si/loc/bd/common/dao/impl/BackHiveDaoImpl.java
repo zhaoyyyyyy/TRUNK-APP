@@ -1,5 +1,5 @@
 /*
- * @(#)BackSparkSqlDaoImpl.java
+ * @(#)BackHiveDaoImpl.java
  *
  * CopyRight (c) 2017 北京亚信智慧数据科技有限公司 保留所有权利。
  */
@@ -25,7 +25,7 @@ import com.asiainfo.biapp.si.loc.base.utils.StringUtil;
 import com.asiainfo.biapp.si.loc.bd.common.dao.IBackSqlDao;
 
 /**
- * Title : BackSparkSqlDaoImpl
+ * Title : BackHiveDaoImpl
  * <p/>
  * Description : 后台库HIVE的访问接口实现类
  * <p/>
@@ -46,8 +46,8 @@ import com.asiainfo.biapp.si.loc.bd.common.dao.IBackSqlDao;
  */
 
 @Repository("backSparkSqlDaoImpl")
-public class BackSparkSqlDaoImpl extends BaseBackDaoImpl implements IBackSqlDao{
-	private Logger log = Logger.getLogger(BackSparkSqlDaoImpl.class);
+public class BackHiveDaoImpl extends BaseBackDaoImpl implements IBackSqlDao{
+	private Logger log = Logger.getLogger(BackHiveDaoImpl.class);
 
 
     public String getCurBackDbSchema() throws SqlRunException{
@@ -309,7 +309,7 @@ public class BackSparkSqlDaoImpl extends BaseBackDaoImpl implements IBackSqlDao{
 	public boolean createVerticalTable(String tableName,String columnName) throws SqlRunException{
 		String sql ="CREATE TABLE IF NOT EXISTS "+tableName+" ("+
 					columnName+" string )  PARTITIONED BY ("+LabelInfoContants.KHQ_CROSS_ID_PARTION+" string) stored as parquet ";
-		log.debug(" ----------------------  BackSparkSqlDaoImpl.createVerticalTable  sql=" + sql);
+		log.debug(" ----------------------  BackHiveDaoImpl.createVerticalTable  sql=" + sql);
 		return this.executeResBoolean(sql);
 	}
 
@@ -320,7 +320,7 @@ public class BackSparkSqlDaoImpl extends BaseBackDaoImpl implements IBackSqlDao{
 		sqlstr.append(" OVERWRITE into table ").append(tableName);
 		sqlstr.append(" PARTITION (").append(LabelInfoContants.KHQ_CROSS_ID_PARTION);
 		sqlstr.append(" = ").append(partionID).append(") ");
-		log.debug(" ----------------------  BackSparkSqlDaoImpl.loadDataToTabByPartion  sql=" + sqlstr.toString());
+		log.debug(" ----------------------  BackHiveDaoImpl.loadDataToTabByPartion  sql=" + sqlstr.toString());
 		return this.executeResBoolean(sqlstr.toString());
 	}
 
@@ -330,7 +330,7 @@ public class BackSparkSqlDaoImpl extends BaseBackDaoImpl implements IBackSqlDao{
 		sqlstr.append("insert overwrite TABLE ").append(tableName);
 		sqlstr.append(" PARTITION (").append(LabelInfoContants.KHQ_CROSS_ID_PARTION);
 		sqlstr.append(" = ").append(partionID).append(") ").append(sql);
-		log.debug(" ----------------------  BackSparkSqlDaoImpl.insertDataToTabByPartion  sql=" + sqlstr.toString());
+		log.debug(" ----------------------  BackHiveDaoImpl.insertDataToTabByPartion  sql=" + sqlstr.toString());
 		return this.executeResBoolean(sqlstr.toString());
 	}
 
