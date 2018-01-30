@@ -28,7 +28,8 @@ var dataModel = {
 		labelMonth : '',//规则中月日期
 		labelDay : '',//规则中日日期
 		updateCycleList : [] ,//更新周期
-		labelTypeIdList : [] //创建类型
+		labelTypeIdList : [] ,//创建类型
+		labelInfoViewObj : {}
 }
 window.loc_onload = function() {
 	//初始化参数
@@ -44,6 +45,16 @@ window.loc_onload = function() {
     var labelSysApp = new Vue({
     	el : '#labelInfoListApp',
     	data : dataModel,
+    	filters: {
+			 formatDate : function (time) {
+				var d = new Date(time);
+			    var year = d.getFullYear();
+			    var month = d.getMonth() + 1;
+			    month = month <10 ? '0' + month : '' + month;
+			    var day = d.getDate() <10 ? '0' + d.getDate() : '' + d.getDate();
+				return year+ '-' + month + '-' + day;
+			 }
+		},
     	methods : {
     		/**
     		 * 选择标签
@@ -51,7 +62,6 @@ window.loc_onload = function() {
     		select : function(index){
     			labelMarket.addToShoppingCar(index);
     		},
-    		
     		toggle:function(categoryId,index){
     			$("#categoryId").val(categoryId);
     			labelMarket.loadLabelInfoList();
@@ -632,14 +642,34 @@ var labelMarket = (function (model){
 			dataModel.ruleList.splice(index,1);
     		model.submitRules();
 		};
-		//鼠标经过弹窗
-		model.showBox=function(elem){
-			if($(elem).parents(".ui-conditionCT").find(".ui-conditionBox").css("display")=="none"){
-				$(elem).parents(".ui-conditionCT").find(".ui-conditionBox").show();
-			}else{
-				$(elem).parents(".ui-conditionCT").find(".ui-conditionBox").hide();
+		/**
+		 * 展示标签信息
+		 */
+		model.showLabelInfo = function(elem){
+			$(".ui-conditionCT").find(".ui-conditionBox").hide();
+			var index = $(elem).parent().parent().attr("index");
+			var rule = dataModel.ruleList[index];
+			if(rule){
+				$.commAjax({
+					url : $.ctx + "/api/label/labelInfo/get",
+					postData:{
+						labelId : rule.calcuElement
+	  				},
+					onSuccess:function(returnObj){
+						var status = returnObj.status;
+						if (status == '200'){
+							if($(elem).parents(".ui-conditionCT").find(".ui-conditionBox").css("display")=="none"){
+								$(elem).parents(".ui-conditionCT").find(".ui-conditionBox").show();
+							}else{
+								$(elem).parents(".ui-conditionCT").find(".ui-conditionBox").hide();
+							}
+							dataModel.labelInfoViewObj = returnObj.data;
+						}else{
+							$.alert(returnObj.msg);
+						}
+					},
+				});
 			}
-			
 		}
 		/**
 		 * 删除匹配的括号【与条件直接关联的括号】,待测试
