@@ -272,6 +272,11 @@
 	color: #000;
 	font-size: 14px;
 }
+.ui-business-caliber.ui-rule{
+	overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
 .ui-lable-icon{
 	background: #F2F7FC;
 	height: 60px;
