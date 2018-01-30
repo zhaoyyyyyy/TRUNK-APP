@@ -124,7 +124,7 @@ function fun_to_delete(id){
 			"priKey" : id,
 		},
 		onSuccess : function(data) {
-			if(data.data.preConfigInfoSet.length==0){
+			if(data.data.preConfigInfoSet!=null){
 				$.confirm('确定要进行[删除]吗？该操作可能会影响所有专区的数据生成', function() {
 					$.commAjax({
 						url : $.ctx + '/api/back/allUserMsg/delete',
