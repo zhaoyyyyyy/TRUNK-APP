@@ -12,8 +12,8 @@ var model = {
 	monthPartitionColumn : "",// 月表分区字段
 
 	otherColumn : "",// 其他字段
-	
-	showPartition : false,//显示分区字段
+
+	showPartition : false,// 显示分区字段
 }
 window.loc_onload = function() {
 	var priKey = $.getUrlParam("priKey");
@@ -80,7 +80,7 @@ window.loc_onload = function() {
 				if (!$.isNull(list[k]["dimOrgLevelId.orgColumnName"])) {
 					if (!isInArray(levelList, list[k].levelId)) {
 						levelList.push(list[k].levelId);
-					}else {
+					} else {
 						$.alert("层级不能重复");
 						for (var i = 1; i <= 5; i++) {
 							$('#myjqgrid').jqGrid('editRow', i);
@@ -94,7 +94,7 @@ window.loc_onload = function() {
 					}
 				} else {
 					nullNum++;
-					if(nullNum == 5){
+					if (nullNum == 5) {
 						$.alert("请填写组织字段名称");
 						for (var i = 1; i <= 5; i++) {
 							$('#myjqgrid').jqGrid('editRow', i);
@@ -197,16 +197,18 @@ window.loc_onload = function() {
 					id : '0'
 				},
 				afterGridLoad : function() {
+					var back = 0;
 					if (priKey == 'selectNull') {
 						for (var i = 1; i <= 5; i++) {
 							var dataRow = {
-									'dimOrgLevelId.orgColumnName' : '',
-									'levelId' : i,
-									'sortNum' : i,
-								}
+								'dimOrgLevelId.orgColumnName' : '',
+								'levelId' : i,
+								'sortNum' : i,
+							}
 							$('#myjqgrid').jqGrid('addRowData', i, dataRow,
 									'last');
 							$('#myjqgrid').jqGrid('editRow', i);
+							back++;
 						}
 					} else {
 						var ids = $('#myjqgrid').jqGrid('getDataIDs');
@@ -216,15 +218,19 @@ window.loc_onload = function() {
 						if (ids.length < 5) {
 							for (var num = ids.length + 1; num <= 5; num++) {
 								var dataRow = {
-										'dimOrgLevelId.orgColumnName' : '',
-										'levelId' : num,
-										'sortNum' : num,
-									}
+									'dimOrgLevelId.orgColumnName' : '',
+									'levelId' : num,
+									'sortNum' : num,
+								}
 								$('#myjqgrid').jqGrid('addRowData', num,
 										dataRow, 'last');
 								$('#myjqgrid').jqGrid('editRow', num);
 							}
 						}
+						back++;
+					}
+					if(back==5){
+						
 					}
 				}
 			});
