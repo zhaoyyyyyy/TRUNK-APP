@@ -73,7 +73,6 @@ window.loc_onload = function() {
 						"labelId" : labelId
 					},
 					onSuccess : function(data1){
-						debugger
 						var list = data1.data;
 						if(list.length!=0){
 							if(model.labelTypeId==5){
