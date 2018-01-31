@@ -101,6 +101,7 @@ window.loc_onload = function() {
 	$('#sourceTableId').change(function(){
 		$(".ui-form-hide").hide();
 		var sourceTableId = $("#sourceTableId").val();
+		model.sourceInfoList = [];
 		$.commAjax({
 			url : $.ctx + '/api/source/sourceTableInfo/get?sourceTableId='+sourceTableId,
 			onSuccess : function(data){
