@@ -82,5 +82,11 @@ public interface ILabelRuleService extends BaseService<LabelRule, String> {
 	 */
 	public String shopCartRule(List<LabelRuleVo> labelRuleVos);
 	
+	/**
+	 * 根据页面提交的LabelRuleVo的list替换掉“剔除”，返回新可解析成sql的list
+	 * @param originalList
+	 * @return
+	 */
+	public List<LabelRuleVo> getNewLabelRuleVoList(List<LabelRuleVo> originalList);
 
 }

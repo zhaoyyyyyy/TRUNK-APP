@@ -25,6 +25,8 @@ import com.asiainfo.biapp.si.loc.base.exception.BaseException;
 import com.asiainfo.biapp.si.loc.base.exception.ParamRequiredException;
 import com.asiainfo.biapp.si.loc.base.page.Page;
 import com.asiainfo.biapp.si.loc.base.service.impl.BaseServiceImpl;
+import com.asiainfo.biapp.si.loc.base.utils.ExpressionPaser;
+import com.asiainfo.biapp.si.loc.base.utils.LogUtil;
 import com.asiainfo.biapp.si.loc.base.utils.StringUtil;
 import com.asiainfo.biapp.si.loc.cache.CocCacheProxy;
 import com.asiainfo.biapp.si.loc.core.label.dao.ILabelRuleDao;
@@ -226,6 +228,58 @@ public class LabelRuleServiceImpl extends BaseServiceImpl<LabelRule, String> imp
 		// 增加组合标签类型，处理方式与纵表一致（已做）
 		}
 		return attrValStr.toString();
+	}
+
+	@Override
+	public List<LabelRuleVo> getNewLabelRuleVoList(List<LabelRuleVo> originalList) {
+		List<LabelRuleVo> newList = new ArrayList<LabelRuleVo>();
+		try {
+			StringBuffer sb = new StringBuffer();
+			// 用string保存运算元素，用空格分隔
+			for (LabelRuleVo c : originalList) {
+				sb.append(c.getCalcuElement()).append(" ");
+			}
+			String oldStr = sb.substring(0, sb.lastIndexOf(" ")).toString();
+			// 检查str中是否有"-"来判断是否有“剔除”的情况，如果有返回剔除位置
+			int firstExceptPos = oldStr.indexOf("-");
+			String resultStr = "";
+			if (firstExceptPos > 0) {
+				// 有“剔除”需要替换剔除，如B剔除A，即B - A，去除剔除后为B and !A，!A(即非A)，记录为_A
+				resultStr = ExpressionPaser
+						.getNewString(oldStr, firstExceptPos);
+			} else {
+				// 不含有“剔除”时直接返回原有rule集合
+				return originalList;
+			}
+			String[] resultArr = resultStr.split(" ");
+			// 处理带下划线的转换为元素内取反，即原来取反的（0或2），现在不取反（1或3），原来不去反的（1或3），现在取反（0或2），
+			for (int i = 0; i < resultArr.length; i++) {
+				// 使用前先克隆，保持原有规则不变
+				LabelRuleVo rule = originalList.get(i).clone();
+				if (resultArr[i].startsWith("_")) {
+					rule.setCalcuElement(resultArr[i].replace("_", ""));
+					if (rule.getLabelFlag() != null) {
+						if (rule.getLabelFlag() == 0) {
+							rule.setLabelFlag(1);
+						} else if (rule.getLabelFlag() == 1) {
+							rule.setLabelFlag(0);
+						} else if (rule.getLabelFlag() == 2) {
+							rule.setLabelFlag(3);
+						} else if (rule.getLabelFlag() == 3) {
+							rule.setLabelFlag(2);
+						}
+					} else {
+						rule.setLabelFlag(0);
+					}
+				} else {
+					rule.setCalcuElement(resultArr[i]);
+				}
+				newList.add(rule);
+			}
+		} catch (Exception e) {
+			LogUtil.error("转换CiLabelRule List，替换“剔除”错误。", e);
+		}
+		return newList;
 	}
 	
 

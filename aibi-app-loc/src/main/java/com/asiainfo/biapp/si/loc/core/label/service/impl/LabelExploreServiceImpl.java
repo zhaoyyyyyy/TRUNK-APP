@@ -29,6 +29,7 @@ import com.asiainfo.biapp.si.loc.core.label.model.LabelElementFactory;
 import com.asiainfo.biapp.si.loc.core.label.service.IGroupCalcSqlPaser;
 import com.asiainfo.biapp.si.loc.core.label.service.ILabelExploreService;
 import com.asiainfo.biapp.si.loc.core.label.service.ILabelInfoService;
+import com.asiainfo.biapp.si.loc.core.label.service.ILabelRuleService;
 import com.asiainfo.biapp.si.loc.core.label.vo.LabelRuleVo;
 
 @Service
@@ -40,6 +41,9 @@ public class LabelExploreServiceImpl implements ILabelExploreService {
 	
 	@Autowired
 	private ILabelInfoService labelInfoService;
+	
+	@Autowired
+	private ILabelRuleService ruleService;
 	
 	@Override
 	public String getFromSqlForMultiLabel(List<LabelRuleVo> labelRuleList, ExploreQueryParam queryParam) throws BaseException {
@@ -154,7 +158,8 @@ public class LabelExploreServiceImpl implements ILabelExploreService {
 	}
 
 	@Override
-	public String getCountSqlStr(List<LabelRuleVo> ciLabelRuleList, ExploreQueryParam queryParam) throws BaseException {
+	public String getCountSqlStr(List<LabelRuleVo> originalList, ExploreQueryParam queryParam) throws BaseException {
+		List<LabelRuleVo> ciLabelRuleList=ruleService.getNewLabelRuleVoList(originalList);
 		// 判断标签探索中是否只包含and和括号
 		boolean andFlag = true;
 		// 解析不同标签工厂实例
