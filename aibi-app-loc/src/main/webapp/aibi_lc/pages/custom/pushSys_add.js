@@ -3,6 +3,9 @@ var model = {
 		tsfszd:"",//推送方式  字典中获取
 		curentIndex:false,//radio选中
 		descTxt:"",//推送平台描述
+		isChecked:false,
+		isActive:false,
+		isShow:false,
 		
 }
 window.loc_onload = function() {
@@ -19,6 +22,8 @@ window.loc_onload = function() {
 					r.validatebox();
 				}
 			})
+		},
+		methods:{
 		}
 	})
 
@@ -28,4 +33,23 @@ window.loc_onload = function() {
 	wd.addBtn("cancel", "取消", function() {
 		wd.cancel();
 	});
+	
+	$(".checkBox").each(function(e){
+		$(this).on("click",function(){
+			if($(this).find("label").hasClass('active')){
+				$(this).find("label").removeClass('active');
+				$(this).find("input").prop("checked", false);
+				$(this).siblings('.ui-push-box').hide();
+			}else{
+				$(this).find("label").addClass('active');
+				$(this).find("input").prop("checked", true);
+				$(this).siblings('.ui-push-box').show();
+			}
+			 return false;
+		})
+	})
+	
+	
+	
 }
+

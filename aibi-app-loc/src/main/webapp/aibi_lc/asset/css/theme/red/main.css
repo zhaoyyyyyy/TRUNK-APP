@@ -1240,4 +1240,13 @@ span.del-btn{
 .customer-rules-table-box table tr td:first-child{
 	text-align:center;
 }
-
+/*推送设置*/
+.push-fieldest{
+	padding:10px 0;
+}
+.push-fieldest> legend{
+	padding:0 5px;
+}
+.push-fieldest > legend > input{
+	margin:0 4px 0 0;
+}

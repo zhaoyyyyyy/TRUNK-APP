@@ -64,7 +64,7 @@ window.loc_onload = function() {
     });
     $("#btn_to_add").click(function(){
     	var wd = $.window('新增推送平台', $.ctx
-    		+ '/aibi_lc/pages/custom/pushSys_add.html', 500, 500);
+    		+ '/aibi_lc/pages/custom/pushSys_add.html', 600, 500);
     	wd.reload = function() {
     		$("#mainGrid").setGridParam({
     			postData : $("#formSearch").formToJson()
