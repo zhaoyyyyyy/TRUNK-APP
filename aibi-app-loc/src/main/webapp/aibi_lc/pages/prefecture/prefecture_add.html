@@ -70,7 +70,7 @@
 							<div class="ui-form-group">
 								<label class="control-label fleft"><span class="input-required">*</span>全量表</label>
 								<div class="control-input">
-									<select id="priKey" name="allUserMsg.priKey" onchange="changeSelect()">
+									<select class="form-control input-pointer" id="priKey" name="allUserMsg.priKey" onchange="changeSelect()">
 										<option :value="all.priKey" v-for="all in allUserMsg">{{all.tableDesc}}</option>
 									</select>
 								</div>
