@@ -40,7 +40,7 @@ public class BackAdsDaoImpl  extends BaseBackDaoImpl implements IBackSqlDao{
 			}
             log.debug(" ----------   BackAdsDapImpl.queryTableColumn datas.size =  " + datas.size() );
         }catch (Exception e){
-            throw new SqlRunException("操作后台库出错");
+            throw new SqlRunException(e.getMessage());
         }
 		return datas;
 	}
@@ -58,7 +58,7 @@ public class BackAdsDaoImpl  extends BaseBackDaoImpl implements IBackSqlDao{
         }catch (Exception e){
             res = false;
             LogUtil.error("isExistsTable出错！"+e);
-            throw new SqlRunException("操作后台库出错");
+            throw new SqlRunException(e.getMessage());
         }
         
         return res;
@@ -129,7 +129,7 @@ public class BackAdsDaoImpl  extends BaseBackDaoImpl implements IBackSqlDao{
             }
         }catch (Exception e){
         	LogUtil.error("操作后台库出错", e);
-            throw new SqlRunException("操作后台库出错");
+            throw new SqlRunException(e.getMessage());
         }
 		return rows;
 	}
@@ -170,7 +170,7 @@ public class BackAdsDaoImpl  extends BaseBackDaoImpl implements IBackSqlDao{
             return this.executeResBoolean(sb.toString());
         }catch (Exception e){
         	LogUtil.error("插入数据出错！"+e+"----executeSql:----"+sb.toString());
-            throw new SqlRunException("操作后台库出错");
+            throw new SqlRunException(e.getMessage());
         }
 	}
 
@@ -210,7 +210,7 @@ public class BackAdsDaoImpl  extends BaseBackDaoImpl implements IBackSqlDao{
             return res;
         }catch (Exception e){
         	LogUtil.error("createTableByName出错！"+e);
-            throw new SqlRunException("操作后台库出错");
+            throw new SqlRunException(e.getMessage());
         }
 	}
 	
@@ -229,7 +229,7 @@ public class BackAdsDaoImpl  extends BaseBackDaoImpl implements IBackSqlDao{
         }catch (Exception e){
         	LogUtil.error("executeResBoolean出错！"+e+"----executeSql:----"+sql);
             res = false;
-            throw new SqlRunException("操作后台库出错");
+            throw new SqlRunException(e.getMessage());
         }
         return res;
     }
@@ -247,7 +247,7 @@ public class BackAdsDaoImpl  extends BaseBackDaoImpl implements IBackSqlDao{
             return this.resultSetToList(resultSet);
         }catch (Exception e){
         	LogUtil.error("BackAdsDapImpl.executeResList出错！"+e+"----executeQuerySql:----"+sql);
-            throw new SqlRunException("操作后台库出错");
+            throw new SqlRunException(e.getMessage());
         }
     }
 

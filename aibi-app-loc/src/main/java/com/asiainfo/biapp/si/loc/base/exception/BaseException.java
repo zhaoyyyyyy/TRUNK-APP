@@ -2,6 +2,11 @@ package com.asiainfo.biapp.si.loc.base.exception;
 
 public class BaseException extends Exception{
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	//错误参数异常
 	public final String PARAM_REQUIRED_CODE = "50001";
 

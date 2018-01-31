@@ -63,7 +63,7 @@ public class BackHiveDaoImpl extends BaseBackDaoImpl implements IBackSqlDao{
         try{
             datas = this.executeResList(sql);
         }catch (Exception e){
-            throw new SqlRunException("操作后台库出错");
+            throw new SqlRunException(e.getMessage());
         }
         
         if (null != datas && !datas.isEmpty()) {
@@ -89,7 +89,7 @@ public class BackHiveDaoImpl extends BaseBackDaoImpl implements IBackSqlDao{
         try{
             datas = this.executeResList(sql);
         }catch (Exception e){
-            throw new SqlRunException("操作后台库出错");
+            throw new SqlRunException(e.getMessage());
         }
         
         if (null != datas && !datas.isEmpty()) {
@@ -119,7 +119,7 @@ public class BackHiveDaoImpl extends BaseBackDaoImpl implements IBackSqlDao{
             }
         }catch (Exception e){
             res = false;
-            throw new SqlRunException("操作后台库出错");
+            throw new SqlRunException(e.getMessage());
         }
         
         return res;
@@ -135,7 +135,7 @@ public class BackHiveDaoImpl extends BaseBackDaoImpl implements IBackSqlDao{
             res = this.executeResBoolean(sql);
         }catch (Exception e){
             res = false;
-            throw new SqlRunException("操作后台库出错");
+            throw new SqlRunException(e.getMessage());
         }
         return res;
 	}
@@ -149,7 +149,7 @@ public class BackHiveDaoImpl extends BaseBackDaoImpl implements IBackSqlDao{
             res = this.executeResBoolean(sql);
         }catch (Exception e){
             res = false;
-            throw new SqlRunException("操作后台库出错");
+            throw new SqlRunException(e.getMessage());
         }
         
         return res;
@@ -164,7 +164,7 @@ public class BackHiveDaoImpl extends BaseBackDaoImpl implements IBackSqlDao{
             res = this.executeResBoolean(sql);
         }catch (Exception e){
             res = false;
-            throw new SqlRunException("操作后台库出错");
+            throw new SqlRunException(e.getMessage());
         }
         
 		return res;
@@ -181,7 +181,7 @@ public class BackHiveDaoImpl extends BaseBackDaoImpl implements IBackSqlDao{
             res = this.executeResBoolean(sql);
         }catch (Exception e){
             res = false;
-            throw new SqlRunException("操作后台库出错");
+            throw new SqlRunException(e.getMessage());
         }
         
         return res;
@@ -216,7 +216,7 @@ public class BackHiveDaoImpl extends BaseBackDaoImpl implements IBackSqlDao{
         try{
             return this.executeResList(sql);
         }catch (Exception e){
-            throw new SqlRunException("操作后台库出错");
+            throw new SqlRunException(e.getMessage());
         }
 	}
 
@@ -240,7 +240,7 @@ public class BackHiveDaoImpl extends BaseBackDaoImpl implements IBackSqlDao{
                 }
             }
         }catch (Exception e){
-            throw new SqlRunException("操作后台库出错");
+            throw new SqlRunException(e.getMessage());
         }
 		return rows;
 	}
@@ -256,7 +256,7 @@ public class BackHiveDaoImpl extends BaseBackDaoImpl implements IBackSqlDao{
             
             return this.resultSetToList(resultSet);
         }catch (Exception e){
-            throw new SqlRunException("操作后台库出错");
+            throw new SqlRunException(e.getMessage());
         }
     }
 
@@ -272,7 +272,7 @@ public class BackHiveDaoImpl extends BaseBackDaoImpl implements IBackSqlDao{
             
         }catch (Exception e){
             res = false;
-            throw new SqlRunException("操作后台库出错");
+            throw new SqlRunException(e.getMessage());
         }
         return res;
     }
@@ -287,7 +287,7 @@ public class BackHiveDaoImpl extends BaseBackDaoImpl implements IBackSqlDao{
             res = this.executeResBoolean(sql);
         }catch (Exception e){
             res = false;
-            throw new SqlRunException("操作后台库出错");
+            throw new SqlRunException(e.getMessage());
         }
         
         return res;
@@ -304,7 +304,7 @@ public class BackHiveDaoImpl extends BaseBackDaoImpl implements IBackSqlDao{
             res = this.executeResBoolean(sql);
         }catch (Exception e){
             res = false;
-            throw new SqlRunException("操作后台库出错");
+            throw new SqlRunException(e.getMessage());
         }
         
         return res;
@@ -372,7 +372,7 @@ public class BackHiveDaoImpl extends BaseBackDaoImpl implements IBackSqlDao{
 		try{
             return this.executeResBoolean(sb.toString());
         }catch (Exception e){
-            throw new SqlRunException("操作后台库出错");
+            throw new SqlRunException(e.getMessage());
         }
 	}
 	
