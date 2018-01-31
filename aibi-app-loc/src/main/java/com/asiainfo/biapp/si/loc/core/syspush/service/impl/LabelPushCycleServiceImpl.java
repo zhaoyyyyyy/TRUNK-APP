@@ -6,26 +6,34 @@
 
 package com.asiainfo.biapp.si.loc.core.syspush.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.asiainfo.biapp.si.loc.base.common.LabelInfoContants;
 import com.asiainfo.biapp.si.loc.base.dao.BaseDao;
 import com.asiainfo.biapp.si.loc.base.exception.BaseException;
 import com.asiainfo.biapp.si.loc.base.exception.ParamRequiredException;
 import com.asiainfo.biapp.si.loc.base.page.Page;
 import com.asiainfo.biapp.si.loc.base.service.impl.BaseServiceImpl;
+import com.asiainfo.biapp.si.loc.base.utils.LogUtil;
 import com.asiainfo.biapp.si.loc.base.utils.StringUtil;
+import com.asiainfo.biapp.si.loc.bd.common.service.IBackSqlService;
 import com.asiainfo.biapp.si.loc.core.label.entity.LabelInfo;
+import com.asiainfo.biapp.si.loc.core.label.service.ILabelExploreService;
 import com.asiainfo.biapp.si.loc.core.label.service.ILabelInfoService;
+import com.asiainfo.biapp.si.loc.core.label.vo.LabelInfoVo;
 import com.asiainfo.biapp.si.loc.core.syspush.dao.ILabelPushCycleDao;
 import com.asiainfo.biapp.si.loc.core.syspush.entity.LabelAttrRel;
 import com.asiainfo.biapp.si.loc.core.syspush.entity.LabelPushCycle;
 import com.asiainfo.biapp.si.loc.core.syspush.service.ILabelAttrRelService;
 import com.asiainfo.biapp.si.loc.core.syspush.service.ILabelPushCycleService;
+import com.asiainfo.biapp.si.loc.core.syspush.vo.CustomGroupListVo;
 import com.asiainfo.biapp.si.loc.core.syspush.vo.LabelPushCycleVo;
 
 /**
@@ -48,6 +56,7 @@ import com.asiainfo.biapp.si.loc.core.syspush.vo.LabelPushCycleVo;
  * @author  wangrd
  * @version 1.0.0.2018年1月17日
  */
+
 @Service
 @Transactional
 public class LabelPushCycleServiceImpl extends BaseServiceImpl<LabelPushCycle, String> implements ILabelPushCycleService{
@@ -60,6 +69,10 @@ public class LabelPushCycleServiceImpl extends BaseServiceImpl<LabelPushCycle, S
     
     @Autowired
     private ILabelAttrRelService iLabelAttrRelService;
+    @Autowired
+    private ILabelExploreService iLabelExploreService;
+    @Autowired
+    private IBackSqlService iBackSqlService;
     
     @Override
     protected BaseDao<LabelPushCycle, String> getBaseDao() {
@@ -108,4 +121,43 @@ public class LabelPushCycleServiceImpl extends BaseServiceImpl<LabelPushCycle, S
         }
         super.delete(recordId);
     }
+    
+    public Integer deleteLabelPushCycle(LabelPushCycle labelPushCycle) throws BaseException{
+        return this.iLabelPushCycleDao.deleteByLabelPushCycle(labelPushCycle);
+    }
+
+    public Page<CustomGroupListVo> findGroupList(Page<CustomGroupListVo> page, LabelInfoVo customGroup) throws BaseException {
+        String sql = this.getGroupListSql(customGroup);
+        LogUtil.debug("清单预览sql："+sql);
+        //清单
+        List<Map<String, String>> pageMap = iBackSqlService.queryForPage(sql, page.getPageStart(), page.getPageSize());
+        if (null != pageMap) {
+            List<CustomGroupListVo> customGroupListVos = new ArrayList<>();
+            for (Map<String, String> map : pageMap) {
+                customGroupListVos.add(new CustomGroupListVo(map.get(LabelInfoContants.KHQ_CROSS_COLUMN)));
+            }
+            page.setData(customGroupListVos);
+        }
+        return page;
+        
+    }
+
+    /** 拼接查询客户群清单预览sql
+     * @param customGroup
+     * @return
+     * @throws BaseException
+     */
+    private String getGroupListSql(LabelInfoVo customGroup) throws BaseException {
+        String fromSql = iLabelExploreService.getListTableSql(customGroup.getLabelId(), customGroup.getDataDate());
+        
+        StringBuilder sql = new StringBuilder("select ").append(LabelInfoContants.KHQ_CROSS_COLUMN).append(" FROM ");
+        if (!fromSql.contains(".")) {
+            sql.append(iBackSqlService.getCurBackDbSchema()).append(".");
+        }
+        
+        return sql.append(fromSql).append(" order by ").append(LabelInfoContants.KHQ_CROSS_COLUMN).append(" asc").toString();
+    }
+    
+
+
 }

@@ -21,8 +21,10 @@ import com.asiainfo.biapp.si.loc.base.exception.BaseException;
 import com.asiainfo.biapp.si.loc.base.page.Page;
 import com.asiainfo.biapp.si.loc.base.utils.StringUtil;
 import com.asiainfo.biapp.si.loc.base.utils.WebResult;
+import com.asiainfo.biapp.si.loc.core.label.vo.LabelInfoVo;
 import com.asiainfo.biapp.si.loc.core.syspush.entity.LabelPushCycle;
 import com.asiainfo.biapp.si.loc.core.syspush.service.ILabelPushCycleService;
+import com.asiainfo.biapp.si.loc.core.syspush.vo.CustomGroupListVo;
 import com.asiainfo.biapp.si.loc.core.syspush.vo.LabelPushCycleVo;
 
 import io.swagger.annotations.Api;
@@ -51,6 +53,7 @@ import springfox.documentation.annotations.ApiIgnore;
  * @author  wangrd
  * @version 1.0.0.2018年1月17日
  */
+
 @Api(value = "标签推送设置信息表",description="王瑞冬")
 @RequestMapping("api/syspush")
 @RestController
@@ -192,4 +195,18 @@ public class LabelPushCycleController extends BaseController<LabelPushCycle>{
         }
         return oldLab;
     }
+
+    @ApiOperation(value = "预览清单")
+    @RequestMapping(value = "/labelPushCycle/findGroupList", method = RequestMethod.POST)
+    public Page<CustomGroupListVo> findGroupList(@ModelAttribute Page<CustomGroupListVo> page, @ModelAttribute LabelInfoVo customGroup) {
+        try {
+            page = iLabelPushCycleService.findGroupList(page,customGroup);
+        } catch (BaseException e) {
+            page.fail(e);
+        }
+        return page;
+    }
+    
+    
+    
 }

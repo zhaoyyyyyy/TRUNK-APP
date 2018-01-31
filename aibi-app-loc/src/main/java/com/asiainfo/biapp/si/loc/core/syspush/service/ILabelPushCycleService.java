@@ -11,7 +11,9 @@ import java.util.List;
 import com.asiainfo.biapp.si.loc.base.exception.BaseException;
 import com.asiainfo.biapp.si.loc.base.page.Page;
 import com.asiainfo.biapp.si.loc.base.service.BaseService;
+import com.asiainfo.biapp.si.loc.core.label.vo.LabelInfoVo;
 import com.asiainfo.biapp.si.loc.core.syspush.entity.LabelPushCycle;
+import com.asiainfo.biapp.si.loc.core.syspush.vo.CustomGroupListVo;
 import com.asiainfo.biapp.si.loc.core.syspush.vo.LabelPushCycleVo;
 
 /**
@@ -86,4 +88,16 @@ public interface ILabelPushCycleService extends BaseService<LabelPushCycle, Stri
      * @throws BaseException
      */
     public void deleteLabelPushCycleById(String recordId) throws BaseException;
+    
+    /**
+     * Description: 清单预览
+     * 
+     * @param page
+     * @param customGroup
+     */
+    public Page<CustomGroupListVo> findGroupList(Page<CustomGroupListVo> page, LabelInfoVo customGroup) throws BaseException;
+    
+    
+    
+
 }
