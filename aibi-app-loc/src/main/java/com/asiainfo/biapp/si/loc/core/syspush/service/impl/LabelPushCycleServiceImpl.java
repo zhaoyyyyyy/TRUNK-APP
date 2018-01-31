@@ -122,9 +122,6 @@ public class LabelPushCycleServiceImpl extends BaseServiceImpl<LabelPushCycle, S
         super.delete(recordId);
     }
     
-    public Integer deleteLabelPushCycle(LabelPushCycle labelPushCycle) throws BaseException{
-        return this.iLabelPushCycleDao.deleteByLabelPushCycle(labelPushCycle);
-    }
 
     public Page<CustomGroupListVo> findGroupList(Page<CustomGroupListVo> page, LabelInfoVo customGroup) throws BaseException {
         String sql = this.getGroupListSql(customGroup);
