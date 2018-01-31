@@ -8,7 +8,9 @@ package com.asiainfo.biapp.si.loc.core.label.controller;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -28,9 +30,11 @@ import com.asiainfo.biapp.si.loc.base.utils.JsonUtil;
 import com.asiainfo.biapp.si.loc.base.utils.LogUtil;
 import com.asiainfo.biapp.si.loc.base.utils.StringUtil;
 import com.asiainfo.biapp.si.loc.base.utils.WebResult;
+import com.asiainfo.biapp.si.loc.core.label.entity.CategoryInfo;
 import com.asiainfo.biapp.si.loc.core.label.entity.LabelExtInfo;
 import com.asiainfo.biapp.si.loc.core.label.entity.LabelInfo;
 import com.asiainfo.biapp.si.loc.core.label.service.IApproveInfoService;
+import com.asiainfo.biapp.si.loc.core.label.service.ICategoryInfoService;
 import com.asiainfo.biapp.si.loc.core.label.service.ILabelInfoService;
 import com.asiainfo.biapp.si.loc.core.label.service.ILabelRuleService;
 import com.asiainfo.biapp.si.loc.core.label.vo.LabelInfoVo;
@@ -79,6 +83,9 @@ public class LabelInfoController extends BaseController {
     
     @Autowired 
     private IApproveInfoService iApproveInfoService;
+    
+    @Autowired 
+    private ICategoryInfoService iCategoryInfoService;
 
     @Autowired
 	private ILabelRuleService ruleService;
@@ -152,12 +159,31 @@ public class LabelInfoController extends BaseController {
     @RequestMapping(value = "/labelInfo/queryPage", method = RequestMethod.POST)
     public Page<LabelInfo> list(@ModelAttribute Page<LabelInfo> page, @ModelAttribute LabelInfoVo labelInfoVo) {
         Page<LabelInfo> labelInfoPage = new Page<>();
+        Set<String> categoryIdSet = new HashSet<>();
         try {
+            if(StringUtil.isNotBlank(labelInfoVo.getCategoryId())){
+                CategoryInfo categoryInfo = iCategoryInfoService.selectCategoryInfoById(labelInfoVo.getCategoryId());
+                categoryIdSet.add(categoryInfo.getCategoryId());
+                if(!categoryInfo.getChildren().isEmpty()){
+                    getCategoryChildren(categoryInfo.getChildren(),categoryIdSet);
+                }
+                labelInfoVo.setCategoryIdSet(categoryIdSet);
+            }
             labelInfoPage = iLabelInfoService.selectLabelInfoPageList(page, labelInfoVo);           
         } catch (BaseException e) {
             labelInfoPage.fail(e);
         }
         return labelInfoPage;
+    }
+    
+    public Set<String> getCategoryChildren(Set<CategoryInfo> categoryInfoSet,Set<String> categoryIdSet){
+        for(CategoryInfo c : categoryInfoSet){
+            categoryIdSet.add(c.getCategoryId());
+            if(!c.getChildren().isEmpty()){
+                getCategoryChildren(c.getChildren(),categoryIdSet);
+            }
+        }
+        return categoryIdSet;
     }
 
     @ApiOperation(value = "不分页查询标签信息列表")
