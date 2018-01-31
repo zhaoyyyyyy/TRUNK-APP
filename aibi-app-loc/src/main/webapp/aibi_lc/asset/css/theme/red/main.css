@@ -86,13 +86,13 @@
 	color:#009241;
 }
 .ui-label-system > li > div > div > a.active{
-	border:1px solid #009241;
+	border:1px solid #D02433;
 	border-bottom: 0;
 	padding: 4px 12px 13px;
 	z-index: 2;
 	position: relative;
 	background: #fff;
-	color: #007F3B;
+	color: #D02433;
 }
 .ui-label-system > li > div > div > a.all-active{
 	background-color: #D02433;
