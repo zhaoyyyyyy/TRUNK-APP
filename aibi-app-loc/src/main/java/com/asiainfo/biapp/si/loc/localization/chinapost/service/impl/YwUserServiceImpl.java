@@ -116,6 +116,10 @@ public class YwUserServiceImpl extends DevUserServiceImpl implements IUserServic
 					
 					
 					Set<Organization> organizationPrivaliege = new HashSet<Organization>();
+					
+					organizationPrivaliege.add(organizationXzqh);
+					organizationPrivaliege.add(organizationYwx);
+					
 					organizationPrivaliege.addAll(organizationSetXzqh);
 					organizationPrivaliege.addAll(organizationSetYwx);
 					
