@@ -10,6 +10,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -80,6 +81,7 @@ public class BackHiveDaoImpl extends BaseBackDaoImpl implements IBackSqlDao{
 	@Override
 	public List<Map<String, String>> queryTableColumn(String tableName) throws SqlRunException {
         List<Map<String, String>> res = new ArrayList<>();
+        Map<String,String> rsMap = null;
         //desc tableName;
         String sql = new StringBuilder("desc ").append(tableName).toString();
 
@@ -94,7 +96,10 @@ public class BackHiveDaoImpl extends BaseBackDaoImpl implements IBackSqlDao{
             LogUtil.debug("There are "+datas.size()+" cols in the table."+datas.toString());
             for (Map<String, String> map : datas) {
                 if (!map.get("col_name").contains("#")) {
-                    res.add(map);
+                	rsMap = new HashMap<String,String>();
+                	rsMap.put("COLUMN_NAME", map.get("col_name"));
+                	rsMap.put("DATA_TYPE", map.get("data_type"));
+                	res.add(rsMap);
                 } else {    //在hive的rs中去掉以[#]开始的以下的列
                     break;
                 }
