@@ -71,11 +71,12 @@
 .ui-label-sec > li > div,
 .ui-label-system > li > div > div{
 	padding: 10px 0 0;
+	width:90%;
 }
 .ui-label-sec > li > div > a,
 .ui-label-system > li > div > div > a{
 	display: inline-block;
-	margin: 0 20px 0 0;
+	margin: 5px 20px 5px 0;
 /* 	clear: both; */
 /* 	content: " "; */
 	color: #666;
