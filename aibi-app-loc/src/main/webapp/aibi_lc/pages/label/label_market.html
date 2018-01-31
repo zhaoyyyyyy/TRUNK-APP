@@ -197,8 +197,8 @@
 					计算中心
 					<span>
 						<!--暂时去掉（）  -->
-						<em data-attr="left" class="J-drag-bracket"></em>
-						<em data-attr="right" class="J-drag-bracket"></em>
+						<em data-attr="left" class="J-drag-bracket">(</em>
+						<em data-attr="right" class="J-drag-bracket">)</em>
 						<i  class="del-shop" onclick="labelMarket.clearShopRules()" title="清空"></i>
 						<i class="J-min" title="收回"></i>
 					</span>
@@ -214,14 +214,14 @@
 						<!--符号 -->
 						<div  v-if="item.elementType == 1" class="dropdown">
 							<button type="button" class="ui-btn ui-btn-menu ui-icon-btn">
-								<span class="fleft" v-if="item.calcuElement == 'and'" >且</span>
 								<span class="fleft" v-if="item.calcuElement == 'or'">或</span>
+								<span class="fleft" v-if="item.calcuElement == 'and'" >且</span>
 								<span class="fleft" v-if="item.calcuElement == '-'" >剔除</span>
 								<span class="caret" onclick="labelMarket.switchConnectorShow(this,event)"></span>
 							</button>
 							<ul class="dropdown-menu">
-								<li onclick="labelMarket.switchConnector(this,'or')"><a href="javascript:void(0)" >且</a></li>
-								<li onclick="labelMarket.switchConnector(this,'and')"><a href="javascript:void(0)" >与</a></li>
+								<li onclick="labelMarket.switchConnector(this,'or')"><a href="javascript:void(0)" >或</a></li>
+								<li onclick="labelMarket.switchConnector(this,'and')"><a href="javascript:void(0)" >且</a></li>
 								<li onclick="labelMarket.switchConnector(this,'-')"><a href="javascript:void(0)" >剔除</a></li>
 							</ul>
 						</div>
