@@ -15,7 +15,8 @@ var model = {
 	gxzq : [],
 	sourceTableId : "",
 	configId : "",
-	tableSchema : ""
+	tableSchema : "",
+	isEdit : 0,
 }
 window.loc_onload = function() {
 	model.configId = $.getCurrentConfigId();
@@ -70,6 +71,7 @@ window.loc_onload = function() {
 			'sourceTableId' : id
 		}
 		$("#sourceTableName").attr("disabled",true);
+		model.isEdit = isEdit;
 	}
 	
 	var dic = $.getDicData("ZDLXZD");
@@ -341,6 +343,10 @@ function analysis(){
 			if(data.data.length==0){
 				$.alert("无法获得列信息，请确认表名");
 				return false;
+			}
+			if(model.isEdit == 0){
+				$("#jsonmap").jqGrid("clearGridData");
+				model.sortNum = 0;
 			}
 			var ids = $("#jsonmap").jqGrid('getDataIDs');
 			for (var isi=0; isi<ids.length; isi++) {//让单元格可以获取内容
