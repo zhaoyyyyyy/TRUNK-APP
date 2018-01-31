@@ -99,6 +99,13 @@ public class BackHiveDaoImpl extends BaseBackDaoImpl implements IBackSqlDao{
                 	rsMap = new HashMap<String,String>();
                 	rsMap.put("COLUMN_NAME", map.get("col_name"));
                 	rsMap.put("DATA_TYPE", map.get("data_type"));
+                	rsMap.put("COLUMN_COMMENT", map.get("col_name"));
+//                	if(StringUtils.isNoneBlank(map.get("comment"))){
+//                		rsMap.put("COLUMN_COMMENT", map.get("comment"));
+//                	}else{
+//                		
+//                	}
+                	
                 	res.add(rsMap);
                 } else {    //在hive的rs中去掉以[#]开始的以下的列
                     break;

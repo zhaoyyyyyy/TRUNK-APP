@@ -37,6 +37,7 @@ public class BackAdsDaoImpl  extends BaseBackDaoImpl implements IBackSqlDao{
             for (Map<String, String> map :  datas) {
             	map.put("COLUMN_NAME", map.get("FIELD"));
             	map.put("DATA_TYPE", map.get("TYPE"));
+            	map.put("COLUMN_COMMENT", map.get("EXTRA"));
 			}
             log.debug(" ----------   BackAdsDapImpl.queryTableColumn datas.size =  " + datas.size() );
         }catch (Exception e){
