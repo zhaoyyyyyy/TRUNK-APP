@@ -160,8 +160,8 @@ public class LabelInfoDaoImpl extends BaseDaoImpl<LabelInfo, String> implements 
             params.put("sortNum", labelInfoVo.getSortNum());
         }
         if (StringUtil.isNotBlank(labelInfoVo.getApproveStatusId())) {
-            hql.append("and approveInfo.approveStatusId LIKE :approveStatusId");
-            params.put("approveStatusId", "%"+labelInfoVo.getApproveStatusId()+"%");
+            hql.append("and l.approveInfo.approveStatusId = :approveStatusId ");
+            params.put("approveStatusId", labelInfoVo.getApproveStatusId());
         }
         if (StringUtils.isNotBlank(labelInfoVo.getpublishTimeStart())) {
             hql.append("and l.publishTime >= :publishTimeStart ");
