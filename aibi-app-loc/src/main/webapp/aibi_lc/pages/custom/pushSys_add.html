@@ -95,34 +95,35 @@
 								</div>
 							</div>
 							</fieldset>
-							 <fieldset class="mt10 push-fieldest">
-							 	 
-								 <legend><input type="checkbox">对接WEBSERVICE</legend>
-								 <div class="ui-form-group">
-								<label class="control-label fleft"></span>WSDL:</label>
-								<div class="control-input">
-									<input  id="sysName" name="sysName" type="text" class="fleft form-control easyui-validatebox"   />
+							<fieldset class="mt10 push-fieldest">
+								<legend><input type="checkbox" v-model="checked">对接WEBSERVICE</legend>
+								<div class="" v-if="checked">
+									<div class="ui-form-group">
+										<label class="control-label fleft"></span>WSDL:</label>
+										<div class="control-input">
+											<input  id="sysName" name="sysName" type="text" class="fleft form-control easyui-validatebox"   />
+										</div>
+									</div>
+									<div class="ui-form-group">
+										<label class="control-label fleft"></span>命名空间:</label>
+										<div class="control-input">
+											<input  id="sysName" name="sysName" type="text" class="fleft form-control easyui-validatebox"   />
+										</div>
+									</div>
+									<div class="ui-form-group">
+										<label class="control-label fleft"></span>方法:</label>
+										<div class="control-input">
+											<input  id="sysName" name="sysName" type="text" class="fleft form-control easyui-validatebox"   />
+										</div>
+									</div>
+									<div class="ui-form-group">
+										<label class="control-label fleft"></span>参数:</label>
+										<div class="control-input">
+											<input  id="sysName" name="sysName" type="text" class="fleft form-control easyui-validatebox"   />
+										</div>
+									</div>
 								</div>
-							</div>
-							<div class="ui-form-group">
-								<label class="control-label fleft"></span>命名空间:</label>
-								<div class="control-input">
-									<input  id="sysName" name="sysName" type="text" class="fleft form-control easyui-validatebox"   />
-								</div>
-							</div>
-							<div class="ui-form-group">
-								<label class="control-label fleft"></span>方法:</label>
-								<div class="control-input">
-									<input  id="sysName" name="sysName" type="text" class="fleft form-control easyui-validatebox"   />
-								</div>
-							</div>
-							<div class="ui-form-group">
-								<label class="control-label fleft"></span>参数:</label>
-								<div class="control-input">
-									<input  id="sysName" name="sysName" type="text" class="fleft form-control easyui-validatebox"   />
-								</div>
-							</div>
-							 </fieldset>
+							</fieldset>
 							 <div class="ui-form-group ml20 mt20">
 								 <div class="checkbox fleft">
 								    <input id="mycheckbox11" type="checkbox" class="checkbix" checked="checked">
