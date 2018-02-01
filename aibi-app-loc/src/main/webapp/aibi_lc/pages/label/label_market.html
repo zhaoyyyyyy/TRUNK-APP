@@ -208,9 +208,15 @@
 						'ui-chaining' : item.elementType ==1,
 						'ui-conditionCT' : item.elementType == 2,
                 		'ui-bracket': item.elementType == 3,
-                		'left' : item.elementType == 3 }" v-bind:index="index">
-						<!--括号 -->
-						<span v-if="item.elementType == 3" v-text="item.calcuElement"></span>
+                		'left' : item.calcuElement == '(',
+                		'right' : item.calcuElement == ')',
+                		'waitClose' : item.waitClose}" v-bind:index="index" v-bind:creat="item.createBrackets">
+						<!--左括号 -->
+						<span v-if="item.calcuElement == '('" v-text="item.calcuElement"></span>
+						<!--右括号 -->
+						<span v-if="item.calcuElement == ')'" v-text="item.calcuElement">
+							<span class="delCondition" onclick="labelMarket.deletePar(this,event)"></span>
+						</span>
 						<!--符号 -->
 						<div  v-if="item.elementType == 1" class="dropdown">
 							<button type="button" class="ui-btn ui-btn-menu ui-icon-btn">
@@ -226,40 +232,12 @@
 							</ul>
 						</div>
 						<!-- 标签 -->
-						<h4 :class="{'ui-conditionCT-h4': 1==1 , 'ui-inverse': item.labelFlag == 0}"  >
+						<h4 :class="{'ui-conditionCT-h4': 1==1 , 'ui-inverse': item.labelFlag == 0}"  v-if="item.elementType == 2">
 							<span v-text="item.customOrLabelName" onclick="labelMarket.againstLabel(this)"></span>
 							<em onclick="labelMarket.againstLabel(this)"></em>
 							<i onclick="labelMarket.deleteRule(this)"></i>
 							<b onclick="labelMarket.showLabelInfo(this)" class="ml10">!</b>
 						</h4>
-						<!--鼠标经过弹窗-->
-						<div class="ui-conditionBox">
-							<i></i>
-							<p class="ui-advanced-sreach mt10">已选条件</p>
-							<div class="clearfix ui-contidion-info mt10">
-								<div class="fleft">
-									<label>更新周期：</label> 
-									<span v-for="h in updateCycleList" v-if="labelInfoViewObj.updateCycle == h.code" v-text="h.dataName"></span>
-								</div>
-								<div class="fright">
-									<label>创建时间：</label> 
-									<span>{{labelInfoViewObj.createTime|formatDate}}</span>
-								</div>
-							</div>
-							<div class="clearfix ui-contidion-info mt10">
-								<div class="fleft">
-									<label>数据日期：</label> 
-									<span v-text="labelInfoViewObj.dataDate"></span>
-								</div>
-							</div>
-							<div class="clearfix marketTipBottomBox mt10">
-								<div class="fright">
-									<label>有效期：</label> 
-									<span >{{labelInfoViewObj.effecTime|formatDate}}</span>至
-									<span >{{labelInfoViewObj.failTime|formatDate}}</span>
-								</div>
-							</div>
-						</div>
 						<!-- 标签体内容 -->
 						<!-- 标志性-->
 						<div class="ui-conditionCT-content align_center" v-if="item.labelTypeId == 1">
@@ -352,12 +330,41 @@
 					</button>
 				</p>
 			</div>
-
+			
+			<!--鼠标经过弹窗-->
+			<div class="ui-conditionBox" style="display: none;">
+				<i></i>
+				<p class="ui-advanced-sreach mt10">已选条件</p>
+				<div class="clearfix ui-contidion-info mt10">
+					<div class="fleft">
+						<label>更新周期：</label> 
+						<span v-for="h in updateCycleList" v-if="labelInfoViewObj.updateCycle == h.code" v-text="h.dataName"></span>
+					</div>
+					<div class="fright">
+						<label>创建时间：</label> 
+						<span>{{labelInfoViewObj.createTime|formatDate}}</span>
+					</div>
+				</div>
+				<div class="clearfix ui-contidion-info mt10">
+					<div class="fleft">
+						<label>数据日期：</label> 
+						<span v-text="labelInfoViewObj.dataDate"></span>
+					</div>
+				</div>
+				<div class="clearfix marketTipBottomBox mt10">
+					<div class="fright">
+						<label>有效期：</label> 
+						<span >{{labelInfoViewObj.effecTime|formatDate}}</span>至
+						<span >{{labelInfoViewObj.failTime|formatDate}}</span>
+					</div>
+				</div>
+			</div>
+	
 		</div>
 
 	</div>
 
-
+	
 	<!-- 计算中心弹框 -->
 	<div class="ui-dialog" id="ztreeDiv">
 		<div class="clearfix ui-enum-content">
