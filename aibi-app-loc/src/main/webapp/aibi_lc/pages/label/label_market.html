@@ -85,15 +85,6 @@
 					</li>
 					<li>
 						<div class="clearfix">
-							<label class="fleft">地市：</label>
-							<div class="fleft">
-								<a onclick="labelMarket.orgSearch(this)" id="allOrg" class="fleft all-active">全部</a>
-								<a onclick="labelMarket.orgSearch(this)" :name="orgC.id" :id="'org'+orgC.id" v-for="orgC in xzqhList"><em>{{orgC.fullName}}</em></a>
-							</div>
-						</div>
-					</li>
-					<li>
-						<div class="clearfix">
 							<label class="fleft">发布时间：</label>
 							<div class="fleft">
 								<a href="javascript:;" onclick="labelMarket.changePublishTime(this)" id="allDate" class="all-active fleft"><!-- all-active 去掉非选中状态 -->
