@@ -59,6 +59,8 @@ public class BaseConstants {
     public static final String DBMS_VERTICA = "VERTICA";
     /** gaussmpp */
     public static final String DBMS_GAUSSMPP = "GAUSSMPP";
-    
+
+    /** 清单PRODUCT_NO是否去隐私化处理 */
+    public static final String PRODUCT_NO_HAS_PRIVACY = "PRODUCT_NO_HAS_PRIVACY";
 	
 }

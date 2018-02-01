@@ -15,6 +15,7 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.asiainfo.biapp.si.loc.base.BaseConstants;
 import com.asiainfo.biapp.si.loc.base.common.LabelInfoContants;
 import com.asiainfo.biapp.si.loc.base.dao.BaseDao;
 import com.asiainfo.biapp.si.loc.base.exception.BaseException;
@@ -24,6 +25,7 @@ import com.asiainfo.biapp.si.loc.base.service.impl.BaseServiceImpl;
 import com.asiainfo.biapp.si.loc.base.utils.LogUtil;
 import com.asiainfo.biapp.si.loc.base.utils.StringUtil;
 import com.asiainfo.biapp.si.loc.bd.common.service.IBackSqlService;
+import com.asiainfo.biapp.si.loc.cache.CocCacheProxy;
 import com.asiainfo.biapp.si.loc.core.label.entity.LabelInfo;
 import com.asiainfo.biapp.si.loc.core.label.service.ILabelExploreService;
 import com.asiainfo.biapp.si.loc.core.label.service.ILabelInfoService;
@@ -128,10 +130,30 @@ public class LabelPushCycleServiceImpl extends BaseServiceImpl<LabelPushCycle, S
         LogUtil.debug("清单预览sql："+sql);
         //清单
         List<Map<String, String>> pageMap = iBackSqlService.queryForPage(sql, page.getPageStart(), page.getPageSize());
+        String productNoHasPrivacy = CocCacheProxy.getCacheProxy().getSYSConfigInfoByKey(BaseConstants.PRODUCT_NO_HAS_PRIVACY);
+        boolean isPrivate = true;
+        if (StringUtil.isBlank(productNoHasPrivacy) || "false".equalsIgnoreCase(productNoHasPrivacy)) {
+            isPrivate = false;
+        }
         if (null != pageMap) {
             List<CustomGroupListVo> customGroupListVos = new ArrayList<>();
             for (Map<String, String> map : pageMap) {
-                customGroupListVos.add(new CustomGroupListVo(map.get(LabelInfoContants.KHQ_CROSS_COLUMN)));
+                String productNo = map.get(LabelInfoContants.KHQ_CROSS_COLUMN);
+                if (StringUtil.isNotBlank(productNo)) {
+                    if (isPrivate) {
+                        if (productNo.length() > 3) {
+                            String start = productNo.substring(0, 3);
+                            String end = productNo.substring(3, productNo.length());
+                            if (end.length() >= 4) {
+                                end = end.replaceFirst("[0-9]{4}", "****");
+                            } else {
+                                end = end.replaceFirst("[0-9]", "*");
+                            }
+                            productNo = start + end;
+                        }
+                    }
+                }
+                customGroupListVos.add(new CustomGroupListVo(productNo));
             }
             page.setData(customGroupListVos);
         }
