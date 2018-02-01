@@ -196,7 +196,10 @@ public class BackHiveDaoImpl extends BaseBackDaoImpl implements IBackSqlDao{
 
 	@Override
 	public List<Map<String, String>> queryForPage(String selectSql, Integer pageStart, Integer pageSize) throws SqlRunException {
-        int begin = (pageStart - 1) * pageSize;
+        if (pageStart < 1) {
+            pageStart = 1;
+        }
+	    int begin = (pageStart - 1) * pageSize;
         int end = begin + pageSize;
 //        String keyColumn = PropertiesUtils.getProperties("RELATED_COLUMN");
         String keyColumn = "";
