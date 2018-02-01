@@ -198,7 +198,7 @@
 					<span>
 						<!--暂时去掉（）  -->
 						<em data-attr="left" class="J-drag-bracket">(</em>
-						<em data-attr="right" class="J-drag-bracket">)</em>
+						<em data-attr="right" class="J-drag-bracket">&nbsp;)</em>
 						<i  class="del-shop" onclick="labelMarket.clearShopRules()" title="清空"></i>
 						<i class="J-min" title="收回"></i>
 					</span>
@@ -236,7 +236,7 @@
 							<span v-text="item.customOrLabelName" onclick="labelMarket.againstLabel(this)"></span>
 							<em onclick="labelMarket.againstLabel(this)"></em>
 							<i onclick="labelMarket.deleteRule(this)"></i>
-							<b onclick="labelMarket.showLabelInfo(this)" class="ml10">!</b>
+							<b onclick="labelMarket.showLabelInfo(this,event)" class="ml10">!</b>
 						</h4>
 						<!-- 标签体内容 -->
 						<!-- 标志性-->
@@ -315,6 +315,48 @@
 						</div>
 					</div>
 				</div>
+			
+				<!--鼠标经过弹窗-->
+				<div class="ui-conditionBox">
+					<i></i>
+					<p class="ui-advanced-sreach mt10">已选条件</p>
+					<div class="clearfix ui-contidion-info mt10">
+						<div class="fleft">
+							<label>更新周期：</label> 
+							<span v-for="h in updateCycleList" v-if="labelInfoViewObj.updateCycle == h.code" v-text="h.dataName"></span>
+						</div>
+						<div class="fright">
+							<label>创建时间：</label> 
+							<span>{{labelInfoViewObj.createTime|formatDate}}</span>
+						</div>
+					</div>
+					<div class="clearfix ui-contidion-info mt10">
+						<div class="fleft">
+							<label>数据日期：</label> 
+							<span v-text="labelInfoViewObj.dataDate"></span>
+						</div>
+					</div>
+					<div class="clearfix marketTipBottomBox mt10">
+						<div class="fright">
+							<label>有效期：</label> 
+							<span >{{labelInfoViewObj.effecTime|formatDate}}</span>至
+							<span >{{labelInfoViewObj.failTime|formatDate}}</span>
+						</div>
+					</div>
+				</div>
+	
+				<!--鼠标经过括号-->
+				
+				<div class="ui-helper-box">
+					<i></i>
+					<ul>
+						<li><a href="">删除内容</a></li>
+						<li><a href="">删除括号与内容</a></li>
+					</ul>
+				</div>
+				
+				
+				
 			</div>
 
 			<!----------------- 购物车 ------------>
@@ -331,35 +373,7 @@
 				</p>
 			</div>
 			
-			<!--鼠标经过弹窗-->
-			<div class="ui-conditionBox" style="display: none;">
-				<i></i>
-				<p class="ui-advanced-sreach mt10">已选条件</p>
-				<div class="clearfix ui-contidion-info mt10">
-					<div class="fleft">
-						<label>更新周期：</label> 
-						<span v-for="h in updateCycleList" v-if="labelInfoViewObj.updateCycle == h.code" v-text="h.dataName"></span>
-					</div>
-					<div class="fright">
-						<label>创建时间：</label> 
-						<span>{{labelInfoViewObj.createTime|formatDate}}</span>
-					</div>
-				</div>
-				<div class="clearfix ui-contidion-info mt10">
-					<div class="fleft">
-						<label>数据日期：</label> 
-						<span v-text="labelInfoViewObj.dataDate"></span>
-					</div>
-				</div>
-				<div class="clearfix marketTipBottomBox mt10">
-					<div class="fright">
-						<label>有效期：</label> 
-						<span >{{labelInfoViewObj.effecTime|formatDate}}</span>至
-						<span >{{labelInfoViewObj.failTime|formatDate}}</span>
-					</div>
-				</div>
-			</div>
-	
+			
 		</div>
 
 	</div>

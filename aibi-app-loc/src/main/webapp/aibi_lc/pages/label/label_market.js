@@ -192,8 +192,18 @@ window.loc_onload = function() {
   	  ]
   });
   
-   
-  
+  $(".ui-calc-content").delegate(".ui-bracket.right","mouseover",function(){
+  	 $(this).find("span").after($(".ui-helper-box"));
+  	 $(this).find(".ui-helper-box").show();
+  })
+   $(".ui-calc-content").delegate(".ui-bracket.right","mouseleave",function(){
+  	 $(this).find(".ui-helper-box").hide();
+  	 $(".ui-helper-box").hide();
+  	 $(".ui-helper-box").find("ul").hide();
+  })
+  $(".ui-helper-box").find("i").click(function(){
+  	$(this).siblings("ul").stop().toggle();
+  })
 	
 }
 
@@ -656,32 +666,63 @@ var labelMarket = (function (model){
 		/**
 		 * 展示标签信息
 		 */
-		model.showLabelInfo = function(elem){
-			var index = $(elem).parent().parent().attr("index");
-			var rule = dataModel.ruleList[index];
-			if($(elem).parents(".ui-conditionCT").find(".ui-conditionBox").css("display") =="none"){//如果原来隐藏，则显示
-				$("#sortable").find(".ui-conditionBox").hide();
-				if(rule){
-					$.commAjax({
-						url : $.ctx + "/api/label/labelInfo/get",
-						postData:{
-							labelId : rule.calcuElement
-		  				},
-						onSuccess:function(returnObj){
-							var status = returnObj.status;
-							if (status == '200'){
-								$(elem).parents(".ui-conditionCT").find(".ui-conditionBox").show();
-								dataModel.labelInfoViewObj = returnObj.data;
-							}else{
-								$.alert(returnObj.msg);
-							}
-						},
-					});
-				}
-			}else{
-				$("#sortable").find(".ui-conditionBox").hide();
+		model.showLabelInfo = function(elem,event){
+		var X = $(elem).parents(".ui-conditionCT").position().top;
+//		var Y = $(elem).parents(".ui-conditionCT").position().left;
+		var top_h=$(elem).offset().left-100-15-82;
+		$(".ui-conditionBox").css({"left":top_h,"top":X+90});
+		var index = $(elem).parent().parent().attr("index");
+		$(".ui-conditionBox").attr("index",index);	
+		var rule = dataModel.ruleList[index];
+		
+		
+		
+		if($(".ui-conditionBox[index="+index+"]").css("display")=="none"){
+			$(".ui-conditionBox[index="+index+"]").show();
+			if(rule){
+				$.commAjax({
+					url : $.ctx + "/api/label/labelInfo/get",
+					postData:{
+						labelId : rule.calcuElement
+	  				},
+					onSuccess:function(returnObj){
+						var status = returnObj.status;
+						if (status == '200'){
+							$(elem).parents(".ui-conditionCT").find(".ui-conditionBox").show();
+							dataModel.labelInfoViewObj = returnObj.data;
+						}else{
+							$.alert(returnObj.msg);
+						}
+					},
+				});
 			}
-			
+		}else{
+			$(".ui-conditionBox").hide();
+		}
+//			var rule = dataModel.ruleList[index];
+//			if($(".ui-conditionBox").css("display") =="none"){//如果原来隐藏，则显示
+//				$(".ui-calculate-center").find(".ui-conditionBox").show();
+//				if(rule){
+//					$.commAjax({
+//						url : $.ctx + "/api/label/labelInfo/get",
+//						postData:{
+//							labelId : rule.calcuElement
+//		  				},
+//						onSuccess:function(returnObj){
+//							var status = returnObj.status;
+//							if (status == '200'){
+//								$(elem).parents(".ui-conditionCT").find(".ui-conditionBox").show();
+//								dataModel.labelInfoViewObj = returnObj.data;
+//							}else{
+//								$.alert(returnObj.msg);
+//							}
+//						},
+//					});
+//				}
+//			}else{
+//				$(".ui-calculate-center").find(".ui-conditionBox").hide();
+//			}
+//			
 		}
 		/**
 		 * 删除连接符
@@ -1160,6 +1201,7 @@ var labelMarket = (function (model){
 		        }
 			});
         };
+        
         /**
          * 括号位置
          */
