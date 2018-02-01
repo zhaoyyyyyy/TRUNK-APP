@@ -82,6 +82,12 @@
 	color: #666;
 	padding: 4px 12px;
 }
+.ui-item a{
+	margin:5px 20px 5px 0!important;
+}
+.ui-item label{
+	margin:5px 0!important;
+}
 .ui-label-sec > li > div > a.active{
 	color:#009241;
 }
