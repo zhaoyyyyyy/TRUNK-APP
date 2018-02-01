@@ -16,6 +16,7 @@ import javax.transaction.Transactional;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
 
+import com.asiainfo.biapp.si.loc.base.BaseConstants;
 import com.asiainfo.biapp.si.loc.base.common.LabelInfoContants;
 import com.asiainfo.biapp.si.loc.base.exception.SqlRunException;
 import com.asiainfo.biapp.si.loc.base.extend.SpringContextHolder;
@@ -66,7 +67,7 @@ public class BackServiceImpl implements IBackSqlService{
      * @return
      */
     private IBackSqlDao getBackDaoBean() {
-    	String dbType = CocCacheProxy.getCacheProxy().getSYSConfigInfoByKey("LOC_CONFIG_SYS_BGDB_TYPE");
+    	String dbType = CocCacheProxy.getCacheProxy().getSYSConfigInfoByKey(BaseConstants.SYS_BGDB_TYPE);
     	String backDaoBeanId = "back"+dbType+"DaoImpl";
     	IBackSqlDao backSqlDao = (IBackSqlDao)SpringContextHolder.getBean(backDaoBeanId);
         return backSqlDao;

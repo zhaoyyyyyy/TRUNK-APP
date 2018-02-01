@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>新增推送平台</title>
+<!--[if IE]>
+    	<meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <![endif]-->
+<link rel="stylesheet" theme="default" href="../../asset/css/theme/default/coc_frame.css" />
+<link rel="stylesheet" theme="default" href="../../asset/css/theme/default/main.css" />
+<script type="text/javascript" src="../../asset/script/common/include.js"></script>
+<script type="text/javascript" src="pushSys_add.js"></script>
+<style type="text/css">
+[v-cloak] {
+	display: none;
+}
+</style>
+<!--[if lt IE 9]>
+	    <script src="../../asset/script/component/h5compatibility/html5shiv.min.js"></script>
+	    <script src="../../asset/script/component/h5compatibility/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+	<div id="dataD" class="iframe-nest" v-cloak>
+		<div class="ui-reg-main">
+			<div class="ui-lc-mian">
+				<form id="saveDataForm">
+					<input type="hidden" v-model="sysId" id="sysId" name="sysId" />
+					<div class="ui-reg-search">
+						<div class="form-horizontal ui-form dimtable-table">
+							<div class="ui-form-group">
+								<label class="control-label fleft"><span class="input-required">*</span>推送平台名称:</label>
+								<div class="control-input">
+									<input  id="sysName" name="sysName" type="text" class="fleft form-control easyui-validatebox" required="true" placeholder="推送平台名称" />
+								</div>
+							</div>
+						     <div class="ui-form-group">
+								<label class="control-label fleft">描述:</label>
+									<div class="control-input">
+										 <textarea rows="3" class="form-control form-control-textarea"></textarea>
+									</div>
+							</div> 
+							<div class="ui-form-group">
+						        <label for="inputEmail3" class="control-label fleft">推送方式:</label>
+						        <ul id="radioList" class="clearfix fleft">
+							        <li class="radio circle success"  v-for="(item,index) in tsfszd" > 
+									   	<input type="radio" name="pushCycle" :value="item.code" id="myr3"> 
+										<label for="myr3" v-bind:class="{active:index==curentIndex}"><i class="default"></i>{{item.dataName}}</label>
+									</li>
+						        </ul>
+						    </div>
+						    <fieldset class="push-fieldest">
+								<legend>FTP/SFTP信息</legend>
+								<div class="ui-form-group">
+									<label class="control-label fleft"></span>协议类型:</label>
+									<div class="control-input">
+										<select name="codeColType" class="form-control easyui-validatebox" dicCode="XYLXZD"	id="codeColType" >
+										</select>
+									</div>
+								</div>
+								<div class="ui-form-group">
+								<label class="control-label fleft"></span>IP:</label>
+								<div class="control-input">
+									<input  id="sysName" name="sysName" type="text" class="fleft form-control easyui-validatebox"   />
+								</div>
+							</div>
+							<div class="ui-form-group">
+								<label class="control-label fleft"></span>用户名:</label>
+								<div class="control-input">
+									<input  id="sysName" name="sysName" type="text" class="fleft form-control easyui-validatebox"   />
+								</div>
+							</div>
+							<div class="ui-form-group">
+								<label class="control-label fleft"></span>密码:</label>
+								<div class="control-input">
+									<input  id="sysName" name="sysName" type="text" class="fleft form-control easyui-validatebox"   />
+								</div>
+							</div>
+							<div class="ui-form-group">
+								<label class="control-label fleft"></span>FTP路径:</label>
+								<div class="control-input">
+									<input  id="sysName" name="sysName" type="text" class="fleft form-control easyui-validatebox"   />
+								</div>
+							</div>
+							<div class="ui-form-group">
+								<label class="control-label fleft"></span>端口:</label>
+								<div class="control-input">
+									<input  id="sysName" name="sysName" type="text" class="fleft form-control easyui-validatebox"   />
+								</div>
+							</div>
+							<div class="ui-form-group">
+								<label class="control-label fleft"></span>本地路径:</label>
+								<div class="control-input">
+									<input  id="sysName" name="sysName" type="text" class="fleft form-control easyui-validatebox"   />
+								</div>
+							</div>
+							</fieldset>
+							<fieldset class="mt10 push-fieldest">
+								<legend><input type="checkbox" v-model="checked">对接WEBSERVICE</legend>
+								<div class="" v-if="checked">
+									<div class="ui-form-group">
+										<label class="control-label fleft"></span>WSDL:</label>
+										<div class="control-input">
+											<input  id="sysName" name="sysName" type="text" class="fleft form-control easyui-validatebox"   />
+										</div>
+									</div>
+									<div class="ui-form-group">
+										<label class="control-label fleft"></span>命名空间:</label>
+										<div class="control-input">
+											<input  id="sysName" name="sysName" type="text" class="fleft form-control easyui-validatebox"   />
+										</div>
+									</div>
+									<div class="ui-form-group">
+										<label class="control-label fleft"></span>方法:</label>
+										<div class="control-input">
+											<input  id="sysName" name="sysName" type="text" class="fleft form-control easyui-validatebox"   />
+										</div>
+									</div>
+									<div class="ui-form-group">
+										<label class="control-label fleft"></span>参数:</label>
+										<div class="control-input">
+											<input  id="sysName" name="sysName" type="text" class="fleft form-control easyui-validatebox"   />
+										</div>
+									</div>
+								</div>
+							</fieldset>
+							 <div class="ui-form-group ml20 mt20">
+								 <div class="checkbox fleft">
+								    <input id="mycheckbox11" type="checkbox" class="checkbix" checked="checked">
+								    <label aria-label="" role="checkbox" for="mycheckbox11" class="checkbix">
+								    		<span class="large"></span>是否推送页面显示
+								    </label>
+								</div>
+							</div>
+							<div class="ui-form-group ml20">
+								 <div class="checkbox fleft">
+								    <input id="mycheckbox12" type="checkbox" class="checkbix" >
+								    <label aria-label="" role="checkbox" for="mycheckbox12" class="checkbix">
+								    		<span class="large"></span>是否同时上传xml文件
+								    </label>
+								</div>
+							</div>
+							<div class="ui-form-group ml20">
+								 <div class="checkbox fleft checkBox">
+								    <input id="mycheckbox13" type="checkbox" class="checkbix">
+								    <label aria-label="" role="checkbox" for="mycheckbox13" class="checkbix"  >
+								    		<span class="large"></span>是否需要DES加密
+								    </label>
+								</div>
+								<div class="fleft clearfix ui-push-box" style="display:none;">
+									<label class="control-label fleft"></span>加密密钥:</label>
+									<div class="control-input">
+										<input  id="sysName" name="sysName" type="text" class="fleft form-control easyui-validatebox"  />
+									</div>
+								</div>
+							</div>
+							<div class="ui-form-group ml20 clearfix">
+								 <div class="checkbox fleft checkBox">
+								    <input id="mycheckbox14" type="checkbox" class="checkbix">
+								    <label aria-label="" role="checkbox" for="mycheckbox14" class="checkbix">
+								    		<span class="large"></span>是否需要压缩
+								    </label>
+								</div>
+								<div class="fleft clearfix ml20 ui-push-box" style="display:none;">
+									<label class="control-label fleft"></span>压缩类型:</label>
+									<div class="control-input">
+										<select  id="sysName" name="sysName" class="fleft form-control easyui-validatebox"  /></select>
+									</div>
+								</div>
+							</div>
+							<div class="ui-form-group  ml20">
+								 <div class="checkbox fleft">
+								    <input id="mycheckbox15" type="checkbox" class="checkbix" >
+								    <label aria-label="" role="checkbox" for="mycheckbox15" class="checkbix">
+								    		<span class="large"></span>是否允许推送属性
+								    </label>
+								</div>
+							</div>
+							<div class="ui-form-group">
+								<label class="control-label fleft"></span>实现类名:</label>
+								<div class="control-input">
+									<input  id="sysName" name="sysName" type="text" class="fleft form-control easyui-validatebox"  />
+								</div>
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

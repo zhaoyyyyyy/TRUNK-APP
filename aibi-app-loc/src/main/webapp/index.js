@@ -107,18 +107,16 @@ var auto_Login = (function (model){
  */
 $(function(){
 	var hash = window.location.hash;
-	var href = "";
-	//获取spring的active配置
-	var springActive = auto_Login._util.getSpringConfig("spring.profiles.active");
-	if(springActive && springActive != ""){
-		auto_Login.active = springActive.replace("-","");
-	}
 	
-	
-	//存  #label/label_mgr 则走单点登录逻辑
-	if(hash){
+	if(hash){//存  #label/label_mgr 则走单点登录逻辑
 		
-		href = hash.split("#")[1];
+		//获取spring的active配置
+		var springActive = auto_Login._util.getSpringConfig("spring.profiles.active");
+		if(springActive && springActive != ""){
+			auto_Login.active = springActive.replace("-","");
+		}
+		
+		var href = hash.split("#")[1];
 		var ssg = window.sessionStorage;
 		if(ssg){
 			var token = ssg.getItem("token");

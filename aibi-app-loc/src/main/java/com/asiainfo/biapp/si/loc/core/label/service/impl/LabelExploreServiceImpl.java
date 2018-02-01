@@ -18,7 +18,10 @@ import com.asiainfo.biapp.si.loc.base.common.CommonConstants;
 import com.asiainfo.biapp.si.loc.base.common.LabelInfoContants;
 import com.asiainfo.biapp.si.loc.base.common.LabelRuleContants;
 import com.asiainfo.biapp.si.loc.base.exception.BaseException;
+import com.asiainfo.biapp.si.loc.base.exception.SqlRunException;
+import com.asiainfo.biapp.si.loc.base.utils.LogUtil;
 import com.asiainfo.biapp.si.loc.base.utils.StringUtil;
+import com.asiainfo.biapp.si.loc.bd.common.service.IBackSqlService;
 import com.asiainfo.biapp.si.loc.cache.CocCacheProxy;
 import com.asiainfo.biapp.si.loc.core.label.entity.LabelInfo;
 import com.asiainfo.biapp.si.loc.core.label.entity.LabelVerticalColumnRel;
@@ -29,6 +32,7 @@ import com.asiainfo.biapp.si.loc.core.label.model.LabelElementFactory;
 import com.asiainfo.biapp.si.loc.core.label.service.IGroupCalcSqlPaser;
 import com.asiainfo.biapp.si.loc.core.label.service.ILabelExploreService;
 import com.asiainfo.biapp.si.loc.core.label.service.ILabelInfoService;
+import com.asiainfo.biapp.si.loc.core.label.service.ILabelRuleService;
 import com.asiainfo.biapp.si.loc.core.label.vo.LabelRuleVo;
 
 @Service
@@ -40,6 +44,12 @@ public class LabelExploreServiceImpl implements ILabelExploreService {
 	
 	@Autowired
 	private ILabelInfoService labelInfoService;
+	
+	@Autowired
+	private ILabelRuleService ruleService;
+	
+	@Autowired
+	private IBackSqlService backServiceImpl;
 	
 	@Override
 	public String getFromSqlForMultiLabel(List<LabelRuleVo> labelRuleList, ExploreQueryParam queryParam) throws BaseException {
@@ -154,7 +164,8 @@ public class LabelExploreServiceImpl implements ILabelExploreService {
 	}
 
 	@Override
-	public String getCountSqlStr(List<LabelRuleVo> ciLabelRuleList, ExploreQueryParam queryParam) throws BaseException {
+	public String getCountSqlStr(List<LabelRuleVo> originalList, ExploreQueryParam queryParam) throws BaseException {
+		List<LabelRuleVo> ciLabelRuleList=ruleService.getNewLabelRuleVoList(originalList);
 		// 判断标签探索中是否只包含and和括号
 		boolean andFlag = true;
 		// 解析不同标签工厂实例
@@ -241,6 +252,11 @@ public class LabelExploreServiceImpl implements ILabelExploreService {
 			String monthDate = queryParam.getMonthDate();
 			tableName += monthDate;
 		}
+		try {
+			tableName = backServiceImpl.getCurBackDbSchema()+"."+tableName;
+		} catch (SqlRunException e) {
+			LogUtil.error(e);
+		}
 		return tableName;
 	}
 
@@ -307,13 +323,16 @@ public class LabelExploreServiceImpl implements ILabelExploreService {
 	@Override
 	public String getListTableSql(String customId, String dataDate) throws BaseException {
 		LabelInfo customGroup = labelInfoService.get(customId);
+		if(customGroup == null){
+			throw new RuntimeException("客户群不存在！");
+		}
 		String tableName = "no table";
 		if (LabelInfoContants.CUSTOM_CYCLE_TYPE_ONE == customGroup.getUpdateCycle()) {
 			tableName = LabelInfoContants.KHQ_CROSS_ONCE_TABLE + customGroup.getConfigId() + "_"+ customGroup.getDataDate();
 		} else {
 			tableName = LabelInfoContants.KHQ_CROSS_TABLE + customGroup.getConfigId() + "_"+ customGroup.getDataDate();
 		}
-		String singleLabelSql = tableName+" where "+LabelInfoContants.KHQ_CROSS_ID_PARTION+" = '"+customId+"' ";
+		String singleLabelSql = backServiceImpl.getCurBackDbSchema()+"."+tableName+" where "+LabelInfoContants.KHQ_CROSS_ID_PARTION+" = '"+customId+"' ";
 		return singleLabelSql;
 	}
 }

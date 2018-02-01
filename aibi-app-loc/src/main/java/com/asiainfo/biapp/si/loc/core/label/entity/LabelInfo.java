@@ -76,13 +76,12 @@ public class LabelInfo extends BaseEntity {
     @Id
     @Column(name = "LABEL_ID")
     @GeneratedValue(generator = "idGenerator")
-    @GenericGenerator(name = "idGenerator", 
-        strategy = "com.asiainfo.biapp.si.loc.base.extend.LocGenerateId",
-        parameters = {
-            @Parameter(name = "name", value = "LABEL_SEQ"), //  来自DIM_SEQUECE_INFO表的 SEQUECE_NAME
+    @GenericGenerator(name = "idGenerator", strategy = "com.asiainfo.biapp.si.loc.base.extend.LocGenerateId", parameters = {
+            @Parameter(name = "name", value = "LABEL_SEQ"), // 来自DIM_SEQUECE_INFO表的
+                                                            // SEQUECE_NAME
             @Parameter(name = "prefix", value = "L"), // ID前缀
             @Parameter(name = "size", value = "7") // 占位符
-    })  
+    })
     @ApiParam(value = "标签ID")
     private String labelId;
 
@@ -276,6 +275,9 @@ public class LabelInfo extends BaseEntity {
     @Transient
     private Integer sourceTableType;
 
+    @Transient
+    private Set<String> categoryIdSet;
+
     /**
      * 排序字段
      */
@@ -286,31 +288,43 @@ public class LabelInfo extends BaseEntity {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "LABEL_ID", referencedColumnName = "RESOURCE_ID", insertable = false, updatable = false)
     private ApproveInfo approveInfo;
-    
+
     @JsonIgnore
     @Transient
-    //@ManyToOne(fetch = FetchType.EAGER)
-    //@JoinColumn(name = "LABEL_ID", referencedColumnName = "LABEL_ID", insertable = false, updatable = false)
+    // @ManyToOne(fetch = FetchType.EAGER)
+    // @JoinColumn(name = "LABEL_ID", referencedColumnName = "LABEL_ID",
+    // insertable = false, updatable = false)
     private MdaSysTableColumn mdaSysTableColumn;
 
     @JsonIgnore
     @Transient
-    //@OneToMany(fetch = FetchType.LAZY)
-    //@JoinColumn(name = "LABEL_ID", referencedColumnName = "LABEL_ID", insertable = false, updatable = false)
+    // @OneToMany(fetch = FetchType.LAZY)
+    // @JoinColumn(name = "LABEL_ID", referencedColumnName = "LABEL_ID",
+    // insertable = false, updatable = false)
     private Set<LabelVerticalColumnRel> verticalColumnRels;
 
     @Transient
-//    @OneToOne(fetch = FetchType.EAGER)
-//    @JoinColumn(name = "LABEL_ID", referencedColumnName = "LABEL_ID", insertable = false, updatable = false)
+    // @OneToOne(fetch = FetchType.EAGER)
+    // @JoinColumn(name = "LABEL_ID", referencedColumnName = "LABEL_ID",
+    // insertable = false, updatable = false)
     private LabelExtInfo labelExtInfo;
-    
-    
+
+    public Set<String> getCategoryIdSet() {
+        return categoryIdSet;
+    }
+
+    public void setCategoryIdSet(Set<String> categoryIdSet) {
+        this.categoryIdSet = categoryIdSet;
+    }
+
     public LabelExtInfo getLabelExtInfo() {
-    	ILabelExtInfoService labelExtInfoService  = (ILabelExtInfoService) SpringContextHolder.getBean("labelExtInfoServiceImpl");
-    	try {
-			return labelExtInfoService.selectLabelExtInfoById(labelId);
-		} catch (BaseException e) {}
-    	return null;
+        ILabelExtInfoService labelExtInfoService = (ILabelExtInfoService) SpringContextHolder
+            .getBean("labelExtInfoServiceImpl");
+        try {
+            return labelExtInfoService.selectLabelExtInfoById(labelId);
+        } catch (BaseException e) {
+        }
+        return null;
     }
 
     public void setLabelExtInfo(LabelExtInfo labelExtInfo) {
@@ -447,8 +461,8 @@ public class LabelInfo extends BaseEntity {
 
     public String getCreateTime() {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        if(createTime != null){
-        	return dateFormat.format(createTime);
+        if (createTime != null) {
+            return dateFormat.format(createTime);
         }
         return "";
     }
@@ -490,13 +504,15 @@ public class LabelInfo extends BaseEntity {
     }
 
     public String getLabelIdLevelDesc() {
-    	try {
-    		ICategoryInfoService categoryInfoService = (ICategoryInfoService)SpringContextHolder.getBean("categoryInfoServiceImpl");
-    		if(StringUtil.isNotBlank(categoryId)){
-    			return categoryInfoService.selectCategoryPath(categoryId);
-    		}
-		} catch (BaseException e) {}
-    	return "";
+        try {
+            ICategoryInfoService categoryInfoService = (ICategoryInfoService) SpringContextHolder
+                .getBean("categoryInfoServiceImpl");
+            if (StringUtil.isNotBlank(categoryId)) {
+                return categoryInfoService.selectCategoryPath(categoryId);
+            }
+        } catch (BaseException e) {
+        }
+        return "";
     }
 
     public void setLabelIdLevelDesc(String labelIdLevelDesc) {
@@ -528,8 +544,9 @@ public class LabelInfo extends BaseEntity {
     }
 
     public MdaSysTableColumn getMdaSysTableColumn() {
-    	IMdaSysTableColService mdaSysTableColService  = (IMdaSysTableColService) SpringContextHolder.getBean("mdaSysTableColServiceImpl");
-    	return mdaSysTableColService.selectMdaSysTableColBylabelId(labelId);
+        IMdaSysTableColService mdaSysTableColService = (IMdaSysTableColService) SpringContextHolder
+            .getBean("mdaSysTableColServiceImpl");
+        return mdaSysTableColService.selectMdaSysTableColBylabelId(labelId);
     }
 
     public void setMdaSysTableColumn(MdaSysTableColumn mdaSysTableColumn) {
@@ -537,15 +554,17 @@ public class LabelInfo extends BaseEntity {
     }
 
     public Set<LabelVerticalColumnRel> getVerticalColumnRels() {
-    	ILabelVerticalColumnRelService labelVerticalColumnRelService  = (ILabelVerticalColumnRelService) SpringContextHolder.getBean("labelVerticalColumnRelServiceImpl");
-    	LabelVerticalColumnRelVo labelVerticalColumnRelVo = new LabelVerticalColumnRelVo();
-    	labelVerticalColumnRelVo.setLabelId(labelId);
-    	List<LabelVerticalColumnRel> list = null;
-		try {
-			list = labelVerticalColumnRelService.selectLabelVerticalColumnRelList(labelVerticalColumnRelVo);
-			return new HashSet(list);
-		} catch (BaseException e) {}
-    	return null;
+        ILabelVerticalColumnRelService labelVerticalColumnRelService = (ILabelVerticalColumnRelService) SpringContextHolder
+            .getBean("labelVerticalColumnRelServiceImpl");
+        LabelVerticalColumnRelVo labelVerticalColumnRelVo = new LabelVerticalColumnRelVo();
+        labelVerticalColumnRelVo.setLabelId(labelId);
+        List<LabelVerticalColumnRel> list = null;
+        try {
+            list = labelVerticalColumnRelService.selectLabelVerticalColumnRelList(labelVerticalColumnRelVo);
+            return new HashSet(list);
+        } catch (BaseException e) {
+        }
+        return null;
     }
 
     public void setVerticalColumnRels(Set<LabelVerticalColumnRel> verticalColumnRels) {

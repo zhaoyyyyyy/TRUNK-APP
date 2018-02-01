@@ -71,6 +71,7 @@
 .ui-label-sec > li > div,
 .ui-label-system > li > div > div{
 	padding: 10px 0 0;
+	width:90%;
 }
 .ui-label-sec > li > div > a,
 .ui-label-system > li > div > div > a{
@@ -80,6 +81,12 @@
 /* 	content: " "; */
 	color: #666;
 	padding: 4px 12px;
+}
+.ui-item a{
+	margin:5px 20px 5px 0!important;
+}
+.ui-item label{
+	margin:5px 0!important;
 }
 .ui-label-sec > li > div > a.active{
 	color:#009241;
@@ -1240,4 +1247,13 @@ span.del-btn{
 .customer-rules-table-box table tr td:first-child{
 	text-align:center;
 }
-
+/*推送设置*/
+.push-fieldest{
+	padding:10px 0;
+}
+.push-fieldest> legend{
+	padding:0 5px;
+}
+.push-fieldest > legend > input{
+	margin:0 4px 0 0;
+}

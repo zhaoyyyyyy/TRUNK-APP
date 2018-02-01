@@ -123,5 +123,10 @@ public class LabelRuleVo extends LabelRule {
 		this.unit = unit;
 	}
 	
+	@Override
+    public LabelRuleVo clone() throws CloneNotSupportedException {
+		LabelRuleVo ciLabelRule = (LabelRuleVo) super.clone();
+        return ciLabelRule;
+    }
 	
 }

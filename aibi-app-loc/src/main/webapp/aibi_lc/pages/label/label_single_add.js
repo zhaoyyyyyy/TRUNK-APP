@@ -22,37 +22,9 @@ function changeStatus(elem){
 	if($(elem).val()==5){
 		$(elem).parents("form").find(".ui-form-hide").show();
 	}else{
-//		$("#dimId").removeAttr("name");
-//		$("#dataType").removeAttr("name");
 		$(elem).parents("form").find(".ui-form-hide").hide();
 	}
 }
-//function changeStatus(obj){
-//	if(obj.value==="5"){//枚举型标签字典value为5
-//		const exit = model.showdimDetail.some(function(item){
-//			return Object.keys(item)[0] === ('showdim'+obj.id);
-//		});
-//		if(!exit){
-//			var a = {};
-//			a['showdim'+obj.id] = true;
-//			model.showdimDetail.push(a);
-//		}else{
-//			model.showdimDetail.forEach(function(item){
-//				if(Object.keys(item)[0]===('showdim'+obj.id)){
-//					item[('showdim'+obj.id)]=true
-//				};
-//			});
-//		}
-//	}else{
-//		model.showdimDetail.some(function(item){
-//			if(item[('showdim'+obj.id)]){
-//				item[('showdim'+obj.id)]=false;
-//				return true
-//			}
-//			return false
-//		});
-//	}
-//}
 window.loc_onload = function() {	
 	model.configId =$.getCurrentConfigId();
 	var dicBqlx = $.getDicData("BQLXZD");
@@ -60,7 +32,6 @@ window.loc_onload = function() {
 		if(dicBqlx[i].code!=10&&dicBqlx[i].code!=12&&dicBqlx[i].code!=11&&dicBqlx[i].code!=8){
 			model.bqlx.push(dicBqlx[i]);
 		}	
-//		model.bqlx.push(dicBqlx[i]);
 	}
 	var dicsjlx = $.getDicData("ZDLXZD");
 	for(var i =0 ; i<dicsjlx.length; i++){
@@ -101,6 +72,7 @@ window.loc_onload = function() {
 	$('#sourceTableId').change(function(){
 		$(".ui-form-hide").hide();
 		var sourceTableId = $("#sourceTableId").val();
+		model.sourceInfoList = [];
 		$.commAjax({
 			url : $.ctx + '/api/source/sourceTableInfo/get?sourceTableId='+sourceTableId,
 			onSuccess : function(data){
@@ -134,23 +106,18 @@ function fun_to_save(){
 	$("form[class~=active]").each(function(){
 		if($("form[class~=active]").validateForm()){	
 			var labelInfo = $(this).formToJson();
-			var labelName = $('#labelName').val();
-			if(labelName==""){
-				$.alert("标签名称不许为空");
-			}else{
-				$.commAjax({
-				  async : false,
-				  url : $.ctx + '/api/label/labelInfo/save',
-				  postData : labelInfo,
-				  onSuccess : function(data){
-					  flag = data.data
-				  }  
-				});	
-				if(k == $("form[class~=active]").size() && flag == "success"){	
-					$.success("创建成功",function(){
-						history.back(-1);
-					})
-				}
+			$.commAjax({
+			  async : false,
+			  url : $.ctx + '/api/label/labelInfo/save',
+			  postData : labelInfo,
+			  onSuccess : function(data){
+				  flag = data.data
+			  }  
+			});	
+			if(k == $("form[class~=active]").size() && flag == "success"){	
+				$.success("创建成功",function(){
+					history.back(-1);
+				})
 			}
 			k++;
 		}
