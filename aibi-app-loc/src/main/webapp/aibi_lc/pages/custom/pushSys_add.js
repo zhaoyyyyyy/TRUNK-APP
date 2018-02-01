@@ -6,6 +6,7 @@ var model = {
 		isChecked:false,
 		isActive:false,
 		isShow:false,
+		checked:false,
 		
 }
 window.loc_onload = function() {
