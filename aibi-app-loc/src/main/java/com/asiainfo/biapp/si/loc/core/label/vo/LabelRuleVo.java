@@ -51,6 +51,8 @@ public class LabelRuleVo extends LabelRule {
 	
 	private List<LabelRuleVo> childLabelRuleList;// 纵表标签子标签或客户群规则
 	
+	private String createBrackets;//前台页面交互使用
+
 	//标签数Param
 	private String effectDate;
 	
@@ -123,6 +125,12 @@ public class LabelRuleVo extends LabelRule {
 		this.unit = unit;
 	}
 	
+	public String getCreateBrackets() {
+		return createBrackets;
+	}
+	public void setCreateBrackets(String createBrackets) {
+		this.createBrackets = createBrackets;
+	}
 	@Override
     public LabelRuleVo clone() throws CloneNotSupportedException {
 		LabelRuleVo ciLabelRule = (LabelRuleVo) super.clone();

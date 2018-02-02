@@ -30,7 +30,11 @@ var dataModel = {
 		updateCycleList : [] ,//更新周期
 		labelTypeIdList : [] ,//创建类型
 		labelInfoViewObj : {},
-		createdLeftPar : new Array() //左括号id
+		createdLeftPar : new Array(), //左括号id
+		categoryPath : "",  //总路径
+		categoryPath1 : "",  //一级目录
+		categoryPath2 : "",  //二级目录
+		categoryPath3 : "",  //三级目录
 }
 window.loc_onload = function() {
 	//初始化参数
@@ -63,9 +67,11 @@ window.loc_onload = function() {
     		select : function(index){
     			labelMarket.addToShoppingCar(index);
     		},
-    		toggle:function(categoryId,index){
+    		toggle:function(categoryId,index,categoryName){
     			$("#categoryId").val(categoryId);
     			labelMarket.loadLabelInfoList();
+    			dataModel.categoryPath1=categoryName;
+    			dataModel.categoryPath = dataModel.categoryPath1;
     			ulListId=index;
     			$.commAjax({
 				    url: $.ctx + "/api/label/categoryInfo/queryList",
@@ -86,7 +92,7 @@ window.loc_onload = function() {
 	//初始化加载标签体系
 	labelMarket.loadLabelCategoryList();
 	//初始化计算中心事件
-	labelMarket.dragParenthesis();
+	calculateDragSort.dragParenthesis();
 	
 	labelMarket.loadUpdateCycle();
 	//加载标签集市
@@ -192,8 +198,18 @@ window.loc_onload = function() {
   	  ]
   });
   
-   
-  
+  $(".ui-calc-content").delegate(".ui-bracket.right","mouseover",function(){
+  	 $(this).find("span").after($(".ui-helper-box"));
+  	 $(this).find(".ui-helper-box").show();
+  })
+   $(".ui-calc-content").delegate(".ui-bracket.right","mouseleave",function(){
+  	 $(this).find(".ui-helper-box").hide();
+  	 $(".ui-helper-box").hide();
+  	 $(".ui-helper-box").find("ul").hide();
+  })
+  $(".ui-helper-box").find("i").click(function(){
+  	$(this).siblings("ul").stop().toggle();
+  })
 	
 }
 
@@ -286,19 +302,34 @@ var labelMarket = (function (model){
 			$(elem).addClass("all-active");
 			$(elem).siblings("a.labelItems").removeClass("active");
 			$(".ui-label-sec").hide();
+			dataModel.categoryPath="";
 		}
 		model.selectByCategoryId = function(obj){
 			$("#categoryId").val(obj.id);
-			if($(obj).hasClass("active")){
-				$(obj).removeClass("active");
-			}else{
-				//二级三级选中状态切换
-				$(obj).addClass("active").siblings("a").removeClass("active");
-				$(obj).parent("div").siblings("label").find('a').removeClass("active");
-				$(obj).parent("label").siblings("div").find('a').removeClass("active");
-				$(obj).parents("li").siblings("li").find("label a").removeClass("active");
-				$(obj).parents("li").siblings("li").find("div a").removeClass("active");
-			}
+			$.commAjax({
+				url: $.ctx + "/api/label/categoryInfo/get",
+				async:false,
+				postData:{"categoryId":obj.id},
+				onSuccess: function(data){
+					$.commAjax({
+						url: $.ctx + "/api/label/categoryInfo/get",
+						postData:{"categoryId":data.data.parentId},
+						onSuccess: function(data1){
+							if(data1.data.categoryName!=dataModel.categoryPath1){
+								dataModel.categoryPath=dataModel.categoryPath1+">"+data1.data.categoryName+">"+data.data.categoryName;
+							}else{
+								dataModel.categoryPath=dataModel.categoryPath1+">"+data.data.categoryName;
+							}
+						}
+					});
+				}
+			});
+			//二级三级选中状态切换
+			$(obj).addClass("active").siblings("a").removeClass("active");
+			$(obj).parent("div").siblings("label").find('a').removeClass("active");
+			$(obj).parent("label").siblings("div").find('a').removeClass("active");
+			$(obj).parents("li").siblings("li").find("label a").removeClass("active");
+			$(obj).parents("li").siblings("li").find("div a").removeClass("active");
 			labelMarket.loadLabelInfoList();
 		}
 	    
@@ -523,6 +554,7 @@ var labelMarket = (function (model){
 	  					//2.更新计算中心的页面样式
   						dataModel.ruleList = returnObj.data.shopCartRules;
   						dataModel.ruleListCount = returnObj.data.showCartRulesCount;
+  						calculateDragSort.sortLabels();
   					}
   				 }
   			});
@@ -656,11 +688,16 @@ var labelMarket = (function (model){
 		/**
 		 * 展示标签信息
 		 */
-		model.showLabelInfo = function(elem){
+		model.showLabelInfo = function(elem,event){
+			var X = $(elem).parents(".ui-conditionCT").position().top;
+			var top_h=$(elem).offset().left-100-15-82;
+			$(".ui-conditionBox").css({"left":top_h,"top":X+90});
 			var index = $(elem).parent().parent().attr("index");
+			$(".ui-conditionBox").attr("index",index);	
 			var rule = dataModel.ruleList[index];
-			if($(elem).parents(".ui-conditionCT").find(".ui-conditionBox").css("display") =="none"){//如果原来隐藏，则显示
-				$("#sortable").find(".ui-conditionBox").hide();
+			
+			if($(".ui-conditionBox[index="+index+"]").css("display")=="none"){//如果原来隐藏，则显示
+				$(".ui-conditionBox[index="+index+"]").show();
 				if(rule){
 					$.commAjax({
 						url : $.ctx + "/api/label/labelInfo/get",
@@ -679,9 +716,8 @@ var labelMarket = (function (model){
 					});
 				}
 			}else{
-				$("#sortable").find(".ui-conditionBox").hide();
-			}
-			
+				$(".ui-conditionBox").hide();
+			}		
 		}
 		/**
 		 * 删除连接符
@@ -1033,199 +1069,7 @@ var labelMarket = (function (model){
 			}
 			
 		};
-		/**
-         * @description 计算中心
-         * @param  
-         * @return  
-         * ------------------------------------------------------------------
-         */
-        model.dragParenthesis= function(){
-        		$( "#sortable > .ui-conditionCT,.ui-calc-h3>span>em" ).draggable({
-				helper: function( event ) {
-					if($(event.target).hasClass("J-drag-bracket")){
-		       	 	   return $(event.target).attr("data-attr") == "left"?$( '<span class="ui-bracket left">(</span>' ):$( '<span class="ui-bracket right">)</span>' );
-					}
-		       	  return $( '<h4 class="ui-conditionCT-h4 ui-conditionCT-h4-helper">2G数据流量<em></em><i></i></h4>' );
-		    	},
-		    	cursor: "crosshair",
-		    	start:function(event,ui){
-		    		var _t = $(this);
-		    		if(!_t.parent().hasClass("opened")){
-		    			  var items = $("#sortable > .ui-conditionCT,#sortable > .ui-bracket.left");
-				      	  var calc= '<div class="ui-state-highlight ui-sortablr-helper J-helper"></div>';
-				  		  $(items).before(calc);
-				  		  $(".J-helper").droppable({
-					  	  	   hoverClass: "ui-drop-highlight",
-					  		   greedy:true,
-					  		   drop: function( event, ui ) {
-					  			   var onDragTag=ui.draggable;
-					  			   var calcuElement = "";
-					  			   if(onDragTag.hasClass("J-drag-bracket")){//如果移动的是括号
-					  				 if(onDragTag.attr("data-attr") == "left"){
-					  					calcuElement = "(";
-					  				 }else{
-					  					calcuElement = ")";
-					  				 }
-					  				 var index = $(this).next().attr('index');
-					  				 var uuid = model.newGuid();
-					  				 var rule = model.getCurlyBraceHTML(calcuElement,1,uuid);
-					  				 rule.sortNum = index;
-					  				 dataModel.ruleList.splice(index,0,rule);
-					  				_t.parent().addClass("opened");
-					  				 return;
-					  			   }else{//页面规则
-						  		        $(this).after(onDragTag);
-						  		        var chains = $("#sortable > .ui-chaining");
-						  		     	var CTitems = $("#sortable > .ui-conditionCT");
-						  		        for(var i =0,len = chains.length;i<len;i++){
-						  		        		$(CTitems[i]).after(chains[i]);
-						  		        }
-					  			   }
-					  			   
-					  	       },
-					  	       create:function( event, ui){
-					  		        console.log(ui);
-					  	       }
-					  	   });
-		    		}else{
-		    			var wait=$("#sortable > .waitClose");//所有左括号
-		    			var totalAry=[];//所有右边元素（规则、括号）
-		    			if(wait.prev().hasClass("left")){//前一个元素是否是左括号
-		    				var creat=wait.prev().attr("creat");
-		    				var stopAry=wait.nextAll(".ui-conditionCT,.ui-bracket");
-		    				for(var k=0;k<stopAry.length;k++){
-		    					if($(stopAry[k]).attr("creat")==creat) break;
-		    					totalAry.push(stopAry[k]);
-		    				}
-		    			}
-		    			else{
-		    				var stopAry=wait.nextAll(".ui-conditionCT,.ui-bracket");
-		    				for(var k=0;k<stopAry.length;k++){
-		    					if($(stopAry[k]).hasClass("ui-bracket") && stopAry.filter("[creat='"+$(stopAry[k]).attr("creat")+"']").length<2) break;
-		    					totalAry.push(stopAry[k]);
-		    				}
-		    			}
-		    			var tarAry=[];
-		    			$(totalAry).each(function(){
-		    				var ary=[];
-		    				var ary2=$(this).prevAll(".ui-conditionCT,.ui-bracket").andSelf();
-		    				for(var i=ary2.length-1;i>=0;i--){	
-		    					if($(ary2[i]).hasClass("waitClose")) break;
-		    					else{
-		    						ary.push($(ary2[i]));
-		    					}
-		    				}
-		    				var left=[]
-		    				for(var i=ary.length-1;i>=0;i--){
-		    					if($(ary[i]).hasClass("left")){
-		    						left.push($(ary[i]));
-		    					}
-		    					else if($(ary[i]).hasClass("right")){
-		    						for(var j=0;j<left.length;j++){
-		    							if( $(left[j]).attr("creat")==$(ary[i]).attr("creat") ){
-		    								left=left.slice(0,j).concat(left.slice(j+1,left.length));
-		    								break;
-		    							}
-		    						}
-		    					}
-		    					else{}
-		    				}
-		    			
-		    				if(left.length==0 &&( $(this).hasClass("ui-conditionCT")||$(this).hasClass("right")) ){
-		    					tarAry.push($(this));
-		    				}
-		    			})
-		    			$(tarAry).each(function(){
-		    				$(this).after('<div class="ui-state-highlight ui-sortablr-helper J-helper"></div>');
-		    				$(this).next().droppable({
-		    					greedy:true,
-		    					hoverClass: "ui-drop-highlight",
-		    					drop: function( event, ui ) {
-		    						var index = $(this).prev().attr('index');
-		    						var rule = model.getCurlyBraceHTML(')',1,$("#sortable .waitClose").attr("creat"));
-		    						rule.sortNum = Number(index)+1;//不转换变成字符串拼接了
-					  				dataModel.ruleList.splice(index+1,0,rule);
-					  				$("#sortable .waitClose").removeClass("waitClose");
-		    						_t.parent().removeClass("opened");
-		    						//右边括号
-		    						model.submitRules();
-		    					}
-		    				})
-		    			})
-		    		}
-		      	  
-		        },
-		        stop:function(event,ui){
-		      	  $(".J-helper").remove();
-		        }
-			});
-        };
-        /**
-         * 括号位置
-         */
-        model.parenthesis_possibility_position = function(_t){
-        	 
-        }
-        /**
-         * 
-         */
-        model.getCurlyBraceHTML=function(flag,count,uuidObj,needDelete){
-        	//封装括号HTML
-        	var rule = {};
-        	if(flag=="("){
-        		rule={
-  		    			elementType : 3,
-  		    			calcuElement : flag,
-  		    			waitClose : true,
-  		    			createBrackets : uuidObj,
-  		    			del :false
-  		    	};
-        	}
-        	else{
-        		if(needDelete == true || needDelete==null) {
-        			rule={
-      		    			elementType : 3,
-      		    			calcuElement : flag,
-      		    			waitClose : false,
-      		    			createBrackets : uuidObj,
-      		    			del :true
-      		    	};
-        		} else {
-        			rule={
-      		    			elementType : 3,
-      		    			calcuElement : flag,
-      		    			waitClose : false,
-      		    			createBrackets : uuidObj,
-      		    			del :false
-      		    	};
-        		}
-        	}
-        	if(!uuidObj){
-        		for(var i=0;i<count;i++){
-        			if(flag=="("){
-        				var uuid = model.newGuid();
-        				rule.createBrackets = uuid;
-        				rule.waitClose = ''; 
-        				dataModel.createdLeftPar.push(uuid);
-        			}
-        			else{
-        				rule.createBrackets = dataModel.createdLeftPar.pop();
-        			}
-        		}	
-        	}
-        	return rule;
-        }
-        //生成唯一标识
-        model.newGuid = function(){ 
-        	var guid = ""; 
-        	for (var i = 1; i <= 32; i++){ 
-        		var n = Math.floor(Math.random()*16.0).toString(16); 
-        		guid += n; 
-        		if((i==8)||(i==12)||(i==16)||(i==20)) 
-        			guid += "-"; 
-        	} 
-        	return guid; 
-        } 
+		
         return model;
    })(window.labelMarket || {});
 

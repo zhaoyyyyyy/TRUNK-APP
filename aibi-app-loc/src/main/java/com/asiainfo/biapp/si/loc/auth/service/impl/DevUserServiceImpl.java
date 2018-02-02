@@ -141,7 +141,7 @@ public class DevUserServiceImpl extends BaseServiceImpl<User, String> implements
 					//通过组织类型来赋予用户的组织权限跟数据权限
 					for(Organization organization : organizationPrivaliege){
 						if("3".equals(organization.getOrgType())){
-							String level = organization.getOrgCode().length()+"";
+							String level = organization.getOrgType();
 							if(dataPrivaliege.containsKey(level)){
 								List<Organization> organizationList = dataPrivaliege.get(level);
 								organizationList.add(organization);
