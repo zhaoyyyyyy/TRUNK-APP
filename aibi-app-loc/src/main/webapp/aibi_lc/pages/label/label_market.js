@@ -30,7 +30,11 @@ var dataModel = {
 		updateCycleList : [] ,//更新周期
 		labelTypeIdList : [] ,//创建类型
 		labelInfoViewObj : {},
-		createdLeftPar : new Array() //左括号id
+		createdLeftPar : new Array(), //左括号id
+		categoryPath : "",  //总路径
+		categoryPath1 : "",  //一级目录
+		categoryPath2 : "",  //二级目录
+		categoryPath3 : "",  //三级目录
 }
 window.loc_onload = function() {
 	//初始化参数
@@ -63,9 +67,11 @@ window.loc_onload = function() {
     		select : function(index){
     			labelMarket.addToShoppingCar(index);
     		},
-    		toggle:function(categoryId,index){
+    		toggle:function(categoryId,index,categoryName){
     			$("#categoryId").val(categoryId);
     			labelMarket.loadLabelInfoList();
+    			dataModel.categoryPath1=categoryName;
+    			dataModel.categoryPath = dataModel.categoryPath1;
     			ulListId=index;
     			$.commAjax({
 				    url: $.ctx + "/api/label/categoryInfo/queryList",
@@ -296,19 +302,34 @@ var labelMarket = (function (model){
 			$(elem).addClass("all-active");
 			$(elem).siblings("a.labelItems").removeClass("active");
 			$(".ui-label-sec").hide();
+			dataModel.categoryPath="";
 		}
 		model.selectByCategoryId = function(obj){
 			$("#categoryId").val(obj.id);
-			if($(obj).hasClass("active")){
-				$(obj).removeClass("active");
-			}else{
-				//二级三级选中状态切换
-				$(obj).addClass("active").siblings("a").removeClass("active");
-				$(obj).parent("div").siblings("label").find('a').removeClass("active");
-				$(obj).parent("label").siblings("div").find('a').removeClass("active");
-				$(obj).parents("li").siblings("li").find("label a").removeClass("active");
-				$(obj).parents("li").siblings("li").find("div a").removeClass("active");
-			}
+			$.commAjax({
+				url: $.ctx + "/api/label/categoryInfo/get",
+				async:false,
+				postData:{"categoryId":obj.id},
+				onSuccess: function(data){
+					$.commAjax({
+						url: $.ctx + "/api/label/categoryInfo/get",
+						postData:{"categoryId":data.data.parentId},
+						onSuccess: function(data1){
+							if(data1.data.categoryName!=dataModel.categoryPath1){
+								dataModel.categoryPath=dataModel.categoryPath1+">"+data1.data.categoryName+">"+data.data.categoryName;
+							}else{
+								dataModel.categoryPath=dataModel.categoryPath1+">"+data.data.categoryName;
+							}
+						}
+					});
+				}
+			});
+			//二级三级选中状态切换
+			$(obj).addClass("active").siblings("a").removeClass("active");
+			$(obj).parent("div").siblings("label").find('a').removeClass("active");
+			$(obj).parent("label").siblings("div").find('a').removeClass("active");
+			$(obj).parents("li").siblings("li").find("label a").removeClass("active");
+			$(obj).parents("li").siblings("li").find("div a").removeClass("active");
 			labelMarket.loadLabelInfoList();
 		}
 	    
