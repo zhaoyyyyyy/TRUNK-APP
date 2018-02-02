@@ -144,17 +144,15 @@ public class BackServiceImpl implements IBackSqlService{
 		String backType =  CocCacheProxy.getCacheProxy().getSYSConfigInfoByKey("LOC_CONFIG_SYS_BGDB_TYPE");
 		String varcharString = "string";
 		List<String> primaryKey = new ArrayList<String>();
-		if(!backType.equals("Hive")||!backType.equals("SparkSql")){
+		System.out.println(backType);
+		Map<String,String> columnName = new HashMap<String,String>();
+		if(!(backType.equals("Hive")||backType.equals("SparkSql"))){
 			varcharString = "varchar(32)";
 			primaryKey.add(LabelInfoContants.KHQ_CROSS_COLUMN);
-			primaryKey.add(LabelInfoContants.KHQ_CROSS_ID_PARTION);
-		}else{
-			primaryKey.add(LabelInfoContants.KHQ_CROSS_ID_PARTION);
 		}
-		Map<String,String> columnName = new HashMap<String,String>();
-		
-		columnName.put(LabelInfoContants.KHQ_CROSS_COLUMN, varcharString);
+		primaryKey.add(LabelInfoContants.KHQ_CROSS_ID_PARTION);
 		columnName.put(LabelInfoContants.KHQ_CROSS_ID_PARTION, varcharString);
+		columnName.put(LabelInfoContants.KHQ_CROSS_COLUMN, varcharString);
 		if(!isExistsTable){
 			isCreateTable = getBackDaoBean().createTableByName(tableName, columnName, primaryKey);
 			log.debug("-------------------- BackServiceImpl.insertCustomerData isCreateTable = " + isCreateTable);

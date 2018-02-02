@@ -83,7 +83,7 @@ public class BackHiveDaoImpl extends BaseBackDaoImpl implements IBackSqlDao{
         List<Map<String, String>> res = new ArrayList<>();
         Map<String,String> rsMap = null;
         //desc tableName;
-        String sql = new StringBuilder("desc ").append(tableName).toString();
+        String sql = new StringBuilder("desc ").append(super.getCurBackDbSchema()).append(".").append(tableName).toString();
 
         List<Map<String, String>> datas = null;
         try{
@@ -126,7 +126,7 @@ public class BackHiveDaoImpl extends BaseBackDaoImpl implements IBackSqlDao{
             }
         }catch (Exception e){
             res = false;
-            throw new SqlRunException(e.getMessage());
+           // throw new SqlRunException(e.getMessage());
         }
         
         return res;
@@ -342,7 +342,7 @@ public class BackHiveDaoImpl extends BaseBackDaoImpl implements IBackSqlDao{
 	@Override
 	public boolean insertDataToTabByPartion(String sql,String tableName,String partionID) throws SqlRunException{
 		StringBuffer sqlstr = new StringBuffer();
-		sqlstr.append("insert overwrite TABLE ").append(tableName);
+		sqlstr.append("insert overwrite TABLE ").append(super.getCurBackDbSchema()).append(".").append(tableName);
 		sqlstr.append(" PARTITION (").append(LabelInfoContants.KHQ_CROSS_ID_PARTION);
 		sqlstr.append(" = ").append(partionID).append(") ").append(sql);
 		log.debug(" ----------------------  BackHiveDaoImpl.insertDataToTabByPartion  sql=" + sqlstr.toString());
@@ -375,8 +375,9 @@ public class BackHiveDaoImpl extends BaseBackDaoImpl implements IBackSqlDao{
 			if(primaryKey.contains(colName)){
 				continue;
 			}
-			sb.append(colName).append(" ").append(columnName.get(colName)).append(",");
+			sb.append(colName).append(" ").append(columnName.get(colName)).append(")");
 		}
+		
 		if(ifPartition){
 			sb.append(" PARTITIONED BY (").append(primaryKeyStr.toString().substring(0,primaryKeyStr.toString().length()-1)).append(") stored as parquet  ");
 		}
