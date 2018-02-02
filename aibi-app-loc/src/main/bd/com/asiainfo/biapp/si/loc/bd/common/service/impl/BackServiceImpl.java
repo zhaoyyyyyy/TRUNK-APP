@@ -146,9 +146,21 @@ public class BackServiceImpl implements IBackSqlService{
 		List<String> primaryKey = new ArrayList<String>();
 		System.out.println(backType);
 		Map<String,String> columnName = new HashMap<String,String>();
+		StringBuffer sqlBuffer = new StringBuffer();
+		String insertcolumn = "";
 		if(!(backType.equals("Hive")||backType.equals("SparkSql"))){
 			varcharString = "varchar(32)";
 			primaryKey.add(LabelInfoContants.KHQ_CROSS_COLUMN);
+			
+			sqlBuffer.append("SELECT ").append(LabelInfoContants.KHQ_CROSS_COLUMN);
+			sqlBuffer.append(",'").append(customerId).append("' ");
+			sqlBuffer.append(sql);
+			
+			insertcolumn = LabelInfoContants.KHQ_CROSS_COLUMN+","+LabelInfoContants.KHQ_CROSS_ID_PARTION;
+		}else{
+			sqlBuffer.append("SELECT ").append(LabelInfoContants.KHQ_CROSS_COLUMN + " ");
+			sqlBuffer.append(sql);
+			insertcolumn= customerId;
 		}
 		primaryKey.add(LabelInfoContants.KHQ_CROSS_ID_PARTION);
 		columnName.put(LabelInfoContants.KHQ_CROSS_ID_PARTION, varcharString);
@@ -161,13 +173,10 @@ public class BackServiceImpl implements IBackSqlService{
 				return isCreateTable;
 			}
 		}
-		StringBuffer sqlBuffer = new StringBuffer();
-		sqlBuffer.append("SELECT ").append(LabelInfoContants.KHQ_CROSS_COLUMN);
-		sqlBuffer.append(",'").append(customerId).append("' ");
-		sqlBuffer.append(sql);
+		
+		
 		log.debug("-------------------- BackServiceImpl.insertCustomerData sqlBuffer = " + sqlBuffer.toString());
 		LogUtil.info("-------------------- BackServiceImpl.insertCustomerData sqlBuffer = " + sqlBuffer.toString());
-		String insertcolumn = LabelInfoContants.KHQ_CROSS_COLUMN+","+LabelInfoContants.KHQ_CROSS_ID_PARTION;
 		isInsertTable = getBackDaoBean().insertDataToTabByPartion(sqlBuffer.toString(), tableName, insertcolumn);
 		log.debug("-------------------- BackServiceImpl.insertCustomerData isInsertTable = " + isInsertTable);
 		return isInsertTable;
