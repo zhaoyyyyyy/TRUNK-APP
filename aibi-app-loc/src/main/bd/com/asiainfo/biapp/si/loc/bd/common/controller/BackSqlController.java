@@ -49,7 +49,8 @@ public class BackSqlController {
             try {
                 list = backSqlService.queryTableColumn(tableName);
             } catch (SqlRunException e) {
-                return webResult.fail(e);
+//                int num = e.getMessage().indexOf(":");.substring(num+1).split(";")[0]
+                return webResult.fail(e.getMessage());
             }
             return webResult.success("获取列成功", list);
         }

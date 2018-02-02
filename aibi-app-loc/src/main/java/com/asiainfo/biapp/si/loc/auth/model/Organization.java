@@ -24,8 +24,16 @@ public class Organization extends BaseEntity{
 	private String interrogateType;
 	private String orgStatus;
 	private String treePath;
+	private Integer levelId;
 	
-	public String getOrgType() {
+    public Integer getLevelId() {
+        return levelId;
+    }
+    
+    public void setLevelId(Integer levelId) {
+        this.levelId = levelId;
+    }
+    public String getOrgType() {
 		return orgType;
 	}
 	public void setOrgType(String orgType) {
