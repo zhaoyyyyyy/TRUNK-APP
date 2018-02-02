@@ -70,15 +70,15 @@ window.loc_onload = function(){
 				}
 	        }
 	    },
-	    mounted: function () {
+	    /*mounted: function () {
 		    this.$nextTick(function () {
-//		    	this.bqlx[0].checked=true;//默认第一个radio选中
+		    	this.bqlx[0].checked=true;//默认第一个radio选中
 			    var r = $(".easyui-validatebox");
 	   			if (r.length){
 	   				r.validatebox();
 	   			}
 		    })
-		}
+		}*/
 	});
 	$.commAjax({
 		url : $.ctx + '/api/dimtable/dimTableInfo/queryList',
