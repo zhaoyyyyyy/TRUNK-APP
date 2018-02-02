@@ -372,10 +372,13 @@ public class BackHiveDaoImpl extends BaseBackDaoImpl implements IBackSqlDao{
 		sb.append("(");
 		Set<String> keySet = columnName.keySet();
 		for(String colName : keySet){
+			if(primaryKey.contains(colName)){
+				continue;
+			}
 			sb.append(colName).append(" ").append(columnName.get(colName)).append(",");
 		}
 		if(ifPartition){
-			sb.append("PARTITION BY (").append(primaryKeyStr.toString().substring(0,primaryKeyStr.toString().length()-1)).append(") stored as parquet  ");
+			sb.append(" PARTITIONED BY (").append(primaryKeyStr.toString().substring(0,primaryKeyStr.toString().length()-1)).append(") stored as parquet  ");
 		}
 		
 		
