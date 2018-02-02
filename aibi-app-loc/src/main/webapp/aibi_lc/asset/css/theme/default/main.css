@@ -603,6 +603,7 @@
 	position:absolute;
 	top:2px;
 	right:0;
+	display:none;
 }
 .ui-helper-box > i{
 	display:block;
