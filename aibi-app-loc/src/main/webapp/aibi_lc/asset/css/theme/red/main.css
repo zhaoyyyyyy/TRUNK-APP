@@ -598,18 +598,19 @@
 	line-height:27px;
 	padding:0 10px;
 }
-.ui-calc-content > .ui-conditionCT > .ui-conditionCT-h4 > em{
-     width: 72%;
-    height: 36px;
-    background: url(./images/lc-icon.png) no-repeat -497px -17px;
-    display: inline-block;
-    vertical-align: middle;
-    cursor: pointer;
-    position:absolute;
-    left:0;
+.ui-helper-box{
+	z-index:999;
+	position:absolute;
+	top:2px;
+	right:0;
+	display:none;
 }
-.ui-calc-content > .ui-conditionCT > .ui-conditionCT-content{
-    height: 98px;
+.ui-helper-box > i{
+	display:block;
+	width:15px;
+	height:15px;
+	background: url(./images/lc-icon.png) no-repeat -221px -104px;
+	cursor: pointer;
 }
 .ui-helper-box > ul{
 	border:1px solid #ccc;
@@ -635,6 +636,19 @@
 	color:#000;
 	padding:0 5px;;
 	font-size:12px;
+}
+.ui-calc-content > .ui-conditionCT > .ui-conditionCT-h4 > em{
+     width: 72%;
+    height: 36px;
+    background: url(./images/lc-icon.png) no-repeat -497px -17px;
+    display: inline-block;
+    vertical-align: middle;
+    cursor: pointer;
+    position:absolute;
+    left:0;
+}
+.ui-calc-content > .ui-conditionCT > .ui-conditionCT-content{
+    height: 98px;
 }
 .ui-calc-content > .ui-conditionCT > .ui-conditionCT-content .ui-nothing-icon{
     height: 28px;
