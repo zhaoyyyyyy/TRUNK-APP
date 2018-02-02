@@ -689,15 +689,11 @@ var labelMarket = (function (model){
 		 * 展示标签信息
 		 */
 		model.showLabelInfo = function(elem,event){
-			var X = $(elem).parents(".ui-conditionCT").position().top;
-			var top_h=$(elem).offset().left-100-15-82;
-			$(".ui-conditionBox").css({"left":top_h,"top":X+90});
 			var index = $(elem).parent().parent().attr("index");
-			$(".ui-conditionBox").attr("index",index);	
 			var rule = dataModel.ruleList[index];
-			
-			if($(".ui-conditionBox[index="+index+"]").css("display")=="none"){//如果原来隐藏，则显示
-				$(".ui-conditionBox[index="+index+"]").show();
+			if($(elem).parents(".ui-conditionCT").find(".ui-conditionBox").length==0){
+				$(elem).parents(".ui-conditionCT").append($(".ui-conditionBox"));
+				$(elem).parents(".ui-conditionCT").find(".ui-conditionBox").show();
 				if(rule){
 					$.commAjax({
 						url : $.ctx + "/api/label/labelInfo/get",
@@ -716,8 +712,36 @@ var labelMarket = (function (model){
 					});
 				}
 			}else{
-				$(".ui-conditionBox").hide();
-			}		
+				$(elem).parents(".ui-conditionCT").find(".ui-conditionBox").hide();
+				$(elem).parents(".ui-conditionCT").find(".ui-conditionBox").remove($(".ui-conditionBox"));
+			}
+			
+			
+			
+			
+//			
+//			if($(".ui-conditionBox[index="+index+"]").css("display")=="none"){//如果原来隐藏，则显示
+//				$(".ui-conditionBox[index="+index+"]").show();
+//				if(rule){
+//					$.commAjax({
+//						url : $.ctx + "/api/label/labelInfo/get",
+//						postData:{
+//							labelId : rule.calcuElement
+//		  				},
+//						onSuccess:function(returnObj){
+//							var status = returnObj.status;
+//							if (status == '200'){
+//								$(elem).parents(".ui-conditionCT").find(".ui-conditionBox").show();
+//								dataModel.labelInfoViewObj = returnObj.data;
+//							}else{
+//								$.alert(returnObj.msg);
+//							}
+//						},
+//					});
+//				}
+//			}else{
+//				$(".ui-conditionBox").hide();
+//			}		
 		}
 		/**
 		 * 删除连接符
