@@ -53,13 +53,8 @@ var calculateDragSort = (function (model){
 			hoverClass: "dragEnter",
 			drop: function( event, ui ) {
 				var conditionCT=_t.clone();
-				var indexDrag = conditionCT.attr('index');
+				var indexDrag = Number(conditionCT.attr('index'));
 				var ruleDrag = dataModel.ruleList[indexDrag];
-				/**
-				var chaining='<div class="ui-chaining">';
-	                chaining+='<span onmousedown="switchConnector_turn(this,event)">且</span>';
-	                chaining+='<a class="icon_rightArr" href="javascript:void(0)" onclick="switchConnector(this,event)">&nbsp;</a>';
-	                chaining+='</div>';**/
 				var dragTempCTIndex=$(this).parent().find(".J-helper").index($(this)[0]);
 				var conditionCTIndex=_t.parent().find(".ui-conditionCT").index(_t[0]);
 				var isDraggingTheLastOne=conditionCTIndex==(_t.parent().find(".ui-conditionCT").length-1)&&_t.nextAll(".right").length==0?true:false;
@@ -97,9 +92,9 @@ var calculateDragSort = (function (model){
 				}else{
 					//向前添加连接符
 					var rule = model.getChainingObj(indexDrag);
-					dataModel.ruleList.splice($(this).prev().attr('index'),0,rule);
-					dataModel.ruleList.splice($(this).prev().attr('index'),0,ruleDrag);
-					indexDrag = indexDrag + 2;
+					var preIndex = $(this).prev().attr('index');
+					dataModel.ruleList.splice(preIndex+1,0,rule);//插入最后一个
+					dataModel.ruleList.splice(preIndex+2,0,ruleDrag);
 					//$(this).before(chaining);
 					//$(this).before(conditionCT);
 				}
@@ -133,7 +128,7 @@ var calculateDragSort = (function (model){
 				//最后删除内部无内容的空括号和它后面的连接符
 				$("#sortable .left").each(function(){
 					var _next=$(this).nextAll().not(".J-helper").eq(0);
-					var _nextIndex = _next.attr('index');
+					var _nextIndex = Number(_next.attr('index'));
 					if(_next.attr("creat")==$(this).attr("creat")){
 						//alert(_next.attr("class"));
 						//三步,1：空括号左侧右侧都有符号，且右侧无label，删除右侧符号

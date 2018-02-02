@@ -216,7 +216,7 @@
 						<span v-if="item.calcuElement == '('" v-text="item.calcuElement"></span>
 						<!--右括号 -->
 						<span v-if="item.calcuElement == ')'" v-text="item.calcuElement">
-							<span class="delCondition" onclick="labelMarket.deletePar(this,event)"></span>
+							<span class="" onclick="labelMarket.deletePar(this,event)"></span>
 						</span>
 						<!--符号 -->
 						<div  v-if="item.elementType == 1" class="dropdown">
@@ -348,13 +348,10 @@
 	
 				<!--鼠标经过括号-->
 				
-				<div class="ui-helper-box">
-					<i></i>
-					<ul>
-						<li><a href="">删除内容</a></li>
-						<li><a href="">删除括号与内容</a></li>
-					</ul>
-				</div>
+				<ul>
+					<li><a href="">删除括号</a></li>
+					<li><a href="">删除括号与内容</a></li>
+				</ul>
 				
 				
 				

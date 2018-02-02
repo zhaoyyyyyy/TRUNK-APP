@@ -172,44 +172,44 @@ window.loc_onload = function() {
 	
 	//样例弹出页面
 	$("#ztreeDiv").dialog({
-	      height: 515,
-	      width: 560,
-	      modal: true,
-	      title:"新建/修改",
-	      autoOpen: false,
-	      open:function(){
-	      	ztreeFunc();
-	      	$(".ui-enum-content").css("display","block")
-	      },
-	      buttons: [
-	    	    {
-	    	      text: "取消",
-	    	      "class":"ui-btn ui-btn-second",
-	    	      click: function() {
-	    	        $( this ).dialog( "close" );
-	    	      }
-  	        },{
-	    	      text: "确定",
-	    	      "class":"ui-btn ui-btn-default",
-	    	      click: function() {
-	    	        $( this ).dialog( "close" );
-	    	      }
-	    	}
-  	  ]
-  });
+		  height: 515,
+		  width: 560,
+		  modal: true,
+		  title:"新建/修改",
+		  autoOpen: false,
+		  open:function(){
+		  	ztreeFunc();
+		  	$(".ui-enum-content").css("display","block")
+		  },
+		  buttons: [
+			    {
+			      text: "取消",
+			      "class":"ui-btn ui-btn-second",
+			      click: function() {
+			        $( this ).dialog( "close" );
+			      }
+		    },{
+			      text: "确定",
+			      "class":"ui-btn ui-btn-default",
+			      click: function() {
+			        $( this ).dialog( "close" );
+			    	      }
+			    	}
+		  	  ]
+	  });
   
-  $(".ui-calc-content").delegate(".ui-bracket.right","mouseover",function(){
-  	 $(this).find("span").after($(".ui-helper-box"));
-  	 $(this).find(".ui-helper-box").show();
-  })
-   $(".ui-calc-content").delegate(".ui-bracket.right","mouseleave",function(){
-  	 $(this).find(".ui-helper-box").hide();
-  	 $(".ui-helper-box").hide();
-  	 $(".ui-helper-box").find("ul").hide();
-  })
-  $(".ui-helper-box").find("i").click(function(){
-  	$(this).siblings("ul").stop().toggle();
-  })
+	  $(".ui-calc-content").delegate(".ui-bracket.right","mouseover",function(){
+	  	 $(this).find("span").after($(".ui-helper-box"));
+	  	 $(this).find(".ui-helper-box").show();
+	  })
+	   $(".ui-calc-content").delegate(".ui-bracket.right","mouseleave",function(){
+	  	 $(this).find(".ui-helper-box").hide();
+	  	 $(".ui-helper-box").hide();
+	  	 $(".ui-helper-box").find("ul").hide();
+	  })
+	  $(".ui-helper-box").find("i").click(function(){
+	  	$(this).siblings("ul").stop().toggle();
+	  })
 	
 }
 
@@ -760,6 +760,18 @@ var labelMarket = (function (model){
 			return index;
 			
 		}
+		//删除连接符号
+		function deleteConnectFlag(obj){
+			var rule = dataModel.ruleList[obj.attr('index')-2];
+			if(rule.elementType ==1){
+				//obj.prev().prev().remove();
+				dataModel.ruleList.splice(index-2,1);
+			}
+			if(obj.prevAll(".ui-conditionCT").length == 0){ 
+				var index = obj.next(".ui-chaining").attr('index');
+				dataModel.ruleList.splice(index,1);
+			}
+		}
 		/**
 		 * 删除匹配的括号【与条件直接关联的括号】,待测试
 		 */
@@ -802,14 +814,16 @@ var labelMarket = (function (model){
 			var creat=$("body .onDelPar").parent().parent().attr("creat");
 			if($(".onDelPar").parent().parent().prev().attr("creat") && $(".onDelPar").parent().parent().prev().attr("creat") == creat){
 				//删除前面或后面的连接符
-				model.deleteConnectFlag($(".onDelPar").parent().parent().attr('index'));
+				model.deleteConnectFlag($(".onDelPar").parent().parent());
 			}
 			var leftBrackets = $(".onDelPar").parent().parent().siblings("[creat='"+creat+"']");
 			var rightBrackets = $(".onDelPar").parent().parent();
 			
-			leftBrackets.remove();
-			rightBrackets.remove();
-			$("#delPar").hide();
+			//leftBrackets.remove();
+			//rightBrackets.remove();
+			//$("#delPar").hide();
+			dataModel.ruleList.splice(leftBrackets.attr('index'),1);
+			dataModel.ruleList.splice(rightBrackets.attr('index'),1);
 			model.submitRules();
 		}
 		/**
@@ -828,7 +842,7 @@ var labelMarket = (function (model){
 			}
 			var nextObj = $(".onDelPar").parent().parent().next();
 			//删除前面或后面的连接符
-			model.deleteConnectFlag($(".onDelPar").parent().parent().attr('index'));
+			model.deleteConnectFlag($(".onDelPar").parent().parent());
 			//调用删除括号的方法
 			model.onlyDelThisPars();
 
@@ -843,7 +857,7 @@ var labelMarket = (function (model){
 		 */
 		model.delEmptyParsAndCF = function(obj){
 			//删除前面或后面的连接符
-			deleteConnectFlag(obj.attr('index'));
+			deleteConnectFlag(obj);
 			
 			var nextObj = obj.next();
 			
