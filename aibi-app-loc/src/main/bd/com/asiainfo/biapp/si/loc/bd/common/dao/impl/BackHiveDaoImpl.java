@@ -344,7 +344,7 @@ public class BackHiveDaoImpl extends BaseBackDaoImpl implements IBackSqlDao{
 		StringBuffer sqlstr = new StringBuffer();
 		sqlstr.append("insert overwrite TABLE ").append(super.getCurBackDbSchema()).append(".").append(tableName);
 		sqlstr.append(" PARTITION (").append(LabelInfoContants.KHQ_CROSS_ID_PARTION);
-		sqlstr.append(" = ").append(partionID).append(") ").append(sql);
+		sqlstr.append(" = '").append(partionID).append("') ").append(sql);
 		log.debug(" ----------------------  BackHiveDaoImpl.insertDataToTabByPartion  sql=" + sqlstr.toString());
 		return this.executeResBoolean(sqlstr.toString());
 	}
