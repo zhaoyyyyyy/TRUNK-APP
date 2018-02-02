@@ -797,7 +797,7 @@ var labelMarket = (function (model){
 			var posX=$(t).offset().left+9;
 			var posY=$(t).offset().top+7;
 			if($("body > #delPar").length==0){
-				var _ul=$('<ul id="delPar"><li><a href="javascript:void(0)">删除括号</a></li><li><a href="javascript:void(0)">删除括号与内容</a></li></ul>');
+				var _ul=$('<ul class="ui-bracket-list" id="delPar"><li><a href="javascript:void(0)">删除括号</a></li><li><a href="javascript:void(0)">删除括号与内容</a></li></ul>');
 				_ul.appendTo("body");
 				$(document).click(function(){$("#delPar").hide()});
 				$("#delPar li").eq(0).bind("click",model.delThisPars);

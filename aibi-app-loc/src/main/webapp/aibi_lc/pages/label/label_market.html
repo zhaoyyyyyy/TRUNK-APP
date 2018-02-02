@@ -215,9 +215,10 @@
 						<!--左括号 -->
 						<span v-if="item.calcuElement == '('" v-text="item.calcuElement"></span>
 						<!--右括号 -->
-						<span v-if="item.calcuElement == ')'" v-text="item.calcuElement">
-							<span class="" onclick="labelMarket.deletePar(this,event)"></span>
+						<span v-if="item.calcuElement == ')'" >{{item.calcuElement}}
+							<span class="onDelPar" onclick="labelMarket.deletePar(this,event)"></span>
 						</span>
+
 						<!--符号 -->
 						<div  v-if="item.elementType == 1" class="dropdown">
 							<button type="button" class="ui-btn ui-btn-menu ui-icon-btn">
@@ -345,16 +346,6 @@
 						</div>
 					</div>
 				</div>
-	
-				<!--鼠标经过括号-->
-				
-				<ul>
-					<li><a href="">删除括号</a></li>
-					<li><a href="">删除括号与内容</a></li>
-				</ul>
-				
-				
-				
 			</div>
 
 			<!----------------- 购物车 ------------>
