@@ -675,20 +675,10 @@ var labelMarket = (function (model){
 			}
 		};
 		/**
-		 * 删除规则
-		 */
-		model.deleteRule = function(t){
-			var index = Number($(t).parent().parent().attr("index"));
-			index = model.deleteCurlyBraces(index);
-			//删除关联的连接符
-			index = model.deleteConnectFlags(index);
-			dataModel.ruleList.splice(index,1);
-    		model.submitRules();
-		};
-		/**
 		 * 展示标签信息
 		 */
 		model.showLabelInfo = function(elem,event){
+
 			var e=event||window.event;
 			e.stopPropagation?e.stopPropagation():e.cancelBubble=true;
 			var X = $(elem).parents(".ui-conditionCT").position().top;
@@ -722,6 +712,18 @@ var labelMarket = (function (model){
 			}
 		}
 		/**
+		 * 删除规则
+		 */
+		model.deleteRule = function(t){
+			var index = Number($(t).parent().parent().attr("index"));
+			index = model.deleteCurlyBraces(index);
+			//删除关联的连接符
+			index = model.deleteConnectFlags(index);
+			dataModel.ruleList.splice(index,1);
+    		model.submitRules();
+		};
+		
+		/**
 		 * 删除连接符
 		 */
 		model.deleteConnectFlags = function(index){
@@ -738,17 +740,22 @@ var labelMarket = (function (model){
 			return index;
 			
 		}
-		//删除连接符号
-		function deleteConnectFlag(obj){
-			var rule = dataModel.ruleList[obj.attr('index')-2];
-			if(rule.elementType ==1){
-				//obj.prev().prev().remove();
-				dataModel.ruleList.splice(index-2,1);
+		/**
+		 * 先删除当前元素前面的连接符，如果前面没有元素。则删除后面的连接符()
+		 * start 为(的位置
+		 */
+		model.deleteConnectFlag = function(start){
+			var rule = dataModel.ruleList[start-1];
+			if(rule && rule.elementType ==1){
+				dataModel.ruleList.splice(start-1,1);
+				start = start-1;
+			}else{
+				var nextRule = dataModel.ruleList[start+2]
+				if(nextRule && nextRule.elementType ==1){
+					dataModel.ruleList.splice(start+2,1);
+				}
 			}
-			if(obj.prevAll(".ui-conditionCT").length == 0){ 
-				var index = obj.next(".ui-chaining").attr('index');
-				dataModel.ruleList.splice(index,1);
-			}
+			return start;
 		}
 		/**
 		 * 删除匹配的括号【与条件直接关联的括号】,待测试
@@ -789,66 +796,51 @@ var labelMarket = (function (model){
 		 * 删除括号的处理函数
 		 */
 		model.delThisPars = function(){
-			var creat=$("body .onDelPar").parent().parent().attr("creat");
-			if($(".onDelPar").parent().parent().prev().attr("creat") && $(".onDelPar").parent().parent().prev().attr("creat") == creat){
-				//删除前面或后面的连接符
-				model.deleteConnectFlag($(".onDelPar").parent().parent());
-			}
-			var leftBrackets = $(".onDelPar").parent().parent().siblings("[creat='"+creat+"']");
 			var rightBrackets = $(".onDelPar").parent().parent();
-			
-			//leftBrackets.remove();
-			//rightBrackets.remove();
-			//$("#delPar").hide();
-			dataModel.ruleList.splice(leftBrackets.attr('index'),1);
+			var creat= rightBrackets.attr("creat");
+			var leftBrackets = $(".onDelPar").parent().parent().siblings("[creat='"+creat+"']");
 			dataModel.ruleList.splice(rightBrackets.attr('index'),1);
+			if(leftBrackets){
+				dataModel.ruleList.splice(leftBrackets.attr('index'),1);
+			}
 			model.submitRules();
+			$("#delPar").hide();
 		}
 		/**
 		 * 删除括号及整个块的处理函数
+		 * 1)删除括号包含的内容
+		 * 2)删除连接符
+		 * 3)删除多余的括号(())
 		 */
 		model.delThisParsAndCT = function (){
-			var creat=$("body .onDelPar").parent().parent().attr("creat");
+			var delObj = $("body .onDelPar").parent().parent();
+			var delIndex = Number(delObj.attr('index'));
+			var creat = delObj.attr("creat");
 			//遍历删除括号内部所有的块
-			var ary=$(".onDelPar").parent().parent().siblings("[creat='"+creat+"']").nextAll();
-			for(var i=0;i<ary.length;i++){
-				if(ary.eq(i).attr('creat') == creat ) {
-					break;
-				} else {
-					ary.eq(i).remove();
-				}
-			}
-			var nextObj = $(".onDelPar").parent().parent().next();
+			var start=Number($(".onDelPar").parent().parent().siblings("[creat='"+creat+"']").attr('index'));
+			dataModel.ruleList.splice(start+1,delIndex-start-1);//删除括号内的元素包含括号
 			//删除前面或后面的连接符
-			model.deleteConnectFlag($(".onDelPar").parent().parent());
-			//调用删除括号的方法
-			model.onlyDelThisPars();
-
+			start = model.deleteConnectFlag(start);
 			//处理剩余空括号
-			if( nextObj.attr('creat') && nextObj.attr('creat') == nextObj.prev().attr('creat')){
-				model.delEmptyParsAndCF(nextObj);
-			}
+			model.delEmptyParsAndCF(start);
+			//调用删除括号的方法
+			$("#delPar").hide();
 			model.submitRules();
 		}
 		/**
 		 * 循环删除空括号和前面的连接符
+	
 		 */
-		model.delEmptyParsAndCF = function(obj){
-			//删除前面或后面的连接符
-			deleteConnectFlag(obj);
-			
-			var nextObj = obj.next();
-			
-			//删除自己和与自己配对的括号
-			obj.prev().remove();
-			obj.remove();
-			
-			//判断如果后面是括号，则循环执行删除
-			if(nextObj.attr('creat') && nextObj.attr('creat') == nextObj.prev().attr('creat')){
-				model.delEmptyParsAndCF(nextObj);
-			}else{
-				return;
+		model.delEmptyParsAndCF = function(start){
+			var pre = dataModel.ruleList[start];
+			var nex = dataModel.ruleList[start+1];
+			if(pre && nex && pre.elementType == 3 && nex.elementType == 3){
+				dataModel.ruleList.splice(start+1,1);
+				dataModel.ruleList.splice(start,1);
+				start = start-1;
+				model.delEmptyParsAndCF(start);//递归删除
 			}
+			return start;
 		}
 		/**
 		 * 清空规则
