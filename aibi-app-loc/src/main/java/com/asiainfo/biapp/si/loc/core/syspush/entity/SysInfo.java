@@ -250,8 +250,25 @@ public class SysInfo extends BaseEntity{
     @ApiParam(value = "客户群调度信息表")
     private String customTaskTable;
 
+    /**
+     * 推送类型
+     */
+    @Column(name = "PUSH_TYPE")
+    @ApiParam(value = "推送类型")
+    private Integer pushType;
     
-    public String getSysId() {
+    
+    public Integer getPushType() {
+		return pushType;
+	}
+
+
+	public void setPushType(Integer pushType) {
+		this.pushType = pushType;
+	}
+
+
+	public String getSysId() {
         return sysId;
     }
 
