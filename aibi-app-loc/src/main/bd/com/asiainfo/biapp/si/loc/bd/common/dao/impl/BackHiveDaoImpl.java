@@ -83,7 +83,7 @@ public class BackHiveDaoImpl extends BaseBackDaoImpl implements IBackSqlDao{
         List<Map<String, String>> res = new ArrayList<>();
         Map<String,String> rsMap = null;
         //desc tableName;
-        String sql = new StringBuilder("desc ").append(super.getCurBackDbSchema()).append(".").append(tableName).toString();
+        String sql = new StringBuilder("desc ").append(tableName).toString();
 
         List<Map<String, String>> datas = null;
         try{
@@ -120,7 +120,7 @@ public class BackHiveDaoImpl extends BaseBackDaoImpl implements IBackSqlDao{
 	public boolean isExistsTable(String tableName) throws SqlRunException {
         boolean res = true;
         try{
-            List<Map<String, String>> cols = this.queryTableColumn(tableName);
+            List<Map<String, String>> cols = this.queryTableColumn(super.getCurBackDbSchema()+"."+tableName);
             if (cols.isEmpty()) {
                 res = false;
             }

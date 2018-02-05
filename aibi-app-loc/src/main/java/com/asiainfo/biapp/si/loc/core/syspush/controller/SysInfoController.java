@@ -129,6 +129,7 @@ public class SysInfoController extends BaseController<SysInfo>{
         @ApiImplicitParam(name = "isAllowNolist", value = "是否允许推送无清单", required = false, paramType = "query", dataType = "int"),
         @ApiImplicitParam(name = "isAllowAttr", value = "是否允许推送属性", required = false, paramType = "query", dataType = "int"),
         @ApiImplicitParam(name = "tableNamePre", value = "推送清单表前缀", required = false, paramType = "query", dataType = "string"),
+        @ApiImplicitParam(name = "pushType", value = "推送类型", required = false, paramType = "query", dataType = "int"),
         @ApiImplicitParam(name = "customTaskTable", value = "客户群调度信息表", required = false, paramType = "query", dataType = "string")})
     @RequestMapping(value = "/sysInfo/save", method = RequestMethod.POST)
     public WebResult<String> save(@ApiIgnore SysInfo sysInfo) {
@@ -171,6 +172,7 @@ public class SysInfoController extends BaseController<SysInfo>{
         @ApiImplicitParam(name = "isAllowNolist", value = "是否允许推送无清单", required = false, paramType = "query", dataType = "int"),
         @ApiImplicitParam(name = "isAllowAttr", value = "是否允许推送属性", required = false, paramType = "query", dataType = "int"),
         @ApiImplicitParam(name = "tableNamePre", value = "推送清单表前缀", required = false, paramType = "query", dataType = "string"),
+        @ApiImplicitParam(name = "pushType", value = "推送类型", required = false, paramType = "query", dataType = "int"),
         @ApiImplicitParam(name = "customTaskTable", value = "客户群调度信息表", required = false, paramType = "query", dataType = "string") })
     @RequestMapping(value = "/sysInfo/update", method = RequestMethod.POST)
     public WebResult<String> edit(@ApiIgnore SysInfo sysInfo) {
@@ -248,6 +250,9 @@ public class SysInfoController extends BaseController<SysInfo>{
         }
         if(null != sys.getShowInPage()){
             oldSys.setShowInPage(sys.getShowInPage());
+        }
+        if(null != sys.getPushType()){
+            oldSys.setPushType(sys.getPushType());
         }
         if(null != sys.getIsNeedXml()){
             oldSys.setIsNeedXml(sys.getIsNeedXml());

@@ -155,6 +155,9 @@ public class SourceTableInfoServiceImpl extends BaseServiceImpl<SourceTableInfo,
                 if (sourceTableInfo.getIdColumn().equals(s.getSourceName())) {
                     continue;
                 }
+                if (sourceTableInfo.getDateColumnName().equals(s.getSourceName())) {
+                    continue;
+                }
                 s.setSourceColumnRule(s.getColumnName());
                 s.setSourceTableId(sourceTableInfo.getSourceTableId());
                 iSourceInfoService.addSourceInfo(s);
@@ -209,6 +212,9 @@ public class SourceTableInfoServiceImpl extends BaseServiceImpl<SourceTableInfo,
         if (!sourceTableInfo.getSourceInfoList().isEmpty()) {
             for (SourceInfo s : sourceTableInfo.getSourceInfoList()) {
                 if (sourceTableInfo.getIdColumn().equals(s.getSourceName())) {
+                    continue;
+                }
+                if (sourceTableInfo.getDateColumnName().equals(s.getSourceName())) {
                     continue;
                 }
                 s.setSourceColumnRule(s.getColumnName());

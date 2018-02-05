@@ -15,7 +15,17 @@ function loadPage (){
 	}
 } 
 
+function toggleDown(elem){
+	$(elem).toggleClass("open");
+}
 
+function exitLoc(){
+	var ssg = window.sessionStorage;
+	delete ssg.token;
+	delete ssg.refreshToken;
+	delete ssg.CurrentConfigId;
+	window.location = "login.html";
+}
 
 //页面初始化加载页面及菜单
 window.loc_onload = function(){

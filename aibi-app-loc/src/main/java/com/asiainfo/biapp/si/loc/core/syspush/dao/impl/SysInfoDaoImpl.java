@@ -76,8 +76,8 @@ public class SysInfoDaoImpl extends BaseDaoImpl<SysInfo, String> implements ISys
             params.put("sysId", sysInfoVo.getSysId());
         }
         if(StringUtil.isNoneBlank(sysInfoVo.getSysName())){
-            hql.append("and s.sysName = :sysName ");
-            params.put("sysName", sysInfoVo.getSysName());
+            hql.append("and s.sysName LIKE :sysName ");
+            params.put("sysName","%" + sysInfoVo.getSysName()+"%");
         }
         if(StringUtil.isNoneBlank(sysInfoVo.getFtpServerIp())){
             hql.append("and s.ftpServerIp = :ftpServerIp ");
@@ -122,6 +122,10 @@ public class SysInfoDaoImpl extends BaseDaoImpl<SysInfo, String> implements ISys
         if(StringUtil.isNoneBlank(sysInfoVo.getDescTxt())){
             hql.append("and s.descTxt = :descTxt ");
             params.put("descTxt", sysInfoVo.getDescTxt());
+        }
+        if (null != sysInfoVo.getPushType()){
+            hql.append("and s.pushType = :pushType ");
+            params.put("pushType", sysInfoVo.getPushType());
         }
         if (null != sysInfoVo.getShowInPage()){
             hql.append("and s.showInPage = :showInPage ");

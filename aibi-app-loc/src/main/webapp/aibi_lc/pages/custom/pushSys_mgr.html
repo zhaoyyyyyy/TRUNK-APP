@@ -25,6 +25,20 @@
 						<span class="create-white"></span> 新增
 					</button>
 				</div>
+				<form id="formSearch" class="form-inline data-form fright">
+                    <div class="form-group">
+						<div class="control-input has-icon"><span>推送方式: </span>
+							 <select id="pushTypeStatus" dicCode="TSFSZD" type="text" class="form-control input-pointer" value="推送方式"></select>
+						  </div>
+					   </div>
+                       <div class="form-group">
+                           <div class="input-group">
+                               <input type="text" class="form-control" placeholder="系统平台名称" id="sysName" >
+                               <input id='hiddeninput' type="text" style="display:none" />
+                               <div class="input-group-addon input-group-icon right-child" id="btn_search"></div>
+                           </div>
+                       </div>
+                  </form>
 			</div>
 			<div class="ui-table-static mt10">
 				<table id="mainGrid" class="table"></table>

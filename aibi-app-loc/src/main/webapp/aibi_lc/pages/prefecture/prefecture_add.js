@@ -18,7 +18,8 @@ var model = {
 		ztreeObj : [],
 		allUserMsg : [],
 		priKey:"",
-		selectNum:0
+		selectNum:0,
+		click:0
 }
 window.loc_onload = function() {
 	var orgdata = [];
@@ -83,12 +84,15 @@ window.loc_onload = function() {
 				}
 			}else{
 				var orgValue = $("#org").val();
-				if($("#type1")&&(orgValue==""||orgValue==null||orgValue==undefined)){
+				if($("#type1")&&model.click!=1&&(orgValue==""||orgValue==null||orgValue==undefined)){
 					$("#type1").click();
-				}else if($("#type2")&&(orgValue==""||orgValue==null||orgValue==undefined)){
+					model.click=1;
+				}else if($("#type2")&&model.click!=1&&(orgValue==""||orgValue==null||orgValue==undefined)){
 					$("#type2").click();
-				}else if($("#type3")&&(orgValue==""||orgValue==null||orgValue==undefined)){
+					model.click=1;
+				}else if($("#type3")&&model.click!=1&&(orgValue==""||orgValue==null||orgValue==undefined)){
 					$("#type3").click();
+					model.click=1;
 				}
 			}
 				

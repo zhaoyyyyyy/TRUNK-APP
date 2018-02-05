@@ -1,4 +1,40 @@
 window.loc_onload = function() {
+	
+	$('#formSearch').keyup(function(event){
+    	if(event.keyCode == 13){
+    		$("#btn_search").click();
+    	}
+    })
+     //根据系统平台名模糊查询
+	$("#btn_search").click(function(){
+		var txtValue = $("#sysName").val();
+		if(txtValue == null){
+			$("#mainGrid").setGridParam({
+				postData : {
+					data : null
+				}
+			}).trigger("reloadGrid",[{
+				page : 1
+			}]);
+		}else{
+			$("#mainGrid").setGridParam({
+				postData : {
+					"sysName":txtValue
+				}
+			}).trigger("reloadGrid",[{
+				page : 1
+			}])
+		}
+	})
+	$("#pushTypeStatus").change(function(){//根据推送方式筛选
+		$("#mainGrid").setGridParam({
+			postData:{
+				"pushType":this.value
+			}
+		}).trigger("reloadGrid",[{
+			page:1
+		}]);
+	})
     $("#mainGrid").jqGrid({
         url: $.ctx + "/api/syspush/sysInfo/queryPage",
         datatype: "json",
@@ -12,12 +48,15 @@ window.loc_onload = function() {
             align: "center"
         },
         {
-            name: 'dayTableName',
-            index: 'dayTableName',
+            name: 'pushType',
+            index: 'pushType',
             width: 40,
             sortable: false,
             frozen: true,
             align: "center",
+            formatter : function(value, opts, data) {
+        		return $.getCodeDesc("TSFSZD",value);
+        	}
         },
         {
             name: 'ftpPost',
@@ -27,8 +66,8 @@ window.loc_onload = function() {
             sortable: false,
         },
         {
-            name: 'dayPartitionColumn',
-            index: 'dayPartitionColumn',
+            name: 'tableNamePre',
+            index: 'tableNamePre',
             width: 40,
             align: "center",
             sortable: false,
@@ -46,7 +85,7 @@ window.loc_onload = function() {
             index: 'sysId',
             sortable: false,
             width: 50,
-            align: "left",
+            align: "center",
             title:false,
             formatter: function(value, opts, data) {
             	var html = '';
@@ -64,7 +103,7 @@ window.loc_onload = function() {
     });
     $("#btn_to_add").click(function(){
     	var wd = $.window('新增推送平台', $.ctx
-    		+ '/aibi_lc/pages/custom/pushSys_add.html', 600, 500);
+    		+ '/aibi_lc/pages/custom/pushSys_add.html', 550, 500);
     	wd.reload = function() {
     		$("#mainGrid").setGridParam({
     			postData : $("#formSearch").formToJson()
@@ -93,22 +132,25 @@ function fun_to_delete(id){
 		});
 	});
 }
-
-
-/*
-
-
 function fun_to_edit(id){
-	$.confirm('确定要进行[编辑]吗？该操作可能会影响所有专区的数据生成', function() {
-		var wd = $.window('编辑全量表', $.ctx
-				+ '/aibi_lc/pages/prefecture/allUserMsg_add.html?priKey=' + id, 500, 500);
-		wd.reload = function() {
-			$("#mainGrid").setGridParam({
-				postData : $("#formSearch").formToJson()
-			}).trigger("reloadGrid", [ {
-				page : 1
-			} ]);
-		}
-	})
+	var wd = $.window('编辑推送平台', $.ctx
+			+ '/aibi_lc/pages/custom/pushSys_add.html?sysId=' + id, 550, 500);
+	wd.reload = function() {
+		$("#mainGrid").setGridParam({
+			postData : $("#formSearch").formToJson()
+		}).trigger("reloadGrid", [ {
+			page : 1
+		} ]);
+	}
 }
-*/
+function fun_to_detail(id){
+	var wd = $.window('查看推送平台', $.ctx
+			+ '/aibi_lc/pages/custom/pushSys_detail.html?sysId=' + id, 550, 500);
+	wd.reload = function() {
+		$("#mainGrid").setGridParam({
+			postData : $("#formSearch").formToJson()
+		}).trigger("reloadGrid", [ {
+			page : 1
+		} ]);
+	}
+}

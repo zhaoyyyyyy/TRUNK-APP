@@ -89,6 +89,12 @@ public class AllUserMsgServiceImpl extends BaseServiceImpl<AllUserMsg, String>im
 
     public void addAllUserMsg(AllUserMsg allUserMsg) throws BaseException {
         String[] dimOrgStr = allUserMsg.getDimOrgLevelStr().split(";");
+        AllUserMsgVo allUserMsgVo = new AllUserMsgVo();
+        allUserMsgVo.setTableDesc(allUserMsg.getTableDesc());
+        List<AllUserMsg> allUserMsgList = selectAllUserMsgList(allUserMsgVo);
+        if(!allUserMsgList.isEmpty()){
+            throw new ParamRequiredException("全量表名称已存在");
+        }
         super.saveOrUpdate(allUserMsg);
         for(String d : dimOrgStr){
             JSONObject obj = JSONObject.fromObject(d);
@@ -106,6 +112,12 @@ public class AllUserMsgServiceImpl extends BaseServiceImpl<AllUserMsg, String>im
     @Transactional(rollbackOn = Exception.class)
     public void modifyAllUserMsg(AllUserMsg allUserMsg) throws BaseException {
         AllUserMsg oldAll = super.get(allUserMsg.getPriKey());
+        AllUserMsgVo allUserMsgVo = new AllUserMsgVo();
+        allUserMsgVo.setTableDesc(allUserMsg.getTableDesc());
+        List<AllUserMsg> allUserMsgList = selectAllUserMsgList(allUserMsgVo);
+        if(!allUserMsgList.isEmpty()&&oldAll.getTableDesc().equals(allUserMsg.getTableDesc())){
+            throw new ParamRequiredException("全量表名称已存在");
+        }
         oldAll = fromToBean(allUserMsg,oldAll);
         DimOrgLevelId dimOrgLevelId = new DimOrgLevelId();
         dimOrgLevelId.setPriKey(oldAll.getPriKey());

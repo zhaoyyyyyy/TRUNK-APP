@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>查看平台</title>
+<!--[if IE]>
+    	<meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <![endif]-->
+<link rel="stylesheet" theme="default" href="../../asset/css/theme/default/coc_frame.css" />
+<link rel="stylesheet" theme="default" href="../../asset/css/theme/default/main.css" />
+<script type="text/javascript" src="../../asset/script/common/include.js"></script>
+<script type="text/javascript" src="pushSys_detail.js"></script>
+<style type="text/css">
+[v-cloak] {
+	display: none;
+}
+</style>
+<!--[if lt IE 9]>
+	    <script src="../../asset/script/component/h5compatibility/html5shiv.min.js"></script>
+	    <script src="../../asset/script/component/h5compatibility/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+	<div id="dataD" class="iframe-nest" v-cloak>
+		<div class="ui-lc-mian">
+			<div class="form-horizontal ui-form label-detail">
+				<div class="ui-form-group">
+					<label class="control-label">推送平台名称:</label> 
+					<span class="file-up-name">{{sysName}}</span>
+				</div>
+				<div class="ui-form-group mt10">
+					<label class="control-label">推送平台描述:</label> 
+					<span class="file-up-name">{{descTxt}}</span>
+				</div>
+				 <div class="ui-form-group mt10">
+					<label class="control-label">推送方式:</label> 
+					<span class="file-up-name">{{pushType}}</span>
+				</div>
+				<div v-if="pushType==='文件推送'">
+					<div class="ui-form-group mt10">
+						<label class="control-label">协议类型:</label> 
+						<span class="file-up-name">{{protocoType}}</span>
+					</div>
+					<div class="ui-form-group mt10">
+						<label class="control-label">IP:</label> 
+						<span class="file-up-name">{{ftpServerIp}}</span>
+					</div>
+					<div class="ui-form-group mt10">
+						<label class="control-label">用户名:</label> 
+						<span class="file-up-name">{{ftpUser}}</span>
+					</div>
+					<div class="ui-form-group mt10">
+						<label class="control-label">密码:</label> 
+						<span class="file-up-name">{{ftpPwd}}</span>
+					</div>
+					<div class="ui-form-group mt10">
+						<label class="control-label">FTP路径:</label> 
+						<span class="file-up-name">{{ftpPath}}</span>
+					</div>
+					<div class="ui-form-group mt10">
+						<label class="control-label">端口:</label> 
+						<span class="file-up-name">{{ftpPost}}</span>
+					</div>
+					<div class="ui-form-group mt10">
+						<label class="control-label">本地路径:</label> 
+						<span class="file-up-name">{{localPath}}</span>
+					</div>
+					<div v-if="webserviceWsdl!==null">
+						<div class="ui-form-group mt10">
+							<label class="control-label">WSDL：</label> 
+							<span class="file-up-name">{{webserviceWsdl}}</span>
+						</div>
+						<div class="ui-form-group mt10">
+							<label class="control-label">命名空间：</label> 
+							<span class="file-up-name">{{webserviceTargetnamespace}}</span>
+						</div>
+						<div class="ui-form-group mt10">
+							<label class="control-label">方法：</label> 
+							<span class="file-up-name">{{webserviceMethod}}</span>
+						</div>
+						<div class="ui-form-group mt10">
+							<label class="control-label">参数：</label> 
+							<span class="file-up-name">{{webserviceArgs}}</span>
+						</div>
+					</div>
+					<div class="ui-form-group mt10" v-if="showInPage===1">
+						<label class="control-label">是否推送页面显示:</label> 
+						<span class="file-up-name">是</span>
+					</div>
+					<div class="ui-form-group mt10" v-if="isNeedXml===1">
+						<label class="control-label">是否同时上传xml文件:</label> 
+						<span class="file-up-name">是</span>
+					</div>
+					<div v-if="isNeedDes===1">
+						<div class="ui-form-group mt10" >
+							<label class="control-label">是否需要DES加密:</label> 
+							<span class="file-up-name">是</span>
+						</div>
+						<div class="ui-form-group mt10" >
+							<label class="control-label">加密密钥:</label> 
+							<span class="file-up-name">{{desKey}}</span>
+						</div>
+					</div>
+					<div v-if="isNeedCompress===1">
+						<div class="ui-form-group mt10" >
+							<label class="control-label">是否需要压缩:</label> 
+							<span class="file-up-name">是</span>
+						</div>
+						<div class="ui-form-group mt10" >
+							<label class="control-label">压缩类型:</label> 
+							<span class="file-up-name">{{compressType}}</span>
+						</div>
+					</div>
+					<div class="ui-form-group mt10" v-if="isAllowAttr===1">
+						<label class="control-label">是否允许推送属性:</label> 
+						<span class="file-up-name">是</span>
+					</div>
+					<div class="ui-form-group mt10">
+						<label class="control-label">实现类名:</label> 
+						<span class="file-up-name">{{pushClassName}}</span>
+					</div>
+				</div>
+				<div v-if="pushType==='表推送'">
+					<div class="ui-form-group mt10">
+						<label class="control-label">推送清单表前缀:</label> 
+						<span class="file-up-name">{{tableNamePre}}</span>
+					</div>
+					<div class="ui-form-group mt10">
+						<label class="control-label">客户群调度信息表:</label> 
+						<span class="file-up-name">{{customTaskTable}}</span>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

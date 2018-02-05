@@ -88,7 +88,7 @@ var numberRule = (function (model){
 				}
 			}
 			if(contiueMinVal !="" && contiueMaxVal !=""){
-				if(contiueMaxVal < contiueMinVal){
+				if(Number(contiueMaxVal) < Number(contiueMinVal)){
 					$.alert("数值范围上限不能小于下限！");
 					return false;
 				}
