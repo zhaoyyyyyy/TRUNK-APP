@@ -9,7 +9,7 @@ var model = {
 		ftpUser:"",//用户名
 		ftpPwd:"",//密码
 		ftpPath:"",//FTP路径
-		ftpPost:"",//端口
+		ftpPort:"",//端口
 		localPath:"",//本地路径
 		webserviceWsdl:"",//WSDL
 		webserviceTargetnamespace:"",//命名空间
@@ -51,7 +51,7 @@ window.loc_onload = function() {
 			model.ftpUser = data.data.ftpUser;
 			model.ftpPwd = data.data.ftpPwd;
 			model.ftpPath = data.data.ftpPath;
-			model.ftpPost = data.data.ftpPost;
+			model.ftpPort = data.data.ftpPort;
 			model.localPath = data.data.localPath;
 			model.webserviceWsdl = data.data.webserviceWsdl;
 			model.webserviceTargetnamespace = data.data.webserviceTargetnamespace;
