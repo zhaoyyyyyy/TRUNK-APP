@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.asiainfo.biapp.si.loc.auth.model.Organization;
 import com.asiainfo.biapp.si.loc.auth.model.User;
 import com.asiainfo.biapp.si.loc.base.common.LabelInfoContants;
 import com.asiainfo.biapp.si.loc.base.common.LabelRuleContants;
@@ -26,6 +27,7 @@ import com.asiainfo.biapp.si.loc.cache.CocCacheProxy;
 import com.asiainfo.biapp.si.loc.core.label.entity.LabelInfo;
 import com.asiainfo.biapp.si.loc.core.label.model.ExploreQueryParam;
 import com.asiainfo.biapp.si.loc.core.label.service.ILabelExploreService;
+import com.asiainfo.biapp.si.loc.core.label.service.ILabelInfoService;
 import com.asiainfo.biapp.si.loc.core.label.vo.LabelRuleVo;
 
 import io.swagger.annotations.Api;
@@ -65,6 +67,9 @@ import io.swagger.annotations.ApiOperation;
 @RestController
 public class ShopCartController extends BaseController {
 
+	@Autowired
+	private ILabelInfoService labelInfoService;
+	
 	@Autowired
 	private ILabelExploreService exploreServiceImpl;
 
@@ -200,6 +205,33 @@ public class ShopCartController extends BaseController {
 			return webResult.fail(msg);
 		}
 	}
+	
+	/**
+	 * 查询客户群是否能够加入到购物车
+	 */
+	@ApiOperation(value = "查询客户群是否能够加入到购物车")
+	@ApiImplicitParam(name = "labelId", value = "客户群id", required = true, paramType = "query", dataType = "string")
+	@RequestMapping(value = "/findCusotmValidate", method = RequestMethod.POST)
+	public WebResult<String> findCusotmValidate( String labelId) {
+		WebResult<String> webResult = new WebResult<>();
+		boolean success = false;
+		String msg = "抱歉，该客户群无规则、无清单可用，不能添加到收纳篮！";
+		//msg = "客户群已经被删除，无法加入到购物车！";
+		try {
+			LabelInfo customGroup = labelInfoService.get(labelId);
+			if (LabelInfoContants.CUSTOM_DATA_STATUS_SUCCESS != customGroup.getDataStatusId()) {
+				success=false;
+			}
+		} catch (Exception e) {
+			LogUtil.error("查询客户群异常", e);
+			return webResult.fail(msg);
+		}
+		if (success) {
+			return webResult.success("查询标签是否能够加入到购物车成功", SUCCESS);
+		} else {
+			return webResult.fail(msg);
+		}
+	}
 
 	/**
 	 * 添加(规则)到购物车
@@ -320,9 +352,11 @@ public class ShopCartController extends BaseController {
 		queryParam.setOrgId(dataPrivaliege);
 		StringBuffer sql = new StringBuffer();
 		try {
+			queryParam.setLoginUser(this.getLoginUser());
 			//不包含纵表的探索
 			String querySql = exploreServiceImpl.getCountSqlStr(labelRules, queryParam);
 			sql.append("select count(1) ").append(querySql);
+			System.out.println("querySql SQL : " + querySql);
 			LogUtil.info("querySql SQL : " + querySql);
 			backServiceImpl.queryCount(sql.toString());
 		} catch (Exception e) {

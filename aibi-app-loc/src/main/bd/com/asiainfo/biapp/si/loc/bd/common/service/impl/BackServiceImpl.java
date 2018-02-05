@@ -140,7 +140,7 @@ public class BackServiceImpl implements IBackSqlService{
 		
 		String backType =  CocCacheProxy.getCacheProxy().getSYSConfigInfoByKey("LOC_CONFIG_SYS_BGDB_TYPE");
 		System.out.println(backType);
-		if(!(backType.equals("Hive")||backType.equals("SparkSql"))){
+		if(backType.equals("Hive")||backType.equals("SparkSql")){
 			isInsertTable = this.insertCustomDataHive(sql, tableName, customerId);
 		}else if(backType.equals("Ads")){
 			isInsertTable = this.insertCustomDataAds(sql, tableName, customerId);
