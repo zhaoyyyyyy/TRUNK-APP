@@ -554,8 +554,8 @@ var labelMarket = (function (model){
 	  					//2.更新计算中心的页面样式
   						dataModel.ruleList = returnObj.data.shopCartRules;
   						dataModel.ruleListCount = returnObj.data.showCartRulesCount;
-  						calculateDragSort.sortLabels();
   					}
+  					calculateDragSort.sortLabels();
   				 }
   			});
         };
@@ -685,11 +685,9 @@ var labelMarket = (function (model){
 			var Y = $(elem).parents(".ui-conditionCT").position().left;
 			$(".ui-conditionBox").css({"left":Y+3,"top":X+90});
 			var index = $(elem).parent().parent().attr("index");
-			$(".ui-conditionBox").attr("index",index);	
 			var rule = dataModel.ruleList[index];
 			$(document).click(function(){$(".ui-conditionBox").hide()});
-			if($(".ui-conditionBox").css("display")=="none" && $(".ui-conditionBox").attr("index")==index){
-				$(".ui-conditionBox").show();
+			if($(".ui-conditionBox").attr("index") !=index){
 				if(rule){
 					$.commAjax({
 						url : $.ctx + "/api/label/labelInfo/get",
@@ -699,7 +697,8 @@ var labelMarket = (function (model){
 						onSuccess:function(returnObj){
 							var status = returnObj.status;
 							if (status == '200'){
-								$(elem).parents(".ui-conditionCT").find(".ui-conditionBox").show();
+								$(".ui-conditionBox").attr("index",index);	
+								$(".ui-conditionBox").show();
 								dataModel.labelInfoViewObj = returnObj.data;
 							}else{
 								$.alert(returnObj.msg);
