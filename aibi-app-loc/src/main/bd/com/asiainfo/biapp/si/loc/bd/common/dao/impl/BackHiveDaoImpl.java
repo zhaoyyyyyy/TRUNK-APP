@@ -237,7 +237,7 @@ public class BackHiveDaoImpl extends BaseBackDaoImpl implements IBackSqlDao{
 //      如果想要完成上述操作，要在生成Statement对象时加入如下两个参数：
         try{
             Connection connection = this.getBackConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement(selectSql,ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            PreparedStatement preparedStatement = connection.prepareStatement(selectSql);
             ResultSet rs =  preparedStatement.executeQuery();
 
             if(rs != null && rs.next()) {
@@ -259,7 +259,7 @@ public class BackHiveDaoImpl extends BaseBackDaoImpl implements IBackSqlDao{
         long s = System.currentTimeMillis();
         try{
             Connection connection = this.getBackConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement(sql,ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
             ResultSet resultSet =  preparedStatement.executeQuery();
 
             LogUtil.debug(new StringBuffer(sql).append(" cost:").append(System.currentTimeMillis()-s).append("ms."));
@@ -275,7 +275,7 @@ public class BackHiveDaoImpl extends BaseBackDaoImpl implements IBackSqlDao{
         long s = System.currentTimeMillis();
         try{
             Connection connection = this.getBackConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement(sql,ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
             ResultSet resultSet =  preparedStatement.executeQuery();
 
             LogUtil.debug(new StringBuffer(sql).append(" cost:").append(System.currentTimeMillis()-s).append("ms."));
