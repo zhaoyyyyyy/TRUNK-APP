@@ -15,7 +15,9 @@ function loadPage (){
 	}
 } 
 
-
+function toggleDown(elem){
+	$(elem).toggleClass("open");
+}
 
 //页面初始化加载页面及菜单
 window.loc_onload = function(){
