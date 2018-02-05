@@ -94,7 +94,7 @@ public class SysInfo extends BaseEntity{
      */
     @Column(name = "FTP_PORT")
     @ApiParam(value = "FTP端口")
-    private String ftpPost;
+    private String ftpPort;
     
     /**
      * 本地路径
@@ -328,13 +328,13 @@ public class SysInfo extends BaseEntity{
     }
 
     
-    public String getFtpPost() {
-        return ftpPost;
+    public String getFtpPort() {
+        return ftpPort;
     }
 
     
-    public void setFtpPost(String ftpPost) {
-        this.ftpPost = ftpPost;
+    public void setFtpPort(String ftpPort) {
+        this.ftpPort = ftpPort;
     }
 
     
@@ -556,6 +556,22 @@ public class SysInfo extends BaseEntity{
     public void setCustomTaskTable(String customTaskTable) {
         this.customTaskTable = customTaskTable;
     }
+
+
+	@Override
+	public String toString() {
+		return "SysInfo [sysId=" + sysId + ", sysName=" + sysName + ", ftpServerIp=" + ftpServerIp + ", ftpUser="
+				+ ftpUser + ", ftpPwd=" + ftpPwd + ", ftpPath=" + ftpPath + ", ftpPort=" + ftpPort + ", localPath="
+				+ localPath + ", webserviceWsdl=" + webserviceWsdl + ", webserviceTargetnamespace="
+				+ webserviceTargetnamespace + ", webserviceMethod=" + webserviceMethod + ", webserviceArgs="
+				+ webserviceArgs + ", descTxt=" + descTxt + ", showInPage=" + showInPage + ", isNeedXml=" + isNeedXml
+				+ ", isNeedDes=" + isNeedDes + ", desKey=" + desKey + ", isNeedCycle=" + isNeedCycle
+				+ ", pushClassName=" + pushClassName + ", isNeedCompress=" + isNeedCompress + ", compressType="
+				+ compressType + ", isNeedTitle=" + isNeedTitle + ", fileType=" + fileType + ", isDuplicateNum="
+				+ isDuplicateNum + ", protocoType=" + protocoType + ", isAllowNolist=" + isAllowNolist
+				+ ", isAllowAttr=" + isAllowAttr + ", tableNamePre=" + tableNamePre + ", customTaskTable="
+				+ customTaskTable + ", pushType=" + pushType + "]";
+	}
     
     
 }

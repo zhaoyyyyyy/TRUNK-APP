@@ -107,7 +107,7 @@ public class SysInfoController extends BaseController<SysInfo>{
         @ApiImplicitParam(name = "ftpUser", value = "FTP用户名", required = false, paramType = "query", dataType = "string"),
         @ApiImplicitParam(name = "ftpPwd", value = "FTP密码", required = false, paramType = "query", dataType = "string"),
         @ApiImplicitParam(name = "ftpPath", value = "FTP路径", required = false, paramType = "query", dataType = "string"),
-        @ApiImplicitParam(name = "ftpPost", value = "FTP端口", required = false, paramType = "query", dataType = "string"),
+        @ApiImplicitParam(name = "ftpPort", value = "FTP端口", required = false, paramType = "query", dataType = "string"),
         @ApiImplicitParam(name = "localPath", value = "本地路径", required = false, paramType = "query", dataType = "string"),
         @ApiImplicitParam(name = "webserviceWsdl", value = "WEBSERVICE_WSDL", required = false, paramType = "query", dataType = "string"),
         @ApiImplicitParam(name = "webserviceTargetnamespace", value = "WEBSERVICE命名空间", required = false, paramType = "query", dataType = "string"),
@@ -150,7 +150,7 @@ public class SysInfoController extends BaseController<SysInfo>{
         @ApiImplicitParam(name = "ftpUser", value = "FTP用户名", required = false, paramType = "query", dataType = "string"),
         @ApiImplicitParam(name = "ftpPwd", value = "FTP密码", required = false, paramType = "query", dataType = "string"),
         @ApiImplicitParam(name = "ftpPath", value = "FTP路径", required = false, paramType = "query", dataType = "string"),
-        @ApiImplicitParam(name = "ftpPost", value = "FTP端口", required = false, paramType = "query", dataType = "string"),
+        @ApiImplicitParam(name = "ftpPort", value = "FTP端口", required = false, paramType = "query", dataType = "string"),
         @ApiImplicitParam(name = "localPath", value = "本地路径", required = false, paramType = "query", dataType = "string"),
         @ApiImplicitParam(name = "webserviceWsdl", value = "WEBSERVICE_WSDL", required = false, paramType = "query", dataType = "string"),
         @ApiImplicitParam(name = "webserviceTargetnamespace", value = "WEBSERVICE命名空间", required = false, paramType = "query", dataType = "string"),
@@ -227,8 +227,8 @@ public class SysInfoController extends BaseController<SysInfo>{
         if(StringUtil.isNoneBlank(sys.getFtpPath())){
             oldSys.setFtpPath(sys.getFtpPath());
         }
-        if(StringUtil.isNoneBlank(sys.getFtpPost())){
-            oldSys.setFtpPost(sys.getFtpPost());
+        if(StringUtil.isNoneBlank(sys.getFtpPort())){
+            oldSys.setFtpPort(sys.getFtpPort());
         }
         if(StringUtil.isNoneBlank(sys.getLocalPath())){
             oldSys.setLocalPath(sys.getLocalPath());
