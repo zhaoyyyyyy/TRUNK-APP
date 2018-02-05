@@ -98,6 +98,17 @@
                                     </div>
                                 </div>                             
                             </div> 
+                            <div class="ui-form-group clearfix">
+					            <input type="hidden" name="sourceTableType" id="sourceTableType">
+					            <label for="updateCycle" class="control-label">
+					             <span class="input-required">*</span>            
+					                         更新周期</label>
+					            <div class="control-input has-icon">
+						            <select  v-model="sourceInfo.updateCycle" required="true" name="updateCycle" class="form-control input-pointer easyui-validatebox">
+										<option v-for="h in gxzq" :value="h.code">{{h.dataName}}</option>
+									</select>
+								</div>
+					        </div>
                         </div>
                         <div class="form-horizontal fleft ui-form">
                             <div class="ui-form-group clearfix">
@@ -122,7 +133,8 @@
                                  <span class="input-required">*</span>                                
                                                                  业务口径</label>
                                 <div class="control-input">
-                                    <input required="true" v-model="sourceInfo.busiCaliber" type="text" class="form-control easyui-validatebox" id="busiCaliber" name="busiCaliber" placeholder="输入业务口径">
+                                    <textarea rows="2" v-model="sourceInfo.busiCaliber" class="form-control form-control-textarea easyui-validatebox"
+                                     required="true" id="busiCaliber" name="busiCaliber" placeholder="输入业务口径"></textarea>
                                 </div>
                             </div>
 						    <div class="ui-form-group clearfix">
@@ -135,17 +147,6 @@
 							         value="2013-12-31" onmousedown="getTime(this)"/>
 			          	             <span class="glyphicon-date form-control-feedback"></span>
 			                       </div>   
-					        </div>
-					        <div class="ui-form-group clearfix">
-					            <input type="hidden" name="sourceTableType" id="sourceTableType">
-					            <label for="updateCycle" class="control-label">
-					             <span class="input-required">*</span>            
-					                         更新周期</label>
-					            <div class="control-input has-icon">
-					            <select  v-model="sourceInfo.updateCycle" required="true" name="updateCycle" class="form-control input-pointer easyui-validatebox">
-									<option v-for="h in gxzq" :value="h.code">{{h.dataName}}</option>
-								</select>
-								</div>
 					        </div>
                             <div class="ui-form-hide">
                               <div class="ui-form-group clearfix">

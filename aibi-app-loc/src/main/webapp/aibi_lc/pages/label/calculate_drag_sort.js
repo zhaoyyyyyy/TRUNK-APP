@@ -236,7 +236,7 @@ var calculateDragSort = (function (model){
 		  				 }else{
 		  					calcuElement = ")";
 		  				 }
-		  				 var index = $(this).next().attr('index');
+		  				 var index = Number($(this).next().attr('index'));
 		  				 var uuid = model.newGuid();
 		  				 var rule = model.getCurlyBraceHTML(calcuElement,1,uuid);
 		  				 rule.sortNum = index;
@@ -311,9 +311,9 @@ var calculateDragSort = (function (model){
 					greedy:true,
 					hoverClass: "ui-drop-highlight",
 					drop: function( event, ui ) {
-						var index = $(this).prev().attr('index');
+						var index = Number($(this).prev().attr('index'));
 						var rule = model.getCurlyBraceHTML(')',1,$("#sortable .waitClose").attr("creat"));
-						rule.sortNum = Number(index)+1;//不转换变成字符串拼接了
+						rule.sortNum = index+1;//不转换变成字符串拼接了
 		  				dataModel.ruleList.splice(index+1,0,rule);
 		  				$("#sortable .waitClose").removeClass("waitClose");
 						_t.parent().removeClass("opened");

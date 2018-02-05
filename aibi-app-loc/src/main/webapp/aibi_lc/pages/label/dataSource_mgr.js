@@ -62,7 +62,8 @@ window.loc_onload = function() {
 			key:true,
 			title:false,
 			formatter: function(value, opts, data) {
-				var html = '<button onclick="fun_to_up(\'' + value + '\')" type="button" class="btn btn-default ui-table-btn">修改</button>'
+				var html = '<button onclick="fun_to_detail(\'' + value + '\')" type="button" class="btn btn-default  ui-table-btn ui-table-btn">查看</button>'
+				+'<button onclick="fun_to_up(\'' + value + '\')" type="button" class="btn btn-default ui-table-btn">修改</button>'
 				+'<button onclick="fun_to_del(\'' + value + '\')" type="button" class="btn btn-default  ui-table-btn ui-table-btn">删除</button>';
 				return html;
 			}
@@ -89,6 +90,10 @@ window.loc_onload = function() {
 }
 function fun_to_up(id) {
 	window.location = 'dataSource_add.html?isEdit=1&sourceTableId=' + id;
+}
+function fun_to_detail(id) {
+	var wd = $.window('指标详情', $.ctx
+			+ '/aibi_lc/pages/label/dataSource_detail.html?sourceTableId=' + id, 500, 600);
 }
 function fun_to_del(id) {
 	$.confirm("确定删除该指标源表吗？", function() {
