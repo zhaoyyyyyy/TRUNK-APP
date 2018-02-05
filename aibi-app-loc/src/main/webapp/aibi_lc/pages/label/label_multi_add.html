@@ -154,12 +154,12 @@
                                    <span class="input-required">*</span>                                  
                                                                      维表选择</label>
                                   <div class="control-input control-select">
-                                      <select required="true" id="dimId" name="dimId" class="form-control input-pointer easyui-validatebox">
+                                      <select required="true" v-model="sourceInfo.dimId" name="dimId" class="form-control input-pointer easyui-validatebox">
                                        <option>请选择维表</option>
                                        <option v-for = "dim in dimtableInfoList" :value="dim.dimId">{{dim.dimTableName}}</option>
                                       </select>       
                                   </div> 
-                                  <button type="button" onclick="fun_to_dimdetail()" class="file-up-btn ml10" >详情</button>
+                                  <button type="button" v-on:click="fun_to_dimdetail(sourceInfo)" class="file-up-btn ml10" >详情</button>
                               </div>            
                               <div class="ui-form-group clearfix">
                                   <label for="dataType" class="control-label">
