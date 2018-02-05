@@ -86,7 +86,7 @@
 								<div class="ui-form-group">
 									<label class="control-label fleft"><span class="input-required">*</span>端口:</label>
 									<div class="control-input">
-										<input v-model="ftpPost" id="ftpPost" name="ftpPost" type="text" class="fleft form-control easyui-validatebox"  required="true" />
+										<input v-model="ftpPort" id="ftpPort" name="ftpPort" type="text" class="fleft form-control easyui-validatebox"  required="true" />
 									</div>
 								</div>
 								<div class="ui-form-group">
@@ -129,23 +129,23 @@
 									 <div class="checkbox fleft checkbox-radio">
 									    <input id="showInPage" name="showInPage" type="checkbox" class="checkbix" checked="checked" value="1">
 									    <label aria-label="" role="checkbox" for="showInPage" class="checkbix" >
-									    		<span class="large"></span>是否推送页面显示
+									    		<i class="default"></i>是否推送页面显示
 									    </label>
 									</div>
 								</div>
-								<div class="ui-form-group ml20 ">
+								 <div class="ui-form-group ml20 ">
 									 <div class="checkbox fleft checkbox-radio">
-									    <input id="isNeedXml" name="isNeedXml" type="checkbox" value="1">
+									    <input id="isNeedXml" name="isNeedXml" type="checkbox"  value="1">
 									    <label aria-label="" role="checkbox" for="isNeedXml">
 									    		<i class="default"></i> 是否同时上传xml文件
 									    </label>
 									</div>
-								</div>
+								</div> 
 								<div class="ui-form-group ml20">
 									 <div class="checkbox fleft checkBox checkbox-radio">
 									    <input id="isNeedDes" name="isNeedDes" type="checkbox" class="checkbix" value="1"  onclick="isShowDesKey(this)" >
 									    <label aria-label="" role="checkbox" for="isNeedDes" class="checkbix"  >
-									    		<span class="large"></span>是否需要DES加密
+									    		<i class="default"></i>是否需要DES加密
 									    </label>
 									</div>
 									<div class="fleft clearfix ui-push-box" v-if="showDesKey">
@@ -159,7 +159,7 @@
 									 <div class="checkbox fleft checkBox checkbox-radio">
 									    <input id="isNeedCompress" name="isNeedCompress" type="checkbox" class="checkbix" value="1" onclick="isShowCompressType(this)">
 									    <label aria-label="" role="checkbox" for="isNeedCompress" class="checkbix">
-									    		<span class="large"></span>是否需要压缩
+									    		<i class="default"></i>是否需要压缩
 									    </label>
 									</div>
 									<div class="fleft clearfix ml20 ui-push-box" v-if="showCompressType">
@@ -174,7 +174,7 @@
 									 <div class="checkbox fleft checkbox-radio">
 									    <input id="isAllowAttr" name="isAllowAttr" type="checkbox" class="checkbix" value="1">
 									    <label aria-label="" role="checkbox" for="isAllowAttr" class="checkbix">
-									    		<span class="large"></span>是否允许推送属性
+									    		<i class="default"></i>是否允许推送属性
 									    </label>
 									</div>
 								</div>

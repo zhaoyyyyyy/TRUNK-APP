@@ -9,7 +9,7 @@ var model = {
 		ftpUser:"",//用户名
 		ftpPwd:"",//密码
 		ftpPath:"",//FTP路径
-		ftpPost:"",//端口
+		ftpPort:"",//端口
 		localPath:"",//本地路径
 		webserviceWsdl:"",//WSDL
 		webserviceTargetnamespace:"",//命名空间
@@ -30,6 +30,7 @@ var model = {
 		isActive:false,
 		isShow:false,
 		checked:false,
+		checkedPushType:false,
 		showPushType:"",//显示推送方式
 		showDesKey:false,//展示DES加密
 		showCompressType:false,//展示压缩类型
@@ -55,7 +56,7 @@ window.loc_onload = function() {
 				model.ftpUser = data.data.ftpUser;
 				model.ftpPwd = data.data.ftpPwd;
 				model.ftpPath = data.data.ftpPath;
-				model.ftpPost = data.data.ftpPost;
+				model.ftpPort = data.data.ftpPort;
 				model.localPath = data.data.localPath;
 				model.webserviceWsdl = data.data.webserviceWsdl;
 				model.webserviceTargetnamespace = data.data.webserviceTargetnamespace;
@@ -68,24 +69,16 @@ window.loc_onload = function() {
 				model.customTaskTable = data.data.customTaskTable;
 				if(data.data.pushType =='1'){
 					model.showPushType ="文件推送";
+					var b =document.getElementById("pushType");
+					$(b).prop("checked", true);
 					model.curentIndex =true;
-				}else{
+				}
+				if(data.data.pushType =='2'){
 					model.showPushType ="表推送";
+					$("input[name='pushType']").prop("checked", true);
+					model.curentIndex =true;
 				}
-				debugger
-				if(data.data.isNeedDes ==1){
-					$("input[name='pushType']").attr("checked","checked");
-					model.showDesKey = true;
-				}
-				if(data.data.isNeedCompress ==1){
-					model.showCompressType = true;
-				}
-				//if(data.data.showInPage){console.log(1);}
-/*				if(data.data.isNeedXml){model.isNeedXml ="on"; console.log(2);}
-				if(data.data.isNeedDes){model.isNeedDes ="on";console.log(3);showDesKey = true;}
-				if(data.data.isNeedCompress){model.isNeedCompress ="on";console.log(4); showCompressType=true;}
-				if(data.data.isAllowAttr){model.isAllowAttr ="on";console.log(5);}
-*/			}
+			}
 		})
 	}
 	new Vue({
@@ -159,22 +152,6 @@ window.loc_onload = function() {
 			model.showPushType="表推送";
 		}
 	})
-	
-	
-	/*$(".checkBox").each(function(e){
-		$(this).on("click",function(){
-			if($(this).find("label").hasClass('active')){
-				$(this).find("label").removeClass('active');
-				$(this).find("input").prop("checked", false);
-				$(this).siblings('.ui-push-box').hide();
-			}else{
-				$(this).find("label").addClass('active');
-				$(this).find("input").prop("checked", true);
-				$(this).siblings('.ui-push-box').show();
-			}
-			 return false;
-		})
-	})*/
 }
 function isShowDesKey(obj) {
 	if (obj.checked) {

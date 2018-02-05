@@ -103,7 +103,7 @@ window.loc_onload = function() {
     });
     $("#btn_to_add").click(function(){
     	var wd = $.window('新增推送平台', $.ctx
-    		+ '/aibi_lc/pages/custom/pushSys_add.html', 550, 500);
+    		+ '/aibi_lc/pages/custom/pushSys_add.html', 600, 500);
     	wd.reload = function() {
     		$("#mainGrid").setGridParam({
     			postData : $("#formSearch").formToJson()
@@ -134,7 +134,7 @@ function fun_to_delete(id){
 }
 function fun_to_edit(id){
 	var wd = $.window('编辑推送平台', $.ctx
-			+ '/aibi_lc/pages/custom/pushSys_add.html?sysId=' + id, 550, 500);
+			+ '/aibi_lc/pages/custom/pushSys_add.html?sysId=' + id, 600, 500);
 	wd.reload = function() {
 		$("#mainGrid").setGridParam({
 			postData : $("#formSearch").formToJson()

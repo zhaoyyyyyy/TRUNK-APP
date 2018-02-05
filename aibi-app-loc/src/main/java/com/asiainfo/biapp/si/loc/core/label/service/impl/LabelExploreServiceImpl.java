@@ -14,6 +14,7 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.asiainfo.biapp.si.loc.auth.model.Organization;
 import com.asiainfo.biapp.si.loc.base.common.CommonConstants;
 import com.asiainfo.biapp.si.loc.base.common.LabelInfoContants;
 import com.asiainfo.biapp.si.loc.base.common.LabelRuleContants;
@@ -215,29 +216,54 @@ public class LabelExploreServiceImpl implements ILabelExploreService {
 		} // end for
 		wherelabel.append(")");
 		// 省专区，地市专区需要权限,普通专区不需要权限、 拼接where中的cityId，用于权限
-		boolean isNeedAuthen = false;
+		boolean isNeedAuthen = true;
 		StringBuffer whereSb = new StringBuffer("where 1=1 and ");
-		String cityColumn = "city_id";// TODO 权限
-		if (StringUtil.isNotEmpty(dataTabelAlias) && StringUtil.isNotEmpty(queryParam.getOrgId())) {
-			String orgId = queryParam.getOrgId();
-			StringBuffer orgSql = new StringBuffer();
-			String[] split = orgId.split(",");
-			for (int i = 0; i < split.length; i++) {
-				orgSql.append("'").append(split[i]).append("'");
-				if (i != (split.length - 1)) {
-					orgSql.append(",");
-				}
-			}
-			whereSb.append(" (").append(dataTabelAlias).append(".").append(cityColumn).append(" in ").append("(")
-					.append(orgSql.toString()).append(")) and ");
-			isNeedAuthen = true;
-		}
+		String cityColumn = getWhereForCity(queryParam, dataTabelAlias, whereSb);
 		whereSb.append(wherelabel);
 		String leftJoinSqlStr = this.getLeftJoinSqlStr(tableAliasMap, aliasColumnMap, andFlag, whereSb, isNeedAuthen,cityColumn);
 		StringBuffer fromSqlSb = new StringBuffer("");
 		fromSqlSb.append(" from ").append(leftJoinSqlStr).append(" ");
 		return fromSqlSb.toString();
 
+	}
+
+	/**
+	 * 
+	 * Description: 拼接权限字段sql
+	 *
+	 * @param queryParam   查询参数
+	 * @param dataTabelAlias	表的别名
+	 * @param whereSb	where之后的权限条件
+	 * @return
+	 *
+	 * @author  tianxy3
+	 * @date 2018年2月5日
+	 */
+	private String getWhereForCity(ExploreQueryParam queryParam, String dataTabelAlias, StringBuffer whereSb) {
+		StringBuffer cityColumn = new StringBuffer();
+		if (StringUtil.isNotEmpty(dataTabelAlias) && StringUtil.isNotEmpty(queryParam.getOrgId())) {
+			List<Organization> list = queryParam.getLoginUser().getDataPrivaliege().get("3");
+			/** key:orgCode; //组织编码（重要）  value:level;  //组织级别（重要）*/
+			Map<String,Integer> map=new HashMap<>();
+			for (Organization organization : list) {
+				map.put(organization.getOrgCode(), organization.getLevelId());
+			}
+			Map<Integer,String> citySqlMap=new HashMap<>();
+			String orgId = queryParam.getOrgId();
+			String[] split = orgId.split(",");
+			for (int i = 0; i < split.length; i++) {
+				String orgCode = split[i];
+				Integer levelId = map.get(orgCode);
+				citySqlMap.put(levelId, "'"+orgCode+"',");
+			}
+			for (Integer levelId : citySqlMap.keySet()) {
+				cityColumn.append("org_level_"+levelId);
+				String citySql = citySqlMap.get(levelId);
+				whereSb.append(" (").append(dataTabelAlias).append(".").append("org_level_"+levelId).append(" in ")
+				.append("(").append(citySql.substring(0, citySql.length()-1)).append(")) and ");
+			}
+		}
+		return cityColumn.toString();
 	}
 
 	/**

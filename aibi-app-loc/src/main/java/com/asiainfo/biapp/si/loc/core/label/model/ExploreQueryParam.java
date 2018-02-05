@@ -1,6 +1,8 @@
 
 package com.asiainfo.biapp.si.loc.core.label.model;
 
+import com.asiainfo.biapp.si.loc.auth.model.User;
+
 /**
  * 
  * Title : ExploreQueryParam
@@ -33,9 +35,7 @@ public class ExploreQueryParam {
 	private String monthDate;// 客户群所使用的月标签的数据时间
 	private String dayDate;// 客户群所使用的日标签的数据时间
 	
-	private String userId;// 获取当前Session中的用户ID
-	private Integer configId;// 专区ID
-	private String cityId;// 地市ID
+	private User loginUser;// 获取当前Session中的用户ID
 
 	private Integer interval;//偏移量	日期型标签使用	
 	private Integer updateCycle;//客户群周期性	日期型标签使用
@@ -79,30 +79,6 @@ public class ExploreQueryParam {
 		this.dayDate = dayDate;
 	}
 
-	public String getUserId() {
-		return userId;
-	}
-
-	public void setUserId(String userId) {
-		this.userId = userId;
-	}
-
-	public Integer getConfigId() {
-		return configId;
-	}
-
-	public void setConfigId(Integer configId) {
-		this.configId = configId;
-	}
-
-	public String getCityId() {
-		return cityId;
-	}
-
-	public void setCityId(String cityId) {
-		this.cityId = cityId;
-	}
-
 	public Integer getInterval() {
 		return interval;
 	}
@@ -125,6 +101,14 @@ public class ExploreQueryParam {
 
 	public void setValidate(boolean isValidate) {
 		this.isValidate = isValidate;
+	}
+
+	public User getLoginUser() {
+		return loginUser;
+	}
+
+	public void setLoginUser(User loginUser) {
+		this.loginUser = loginUser;
 	}
 
 	public String getOrgId() {
