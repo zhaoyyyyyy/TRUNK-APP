@@ -216,7 +216,7 @@ public class LabelExploreServiceImpl implements ILabelExploreService {
 		} // end for
 		wherelabel.append(")");
 		// 省专区，地市专区需要权限,普通专区不需要权限、 拼接where中的cityId，用于权限
-		boolean isNeedAuthen = true;
+		boolean isNeedAuthen = false;
 		StringBuffer whereSb = new StringBuffer();
 		if(queryParam.isValidate()){
 			whereSb.append("where 1=2 and ");
@@ -225,6 +225,9 @@ public class LabelExploreServiceImpl implements ILabelExploreService {
 		}
 		String cityColumn = getWhereForCity(queryParam, dataTabelAlias, whereSb);
 		whereSb.append(wherelabel);
+		if (StringUtil.isNotEmpty(cityColumn)){
+			isNeedAuthen = true;
+		}
 		String leftJoinSqlStr = this.getLeftJoinSqlStr(tableAliasMap, aliasColumnMap, andFlag, whereSb, isNeedAuthen,cityColumn);
 		StringBuffer fromSqlSb = new StringBuffer("");
 		fromSqlSb.append(" from ").append(leftJoinSqlStr).append(" ");
@@ -246,7 +249,8 @@ public class LabelExploreServiceImpl implements ILabelExploreService {
 	 */
 	private String getWhereForCity(ExploreQueryParam queryParam, String dataTabelAlias, StringBuffer whereSb) {
 		StringBuffer cityColumn = new StringBuffer();
-		if (StringUtil.isNotEmpty(dataTabelAlias) && StringUtil.isNotEmpty(queryParam.getOrgId())) {
+		if (StringUtil.isNotEmpty(dataTabelAlias) && StringUtil.isNotEmpty(queryParam.getOrgId())
+				&& (queryParam.getLoginUser() != null)) {
 			List<Organization> list = queryParam.getLoginUser().getDataPrivaliege().get("3");
 			/** key:orgCode; //组织编码（重要）  value:level;  //组织级别（重要）*/
 			Map<String,Integer> map=new HashMap<>();
@@ -259,7 +263,11 @@ public class LabelExploreServiceImpl implements ILabelExploreService {
 			for (int i = 0; i < split.length; i++) {
 				String orgCode = split[i];
 				Integer levelId = map.get(orgCode);
-				citySqlMap.put(levelId, "'"+orgCode+"',");
+				if(citySqlMap.get(levelId)!=null){
+					citySqlMap.put(levelId,citySqlMap.get(levelId)+ "'"+orgCode+"',");
+				}else{
+					citySqlMap.put(levelId, "'"+orgCode+"',");
+				}
 			}
 			for (Integer levelId : citySqlMap.keySet()) {
 				cityColumn.append("org_level_"+levelId);
