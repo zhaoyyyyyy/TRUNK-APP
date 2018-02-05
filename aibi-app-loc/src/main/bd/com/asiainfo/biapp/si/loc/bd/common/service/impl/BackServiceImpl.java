@@ -136,49 +136,97 @@ public class BackServiceImpl implements IBackSqlService{
 		log.debug("-------------------- BackServiceImpl.insertCustomerData tableName = " + tableName);
 		log.debug("-------------------- BackServiceImpl.insertCustomerData customerId = " + customerId);
 		
+		boolean isInsertTable = true;
+		
+		String backType =  CocCacheProxy.getCacheProxy().getSYSConfigInfoByKey("LOC_CONFIG_SYS_BGDB_TYPE");
+		System.out.println(backType);
+		if(!(backType.equals("Hive")||backType.equals("SparkSql"))){
+			isInsertTable = this.insertCustomDataHive(sql, tableName, customerId);
+		}else if(backType.equals("Ads")){
+			isInsertTable = this.insertCustomDataAds(sql, tableName, customerId);
+		}
+		return isInsertTable;
+	}
+	
+	private boolean insertCustomDataHive(String sql, String tableName, String customerId) throws SqlRunException{
+
+		log.debug("-------------------- BackServiceImpl.insertCustomDataHive sql = " + sql);
+		log.debug("-------------------- BackServiceImpl.insertCustomDataHive tableName = " + tableName);
+		log.debug("-------------------- BackServiceImpl.insertCustomDataHive customerId = " + customerId);
+		
 		boolean isExistsTable = getBackDaoBean().isExistsTable(tableName);
 		boolean isCreateTable = true;
 		boolean isInsertTable = true;
-		log.debug("-------------------- BackServiceImpl.insertCustomerData isExistsTable = " + isExistsTable);
+		log.debug("-------------------- BackServiceImpl.insertCustomDataHive isExistsTable = " + isExistsTable);
 		
-		String backType =  CocCacheProxy.getCacheProxy().getSYSConfigInfoByKey("LOC_CONFIG_SYS_BGDB_TYPE");
-		String varcharString = "string";
 		List<String> primaryKey = new ArrayList<String>();
-		System.out.println(backType);
 		Map<String,String> columnName = new HashMap<String,String>();
 		StringBuffer sqlBuffer = new StringBuffer();
 		String insertcolumn = "";
-		if(!(backType.equals("Hive")||backType.equals("SparkSql"))){
-			varcharString = "varchar(32)";
-			primaryKey.add(LabelInfoContants.KHQ_CROSS_COLUMN);
-			
-			sqlBuffer.append("SELECT ").append(LabelInfoContants.KHQ_CROSS_COLUMN);
-			sqlBuffer.append(",'").append(customerId).append("' ");
-			sqlBuffer.append(sql);
-			
-			insertcolumn = LabelInfoContants.KHQ_CROSS_COLUMN+","+LabelInfoContants.KHQ_CROSS_ID_PARTION;
-		}else{
-			sqlBuffer.append("SELECT ").append(LabelInfoContants.KHQ_CROSS_COLUMN + " ");
-			sqlBuffer.append(sql);
-			insertcolumn= customerId;
-		}
+		
+		sqlBuffer.append("SELECT ").append(LabelInfoContants.KHQ_CROSS_COLUMN + " ");
+		sqlBuffer.append(sql);
+		insertcolumn= customerId;
+		
 		primaryKey.add(LabelInfoContants.KHQ_CROSS_ID_PARTION);
-		columnName.put(LabelInfoContants.KHQ_CROSS_ID_PARTION, varcharString);
-		columnName.put(LabelInfoContants.KHQ_CROSS_COLUMN, varcharString);
+		columnName.put(LabelInfoContants.KHQ_CROSS_ID_PARTION, "string");
+		columnName.put(LabelInfoContants.KHQ_CROSS_COLUMN, "string");
 		if(!isExistsTable){
 			isCreateTable = getBackDaoBean().createTableByName(tableName, columnName, primaryKey);
-			log.debug("-------------------- BackServiceImpl.insertCustomerData isCreateTable = " + isCreateTable);
+			log.debug("-------------------- BackServiceImpl.insertCustomDataHive isCreateTable = " + isCreateTable);
 			if(!isCreateTable){
 				//建表失败
 				return isCreateTable;
 			}
 		}
 		
-		
-		log.debug("-------------------- BackServiceImpl.insertCustomerData sqlBuffer = " + sqlBuffer.toString());
+		log.debug("-------------------- BackServiceImpl.insertCustomDataHive sqlBuffer = " + sqlBuffer.toString());
 		LogUtil.info("-------------------- BackServiceImpl.insertCustomerData sqlBuffer = " + sqlBuffer.toString());
 		isInsertTable = getBackDaoBean().insertDataToTabByPartion(sqlBuffer.toString(), tableName, insertcolumn);
-		log.debug("-------------------- BackServiceImpl.insertCustomerData isInsertTable = " + isInsertTable);
+		log.debug("-------------------- BackServiceImpl.insertCustomDataHive isInsertTable = " + isInsertTable);
 		return isInsertTable;
+	
+	}
+	
+	private boolean insertCustomDataAds(String sql, String tableName, String customerId) throws SqlRunException{
+
+		log.debug("-------------------- BackServiceImpl.insertCustomDataAds sql = " + sql);
+		log.debug("-------------------- BackServiceImpl.insertCustomDataAds tableName = " + tableName);
+		log.debug("-------------------- BackServiceImpl.insertCustomDataAds customerId = " + customerId);
+		
+		boolean isExistsTable = getBackDaoBean().isExistsTable(tableName);
+		boolean isCreateTable = true;
+		boolean isInsertTable = true;
+		log.debug("-------------------- BackServiceImpl.insertCustomDataAds isExistsTable = " + isExistsTable);
+		
+		List<String> primaryKey = new ArrayList<String>();
+		Map<String,String> columnName = new HashMap<String,String>();
+		StringBuffer sqlBuffer = new StringBuffer();
+		String insertcolumn = "";
+		primaryKey.add(LabelInfoContants.KHQ_CROSS_COLUMN);
+			
+		sqlBuffer.append("SELECT ").append(LabelInfoContants.KHQ_CROSS_COLUMN);
+		sqlBuffer.append(",'").append(customerId).append("' ");
+		sqlBuffer.append(sql);
+			
+		insertcolumn = LabelInfoContants.KHQ_CROSS_COLUMN+","+LabelInfoContants.KHQ_CROSS_ID_PARTION;
+		primaryKey.add(LabelInfoContants.KHQ_CROSS_ID_PARTION);
+		columnName.put(LabelInfoContants.KHQ_CROSS_ID_PARTION, "varchar(32)");
+		columnName.put(LabelInfoContants.KHQ_CROSS_COLUMN, "varchar(32)");
+		if(!isExistsTable){
+			isCreateTable = getBackDaoBean().createTableByName(tableName, columnName, primaryKey);
+			log.debug("-------------------- BackServiceImpl.insertCustomDataAds isCreateTable = " + isCreateTable);
+			if(!isCreateTable){
+				//建表失败
+				return isCreateTable;
+			}
+		}
+		
+		log.debug("-------------------- BackServiceImpl.insertCustomDataAds sqlBuffer = " + sqlBuffer.toString());
+		LogUtil.info("-------------------- BackServiceImpl.insertCustomerData sqlBuffer = " + sqlBuffer.toString());
+		isInsertTable = getBackDaoBean().insertDataToTabByPartion(sqlBuffer.toString(), tableName, insertcolumn);
+		log.debug("-------------------- BackServiceImpl.insertCustomDataAds isInsertTable = " + isInsertTable);
+		return isInsertTable;
+	
 	}
 }
