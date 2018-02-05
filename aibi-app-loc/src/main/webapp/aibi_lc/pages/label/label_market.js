@@ -689,35 +689,6 @@ var labelMarket = (function (model){
 		 * 展示标签信息
 		 */
 		model.showLabelInfo = function(elem,event){
-//			var index = $(elem).parent().parent().attr("index");
-//			var rule = dataModel.ruleList[index];
-//			if($(elem).parents(".ui-conditionCT").find(".ui-conditionBox").length==0){
-//				$(elem).parents(".ui-conditionCT").append($(".ui-conditionBox"));
-//				$(elem).parents(".ui-conditionCT").find(".ui-conditionBox").show();
-//				if(rule){
-//					$.commAjax({
-//						url : $.ctx + "/api/label/labelInfo/get",
-//						postData:{
-//							labelId : rule.calcuElement
-//		  				},
-//						onSuccess:function(returnObj){
-//							var status = returnObj.status;
-//							if (status == '200'){
-//								$(elem).parents(".ui-conditionCT").find(".ui-conditionBox").show();
-//								dataModel.labelInfoViewObj = returnObj.data;
-//							}else{
-//								$.alert(returnObj.msg);
-//							}
-//						},
-//					});
-//				}
-//			}else{
-//				$(elem).parents(".ui-conditionCT").find(".ui-conditionBox").hide();
-//				$(elem).parents(".ui-conditionCT").find(".ui-conditionBox").remove($(".ui-conditionBox"));
-//			}
-//			
-
-
 			var e=event||window.event;
 			e.stopPropagation?e.stopPropagation():e.cancelBubble=true;
 			var X = $(elem).parents(".ui-conditionCT").position().top;
