@@ -81,20 +81,29 @@ var calculateDragSort = (function (model){
 				if(dragTempCTIndex==0||isInParFirst==true){
 					//如果是第一的位置，向后添加连接符；或者目标区域在左括号的右侧1号位，也可认为是第一的位置;
 					//但是括号里只有一个元素，则不需要添连接符
-					var index = $(this).prev.attr('index');
+					var index = Number($(this).next().attr('index'));
 					if(isToEmptyParenthesis!=true){
 						var rule = model.getChainingObj(index);
 						dataModel.ruleList.splice(index,0,rule);
 						//$(this).after(chaining);
+						if(index<=indexDrag){//向前添加
+							indexDrag = indexDrag+1 ;
+						}
 					}
 					dataModel.ruleList.splice(index,0,ruleDrag);
+					if(index<=indexDrag){//向前添加
+						indexDrag = indexDrag+1 ;
+					}
 					//$(this).after(conditionCT);
 				}else{
 					//向前添加连接符
 					var rule = model.getChainingObj(indexDrag);
-					var preIndex = $(this).prev().attr('index');
+					var preIndex = Number($(this).prev().attr('index'));
 					dataModel.ruleList.splice(preIndex+1,0,rule);//插入最后一个
 					dataModel.ruleList.splice(preIndex+2,0,ruleDrag);
+					if(preIndex<=indexDrag){//向前添加
+						indexDrag = indexDrag+2 ;
+					}
 					//$(this).before(chaining);
 					//$(this).before(conditionCT);
 				}
@@ -104,14 +113,29 @@ var calculateDragSort = (function (model){
 					//如果不是拖拽的最后一个并且不是在括号最后位置，或者目标区域在括号的第一个位置并且不在括号内最后位置，或者在括号第一位置，这时删除后面紧跟的连接符；否则删除前面紧挨的连接符；
 					if((!isDraggingTheLastOne&&!isStartFromParenthesisLast)||(isInParFirst==true&&isStartFromParenthesisLast==false&&!isDraggingTheLastOne)||isStartFromParenthesisFirst==true){
 						//_t.nextAll(".ui-chaining").eq(0).remove();
-						var index = _t.nextAll(".ui-chaining").eq(0).attr('index');
-						dataModel.ruleList.splice(index,1);
+						//var index = _t.nextAll(".ui-chaining").eq(0).attr('index');
+						var firstChaining = -1;//删除后面连接符
+						for(var i = indexDrag ;i < dataModel.ruleList.length;i++){
+							var item = dataModel.ruleList[i];
+							if(item.elementType == 1){
+								firstChaining = i;
+								break;
+							}
+						}
+						dataModel.ruleList.splice(firstChaining,1);
 					}
 					else{
 						//_t.prevAll(".ui-chaining").eq(0).remove();
-						var index = _t.prevAll(".ui-chaining").eq(0).attr('index');
-						dataModel.ruleList.splice(index,1);
-						indexDrag = indexDrag -1 ;
+						var firstChaining = -1;//删除前面连接符
+						for(var i = indexDrag-1 ;i>=0;i--){
+							var item = dataModel.ruleList[i];
+							if(item.elementType == 1){
+								firstChaining = i;
+								break;
+							}
+						}
+						dataModel.ruleList.splice(firstChaining,1);
+						indexDrag = indexDrag -1;
 					}
 				}else{
 					//括号里只有一个标签
@@ -126,36 +150,46 @@ var calculateDragSort = (function (model){
 				model.sortLabels();
 				
 				//最后删除内部无内容的空括号和它后面的连接符
-				$("#sortable .left").each(function(){
-					var _next=$(this).nextAll().not(".J-helper").eq(0);
-					var _nextIndex = Number(_next.attr('index'));
-					if(_next.attr("creat")==$(this).attr("creat")){
-						//alert(_next.attr("class"));
-						//三步,1：空括号左侧右侧都有符号，且右侧无label，删除右侧符号
-						//2:空括号左侧有符号且右侧无label，删除左侧符号
-						//3:空括号右侧有符号且左侧无label，也删除右侧符号（合并到1）
-						var leftHas=$(this).prevAll().not(".J-helper").eq(0).hasClass("ui-chaining")?true:false;
-						var rightHas=_next.nextAll().not(".J-helper").eq(0).hasClass("ui-chaining")?true:false;
-						if(rightHas==true || leftHas==true&&rightHas==true){
-							//_next.nextAll(".ui-chaining").eq(0).remove();
-							dataModel.ruleList.splice(_next.nextAll(".ui-chaining").eq(0).attr('index'),1);
-						}else if( (leftHas==true&&$(this).nextAll(".ui-conditionCT").length==0) || (leftHas==true&&_next.nextAll().not(".J-helper").eq(0).hasClass("right")) ){
-							//_next.prevAll(".ui-chaining").eq(0).remove();
-							dataModel.ruleList.splice(_next.prevAll(".ui-chaining").eq(0).attr('index'),1);
-							_nextIndex = _nextIndex - 1;
-						}
-						
-						dataModel.ruleList.splice(_nextIndex-1,1);
-						dataModel.ruleList.splice(_nextIndex-2,1);
-						var prev=$(this).prev().prev();
-						//_next.remove();
-						//$(this).remove();
-						
-						if(prev.hasClass("left")){
-							arguments.callee.apply(prev[0],arguments);
+				for(var i = 0 ;i < dataModel.ruleList.length;i++){
+					var item = dataModel.ruleList[i];
+					if(item.calcuElement == '('){//遍历所有左括号
+						var nextItem = dataModel.ruleList[i+1];
+						if(item.createBrackets && item.createBrackets == nextItem.createBrackets){//()
+							var preItem = dataModel.ruleList[i-1];
+							var nextNextItem = dataModel.ruleList[i+2];
+							var leftHas = preItem && preItem.elementType == 1 ? true : false ;//如果前一个是连接符 true
+							var rightHas = nextNextItem && nextNextItem.elementType == 1 ? true : false ;//如果后一个后一个是连接符 true
+							var rightParenthesisHas = nextNextItem && nextNextItem.calcuElement == ')' ? true : false;//如果后一个后一个元素是)
+							var rightConditionHas = false;//判断当前左括号右侧是否存在规则，默认没有元素
+							for(var j= i+1;j<dataModel.ruleList.length;j++){
+								if(item.elementType == 2){//有元素
+									rightConditionHas = true;
+								}
+							}
+							//三步,1：空括号左侧右侧都有符号，且右侧无label，删除右侧符号
+							//2:空括号左侧有符号且右侧无label，删除左侧符号
+							//3:空括号右侧有符号且左侧无label，也删除右侧符号（合并到1）
+							var indexTemp = i;
+							if(rightHas==true || leftHas==true&&rightHas==true){
+								dataModel.ruleList.splice(i+2,1);//删除)右侧符号
+							}else if( (leftHas==true&& rightConditionHas == false) || (leftHas==true&& rightParenthesisHas ) ){
+								//_next.prevAll(".ui-chaining").eq(0).remove();???
+								dataModel.ruleList.splice(i-1,1);//删除左括号的前一个连接符
+								indexTemp = i-1;
+							}
+							//var prev=$(this).prev().prev();
+							dataModel.ruleList.splice(indexTemp+1,1);
+							dataModel.ruleList.splice(indexTemp,1);
+							//_next.remove();
+							//$(this).remove();
+							/**
+							if(prev.hasClass("left")){
+								arguments.callee.apply(prev[0],arguments);
+							}
+							**/
 						}
 					}
-				});
+				}
 			}
 		})
 	};
