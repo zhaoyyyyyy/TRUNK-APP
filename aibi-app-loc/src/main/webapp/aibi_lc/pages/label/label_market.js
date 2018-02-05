@@ -687,7 +687,7 @@ var labelMarket = (function (model){
 			var index = $(elem).parent().parent().attr("index");
 			var rule = dataModel.ruleList[index];
 			$(document).click(function(){$(".ui-conditionBox").hide()});
-			if($(".ui-conditionBox").attr("index")=='' || $(".ui-conditionBox").attr("index") !=index){
+			if($(".ui-conditionBox").attr("index") !=index){
 				if(rule){
 					$.commAjax({
 						url : $.ctx + "/api/label/labelInfo/get",
