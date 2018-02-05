@@ -296,6 +296,9 @@ function fun_to_save() {
         }
         if (idAndDate == list.length) {
             $.alert("请增加除[主键名称]与[分区字段]以外的指标信息列");
+            for (var p = 0; p < ids.length; p++) {
+                $("#jsonmap").jqGrid("editRow", ids[p]);
+            }
             return false;
         }
         $("#sourceInfoList").val(sourceInfoList);
@@ -399,7 +402,7 @@ function analysis() {
                 $("#jsonmap").jqGrid("editRow", ids[p]);
             }
         },
-        maskMassage: 'Load...'
+        maskMassage: '正在解析...'
     })
 }
 function fun_to_import() {
