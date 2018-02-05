@@ -9,6 +9,9 @@ import java.sql.Statement;
 
 import org.apache.log4j.Logger;
 
+import com.asiainfo.biapp.si.loc.base.BaseConstants;
+import com.asiainfo.biapp.si.loc.cache.CocCacheProxy;
+
 public final class JDBCUtil {
 	
 //	private Logger logger = Logger.getLogger(this.getClass());
@@ -55,15 +58,15 @@ public final class JDBCUtil {
 		web_password = "opg";
 		web_driver = "com.mysql.jdbc.Driver";
 		
-//		back_url = PropertiesUtils.getProperties("CI_BACK_DATABASE_URL");
-//		back_user = PropertiesUtils.getProperties("CI_BACK_DATABASE_USERNAME");
-//		back_password = PropertiesUtils.getProperties("CI_BACK_DATABASE_PASSWORD");
-//		back_driver = PropertiesUtils.getProperties("CI_BACK_DATABASE_DRIVER");
+		back_url = CocCacheProxy.getCacheProxy().getSYSConfigInfoByKey(BaseConstants.SYS_BGDB_URL);
+		back_user = CocCacheProxy.getCacheProxy().getSYSConfigInfoByKey(BaseConstants.SYS_BGDB_USERNAME);
+		back_password = CocCacheProxy.getCacheProxy().getSYSConfigInfoByKey(BaseConstants.SYS_BGDB_PASSWORD);
+		back_driver = CocCacheProxy.getCacheProxy().getSYSConfigInfoByKey(BaseConstants.SYS_BGDB_DRIVER);
 		
-		back_url = "jdbc:hive2://10.19.58.81:10015/default";
-		back_user = "coc";
-		back_password = "coc";
-		back_driver = "org.apache.hive.jdbc.HiveDriver";
+//		back_url = "jdbc:hive2://10.19.58.81:10015/default";
+//		back_user = "coc";
+//		back_password = "coc";
+//		back_driver = "org.apache.hive.jdbc.HiveDriver";
 	}
 
 	/**
