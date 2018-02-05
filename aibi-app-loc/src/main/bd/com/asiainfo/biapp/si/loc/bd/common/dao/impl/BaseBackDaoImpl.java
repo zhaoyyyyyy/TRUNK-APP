@@ -24,6 +24,7 @@ import com.asiainfo.biapp.si.loc.base.BaseConstants;
 
 import com.asiainfo.biapp.si.loc.base.exception.DbConnectException;
 import com.asiainfo.biapp.si.loc.base.exception.SqlRunException;
+import com.asiainfo.biapp.si.loc.bd.common.util.JDBCUtil;
 import com.asiainfo.biapp.si.loc.cache.CocCacheProxy;
 
 /**
@@ -86,19 +87,21 @@ public class BaseBackDaoImpl {
 	 * Description: 拿到后台数据DataSource
 	 *	
 	 * @return
+	 * @throws Exception 
 	 * @throws SQLException 
 	 */
-	public Connection getBackConnection() throws DbConnectException, SqlRunException{
+	public Connection getBackConnection() throws Exception{
 	        
 		//从配置缓存中拿到后台库的配置
-		String driverClassName = CocCacheProxy.getCacheProxy().getSYSConfigInfoByKey(BaseConstants.SYS_BGDB_DRIVER);
-		String url =CocCacheProxy.getCacheProxy().getSYSConfigInfoByKey(BaseConstants.SYS_BGDB_URL);
-		String username = CocCacheProxy.getCacheProxy().getSYSConfigInfoByKey(BaseConstants.SYS_BGDB_USERNAME);
-		String password = CocCacheProxy.getCacheProxy().getSYSConfigInfoByKey(BaseConstants.SYS_BGDB_PASSWORD);
-		DataSource dataSource = this.getDataSourceBuilder(driverClassName,url,username,password).build();
+//		String driverClassName = CocCacheProxy.getCacheProxy().getSYSConfigInfoByKey(BaseConstants.SYS_BGDB_DRIVER);
+//		String url =CocCacheProxy.getCacheProxy().getSYSConfigInfoByKey(BaseConstants.SYS_BGDB_URL);
+//		String username = CocCacheProxy.getCacheProxy().getSYSConfigInfoByKey(BaseConstants.SYS_BGDB_USERNAME);
+//		String password = CocCacheProxy.getCacheProxy().getSYSConfigInfoByKey(BaseConstants.SYS_BGDB_PASSWORD);
+//		DataSource dataSource = this.getDataSourceBuilder(driverClassName,url,username,password).build();
         Connection conn = null;
         try {
-            conn = dataSource.getConnection();
+//            conn = dataSource.getConnection();
+            conn = JDBCUtil.getInstance().getBackConnection();
         } catch (SQLTimeoutException e) {
             throw new DbConnectException("后台库连接异常");
         } catch (SQLException e) {
@@ -127,6 +130,8 @@ public class BaseBackDaoImpl {
         dataSourceBuilder.password(password);
         return dataSourceBuilder;
     }
+	
+	
 	
 
 	/**
