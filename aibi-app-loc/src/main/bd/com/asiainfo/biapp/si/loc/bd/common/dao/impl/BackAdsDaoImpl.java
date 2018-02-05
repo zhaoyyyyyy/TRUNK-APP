@@ -15,6 +15,7 @@ import org.springframework.stereotype.Repository;
 import com.asiainfo.biapp.si.loc.base.exception.SqlRunException;
 import com.asiainfo.biapp.si.loc.base.utils.LogUtil;
 import com.asiainfo.biapp.si.loc.bd.common.dao.IBackSqlDao;
+import com.asiainfo.biapp.si.loc.bd.common.util.JDBCUtil;
 
 @Repository("backAdsDaoImpl")
 public class BackAdsDaoImpl  extends BaseBackDaoImpl implements IBackSqlDao{
@@ -94,14 +95,19 @@ public class BackAdsDaoImpl  extends BaseBackDaoImpl implements IBackSqlDao{
 			throws SqlRunException {
         pageStart = pageStart == null? 0 : pageStart;
         String limitSql = pageSize == null ? " ": " limit "+ pageStart+","+pageStart+pageSize;
+        Connection conn = null;
+        PreparedStatement st = null;
+        ResultSet rs = null;
         try{
-            Connection connection = this.getBackConnection();
+            conn = this.getBackConnection();
             String sql = selectSql+limitSql;
-            PreparedStatement preparedStatement = connection.prepareStatement(sql);
-            ResultSet resultSet =  preparedStatement.executeQuery();
-            return resultSetToList(resultSet);
+            st = conn.prepareStatement(sql);
+            rs =  st.executeQuery();
+            return resultSetToList(rs);
         }catch (Exception e){
             e.printStackTrace();
+        }finally{
+        	JDBCUtil.getInstance().free(conn, st, rs);
         }
 		return null;
 	}
@@ -112,10 +118,13 @@ public class BackAdsDaoImpl  extends BaseBackDaoImpl implements IBackSqlDao{
         int rows = 0;
 //      原因是按照缺省方式打开的ResultSet不支持结果集cursor的回滚
 //      如果想要完成上述操作，要在生成Statement对象时加入如下两个参数：
+        Connection conn = null;
+        PreparedStatement st = null;
+        ResultSet rs = null;
         try{
-            Connection connection = this.getBackConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement(selectSql);
-            ResultSet rs =  preparedStatement.executeQuery();
+            conn = this.getBackConnection();
+            st = conn.prepareStatement(selectSql);
+            rs =  st.executeQuery();
             log.debug(" ----------   BackAdsDapImpl.queryCount rs.getRow() =  " + rs.getRow());
             if(rs != null && rs.next()) {
                 if (selectSql.contains("count") || selectSql.contains("COUNT")) {
@@ -131,6 +140,8 @@ public class BackAdsDaoImpl  extends BaseBackDaoImpl implements IBackSqlDao{
         }catch (Exception e){
         	LogUtil.error("操作后台库出错", e);
             throw new SqlRunException(e.getMessage());
+        }finally{
+        	JDBCUtil.getInstance().free(conn, st, rs);
         }
 		return rows;
 	}
@@ -219,11 +230,14 @@ public class BackAdsDaoImpl  extends BaseBackDaoImpl implements IBackSqlDao{
         Boolean res = true;
         long s = System.currentTimeMillis();
         log.debug(" ----------   BackAdsDapImpl.executeResBoolean sql =  " + sql);
+        Connection conn = null;
+        PreparedStatement st = null;
+        ResultSet rs = null;
         try{
-            Connection connection = this.getBackConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            conn = this.getBackConnection();
+            st = conn.prepareStatement(sql);
            // res =  preparedStatement.execute();
-            preparedStatement.execute();
+            st.execute();
             log.debug(" ----------   BackAdsDapImpl.executeResBoolean res =  " + res);
             LogUtil.debug(new StringBuffer(sql).append(" cost:").append(System.currentTimeMillis()-s).append("ms."));
             
@@ -231,6 +245,8 @@ public class BackAdsDaoImpl  extends BaseBackDaoImpl implements IBackSqlDao{
         	LogUtil.error("executeResBoolean出错！"+e+"----executeSql:----"+sql);
             res = false;
             throw new SqlRunException(e.getMessage());
+        }finally{
+        	JDBCUtil.getInstance().free(conn, st, rs);
         }
         return res;
     }
@@ -238,17 +254,22 @@ public class BackAdsDaoImpl  extends BaseBackDaoImpl implements IBackSqlDao{
 	private List<Map<String, String>> executeResList(String sql) throws SqlRunException {
         long s = System.currentTimeMillis();
        // log.debug(" ----------   BackAdsDapImpl.executeResList sql =  " + sql);
+        Connection conn = null;
+        PreparedStatement st = null;
+        ResultSet rs = null;
         try{
-            Connection connection = this.getBackConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement(sql);
-            ResultSet resultSet =  preparedStatement.executeQuery();
+            conn = this.getBackConnection();
+            st = conn.prepareStatement(sql);
+            rs =  st.executeQuery();
            // log.debug(" ----------   BackAdsDapImpl.executeResList resultSet.getRow() =  " + resultSet.getRow());
             LogUtil.debug(new StringBuffer(sql).append(" cost:").append(System.currentTimeMillis()-s).append("ms."));
             
-            return this.resultSetToList(resultSet);
+            return this.resultSetToList(rs);
         }catch (Exception e){
         	LogUtil.error("BackAdsDapImpl.executeResList出错！"+e+"----executeQuerySql:----"+sql);
             throw new SqlRunException(e.getMessage());
+        }finally{
+        	JDBCUtil.getInstance().free(conn, st, rs);
         }
     }
 

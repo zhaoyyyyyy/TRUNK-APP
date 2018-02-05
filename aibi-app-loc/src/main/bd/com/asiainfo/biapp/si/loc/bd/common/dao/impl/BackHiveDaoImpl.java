@@ -24,6 +24,7 @@ import com.asiainfo.biapp.si.loc.base.exception.SqlRunException;
 import com.asiainfo.biapp.si.loc.base.utils.LogUtil;
 import com.asiainfo.biapp.si.loc.base.utils.StringUtil;
 import com.asiainfo.biapp.si.loc.bd.common.dao.IBackSqlDao;
+import com.asiainfo.biapp.si.loc.bd.common.util.JDBCUtil;
 
 /**
  * Title : BackHiveDaoImpl
@@ -235,10 +236,13 @@ public class BackHiveDaoImpl extends BaseBackDaoImpl implements IBackSqlDao{
         int rows = 0;
 //      原因是按照缺省方式打开的ResultSet不支持结果集cursor的回滚
 //      如果想要完成上述操作，要在生成Statement对象时加入如下两个参数：
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet rs = null;
         try{
-            Connection connection = this.getBackConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement(selectSql);
-            ResultSet rs =  preparedStatement.executeQuery();
+            connection = this.getBackConnection();
+            preparedStatement = connection.prepareStatement(selectSql);
+            rs =  preparedStatement.executeQuery();
 
             if(rs != null && rs.next()) {
                 if (selectSql.contains("count") || selectSql.contains("COUNT")) {
@@ -251,38 +255,50 @@ public class BackHiveDaoImpl extends BaseBackDaoImpl implements IBackSqlDao{
             }
         }catch (Exception e){
             throw new SqlRunException(e.getMessage());
+        }finally{
+        	JDBCUtil.getInstance().free(connection, preparedStatement, rs);
         }
 		return rows;
 	}
 
     private List<Map<String, String>> executeResList(String sql) throws SqlRunException {
         long s = System.currentTimeMillis();
+        Connection conn = null;
+        PreparedStatement st = null;
+        ResultSet rs = null;
         try{
-            Connection connection = this.getBackConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement(sql);
-            ResultSet resultSet =  preparedStatement.executeQuery();
+        	conn = this.getBackConnection();
+        	st = conn.prepareStatement(sql);
+            rs = st.executeQuery();
 
             LogUtil.debug(new StringBuffer(sql).append(" cost:").append(System.currentTimeMillis()-s).append("ms."));
             
-            return this.resultSetToList(resultSet);
+            return this.resultSetToList(rs);
         }catch (Exception e){
             throw new SqlRunException(e.getMessage());
+        }finally{
+        	JDBCUtil.getInstance().free(conn, st, rs);
         }
     }
 
     private Boolean executeResBoolean(String sql) throws SqlRunException {
         Boolean res = true;
         long s = System.currentTimeMillis();
+        Connection conn = null;
+        PreparedStatement st = null;
+        ResultSet rs = null;
         try{
-            Connection connection = this.getBackConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement(sql);
-            ResultSet resultSet =  preparedStatement.executeQuery();
+            conn = this.getBackConnection();
+            st = conn.prepareStatement(sql);
+            rs =  st.executeQuery();
 
             LogUtil.debug(new StringBuffer(sql).append(" cost:").append(System.currentTimeMillis()-s).append("ms."));
             
         }catch (Exception e){
             res = false;
             throw new SqlRunException(e.getMessage());
+        }finally{
+        	JDBCUtil.getInstance().free(conn, st, rs);
         }
         return res;
     }
