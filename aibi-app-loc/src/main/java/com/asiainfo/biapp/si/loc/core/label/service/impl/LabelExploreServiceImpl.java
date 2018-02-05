@@ -217,7 +217,12 @@ public class LabelExploreServiceImpl implements ILabelExploreService {
 		wherelabel.append(")");
 		// 省专区，地市专区需要权限,普通专区不需要权限、 拼接where中的cityId，用于权限
 		boolean isNeedAuthen = true;
-		StringBuffer whereSb = new StringBuffer("where 1=1 and ");
+		StringBuffer whereSb = new StringBuffer();
+		if(queryParam.isValidate()){
+			whereSb.append("where 1=2 and ");
+		}else{
+			whereSb.append("where 1=1 and ");
+		}
 		String cityColumn = getWhereForCity(queryParam, dataTabelAlias, whereSb);
 		whereSb.append(wherelabel);
 		String leftJoinSqlStr = this.getLeftJoinSqlStr(tableAliasMap, aliasColumnMap, andFlag, whereSb, isNeedAuthen,cityColumn);

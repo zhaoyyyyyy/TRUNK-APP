@@ -350,6 +350,7 @@ public class ShopCartController extends BaseController {
 		List<LabelRuleVo> labelRules = getSessionLabelRuleList();
 		ExploreQueryParam queryParam = new ExploreQueryParam(dataDate, monthLabelDate, dayLabelDate);
 		queryParam.setOrgId(dataPrivaliege);
+		queryParam.setValidate(true);
 		StringBuffer sql = new StringBuffer();
 		try {
 			queryParam.setLoginUser(this.getLoginUser());
@@ -390,6 +391,7 @@ public class ShopCartController extends BaseController {
 		try {
 			StringBuffer sql = new StringBuffer();
 			//不包含纵表的探索
+			queryParam.setLoginUser(this.getLoginUser());
 			String countSql = exploreServiceImpl.getCountSqlStr(labelRules, queryParam);
 			sql.append("select count(1) ").append(countSql);
 			LogUtil.info("countSql SQL : " + countSql);
