@@ -200,7 +200,7 @@ html,body{height: 100%;}
 	cursor: pointer;
 }
 .ui-login-header.open .dropdown-menu{
-	right:0;
+	right:10px;
 	left:auto;
 }
 .ui-login-header > img{
