@@ -722,7 +722,7 @@ var labelMarket = (function (model){
 			e.stopPropagation?e.stopPropagation():e.cancelBubble=true;
 			var X = $(elem).parents(".ui-conditionCT").position().top;
 			var Y = $(elem).parents(".ui-conditionCT").position().left;
-			$(".ui-conditionBox").css({"left":Y+3,"top":X+40});
+			$(".ui-conditionBox").css({"left":Y+3,"top":X+90});
 			var index = $(elem).parent().parent().attr("index");
 			$(".ui-conditionBox").attr("index",index);	
 			var rule = dataModel.ruleList[index];
