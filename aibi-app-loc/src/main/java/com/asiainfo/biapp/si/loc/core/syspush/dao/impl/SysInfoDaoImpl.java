@@ -95,9 +95,9 @@ public class SysInfoDaoImpl extends BaseDaoImpl<SysInfo, String> implements ISys
             hql.append("and s.ftpPath = :ftpPath ");
             params.put("ftpPath", sysInfoVo.getFtpPath());
         }
-        if(StringUtil.isNoneBlank(sysInfoVo.getFtpPost())){
-            hql.append("and s.ftpPost = :ftpPost ");
-            params.put("ftpPost", sysInfoVo.getFtpPost());
+        if(StringUtil.isNoneBlank(sysInfoVo.getFtpPort())){
+            hql.append("and s.ftpPort = :ftpPort ");
+            params.put("ftpPort", sysInfoVo.getFtpPort());
         }
         if(StringUtil.isNoneBlank(sysInfoVo.getLocalPath())){
             hql.append("and s.localPath = :localPath ");
