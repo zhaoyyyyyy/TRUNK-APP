@@ -181,7 +181,7 @@ var labelMarket = (function (model){
          * ------------------------------------------------------------------
          */
 		model.loadLabelInfoList = function(){
-			// $("#configId").val($.getCurrentConfigId());
+			$("#configId").val($.getCurrentConfigId());
 			var obj = $("#formSearch").formToJson();
 			obj.pageSize = 20;
 			obj.groupType = 1;

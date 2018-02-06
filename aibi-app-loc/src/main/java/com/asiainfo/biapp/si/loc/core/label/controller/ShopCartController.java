@@ -12,11 +12,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.asiainfo.biapp.si.loc.auth.model.Organization;
-import com.asiainfo.biapp.si.loc.auth.model.User;
 import com.asiainfo.biapp.si.loc.base.common.LabelInfoContants;
 import com.asiainfo.biapp.si.loc.base.common.LabelRuleContants;
 import com.asiainfo.biapp.si.loc.base.controller.BaseController;
+import com.asiainfo.biapp.si.loc.base.exception.BaseException;
 import com.asiainfo.biapp.si.loc.base.utils.DateUtil;
 import com.asiainfo.biapp.si.loc.base.utils.JsonUtil;
 import com.asiainfo.biapp.si.loc.base.utils.LogUtil;
@@ -218,10 +217,12 @@ public class ShopCartController extends BaseController {
 		String msg = "抱歉，该客户群无规则、无清单可用，不能添加到收纳篮！";
 		//msg = "客户群已经被删除，无法加入到购物车！";
 		try {
-			LabelInfo customGroup = labelInfoService.get(labelId);
+			LabelInfo customGroup = labelInfoService.selectLabelInfoById(labelId);
 			if (LabelInfoContants.CUSTOM_DATA_STATUS_SUCCESS != customGroup.getDataStatusId()) {
 				success=false;
 			}
+		}catch (BaseException baseException) {
+			return webResult.fail(baseException);
 		} catch (Exception e) {
 			LogUtil.error("查询客户群异常", e);
 			return webResult.fail(msg);
@@ -276,7 +277,9 @@ public class ShopCartController extends BaseController {
 				}
 			}
 
-		} catch (Exception e) {
+		} catch (BaseException baseException) {
+			return webResult.fail(baseException);
+		}catch (Exception e) {
 			LogUtil.error("添加(规则)到购物车异常", e);
 			return webResult.fail(msg);
 		}
@@ -305,7 +308,9 @@ public class ShopCartController extends BaseController {
 				setSessionAttribute(LabelRuleContants.SHOP_CART_RULE, JsonUtil.toJsonString(rules));
 			}
 			setSessionAttribute(LabelRuleContants.SHOP_CART_RULE_NUM, String.valueOf(numValue));
-		} catch (Exception e) {
+		} catch (BaseException baseException) {
+			return webResult.fail(baseException);
+		}catch (Exception e) {
 			LogUtil.error("计算中心修改异常", e);
 			return webResult.fail(e.getMessage());
 		}
@@ -360,7 +365,9 @@ public class ShopCartController extends BaseController {
 			System.out.println("querySql SQL : " + querySql);
 			LogUtil.info("querySql SQL : " + querySql);
 			backServiceImpl.queryCount(sql.toString());
-		} catch (Exception e) {
+		} catch (BaseException baseException) {
+			return webResult.fail(baseException);
+		}catch (Exception e) {
 			LogUtil.error("校验sql异常", e);
 			return webResult.fail(e.getMessage());
 		}
