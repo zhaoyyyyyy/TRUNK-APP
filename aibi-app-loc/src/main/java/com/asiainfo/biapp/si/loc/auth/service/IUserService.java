@@ -31,5 +31,11 @@ public interface IUserService {
 	 * @return
 	 */
 	public User getUserByToken(String token) throws BaseException;
+	
+	/**
+	 * 得到一个系统token(在没有登录用户的时候可以使用，不能将此接口开放出去，内部调用即可)
+	 * @return
+	 */
+	public TokenModel getSysToken() throws BaseException ;
 
 }

@@ -60,6 +60,11 @@ public class DevUserServiceImpl extends BaseServiceImpl<User, String> implements
 	@Value("${autoLoginSign}")  
     protected String autoLoginSign; 
 	
+	/**
+	 * 系统用户名称
+	 */
+    private static final String LOC_SYS_USERNAME = "LOC_SYS"; 
+	
 	@Override
 	protected BaseDao<User, String> getBaseDao() {
 		return null;
@@ -98,6 +103,11 @@ public class DevUserServiceImpl extends BaseServiceImpl<User, String> implements
 	@Override
 	public TokenModel getTokenByUsername(String username) throws BaseException {
 		return getTokenByUsernamePassword(username, autoLoginSign);
+	}
+	
+	@Override
+	public TokenModel getSysToken() throws BaseException {
+		return getTokenByUsername(LOC_SYS_USERNAME);
 	}
 	
 	/**
