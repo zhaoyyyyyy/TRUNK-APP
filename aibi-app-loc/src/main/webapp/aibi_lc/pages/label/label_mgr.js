@@ -171,11 +171,12 @@ function fun_to_publish(id){
 				"approveStatusId": 2
 			},
 			onSuccess : function(data){
+				var currentPage=$('#mainGrid').getGridParam('page')
 				$.success('发布成功。',function(){
 					$("#mainGrid").setGridParam({
 						postData : $("#formSearch").formToJson()
 					}).trigger("reloadGrid", [ {
-						page : 1
+						pageStart : currentPage
 					} ]);
 				});
 			}
@@ -192,12 +193,13 @@ function fun_to_over(id){
 				"dataStatusId" : 4
 			},
 			onSuccess : function(data){
+				var currentPage=$('#mainGrid').getGridParam('page')
 				$("#mainGrid").setGridParam({
 					postData:{
 						data : null
 					}
 				}).trigger("reloadGrid",[{
-					page : 1
+					pageStart : currentPage
 				}]);
 			}
 		});
@@ -213,12 +215,13 @@ function fun_to_start(id){
 				"dataStatusId" : 2
 			},
 			onSuccess : function(data){
+				var currentPage=$('#mainGrid').getGridParam('page')
 				$("#mainGrid").setGridParam({
 					postData:{
 						data : null
 					}
 				}).trigger("reloadGrid",[{
-					page : 1
+					pageStart : currentPage
 				}]);
 			}
 		});
@@ -234,12 +237,13 @@ function fun_to_offline(id){
 				"dataStatusId" : 5
 			},
 			onSuccess : function(data){
+				var currentPage=$('#mainGrid').getGridParam('page')
 				$("#mainGrid").setGridParam({
 					postData:{
 						data : null
 					}
 				}).trigger("reloadGrid",[{
-					page : 1
+					pageStart : currentPage
 				}]);
 			}
 		});
