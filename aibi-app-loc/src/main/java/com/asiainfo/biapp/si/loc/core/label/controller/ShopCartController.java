@@ -196,7 +196,7 @@ public class ShopCartController extends BaseController {
 			}
 		} catch (Exception e) {
 			LogUtil.error("校验标签异常", e);
-			return webResult.fail(msg);
+			return webResult.fail(msg,e);
 		}
 		if (success) {
 			return webResult.success("查询标签是否能够加入到购物车成功", SUCCESS);
@@ -281,7 +281,7 @@ public class ShopCartController extends BaseController {
 			return webResult.fail(baseException);
 		}catch (Exception e) {
 			LogUtil.error("添加(规则)到购物车异常", e);
-			return webResult.fail(msg);
+			return webResult.fail(msg,e);
 		}
 		if (success) {
 			return webResult.success("加入购物车成功", SUCCESS);
@@ -369,7 +369,7 @@ public class ShopCartController extends BaseController {
 			return webResult.fail(baseException);
 		}catch (Exception e) {
 			LogUtil.error("校验sql异常", e);
-			return webResult.fail(e.getMessage());
+			return webResult.fail(e.getMessage(),e);
 		}
 		return webResult.success("校验sql成功", SUCCESS);
 	}
