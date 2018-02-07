@@ -71,7 +71,7 @@ public class OrganizationServiceImpl implements IOrganizationService {
 	 * {@inheritDoc}
 	 * @see com.asiainfo.biapp.si.loc.auth.service.IOrganizationService#selectAllOrganization()
 	 */
-	@Cacheable(value="Organization", key="'selectAllOrganization'")
+	//@Cacheable(value="Organization", key="'selectAllOrganization'")
 	public Map<String,Organization> selectAllOrganization() throws BaseException{
 		Map<String,Organization> result =  new HashMap<String,Organization>();
 		try {
