@@ -41,6 +41,10 @@ import com.asiainfo.biapp.si.loc.core.syspush.vo.SysInfoVo;
  */
 @Repository
 public class SysInfoDaoImpl extends BaseDaoImpl<SysInfo, String> implements ISysInfoDao{
+	
+	public SysInfo selectSysInfoBySysName(String sysName) {
+		 return super.findOneByHql("from SysInfo s where s.sysName = ?0", sysName);
+	}
 
     /**
      * 根据条件分页查询

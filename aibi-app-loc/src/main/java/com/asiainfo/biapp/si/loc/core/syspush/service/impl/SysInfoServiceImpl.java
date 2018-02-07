@@ -72,6 +72,9 @@ public class SysInfoServiceImpl extends BaseServiceImpl<SysInfo, String> impleme
     }
 
     public void addSysInfo(SysInfo sysInfo) throws BaseException {
+    	if(null !=iSysInfoDao.selectSysInfoBySysName(sysInfo.getSysName())){
+    		 throw new ParamRequiredException("平台名称已存在");
+    	}
         super.saveOrUpdate(sysInfo);
     }
 
