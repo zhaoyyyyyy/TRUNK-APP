@@ -239,17 +239,8 @@ public class LabelInfoController extends BaseController {
             @ApiImplicitParam(name = "sortNum", value = "排序字段", required = false, paramType = "query", dataType = "int") ,
             @ApiImplicitParam(name = "dependIndex", value = "规则依赖的指标",required=false,paramType = "query", dataType= "string")})
     @RequestMapping(value = "/labelInfo/save", method = RequestMethod.POST)
-    public WebResult<String> save(@ApiIgnore LabelInfo labelInfo){
-        WebResult<String> webResult = new WebResult<>();
-        /*LabelInfo label = new LabelInfo();
-        try {
-            label = iLabelInfoService.selectOneByLabelName(labelInfo.getLabelName());
-        } catch (BaseException e1) {
-            return webResult.fail(e1);
-        }
-        if (null !=label) {
-            return webResult.fail("标签名称重复");
-        }*/
+    public WebResult<LabelInfo> save(@ApiIgnore LabelInfo labelInfo){
+        WebResult<LabelInfo> webResult = new WebResult<>();
         User user = new User();  
         try {
             user = this.getLoginUser();
@@ -258,7 +249,7 @@ public class LabelInfoController extends BaseController {
         } catch (BaseException e) {
             return webResult.fail(e);
         }
-        return webResult.success("新增标签信息成功", SUCCESS);
+        return webResult.success("新增标签信息成功", labelInfo);
     }
     
     @ApiOperation(value = "修改标签信息")
@@ -437,9 +428,9 @@ public class LabelInfoController extends BaseController {
         if (StringUtil.isNotBlank(lab.getDimId())) {
             oldLab.setDimId(lab.getDimId());
         }
-        if (StringUtil.isNotBlank(lab.getDataType())) {
+        /*if (StringUtil.isNotBlank(lab.getDataType())) {
             oldLab.setDataType(lab.getDataType());
-        }
+        }*/
         if (StringUtil.isNotBlank(lab.getUnit())) {
             oldLab.setUnit(lab.getUnit());
         }

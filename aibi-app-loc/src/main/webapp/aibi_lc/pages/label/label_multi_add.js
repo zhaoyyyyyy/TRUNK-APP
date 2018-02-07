@@ -13,7 +13,6 @@ var model = {
 			busiCaliber : "",
 			failTime : "",
 		    updateCycle : "",
-		    dataType : "",
 		    categoryName : ""
 		}],
 		bqlx : [],
@@ -28,7 +27,7 @@ function changeStatus(elem){
 		$(elem).parents("form").find(".ui-form-hide").show();
 	}else{
 		$("#dimId").removeAttr("name");
-		$("#dataType").removeAttr("name");
+//		$("#dataType").removeAttr("name");
 		$(elem).parents("form").find(".ui-form-hide").hide();
 		
 	}
@@ -163,7 +162,6 @@ function fun_to_createRow(){
 		 busiCaliber : "",
 	     failTime : "",
 	     updateCycle : "",
-	     dataType : "",
 	     categoryName : ""
 	});
 }

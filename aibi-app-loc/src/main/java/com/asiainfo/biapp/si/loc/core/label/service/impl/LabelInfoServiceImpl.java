@@ -146,12 +146,7 @@ public class LabelInfoServiceImpl extends BaseServiceImpl<LabelInfo, String> imp
         label = iLabelInfoService.selectOneByLabelName(labelInfo.getLabelName(),labelInfo.getConfigId());
         if (null !=label) {
             throw new ParamRequiredException("标签名称重复");
-        }
-        //封装标签规则维表信息
-        LabelCountRules labelCountRules = new LabelCountRules();
-        labelCountRules.setDependIndex(labelInfo.getDependIndex());
-        labelCountRules.setCountRules(labelInfo.getCountRules());
-        iLabelCountRulesService.addLabelCountRules(labelCountRules);        
+        }   
         
         //封装标签信息
         labelInfo.setCreateTime(new Date());
@@ -175,24 +170,31 @@ public class LabelInfoServiceImpl extends BaseServiceImpl<LabelInfo, String> imp
         labelExtInfo.setOriginalTableType(labelInfo.getSourceTableType());
         iLabelExtInfoService.addLabelExtInfo(labelExtInfo);
         
-        //封装元数据表列信息
-        MdaSysTableColumn mdaSysTableColumn = new MdaSysTableColumn();
-        mdaSysTableColumn.setLabelId(labelInfo.getLabelId());
-    	MdaSysTable mdaSysTable = iMdaSysTableService.queryMdaSysTable(labelInfo.getConfigId(),labelInfo.getUpdateCycle(),1);
-    	mdaSysTableColumn.setTableId(mdaSysTable.getTableId());
-        mdaSysTableColumn.setColumnName(labelInfo.getLabelId());
-        mdaSysTableColumn.setColumnCnName(labelInfo.getLabelName());
-        mdaSysTableColumn.setCountRulesCode(labelCountRules.getCountRulesCode());
-        if (labelInfo.getLabelTypeId()==5) {
-            DimTableInfo dimTable =iDimTableInfoService.selectDimTableInfoById(labelInfo.getDimId());
-            mdaSysTableColumn.setDimTransId(labelInfo.getDimId());
-            mdaSysTableColumn.setDataType(labelInfo.getDataType());
-            int columnDataTypeId = Integer.parseInt(dimTable.getCodeColType());
-            mdaSysTableColumn.setColumnDataTypeId(columnDataTypeId);
-        }
-        mdaSysTableColumn.setUnit(labelInfo.getUnit());
-        mdaSysTableColumn.setColumnStatus(1);
-        iMdaSysTableColService.addMdaSysTableColumn(mdaSysTableColumn);
+        if (labelInfo.getLabelTypeId()!=8) {
+           //封装标签规则维表信息
+            LabelCountRules labelCountRules = new LabelCountRules();
+            labelCountRules.setDependIndex(labelInfo.getDependIndex());
+            labelCountRules.setCountRules(labelInfo.getCountRules());
+            iLabelCountRulesService.addLabelCountRules(labelCountRules);    
+            
+           //封装元数据表列信息
+            MdaSysTableColumn mdaSysTableColumn = new MdaSysTableColumn();
+            mdaSysTableColumn.setLabelId(labelInfo.getLabelId());
+            MdaSysTable mdaSysTable = iMdaSysTableService.queryMdaSysTable(labelInfo.getConfigId(),labelInfo.getUpdateCycle(),1);
+            mdaSysTableColumn.setTableId(mdaSysTable.getTableId());
+            mdaSysTableColumn.setColumnName(labelInfo.getLabelId());
+            mdaSysTableColumn.setColumnCnName(labelInfo.getLabelName());
+            mdaSysTableColumn.setCountRulesCode(labelCountRules.getCountRulesCode());
+            if (labelInfo.getLabelTypeId()==5) {
+                DimTableInfo dimTable =iDimTableInfoService.selectDimTableInfoById(labelInfo.getDimId());
+                mdaSysTableColumn.setDimTransId(labelInfo.getDimId());
+                int columnDataTypeId = Integer.parseInt(dimTable.getCodeColType());
+                mdaSysTableColumn.setColumnDataTypeId(columnDataTypeId);
+            }
+            mdaSysTableColumn.setUnit(labelInfo.getUnit());
+            mdaSysTableColumn.setColumnStatus(1);
+            iMdaSysTableColService.addMdaSysTableColumn(mdaSysTableColumn);
+        }   
     }
 
     public void modifyLabelInfo(LabelInfo labelInfo) throws BaseException{
@@ -211,18 +213,15 @@ public class LabelInfoServiceImpl extends BaseServiceImpl<LabelInfo, String> imp
         MdaSysTableColumn mdaSysTableColumn = iMdaSysTableColService.selectMdaSysTableColBylabelId(labelInfo.getLabelId());
         MdaSysTable mdaSysTable = iMdaSysTableService.queryMdaSysTable(labelInfo.getConfigId(),labelInfo.getUpdateCycle(),1);
         mdaSysTableColumn.setTableId(mdaSysTable.getTableId());
-//      mdaSysTableColumn.setColumnName(labelInfo.getLabelId());
         mdaSysTableColumn.setColumnCnName(labelInfo.getLabelName());
         if (StringUtil.isNotBlank(labelInfo.getDimId())) {
             DimTableInfo dimTable = iDimTableInfoService.selectDimTableInfoById(labelInfo.getDimId());
             mdaSysTableColumn.setDimTransId(labelInfo.getDimId());
-            mdaSysTableColumn.setDataType(labelInfo.getDataType());
             int columnDataTypeId = Integer.parseInt(dimTable.getCodeColType());
             mdaSysTableColumn.setColumnDataTypeId(columnDataTypeId);
             mdaSysTableColumn.setUnit(labelInfo.getUnit());
         }else if(StringUtil.isNotBlank(labelInfo.getDependIndex())&&StringUtil.isBlank(labelInfo.getDimId())){
             mdaSysTableColumn.setDimTransId(null);
-            mdaSysTableColumn.setDataType(null);
             mdaSysTableColumn.setColumnDataTypeId(null);
             mdaSysTableColumn.setUnit(labelInfo.getUnit());
         }

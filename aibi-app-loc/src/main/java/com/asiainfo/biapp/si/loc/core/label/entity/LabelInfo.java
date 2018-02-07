@@ -260,8 +260,8 @@ public class LabelInfo extends BaseEntity {
     /**
      * 数据类型
      */
-    @Transient
-    private String dataType;
+/*    @Transient
+    private String dataType;*/
 
     /**
      * 维表主键
@@ -611,12 +611,12 @@ public class LabelInfo extends BaseEntity {
         this.sourceTableType = sourceTableType;
     }
 
-    public String getDataType() {
+   /* public String getDataType() {
         return dataType;
     }
 
     public void setDataType(String dataType) {
         this.dataType = dataType;
     }
-
+*/
 }
