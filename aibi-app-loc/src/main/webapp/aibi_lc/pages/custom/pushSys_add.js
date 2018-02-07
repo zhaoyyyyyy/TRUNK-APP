@@ -72,6 +72,12 @@ window.loc_onload = function() {
 					var b =document.getElementById("pushType");
 					$(b).prop("checked", true);
 					model.curentIndex =true;
+					if(model.webserviceWsdl){
+						model.checked=true;
+					}else{
+						model.checked=false;
+					}
+					
 				}
 				if(data.data.pushType ==2){
 					model.showPushType ="表推送";
