@@ -38,7 +38,7 @@ window.loc_onload = function() {
     $("#mainGrid").jqGrid({
         url: $.ctx + "/api/syspush/sysInfo/queryPage",
         datatype: "json",
-        colNames: ['系统平台名称','推送方式', 'FTP/SFTP地址', '表前缀', '描述','操作'],
+        colNames: ['系统平台名称','推送方式', 'IP地址', '表前缀', '描述','操作'],
         colModel: [{
             name: 'sysName',
             index: 'sysName',
@@ -59,8 +59,8 @@ window.loc_onload = function() {
         	}
         },
         {
-            name: 'ftpPath',
-            index: 'ftpPath',
+            name: 'ftpServerIp',
+            index: 'ftpServerIp',
             width: 40,
             align: "center",
             sortable: false,
