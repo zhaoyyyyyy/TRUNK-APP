@@ -358,13 +358,17 @@ public class ShopCartController extends BaseController {
 		queryParam.setValidate(true);
 		StringBuffer sql = new StringBuffer();
 		try {
-			queryParam.setLoginUser(this.getLoginUser());
-			//不包含纵表的探索
-			String querySql = exploreServiceImpl.getCountSqlStr(labelRules, queryParam);
-			sql.append("select count(1) ").append(querySql);
-			System.out.println("querySql SQL : " + querySql);
-			LogUtil.info("querySql SQL : " + querySql);
-			backServiceImpl.queryCount(sql.toString());
+			if(haveCustomOrVerticalLabel(labelRules)) {
+				String querySql = exploreServiceImpl.getFromSqlForMultiLabel(labelRules, queryParam);
+				sql.append("select count(1) ").append(querySql);
+			}else{
+				//不包含纵表的探索
+				String querySql = exploreServiceImpl.getCountSqlStr(labelRules, queryParam);
+				sql.append("select count(1) ").append(querySql);
+			}
+			System.out.println("querySql SQL : " + sql.toString());
+			LogUtil.info("querySql SQL : " + sql.toString());
+			backServiceImpl.queryCount(sql.toString());	
 		} catch (BaseException baseException) {
 			return webResult.fail(baseException);
 		}catch (Exception e) {
@@ -389,24 +393,29 @@ public class ShopCartController extends BaseController {
 			@ApiImplicitParam(name = "monthLabelDate", value = "数据日期(月)", required = true, paramType = "query", dataType = "string"),
 			@ApiImplicitParam(name = "dataPrivaliege", value = "数据范围", required = true, paramType = "query", dataType = "string")})
 	@RequestMapping(value = "/explore", method = RequestMethod.POST)
-	public WebResult<String> explore(String dataDate, String dayLabelDate,String monthLabelDate,String dataPrivaliege) {
+	public WebResult<String> explore(String dataDate, String dayLabelDate, String monthLabelDate,
+			String dataPrivaliege) {
 		WebResult<String> webResult = new WebResult<>();
 		List<LabelRuleVo> labelRules = getSessionLabelRuleList();
 		ExploreQueryParam queryParam = new ExploreQueryParam(dataDate, monthLabelDate, dayLabelDate);
 		queryParam.setOrgId(dataPrivaliege);
 		Integer num;
+		StringBuffer sql = new StringBuffer();
 		try {
-			StringBuffer sql = new StringBuffer();
-			//不包含纵表的探索
-			queryParam.setLoginUser(this.getLoginUser());
-			String countSql = exploreServiceImpl.getCountSqlStr(labelRules, queryParam);
-			sql.append("select count(1) ").append(countSql);
-			LogUtil.info("countSql SQL : " + countSql);
-			//调用后台接口
+			if (haveCustomOrVerticalLabel(labelRules)) {
+				String querySql = exploreServiceImpl.getFromSqlForMultiLabel(labelRules, queryParam);
+				sql.append("select count(1) ").append(querySql);
+			} else {
+				// 不包含纵表的探索
+				String querySql = exploreServiceImpl.getCountSqlStr(labelRules, queryParam);
+				sql.append("select count(1) ").append(querySql);
+			}
+			LogUtil.info("countSql SQL : " + sql.toString());
+			// 调用后台接口
 			num = backServiceImpl.queryCount(sql.toString());
 		} catch (Exception e) {
 			LogUtil.error("探索异常", e);
-			return webResult.fail(e.getMessage());
+			return webResult.fail(e.getMessage(), e);
 		}
 		return webResult.success("探索成功", String.valueOf(num));
 	}
@@ -451,6 +460,31 @@ public class ShopCartController extends BaseController {
 
 	}
 
+	
+	/**
+	 * 验证是否包含用户群或者纵表标签
+	 * @param rules List<CiLabelRule> 处理过的规则
+	 * @return
+	 */
+	private boolean haveCustomOrVerticalLabel(List<LabelRuleVo> rules) {
+		boolean result = false;
+		if(rules != null) {
+			for (LabelRuleVo rule : rules) {
+				if (rule.getElementType() == LabelRuleContants.ELEMENT_TYPE_CUSTOM_RULES 
+						|| rule.getElementType() == LabelRuleContants.ELEMENT_TYPE_LIST_ID) {
+					result = true;
+					break;
+				} else if (rule.getElementType() == LabelRuleContants.ELEMENT_TYPE_LABEL_ID) {
+					if (rule.getLabelTypeId() == LabelInfoContants.LABEL_TYPE_VERT) {
+						result = true;
+						break;
+					}
+				}
+			}
+		}
+		return result;
+	}
+	
 	/**
 	 * 计算标签和清单的总个数 并为
 	 * 

@@ -11,6 +11,7 @@ import java.util.Set;
 
 import javax.transaction.Transactional;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -221,7 +222,7 @@ public class LabelExploreServiceImpl implements ILabelExploreService {
 		wherelabel.append(")");
 		// 省专区，地市专区需要权限,普通专区不需要权限、 拼接where中的cityId，用于权限
 		boolean isNeedAuthen = false;
-		StringBuffer whereSb = new StringBuffer();
+		StringBuffer whereSb = new StringBuffer();//where 整体条件
 		if(queryParam.isValidate()){
 			whereSb.append("where 1=2 and ");
 		}else{
@@ -257,23 +258,23 @@ public class LabelExploreServiceImpl implements ILabelExploreService {
 		if (StringUtil.isNotEmpty(dataTabelAlias) && StringUtil.isNotEmpty(queryParam.getOrgId())) {
 			/** key:orgCode; //组织编码（重要）  value:level;  //组织级别（重要）*/
 			Map<String, Organization> map = organizationService.selectAllOrganization();
-			Map<Integer,String> citySqlMap=new HashMap<>();
+			Map<String,String> citySqlMap=new HashMap<>();
 			String orgId = queryParam.getOrgId();
 			String[] split = orgId.split(",");
 			for (int i = 0; i < split.length; i++) {
 				String orgCode = split[i];
 				Organization organization = map.get(orgCode);
-				Integer levelId = organization.getLevelId();
+				String levelId ="org_level_"+organization.getLevelId();
 				if(citySqlMap.get(levelId)!=null){
 					citySqlMap.put(levelId,citySqlMap.get(levelId)+ "'"+orgCode+"',");
 				}else{
 					citySqlMap.put(levelId, "'"+orgCode+"',");
 				}
 			}
-			for (Integer levelId : citySqlMap.keySet()) {
-				cityColumn.append("org_level_"+levelId);
+			cityColumn.append(StringUtils.join(citySqlMap.keySet().toArray(),","));
+			for (String levelId : citySqlMap.keySet()) {
 				String citySql = citySqlMap.get(levelId);
-				whereSb.append(" (").append(dataTabelAlias).append(".").append("org_level_"+levelId).append(" in ")
+				whereSb.append(" (").append(dataTabelAlias).append(".").append(levelId).append(" in ")
 				.append("(").append(citySql.substring(0, citySql.length()-1)).append(")) and ");
 			}
 		}
