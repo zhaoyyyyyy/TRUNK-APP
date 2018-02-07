@@ -27,6 +27,63 @@ window.loc_onload = function(){
 		});
 	});
 	*/
+	//批量审批发布
+	$('#btn_batch_publish').click(function(){
+		var ids = $('#mainGrid').jqGrid('getGridParam', 'selarrrow');
+		if(ids.length<1){
+			$.alert("请勾选需要发布的标签");
+			return;
+		}
+		$.confirm('确定发布已勾选的标签？',function(){
+			var failLabNamelist = [];
+			for(var i=0; i<ids.length; i++){
+				$.commAjax({
+					async : false,
+					url : $.ctx + '/api/label/labelInfo/get',
+					postData : {
+						"labelId" : ids[i]
+					},
+				    onSuccess : function(data){
+				    	if(data.data.dataStatusId==1 && data.data.approveInfo.approveStatusId==1){
+				    		$.commAjax({
+				    			url : $.ctx + '/api/label/labelInfo/update',
+								postData : {
+									"labelId" : ids[i],
+									"dataStatusId" : 2,
+									"approveStatusId": 2
+								},
+				    		});
+				    	}else{
+				    		failLabNamelist.push(data.data.labelName)
+				    	}
+				    }
+				});
+				var k = i+1;
+				if(k ==ids.length && failLabNamelist.length==0){
+					$.success('标签发布成功',function(){
+						$("#mainGrid").setGridParam({
+							postData : $("#formSearch").formToJson()
+						}).trigger("reloadGrid",[{
+							page : 1
+						}]);
+					});
+				}else if(k ==ids.length && failLabNamelist.length !=0){
+					var failLabName = "";
+					for(var i=0; i<failLabNamelist.length; i++){
+						failLabName += "["+failLabNamelist[i]+"标签]"
+					}
+					$.success(failLabName+'因不满足条件，未发布成功',function(){
+						$("#mainGrid").setGridParam({
+							postData : $("#formSearch").formToJson()
+						}).trigger("reloadGrid",[{
+							page : 1
+						}]);
+					});
+				}
+			}
+		});
+	})
+	
 	$('#formSearch').keyup(function(event){
     	if(event.keyCode == 13){
     		$("#btn_search").click();
@@ -145,7 +202,7 @@ window.loc_onload = function(){
 //	        rowNum:10,
 	        rowList:[10,20,30],
 	        viewrecords: true,
-//	        multiselect:true,
+	        multiselect:true,
 	        pager: '#mainGridPager'  
 	    });
 }
@@ -160,6 +217,7 @@ function fun_to_detail(id){
 		}]);
 	}
 }
+
 
 function fun_to_publish(id){
 	$.confirm('确定发布此标签？',function(){
@@ -249,19 +307,7 @@ function fun_to_offline(id){
 		});
 	});
 }
-/*
-function fun_to_edit(id){
-	var configId = $.getCurrentConfigId();
-	var win = $.window('标签修改',$.ctx+'/aibi_lc/pages/label/label_edit.html?labelId='+id+"&configId="+configId,500,600);
-	win.reload = function(){
-		$("#mainGrid").setGridParam({
-			postData : $("fromSearch").fromToJson()
-		}).trigger("reloadGrid",[{
-			page : 1
-		}]);
-	}
-}
-*/
+
 function fun_to_del(id){
 	$.confirm('您确定要继续删除吗？',function(){
 		$.commAjax({
@@ -282,3 +328,51 @@ function fun_to_del(id){
 		});
 	});
 }
+/*function btn_batch_publish(){
+	var ids = $('#mainGrid').jqGrid('getGridParam', 'selarrrow');
+	if(ids.length<1){
+		$.alert("请勾选需要发布的标签");
+		return;
+	}
+	$.confirm('确定发布已勾选的标签？',function(){
+		var failLabNamelist = [];
+		for(var i=0; i<ids.length; i++){
+			$.commAjax({
+				url : $.ctx + '/api/label/labelInfo/update',
+				postData : {
+					"labelId" : ids[i]
+				},
+			    onSuccess : function(data){
+			    	if(data.data.dataStatusId==1 && data.data.approveInfo.approveStatusId==1){
+			    		$.commAjax({
+			    			url : $.ctx + '/api/label/labelInfo/update',
+							postData : {
+								"labelId" : ids[i],
+								"dataStatusId" : 2,
+								"approveStatusId": 2
+							},
+			    		});
+			    	}else{
+			    		failLabNamelist.push(data.data.labelName)
+			    	}
+			    }
+			});
+			var k = i+1;
+			if(k=ids.length && failLabNamelist.length==0){
+				$.success('标签发布成功',function(){
+					$("#mainGrid").setGridParam({
+						postData : $("#formSearch").formToJson()
+					}).trigger("reloadGrid",[{
+						page : 1
+					}]);
+				});
+			}else{
+				var failLabName = "";
+				for(var i=0; i<failLabNamelist.length; i++){
+					failLabName += "["+failLabNamelist[i]+"标签]"
+				}
+				$.alert(failLabName+"因不满足条件,未发布成功")
+			}
+		}
+	});
+}*/
