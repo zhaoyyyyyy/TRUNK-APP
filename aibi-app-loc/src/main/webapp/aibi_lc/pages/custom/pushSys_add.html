@@ -43,13 +43,13 @@
 							<div class="ui-form-group">
 						        <label for="inputEmail3" class="control-label fleft"><span class="input-required">*</span>推送方式:</label>
 						        <ul id="radioList" class="clearfix fleft">
-							        <li class="radio circle success"  v-for="(item,index) in tsfszd" > 
+							        <li class="radio circle success"  v-for="(item,index) in tsfszd" v-on:click="select(index)"> 
 									   	<input type="radio" name="pushType" :value="item.code" id="pushType" required="true" > 
 										<label id="tsfszd" name="tsfszd" for="pushType" v-bind:class="{active:index==curentIndex}"><i class="default" ></i>{{item.dataName}}</label>
 									</li>
 						        </ul>
 						    </div>
-						    <div id="filePush" v-if="showPushType==='文件推送'">
+						    <div id="filePush" v-if="pushType==1">
 							    <fieldset class="push-fieldest">
 									<legend>FTP/SFTP信息</legend>
 									<div class="ui-form-group">
@@ -185,7 +185,7 @@
 									</div>
 								</div>
 							</div>
-							<div id="labelPush" v-if="showPushType ==='表推送'">
+							<div id="labelPush" v-if="pushType ==2">
 							<fieldset class="push-fieldest">
 									<legend>表推送</legend>
 									<div class="ui-form-group">

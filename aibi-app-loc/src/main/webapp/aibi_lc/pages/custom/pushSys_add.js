@@ -67,13 +67,13 @@ window.loc_onload = function() {
 				model.compressType = data.data.compressType;
 				model.tableNamePre = data.data.tableNamePre;
 				model.customTaskTable = data.data.customTaskTable;
-				if(data.data.pushType =='1'){
+				if(data.data.pushType ==1){
 					model.showPushType ="文件推送";
 					var b =document.getElementById("pushType");
 					$(b).prop("checked", true);
 					model.curentIndex =true;
 				}
-				if(data.data.pushType =='2'){
+				if(data.data.pushType ==2){
 					model.showPushType ="表推送";
 					$("input[name='pushType']").prop("checked", true);
 					model.curentIndex =true;
@@ -84,6 +84,15 @@ window.loc_onload = function() {
 	new Vue({
 		el : '#dataD',
 		data : model,
+		methods:{
+			select : function(index){
+    			if(index==0){
+    				model.pushType=1;
+    			}else{
+    				model.pushType=2;
+    			}
+    		}
+		},
 		mounted : function() {
 			this.$nextTick(function() {
 				var r = $(".easyui-validatebox");
@@ -144,14 +153,14 @@ window.loc_onload = function() {
 	wd.addBtn("cancel", "取消", function() {
 		wd.cancel();
 	});
-	$("input[name='pushType']").on("click",function(){	//选择推送方式来隐藏或者显示下面内容
-		var rdoValue = $("#pushType").is(":checked") ? "文件推送":"表推送";
-		if(rdoValue == "文件推送"){
-			model.showPushType="文件推送";			
-		}else{
-			model.showPushType="表推送";
-		}
-	})
+//	$("input[name='pushType']").on("click",function(){	//选择推送方式来隐藏或者显示下面内容
+//		var rdoValue = $("#pushType").is(":checked") ? "文件推送":"表推送";
+//		if(rdoValue == "文件推送"){
+//			model.showPushType="文件推送";			
+//		}else{
+//			model.showPushType="表推送";
+//		}
+//	})
 }
 function isShowDesKey(obj) {
 	if (obj.checked) {
