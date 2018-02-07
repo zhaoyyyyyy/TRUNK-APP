@@ -59,8 +59,8 @@ window.loc_onload = function() {
         	}
         },
         {
-            name: 'ftpPost',
-            index: 'ftpPost',
+            name: 'ftpPath',
+            index: 'ftpPath',
             width: 40,
             align: "center",
             sortable: false,
