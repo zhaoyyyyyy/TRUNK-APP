@@ -64,6 +64,15 @@ public interface ISysInfoService extends BaseService<SysInfo, String>{
     public SysInfo selectSysInfoById(String sysId) throws BaseException;
     
     /**
+     * Description: 根据名称查询平台
+     *
+     * @param sysName
+     * @return
+     * @throws BaseException
+     */
+    public SysInfo selectSysInfoBySysName(String sysName) throws BaseException;
+    
+    /**
      * 新增或修改一个实体 Description:
      *
      * @param sysInfo
