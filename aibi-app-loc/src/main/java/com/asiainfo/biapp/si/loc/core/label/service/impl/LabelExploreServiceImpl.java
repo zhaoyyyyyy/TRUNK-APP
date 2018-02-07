@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.asiainfo.biapp.si.loc.auth.model.Organization;
+import com.asiainfo.biapp.si.loc.auth.service.IOrganizationService;
 import com.asiainfo.biapp.si.loc.base.common.CommonConstants;
 import com.asiainfo.biapp.si.loc.base.common.LabelInfoContants;
 import com.asiainfo.biapp.si.loc.base.common.LabelRuleContants;
@@ -51,6 +52,9 @@ public class LabelExploreServiceImpl implements ILabelExploreService {
 	
 	@Autowired
 	private IBackSqlService backServiceImpl;
+	
+	@Autowired
+	private IOrganizationService organizationService; 
 	
 	@Override
 	public String getFromSqlForMultiLabel(List<LabelRuleVo> labelRuleList, ExploreQueryParam queryParam) throws BaseException {
@@ -245,24 +249,21 @@ public class LabelExploreServiceImpl implements ILabelExploreService {
 	 * @return
 	 *
 	 * @author  tianxy3
+	 * @throws BaseException 
 	 * @date 2018年2月5日
 	 */
-	private String getWhereForCity(ExploreQueryParam queryParam, String dataTabelAlias, StringBuffer whereSb) {
+	private String getWhereForCity(ExploreQueryParam queryParam, String dataTabelAlias, StringBuffer whereSb) throws BaseException {
 		StringBuffer cityColumn = new StringBuffer();
-		if (StringUtil.isNotEmpty(dataTabelAlias) && StringUtil.isNotEmpty(queryParam.getOrgId())
-				&& (queryParam.getLoginUser() != null)) {
-			List<Organization> list = queryParam.getLoginUser().getDataPrivaliege().get("3");
+		if (StringUtil.isNotEmpty(dataTabelAlias) && StringUtil.isNotEmpty(queryParam.getOrgId())) {
 			/** key:orgCode; //组织编码（重要）  value:level;  //组织级别（重要）*/
-			Map<String,Integer> map=new HashMap<>();
-			for (Organization organization : list) {
-				map.put(organization.getOrgCode(), organization.getLevelId());
-			}
+			Map<String, Organization> map = organizationService.selectAllOrganization();
 			Map<Integer,String> citySqlMap=new HashMap<>();
 			String orgId = queryParam.getOrgId();
 			String[] split = orgId.split(",");
 			for (int i = 0; i < split.length; i++) {
 				String orgCode = split[i];
-				Integer levelId = map.get(orgCode);
+				Organization organization = map.get(orgCode);
+				Integer levelId = organization.getLevelId();
 				if(citySqlMap.get(levelId)!=null){
 					citySqlMap.put(levelId,citySqlMap.get(levelId)+ "'"+orgCode+"',");
 				}else{
