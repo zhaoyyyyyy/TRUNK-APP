@@ -11,7 +11,7 @@ var ruleDataModel = {
 window.loc_onload = function() {
 	var wd = frameElement.lhgDG;
 	var ruleIndex = $.getUrlParam("index");
-	ruleDataModel.rule = wd.curWin.labelMarket.getDialogRuleValue(ruleIndex);
+	ruleDataModel.rule = wd.curWin.calculateCenter.getDialogRuleValue(ruleIndex);
 	ruleDataModel.ruleIndex = ruleIndex;
 	//获取数据rule
 	wd.addBtn("ok", "确定", function() {
@@ -245,7 +245,7 @@ var dateRule = (function (model){
 			}
 			var wd = frameElement.lhgDG;
 			//提交变量
-			wd.curWin.labelMarket.setDialogRuleValue(ruleDataModel.ruleIndex,ruleDataModel.rule);
+			wd.curWin.calculateCenter.setDialogRuleValue(ruleDataModel.ruleIndex,ruleDataModel.rule);
 			wd.cancel();
 	}
     return model;

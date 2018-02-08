@@ -35,8 +35,8 @@ window.loc_onload = function() {
 		if(!dataDateModel.checkRuleEffectDate(labelMonthTemp,labelDayTemp)){
 			//验证sql
 			var checkedModelListStr = dataModel.checkedModelList.join(',');
-			if(wd.curWin.labelMarket.validateSql(labelMonthTemp,labelDayTemp,checkedModelListStr)){
-				wd.curWin.labelMarket.submitForExplore(labelMonthTemp,labelDayTemp,checkedModelListStr);
+			if(wd.curWin.calculateCenter.validateSql(labelMonthTemp,labelDayTemp,checkedModelListStr)){
+				wd.curWin.calculateCenter.submitForExplore(labelMonthTemp,labelDayTemp,checkedModelListStr);
 				wd.cancel();
 			}
 		}

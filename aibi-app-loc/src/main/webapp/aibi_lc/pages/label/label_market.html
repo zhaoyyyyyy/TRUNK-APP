@@ -11,6 +11,7 @@
 	<link rel="stylesheet" theme="default" href="../../asset/css/theme/default/main.css"/> 
    	<script type="text/javascript" src="../../asset/script/common/include.js"></script>
    	<script type="text/javascript" src="label_market.js"></script>
+   	<script type="text/javascript" src="calculate_center.js"></script>
    	<script type="text/javascript" src="calculate_drag_sort.js"></script>
    	<style type="text/css">
 	[v-cloak] {
@@ -202,7 +203,7 @@
 						<!--暂时去掉（）  -->
 						<em data-attr="left" class="J-drag-bracket">(</em>
 						<em data-attr="right" class="J-drag-bracket">&nbsp;)</em>
-						<i  class="del-shop" onclick="labelMarket.clearShopRules()" title="清空"></i>
+						<i  class="del-shop" onclick="calculateCenter.clearShopRules()" title="清空"></i>
 						<i class="J-min" title="收回"></i>
 					</span>
 				</h3>
@@ -218,7 +219,7 @@
 						<span v-if="item.calcuElement == '('" v-text="item.calcuElement"></span>
 						<!--右括号 -->
 						<span v-if="item.calcuElement == ')'" >{{item.calcuElement}}
-							<span class="onDelPar" onclick="labelMarket.deletePar(this,event)"></span>
+							<span class="onDelPar" onclick="calculateCenter.deletePar(this,event)"></span>
 						</span>
 
 						<!--符号 -->
@@ -227,20 +228,20 @@
 								<span class="fleft" v-if="item.calcuElement == 'or'">或</span>
 								<span class="fleft" v-if="item.calcuElement == 'and'" >且</span>
 								<span class="fleft" v-if="item.calcuElement == '-'" >剔除</span>
-								<span class="caret" onclick="labelMarket.switchConnectorShow(this,event)"></span>
+								<span class="caret" onclick="calculateCenter.switchConnectorShow(this,event)"></span>
 							</button>
 							<ul class="dropdown-menu">
-								<li onclick="labelMarket.switchConnector(this,'or')"><a href="javascript:void(0)" >或</a></li>
-								<li onclick="labelMarket.switchConnector(this,'and')"><a href="javascript:void(0)" >且</a></li>
-								<li onclick="labelMarket.switchConnector(this,'-')"><a href="javascript:void(0)" >剔除</a></li>
+								<li onclick="calculateCenter.switchConnector(this,'or')"><a href="javascript:void(0)" >或</a></li>
+								<li onclick="calculateCenter.switchConnector(this,'and')"><a href="javascript:void(0)" >且</a></li>
+								<li onclick="calculateCenter.switchConnector(this,'-')"><a href="javascript:void(0)" >剔除</a></li>
 							</ul>
 						</div>
 						<!-- 标签 -->
 						<h4 :class="{'ui-conditionCT-h4': 1==1 , 'ui-inverse': item.labelFlag == 0}"  v-if="item.elementType == 2">
-							<span v-text="item.customOrLabelName" onclick="labelMarket.againstLabel(this)"></span>
-							<em onclick="labelMarket.againstLabel(this)"></em>
-							<i onclick="labelMarket.deleteRule(this)"></i>
-							<b onclick="labelMarket.showLabelInfo(this,event)" class="ml10">!</b>
+							<span v-text="item.customOrLabelName" onclick="calculateCenter.againstLabel(this)"></span>
+							<em onclick="calculateCenter.againstLabel(this)"></em>
+							<i onclick="calculateCenter.deleteRule(this)"></i>
+							<b onclick="calculateCenter.showLabelInfo(this,event)" class="ml10">!</b>
 						</h4>
 						<!-- 标签体内容 -->
 						<!-- 标志性-->
@@ -249,7 +250,7 @@
 							<div class="clearfix">是</div>
 						</div>
 						<!-- 指标型 -->
-						<div class="ui-conditionCT-content align_center" v-if="item.labelTypeId == 4" onclick="labelMarket.setLabelAttr(this)">
+						<div class="ui-conditionCT-content align_center" v-if="item.labelTypeId == 4" onclick="calculateCenter.setLabelAttr(this)">
 							<h5 v-if="item.queryWay != null">已选条件：</h5>
 							<div class="clearfix" v-if="item.queryWay == 1">
 								数值范围：
@@ -272,14 +273,14 @@
 							<i class="ui-nothing-icon" v-if="item.queryWay == null"><em></em>请点击设置</i>
 						</div>
 						<!-- 枚举型  5,9,11,12-->
-						<div class="ui-conditionCT-content align_center" v-if="item.labelTypeId == 5" onclick="labelMarket.setLabelAttr(this)">
+						<div class="ui-conditionCT-content align_center" v-if="item.labelTypeId == 5" onclick="calculateCenter.setLabelAttr(this)">
 							<h5 v-if="item.attrVal != null ">已选条件：</h5>
 							<div class="clearfix" v-if="item.attrVal != null " v-text="item.attrName">
 							</div>
 							<i class="ui-nothing-icon" v-if="item.attrVal == null "><em></em>请点击设置</i>
 						</div>
 						<!-- 日期型 -->
-						<div class="ui-conditionCT-content align_center" v-if="item.labelTypeId == 6" onclick="labelMarket.setLabelAttr(this)">
+						<div class="ui-conditionCT-content align_center" v-if="item.labelTypeId == 6" onclick="calculateCenter.setLabelAttr(this)">
 							<h5 v-if="item.queryWay != null">已选条件：</h5>
 							<div class="clearfix" v-if="item.queryWay == 1">
 								<span v-if="item.startTime !=''">
@@ -300,7 +301,7 @@
 						</div>
 						
 						<!-- 文本型-->
-						<div class="ui-conditionCT-content align_center" v-if="item.labelTypeId == 7" onclick="labelMarket.setLabelAttr(this)">
+						<div class="ui-conditionCT-content align_center" v-if="item.labelTypeId == 7" onclick="calculateCenter.setLabelAttr(this)">
 							<h5 v-if="item.queryWay != null">已选条件：</h5>
 							<div class="clearfix" v-if="item.queryWay == 1">
 								模糊值：
@@ -357,8 +358,8 @@
 				</p>
 				<p class="fright">
 					<span>客户群数：</span><span class="y-text" v-text="exploreCustomNum"></span>
-					<span class="shop-icon" onclick="labelMarket.explore(event,this);"></span>
-					<button type="button" class="ui-btn ui-btn-default mr10" onclick="labelMarket.gotoSaveCustomer(event);">
+					<span class="shop-icon" onclick="calculateCenter.explore(event,this);"></span>
+					<button type="button" class="ui-btn ui-btn-default mr10" onclick="calculateCenter.gotoSaveCustomer(event);">
 						<span class="create-white"></span> 创建客户群
 					</button>
 				</p>
