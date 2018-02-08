@@ -138,7 +138,7 @@ public class LabelExploreServiceImpl implements ILabelExploreService {
 		Map<String, LabelVerticalColumnRel> map = new HashMap<String, LabelVerticalColumnRel>();
 		Set<LabelVerticalColumnRel> verticalColumnRels = labelInfo.getVerticalColumnRels();
 		for (LabelVerticalColumnRel rel : verticalColumnRels) {
-			String key = rel.getColumnId();
+			String key = rel.getLabelVerticalColumnRelId().getColumnId();
 			map.put(key, rel);
 		}
 		// 根据纵表标签获得其子规则

@@ -58,7 +58,7 @@ import com.asiainfo.biapp.si.loc.core.label.vo.MdaSysTableColumnVo;
  * @author lilin7
  * @version 1.0.0.2017年11月21日
  */
-//@Api(value = "元数据表列管理")
+@Api(value = "元数据表列管理")
 @RequestMapping("api/label")
 @RestController
 public class MdaSysTableColumnController extends BaseController<MdaSysTableColumn> {
@@ -210,6 +210,12 @@ public class MdaSysTableColumnController extends BaseController<MdaSysTableColum
         }
         if (StringUtil.isNotBlank(mda.getCountRulesCode())) {
             oldmda.setCountRulesCode(mda.getCountRulesCode());
+        }
+        if (null != mda.getLabelTypeId()) {
+            oldmda.setLabelTypeId(mda.getLabelTypeId());
+        }
+        if (null != mda.getIsMustColumn()) {
+            oldmda.setIsMustColumn(mda.getIsMustColumn());
         }
         return oldmda;
     }

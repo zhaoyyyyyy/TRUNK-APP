@@ -19,9 +19,19 @@ import com.asiainfo.biapp.si.loc.base.exception.BaseException;
 import com.asiainfo.biapp.si.loc.base.exception.ParamRequiredException;
 import com.asiainfo.biapp.si.loc.base.page.Page;
 import com.asiainfo.biapp.si.loc.base.service.impl.BaseServiceImpl;
+import com.asiainfo.biapp.si.loc.base.utils.StringUtil;
+import com.asiainfo.biapp.si.loc.core.dimtable.entity.DimTableInfo;
+import com.asiainfo.biapp.si.loc.core.dimtable.service.IDimTableInfoService;
 import com.asiainfo.biapp.si.loc.core.label.dao.IMdaSysTableColumnDao;
+import com.asiainfo.biapp.si.loc.core.label.entity.LabelInfo;
+import com.asiainfo.biapp.si.loc.core.label.entity.LabelVerticalColumnRel;
+import com.asiainfo.biapp.si.loc.core.label.entity.LabelVerticalColumnRelId;
+import com.asiainfo.biapp.si.loc.core.label.entity.MdaSysTable;
 import com.asiainfo.biapp.si.loc.core.label.entity.MdaSysTableColumn;
+import com.asiainfo.biapp.si.loc.core.label.service.ILabelInfoService;
+import com.asiainfo.biapp.si.loc.core.label.service.ILabelVerticalColumnRelService;
 import com.asiainfo.biapp.si.loc.core.label.service.IMdaSysTableColService;
+import com.asiainfo.biapp.si.loc.core.label.service.IMdaSysTableService;
 import com.asiainfo.biapp.si.loc.core.label.vo.MdaSysTableColumnVo;
 
 /**
@@ -57,6 +67,18 @@ public class MdaSysTableColServiceImpl extends BaseServiceImpl<MdaSysTableColumn
 
     @Autowired
     private IMdaSysTableColumnDao iMdaSysTableColumnDao;
+    
+    @Autowired
+    private IMdaSysTableService iMdaSysTableService;
+    
+    @Autowired
+    private ILabelInfoService iLabelInfoService;
+    
+    @Autowired 
+    private IDimTableInfoService iDimTableInfoService;
+    
+    @Autowired
+    private ILabelVerticalColumnRelService iLabelVerticalColumnRelService;
 
     @Override
     protected BaseDao<MdaSysTableColumn, String> getBaseDao() {
@@ -85,7 +107,31 @@ public class MdaSysTableColServiceImpl extends BaseServiceImpl<MdaSysTableColumn
 
     @Override
     public void addMdaSysTableColumn(MdaSysTableColumn mdaSysTableColumn) throws BaseException {
-        super.saveOrUpdate(mdaSysTableColumn);
+        //保存标签与纵表列关系
+        if (mdaSysTableColumn.getLabelTypeId()!=null) {
+            if (StringUtil.isNotBlank(mdaSysTableColumn.getDimTransId())) {
+                mdaSysTableColumn.setDimTransId(mdaSysTableColumn.getDimTransId());
+                DimTableInfo dimTable = iDimTableInfoService.selectDimTableInfoById(mdaSysTableColumn.getDimTransId());
+                int columnDataTypeId = Integer.parseInt(dimTable.getCodeColType());
+                mdaSysTableColumn.setColumnDataTypeId(columnDataTypeId);
+            }
+            LabelInfo labelInfo = iLabelInfoService.get(mdaSysTableColumn.getLabelId());
+            MdaSysTable mdaSysTable = iMdaSysTableService.queryMdaSysTable(labelInfo.getConfigId(), labelInfo.getUpdateCycle(), 3);
+            mdaSysTableColumn.setTableId(mdaSysTable.getTableId());
+            super.saveOrUpdate(mdaSysTableColumn);
+            
+            LabelVerticalColumnRel labelVerticalColumnRel = new LabelVerticalColumnRel();
+            LabelVerticalColumnRelId labelVerticalColumnRelId = new LabelVerticalColumnRelId();
+            labelVerticalColumnRelId.setLabelId(mdaSysTableColumn.getLabelId());
+            labelVerticalColumnRelId.setColumnId(mdaSysTableColumn.getColumnId());  
+            labelVerticalColumnRel.setLabelVerticalColumnRelId(labelVerticalColumnRelId);
+            labelVerticalColumnRel.setIsMustColumn(mdaSysTableColumn.getIsMustColumn());
+            labelVerticalColumnRel.setLabelTypeId(mdaSysTableColumn.getLabelTypeId());
+            labelVerticalColumnRel.setSortNum(null);
+            iLabelVerticalColumnRelService.addLabelVerticalColumnRel(labelVerticalColumnRel); 
+        } else{
+            super.saveOrUpdate(mdaSysTableColumn);
+        }      
     }
 
     public void modifyMdaSysTableColumn(MdaSysTableColumn mdaSysTableColumn) throws BaseException {

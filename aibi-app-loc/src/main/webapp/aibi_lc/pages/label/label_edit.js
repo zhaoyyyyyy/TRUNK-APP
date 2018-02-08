@@ -1,13 +1,15 @@
 var model = {
 	bqlx : [],
+	fhbqlx : [],
 	gxzq : [],
 	spzt : [],
-//	isbq : [],
 	sjlx : [],
+	sfzd : [],
 	dimtableInfoList : [],
 	sourceIdList : [],
-	sourceNameList : [],
 	dependIndexList : [],
+	sourcetableInfoList : [],  //纵表集合
+	sourceInfoList : [], //纵表对应的列集合
 	categoryId : "",
 	labelName : "",
 	failTime : "",
@@ -17,7 +19,7 @@ var model = {
 	approveStatusId : "",
 	dependIndex : "",
 	configId : "",
-	dataName : "",
+//	dataName : "",
 	dimId : "",
 	unit : "",
 	isRegular : "",
@@ -25,6 +27,8 @@ var model = {
 	countRules : "",
 	busiCaliber : "",
 	isemmu : false,
+	isfhbq : false, //复合标签判断相应的显隐
+	showdim : false,
 }
 
 window.loc_onload = function() {
@@ -48,13 +52,7 @@ window.loc_onload = function() {
 				model.labelName = data.data.labelName;
 				model.updateCycle = data.data.updateCycle;
 				model.labelTypeId = data.data.labelTypeId;
-				model.isRegular = data.data.isRegular;
 				model.busiCaliber = data.data.busiCaliber;
-				if(model.isRegular==1){
-					$("#type"+model.isRegular).click()
-				}else if(model.isRegular==2){
-					$("#type"+model.isRegular).click()
-				}
 				var categoryId = data.data.categoryId;
 				$.commAjax({
 					ansyc : false,
@@ -77,28 +75,34 @@ window.loc_onload = function() {
 						if(list.length!=0){
 							if(model.labelTypeId==5){
 								model.isemmu=true;
-								model.dataName = list[0].dataType;
+//								model.dataName = list[0].dataType;
 								model.dimId = list[0].dimTransId;
+							}else if(model.labelTypeId==8){
+								model.isfhbq = true;
+								model.isemmu = false;
+								model.sourceInfoList = list;
 							}
 							model.unit = list[0].unit
 						};
 						var countRulesCode = list[0].countRulesCode;
-						$.commAjax({
-							ansyc : false,
-							url : $.ctx + '/api/label/labelCountRules/get',
-							postData : {
-								"countRulesCode" : countRulesCode
-							},
-							onSuccess : function(data4){
-								model.countRules = data4.data.countRules;
-								var echodependIndex = data4.data.dependIndex;
-								$("#dependIndex").val(echodependIndex);
-								var dependList = echodependIndex.split(",");
-								for(var i=0; i<dependList.length ; i++){
-									model.dependIndexList.push(dependList[i])
-								}
-							}	
-						});
+						if(countRulesCode !=null){
+							$.commAjax({
+								ansyc : false,
+								url : $.ctx + '/api/label/labelCountRules/get',
+								postData : {
+									"countRulesCode" : countRulesCode
+								},
+								onSuccess : function(data4){
+									model.countRules = data4.data.countRules;
+									var echodependIndex = data4.data.dependIndex;
+									$("#dependIndex").val(echodependIndex);
+									var dependList = echodependIndex.split(",");
+									for(var i=0; i<dependList.length ; i++){
+										model.dependIndexList.push(dependList[i])
+									}
+								}	
+							});
+						}	
 					}
 				});
 				model.approveStatusId = data.data.approveInfo.approveStatusId;
@@ -111,7 +115,6 @@ window.loc_onload = function() {
 			data : model,
 			methods : {
 				del_sourceName : function(index){
-//					model.sourceNameList.splice(index,1);
 					model.dependIndexList.splice(index,1);
 					var dependx = "";
 					for(var i=0; i<model.dependIndexList.length; i++){
@@ -122,7 +125,75 @@ window.loc_onload = function() {
 					}else{
 						$("#dependIndex").val("");
 					}
-					
+				},
+				changebq : function(event){
+					if(event.target.value==5){
+						model.isemmu = true;
+						model.isfhbq = false;
+					}else if(event.target.value==8){
+						model.isfhbq = true;
+						model.isemmu = false;
+						model.sourceInfoList=[];
+					}else{
+						model.isemmu = false;
+						model.isfhbq = false;
+					}
+				},
+				//选择不同的标签类型
+				changeStatus : function(index,event){
+					Vue.set(model.sourceInfoList[index],'showdim',false);
+					if(event.target.value == 5){
+						model.sourceInfoList[index].showdim = true;
+					}else{
+						model.sourceInfoList[index].showdim = false;
+					}
+				},
+				//不同周期获取不同的纵表
+				change_updateCycle : function(){
+					$.commAjax({
+						async : false,
+						url : $.ctx + '/api/source/sourceTableInfo/queryList',
+						postData : {
+							"configId" : model.configId,
+							"readCycle" : model.updateCycle
+						},
+						onSuccess : function(data){
+							model.sourcetableInfoList = data.data
+						}
+					});
+				},
+				//选择不同的纵表，获取对应的列信息
+				change_sourceId : function(){	
+					if(!model.updateCycle){
+						$.alert("请选择周期")
+					}else{
+						var sourceTableId = $("#sourceTableId").val();
+						$.commAjax({
+							url : $.ctx + '/api/source/sourceTableInfo/get?sourceTableId='+sourceTableId,
+							onSuccess : function(data){					
+								model.sourceInfoList = data.data.sourceInfoList
+							}
+						});
+					}
+				},
+				//删除列
+				del_form : function(index){
+					model.sourceInfoList.splice(index,1)
+				},
+				//显示维表详情
+				showdimdetail : function(sourceInfo){
+					$.commAjax({
+						ansyc : false,
+					    url : $.ctx + '/api/dimtable/dimTableInfo/get',
+					    postData : {
+					    	"dimId" : sourceInfo.dimTransId
+					    },
+					    onSuccess : function(data){
+					    	var dimTableName = data.data.dimTableName;
+					    	var win = $.window('维表详情',$.ctx + '/aibi_lc/pages/dimtable/dimtable_detail.html?dimTableName='+dimTableName, 900,
+					    			600);
+					    }
+					});
 				}
 			},
 			mounted: function () {
@@ -148,10 +219,16 @@ window.loc_onload = function() {
 
 	var dicBqlx = $.getDicData("BQLXZD");
 	for(var i = 0; i<dicBqlx.length; i++){
-		if(dicBqlx[i].code!=10&&dicBqlx[i].code!=12&&dicBqlx[i].code!=11&&dicBqlx[i].code!=8){
+		if(dicBqlx[i].code!=10&&dicBqlx[i].code!=12&&dicBqlx[i].code!=11){
 			model.bqlx.push(dicBqlx[i]);
 		}	
-//		model.bqlx.push(dicBqlx[i]);
+	}
+	
+	//复合标签列数据类型
+	for(var i = 0; i<dicBqlx.length; i++){
+		if(dicBqlx[i].code!=10&&dicBqlx[i].code!=12&&dicBqlx[i].code!=11&&dicBqlx[i].code!=8){
+			model.fhbqlx.push(dicBqlx[i]);
+		}	
 	}
 	
 	var dicspzt = $.getDicData("SPZTZD");
@@ -160,6 +237,10 @@ window.loc_onload = function() {
 			model.spzt.push(dicspzt[i]); 
 		}
 	}	
+	var dicsfzd = $.getDicData("SFZD");
+	for(var i = 0; i<dicsfzd.length; i++){
+		model.sfzd.push(dicsfzd[i]);
+	}
 	$.commAjax({
 		url : $.ctx + '/api/dimtable/dimTableInfo/queryList',
 		postData : {
@@ -194,37 +275,53 @@ window.loc_onload = function() {
 	
 }
 
-function changebq(obj){
-	if(obj==5){
-		model.isemmu=true;
-	}else{
-		model.isemmu=false;
-	}
-}
-
 function fun_to_save(){
-	if($("#saveDataForm").validateForm()){
+	if($("form").validateForm()){
 		var url_ = "";
+		var url_fh = "";
 		var msg = "";
+		var savemda = "";
 		if(model.labelId!=null && model.labelId!="" && model.labelId!=undefined){
-			url_ = $.ctx + '/api/label/labelInfo/update',
+			url_ = $.ctx + '/api/label/labelInfo/update';
+			if(model.labelTypeId == 8){
+				url_fh = $.ctx + '/api/label/mdaSysTableCol/update';
+			}
 			msg = "修改成功";
 		}else{
 			$("#labelId").removeAttr("name"),
-			url_ = $.ctx + '/api/label/labelInfo/save',
+			url_ = $.ctx + '/api/label/labelInfo/save';
+			if(model.labelTypeId == 8){
+				url_fh = $.ctx + '/api/label/mdaSysTableCol/save';
+			}
 			msg = "保存成功";
 		}
 		$.commAjax({
 			url : url_,
 			postData : $('#saveDataForm').formToJson(),
 			onSuccess : function(data){
-				if(data.data == "success"){
-					$.success(msg, function() {
-						history.back(-1);
-					});
+				var labelId = data.data.labelId;
+				if(url_fh !="" && labelId!=""){
+					var k=0;
+					$("form[class~=create-main-col]").each(function(){
+						var mdaSysTableColumn = $(this).formToJson();
+						mdaSysTableColumn["labelId"]=labelId;
+						$.commAjax({
+							url : url_fh,
+							postData : mdaSysTableColumn,
+							onSuccess : function(data){
+								savemda = data.status
+								if(k==$("form[class~=create-main-col]").size() && savemda== 200){
+									$.success(msg,function(){
+										history.back(-1);
+									});
+								};
+							}
+						});
+						k++;
+					})
 				}
-			}
-		});
+			}	
+		});		
 	}else{
 		$.alert("表单校验失败");
 	}

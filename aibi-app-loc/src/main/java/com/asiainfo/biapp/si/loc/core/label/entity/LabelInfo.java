@@ -557,7 +557,9 @@ public class LabelInfo extends BaseEntity {
         ILabelVerticalColumnRelService labelVerticalColumnRelService = (ILabelVerticalColumnRelService) SpringContextHolder
             .getBean("labelVerticalColumnRelServiceImpl");
         LabelVerticalColumnRelVo labelVerticalColumnRelVo = new LabelVerticalColumnRelVo();
-        labelVerticalColumnRelVo.setLabelId(labelId);
+        LabelVerticalColumnRelId labelVerticalColumnRelId = new LabelVerticalColumnRelId();
+        labelVerticalColumnRelId.setLabelId(labelId);
+        labelVerticalColumnRelVo.setLabelVerticalColumnRelId(labelVerticalColumnRelId);
         List<LabelVerticalColumnRel> list = null;
         try {
             list = labelVerticalColumnRelService.selectLabelVerticalColumnRelList(labelVerticalColumnRelVo);
