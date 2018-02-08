@@ -100,6 +100,17 @@
 									<select v-model="idDataType" required="true" name="idDataType" dicCode="ZDLXZD" type="text" class="form-control input-pointer easyui-validatebox"></select>
 								</div>
 							</div>
+							
+							<div class="ui-form-group">
+								<label class="control-label" for="inputEmail4"><span class="input-required">*</span>源表类型</label>
+								<div class="control-input has-icon">
+									<ul class="validate-radioList">
+										<li class="radio circle success" v-for="t in tableType" style="display: inline"><input class="easyui-validatebox" validType="radio" :value="t.code"
+											:id="'type'+t.code" name="sourceTableType" type="radio" /> <label><i class="default"></i>{{t.dataName}}</label></li>
+									</ul>
+								</div>
+							</div>
+							
 						</div>
 					</div>
 					<div class="ui-reg-table mt20">

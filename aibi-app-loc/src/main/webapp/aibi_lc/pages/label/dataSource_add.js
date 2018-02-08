@@ -13,6 +13,7 @@ var model = {
     idDataType: "",
     sortNum: 0,
     gxzq: [],
+    tableType:[],
     sourceTableId: "",
     configId: "",
     tableSchema: "",
@@ -24,6 +25,10 @@ window.loc_onload = function() {
     var dicGxzq = $.getDicData("GXZQZD");
     for (var i = 0; i < dicGxzq.length; i++) {
         model.gxzq.push(dicGxzq[i]);
+    };
+    var dicYblx = $.getDicData("SJYBLX");
+    for (var i = 0; i < dicYblx.length; i++) {
+        model.tableType.push(dicYblx[i]);
     };
     var isEdit = $.getUrlParam("isEdit");
     var id = $.getUrlParam("sourceTableId");
@@ -64,6 +69,7 @@ window.loc_onload = function() {
         }
     });
     $("#code1").click();
+    $("#type1").click();
     var url = "";
     var pD = {};
     if (isEdit == 1) {
@@ -213,7 +219,7 @@ function fun_to_del(id, sourceId) {
                 if (data.data.length == 0) {
                     $("#jsonmap").jqGrid("delRowData", id);
                 } else {
-                    $.alert("该指标已经被使用，不能删除");
+                    $.alert("该指标已经被使用，不能删除！");
                 }
             }
         })

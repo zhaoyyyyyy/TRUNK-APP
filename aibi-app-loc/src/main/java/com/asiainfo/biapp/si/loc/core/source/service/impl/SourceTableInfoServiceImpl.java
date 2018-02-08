@@ -31,6 +31,8 @@ import com.asiainfo.biapp.si.loc.base.service.impl.BaseServiceImpl;
 import com.asiainfo.biapp.si.loc.base.utils.FileUtil;
 import com.asiainfo.biapp.si.loc.base.utils.LogUtil;
 import com.asiainfo.biapp.si.loc.base.utils.StringUtil;
+import com.asiainfo.biapp.si.loc.core.label.entity.MdaSysTable;
+import com.asiainfo.biapp.si.loc.core.label.service.IMdaSysTableService;
 import com.asiainfo.biapp.si.loc.core.source.dao.ISourceTableInfoDao;
 import com.asiainfo.biapp.si.loc.core.source.entity.SourceInfo;
 import com.asiainfo.biapp.si.loc.core.source.entity.SourceTableInfo;
@@ -80,6 +82,9 @@ public class SourceTableInfoServiceImpl extends BaseServiceImpl<SourceTableInfo,
 
     @Autowired
     private ITargetTableStatusService iTargetTableStatusService;
+    
+    @Autowired
+    private IMdaSysTableService iMdaSysTableService;
 
     @Override
     protected BaseDao<SourceTableInfo, String> getBaseDao() {
@@ -124,6 +129,7 @@ public class SourceTableInfoServiceImpl extends BaseServiceImpl<SourceTableInfo,
                 throw new ParamRequiredException("字段名称["+s.getColumnName()+"]已存在");
             }
         }
+        Date createTime = new Date();
         SourceTableInfoVo sourceTableInfoVo = new SourceTableInfoVo();
         sourceTableInfoVo.setSourceTableName(sourceTableInfo.getSourceTableName());
         sourceTableInfoVo.setConfigId(sourceTableInfo.getConfigId());
@@ -132,9 +138,8 @@ public class SourceTableInfoServiceImpl extends BaseServiceImpl<SourceTableInfo,
             throw new ParamRequiredException("表名称已存在");
         }
         sourceTableInfo.setKeyType(sourceTableInfo.getIdType());
-        sourceTableInfo.setCreateTime(new Date());
+        sourceTableInfo.setCreateTime(createTime);
         sourceTableInfo.setDataExtractionType(0);
-        sourceTableInfo.setSourceTableType(1);
         sourceTableInfo.setStatusId(1);
         sourceTableInfo.setDataStore(1);
         super.saveOrUpdate(sourceTableInfo);
@@ -166,6 +171,20 @@ public class SourceTableInfoServiceImpl extends BaseServiceImpl<SourceTableInfo,
                 iSourceInfoService.modifySourceInfo(newS);
             }
         }
+        
+        if(2==sourceTableInfo.getSourceTableType()){
+            MdaSysTable mdaSysTable = new MdaSysTable();
+            mdaSysTable.setConfigId(sourceTableInfo.getConfigId());
+            mdaSysTable.setTableName("LV_"+sourceTableInfo.getConfigId()+"_"+sourceTableInfo.getSourceTableName());
+            mdaSysTable.setTableCnName(sourceTableInfo.getSourceTableCnName());
+            mdaSysTable.setTableSchema(sourceTableInfo.getTableSchema());
+            mdaSysTable.setTableType(3);
+            mdaSysTable.setUpdateCycle(sourceTableInfo.getReadCycle());
+            mdaSysTable.setCreateUserId(sourceTableInfo.getCreateUserId());
+            mdaSysTable.setCreateTime(createTime);
+            iMdaSysTableService.saveOrUpdate(mdaSysTable);
+        }
+        
     }
 
     public void modifySourceTableInfo(SourceTableInfo sourceTableInfo) throws BaseException {

@@ -213,7 +213,7 @@ public class ShopCartController extends BaseController {
 	@RequestMapping(value = "/findCusotmValidate", method = RequestMethod.POST)
 	public WebResult<String> findCusotmValidate( String labelId) {
 		WebResult<String> webResult = new WebResult<>();
-		boolean success = false;
+		boolean success = true;
 		String msg = "抱歉，该客户群无规则、无清单可用，不能添加到收纳篮！";
 		//msg = "客户群已经被删除，无法加入到购物车！";
 		try {
