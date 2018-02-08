@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.annotation.Resource;
 import javax.transaction.Transactional;
 
 import org.apache.commons.lang.StringUtils;
@@ -42,7 +43,7 @@ import com.asiainfo.biapp.si.loc.core.label.vo.LabelRuleVo;
 @Transactional
 public class LabelExploreServiceImpl implements ILabelExploreService {
 
-	@Autowired
+	@Resource(name="sparkSqlPaser")
 	private IGroupCalcSqlPaser sqlPaser;
 	
 	@Autowired
@@ -92,8 +93,6 @@ public class LabelExploreServiceImpl implements ILabelExploreService {
 				if (trimSql.startsWith("from")) {
 					singleLabelSql = trimSql.substring(4);
 				}
-				System.out.println("根据标签ID获得混合运算生成客户群,标签Id为："
-						+ rule.getCalcuElement() + ",生成的sql为："+ singleLabelSql);
 				if (labelRuleToSql.keySet().contains(rule.getCalcuElement())) {
 					labelRuleToSql.put(rule.getCalcuElement() + "_"+ duplicateLabelIdCount, singleLabelSql);
 					calcExpr.append(rule.getCalcuElement() + "_"+ duplicateLabelIdCount);
@@ -111,8 +110,19 @@ public class LabelExploreServiceImpl implements ILabelExploreService {
 			}//end ELEMENT_TYPE
 			
 		}//end for
-		String sql =" from ("+ sqlPaser.parseExprToSql(calcExpr.toString(), labelRuleToSql)+")";
-		System.out.println(sql);
+		String sql = "";
+		if (labelRuleToSql.keySet().size() == 1) {
+			String calcExprStr = calcExpr.toString();
+			calcExprStr = calcExprStr.replace(String.valueOf(CommonConstants.LEFT_Q), "")
+					.replace(String.valueOf(CommonConstants.RIGHT_Q), "");
+			if (labelRuleToSql.containsKey(calcExprStr)) {
+				sql = "select " +LabelInfoContants.KHQ_CROSS_COLUMN+ " from " + labelRuleToSql.get(calcExprStr);
+			} else {
+				sql = "select " +LabelInfoContants.KHQ_CROSS_COLUMN+ " from " + calcExprStr ;
+			}
+		} else if (labelRuleToSql.keySet().size() > 1) {
+			sql =sqlPaser.parseExprToSql(calcExpr.toString(), labelRuleToSql);
+		}
 		return sql;
 	}
 

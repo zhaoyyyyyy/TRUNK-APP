@@ -371,7 +371,7 @@ public class ShopCartController extends BaseController {
 		try {
 			if(haveCustomOrVerticalLabel(labelRules)) {
 				String querySql = exploreServiceImpl.getFromSqlForMultiLabel(labelRules, queryParam);
-				sql.append("select count(1) ").append(querySql);
+				sql.append("select count(1) from (").append(querySql).append(") abc");
 			}else{
 				//不包含纵表的探索
 				String querySql = exploreServiceImpl.getCountSqlStr(labelRules, queryParam);
@@ -415,7 +415,7 @@ public class ShopCartController extends BaseController {
 		try {
 			if (haveCustomOrVerticalLabel(labelRules)) {
 				String querySql = exploreServiceImpl.getFromSqlForMultiLabel(labelRules, queryParam);
-				sql.append("select count(1) ").append(querySql);
+				sql.append("select count(1) from (").append(querySql).append(") abc");
 			} else {
 				// 不包含纵表的探索
 				String querySql = exploreServiceImpl.getCountSqlStr(labelRules, queryParam);
