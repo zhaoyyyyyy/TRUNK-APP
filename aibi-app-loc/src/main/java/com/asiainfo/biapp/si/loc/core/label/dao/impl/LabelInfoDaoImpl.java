@@ -171,6 +171,10 @@ public class LabelInfoDaoImpl extends BaseDaoImpl<LabelInfo, String> implements 
             hql.append("and l.publishTime <= :publishTimeEnd ");
             params.put("publishTimeEnd", DateUtil.string2Date(labelInfoVo.getpublishTimeEnd(), DateUtil.FORMAT_YYYY_MM_DD));
         }
+        if(StringUtil.isNotBlank(labelInfoVo.getCreateUserId())){
+            hql.append("and l.createUserId = :createUserId ");
+            params.put("createUserId", labelInfoVo.getCreateUserId());
+        }
         hql.append("and l.dataStatusId != 6");
         if(StringUtil.isNotBlank(page.getSortCol())){
             hql.append(" order by l."+page.getSortCol()+" "+page.getSortOrder());
