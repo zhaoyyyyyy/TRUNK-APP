@@ -150,12 +150,11 @@ var labelInfoModel = (function (model){
     			  url: url,
     			  postData:data,
     			  onSuccess: function(returnObj){
-    				  if(returnObj.status == '200'){
-    					  $.alert(returnObj.msg);
-    					  model.back();
-    				  }else{
-    					  $.alert(returnObj.msg);
-    				  }
+    				  $.alert(returnObj.msg);
+					  model.back();
+    			  },
+    			  onFailure:function(returnObj){
+					  $.alert(returnObj.msg);
     			  }
     		  });
     	 }
@@ -168,13 +167,11 @@ var labelInfoModel = (function (model){
 		$.commAjax({
 			  url: $.ctx + "/api/user/get",
 			  onSuccess: function(returnObj){
-				  if(returnObj.status == '200'){
-					  dataModel.dataPrivaliegeList = returnObj.data.dataPrivaliege[3];
-					  if(dataModel.dataPrivaliegeList && dataModel.dataPrivaliegeList.length > 1){
-						  dataModel.isShowPrivaliegeDiv = true;
-					  }else if(dataModel.dataPrivaliegeList && dataModel.dataPrivaliegeList.length == 1){
-						  dataModel.checkedModelList[0] = dataModel.dataPrivaliegeList[0].id;
-					  }
+				  dataModel.dataPrivaliegeList = returnObj.data.dataPrivaliege[3];
+				  if(dataModel.dataPrivaliegeList && dataModel.dataPrivaliegeList.length > 1){
+					  dataModel.isShowPrivaliegeDiv = true;
+				  }else if(dataModel.dataPrivaliegeList && dataModel.dataPrivaliegeList.length == 1){
+					  dataModel.checkedModelList[0] = dataModel.dataPrivaliegeList[0].id;
 				  }
 			  }
 		});

@@ -44,36 +44,34 @@ var calculateCenter = (function (model){
 			  async	: false,//同步
 			  postData:{labelId :  $.trim(id)},
 			  onSuccess: function(returnObj){
-			  	  //1.如果验证失败，需要返回 2.需要提示
-				  if(returnObj.status == '201'){
-					  flag = true; 
-					  msg = returnObj.msg ;
-				  }
-				  
+			  },
+			  onFailure : function(returnObj){
+				  flag = true; 
+				  msg = returnObj.msg ;
 			  }
 		});
 		if(flag){
 			$.alert(msg);
 			return;
+		}else{
+			var para={
+					"calculationsId"	: $.trim(id),
+					"typeId"			: typeId,
+					"isEditCustomFlag"	: isEditCustomFlag,
+					"defaultOp"        : defaultOp
+			};
+			$.commAjax({
+				  url: $.ctx + "/api/shopCart/saveShopSession",
+				  postData:para,
+				  onSuccess: function(returnObj){
+					  model.refreshShopCart();
+				  },
+				  onFailure : function(returnObj){
+					  $.alert(returnObj.msg);
+				  }
+			});
 		}
-		var para={
-				"calculationsId"	: $.trim(id),
-				"typeId"			: typeId,
-				"isEditCustomFlag"	: isEditCustomFlag,
-				"defaultOp"        : defaultOp
-		};
-		$.commAjax({
-			  url: $.ctx + "/api/shopCart/saveShopSession",
-			  postData:para,
-			  onSuccess: function(returnObj){
-				  	var status = returnObj.status;
-					if (status == '200'){
-						model.refreshShopCart();
-					}else{
-						$.alert("添加标签失败");
-					}
-			  }
-		});
+		
     };
     /**
      * @description 刷新缓存
@@ -127,12 +125,10 @@ var calculateCenter = (function (model){
 			  url: $.ctx + "/api/shopCart/updateShopSession",
 			  postData:{labelRuleStr : para},
 			  onSuccess: function(returnObj){
-				  	var status = returnObj.status;
-					if (status == '200'){
-						model.refreshShopCart();
-					}else{
-						$.alert("添加标签失败");
-					}
+				  model.refreshShopCart();
+			  },
+			  onFailure : function(returnObj){
+				  $.alert("添加标签失败");
 			  }
 		});
 	};
@@ -237,15 +233,13 @@ var calculateCenter = (function (model){
 						labelId : rule.calcuElement
 	  				},
 					onSuccess:function(returnObj){
-						var status = returnObj.status;
-						if (status == '200'){
-							$(".ui-conditionBox").attr("index",index);	
-							$(".ui-conditionBox").show();
-							dataModel.labelInfoViewObj = returnObj.data;
-						}else{
-							$.alert(returnObj.msg);
-						}
+						$(".ui-conditionBox").attr("index",index);	
+						$(".ui-conditionBox").show();
+						dataModel.labelInfoViewObj = returnObj.data;
 					},
+					onFailure:function(returnObj){
+						$.alert(returnObj.msg);
+					}
 				});
 			}
 		}else{
@@ -388,17 +382,15 @@ var calculateCenter = (function (model){
 	 */
 	model.clearShopRules = function(){
 		$.confirm('确定要清空？', function() {
-			$('.ui-calc-h3>span').remove
+			$('.ui-calc-h3>span').remove();
 			$.commAjax({
 				url : $.ctx + "/api/shopCart/delShopSession",
 				onSuccess:function(returnObj){
-					var status = returnObj.status;
-					if (status == '200'){
-						model.refreshShopCart();
-					}else{
-						$.alert(returnObj.msg);
-					}
+					model.refreshShopCart();
 				},
+				onFailure:function(returnObj){
+					$.alert(returnObj.msg);
+				}
 			});
 		});
 	};
@@ -468,11 +460,10 @@ var calculateCenter = (function (model){
 					  postData:{labelId : dataModel.ruleList[i].calcuElement},
 					  async	: false,//同步
 					  onSuccess: function(returnObj){
-						  	var status = returnObj.status;
-							if (status != '200'){
-								resultFlag = false;
-								$.alert("购物车中存在无效标签，请删除！");
-							}
+					  },
+					  onFailure:function(returnObj){
+						  resultFlag = false;
+						  $.alert("购物车中存在无效标签，请删除！");
 					  }
 				});
 			}
@@ -496,14 +487,11 @@ var calculateCenter = (function (model){
 				  "dataPrivaliege" : dataPrivaliege
 			  },
 			  onSuccess: function(returnObj){
-				  	var status = returnObj.status;
-				  	var msg = returnObj.msg;
-					if (status == '200'){
-						//删除失效的标签
-						flag = true;
-					}else{
-						$.alert(msg);
-					}
+				    //删除失效的标签
+					flag = true;
+			  },
+			  onFailure:function(returnObj){
+				  $.alert(returnObj.msg);
 			  }
 		});
 		return flag;
@@ -525,20 +513,17 @@ var calculateCenter = (function (model){
 				  url: $.ctx + "/api/shopCart/findEaliestDataDate",
 				  async	: false,//同步
 				  onSuccess: function(returnObj){
-					  	var status = returnObj.status;
 					  	var result = returnObj.data;
-						if (status == '200'){
-							dataModel.existMonthLabel = result.existMonthLabel;
-							dataModel.existDayLabel = result.existDayLabel;
-							dataModel.labelMonth = result.monthDate;
-							dataModel.labelDay = result.dayDate;
-							if(!dataModel.existMonthLabel && !dataModel.existDayLabel){//不含标签时直接探索
-								//验证sql
-								if(model.validateSql(dataModel.labelMonth.replace(/-/g,""),dataModel.labelDay.replace(/-/g,""))){
-									model.submitForExplore(dataModel.labelMonth.replace(/-/g,""),dataModel.labelDay.replace(/-/g,""));
-								}
-								existLabel = false;
+					  	dataModel.existMonthLabel = result.existMonthLabel;
+						dataModel.existDayLabel = result.existDayLabel;
+						dataModel.labelMonth = result.monthDate;
+						dataModel.labelDay = result.dayDate;
+						if(!dataModel.existMonthLabel && !dataModel.existDayLabel){//不含标签时直接探索
+							//验证sql
+							if(model.validateSql(dataModel.labelMonth.replace(/-/g,""),dataModel.labelDay.replace(/-/g,""))){
+								model.submitForExplore(dataModel.labelMonth.replace(/-/g,""),dataModel.labelDay.replace(/-/g,""));
 							}
+							existLabel = false;
 						}
 				  }
 			});
@@ -571,11 +556,11 @@ var calculateCenter = (function (model){
 			  postData:param,
 			  onSuccess: function(returnObj){
 				dataModel.exploreCustomNum = 0;
-				if(returnObj.status == '200'){
-					dataModel.exploreCustomNum = returnObj.data;
-				}else{
-					$.alert("探索失败");
-				}
+				dataModel.exploreCustomNum = returnObj.data;
+			 },
+			 onFailure:function(returnObj){
+				dataModel.exploreCustomNum = 0;
+				$.alert(returnObj.msg);
 			 }
 		});
 	};
