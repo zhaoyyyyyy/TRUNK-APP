@@ -258,6 +258,7 @@ var labelMarket = (function (model){
 			var obj = $("#formSearch").formToJson();
 			obj.pageSize = 20;
 			obj.groupType = 0;
+			obj.dataStatusId = 2;
 			$.commAjax({
 				url: $.ctx + "/api/label/labelInfo/queryPage",
 				postData:obj,
