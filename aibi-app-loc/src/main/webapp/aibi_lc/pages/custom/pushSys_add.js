@@ -26,16 +26,17 @@ var model = {
 		tableNamePre:"",//推送清单表前缀
 		customTaskTable:"",//客户群调度信息表
 		curentIndex:false,//radio选中
-		isChecked:false,
-		isActive:false,
-		isShow:false,
+	//	isChecked:false,
+	//	isActive:false,
+	//  isShow:false,
 		checked:false,
-		checkedPushType:false,
-		showPushType:"",//显示推送方式
+	//  checkedPushType:false,
+	//	showPushType:"",//显示推送方式
 		showDesKey:false,//展示DES加密
 		showCompressType:false,//展示压缩类型
 		pushFile:false,//上传xml文件
 		pushAttr:false,//推送属性
+		pushPage:true,//展开推送页面显示
 		
 }
 window.loc_onload = function() {
@@ -70,8 +71,6 @@ window.loc_onload = function() {
 				model.tableNamePre = data.data.tableNamePre;
 				model.customTaskTable = data.data.customTaskTable;
 				if(data.data.pushType ==1){
-//					model.showPushType ="文件推送";
-console.log(data.data.isNeedDes)
 					var b =document.getElementById("pushType");
 					$(b).prop("checked", true);
 					model.curentIndex =true;
@@ -100,9 +99,13 @@ console.log(data.data.isNeedDes)
 					}else{
 						model.pushAttr=false;
 					}
+					if(data.data.showInPage==1){
+						model.pushPage=true;
+					}else{
+						model.pushPage=false;
+					}
 				}
 				if(data.data.pushType ==2){
-//					model.showPushType ="表推送";
 					$("input[name='pushType']").prop("checked", true);
 					model.curentIndex =true;
 				}
@@ -150,16 +153,16 @@ console.log(data.data.isNeedDes)
 				if(dataForm.showInPage !=1){
 				dataForm.showInPage = 0;
 				}
-				if(dataForm.isNeedXml !="1"){
+				if(dataForm.isNeedXml !=1){
 					dataForm.isNeedXml = 0;
 				}
-				if(dataForm.isNeedDes !="1"){
+				if(dataForm.isNeedDes !=1){
 					dataForm.isNeedDes = 0;
 				}
-				if(dataForm.isNeedCompress !="1"){
+				if(dataForm.isNeedCompress !=1){
 					dataForm.isNeedCompress = 0;
 				}
-				if(dataForm.isAllowAttr !="1"){
+				if(dataForm.isAllowAttr !=1){
 					dataForm.isAllowAttr = 0;
 				}
 				$.commAjax({
