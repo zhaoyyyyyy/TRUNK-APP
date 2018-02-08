@@ -467,9 +467,22 @@ public class LabelInfoController extends BaseController {
     public WebResult<List<LabelInfo>> findListByEffective(@ModelAttribute LabelInfoVo labelInfoVo) {
         WebResult<List<LabelInfo>> webResult = new WebResult<>();
         List<LabelInfo> labelInfoList = new ArrayList<>();
+        Set<String> categoryIdSet = new HashSet<>();
+        //Page<LabelInfo> page =new Page<LabelInfo>();
         try {
+            if(StringUtil.isNotBlank(labelInfoVo.getCategoryId())){
+                CategoryInfo categoryInfo = iCategoryInfoService.selectCategoryInfoById(labelInfoVo.getCategoryId());
+                categoryIdSet.add(categoryInfo.getCategoryId());
+                if(!categoryInfo.getChildren().isEmpty()){
+                    getCategoryChildren(categoryInfo.getChildren(),categoryIdSet);
+                }
+                labelInfoVo.setCategoryIdSet(categoryIdSet);
+            }
+            labelInfoList = iLabelInfoService.selectLabelAllEffectiveInfoList(labelInfoVo);          
+        }
+        /*try {
             labelInfoList = iLabelInfoService.selectLabelAllEffectiveInfoList(labelInfoVo);
-        } catch (BaseException e) {
+        }*/ catch (BaseException e) {
             e.printStackTrace();
         }
         return webResult.success("获取有效标签信息成功.", labelInfoList);

@@ -108,6 +108,19 @@ window.loc_onload = function() {
             				$("#labelDetail").append(html);
         				}
         			}
+        			if(model.customRule[i].labelTypeId == 7){//文本型
+        				if("1" == model.customRule[i].queryWay){
+        					if(model.customRule[i].darkValue){
+        						html = "<div class='ui-custom-item clearfix clearfix' ><a><span> "+model.customRule[i].attrName+"</span></a><a><span>模糊值:"+model.customRule[i].darkValue+"</span></div>"
+        						$("#labelDetail").append(html);
+        					}
+        				}else if("2" == model.customRule[i].queryWay){
+        					if(model.customRule[i].exactValue){
+        						html = "<div class='ui-custom-item clearfix clearfix' ><a><span> "+model.customRule[i].attrName+"</span></a><a><span>精确值:"+model.customRule[i].exactValue+"</span></div>"
+        						$("#labelDetail").append(html);
+        					}
+        				}
+        			}
         		}
 			}
 		}
@@ -237,23 +250,24 @@ window.loc_onload = function() {
 	}
 	function dataClick(event, treeId, treeNode){
 		$.commAjax({			
-		    url : $.ctx+'/api/label/labelInfo/queryListEffective', 
+		    url : $.ctx + "/api/label/labelInfo/queryPage", 
 		    dataType : 'json', 
 		    async:true,
 		    postData : {
 					"configId" :configId,
 					"categoryId" :treeNode.categoryId,
 					"groupType" :0,
+					"dataStatusId":2,
 				},
 		    onSuccess: function(data){
 		    	$("#OptionalLabel").html("");
-		    	for(var i=0;i<data.data.length;i++){
+		    	for(var i=0;i<data.rows.length;i++){
 		    		html="<li>"+
 		    		"<div class='checkbox'>"+
-		    		"<input type='checkbox' id='"+data.data[i].labelId+"L' class='checkbix'>"+
-		    		"<label for='"+data.data[i].labelId+"L' aria-label role='checkbox' class='checkbix' data-id='"+data.data[i].labelId+"L' data-name='"+data.data[i].labelName+"'>"+
+		    		"<input type='checkbox' id='"+data.rows[i].labelId+"L' class='checkbix'>"+
+		    		"<label for='"+data.rows[i].labelId+"L' aria-label role='checkbox' class='checkbix' data-id='"+data.rows[i].labelId+"L' data-name='"+data.rows[i].labelName+"'>"+
 		    		"<span class='large'></span>"+
-		    		data.data[i].labelName+
+		    		data.rows[i].labelName+
 		    		"</label>"+
 		    		"</div>"+
 		    		"</li>";
@@ -265,26 +279,25 @@ window.loc_onload = function() {
 	};
     $("#btn_search").click(function() {
     	var txt = $("#labelName").val();
-    	console.log(txt);
     	$.commAjax({			
-		    url : $.ctx+'/api/label/labelInfo/queryListEffective', 
+		    url : $.ctx+"/api/label/labelInfo/queryPage", 
 		    dataType : 'json', 
 		    async:true,
 		    postData : {
 		    		"labelName":txt,
 					"configId" :configId,
-					//"categoryId" :treeNode.categoryId,
 					"groupType" :0,
+					"dataStatusId":2,
 				},
 		    onSuccess: function(data){
 		    	$("#OptionalLabel").html("");
-		    	for(var i=0;i<data.data.length;i++){
+		    	for(var i=0;i<data.rows.length;i++){
 		    		html="<li>"+
 		    		"<div class='checkbox'>"+
-		    		"<input type='checkbox' id='"+data.data[i].labelId+"L' class='checkbix'>"+
-		    		"<label for='"+data.data[i].labelId+"L' aria-label role='checkbox' class='checkbix' data-id='"+data.data[i].labelId+"L' data-name='"+data.data[i].labelName+"'>"+
+		    		"<input type='checkbox' id='"+data.rows[i].labelId+"L' class='checkbix'>"+
+		    		"<label for='"+data.rows[i].labelId+"L' aria-label role='checkbox' class='checkbix' data-id='"+data.rows[i].labelId+"L' data-name='"+data.rows[i].labelName+"'>"+
 		    		"<span class='large'></span>"+
-		    		data.data[i].labelName+
+		    		data.rows[i].labelName+
 		    		"</label>"+
 		    		"</div>"+
 		    		"</li>";
