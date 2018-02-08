@@ -13,7 +13,12 @@ var calculateCenter = (function (model){
      */
 	model.addToShoppingCar = function(index){
     	var labelInfo = dataModel.labelInfoList[index];
-    	model.addShopCart(labelInfo.labelId,1,'',0);
+    	if(labelInfo.groupType == 0 ){
+    		model.addShopCart(labelInfo.labelId,1,'',0);//标签
+    	}else{
+    		model.addShopCart(labelInfo.labelId,2,'',0);//客户群
+    	}
+    	
     };
     /**
 	 * 加入购物车缓存
@@ -25,41 +30,28 @@ var calculateCenter = (function (model){
     model.addShopCart = function(id,typeId,isEditCustomFlag,defaultOp){
     	var flag = false;
     	var msg = "";
-    	var flag = false;
-    	var msg = "";
+    	var url = "";
 		if(typeId == 1) {
 			//校验标签有效性
-			$.commAjax({
-				  url: $.ctx + "/api/shopCart/findLabelValidate",
-				  async	: false,//同步
-				  postData:{labelId :  $.trim(id)},
-				  onSuccess: function(returnObj){
-				  	  //1.如果验证失败，需要返回 2.需要提示
-					  if(returnObj.status == '201'){
-						  flag = true; 
-						  msg = returnObj.msg ;
-					  }
-					  
-				  }
-			});
-			
+			url = $.ctx + "/api/shopCart/findLabelValidate";
 		}
 		if(typeId == 2) {
-			$.commAjax({
-				  url: $.ctx + "/api/shopCart/findCusotmValidate",
-				  async	: false,//同步
-				  postData:{
-					  labelId : {'labelId' : $.trim(id)}
-				  },
-				  onSuccess: function(returnObj){
-					//1.如果验证失败，需要返回 2.需要提示
-					  if(returnObj.status == '201'){
-						  flag = true; 
-						  msg = returnObj.msg ;
-					  }
-				  }
-			});
+			url = $.ctx + "/api/shopCart/findCusotmValidate";
 		}
+		//校验标签有效性
+		$.commAjax({
+			  url: url,
+			  async	: false,//同步
+			  postData:{labelId :  $.trim(id)},
+			  onSuccess: function(returnObj){
+			  	  //1.如果验证失败，需要返回 2.需要提示
+				  if(returnObj.status == '201'){
+					  flag = true; 
+					  msg = returnObj.msg ;
+				  }
+				  
+			  }
+		});
 		if(flag){
 			$.alert(msg);
 			return;
@@ -164,7 +156,7 @@ var calculateCenter = (function (model){
 	    		model.refreshShopCart();
 	    	}
 			
-		}else if(labelType == "5" || labelType == "9"){  //条件选择
+		}else if(labelType == "5" || labelType == "9"){  //枚举标签 条件选择
 			//样例弹出页面
 			var wd = $.window(name + "-条件设置", $.ctx + '/aibi_lc/pages/labelDialog/enumItemSet.html?index='+index, 800, 500);
 	    	wd.reload = function() {

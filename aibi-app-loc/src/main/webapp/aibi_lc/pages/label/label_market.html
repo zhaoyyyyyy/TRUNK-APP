@@ -210,7 +210,7 @@
 				<div class="ui-calc-content clearfix" id="sortable">
 					<div v-for="(item,index) in ruleList" :class="{
 						'ui-chaining' : item.elementType ==1,
-						'ui-conditionCT' : item.elementType == 2,
+						'ui-conditionCT' : ( item.elementType == 2 || item.elementType == 5),
                 		'ui-bracket': item.elementType == 3,
                 		'left' : item.calcuElement == '(',
                 		'right' : item.calcuElement == ')',
@@ -236,8 +236,8 @@
 								<li onclick="calculateCenter.switchConnector(this,'-')"><a href="javascript:void(0)" >剔除</a></li>
 							</ul>
 						</div>
-						<!-- 标签 -->
-						<h4 :class="{'ui-conditionCT-h4': 1==1 , 'ui-inverse': item.labelFlag == 0}"  v-if="item.elementType == 2">
+						<!-- 标签 或者客户群 -->
+						<h4 :class="{'ui-conditionCT-h4': 1==1 , 'ui-inverse': item.labelFlag == 0}"  v-if="(item.elementType == 2 || item.elementType == 5)">
 							<span v-text="item.customOrLabelName" onclick="calculateCenter.againstLabel(this)"></span>
 							<em onclick="calculateCenter.againstLabel(this)"></em>
 							<i onclick="calculateCenter.deleteRule(this)"></i>
@@ -313,14 +313,20 @@
 							</div>
 							<i class="ui-nothing-icon" v-if="item.queryWay == null "><em></em>请点击设置</i>
 						</div>
-						 
+						
+						<!-- 客户群-->
+						<div class="ui-conditionCT-content align_center" v-if="item.elementType == 5">
+							<h5>已选条件：</h5>
+							<div class="clearfix" v-text="item.attrVal"></div>
+						</div>
+						
 						<div class="tooltip top" role="tooltip" v-if="index==0">
 							<div class="tooltip-arrow"></div>
 							<div class="tooltip-inner">鼠标点击标签反选</div>
 						</div>
 					</div>
 				</div>
-				<!---------------------- 计算中心   end----------------------->
+				
 				<!-----------------------鼠标经过弹窗  begin------------------>
 				<div class="ui-conditionBox">
 					<i></i>
@@ -351,6 +357,7 @@
 				</div>
 				<!-----------------------鼠标经过弹窗end--------------------->
 			</div>
+			<!---------------------- 计算中心   end----------------------->
 			<!----------------------- 购物车 ---------------------------->
 			<div class="ui-shop-cart nest">
 				<p class="fleft ui-shop-cart-icon">

@@ -30,7 +30,6 @@ var dataModel = {
 		updateCycleList : [] ,//更新周期
 		labelTypeIdList : [] ,//创建类型
 		labelInfoViewObj : {},
-		createdLeftPar : new Array(), //左括号id
 		categoryPath : "",  //总路径
 		categoryPath1 : "",  //一级目录
 		categoryPath2 : "",  //二级目录
