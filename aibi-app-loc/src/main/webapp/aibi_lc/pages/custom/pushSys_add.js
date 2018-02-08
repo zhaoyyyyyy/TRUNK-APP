@@ -34,6 +34,8 @@ var model = {
 		showPushType:"",//显示推送方式
 		showDesKey:false,//展示DES加密
 		showCompressType:false,//展示压缩类型
+		pushFile:false,//上传xml文件
+		pushAttr:false,//推送属性
 		
 }
 window.loc_onload = function() {
@@ -68,7 +70,8 @@ window.loc_onload = function() {
 				model.tableNamePre = data.data.tableNamePre;
 				model.customTaskTable = data.data.customTaskTable;
 				if(data.data.pushType ==1){
-					model.showPushType ="文件推送";
+//					model.showPushType ="文件推送";
+console.log(data.data.isNeedDes)
 					var b =document.getElementById("pushType");
 					$(b).prop("checked", true);
 					model.curentIndex =true;
@@ -77,10 +80,29 @@ window.loc_onload = function() {
 					}else{
 						model.checked=false;
 					}
-					
+					if(data.data.isNeedDes==1){
+						model.showDesKey=true;
+					}else{
+						model.showDesKey=false;
+					}
+					if(data.data.isNeedCompress==1){
+						model.showCompressType=true;
+					}else{
+						model.showCompressType=false;
+					}
+					if(data.data.isNeedXml==1){
+						model.pushFile=true;
+					}else{
+						model.pushFile=false;
+					}
+					if(data.data.isAllowAttr==1){
+						model.pushAttr=true;
+					}else{
+						model.pushAttr=false;
+					}
 				}
 				if(data.data.pushType ==2){
-					model.showPushType ="表推送";
+//					model.showPushType ="表推送";
 					$("input[name='pushType']").prop("checked", true);
 					model.curentIndex =true;
 				}
@@ -168,19 +190,19 @@ window.loc_onload = function() {
 //		}
 //	})
 }
-function isShowDesKey(obj) {
-	if (obj.checked) {
-		$("#isNeedDes").val("1");
-		model.showDesKey = true;
-	}else{
-		model.showDesKey = false;
-	}
-}
-function isShowCompressType(obj) {
-	if (obj.checked) {
-		$("#compressType").val("1");
-		model.showCompressType = true;
-	}else{
-		model.showCompressType = false;
-	}
-}
+//function isShowDesKey(obj) {
+//	if (obj.checked) {
+//		$("#isNeedDes").val("1");
+//		model.showDesKey = true;
+//	}else{
+//		model.showDesKey = false;
+//	}
+//}
+//function isShowCompressType(obj) {
+//	if (obj.checked) {
+//		$("#compressType").val("1");
+//		model.showCompressType = true;
+//	}else{
+//		model.showCompressType = false;
+//	}
+//}
