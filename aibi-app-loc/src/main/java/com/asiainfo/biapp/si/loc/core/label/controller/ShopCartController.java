@@ -103,9 +103,9 @@ public class ShopCartController extends BaseController {
 			} // end getElementType
 		}
 		if (flag) {
-			return webResult.success("判断所选日期是否早于标签生效日期", SUCCESS);
-		} else {
 			return webResult.fail("所选日期早于标签生效日期，请重新选择！");
+		} else {
+			return webResult.success("判断所选日期是否早于标签生效日期", SUCCESS);
 		}
 	}
 	
