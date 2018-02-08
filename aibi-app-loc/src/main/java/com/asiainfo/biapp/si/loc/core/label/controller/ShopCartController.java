@@ -252,6 +252,14 @@ public class ShopCartController extends BaseController {
 		boolean success = true;
 		String msg = "抱歉，该标签数据未准备好，不能添加到收纳篮！";
 		try {
+			List<LabelRuleVo> rules = getSessionLabelRuleList();
+			Integer sort = 0;
+			if (rules.size() > 0) {
+				sort = rules.get(rules.size() - 1).getSortNum();
+				sort = sort + 1;// 排序标号 ,默认规则为"and"
+				rules.add(generateRule("and", LabelRuleContants.ELEMENT_TYPE_OPERATOR, sort));
+			}
+			sort = sort + 1;
 			if (LabelRuleContants.LABEL_INFO_CALCULATIONS_TYPEID.equals(typeId)) {
 				LabelInfo ciLabelInfo = CocCacheProxy.getCacheProxy().getLabelInfoById(calculationsId);
 				if (StringUtil.isEmpty(ciLabelInfo.getDataDate())) {
@@ -260,22 +268,25 @@ public class ShopCartController extends BaseController {
 				// 校验完之后的操作
 				if (success) {
 					msg = "加入购物车成功";
-					List<LabelRuleVo> rules = getSessionLabelRuleList();
-					Integer sort = 0;
-					if (rules.size() > 0) {
-						sort = rules.get(rules.size() - 1).getSortNum();
-						sort = sort + 1;// 排序标号 ,默认规则为"and"
-						rules.add(generateRule("and", LabelRuleContants.ELEMENT_TYPE_OPERATOR, sort));
-					}
-					sort = sort + 1;// 初始化标签规则
 					LabelRuleVo rule = initLabelRule(ciLabelInfo, sort);
-					rules.add(rule);
-
-					setSessionAttribute(LabelRuleContants.SHOP_CART_RULE, JsonUtil.toJsonString(rules));
-					setSessionAttribute(LabelRuleContants.SHOP_CART_RULE_NUM,
-							String.valueOf(findLabelOrCustomNum(rules)));
+					rules.add(rule);// 初始化标签规则
 				}
+			}else if (LabelRuleContants.CUSTOM_GROUP_INFO_CALCULATIONS_TYPEID.equals(typeId)) {
+				LabelInfo ciCustomGroupInfo = labelInfoService.selectLabelInfoById(calculationsId);
+				LabelRuleVo rule = new LabelRuleVo();
+				rule.setCalcuElement(ciCustomGroupInfo.getLabelId());
+				rule.setCustomId(ciCustomGroupInfo.getLabelId());
+				rule.setLabelTypeId(ciCustomGroupInfo.getLabelTypeId());
+				rule.setElementType(LabelRuleContants.ELEMENT_TYPE_LIST_ID);
+				rule.setCustomOrLabelName(ciCustomGroupInfo.getLabelName());
+				rule.setSortNum(sort);
+				rule.setLabelFlag(1);// 取反标识，默认不取反
+				rule.setAttrVal(ciCustomGroupInfo.getDataDate());
+				rules.add(rule);
 			}
+			setSessionAttribute(LabelRuleContants.SHOP_CART_RULE, JsonUtil.toJsonString(rules));
+			setSessionAttribute(LabelRuleContants.SHOP_CART_RULE_NUM,
+					String.valueOf(findLabelOrCustomNum(rules)));
 
 		} catch (BaseException baseException) {
 			return webResult.fail(baseException);
@@ -545,7 +556,7 @@ public class ShopCartController extends BaseController {
 	 */
 	private LabelRuleVo initLabelRule(LabelInfo ciLabelInfo, Integer sort) {
 		LabelRuleVo rule = new LabelRuleVo();
-		rule.setCalcuElement(String.valueOf(ciLabelInfo.getLabelId()));
+		rule.setCalcuElement(ciLabelInfo.getLabelId());
 		rule.setCustomOrLabelName(ciLabelInfo.getLabelName());
 		rule.setMaxVal(new Double(1));
 		rule.setMinVal(new Double(0));
