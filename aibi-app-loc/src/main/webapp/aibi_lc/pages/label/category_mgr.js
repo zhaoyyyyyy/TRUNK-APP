@@ -316,6 +316,11 @@ window.loc_onload = function() {
 		$(".label-dialog").removeClass("active");
 		$("#labelList").find("input[checked]");
 	});
+	$('#exampleInputAmount').keyup(function(event){
+    	if(event.keyCode == 13){
+    		$("#btn_serach").click();
+    	}
+    })
 	//左边树模糊查询
 	$("#btn_serach").click(function(){
 		$.commAjax({			
@@ -413,6 +418,11 @@ window.loc_onload = function() {
 	function dataClick(event, treeId, treeNode){
 		transToData=treeNode.categoryId;
 	}
+	$('#exampleInputAmount1').keyup(function(event){
+    	if(event.keyCode == 13){
+    		$("#btn_serach1").click();
+    	}
+    })
 	//标签部分的模糊查询
 	$("#btn_serach1").click(function(){
 		var text =$("#exampleInputAmount1").val();
@@ -443,6 +453,11 @@ window.loc_onload = function() {
 			}
 		})
 	})
+	$('#exampleInputAmount2').keyup(function(event){
+    	if(event.keyCode == 13){
+    		$("#btn_serach2").click();
+    	}
+    })
 	//右边树的模糊查询
 	$("#btn_serach2").click(function(){
 		$.commAjax({			

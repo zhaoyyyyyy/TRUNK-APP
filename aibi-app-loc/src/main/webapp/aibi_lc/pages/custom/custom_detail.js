@@ -175,7 +175,7 @@ window.loc_onload = function() {
 									    maskMassage : '推送中...'
 								   });
 									if(i == $("#checkboxList label[class~=active]").length-1){
-										$.success("推送成功",function(){
+										$.success("推送设置成功",function(){
 											//history.back(-1);
 										});
 									}
@@ -277,6 +277,11 @@ window.loc_onload = function() {
 		    maskMassage : '搜索中...'
 	   });
 	};
+	$('#labelName').keyup(function(event){
+    	if(event.keyCode == 13){
+    		$("#btn_search").click();
+    	}
+    })
     $("#btn_search").click(function() {
     	var txt = $("#labelName").val();
     	$.commAjax({			
