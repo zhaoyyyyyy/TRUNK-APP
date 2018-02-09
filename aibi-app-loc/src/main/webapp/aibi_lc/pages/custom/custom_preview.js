@@ -1,6 +1,6 @@
 window.loc_onload = function() {
 	$("#mainGrid").jqGrid({
-	        colNames : [ '手机号' ],
+	        colNames : [ '客户编码' ],
 	        colModel : [ 
 	                     {name : 'id',index : 'id',width : 60,align : "center"},
 	                   ],

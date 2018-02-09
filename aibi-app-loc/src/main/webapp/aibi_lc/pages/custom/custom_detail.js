@@ -18,6 +18,7 @@ var model = {
 		calcuElementName:"",//已选属性名称
 		calcuElementNames:[],//已选属性名称
 		AttrbuteId : "",//推送的属性标签ID
+		labelOptRuleShow:"",//枚举标签选择的条件
 		
 }
 window.loc_onload = function() {
@@ -65,6 +66,7 @@ window.loc_onload = function() {
 			model.dayLabelDate = data.data.dayLabelDate;
 			model.monthLabelDate = data.data.monthLabelDate;
 			model.customNum = data.data.labelExtInfo.customNum;
+			model.labelOptRuleShow = data.data.labelExtInfo.labelOptRuleShow;
 		}
 	})
 	$.commAjax({
@@ -78,15 +80,15 @@ window.loc_onload = function() {
 				var html="";
         		if(model.customRule[i].elementType ==2){
         			if(model.customRule[i].labelTypeId ==4 &&model.customRule[i].contiueMinVal!="" &&model.customRule[i].contiueMaxVal!=""&&model.customRule[i].contiueMinVal!=null &&model.customRule[i].contiueMaxVal!=null){
-        				html = "<div class='ui-custom-item clearfix clearfix' ><a><span> "+model.customRule[i].attrName+"</span></a><a><span>"+model.customRule[i].leftZoneSign+model.customRule[i].contiueMinVal+"且"+model.customRule[i].rightZoneSign+model.customRule[i].contiueMaxVal+"</span></div>"
+        				html = "<div class='ui-custom-item clearfix clearfix' ><a><span> "+model.customRule[i].attrName+"</span></a><a><span>取值范围:"+model.customRule[i].leftZoneSign+model.customRule[i].contiueMinVal+"且"+model.customRule[i].rightZoneSign+model.customRule[i].contiueMaxVal+"</span></div>"
         				$("#labelDetail").append(html);
         			}
         			if(model.customRule[i].labelTypeId ==4 &&model.customRule[i].contiueMinVal==null &&model.customRule[i].contiueMaxVal!=null){
-        				html = "<div class='ui-custom-item clearfix clearfix' ><a><span> "+model.customRule[i].attrName+"</span></a><a><span>"+model.customRule[i].rightZoneSign+model.customRule[i].contiueMaxVal+"</span></div>"
+        				html = "<div class='ui-custom-item clearfix clearfix' ><a><span> "+model.customRule[i].attrName+"</span></a><a><span>取值范围:"+model.customRule[i].rightZoneSign+model.customRule[i].contiueMaxVal+"</span></div>"
         				$("#labelDetail").append(html);
         			}
         			if(model.customRule[i].labelTypeId ==4 &&model.customRule[i].contiueMinVal!=null &&model.customRule[i].contiueMaxVal==null){
-        				html = "<div class='ui-custom-item clearfix clearfix' ><a><span> "+model.customRule[i].attrName+"</span></a><a><span>"+model.customRule[i].leftZoneSign+model.customRule[i].contiueMinVal+"</span></div>"
+        				html = "<div class='ui-custom-item clearfix clearfix' ><a><span> "+model.customRule[i].attrName+"</span></a><a><span>取值范围:"+model.customRule[i].leftZoneSign+model.customRule[i].contiueMinVal+"</span></div>"
         				$("#labelDetail").append(html);
         			}
         			if(model.customRule[i].labelTypeId ==4 &&model.customRule[i].exactValue!= ""){
@@ -104,21 +106,18 @@ window.loc_onload = function() {
         			}
         			if(model.customRule[i].labelTypeId== 5||model.customRule[i].labelTypeId== 9||model.customRule[i].labelTypeId== 12){//枚举
         				if(model.customRule[i].attrVal){
-        					html = "<div class='ui-custom-item clearfix clearfix' ><a><span> "+model.customRule[i].attrName+"</span></a></div>"
+        					html = "<div class='ui-custom-item clearfix clearfix' ><a><span> "+model.customRule[i].attrName+"</span></a><a><span>"+model.labelOptRuleShow+"</span></a></div>"
             				$("#labelDetail").append(html);
         				}
         			}
         			if(model.customRule[i].labelTypeId == 7){//文本型
-        				if("1" == model.customRule[i].queryWay){
-        					if(model.customRule[i].darkValue){
-        						html = "<div class='ui-custom-item clearfix clearfix' ><a><span> "+model.customRule[i].attrName+"</span></a><a><span>模糊值:"+model.customRule[i].darkValue+"</span></div>"
-        						$("#labelDetail").append(html);
-        					}
-        				}else if("2" == model.customRule[i].queryWay){
-        					if(model.customRule[i].exactValue){
-        						html = "<div class='ui-custom-item clearfix clearfix' ><a><span> "+model.customRule[i].attrName+"</span></a><a><span>精确值:"+model.customRule[i].exactValue+"</span></div>"
-        						$("#labelDetail").append(html);
-        					}
+        				if(model.customRule[i].darkValue){
+        					html = "<div class='ui-custom-item clearfix clearfix' ><a><span> "+model.customRule[i].attrName+"</span></a><a><span>模糊值:"+model.customRule[i].darkValue+"</span></div>"
+        					$("#labelDetail").append(html);
+        				}
+        				if(model.customRule[i].exactValue){
+        					html = "<div class='ui-custom-item clearfix clearfix' ><a><span> "+model.customRule[i].attrName+"</span></a><a><span>精确值:"+model.customRule[i].exactValue+"</span></div>"
+        					$("#labelDetail").append(html);
         				}
         			}
         		}
@@ -340,7 +339,6 @@ window.loc_onload = function() {
 				}
 			}
 			model.calcuElementNames=model.calcuElementName.split(",");
-			console.log(model.calcuElementNames);
 			var  html="<li>"+
     		"<div class='checkbox'>"+
     		"<input type='checkbox' id='"+attrId+"L' class='checkbix'>"+
