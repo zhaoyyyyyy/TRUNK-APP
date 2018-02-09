@@ -8,6 +8,9 @@
 		<artifactId>xportrait</artifactId>
 		<version>1.0.0</version>
 	</parent>
+	
+	<packaging>jar</packaging>
+	
 	<groupId>com.asiainfo.biapp</groupId>
 	<artifactId>aibi-app-loc</artifactId>
 	<version>1.0.0</version>
@@ -20,13 +23,28 @@
 		<hadoop.version>2.5.0</hadoop.version>
 	</properties>
 	<dependencies>
-
+		
 		<!-- eureka client -->
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-eureka</artifactId>
 		</dependency>
 
+		<!-- 注册springbootadmin客户端 -->
+		<dependency>
+			<groupId>de.codecentric</groupId>
+			<artifactId>spring-boot-admin-starter-client</artifactId>
+			<version>1.5.1</version>
+		</dependency>
+		
+		<!-- 如果是打war包开启,打jar包需要注释掉 
+		<dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-tomcat</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        -->
+        
 		<!-- spring redis -->
 		<dependency>
             <groupId>org.springframework.boot</groupId>
