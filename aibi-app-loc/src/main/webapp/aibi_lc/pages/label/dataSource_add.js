@@ -13,6 +13,7 @@ var model = {
     idDataType: "",
     sortNum: 0,
     gxzq: [],
+    tableType:[],
     sourceTableId: "",
     configId: "",
     tableSchema: "",
@@ -24,6 +25,10 @@ window.loc_onload = function() {
     var dicGxzq = $.getDicData("GXZQZD");
     for (var i = 0; i < dicGxzq.length; i++) {
         model.gxzq.push(dicGxzq[i]);
+    };
+    var dicYblx = $.getDicData("SJYBLX");
+    for (var i = 0; i < dicYblx.length; i++) {
+        model.tableType.push(dicYblx[i]);
     };
     var isEdit = $.getUrlParam("isEdit");
     var id = $.getUrlParam("sourceTableId");
@@ -64,6 +69,7 @@ window.loc_onload = function() {
         }
     });
     $("#code1").click();
+    $("#type1").click();
     var url = "";
     var pD = {};
     if (isEdit == 1) {
@@ -213,7 +219,7 @@ function fun_to_del(id, sourceId) {
                 if (data.data.length == 0) {
                     $("#jsonmap").jqGrid("delRowData", id);
                 } else {
-                    $.alert("该指标已经被使用，不能删除");
+                    $.alert("该指标已经被使用，不能删除！");
                 }
             }
         })
@@ -368,9 +374,7 @@ function analysis() {
                 if (isInArray(exitColnames, data.data[i].COLUMN_NAME)) { // 判断当前行是否已存在
                     continue;
                 } else {
-                    if (data.data[i].DATA_TYPE.toLowerCase().indexOf("varchar") != -1) {
-                        data.data[i].DATA_TYPE = "2";
-                    } else if (data.data[i].DATA_TYPE.toLowerCase().indexOf("int") != -1) {
+                    if (data.data[i].DATA_TYPE.toLowerCase().indexOf("int") != -1) {
                         data.data[i].DATA_TYPE = "1";
                     } else {
                     	data.data[i].DATA_TYPE = "2";
@@ -411,9 +415,7 @@ function fun_to_import() {
     var wd = $.window('导入列信息', $.ctx + '/aibi_lc/pages/label/dataSource_import.html', 300, 200);
     wd.addSourceList = function(sourceList) {
         for (var i = 0; i < sourceList.length; i++) {
-            if (sourceList[i].cooColumnType.toLowerCase().indexOf("varchar") != -1) {
-                sourceList[i].cooColumnType = "2";
-            } else if (sourceList[i].cooColumnType.toLowerCase().indexOf("int") != -1) {
+            if (sourceList[i].cooColumnType.toLowerCase().indexOf("int") != -1) {
                 sourceList[i].cooColumnType = "1";
             } else {
                 sourceList[i].cooColumnType = "2";

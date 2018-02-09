@@ -172,9 +172,10 @@ public class DimTableDataServiceImpl extends BaseServiceImpl<DimTableData, DimTa
      */
     private String getSql(String schema, DimTableInfo dimTableInfo, StringBuilder sql){
         if (null != dimTableInfo) {
-            sql.append("select ").append(StringUtil.isNotBlank(schema)?schema+".":"").append(dimTableInfo.getDimCodeCol())
-               .append(", ").append(dimTableInfo.getDimValueCol()).append(" ").append("from ")
-               .append(dimTableInfo.getDimTableName()).append(" ");
+        	sql.append("select ").append(dimTableInfo.getDimCodeCol())
+            .append(", ").append(dimTableInfo.getDimValueCol()).append(" from ")
+            .append(StringUtil.isNotBlank(schema)?schema+".":"")
+            .append(dimTableInfo.getDimTableName()).append(" ");
                
             if (StringUtil.isNoneBlank(dimTableInfo.getDimWhere())) {
                 if (dimTableInfo.getDimWhere().contains(SQL_WHERE_L) || dimTableInfo.getDimWhere().contains(SQL_WHERE_U)) {

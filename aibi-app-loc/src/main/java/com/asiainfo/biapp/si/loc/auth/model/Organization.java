@@ -12,7 +12,6 @@ public class Organization extends BaseEntity{
 	private String simpleName;
 	
 	private String orgCode; //组织编码（重要）  
-	private Integer level;  //组织级别（重要）
 	
 	private String orgType;
 	private String fullName;
@@ -24,7 +23,7 @@ public class Organization extends BaseEntity{
 	private String interrogateType;
 	private String orgStatus;
 	private String treePath;
-	private Integer levelId;
+	private Integer levelId;//组织级别（重要）
 	
     public Integer getLevelId() {
         return levelId;
@@ -50,12 +49,6 @@ public class Organization extends BaseEntity{
 	}
 	public String getOrgCode() {
 		return orgCode;
-	}
-	public Integer getLevel() {
-		return level;
-	}
-	public void setLevel(Integer level) {
-		this.level = level;
 	}
 	public String getId() {
 		return id;

@@ -35,8 +35,8 @@ window.loc_onload = function() {
 		if(!dataDateModel.checkRuleEffectDate(labelMonthTemp,labelDayTemp)){
 			//验证sql
 			var checkedModelListStr = dataModel.checkedModelList.join(',');
-			if(wd.curWin.labelMarket.validateSql(labelMonthTemp,labelDayTemp,checkedModelListStr)){
-				wd.curWin.labelMarket.submitForExplore(labelMonthTemp,labelDayTemp,checkedModelListStr);
+			if(wd.curWin.calculateCenter.validateSql(labelMonthTemp,labelDayTemp,checkedModelListStr)){
+				wd.curWin.calculateCenter.submitForExplore(labelMonthTemp,labelDayTemp,checkedModelListStr);
 				wd.cancel();
 			}
 		}
@@ -95,13 +95,11 @@ var dataDateModel = (function (model){
 				  "newLabelDayFormat":labelDayArg
 			  },
 			  onSuccess: function(returnObj){
-				  if(returnObj.status == '200'){
-					  isNewDate = false ;
-				  }else{
-					  isNewDate = true ;
-					  msgDate = returnObj.msg;
-				  }
-				  
+				  isNewDate = false ;
+			  },
+			  onFailure: function(returnObj){
+				  isNewDate = true ;
+				  msgDate = returnObj.msg;
 			  }
 		});
 		if(isNewDate){
@@ -117,13 +115,11 @@ var dataDateModel = (function (model){
 		$.commAjax({
 			  url: $.ctx + "/api/user/get",
 			  onSuccess: function(returnObj){
-				  if(returnObj.status == '200'){
-					  dataModel.dataPrivaliegeList = returnObj.data.dataPrivaliege[$.xzqh];
-					  if(dataModel.dataPrivaliegeList && dataModel.dataPrivaliegeList.length > 1){
-						  dataModel.isShowPrivaliegeDiv = true;
-					  }else if(dataModel.dataPrivaliegeList && dataModel.dataPrivaliegeList.length == 1){
-						  dataModel.checkedModelList[0] = dataModel.dataPrivaliegeList[0].id;
-					  }
+				  dataModel.dataPrivaliegeList = returnObj.data.dataPrivaliege[$.xzqh];
+				  if(dataModel.dataPrivaliegeList && dataModel.dataPrivaliegeList.length > 1){
+					  dataModel.isShowPrivaliegeDiv = true;
+				  }else if(dataModel.dataPrivaliegeList && dataModel.dataPrivaliegeList.length == 1){
+					  dataModel.checkedModelList[0] = dataModel.dataPrivaliegeList[0].id;
 				  }
 			  }
 		});

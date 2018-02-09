@@ -48,7 +48,7 @@
 							<span class="input-required">*</span>
 							更新周期</label> 
 							<div class="control-input ml10">
-								<select v-model="updateCycle" name="updateCycle" required="true" class="easyui-validatebox form-control" selected>
+								<select v-model="updateCycle" v-on:change="change_updateCycle" name="updateCycle" required="true" class="easyui-validatebox form-control" selected>
 									<option v-for="h in gxzq" :value="h.code">{{h.dataName}}</option>
 								</select>
 							</div>
@@ -67,8 +67,10 @@
 							<span class="input-required">*</span>
 							标签类型</label> 
 							<div class="control-input ml10">
-								<select v-model="labelTypeId" id="labelTypeId" name="labelTypeId" required="true" class="easyui-validatebox form-control"
-							     onchange="changebq(this.options[this.selectedIndex].value)">
+								<!-- <select v-model="labelTypeId" id="labelTypeId" name="labelTypeId" required="true" class="easyui-validatebox form-control"
+							     onchange="changebq(this.options[this.selectedIndex].value)"> -->
+							     <select v-model="labelTypeId" id="labelTypeId" name="labelTypeId" required="true" class="easyui-validatebox form-control"
+							     v-on:click="changebq($event)">
 								<option v-for="h in bqlx" :value="h.code">{{h.dataName}}</option>
 								</select>
 							</div>
@@ -86,7 +88,7 @@
                                 </div>
                                 <button type="button" onclick="fun_to_dimdetail()" class="file-up-btn ml10" >详情</button>
                             </div>
-                            <div class="ui-form-group ml70">
+                           <!--  <div class="ui-form-group ml70">
                                 <label for="dataType" class="control-label">
                                 <span class="input-required">*</span>                                
                                                                  数据类型</label>
@@ -95,7 +97,7 @@
 									        <option v-for = "h in sjlx" :value="h.dataName">{{h.dataName}}</option>
 								        </select>
                                   </div>
-                            </div>
+                            </div> -->
                         </div>
                         <div class="ui-form-group ml70">
                             <label for="categoryId" class="control-label">
@@ -110,29 +112,31 @@
                                 </div>
                             </div>                             
                         </div>
-                        <div class="ui-form-group ml70">
-		            	    <!-- <input type="hidden" name="dependIndex" v-model="dependIndex"> -->
-                            <label for="inputEmail3" class="control-label fleft">
-                            <span class="input-required">*</span>
-                                                        规则依赖指标</label>
-                            <div class="control-input ml10">
-                                <input name="dependIndex" id="dependIndex" type="text" class="form-control easyui-validatebox" required="true" readonly="readonly">
-                                <div class="label-lists">
-                                    <span class="del-btn mr10" v-for="(sourceId,index) in dependIndexList">{{sourceId}}
-                                        <i class="del-btn-icon" v-on:click="del_sourceName(index)"></i>
-                                    </span>
-                                </div>
-                            </div>
-                            <button id="btn_index_select" name="btn_index_select" type="button" class="ui-btn ui-btn-ghost-brand ml10">指标选择</button>
-                        </div>
-                        <div class="ui-form-group ml70">
-                           <label for="countRules" class="control-label">
-                           <span class="input-required">*</span>
-                                                      具体规则</label>
-                           <div class="control-input ml10">
-                               <textarea rows="4" id="countRules" name="countRules" required="true"
-                                   class="easyui-validatebox form-control form-control-textarea">{{countRules}}</textarea>
-                           </div>
+                        <div v-if="isfhbq==false">
+	                        <div class="ui-form-group ml70">
+			            	    <!-- <input type="hidden" name="dependIndex" v-model="dependIndex"> -->
+	                            <label for="inputEmail3" class="control-label fleft">
+	                            <span class="input-required">*</span>
+	                                                        规则依赖指标</label>
+	                            <div class="control-input ml10">
+	                                <input name="dependIndex" id="dependIndex" type="text" class="form-control easyui-validatebox" required="true" readonly="readonly">
+	                                <div class="label-lists">
+	                                    <span class="del-btn mr10" v-for="(sourceId,index) in dependIndexList">{{sourceId}}
+	                                        <i class="del-btn-icon" v-on:click="del_sourceName(index)"></i>
+	                                    </span>
+	                                </div>
+	                            </div>
+	                            <button id="btn_index_select" name="btn_index_select" type="button" class="ui-btn ui-btn-ghost-brand ml10">指标选择</button>
+	                        </div>
+	                        <div class="ui-form-group ml70">
+	                           <label for="countRules" class="control-label">
+	                           <span class="input-required">*</span>
+	                                                      具体规则</label>
+	                           <div class="control-input ml10">
+	                               <textarea rows="4" id="countRules" name="countRules" required="true"
+	                                   class="easyui-validatebox form-control form-control-textarea">{{countRules}}</textarea>
+	                           </div>
+	                        </div>
                         </div>
 		                <div class="ui-form-group ml70">
 							<label class="control-label">单位</label> 
@@ -149,27 +153,104 @@
 	                            required="true" name="busiCaliber" placeholder="请输入业务口径">
 							</div>
 						</div>
-						<!-- <div class="ui-form-group ml70">
-                            <label class="control-label fleft">
-                            <span class="input-required">*</span>
-                                                        是否正式标签</label>
-                            <div class="control-input ml10">
-                               <ul>
-								  <li v-for="(i,index) in isbq" style="display: inline">
-								  	<div class="radio circle success">
-								  		<input :value="i.code" :id="'type'+i.code" name="isRegular" type="radio" required="true" class="easyui-validatebox"/>													
-										<label><i class="default"></i>{{i.dataName}}</label>
-								  	</div>											  	
-								  </li>
-				               </ul>
-				            </div>
-                        </div> -->
-		            	
-						
-                        
-                        
+						<div v-if="isfhbq==true" class="ui-form-group ml70">
+							<label class="control-label">
+							<span class="input-required">*</span>
+							请选择纵表</label> 
+							<div class="control-input has-icon">
+                                <select v-on:click="change_sourceId" id="sourceTableId" name="sourceTableId" class="form-control ml10 input-pointer ">
+                                <option>请选择指标源表</option>
+                                <option v-for ="source in sourcetableInfoList" :value="source.sourceTableId">{{source.sourceTableName}}</option>
+                                </select>
+                            </div>
+						</div>		            							                                               
 					</div>
 				</form>
+              
+ <!---------------------------------------复合标签列信息 ------------------------------------------->  
+                <div v-if="isfhbq==true">
+	                <div class="ui-expand-search mt5">
+	                    <div class="form-inline ui-form">
+	                        <div class="clearfix">
+	                            <div  class="form-group">
+	                                <label class="fleft mt5" for="exampleInputEmail4">请选择复合标签列信息</label>
+	                            </div>
+	                        </div>
+	                    </div>
+		            </div>
+	                <form  class="clearfix create-main-col active mt10" v-for="(sourceInfo,index) in sourceInfoList">
+	                <fieldset>
+	                    <legend>列信息</legend>
+	                    <i v-on:click="del_form(index)" class="del-btn-icon fright mr10 mt5" ></i>
+	                    <div class="form-horizontal fleft ui-form">
+	                        <div class="ui-form-group ml70">
+								<label class="control-label">
+								<span class="input-required">*</span>
+								标签类型</label> 
+								<div class="control-input ml10">
+									<select v-model="sourceInfo.labelTypeId" id="labelTypeId" name="labelTypeId" required="true" class="easyui-validatebox form-control"
+								     v-on:change="changeStatus(index,$event)">
+									<option v-for="h in fhbqlx" :value="h.code">{{h.dataName}}</option>
+									</select>
+								</div>
+							</div>
+							<div v-if="sourceInfo.showdim==true" class="ui-form-hide">
+								<div class="ui-form-group ml70">
+		                            <label class="control-label" for="dimTableName">
+		                            <span class="input-required">*</span>                               
+		                                                           维表选择</label>
+		                            <div class="control-input ml10">
+		                             	<select v-model="sourceInfo.dimTransId" name="dimTransId" id="dimTransId" required="true" class="easyui-validatebox form-control">
+		                                     <option disabled value="">请选择维表</option>
+		                                     <option v-for = "dim in dimtableInfoList" :value="dim.dimId">{{dim.dimTableName}}</option>
+		                                 </select>
+		                            </div>
+		                            <button type="button" v-on:click="showdimdetail(sourceInfo)" class="file-up-btn ml10" >详情</button>
+		                        </div> 
+		                        <!-- <div class="ui-form-group ml70">
+									<label class="control-label">
+									<span class="input-required">*</span>
+									数据类型:</label> 
+									<div class="control-input ml10">
+										<select v-model="sourceInfo.dataType" name="dataType" required="true" class="easyui-validatebox form-control" selected>
+										     <option v-for = "h in sjlx" :value="h.code">{{h.dataName}}</option>
+									    </select>
+								    </div>
+							    </div> -->
+		                    </div>
+							<div class="ui-form-group ml70">
+								<label class="control-label">
+								<span class="input-required">*</span>
+								列名</label> 
+								<div class="control-input ml10">
+									<input v-model="sourceInfo.sourceName" name="columnName" type="text" required="true" class="easyui-validatebox fleft form-control"
+									placeholder="请输入列名称" />
+							    </div>
+							</div>
+							<div class="ui-form-group ml70">
+								<label class="control-label">
+								<span class="input-required">*</span>
+								列中文名</label> 
+								<div class="control-input ml10">
+									<input v-model="sourceInfo.columnCnName" name="columnCnName" type="text" required="true" class="easyui-validatebox fleft form-control"
+									placeholder="请输入列中文名称" />
+							    </div>
+							</div>
+							
+							<div class="ui-form-group ml70">
+								<label class="control-label">
+								<span class="input-required">*</span>
+								是否必选列</label> 
+								<div class="control-input ml10">
+									<select v-model="sourceInfo.isMustColumn" name="isMustColumn" required="true" class="easyui-validatebox form-control">
+										<option v-for="h in sfzd" :value="h.code">{{h.dataName}}</option>
+								    </select>
+							    </div>
+							</div>
+	                    </div>
+	                </fieldset>
+	                </form>
+                </div>
 				<div class="ui-reg-grid mt40">
                     <div class="ui-grid-button clearfix mt20">
                         <button onclick="window.location='label_mgr.html'" type="button" class="ui-btn ui-btn-second">取消</button>

@@ -12,6 +12,7 @@ var model = {
 	gxzqzd : [],
 	bslxzd : [],
 	zdlxzd : [],
+	yblxzd : [],
 }
 window.loc_onload = function() {
 	var id = $.getUrlParam("sourceTableId");
@@ -29,11 +30,10 @@ window.loc_onload = function() {
 	for (var i = 0; i < dicGxzq.length; i++) {
 		model.zdlxzd[dicGxzq[i].code]=dicGxzq[i].dataName;
 	}
-	
-	
-	var cooType = [];
-	cooType[1]="integer";
-	cooType[2]="varchar";
+	var dicGxzq = $.getDicData("SJYBLX");
+	for (var i = 0; i < dicGxzq.length; i++) {
+		model.yblxzd[dicGxzq[i].code]=dicGxzq[i].dataName;
+	}
 	
 	$.commAjax({
 		url : $.ctx + '/api/source/sourceTableInfo/get',
@@ -45,7 +45,7 @@ window.loc_onload = function() {
 		onSuccess : function(data) {
 			model.sourceTableName = data.data.sourceTableName;
 			model.sourceTableCnName = data.data.sourceTableCnName;
-			model.sourceTableType = data.data.sourceTableType;
+			model.sourceTableType = model.yblxzd[data.data.sourceTableType];
 			model.dateColumnName = data.data.dateColumnName;
 			model.whereSql = data.data.whereSql;
 			model.idColumn = data.data.idColumn;
@@ -83,7 +83,7 @@ window.loc_onload = function() {
 			align : "center",
 			sortable : false,
 			formatter:function(value){
-				return cooType[value];
+				return model.zdlxzd[value];
 			}
 		}, {
 			name : 'sourceName',

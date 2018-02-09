@@ -26,14 +26,17 @@ var model = {
 		tableNamePre:"",//推送清单表前缀
 		customTaskTable:"",//客户群调度信息表
 		curentIndex:false,//radio选中
-		isChecked:false,
-		isActive:false,
-		isShow:false,
+	//	isChecked:false,
+	//	isActive:false,
+	//  isShow:false,
 		checked:false,
-		checkedPushType:false,
-		showPushType:"",//显示推送方式
+	//  checkedPushType:false,
+	//	showPushType:"",//显示推送方式
 		showDesKey:false,//展示DES加密
 		showCompressType:false,//展示压缩类型
+		pushFile:false,//上传xml文件
+		pushAttr:false,//推送属性
+		pushPage:true,//展开推送页面显示
 		
 }
 window.loc_onload = function() {
@@ -67,14 +70,42 @@ window.loc_onload = function() {
 				model.compressType = data.data.compressType;
 				model.tableNamePre = data.data.tableNamePre;
 				model.customTaskTable = data.data.customTaskTable;
-				if(data.data.pushType =='1'){
-					model.showPushType ="文件推送";
+				if(data.data.pushType ==1){
 					var b =document.getElementById("pushType");
 					$(b).prop("checked", true);
 					model.curentIndex =true;
+					if(model.webserviceWsdl){
+						model.checked=true;
+					}else{
+						model.checked=false;
+					}
+					if(data.data.isNeedDes==1){
+						model.showDesKey=true;
+					}else{
+						model.showDesKey=false;
+					}
+					if(data.data.isNeedCompress==1){
+						model.showCompressType=true;
+					}else{
+						model.showCompressType=false;
+					}
+					if(data.data.isNeedXml==1){
+						model.pushFile=true;
+					}else{
+						model.pushFile=false;
+					}
+					if(data.data.isAllowAttr==1){
+						model.pushAttr=true;
+					}else{
+						model.pushAttr=false;
+					}
+					if(data.data.showInPage==1){
+						model.pushPage=true;
+					}else{
+						model.pushPage=false;
+					}
 				}
-				if(data.data.pushType =='2'){
-					model.showPushType ="表推送";
+				if(data.data.pushType ==2){
 					$("input[name='pushType']").prop("checked", true);
 					model.curentIndex =true;
 				}
@@ -84,6 +115,15 @@ window.loc_onload = function() {
 	new Vue({
 		el : '#dataD',
 		data : model,
+		methods:{
+			select : function(index){
+    			if(index==0){
+    				model.pushType=1;
+    			}else{
+    				model.pushType=2;
+    			}
+    		}
+		},
 		mounted : function() {
 			this.$nextTick(function() {
 				var r = $(".easyui-validatebox");
@@ -113,16 +153,16 @@ window.loc_onload = function() {
 				if(dataForm.showInPage !=1){
 				dataForm.showInPage = 0;
 				}
-				if(dataForm.isNeedXml !="1"){
+				if(dataForm.isNeedXml !=1){
 					dataForm.isNeedXml = 0;
 				}
-				if(dataForm.isNeedDes !="1"){
+				if(dataForm.isNeedDes !=1){
 					dataForm.isNeedDes = 0;
 				}
-				if(dataForm.isNeedCompress !="1"){
+				if(dataForm.isNeedCompress !=1){
 					dataForm.isNeedCompress = 0;
 				}
-				if(dataForm.isAllowAttr !="1"){
+				if(dataForm.isAllowAttr !=1){
 					dataForm.isAllowAttr = 0;
 				}
 				$.commAjax({
@@ -144,28 +184,28 @@ window.loc_onload = function() {
 	wd.addBtn("cancel", "取消", function() {
 		wd.cancel();
 	});
-	$("input[name='pushType']").on("click",function(){	//选择推送方式来隐藏或者显示下面内容
-		var rdoValue = $("#pushType").is(":checked") ? "文件推送":"表推送";
-		if(rdoValue == "文件推送"){
-			model.showPushType="文件推送";			
-		}else{
-			model.showPushType="表推送";
-		}
-	})
+//	$("input[name='pushType']").on("click",function(){	//选择推送方式来隐藏或者显示下面内容
+//		var rdoValue = $("#pushType").is(":checked") ? "文件推送":"表推送";
+//		if(rdoValue == "文件推送"){
+//			model.showPushType="文件推送";			
+//		}else{
+//			model.showPushType="表推送";
+//		}
+//	})
 }
-function isShowDesKey(obj) {
-	if (obj.checked) {
-		$("#isNeedDes").val("1");
-		model.showDesKey = true;
-	}else{
-		model.showDesKey = false;
-	}
-}
-function isShowCompressType(obj) {
-	if (obj.checked) {
-		$("#compressType").val("1");
-		model.showCompressType = true;
-	}else{
-		model.showCompressType = false;
-	}
-}
+//function isShowDesKey(obj) {
+//	if (obj.checked) {
+//		$("#isNeedDes").val("1");
+//		model.showDesKey = true;
+//	}else{
+//		model.showDesKey = false;
+//	}
+//}
+//function isShowCompressType(obj) {
+//	if (obj.checked) {
+//		$("#compressType").val("1");
+//		model.showCompressType = true;
+//	}else{
+//		model.showCompressType = false;
+//	}
+//}

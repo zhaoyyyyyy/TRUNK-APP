@@ -12,11 +12,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.asiainfo.biapp.si.loc.auth.model.Organization;
-import com.asiainfo.biapp.si.loc.auth.model.User;
 import com.asiainfo.biapp.si.loc.base.common.LabelInfoContants;
 import com.asiainfo.biapp.si.loc.base.common.LabelRuleContants;
 import com.asiainfo.biapp.si.loc.base.controller.BaseController;
+import com.asiainfo.biapp.si.loc.base.exception.BaseException;
 import com.asiainfo.biapp.si.loc.base.utils.DateUtil;
 import com.asiainfo.biapp.si.loc.base.utils.JsonUtil;
 import com.asiainfo.biapp.si.loc.base.utils.LogUtil;
@@ -104,9 +103,9 @@ public class ShopCartController extends BaseController {
 			} // end getElementType
 		}
 		if (flag) {
-			return webResult.success("判断所选日期是否早于标签生效日期", SUCCESS);
-		} else {
 			return webResult.fail("所选日期早于标签生效日期，请重新选择！");
+		} else {
+			return webResult.success("判断所选日期是否早于标签生效日期", SUCCESS);
 		}
 	}
 	
@@ -197,7 +196,7 @@ public class ShopCartController extends BaseController {
 			}
 		} catch (Exception e) {
 			LogUtil.error("校验标签异常", e);
-			return webResult.fail(msg);
+			return webResult.fail(msg,e);
 		}
 		if (success) {
 			return webResult.success("查询标签是否能够加入到购物车成功", SUCCESS);
@@ -214,14 +213,16 @@ public class ShopCartController extends BaseController {
 	@RequestMapping(value = "/findCusotmValidate", method = RequestMethod.POST)
 	public WebResult<String> findCusotmValidate( String labelId) {
 		WebResult<String> webResult = new WebResult<>();
-		boolean success = false;
+		boolean success = true;
 		String msg = "抱歉，该客户群无规则、无清单可用，不能添加到收纳篮！";
 		//msg = "客户群已经被删除，无法加入到购物车！";
 		try {
-			LabelInfo customGroup = labelInfoService.get(labelId);
+			LabelInfo customGroup = labelInfoService.selectLabelInfoById(labelId);
 			if (LabelInfoContants.CUSTOM_DATA_STATUS_SUCCESS != customGroup.getDataStatusId()) {
 				success=false;
 			}
+		}catch (BaseException baseException) {
+			return webResult.fail(baseException);
 		} catch (Exception e) {
 			LogUtil.error("查询客户群异常", e);
 			return webResult.fail(msg);
@@ -251,6 +252,14 @@ public class ShopCartController extends BaseController {
 		boolean success = true;
 		String msg = "抱歉，该标签数据未准备好，不能添加到收纳篮！";
 		try {
+			List<LabelRuleVo> rules = getSessionLabelRuleList();
+			Integer sort = 0;
+			if (rules.size() > 0) {
+				sort = rules.get(rules.size() - 1).getSortNum();
+				sort = sort + 1;// 排序标号 ,默认规则为"and"
+				rules.add(generateRule("and", LabelRuleContants.ELEMENT_TYPE_OPERATOR, sort));
+			}
+			sort = sort + 1;
 			if (LabelRuleContants.LABEL_INFO_CALCULATIONS_TYPEID.equals(typeId)) {
 				LabelInfo ciLabelInfo = CocCacheProxy.getCacheProxy().getLabelInfoById(calculationsId);
 				if (StringUtil.isEmpty(ciLabelInfo.getDataDate())) {
@@ -259,26 +268,31 @@ public class ShopCartController extends BaseController {
 				// 校验完之后的操作
 				if (success) {
 					msg = "加入购物车成功";
-					List<LabelRuleVo> rules = getSessionLabelRuleList();
-					Integer sort = 0;
-					if (rules.size() > 0) {
-						sort = rules.get(rules.size() - 1).getSortNum();
-						sort = sort + 1;// 排序标号 ,默认规则为"and"
-						rules.add(generateRule("and", LabelRuleContants.ELEMENT_TYPE_OPERATOR, sort));
-					}
-					sort = sort + 1;// 初始化标签规则
 					LabelRuleVo rule = initLabelRule(ciLabelInfo, sort);
-					rules.add(rule);
-
-					setSessionAttribute(LabelRuleContants.SHOP_CART_RULE, JsonUtil.toJsonString(rules));
-					setSessionAttribute(LabelRuleContants.SHOP_CART_RULE_NUM,
-							String.valueOf(findLabelOrCustomNum(rules)));
+					rules.add(rule);// 初始化标签规则
 				}
+			}else if (LabelRuleContants.CUSTOM_GROUP_INFO_CALCULATIONS_TYPEID.equals(typeId)) {
+				LabelInfo ciCustomGroupInfo = labelInfoService.selectLabelInfoById(calculationsId);
+				LabelRuleVo rule = new LabelRuleVo();
+				rule.setCalcuElement(ciCustomGroupInfo.getLabelId());
+				rule.setCustomId(ciCustomGroupInfo.getLabelId());
+				rule.setLabelTypeId(ciCustomGroupInfo.getLabelTypeId());
+				rule.setElementType(LabelRuleContants.ELEMENT_TYPE_LIST_ID);
+				rule.setCustomOrLabelName(ciCustomGroupInfo.getLabelName());
+				rule.setSortNum(sort);
+				rule.setLabelFlag(1);// 取反标识，默认不取反
+				rule.setAttrVal(ciCustomGroupInfo.getDataDate());
+				rules.add(rule);
 			}
+			setSessionAttribute(LabelRuleContants.SHOP_CART_RULE, JsonUtil.toJsonString(rules));
+			setSessionAttribute(LabelRuleContants.SHOP_CART_RULE_NUM,
+					String.valueOf(findLabelOrCustomNum(rules)));
 
-		} catch (Exception e) {
+		} catch (BaseException baseException) {
+			return webResult.fail(baseException);
+		}catch (Exception e) {
 			LogUtil.error("添加(规则)到购物车异常", e);
-			return webResult.fail(msg);
+			return webResult.fail(msg,e);
 		}
 		if (success) {
 			return webResult.success("加入购物车成功", SUCCESS);
@@ -305,7 +319,9 @@ public class ShopCartController extends BaseController {
 				setSessionAttribute(LabelRuleContants.SHOP_CART_RULE, JsonUtil.toJsonString(rules));
 			}
 			setSessionAttribute(LabelRuleContants.SHOP_CART_RULE_NUM, String.valueOf(numValue));
-		} catch (Exception e) {
+		} catch (BaseException baseException) {
+			return webResult.fail(baseException);
+		}catch (Exception e) {
 			LogUtil.error("计算中心修改异常", e);
 			return webResult.fail(e.getMessage());
 		}
@@ -350,18 +366,25 @@ public class ShopCartController extends BaseController {
 		List<LabelRuleVo> labelRules = getSessionLabelRuleList();
 		ExploreQueryParam queryParam = new ExploreQueryParam(dataDate, monthLabelDate, dayLabelDate);
 		queryParam.setOrgId(dataPrivaliege);
+		queryParam.setValidate(true);
 		StringBuffer sql = new StringBuffer();
 		try {
-			queryParam.setLoginUser(this.getLoginUser());
-			//不包含纵表的探索
-			String querySql = exploreServiceImpl.getCountSqlStr(labelRules, queryParam);
-			sql.append("select count(1) ").append(querySql);
-			System.out.println("querySql SQL : " + querySql);
-			LogUtil.info("querySql SQL : " + querySql);
-			backServiceImpl.queryCount(sql.toString());
-		} catch (Exception e) {
+			if(haveCustomOrVerticalLabel(labelRules)) {
+				String querySql = exploreServiceImpl.getFromSqlForMultiLabel(labelRules, queryParam);
+				sql.append("select count(1) from (").append(querySql).append(") abc");
+			}else{
+				//不包含纵表的探索
+				String querySql = exploreServiceImpl.getCountSqlStr(labelRules, queryParam);
+				sql.append("select count(1) ").append(querySql);
+			}
+			System.out.println("querySql SQL : " + sql.toString());
+			LogUtil.info("querySql SQL : " + sql.toString());
+			backServiceImpl.queryCount(sql.toString());	
+		} catch (BaseException baseException) {
+			return webResult.fail(baseException);
+		}catch (Exception e) {
 			LogUtil.error("校验sql异常", e);
-			return webResult.fail(e.getMessage());
+			return webResult.fail(e.getMessage(),e);
 		}
 		return webResult.success("校验sql成功", SUCCESS);
 	}
@@ -381,23 +404,29 @@ public class ShopCartController extends BaseController {
 			@ApiImplicitParam(name = "monthLabelDate", value = "数据日期(月)", required = true, paramType = "query", dataType = "string"),
 			@ApiImplicitParam(name = "dataPrivaliege", value = "数据范围", required = true, paramType = "query", dataType = "string")})
 	@RequestMapping(value = "/explore", method = RequestMethod.POST)
-	public WebResult<String> explore(String dataDate, String dayLabelDate,String monthLabelDate,String dataPrivaliege) {
+	public WebResult<String> explore(String dataDate, String dayLabelDate, String monthLabelDate,
+			String dataPrivaliege) {
 		WebResult<String> webResult = new WebResult<>();
 		List<LabelRuleVo> labelRules = getSessionLabelRuleList();
 		ExploreQueryParam queryParam = new ExploreQueryParam(dataDate, monthLabelDate, dayLabelDate);
 		queryParam.setOrgId(dataPrivaliege);
 		Integer num;
+		StringBuffer sql = new StringBuffer();
 		try {
-			StringBuffer sql = new StringBuffer();
-			//不包含纵表的探索
-			String countSql = exploreServiceImpl.getCountSqlStr(labelRules, queryParam);
-			sql.append("select count(1) ").append(countSql);
-			LogUtil.info("countSql SQL : " + countSql);
-			//调用后台接口
+			if (haveCustomOrVerticalLabel(labelRules)) {
+				String querySql = exploreServiceImpl.getFromSqlForMultiLabel(labelRules, queryParam);
+				sql.append("select count(1) from (").append(querySql).append(") abc");
+			} else {
+				// 不包含纵表的探索
+				String querySql = exploreServiceImpl.getCountSqlStr(labelRules, queryParam);
+				sql.append("select count(1) ").append(querySql);
+			}
+			LogUtil.info("countSql SQL : " + sql.toString());
+			// 调用后台接口
 			num = backServiceImpl.queryCount(sql.toString());
 		} catch (Exception e) {
 			LogUtil.error("探索异常", e);
-			return webResult.fail(e.getMessage());
+			return webResult.fail(e.getMessage(), e);
 		}
 		return webResult.success("探索成功", String.valueOf(num));
 	}
@@ -442,6 +471,31 @@ public class ShopCartController extends BaseController {
 
 	}
 
+	
+	/**
+	 * 验证是否包含用户群或者纵表标签
+	 * @param rules List<CiLabelRule> 处理过的规则
+	 * @return
+	 */
+	private boolean haveCustomOrVerticalLabel(List<LabelRuleVo> rules) {
+		boolean result = false;
+		if(rules != null) {
+			for (LabelRuleVo rule : rules) {
+				if (rule.getElementType() == LabelRuleContants.ELEMENT_TYPE_CUSTOM_RULES 
+						|| rule.getElementType() == LabelRuleContants.ELEMENT_TYPE_LIST_ID) {
+					result = true;
+					break;
+				} else if (rule.getElementType() == LabelRuleContants.ELEMENT_TYPE_LABEL_ID) {
+					if (rule.getLabelTypeId() == LabelInfoContants.LABEL_TYPE_VERT) {
+						result = true;
+						break;
+					}
+				}
+			}
+		}
+		return result;
+	}
+	
 	/**
 	 * 计算标签和清单的总个数 并为
 	 * 
@@ -502,7 +556,7 @@ public class ShopCartController extends BaseController {
 	 */
 	private LabelRuleVo initLabelRule(LabelInfo ciLabelInfo, Integer sort) {
 		LabelRuleVo rule = new LabelRuleVo();
-		rule.setCalcuElement(String.valueOf(ciLabelInfo.getLabelId()));
+		rule.setCalcuElement(ciLabelInfo.getLabelId());
 		rule.setCustomOrLabelName(ciLabelInfo.getLabelName());
 		rule.setMaxVal(new Double(1));
 		rule.setMinVal(new Double(0));

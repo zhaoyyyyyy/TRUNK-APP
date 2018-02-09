@@ -140,25 +140,6 @@ public class WebResult<T extends Object> {
 	public void setData(T data) {
 		this.data = data;
 	}
-
-	/**
-     * Description: JSON返回失败
-     *
-     * @return
-     */
-    public WebResult<T> fail(String message){
-//    	 Map<String, Object> result = new HashMap<String, Object>();
-//         result.put(WebResult.Result.STATUS, WebResult.Code.FAIL);
-//         result.put(WebResult.Result.MSG, message);
-//         result.put(WebResult.Result.LIST, null);
-//         return result;
-    	
-    	 //WebResult<T> webResult = new WebResult<T>();
-    	 this.setData(null);
-    	 this.setMsg(message);
-    	 this.setStatus(WebResult.Code.FAIL+"");
-         return this;
-    }
     
     /**
      * Description: JSON返回成功
@@ -166,17 +147,28 @@ public class WebResult<T extends Object> {
      * @return 成功的JSON map
      */
     public WebResult<T> success(String message,T obj){
-//    	 Map<String, Object> result = new HashMap<String, Object>();
-//       result.put(WebResult.Result.STATUS, WebResult.Code.OK);
-//       result.put(WebResult.Result.MSG, message);
-//       result.put(WebResult.Result.LIST, obj);
-    	 
-    	 //WebResult<T> webResult = new WebResult<>();
     	 this.setData(obj);
     	 this.setStatus(WebResult.Code.OK+"");
     	 this.setMsg(message);
          return this;
     }
+    
+    
+    /**
+     * Description: JSON返回失败
+     *
+     * @return
+     */
+    public WebResult<T> fail(String message){
+    	 this.setData(null);
+    	 this.setMsg(message);
+    	 this.setStatus(WebResult.Code.FAIL+"");
+    	 
+    	 LogUtil.error(message);
+    	 
+         return this;
+    }
+
     
     /**
      * Description: JSON返回失败
@@ -193,8 +185,30 @@ public class WebResult<T extends Object> {
     	 
     	 //记录日志
     	 this.setExecption(result.toString());
-    	 LogUtil.error(baseException.getMessage(), baseException);
+    	 LogUtil.error(result.toString(), baseException);
     	 return this;
     }
 
+    /**
+     * Description: JSON返回失败
+     *
+     * @return
+     */
+    public WebResult<T> fail(String message,Exception e){
+    	 this.setData(null);
+    	 this.setMsg(message);
+    	 this.setStatus(WebResult.Code.FAIL+"");
+    	 
+    	 final Writer result = new StringWriter();
+         final PrintWriter printWriter = new PrintWriter(result);
+         e.printStackTrace(printWriter);
+    	 this.setExecption(result.toString());
+    	 
+    	 LogUtil.error(result.toString(), e);
+         return this;
+    }
+    
+  
+    
+	
 }

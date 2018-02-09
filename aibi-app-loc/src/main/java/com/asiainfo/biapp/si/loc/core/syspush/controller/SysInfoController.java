@@ -178,8 +178,13 @@ public class SysInfoController extends BaseController<SysInfo>{
     public WebResult<String> edit(@ApiIgnore SysInfo sysInfo) {
         WebResult<String> webResult = new WebResult<>();
         SysInfo oldSys = new SysInfo();
+        SysInfo sys =new SysInfo();
         try {
+        	sys =iSysInfoService.selectSysInfoBySysName(sysInfo.getSysName());
             oldSys = iSysInfoService.selectSysInfoById(sysInfo.getSysId());
+            if(!sysInfo.getSysName().equals(oldSys.getSysName()) && null != sys){
+                return webResult.fail("平台名称已存在");
+            }
             oldSys = fromToBean(sysInfo, oldSys);
             iSysInfoService.modifySysInfo(oldSys);
         } catch (BaseException e) {

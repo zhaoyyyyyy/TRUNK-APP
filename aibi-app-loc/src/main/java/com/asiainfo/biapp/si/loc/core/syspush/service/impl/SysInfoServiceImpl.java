@@ -70,8 +70,18 @@ public class SysInfoServiceImpl extends BaseServiceImpl<SysInfo, String> impleme
         }
         return super.get(sysId);
     }
+    
+    public SysInfo selectSysInfoBySysName(String sysName) throws BaseException {
+        if(StringUtil.isBlank(sysName)){
+            throw new ParamRequiredException("名称不能为空");
+        }
+        return iSysInfoDao.selectSysInfoBySysName(sysName);
+    }
 
     public void addSysInfo(SysInfo sysInfo) throws BaseException {
+    	if(null !=iSysInfoDao.selectSysInfoBySysName(sysInfo.getSysName())){
+    		 throw new ParamRequiredException("平台名称已存在");
+    	}
         super.saveOrUpdate(sysInfo);
     }
 

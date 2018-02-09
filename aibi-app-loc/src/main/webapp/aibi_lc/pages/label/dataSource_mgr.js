@@ -117,7 +117,7 @@ function fun_to_del(id) {
 					})
 				}
 				if(is=="have"){
-					$.alert("该指标已被注册");
+					$.alert("该表中指标已经被注册为标签，不能删除！");
 				}else{
 					$.commAjax({
 						url : $.ctx + '/api/source/sourceTableInfo/delete',

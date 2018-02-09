@@ -45,8 +45,10 @@ window.loc_onload = function(){
 			});
 			$("#accordion").show();
 			
+			
+			var $accordin = $('#accordion a');
 			//点击菜单
-			$('#accordion a').click(function(){
+			$accordin.click(function(){
 				var self = this;
 				if(!$(this).parent().parent().is("#accordion")){
 					$('#accordion li').removeClass("active");
@@ -57,6 +59,10 @@ window.loc_onload = function(){
 					window.location.hash = $(self).attr('href');
 				}
 			});
+			//点击菜单
+			if($accordin && $accordin.length >0){
+				$('#accordion a').eq(0).click();
+			}
 		}
 	});
 	

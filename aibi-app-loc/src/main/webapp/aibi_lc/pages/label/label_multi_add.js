@@ -13,7 +13,6 @@ var model = {
 			busiCaliber : "",
 			failTime : "",
 		    updateCycle : "",
-		    dataType : "",
 		    categoryName : ""
 		}],
 		bqlx : [],
@@ -28,7 +27,7 @@ function changeStatus(elem){
 		$(elem).parents("form").find(".ui-form-hide").show();
 	}else{
 		$("#dimId").removeAttr("name");
-		$("#dataType").removeAttr("name");
+//		$("#dataType").removeAttr("name");
 		$(elem).parents("form").find(".ui-form-hide").hide();
 		
 	}
@@ -68,7 +67,21 @@ window.loc_onload = function(){
 				}else{
 					$("#dependIndex_"+index).val("");
 				}
-	        }
+	        },
+	        fun_to_dimdetail : function(sourceInfo){
+	    		$.commAjax({
+					ansyc : false,
+				    url : $.ctx + '/api/dimtable/dimTableInfo/get',
+				    postData : {
+				    	"dimId" : sourceInfo.dimId
+				    },
+				    onSuccess : function(data){
+				    	var dimTableName = data.data.dimTableName;
+				    	var win = $.window('维表详情',$.ctx + '/aibi_lc/pages/dimtable/dimtable_detail.html?dimTableName='+dimTableName, 900,
+				    			600);
+				    }
+				});
+	    	}
 	    },
 	    /*mounted: function () {
 		    this.$nextTick(function () {
@@ -127,21 +140,6 @@ function chooseKpi(obj){
 	}
 }
 
-function fun_to_dimdetail(){
-	var dimId = $("#dimId").val();
-	$.commAjax({
-		ansyc : false,
-	    url : $.ctx + '/api/dimtable/dimTableInfo/get',
-	    postData : {
-	    	"dimId" : dimId
-	    },
-	    onSuccess : function(data){
-	    	var dimTableName = data.data.dimTableName;
-	    	var win = $.window('维表详情',$.ctx + '/aibi_lc/pages/dimtable/dimtable_detail.html?dimTableName='+dimTableName, 900,
-	    			600);
-	    }
-	});
-}
 function getTime(element){
 	console.log(element);
 	$(element).datepicker({
@@ -164,7 +162,6 @@ function fun_to_createRow(){
 		 busiCaliber : "",
 	     failTime : "",
 	     updateCycle : "",
-	     dataType : "",
 	     categoryName : ""
 	});
 }

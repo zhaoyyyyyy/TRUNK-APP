@@ -61,10 +61,10 @@ public class LabelVerticalColumnRelDaoImpl extends BaseDaoImpl<LabelVerticalColu
         Map<String, Object> reMap = new HashMap<>();
         Map<String, Object> params = new HashMap<>();
         StringBuffer hql = new StringBuffer("from LabelVerticalColumnRel l where 1=1 ");
-        if(StringUtil.isNoneBlank(labelVerticalColumnRelVo.getLabelId()) && (null != labelVerticalColumnRelVo.getColumnId())){
+        if(StringUtil.isNoneBlank(labelVerticalColumnRelVo.getLabelVerticalColumnRelId().getLabelId()) && (null != labelVerticalColumnRelVo.getLabelVerticalColumnRelId().getColumnId())){
             hql.append("and l.labelId = :labelId and l.columnId = :columnId ");
-            params.put("labelId", labelVerticalColumnRelVo.getLabelId());
-            params.put("columnId", labelVerticalColumnRelVo.getColumnId());
+            params.put("labelId", labelVerticalColumnRelVo.getLabelVerticalColumnRelId().getLabelId());
+            params.put("columnId", labelVerticalColumnRelVo.getLabelVerticalColumnRelId().getColumnId());
         }
         if(null != labelVerticalColumnRelVo.getLabelTypeId()){
             hql.append("and l.labelTypeId = :labelTypeId ");

@@ -43,13 +43,13 @@
 							<div class="ui-form-group">
 						        <label for="inputEmail3" class="control-label fleft"><span class="input-required">*</span>推送方式:</label>
 						        <ul id="radioList" class="clearfix fleft">
-							        <li class="radio circle success"  v-for="(item,index) in tsfszd" > 
+							        <li class="radio circle success"  v-for="(item,index) in tsfszd" v-on:click="select(index)"> 
 									   	<input type="radio" name="pushType" :value="item.code" id="pushType" required="true" > 
 										<label id="tsfszd" name="tsfszd" for="pushType" v-bind:class="{active:index==curentIndex}"><i class="default" ></i>{{item.dataName}}</label>
 									</li>
 						        </ul>
 						    </div>
-						    <div id="filePush" v-if="showPushType==='文件推送'">
+						    <div id="filePush" v-if="pushType==1">
 							    <fieldset class="push-fieldest">
 									<legend>FTP/SFTP信息</legend>
 									<div class="ui-form-group">
@@ -90,9 +90,9 @@
 									</div>
 								</div>
 								<div class="ui-form-group">
-									<label class="control-label fleft"><span class="input-required">*</span>本地路径:</label>
+									<label class="control-label fleft">本地路径:</label>
 									<div class="control-input">
-										<input v-model="localPath" id="localPath" name="localPath" type="text" class="fleft form-control easyui-validatebox" required="true"  />
+										<input v-model="localPath" id="localPath" name="localPath" type="text" class="fleft form-control easyui-validatebox"  placeholder="本地临时路径" />
 									</div>
 								</div>
 								</fieldset>
@@ -127,7 +127,7 @@
 								 </fieldset>
 								 <div class="ui-form-group ml20 mt20">
 									 <div class="checkbox fleft checkbox-radio">
-									    <input id="showInPage" name="showInPage" type="checkbox" class="checkbix" checked="checked" value="1">
+									    <input id="showInPage" name="showInPage" type="checkbox" class="checkbix" v-model="pushPage" :checked="pushPage" value="1">
 									    <label aria-label="" role="checkbox" for="showInPage" class="checkbix" >
 									    		<i class="default"></i>是否推送页面显示
 									    </label>
@@ -135,7 +135,7 @@
 								</div>
 								 <div class="ui-form-group ml20 ">
 									 <div class="checkbox fleft checkbox-radio">
-									    <input id="isNeedXml" name="isNeedXml" type="checkbox"  value="1">
+									    <input id="isNeedXml" name="isNeedXml" type="checkbox" class="checkbix" value="1" v-model="pushFile" :checked="pushFile"/>
 									    <label aria-label="" role="checkbox" for="isNeedXml">
 									    		<i class="default"></i> 是否同时上传xml文件
 									    </label>
@@ -143,7 +143,7 @@
 								</div> 
 								<div class="ui-form-group ml20">
 									 <div class="checkbox fleft checkBox checkbox-radio">
-									    <input id="isNeedDes" name="isNeedDes" type="checkbox" class="checkbix" value="1"  onclick="isShowDesKey(this)" >
+									    <input id="isNeedDes" name="isNeedDes" type="checkbox" class="checkbix" value="1" v-model="showDesKey" :checked="showDesKey"/>
 									    <label aria-label="" role="checkbox" for="isNeedDes" class="checkbix"  >
 									    		<i class="default"></i>是否需要DES加密
 									    </label>
@@ -157,7 +157,7 @@
 								</div>
 								<div class="ui-form-group ml20 clearfix">
 									 <div class="checkbox fleft checkBox checkbox-radio">
-									    <input id="isNeedCompress" name="isNeedCompress" type="checkbox" class="checkbix" value="1" onclick="isShowCompressType(this)">
+									    <input id="isNeedCompress" name="isNeedCompress" type="checkbox" class="checkbix" value="1" v-model="showCompressType" :checked="showCompressType"/>
 									    <label aria-label="" role="checkbox" for="isNeedCompress" class="checkbix">
 									    		<i class="default"></i>是否需要压缩
 									    </label>
@@ -172,7 +172,7 @@
 								</div>
 								<div class="ui-form-group  ml20">
 									 <div class="checkbox fleft checkbox-radio">
-									    <input id="isAllowAttr" name="isAllowAttr" type="checkbox" class="checkbix" value="1">
+									    <input id="isAllowAttr" name="isAllowAttr" type="checkbox" class="checkbix" value="1" v-model="pushAttr" :checked="pushAttr"/>
 									    <label aria-label="" role="checkbox" for="isAllowAttr" class="checkbix">
 									    		<i class="default"></i>是否允许推送属性
 									    </label>
@@ -185,7 +185,7 @@
 									</div>
 								</div>
 							</div>
-							<div id="labelPush" v-if="showPushType ==='表推送'">
+							<div id="labelPush" v-if="pushType ==2">
 							<fieldset class="push-fieldest">
 									<legend>表推送</legend>
 									<div class="ui-form-group">

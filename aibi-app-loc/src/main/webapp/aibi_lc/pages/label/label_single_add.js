@@ -40,7 +40,23 @@ window.loc_onload = function() {
 	new Vue({
 		el : '#dataD',
 	    data : model ,
-	    mounted: function () {
+	    methods :{
+	    	fun_to_dimdetail : function(sourceInfo){
+	    		$.commAjax({
+					ansyc : false,
+				    url : $.ctx + '/api/dimtable/dimTableInfo/get',
+				    postData : {
+				    	"dimId" : sourceInfo.dimId
+				    },
+				    onSuccess : function(data){
+				    	var dimTableName = data.data.dimTableName;
+				    	var win = $.window('维表详情',$.ctx + '/aibi_lc/pages/dimtable/dimtable_detail.html?dimTableName='+dimTableName, 900,
+				    			600);
+				    }
+				});
+	    	} 
+	    } ,
+	    mounted : function () {
 		    this.$nextTick(function () {
 		    	this.bqlx[0].checked=true;//默认第一个radio选中
 			    var r = $(".easyui-validatebox");
@@ -111,10 +127,10 @@ function fun_to_save(){
 			  url : $.ctx + '/api/label/labelInfo/save',
 			  postData : labelInfo,
 			  onSuccess : function(data){
-				  flag = data.data
+				  flag = data.status
 			  }  
 			});	
-			if(k == $("form[class~=active]").size() && flag == "success"){	
+			if(k == $("form[class~=active]").size() && flag == 200){	
 				$.success("创建成功",function(){
 					history.back(-1);
 				})
@@ -124,21 +140,6 @@ function fun_to_save(){
 	})
 }
 
-function fun_to_dimdetail(){
-	var dimId = $("#dimId").val();
-	$.commAjax({
-		ansyc : false,
-	    url : $.ctx + '/api/dimtable/dimTableInfo/get',
-	    postData : {
-	    	"dimId" : dimId
-	    },
-	    onSuccess : function(data){
-	    	var dimTableName = data.data.dimTableName;
-	    	var win = $.window('维表详情',$.ctx + '/aibi_lc/pages/dimtable/dimtable_detail.html?dimTableName='+dimTableName, 900,
-	    			600);
-	    }
-	});
-}
 function getData(tag){	
 	if($(tag).parents(".create-main").hasClass("active")){
 		$(tag).parents(".create-main").removeClass("active");

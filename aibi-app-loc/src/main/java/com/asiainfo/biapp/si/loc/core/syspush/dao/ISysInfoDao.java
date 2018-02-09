@@ -51,4 +51,12 @@ public interface ISysInfoDao extends BaseDao<SysInfo, String>{
      * @return
      */
     public List<SysInfo> selectSysInfoList(SysInfoVo sysInfoVo);
+    
+    /**
+     * 根据平台名称查询
+     *
+     * @param sysName
+     * @return
+     */
+    public SysInfo selectSysInfoBySysName(String sysName);
 }

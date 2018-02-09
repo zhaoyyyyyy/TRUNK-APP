@@ -9,12 +9,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.annotation.Resource;
 import javax.transaction.Transactional;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.asiainfo.biapp.si.loc.auth.model.Organization;
+import com.asiainfo.biapp.si.loc.auth.service.IOrganizationService;
 import com.asiainfo.biapp.si.loc.base.common.CommonConstants;
 import com.asiainfo.biapp.si.loc.base.common.LabelInfoContants;
 import com.asiainfo.biapp.si.loc.base.common.LabelRuleContants;
@@ -40,7 +43,7 @@ import com.asiainfo.biapp.si.loc.core.label.vo.LabelRuleVo;
 @Transactional
 public class LabelExploreServiceImpl implements ILabelExploreService {
 
-	@Autowired
+	@Resource(name="sparkSqlPaser")
 	private IGroupCalcSqlPaser sqlPaser;
 	
 	@Autowired
@@ -51,6 +54,9 @@ public class LabelExploreServiceImpl implements ILabelExploreService {
 	
 	@Autowired
 	private IBackSqlService backServiceImpl;
+	
+	@Autowired
+	private IOrganizationService organizationService; 
 	
 	@Override
 	public String getFromSqlForMultiLabel(List<LabelRuleVo> labelRuleList, ExploreQueryParam queryParam) throws BaseException {
@@ -87,8 +93,6 @@ public class LabelExploreServiceImpl implements ILabelExploreService {
 				if (trimSql.startsWith("from")) {
 					singleLabelSql = trimSql.substring(4);
 				}
-				System.out.println("根据标签ID获得混合运算生成客户群,标签Id为："
-						+ rule.getCalcuElement() + ",生成的sql为："+ singleLabelSql);
 				if (labelRuleToSql.keySet().contains(rule.getCalcuElement())) {
 					labelRuleToSql.put(rule.getCalcuElement() + "_"+ duplicateLabelIdCount, singleLabelSql);
 					calcExpr.append(rule.getCalcuElement() + "_"+ duplicateLabelIdCount);
@@ -106,8 +110,19 @@ public class LabelExploreServiceImpl implements ILabelExploreService {
 			}//end ELEMENT_TYPE
 			
 		}//end for
-		String sql =" from ("+ sqlPaser.parseExprToSql(calcExpr.toString(), labelRuleToSql)+")";
-		System.out.println(sql);
+		String sql = "";
+		if (labelRuleToSql.keySet().size() == 1) {
+			String calcExprStr = calcExpr.toString();
+			calcExprStr = calcExprStr.replace(String.valueOf(CommonConstants.LEFT_Q), "")
+					.replace(String.valueOf(CommonConstants.RIGHT_Q), "");
+			if (labelRuleToSql.containsKey(calcExprStr)) {
+				sql = "select " +LabelInfoContants.KHQ_CROSS_COLUMN+ " from " + labelRuleToSql.get(calcExprStr);
+			} else {
+				sql = "select " +LabelInfoContants.KHQ_CROSS_COLUMN+ " from " + calcExprStr ;
+			}
+		} else if (labelRuleToSql.keySet().size() > 1) {
+			sql =sqlPaser.parseExprToSql(calcExpr.toString(), labelRuleToSql);
+		}
 		return sql;
 	}
 
@@ -123,7 +138,7 @@ public class LabelExploreServiceImpl implements ILabelExploreService {
 		Map<String, LabelVerticalColumnRel> map = new HashMap<String, LabelVerticalColumnRel>();
 		Set<LabelVerticalColumnRel> verticalColumnRels = labelInfo.getVerticalColumnRels();
 		for (LabelVerticalColumnRel rel : verticalColumnRels) {
-			String key = rel.getColumnId();
+			String key = rel.getLabelVerticalColumnRelId().getColumnId();
 			map.put(key, rel);
 		}
 		// 根据纵表标签获得其子规则
@@ -216,10 +231,18 @@ public class LabelExploreServiceImpl implements ILabelExploreService {
 		} // end for
 		wherelabel.append(")");
 		// 省专区，地市专区需要权限,普通专区不需要权限、 拼接where中的cityId，用于权限
-		boolean isNeedAuthen = true;
-		StringBuffer whereSb = new StringBuffer("where 1=1 and ");
+		boolean isNeedAuthen = false;
+		StringBuffer whereSb = new StringBuffer();//where 整体条件
+		if(queryParam.isValidate()){
+			whereSb.append("where 1=2 and ");
+		}else{
+			whereSb.append("where 1=1 and ");
+		}
 		String cityColumn = getWhereForCity(queryParam, dataTabelAlias, whereSb);
 		whereSb.append(wherelabel);
+		if (StringUtil.isNotEmpty(cityColumn)){
+			isNeedAuthen = true;
+		}
 		String leftJoinSqlStr = this.getLeftJoinSqlStr(tableAliasMap, aliasColumnMap, andFlag, whereSb, isNeedAuthen,cityColumn);
 		StringBuffer fromSqlSb = new StringBuffer("");
 		fromSqlSb.append(" from ").append(leftJoinSqlStr).append(" ");
@@ -237,29 +260,31 @@ public class LabelExploreServiceImpl implements ILabelExploreService {
 	 * @return
 	 *
 	 * @author  tianxy3
+	 * @throws BaseException 
 	 * @date 2018年2月5日
 	 */
-	private String getWhereForCity(ExploreQueryParam queryParam, String dataTabelAlias, StringBuffer whereSb) {
+	private String getWhereForCity(ExploreQueryParam queryParam, String dataTabelAlias, StringBuffer whereSb) throws BaseException {
 		StringBuffer cityColumn = new StringBuffer();
 		if (StringUtil.isNotEmpty(dataTabelAlias) && StringUtil.isNotEmpty(queryParam.getOrgId())) {
-			List<Organization> list = queryParam.getLoginUser().getDataPrivaliege().get("3");
 			/** key:orgCode; //组织编码（重要）  value:level;  //组织级别（重要）*/
-			Map<String,Integer> map=new HashMap<>();
-			for (Organization organization : list) {
-				map.put(organization.getOrgCode(), organization.getLevelId());
-			}
-			Map<Integer,String> citySqlMap=new HashMap<>();
+			Map<String, Organization> map = organizationService.selectAllOrganization();
+			Map<String,String> citySqlMap=new HashMap<>();
 			String orgId = queryParam.getOrgId();
 			String[] split = orgId.split(",");
 			for (int i = 0; i < split.length; i++) {
 				String orgCode = split[i];
-				Integer levelId = map.get(orgCode);
-				citySqlMap.put(levelId, "'"+orgCode+"',");
+				Organization organization = map.get(orgCode);
+				String levelId ="org_level_"+organization.getLevelId();
+				if(citySqlMap.get(levelId)!=null){
+					citySqlMap.put(levelId,citySqlMap.get(levelId)+ "'"+orgCode+"',");
+				}else{
+					citySqlMap.put(levelId, "'"+orgCode+"',");
+				}
 			}
-			for (Integer levelId : citySqlMap.keySet()) {
-				cityColumn.append("org_level_"+levelId);
+			cityColumn.append(StringUtils.join(citySqlMap.keySet().toArray(),","));
+			for (String levelId : citySqlMap.keySet()) {
 				String citySql = citySqlMap.get(levelId);
-				whereSb.append(" (").append(dataTabelAlias).append(".").append("org_level_"+levelId).append(" in ")
+				whereSb.append(" (").append(dataTabelAlias).append(".").append(levelId).append(" in ")
 				.append("(").append(citySql.substring(0, citySql.length()-1)).append(")) and ");
 			}
 		}

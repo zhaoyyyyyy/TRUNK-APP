@@ -239,26 +239,17 @@ public class LabelInfoController extends BaseController {
             @ApiImplicitParam(name = "sortNum", value = "排序字段", required = false, paramType = "query", dataType = "int") ,
             @ApiImplicitParam(name = "dependIndex", value = "规则依赖的指标",required=false,paramType = "query", dataType= "string")})
     @RequestMapping(value = "/labelInfo/save", method = RequestMethod.POST)
-    public WebResult<String> save(@ApiIgnore LabelInfo labelInfo){
-        WebResult<String> webResult = new WebResult<>();
-        /*LabelInfo label = new LabelInfo();
-        try {
-            label = iLabelInfoService.selectOneByLabelName(labelInfo.getLabelName());
-        } catch (BaseException e1) {
-            return webResult.fail(e1);
-        }
-        if (null !=label) {
-            return webResult.fail("标签名称重复");
-        }*/
+    public WebResult<LabelInfo> save(@ApiIgnore LabelInfo labelInfo){
+        WebResult<LabelInfo> webResult = new WebResult<>();
         User user = new User();  
         try {
             user = this.getLoginUser();
-            labelInfo.setCreateUserId(user.getUserId());
+            labelInfo.setCreateUserId(user.getUserName());
             iLabelInfoService.addLabelInfo(labelInfo);
         } catch (BaseException e) {
             return webResult.fail(e);
         }
-        return webResult.success("新增标签信息成功", SUCCESS);
+        return webResult.success("新增标签信息成功", labelInfo);
     }
     
     @ApiOperation(value = "修改标签信息")
@@ -437,9 +428,9 @@ public class LabelInfoController extends BaseController {
         if (StringUtil.isNotBlank(lab.getDimId())) {
             oldLab.setDimId(lab.getDimId());
         }
-        if (StringUtil.isNotBlank(lab.getDataType())) {
+        /*if (StringUtil.isNotBlank(lab.getDataType())) {
             oldLab.setDataType(lab.getDataType());
-        }
+        }*/
         if (StringUtil.isNotBlank(lab.getUnit())) {
             oldLab.setUnit(lab.getUnit());
         }
@@ -476,9 +467,22 @@ public class LabelInfoController extends BaseController {
     public WebResult<List<LabelInfo>> findListByEffective(@ModelAttribute LabelInfoVo labelInfoVo) {
         WebResult<List<LabelInfo>> webResult = new WebResult<>();
         List<LabelInfo> labelInfoList = new ArrayList<>();
+        Set<String> categoryIdSet = new HashSet<>();
+        //Page<LabelInfo> page =new Page<LabelInfo>();
         try {
+            if(StringUtil.isNotBlank(labelInfoVo.getCategoryId())){
+                CategoryInfo categoryInfo = iCategoryInfoService.selectCategoryInfoById(labelInfoVo.getCategoryId());
+                categoryIdSet.add(categoryInfo.getCategoryId());
+                if(!categoryInfo.getChildren().isEmpty()){
+                    getCategoryChildren(categoryInfo.getChildren(),categoryIdSet);
+                }
+                labelInfoVo.setCategoryIdSet(categoryIdSet);
+            }
+            labelInfoList = iLabelInfoService.selectLabelAllEffectiveInfoList(labelInfoVo);          
+        }
+        /*try {
             labelInfoList = iLabelInfoService.selectLabelAllEffectiveInfoList(labelInfoVo);
-        } catch (BaseException e) {
+        }*/ catch (BaseException e) {
             e.printStackTrace();
         }
         return webResult.success("获取有效标签信息成功.", labelInfoList);

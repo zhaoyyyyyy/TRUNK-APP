@@ -133,7 +133,7 @@ public class MdaSysTableController extends BaseController<MdaSysTable> {
         } catch (BaseException e) {
             LOGGER.info("context", e);
         }
-        mdaSysTable.setCreateUserId(user.getUserId());
+        mdaSysTable.setCreateUserId(user.getUserName());
         try {
             iMdaSysTableService.addMdaSysTable(mdaSysTable);
         } catch (BaseException e1) {

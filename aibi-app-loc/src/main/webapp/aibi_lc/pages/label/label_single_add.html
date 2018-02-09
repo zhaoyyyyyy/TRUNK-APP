@@ -159,7 +159,7 @@
 									       <div class="control-input date-input fleft has-icon">
 					          	             <input name="failTime" type="text" required="true"
 									         class="form-control input-pointer easyui-validatebox" data-dismiss="formDatepicker#sendTime" 
-									         value="2013-12-31" onmousedown="getTime(this)"/>
+									         value="2037-12-31" onmousedown="getTime(this)"/>
 					          	             <span class="glyphicon-date form-control-feedback"></span>
 					                       </div>   
 							        </div>
@@ -170,14 +170,14 @@
 		                                     <span class="input-required">*</span>                                    
 		                                                                         维表选择</label>
 		                                    <div class="control-input control-select">
-		                                        <select id="dimId" name="dimId" required="true" class="form-control input-pointer easyui-validatebox">
+		                                        <select v-model="sourceInfo.dimId" name="dimId" required="true" class="form-control input-pointer easyui-validatebox">
 			                                        <option>请选择维表</option>
 			                                        <option v-for = "dim in dimtableInfoList" :value="dim.dimId">{{dim.dimTableName}}</option>
 		                                        </select>       
 		                                    </div> 
-		                                    <button type="button" onclick="fun_to_dimdetail()" class="file-up-btn ml10" >详情</button>
+		                                    <button type="button" v-on:click="fun_to_dimdetail(sourceInfo)" class="file-up-btn ml10" >详情</button>
 		                                </div>            
-		                                <div class="ui-form-group">
+		                                <!-- <div class="ui-form-group">
 		                                    <label for="dataType" class="control-label">
 		                                    <span class="input-required">*</span>                                    
 		                                                                        数据类型</label>
@@ -186,7 +186,7 @@
 									                   <option v-for = "h in sjlx" :value="h.dataName">{{h.dataName}}</option>
 								                    </select>
 		                                      </div>
-		                                </div>
+		                                </div> -->
 	                                </div>
 	                            </div>
 	                        </div>

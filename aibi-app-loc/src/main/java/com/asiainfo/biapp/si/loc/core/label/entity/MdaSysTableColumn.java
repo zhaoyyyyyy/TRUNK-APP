@@ -142,6 +142,18 @@ public class MdaSysTableColumn extends BaseEntity {
     @ApiParam(value = "规则编码")
     private String countRulesCode;
 
+    /**
+     * 列对应标签类型Id
+     */
+    @Transient
+    private Integer labelTypeId;
+    
+    /**
+     * 是否必选列
+     */
+    @Transient
+    private Integer isMustColumn;
+    
     @Transient
     private DimTableInfo dimtableInfo;
 
@@ -252,5 +264,27 @@ public class MdaSysTableColumn extends BaseEntity {
     public void setCountRulesCode(String countRulesCode) {
         this.countRulesCode = countRulesCode;
     }
+
+    
+    public Integer getLabelTypeId() {
+        return labelTypeId;
+    }
+
+    
+    public void setLabelTypeId(Integer labelTypeId) {
+        this.labelTypeId = labelTypeId;
+    }
+
+    
+    public Integer getIsMustColumn() {
+        return isMustColumn;
+    }
+
+    
+    public void setIsMustColumn(Integer isMustColumn) {
+        this.isMustColumn = isMustColumn;
+    }
+
+
 
 }

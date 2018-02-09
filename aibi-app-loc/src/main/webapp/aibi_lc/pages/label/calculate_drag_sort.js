@@ -39,7 +39,7 @@ var calculateDragSort = (function (model){
 				$("#sortable .ui-chaining").show();
 				$("#sortable .J-helper").remove();
 				$("#sortable .onSortingLabel").removeClass("onSortingLabel").show();
-				labelMarket.submitRules();
+				calculateCenter.submitRules();
 			}
 		});
 	}
@@ -318,7 +318,7 @@ var calculateDragSort = (function (model){
 		  				$("#sortable .waitClose").removeClass("waitClose");
 						_t.parent().removeClass("opened");
 						//右边括号
-						labelMarket.submitRules();
+						calculateCenter.submitRules();
 					}
 				})
 			})
