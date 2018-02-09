@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.asiainfo.biapp.si.loc.auth.model.User;
 import com.asiainfo.biapp.si.loc.base.controller.BaseController;
 import com.asiainfo.biapp.si.loc.base.exception.BaseException;
 import com.asiainfo.biapp.si.loc.base.page.Page;
@@ -115,8 +116,11 @@ public class DimTableInfoController extends BaseController<DimTableInfo>{
     public WebResult<String> save(@ApiIgnore DimTableInfo dimTableInfo) {
             WebResult<String> webResult = new WebResult<>();
             dimTableInfo.setCreateTime(new Date());
+            User user = new User(); 
             DimTableInfo dimTable = new DimTableInfo();
             try {
+            	user = this.getLoginUser();
+                dimTableInfo.setCreateUserId(user.getUserName());
                 dimTable = iDimTableInfoService.selectOneByDimTableName(dimTableInfo.getDimTableName());
                 if (null != dimTable) {
                     return webResult.fail("维表名称已存在");
