@@ -16,3 +16,4 @@ aibi-common/.classpath
 aibi-common/.project
 aibi-common/.settings/
 aibi-app-loc/src/main/java/com/asiainfo/biapp/si/loc/base/Test.java
+Test*.java
