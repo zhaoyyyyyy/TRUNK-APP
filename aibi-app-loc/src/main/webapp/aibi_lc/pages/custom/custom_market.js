@@ -404,7 +404,7 @@ var labelMarket = (function (model){
 				$.commAjax({
 					url: $.ctx + "/api/user/get",
 					onSuccess: function(data){
-						$("#createUserId").val(data.data.userId);
+						$("#createUserId").val(data.data.userName);
 						model.loadLabelInfoList();
 					}
 				});

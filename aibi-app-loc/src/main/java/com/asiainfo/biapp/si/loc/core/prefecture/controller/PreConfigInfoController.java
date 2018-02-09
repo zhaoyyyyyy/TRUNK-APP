@@ -152,7 +152,7 @@ public class PreConfigInfoController extends BaseController<PreConfigInfo> {
         User user = new User();
         try {
             user = this.getLoginUser();
-            preConfigInfo.setCreateUserId(user.getUserId());
+            preConfigInfo.setCreateUserId(user.getUserName());
             iPreConfigInfoService.addPreConfigInfo(preConfigInfo);
         } catch (BaseException e) {
             return webResult.fail(e);

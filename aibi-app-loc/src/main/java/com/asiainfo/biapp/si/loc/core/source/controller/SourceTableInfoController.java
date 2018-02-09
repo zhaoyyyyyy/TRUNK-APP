@@ -138,7 +138,7 @@ public class SourceTableInfoController extends BaseController<SourceTableInfo> {
         User user = new User();
         try {
             user = this.getLoginUser();
-            sourceTableInfo.setCreateUserId(user.getUserId());
+            sourceTableInfo.setCreateUserId(user.getUserName());
             iSourceTableInfoService.addSourceTableInfo(sourceTableInfo);
         } catch (BaseException e) {
             return webResult.fail(e);

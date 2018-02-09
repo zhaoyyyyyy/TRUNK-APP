@@ -244,7 +244,7 @@ public class LabelInfoController extends BaseController {
         User user = new User();  
         try {
             user = this.getLoginUser();
-            labelInfo.setCreateUserId(user.getUserId());
+            labelInfo.setCreateUserId(user.getUserName());
             iLabelInfoService.addLabelInfo(labelInfo);
         } catch (BaseException e) {
             return webResult.fail(e);
