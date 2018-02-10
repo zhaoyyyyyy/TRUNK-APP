@@ -23,9 +23,9 @@ eureka:
       enabled: true
     serviceUrl:
       defaultZone: "${jauth-url}/eureka/"
-  instance:
-    leaseExpirationDurationInSeconds: 1
-    leaseRenewalIntervalInSeconds: 1
+  #instance:
+    #leaseExpirationDurationInSeconds: 1
+    #leaseRenewalIntervalInSeconds: 1
 autoLoginSign: xm8EV6Hy5RMFK4EEACIDAwQus
 context:
   component-scan:
@@ -34,4 +34,8 @@ context:
     classes: com.asiainfo.biapp.si.loc.base.LocCacheBase
   listener:
     classes: com.asiainfo.biapp.si.loc.base.listener.LocBaseListener
-  
+info:
+  app:  
+    name: "LOC"  
+    description: "标签运营中心-亚信"  
+version: "5.0.0"  
