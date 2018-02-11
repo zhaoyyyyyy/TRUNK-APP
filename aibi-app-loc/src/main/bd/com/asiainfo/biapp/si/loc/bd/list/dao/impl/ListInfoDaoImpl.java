@@ -4,12 +4,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.stereotype.Repository;
+
 import com.asiainfo.biapp.si.loc.base.dao.BaseDaoImpl;
 import com.asiainfo.biapp.si.loc.base.page.Page;
 import com.asiainfo.biapp.si.loc.base.utils.StringUtil;
 import com.asiainfo.biapp.si.loc.bd.list.dao.IListInfoDao;
 import com.asiainfo.biapp.si.loc.bd.listinfo.entity.ListInfo;
 
+@Repository
 public class ListInfoDaoImpl extends BaseDaoImpl<ListInfo, String> implements IListInfoDao{
 
 	
