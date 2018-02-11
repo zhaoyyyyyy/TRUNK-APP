@@ -17,7 +17,10 @@ import org.springframework.stereotype.Repository;
 import com.asiainfo.biapp.si.loc.auth.model.Organization;
 import com.asiainfo.biapp.si.loc.auth.model.User;
 import com.asiainfo.biapp.si.loc.base.dao.BaseDaoImpl;
+import com.asiainfo.biapp.si.loc.base.exception.BaseException;
 import com.asiainfo.biapp.si.loc.base.page.Page;
+import com.asiainfo.biapp.si.loc.base.utils.LogUtil;
+import com.asiainfo.biapp.si.loc.core.label.entity.LabelInfo;
 import com.asiainfo.biapp.si.loc.core.prefecture.dao.IPreConfigInfoDao;
 import com.asiainfo.biapp.si.loc.core.prefecture.entity.PreConfigInfo;
 import com.asiainfo.biapp.si.loc.core.prefecture.vo.PreConfigInfoVo;
@@ -131,4 +134,15 @@ public class PreConfigInfoDaoImpl extends BaseDaoImpl<PreConfigInfo, String> imp
         reMap.put("params", params);
         return reMap;
     }
+    
+    public List<PreConfigInfo> selectEffectivaPreConfigInfo(){
+        List<PreConfigInfo> preConfigInfo = new ArrayList<>();
+        try {
+            preConfigInfo = super.findListByHql("from PreConfigInfo p where p.configStatus = ?0", 1);
+        } catch (BaseException e) {
+            LogUtil.error(e);
+        }
+        return preConfigInfo;
+    }
+    
 }

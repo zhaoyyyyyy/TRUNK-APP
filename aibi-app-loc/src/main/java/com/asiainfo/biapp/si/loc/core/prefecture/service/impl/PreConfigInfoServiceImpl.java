@@ -164,5 +164,9 @@ public class PreConfigInfoServiceImpl extends BaseServiceImpl<PreConfigInfo, Str
         }
         return oldPre;
     }
+    
+    public List<PreConfigInfo> selectEffectivaPreConfigInfo() throws BaseException{
+        return iPreConfigInfoDao.selectEffectivaPreConfigInfo();
+    }
 
 }

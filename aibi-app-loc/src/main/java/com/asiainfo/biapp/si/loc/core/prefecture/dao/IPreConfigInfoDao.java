@@ -67,5 +67,7 @@ public interface IPreConfigInfoDao extends BaseDao<PreConfigInfo, String> {
      * @return
      */
     public PreConfigInfo selectOneBySourceName(String sourceName);
+    
+    public List<PreConfigInfo> selectEffectivaPreConfigInfo();
 
 }

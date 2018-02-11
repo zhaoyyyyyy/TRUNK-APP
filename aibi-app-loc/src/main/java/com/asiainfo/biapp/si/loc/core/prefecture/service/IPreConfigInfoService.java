@@ -104,5 +104,7 @@ public interface IPreConfigInfoService extends BaseService<PreConfigInfo, String
      * @throws BaseException
      */
     public void deletePreConfigInfo(String configId) throws BaseException;
+    
+    public List<PreConfigInfo> selectEffectivaPreConfigInfo() throws BaseException;
 
 }
