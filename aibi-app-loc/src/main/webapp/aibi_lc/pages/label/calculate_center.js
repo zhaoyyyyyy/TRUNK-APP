@@ -4,22 +4,41 @@
  * ------------------------------------------------------------------
  */
 var calculateCenter = (function (model){
-	
 	/**
      * @description 标签添加缓存，购物车动画效果===true ,组装rule
      * @param  
      * @return  
      * ------------------------------------------------------------------
      */
-	model.addToShoppingCar = function(index){
+	model.addToShoppingCar = function(index,animatePrar){
     	var labelInfo = dataModel.labelInfoList[index];
     	if(labelInfo.groupType == 0 ){
-    		model.addShopCart(labelInfo.labelId,1,'',0);//标签
+    		model.addShopCart(labelInfo.labelId,1,'',0,animatePrar);//标签
     	}else{
     		model.addShopCart(labelInfo.labelId,2,'',0);//客户群
     	}
     	
     };
+    model.addAnimate = function(animatePrar){
+    	var elem=animatePrar.event.currentTarget;
+		var flyer = $("<span class='flying ui-btn ui-btn-default'></span>");
+		$(flyer).text(animatePrar.item.labelName);
+		flyer.fly({
+			start: {
+				left:$(elem).offset().left,
+				top:$(elem).offset().top-$(window).scrollTop(),
+			},
+			end: {
+				left: animatePrar.offset.left,
+				top: animatePrar.offset.top,
+			},
+		    speed: 0.9, //越大越快，默认1.2  
+			onEnd: function(){
+				this.destory();
+			}
+		});
+    }
+    
     /**
 	 * 加入购物车缓存
 	 * @id 标签、用户群或者模板的ID
@@ -27,7 +46,7 @@ var calculateCenter = (function (model){
 	 * @defaultOp 操作类型:and,or,- ;没有值为为空字符串，为空时后台默认是and
 	 * @isEditCustomFlag 是否是修改操作，1、修改操作，0、保存操作
 	 */
-    model.addShopCart = function(id,typeId,isEditCustomFlag,defaultOp){
+    model.addShopCart = function(id,typeId,isEditCustomFlag,defaultOp,animatePrar){
     	var flag = false;
     	var msg = "";
     	var url = "";
@@ -44,6 +63,7 @@ var calculateCenter = (function (model){
 			  async	: false,//同步
 			  postData:{labelId :  $.trim(id)},
 			  onSuccess: function(returnObj){
+			  	 model.addAnimate(animatePrar)//购物车动画
 			  },
 			  onFailure : function(returnObj){
 				  flag = true; 

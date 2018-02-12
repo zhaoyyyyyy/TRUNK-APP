@@ -713,6 +713,7 @@
 	height:20px;
 	display:inline-block;
 	vertical-align:middle;
+	display:none;
 }
 /**tip top*/
 .ui-conditionCT .tooltip {

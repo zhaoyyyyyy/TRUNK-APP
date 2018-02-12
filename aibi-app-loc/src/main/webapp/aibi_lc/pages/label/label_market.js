@@ -34,6 +34,7 @@ var dataModel = {
 		categoryPath1 : "",  //一级目录
 		categoryPath2 : "",  //二级目录
 		categoryPath3 : "",  //三级目录
+		offset:"",//购物车动画偏移量
 }
 window.loc_onload = function() {
 	//初始化参数
@@ -63,25 +64,13 @@ window.loc_onload = function() {
     		 * 选择标签
     		 */
     		select : function(index,event,item){
-    			calculateCenter.addToShoppingCar(index);
-    			//加入购物车
-    			var elem=event.currentTarget;
-				var flyer = $("<span class='flying ui-btn ui-btn-default'></span>");
-				$(flyer).text(item.labelName);
-				flyer.fly({
-					start: {
-						left:event.pageX,
-						top:$(elem).offset().top-$(window).scrollTop(),
-					},
-					end: {
-						left: offset.left,
-						top: offset.top,
-					},
-				    speed: 0.9, //越大越快，默认1.2  
-					onEnd: function(){
-						this.destory();
-					}
-				});
+    			//购物车参数
+    			var animatePrar={
+    				event:event,
+    				item:item,
+    				offset:dataModel.offset,
+    			}
+    			calculateCenter.addToShoppingCar(index,animatePrar);
     		},
     		toggle:function(categoryId,index,categoryName){
     			$("#categoryId").val(categoryId);
@@ -102,11 +91,15 @@ window.loc_onload = function() {
 				    }
 				});
     		}
-    	}
+    	},
+    	mounted: function () {
+		    this.$nextTick(function () {
+		       dataModel.offset = $("#end").offset();
+		    })
+		}
     });
-    var offset = $("#end").offset();
-    
 	
+
 	//初始化加载标签体系
 	labelMarket.loadLabelCategoryList();
 	//初始化计算中心事件
