@@ -34,6 +34,7 @@ var calculateCenter = (function (model){
 			},
 		    speed: 0.9, //越大越快，默认1.2  
 			onEnd: function(){
+				$(".shop-car-msg").fadeIn().animate({"width":4,"height":4},300).fadeOut(1000).animate({"width":6,"height":6}, 200);
 				this.destory();
 			}
 		});

@@ -715,6 +715,16 @@
 	vertical-align:middle;
 	display:none;
 }
+.shop-car-msg{
+	position:fixed;
+	bottom:27px;left:83px; 
+	z-index:10000; 
+	width:6px; 
+	height:6px;
+	background:#D02433;
+	border-radius:50%;
+	display:none;
+}
 /**tip top*/
 .ui-conditionCT .tooltip {
     display: inline-block;
