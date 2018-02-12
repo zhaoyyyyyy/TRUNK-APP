@@ -94,7 +94,7 @@ window.loc_onload = function() {
     	},
     	mounted: function () {
 		    this.$nextTick(function () {
-		       dataModel.offset = $("#end").offset();
+		       dataModel.offset = $("#end").offset();//加入购物车参数
 		    })
 		}
     });
