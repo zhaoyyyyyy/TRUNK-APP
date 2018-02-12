@@ -45,7 +45,6 @@ window.loc_onload = function() {
      * 标签集市
      * ------------------------------------------------------------------
      */
-
     var labelSysApp = new Vue({
     	el : '#labelInfoListApp',
     	data : dataModel,
@@ -63,8 +62,26 @@ window.loc_onload = function() {
     		/**
     		 * 选择标签
     		 */
-    		select : function(index){
+    		select : function(index,event,item){
     			calculateCenter.addToShoppingCar(index);
+    			//加入购物车
+    			var elem=event.currentTarget;
+				var flyer = $("<span class='flying ui-btn ui-btn-default'></span>");
+				$(flyer).text(item.labelName);
+				flyer.fly({
+					start: {
+						left:event.pageX,
+						top:$(elem).offset().top-$(window).scrollTop(),
+					},
+					end: {
+						left: offset.left,
+						top: offset.top,
+					},
+				    speed: 0.9, //越大越快，默认1.2  
+					onEnd: function(){
+						this.destory();
+					}
+				});
     		},
     		toggle:function(categoryId,index,categoryName){
     			$("#categoryId").val(categoryId);
@@ -87,6 +104,8 @@ window.loc_onload = function() {
     		}
     	}
     });
+    var offset = $("#end").offset();
+    
 	
 	//初始化加载标签体系
 	labelMarket.loadLabelCategoryList();
