@@ -702,6 +702,18 @@
 	border-radius: 4px;
 	color: #666;
 }
+.flying{
+	position: fixed;
+	z-index: 9999;
+	text-align:center;
+}
+.custom-load{
+	background:url(../../../images/loading.gif) no-repeat center center;
+	width:20px;
+	height:20px;
+	display:inline-block;
+	vertical-align:middle;
+}
 /**tip top*/
 .ui-conditionCT .tooltip {
     display: inline-block;

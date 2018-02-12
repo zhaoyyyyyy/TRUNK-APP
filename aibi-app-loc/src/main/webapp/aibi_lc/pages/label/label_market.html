@@ -20,7 +20,6 @@
 	#jsonmap1_pager select{
 		display:none;
 	}
-	.flying{position: fixed;z-index: 9999;text-align:center;}
 	</style>
     <!--[if lt IE 9]>
 	    <script src="../../asset/script/component/h5compatibility/html5shiv.min.js"></script>
@@ -152,7 +151,7 @@
 								<div class="tooltip-inner" v-text="item.labelName"></div>
 							</div>
 							<span v-text="item.labelName"></span>
-							<i class="addcar" v-on:click="select(index,event,item)"></i>
+							<i v-on:click="select(index,event,item)"></i>
 						</h3>
 						<div class="ui-label-item">
 							<a href="javascript:;" class="ui-label-time">
@@ -365,7 +364,8 @@
 					<i id="end"></i> <span>已选择标签 {{ruleListCount}} 个</span>
 				</p>
 				<p class="fright">
-					<span>客户群数：</span><span class="y-text custom-load" v-text="exploreCustomNum"></span>
+					<span>客户群数：</span><span class="y-text" v-text="exploreCustomNum"></span>
+					<span class="custom-load"></span>
 					<span class="shop-icon" onclick="calculateCenter.explore(event,this);"></span>
 					<button type="button" class="ui-btn ui-btn-default mr10" onclick="calculateCenter.gotoSaveCustomer(event);">
 						<span class="create-white"></span> 创建客户群
