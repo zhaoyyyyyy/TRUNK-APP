@@ -1182,7 +1182,8 @@ span.del-btn{
 	position: absolute;
 	filter: alpha(enabled=false);
 	text-align:center;
-	border : 5px solid #F1f1f1;
+	border : 1px solid #ffbb1e;
+	border-radius: 5px;
 	display: none;
 }
 /*标签管理详情*/

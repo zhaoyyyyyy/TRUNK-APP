@@ -38,7 +38,7 @@ function toAdminConsole(){
 		postData:{'key':'jauth-url'},
 		onSuccess:function(obj){
 			var ssg = window.sessionStorage;
-			window.location.href = obj.data+"#"+ssg.getItem('token')+'1';
+			window.open(obj.data+"#"+ssg.getItem('token'));    
 		}
 	});
 }
