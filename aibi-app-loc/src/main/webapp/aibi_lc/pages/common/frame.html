@@ -39,8 +39,9 @@
  				<span class="ui-login-header dropdown" onclick="toggleDown(this)">
  					<img alt="" src="../../asset/images/timg.jpg" />
  					<em class="ui-user-info"></em>
- 					<ul class="dropdown-menu">
-				       <li><a href="#" onclick="exitLoc()">退出</a></li>
+ 					<ul class="dropdown-menu" id="user_opt_ul">
+				       <li v-show="username == 'admin'"><a href="javascript:void(0);" onclick="toAdminConsole()">进入后台管理</a></li>
+				       <li><a href="javascript:void(0);" onclick="exitLoc()">退出</a></li>
 			        </ul>
  				</span>
  			</div>

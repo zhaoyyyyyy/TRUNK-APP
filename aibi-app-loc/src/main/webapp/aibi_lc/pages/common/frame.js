@@ -19,12 +19,28 @@ function toggleDown(elem){
 	$(elem).toggleClass("open");
 }
 
+/**
+ * 退出
+ */
 function exitLoc(){
 	var ssg = window.sessionStorage;
 	delete ssg.token;
 	delete ssg.refreshToken;
 	delete ssg.CurrentConfigId;
 	window.location = "login.html";
+}
+/**
+ * 进入后台管理
+ */
+function toAdminConsole(){
+	$.commAjax({
+		url:'/api/config/springConfig',
+		postData:{'key':'jauth-url'},
+		onSuccess:function(obj){
+			var ssg = window.sessionStorage;
+			window.location.href = obj.data+"#"+ssg.getItem('token')+'1';
+		}
+	});
 }
 
 //页面初始化加载页面及菜单
@@ -34,9 +50,10 @@ window.loc_onload = function(){
 	
 	//得到用户所拥有的菜单
 	$.commAjax({
-		url:'/api/user/resourceMenu/query',
+		url:'/api/user/get',
 		onSuccess:function(obj){
-			new Vue({ el:'#accordion', data: {resourceList:obj.data} });
+			new Vue({ el:'#accordion', data: {resourceList:obj.data.menuResource} });
+			new Vue({ el:'#user_opt_ul', data: {username:obj.data.userName} });
 			
 			//渲染手风琴菜单并显示
 			$("#accordion").accordion({
