@@ -180,6 +180,8 @@
 }
 .ui-label-list > li > .ul-label-box{
 	box-shadow: 0 0 6px 0 rgba(0,0,0,0.05);
+	border: 1px solid #DCE2E4;
+    border-radius: 5px;
 }
 .ui-label-list > li > .ui-label-info{
 	border-bottom: 2px solid #fff;
