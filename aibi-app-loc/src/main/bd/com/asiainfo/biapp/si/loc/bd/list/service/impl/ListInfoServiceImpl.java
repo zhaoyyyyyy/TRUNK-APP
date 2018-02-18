@@ -12,6 +12,7 @@ import com.asiainfo.biapp.si.loc.base.exception.BaseException;
 import com.asiainfo.biapp.si.loc.base.exception.ParamRequiredException;
 import com.asiainfo.biapp.si.loc.base.page.Page;
 import com.asiainfo.biapp.si.loc.base.service.impl.BaseServiceImpl;
+import com.asiainfo.biapp.si.loc.bd.common.util.JDBCUtil;
 import com.asiainfo.biapp.si.loc.bd.list.dao.IListInfoDao;
 import com.asiainfo.biapp.si.loc.bd.list.service.IListInfoService;
 import com.asiainfo.biapp.si.loc.bd.listinfo.entity.ListInfo;
@@ -56,7 +57,6 @@ public class ListInfoServiceImpl extends BaseServiceImpl<ListInfo, String>  impl
 
 	@Override
 	public void deleteListInfoById(ListInfoId id) throws BaseException {
-		// TODO Auto-generated method stub
 		
 	}
 

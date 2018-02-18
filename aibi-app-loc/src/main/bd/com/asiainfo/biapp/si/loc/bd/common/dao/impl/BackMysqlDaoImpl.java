@@ -9,6 +9,7 @@ package com.asiainfo.biapp.si.loc.bd.common.dao.impl;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
@@ -20,6 +21,7 @@ import org.springframework.stereotype.Repository;
 import com.asiainfo.biapp.si.loc.base.exception.SqlRunException;
 import com.asiainfo.biapp.si.loc.base.utils.LogUtil;
 import com.asiainfo.biapp.si.loc.bd.common.dao.IBackSqlDao;
+import com.asiainfo.biapp.si.loc.bd.common.util.JDBCUtil;
 
 /**
  * 后台库是mysql库的情况下
@@ -192,8 +194,6 @@ public class BackMysqlDaoImpl extends BaseBackDaoImpl implements IBackSqlDao{
 		// TODO Auto-generated method stub
 		return false;
 	}
-
-
-
+	
 
 }

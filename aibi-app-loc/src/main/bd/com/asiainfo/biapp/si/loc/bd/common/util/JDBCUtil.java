@@ -10,11 +10,13 @@ import java.sql.Statement;
 import org.apache.log4j.Logger;
 
 import com.asiainfo.biapp.si.loc.base.BaseConstants;
+import com.asiainfo.biapp.si.loc.base.LocDataSource;
+import com.asiainfo.biapp.si.loc.base.extend.SpringContextHolder;
 import com.asiainfo.biapp.si.loc.cache.CocCacheProxy;
 
 public final class JDBCUtil {
 	
-//	private Logger logger = Logger.getLogger(this.getClass());
+	private Logger log = Logger.getLogger(this.getClass());
 
 	private String web_url = null;
 	private String web_user = null;
@@ -48,20 +50,34 @@ public final class JDBCUtil {
 	 * 初始化 前台库 配置数据
 	 */
 	public void initJdbcPrepro() {
-//		web_url = PropertiesUtils.getProperties("CI_DATABASE_URL");
-//		web_user = PropertiesUtils.getProperties("CI_DATABASE_USERNAME");
-//		web_password = PropertiesUtils.getProperties("CI_DATABASE_PASSWORD");
-//		web_driver = PropertiesUtils.getProperties("CI_DATABASE_DRIVER");
+		LocDataSource ds = (LocDataSource)SpringContextHolder.getBean("locDataSource");
+		web_url = ds.getUrl();
+		web_user = ds.getUsername();
+		web_password = ds.getPassword();
+		web_driver = ds.getDriverClass();
 		
-		web_url = "jdbc:mysql://10.1.253.202:3306/opg";
-		web_user = "opg";
-		web_password = "opg";
-		web_driver = "com.mysql.jdbc.Driver";
+//		web_url = "jdbc:mysql://10.1.253.202:3306/opg";
+//		web_user = "opg";
+//		web_password = "opg";
+//		web_driver = "com.mysql.jdbc.Driver";
+		System.out.println("-----------------------------  web_url = " + web_url);
+		System.out.println("-----------------------------  web_user = " + web_user);
+		System.out.println("-----------------------------  web_password = " + web_password);
+		System.out.println("-----------------------------  web_driver = " + web_driver);
+		log.debug("-----------------------------  web_url = " + web_url);
+		log.debug("-----------------------------  web_user = " + web_user);
+		log.debug("-----------------------------  web_password = " + web_password);
+		log.debug("-----------------------------  web_driver = " + web_driver);
 		
 		back_url = CocCacheProxy.getCacheProxy().getSYSConfigInfoByKey(BaseConstants.SYS_BGDB_URL);
 		back_user = CocCacheProxy.getCacheProxy().getSYSConfigInfoByKey(BaseConstants.SYS_BGDB_USERNAME);
 		back_password = CocCacheProxy.getCacheProxy().getSYSConfigInfoByKey(BaseConstants.SYS_BGDB_PASSWORD);
 		back_driver = CocCacheProxy.getCacheProxy().getSYSConfigInfoByKey(BaseConstants.SYS_BGDB_DRIVER);
+		
+		log.debug("-----------------------------  back_url = " + back_url);
+		log.debug("-----------------------------  back_user = " + back_user);
+		log.debug("-----------------------------  back_password = " + back_password);
+		log.debug("-----------------------------  back_driver = " + back_driver);
 		
 //		back_url = "jdbc:hive2://10.19.58.81:10015/default";
 //		back_user = "coc";
@@ -145,8 +161,7 @@ public final class JDBCUtil {
 			ps.executeUpdate();
 			
 		} catch (Exception e) {
-			e.printStackTrace();
-//			logger.error(e.getMessage(),e);
+			log.error(e.getMessage(),e);
 			throw new RuntimeException(e.getMessage());
 		}finally{
 			this.free(conn, ps, null);
@@ -165,19 +180,19 @@ public final class JDBCUtil {
 			try {
 				rs.close();
 			} catch (Exception e) {
-//				logger.error(e.getMessage(),e);
+				log.error(e.getMessage(),e);
 			} finally {
 				if (st != null) {
 					try {
 						st.close();
 					} catch (SQLException e) {
-//						logger.error(e.getMessage(),e);
+						log.error(e.getMessage(),e);
 					} finally {
 						if (conn != null) {
 							try {
 								conn.close();
 							} catch (SQLException e) {
-//								logger.error(e.getMessage(),e);
+								log.error(e.getMessage(),e);
 							}
 						}
 					}
