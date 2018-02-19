@@ -19,6 +19,7 @@ import com.asiainfo.biapp.si.loc.auth.model.User;
 import com.asiainfo.biapp.si.loc.base.dao.BaseDao;
 import com.asiainfo.biapp.si.loc.base.exception.BaseException;
 import com.asiainfo.biapp.si.loc.base.exception.ParamRequiredException;
+import com.asiainfo.biapp.si.loc.base.exception.UserAuthException;
 import com.asiainfo.biapp.si.loc.base.page.Page;
 import com.asiainfo.biapp.si.loc.base.service.impl.BaseServiceImpl;
 import com.asiainfo.biapp.si.loc.base.utils.StringUtil;
@@ -76,6 +77,9 @@ public class PreConfigInfoServiceImpl extends BaseServiceImpl<PreConfigInfo, Str
     }
 
     public List<PreConfigInfo> selectPreConfigInfoList(PreConfigInfoVo preConfigInfoVo,User user) throws BaseException {
+    	if(user.getOrgPrivaliege() == null ||( user.getOrgPrivaliege() != null && user.getOrgPrivaliege().size() == 0)){
+    		throw new UserAuthException("请给当前用户赋予专区组织权限。");
+    	}
         return iPreConfigInfoDao.selectPreConfigInfoList(preConfigInfoVo,user);
     }
 

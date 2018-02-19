@@ -94,39 +94,39 @@ public class PreConfigInfoDaoImpl extends BaseDaoImpl<PreConfigInfo, String> imp
         StringBuffer hql = new StringBuffer("from PreConfigInfo p where 1=1 and p.orgId in (:orgIdList)");
         params.put("orgIdList", orgIdList);
         if (StringUtils.isNotBlank(preConfigInfoVo.getConfigId())) {
-            hql.append("and p.configId = :configId ");
+            hql.append(" and p.configId = :configId ");
             params.put("configId", preConfigInfoVo.getConfigId());
         }
         if (StringUtils.isNotBlank(preConfigInfoVo.getOrgId())) {
-            hql.append("and p.orgId = :orgId ");
+            hql.append(" and p.orgId = :orgId ");
             params.put("orgId", preConfigInfoVo.getOrgId());
         }
         if (null != preConfigInfoVo.getDataAccessType()) {
-            hql.append("and p.dataAccessType = :dataAccessType ");
+            hql.append(" and p.dataAccessType = :dataAccessType ");
             params.put("dataAccessType", preConfigInfoVo.getDataAccessType());
         }
         if (StringUtils.isNotBlank(preConfigInfoVo.getSourceName())) {
-            hql.append("and p.sourceName LIKE :sourceName ");
+            hql.append(" and p.sourceName LIKE :sourceName ");
             params.put("sourceName","%" + preConfigInfoVo.getSourceName() + "%");
         }
         if (StringUtils.isNotBlank(preConfigInfoVo.getSourceEnName())) {
-            hql.append("and p.sourceEnName LIKE :sourceEnName ");
+            hql.append(" and p.sourceEnName LIKE :sourceEnName ");
             params.put("sourceEnName","%" + preConfigInfoVo.getSourceEnName() + "%");
         }
         if (StringUtils.isNotBlank(preConfigInfoVo.getContractName())) {
-            hql.append("and p.contractName = :contractName ");
+            hql.append(" and p.contractName = :contractName ");
             params.put("contractName", preConfigInfoVo.getContractName());
         }
         if (StringUtils.isNotBlank(preConfigInfoVo.getConfigDesc())) {
-            hql.append("and p.configDesc LIKE :configDesc ");
+            hql.append(" and p.configDesc LIKE :configDesc ");
             params.put("configDesc", "%" + preConfigInfoVo.getConfigDesc() + "%");
         }
         if (null != preConfigInfoVo.getInvalidTime()) {
-            hql.append("and p.invalidTime = :invalidTime ");
+            hql.append(" and p.invalidTime = :invalidTime ");
             params.put("invalidTime", preConfigInfoVo.getInvalidTime());
         }
         if (null != preConfigInfoVo.getConfigStatus()) {
-            hql.append("and p.configStatus = :configStatus ");
+            hql.append(" and p.configStatus = :configStatus ");
             params.put("configStatus", preConfigInfoVo.getConfigStatus());
         }
         hql.append("order by p.createTime desc");

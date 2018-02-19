@@ -15,7 +15,10 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
+import com.asiainfo.biapp.si.loc.auth.utils.AuthUtils;
 import com.asiainfo.biapp.si.loc.base.utils.DateUtil;
 import com.asiainfo.biapp.si.loc.base.utils.HttpUtil;
 import com.asiainfo.biapp.si.loc.base.utils.LogUtil;
@@ -103,8 +106,17 @@ public class LogAspectAdvice {
     public void saveLog(String inputParams,String interfaceName, String method, String targetName, String result) {
         // http保存日志
         Map<String, Object> params = new HashMap<>();
-        params.put("userId", "admin");
-        params.put("ipAddr", "127.0.0.1");
+        
+    	try {
+    		HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+    		String token = AuthUtils.getTokenByRequest(request);
+        	params.put("userId",AuthUtils.getUserByToken(token).getUserName());
+        	params.put("ipAddr",request.getRequestURL()+"/"+ request.getRequestURI());
+    	} catch (Exception e) {
+    		params.put("userId", "sys_loc");
+    	    params.put("ipAddr", "localhost");
+    	}
+    	
         params.put("opTime",DateUtil.date2String(new Date()));
         params.put("sysId", nodeName);
         params.put("interfaceName",interfaceName );
@@ -136,16 +148,15 @@ public class LogAspectAdvice {
         Object result = pjp.proceed();// result的值就是被拦截方法的返回值
         
         if(!"setReqAndRes".equals(method)){
+            
         	
         	
-        
-            
-            
+
+        	
+        	
         	String inputParams = "";
         	if(args != null  && args.length> 0){
-        		//inputParams = JSONArray.fromObject(args).toString();
         		
-        		//TODO 这个因为是request输出的，没法处理，后续看 zhougz3
         		ObjectMapper mapper = new ObjectMapper();
         		if(args[0] instanceof org.apache.catalina.connector.RequestFacade){
         			inputParams = "请求头";
@@ -156,8 +167,6 @@ public class LogAspectAdvice {
                         inputParams = "不能解析的参数";
                     }
         		}
-        		
-                
         		if(inputParams.length() > 2000){
         			inputParams = inputParams.substring(0, 2000);
         		}
