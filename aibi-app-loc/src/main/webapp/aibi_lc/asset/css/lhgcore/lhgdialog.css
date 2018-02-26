@@ -116,8 +116,6 @@ a.lhgdig_button:hover em {
 	border-top: 1px solid #ddd;
 	cursor:move;
 	background-color: #fff;
-	
-	border-radius: 8px;
 	border: 1px solid #ddd;
 	vertical-align:middle;
 }

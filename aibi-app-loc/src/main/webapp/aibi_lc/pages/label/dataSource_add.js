@@ -70,15 +70,18 @@ window.loc_onload = function() {
     });
     $("#code1").click();
     $("#type1").click();
-    var url = "";
+    var url = $.ctx + "/api/source/sourceInfo/queryPage";
     var pD = {};
     if (isEdit == 1) {
-        url = $.ctx + "/api/source/sourceInfo/queryPage";
         pD = {
             'sourceTableId': id
         }
         $("#sourceTableName").attr("disabled", true);
         model.isEdit = isEdit;
+    }else{
+		pD = {
+	        'sourceTableId': 'neverexit'
+		}
     };
 
     var dic = $.getDicData("ZDLXZD");
