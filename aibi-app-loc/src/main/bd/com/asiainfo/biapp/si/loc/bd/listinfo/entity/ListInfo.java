@@ -6,6 +6,7 @@ import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import com.asiainfo.biapp.si.loc.base.entity.BaseEntity;
 
@@ -55,6 +56,7 @@ public class ListInfo extends BaseEntity{
 	@ApiParam(value = "清单总数")
 	private Integer customNum;
 	
+	@Transient
 	private String customGroupName;
 	
 	/**
