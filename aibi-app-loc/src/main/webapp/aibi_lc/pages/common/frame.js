@@ -15,9 +15,12 @@ function loadPage (){
 	}
 } 
 
-function toggleDown(elem){
+function toggleDown(elem,event){
+	var e = e||event ;
+	e.stopPropagation?e.stopPropagation():e.cancelBubble=true;
 	$(elem).toggleClass("open");
 }
+
 
 /**
  * 退出
@@ -46,7 +49,11 @@ function toAdminConsole(){
 //页面初始化加载页面及菜单
 window.loc_onload = function(){
 	loadPage();
-	
+	$(document).click(function(ev){
+		var e = ev||event ;
+		e.stopPropagation?e.stopPropagation():e.cancelBubble=true;
+		$(".ui-login-header").removeClass("open");
+	});
 	
 	//得到用户所拥有的菜单
 	$.commAjax({

@@ -1,27 +1,14 @@
 
 package com.asiainfo.biapp.si.loc.base.task;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
-import com.asiainfo.biapp.si.loc.base.common.CommonConstants;
-import com.asiainfo.biapp.si.loc.base.common.LabelInfoContants;
-import com.asiainfo.biapp.si.loc.base.common.LabelRuleContants;
-import com.asiainfo.biapp.si.loc.base.extend.SpringContextHolder;
+import com.asiainfo.biapp.si.loc.base.exception.BaseException;
 import com.asiainfo.biapp.si.loc.base.utils.LogUtil;
-import com.asiainfo.biapp.si.loc.base.utils.StringUtil;
-import com.asiainfo.biapp.si.loc.bd.common.dao.IBackSqlDao;
-import com.asiainfo.biapp.si.loc.bd.common.service.IBackSqlService;
-import com.asiainfo.biapp.si.loc.core.label.entity.LabelExtInfo;
-import com.asiainfo.biapp.si.loc.core.label.entity.LabelInfo;
 import com.asiainfo.biapp.si.loc.core.label.model.CustomRunModel;
-import com.asiainfo.biapp.si.loc.core.label.service.ILabelExploreService;
-import com.asiainfo.biapp.si.loc.core.label.service.ILabelInfoService;
-import com.asiainfo.biapp.si.loc.core.label.service.ILabelRuleService;
-import com.asiainfo.biapp.si.loc.core.label.vo.LabelRuleVo;
+import com.asiainfo.biapp.si.loc.core.label.service.ICustomerManagerService;
 
 /**
  * 
@@ -59,54 +46,20 @@ public class CustomerListCreaterThread extends Thread {
 	private CustomRunModel customRunModel;
 
 	@Autowired
-	private ILabelExploreService exploreServiceImpl;
-
-	@Autowired
-	private ILabelRuleService ruleService;
-
-	@Autowired
-	private ILabelInfoService labelInfoService;
-
-	@Autowired
-	private IBackSqlService backServiceImpl;
+	private ICustomerManagerService customerManagerService;
 
 	@Override
 	public void run() {
-
 		try {
 			Thread.sleep(5000);// 之前的事务提交需要一定时间
 		} catch (InterruptedException e) {
 			LogUtil.error("InterruptedException", e);
 		}
-		LabelInfo customGroup = null;
-		LabelExtInfo labelExtInfo = null ;
 		try {
-			// 1.获取sql
-		    customGroup = labelInfoService.get(customGroupId);
-			customRunModel.setOrgId(customGroup.getOrgId());// 权限
-			List<LabelRuleVo> labelRuleList = ruleService.queryCiLabelRuleList(customGroupId,
-					LabelRuleContants.LABEL_RULE_FROM_COSTOMER);
-			String countSqlStr = exploreServiceImpl.getCountSqlStr(labelRuleList, customRunModel);
-			// 2.生成表
-			String tableName = "no table";
-			if (LabelInfoContants.CUSTOM_CYCLE_TYPE_ONE == customGroup.getUpdateCycle()) {
-				tableName = LabelInfoContants.KHQ_CROSS_ONCE_TABLE + customGroup.getConfigId() + "_"+ customGroup.getDataDate();
-			} else {
-				tableName = LabelInfoContants.KHQ_CROSS_TABLE + customGroup.getConfigId() + "_"+ customGroup.getDataDate();
-			}
-			backServiceImpl.insertCustomerData(countSqlStr, tableName, customGroupId);
-			// 3.发通知 setCustomNum
-			int customNum = backServiceImpl.queryCount("select count(1) " + countSqlStr);
-		    labelExtInfo = customGroup.getLabelExtInfo();
-			labelExtInfo.setCustomNum(customNum);
-			customGroup.setDataStatusId(LabelInfoContants.CUSTOM_DATA_STATUS_SUCCESS);
-		} catch (Exception e) {
-			customGroup.setDataStatusId(LabelInfoContants.CUSTOM_DATA_STATUS_FAILED);
+			customerManagerService.createCustomerList(customGroupId, customRunModel);
+		} catch (BaseException e) {
 			LogUtil.error("生成客户群的清单异常", e);
-		} finally {
-			labelInfoService.syncUpdateCustomGroupInfo(customGroup, labelExtInfo);
 		}
-
 	}
 	
 	public void setCustomRunModel(CustomRunModel customRunModel) {

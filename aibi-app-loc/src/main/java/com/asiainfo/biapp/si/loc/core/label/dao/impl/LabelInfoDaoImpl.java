@@ -226,8 +226,8 @@ public class LabelInfoDaoImpl extends BaseDaoImpl<LabelInfo, String> implements 
             params.put("labelTypeId", labelInfoVo.getLabelTypeId());
         }
         if (StringUtil.isNotBlank(labelInfoVo.getCategoryId())) {
-            hql.append("and l.categoryId = :categoryId ");
-            params.put("categoryId", labelInfoVo.getCategoryId());
+        	hql.append("and l.categoryId in (:categoryIdSet) ");
+            params.put("categoryIdSet", labelInfoVo.getCategoryIdSet());
         }
         if (null != labelInfoVo.getCreateTypeId()) {
             hql.append("and l.createTypeId = :createTypeId ");
