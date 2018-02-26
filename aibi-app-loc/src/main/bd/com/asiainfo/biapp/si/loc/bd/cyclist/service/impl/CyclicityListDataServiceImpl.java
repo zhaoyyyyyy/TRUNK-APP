@@ -49,12 +49,14 @@ public class CyclicityListDataServiceImpl implements ICyclicityListDataService{
 		String newDayDate = CocCacheProxy.getCacheProxy().getNewLabelDay();
 		newDayDate = "20180212";
 		Map<String,List<String>> allList = this.getAllListIdAndConfig(newDayDate,dayUpdateCycle,null);
-		ExecutorService executorService = Executors.newFixedThreadPool(3);
-		List<Future<String>> resultList = new ArrayList<Future<String>>();
+		
 		if(null == allList || allList.isEmpty()){
 			return ;
 		}
 		Set<String> keySet = allList.keySet();
+		ExecutorService executorService = Executors.newFixedThreadPool(keySet.size());
+		List<Future<String>> resultList = new ArrayList<Future<String>>();
+		
 		for (String key : keySet) {
 			List<String> listList = allList.get(key);
 			// 使用ExecutorService执行Callable类型的任务，并将结果保存在future变量中  
@@ -79,6 +81,29 @@ public class CyclicityListDataServiceImpl implements ICyclicityListDataService{
 		newDayDate = "201802";
 		Map<String,List<String>> allList = this.getAllListIdAndConfig(newDayDate,monthUpdateCycle,null);
 		
+		if(null == allList || allList.isEmpty()){
+			return ;
+		}
+		Set<String> keySet = allList.keySet();
+		ExecutorService executorService = Executors.newFixedThreadPool(keySet.size());
+		List<Future<String>> resultList = new ArrayList<Future<String>>();
+		
+		for (String key : keySet) {
+			List<String> listList = allList.get(key);
+			// 使用ExecutorService执行Callable类型的任务，并将结果保存在future变量中  
+            Future<String> future = executorService.submit(new RunListDataByConfig(listList,key,newDayDate));  
+            // 将任务执行结果存储到List中  
+            resultList.add(future);
+		}
+		
+		// 遍历任务的结果  
+        for (Future<String> fs : resultList) { 
+        	try {
+				System.out.println("#######  -----  " + fs.get());
+			} catch (InterruptedException | ExecutionException e) {
+				e.printStackTrace();
+			}
+        }
 	}
 
 	@Override
@@ -87,6 +112,29 @@ public class CyclicityListDataServiceImpl implements ICyclicityListDataService{
 		newDayDate = "20180212";
 		Map<String,List<String>> allList = this.getAllListIdAndConfig(newDayDate,dayUpdateCycle,configId);
 		
+		if(null == allList || allList.isEmpty()){
+			return ;
+		}
+		Set<String> keySet = allList.keySet();
+		ExecutorService executorService = Executors.newFixedThreadPool(keySet.size());
+		List<Future<String>> resultList = new ArrayList<Future<String>>();
+		
+		for (String key : keySet) {
+			List<String> listList = allList.get(key);
+			// 使用ExecutorService执行Callable类型的任务，并将结果保存在future变量中  
+            Future<String> future = executorService.submit(new RunListDataByConfig(listList,key,newDayDate));  
+            // 将任务执行结果存储到List中  
+            resultList.add(future);
+		}
+		
+		// 遍历任务的结果  
+        for (Future<String> fs : resultList) { 
+        	try {
+				System.out.println("#######  -----  " + fs.get());
+			} catch (InterruptedException | ExecutionException e) {
+				e.printStackTrace();
+			}
+        }
 	}
 
 	@Override
@@ -95,6 +143,29 @@ public class CyclicityListDataServiceImpl implements ICyclicityListDataService{
 		newDayDate = "201802";
 		Map<String,List<String>> allList = this.getAllListIdAndConfig(newDayDate,monthUpdateCycle,configId);
 		
+		if(null == allList || allList.isEmpty()){
+			return ;
+		}
+		Set<String> keySet = allList.keySet();
+		ExecutorService executorService = Executors.newFixedThreadPool(keySet.size());
+		List<Future<String>> resultList = new ArrayList<Future<String>>();
+		
+		for (String key : keySet) {
+			List<String> listList = allList.get(key);
+			// 使用ExecutorService执行Callable类型的任务，并将结果保存在future变量中  
+            Future<String> future = executorService.submit(new RunListDataByConfig(listList,key,newDayDate));  
+            // 将任务执行结果存储到List中  
+            resultList.add(future);
+		}
+		
+		// 遍历任务的结果  
+        for (Future<String> fs : resultList) { 
+        	try {
+				System.out.println("#######  -----  " + fs.get());
+			} catch (InterruptedException | ExecutionException e) {
+				e.printStackTrace();
+			}
+        }
 	}
 
 	@Override
@@ -107,6 +178,30 @@ public class CyclicityListDataServiceImpl implements ICyclicityListDataService{
 			}
 		}
 		Map<String,List<String>> allList = this.getAllListIdAndConfig(dataDate,dayUpdateCycle,configId);
+		
+		if(null == allList || allList.isEmpty()){
+			return ;
+		}
+		Set<String> keySet = allList.keySet();
+		ExecutorService executorService = Executors.newFixedThreadPool(keySet.size());
+		List<Future<String>> resultList = new ArrayList<Future<String>>();
+		
+		for (String key : keySet) {
+			List<String> listList = allList.get(key);
+			// 使用ExecutorService执行Callable类型的任务，并将结果保存在future变量中  
+            Future<String> future = executorService.submit(new RunListDataByConfig(listList,key,dataDate));  
+            // 将任务执行结果存储到List中  
+            resultList.add(future);
+		}
+		
+		// 遍历任务的结果  
+        for (Future<String> fs : resultList) { 
+        	try {
+				System.out.println("#######  -----  " + fs.get());
+			} catch (InterruptedException | ExecutionException e) {
+				e.printStackTrace();
+			}
+        }
 	}
 
 	@Override
@@ -120,6 +215,30 @@ public class CyclicityListDataServiceImpl implements ICyclicityListDataService{
 		}
 		Map<String,List<String>> allList = this.getAllListIdAndConfig(dataDate,monthUpdateCycle,configId);
 		
+		
+		if(null == allList || allList.isEmpty()){
+			return ;
+		}
+		Set<String> keySet = allList.keySet();
+		ExecutorService executorService = Executors.newFixedThreadPool(keySet.size());
+		List<Future<String>> resultList = new ArrayList<Future<String>>();
+		
+		for (String key : keySet) {
+			List<String> listList = allList.get(key);
+			// 使用ExecutorService执行Callable类型的任务，并将结果保存在future变量中  
+            Future<String> future = executorService.submit(new RunListDataByConfig(listList,key,dataDate));  
+            // 将任务执行结果存储到List中  
+            resultList.add(future);
+		}
+		
+		// 遍历任务的结果  
+        for (Future<String> fs : resultList) { 
+        	try {
+				System.out.println("#######  -----  " + fs.get());
+			} catch (InterruptedException | ExecutionException e) {
+				e.printStackTrace();
+			}
+        }
 	}
 
 	private Map<String,List<String>> getAllListIdAndConfig(String dataDate,int updateCycle,String configId){
