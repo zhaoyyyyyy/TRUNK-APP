@@ -103,6 +103,7 @@ window.loc_onload = function() {
         viewrecords: true,
         
     });
+    $("#mainGrid").jqGrid('setLabel',0, '序号');
 }
 function fun_to_edit(id){
 	$.confirm('确定要进行[编辑]吗？该操作可能会影响所有专区的数据生成', function() {

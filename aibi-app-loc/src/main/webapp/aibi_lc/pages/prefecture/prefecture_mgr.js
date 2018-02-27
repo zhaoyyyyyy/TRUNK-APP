@@ -153,7 +153,7 @@ window.loc_onload = function() {
         viewrecords: true,
         
     });
-
+	$("#mainGrid").jqGrid('setLabel',0, '序号');
 }
 function setColor(cellvalue, options, rowObject) {
     if (rowObject.total > 700) {
