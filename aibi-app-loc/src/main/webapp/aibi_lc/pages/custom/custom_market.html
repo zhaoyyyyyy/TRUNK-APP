@@ -137,7 +137,7 @@
 									<div class="tooltip-inner" v-text="item.labelName"></div>
 								</div>
 								<span v-text="item.labelName"></span>
-								<i v-on:click="select(index)"></i>
+								<i v-on:click="select(index,event,item)"></i>
 							</h3>
 							<div class="ui-label-item">
 								<a href="javascript:;">
@@ -370,8 +370,9 @@
 			<!----------------------- 购物车 ---------------------------->
 			<div class="ui-shop-cart nest">
 				<p class="fleft ui-shop-cart-icon">
-					<i></i> <span>已选择标签 {{ruleListCount}} 个</span>
+					<i id="end"></i> <span>已选择标签 {{ruleListCount}} 个</span>
 				</p>
+				<div class="shop-car-msg"></div>
 				<p class="fright">
 					<span>客户群数：</span><span class="y-text" v-text="exploreCustomNum"></span>
 					<span class="shop-icon" onclick="calculateCenter.explore(event,this);"></span>

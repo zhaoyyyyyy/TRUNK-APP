@@ -15,7 +15,7 @@ var calculateCenter = (function (model){
     	if(labelInfo.groupType == 0 ){
     		model.addShopCart(labelInfo.labelId,1,'',0,animatePrar);//标签
     	}else{
-    		model.addShopCart(labelInfo.labelId,2,'',0);//客户群
+    		model.addShopCart(labelInfo.labelId,2,'',0,animatePrar);//客户群
     	}
     	
     };
@@ -576,12 +576,16 @@ var calculateCenter = (function (model){
 			  url: $.ctx + "/api/shopCart/explore",
 			  postData:param,
 			  onSuccess: function(returnObj){
+			  	$(".shop-icon").removeClass("loading");
 				dataModel.exploreCustomNum = 0;
 				dataModel.exploreCustomNum = returnObj.data;
 			 },
 			 onFailure:function(returnObj){
 				dataModel.exploreCustomNum = 0;
 				$.alert(returnObj.msg);
+			 },
+			 beforeSend:function(){
+			 	$(".shop-icon").addClass("loading");
 			 }
 		});
 	};

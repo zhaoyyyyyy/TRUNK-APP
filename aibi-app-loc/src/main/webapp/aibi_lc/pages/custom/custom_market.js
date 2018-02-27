@@ -32,7 +32,8 @@ var dataModel = {
 		labelDay : '',//规则中日日期
 		updateCycleList : [] ,//更新周期
 		labelTypeIdList : [] ,//创建类型
-		labelInfoViewObj : {}
+		labelInfoViewObj : {},
+		offset:"",//购物车动画偏移量
 }
 window.loc_onload = function() {
 	//初始化参数
@@ -62,8 +63,14 @@ window.loc_onload = function() {
     		/**
     		 * 选择标签
     		 */
-    		select : function(index){
-    			calculateCenter.addToShoppingCar(index);
+    		select : function(index,event,item){
+    			//购物车参数
+    			var animatePrar={
+    				event:event,
+    				item:item,
+    				offset:dataModel.offset,
+    			}
+    			calculateCenter.addToShoppingCar(index,animatePrar);
     		},
     		toggleDropdown : function(item){
 				if(typeof item.isOpen=='undefined'){
@@ -72,7 +79,12 @@ window.loc_onload = function() {
 					item.isOpen=!item.isOpen;
 				}
 			}
-    	}
+    	},
+    	mounted: function () {
+		    this.$nextTick(function () {
+		       dataModel.offset = $("#end").offset();//加入购物车参数
+		    })
+		}
     });
 
 	
@@ -137,8 +149,12 @@ window.loc_onload = function() {
 	
 	//计算中心弹出/收起（下面）
 	$(".ui-shop-cart").click(function(){
-		calculateCenter.refreshShopCart();
-		$(".ui-calculate-center").addClass("heightAuto");
+		if($(".ui-calculate-center").hasClass("heightAuto")){
+			$(".ui-calculate-center").removeClass("heightAuto");
+		}else{
+			calculateCenter.refreshShopCart();
+			$(".ui-calculate-center").addClass("heightAuto");
+		}
 	});
 	$(".J-min").click(function(){
 		$(".ui-calculate-center").removeClass("heightAuto");

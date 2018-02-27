@@ -19,11 +19,21 @@ window.loc_onload = function() {
 			},
 			url : $.ctx + '/api/dimtable/dimTableInfo/get',
 			onSuccess : function(data) {
+				console.log(data.data);
 				model.dimTableName = data.data.dimTableName;
 				model.dimComment = data.data.dimComment;
 				model.codeColType = data.data.codeColType;
 				model.dimCodeCol = data.data.dimCodeCol;
 				model.dimValueCol = data.data.dimValueCol;
+				if(data.data.dimCodeCol!=("DIM_CODE") && data.data.dimValueCol!=("DIM_VALUE")){
+					var useDefaultCol = document.getElementById("no");
+					useDefaultCol.checked = true;
+					$("#dimCodeCol1").show();
+					$("#dimValueCol1").show();			
+				}else{
+					$("#dimCodeCol1").hide();
+					$("#dimValueCol1").hide();
+				}
 			}
 		})
 	}else{
