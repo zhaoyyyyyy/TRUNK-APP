@@ -378,6 +378,9 @@
     margin:0 0 0 40px;
     border-right:1px solid #999;
 }
+.ui-shop-cart .shop-icon.loading{
+	background: url(../../../images/enmu-loading.gif) no-repeat center center;
+}
 /*数据资源管理样式 gaojj3*/
 
 .ui-lc-mian > .ui-label-mes.ui-data-form .form-group{
@@ -708,14 +711,6 @@
 	position: fixed;
 	z-index: 9999;
 	text-align:center;
-}
-.custom-load{
-	background:url(../../../images/enmu-loading.gif) no-repeat center center;
-	width:20px;
-	height:20px;
-	display:inline-block;
-	vertical-align:middle;
-	display:none;
 }
 .shop-car-msg{
 	position:fixed;

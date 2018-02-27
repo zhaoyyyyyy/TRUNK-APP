@@ -135,7 +135,7 @@
 					<i id="customNumDesc" class="f-ico-triangle-mb"></i>
 				</a>
 				 -->
-				<a title="点击标签按从小到大排序" onclick="labelMarket.changeSortCol(this)" id="sortPublishTime" name="publishTime" class="fleft">
+				<a onclick="labelMarket.changeSortCol(this)" id="sortPublishTime" name="publishTime" class="fleft">
 					发布时间
 					<i id="sortPublishTimeAsc" class="f-ico-triangle-mt"></i>
 					<i id="sortPublishTimeDesc" class="f-ico-triangle-mb"></i>
@@ -366,7 +366,6 @@
 				<div class="shop-car-msg"></div>
 				<p class="fright">
 					<span>客户群数：</span><span class="y-text" v-text="exploreCustomNum"></span>
-					<span class="custom-load"></span>
 					<span class="shop-icon" onclick="calculateCenter.explore(event,this);"></span>
 					<button type="button" class="ui-btn ui-btn-default mr10" onclick="calculateCenter.gotoSaveCustomer(event);">
 						<span class="create-white"></span> 创建客户群

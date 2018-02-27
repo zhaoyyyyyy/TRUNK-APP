@@ -576,12 +576,16 @@ var calculateCenter = (function (model){
 			  url: $.ctx + "/api/shopCart/explore",
 			  postData:param,
 			  onSuccess: function(returnObj){
+			  	$(".shop-icon").removeClass("loading");
 				dataModel.exploreCustomNum = 0;
 				dataModel.exploreCustomNum = returnObj.data;
 			 },
 			 onFailure:function(returnObj){
 				dataModel.exploreCustomNum = 0;
 				$.alert(returnObj.msg);
+			 },
+			 beforeSend:function(){
+			 	$(".shop-icon").addClass("loading");
 			 }
 		});
 	};
