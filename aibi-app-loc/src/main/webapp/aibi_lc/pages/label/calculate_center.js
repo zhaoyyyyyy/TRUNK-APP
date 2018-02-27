@@ -15,7 +15,7 @@ var calculateCenter = (function (model){
     	if(labelInfo.groupType == 0 ){
     		model.addShopCart(labelInfo.labelId,1,'',0,animatePrar);//标签
     	}else{
-    		model.addShopCart(labelInfo.labelId,2,'',0);//客户群
+    		model.addShopCart(labelInfo.labelId,2,'',0,animatePrar);//客户群
     	}
     	
     };

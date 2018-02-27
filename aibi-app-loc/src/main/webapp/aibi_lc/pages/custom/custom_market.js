@@ -32,7 +32,8 @@ var dataModel = {
 		labelDay : '',//规则中日日期
 		updateCycleList : [] ,//更新周期
 		labelTypeIdList : [] ,//创建类型
-		labelInfoViewObj : {}
+		labelInfoViewObj : {},
+		offset:"",//购物车动画偏移量
 }
 window.loc_onload = function() {
 	//初始化参数
@@ -62,8 +63,14 @@ window.loc_onload = function() {
     		/**
     		 * 选择标签
     		 */
-    		select : function(index){
-    			calculateCenter.addToShoppingCar(index);
+    		select : function(index,event,item){
+    			//购物车参数
+    			var animatePrar={
+    				event:event,
+    				item:item,
+    				offset:dataModel.offset,
+    			}
+    			calculateCenter.addToShoppingCar(index,animatePrar);
     		},
     		toggleDropdown : function(item){
 				if(typeof item.isOpen=='undefined'){
@@ -72,7 +79,12 @@ window.loc_onload = function() {
 					item.isOpen=!item.isOpen;
 				}
 			}
-    	}
+    	},
+    	mounted: function () {
+		    this.$nextTick(function () {
+		       dataModel.offset = $("#end").offset();//加入购物车参数
+		    })
+		}
     });
 
 	
