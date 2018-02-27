@@ -45,12 +45,12 @@
 		</div>
 		<div class="mt10">
 			<div class="radio circle success" @click="haveAttr=false"> 
-			   <input type="radio" name="radio19" id="myr3" checked="checked"> 
-			   <label for="myr3"><i class="default"></i> 不带属性</label>
+			   <input type="radio" name="radio19" id="myr3" :checked="!haveAttr"> 
+			   <label for="myr3" v-bind:class="{active:!haveAttr}"><i class="default"></i> 不带属性</label>
 			</div>
 		    <div class="radio circle success" @click="haveAttr=true">
-			   <input type="radio" name="radio19"  id="myr4"> 
-			   <label  for="myr4"><i class="default"></i> 带属性</label>
+			   <input type="radio" name="radio19"  id="myr4" :checked="haveAttr"> 
+			   <label  for="myr4" v-bind:class="{active:haveAttr}"><i class="default"></i> 带属性</label>
 			</div>
 		</div>
 		<div class="ui-edit-h3" v-show="haveAttr" style="display:none;">
