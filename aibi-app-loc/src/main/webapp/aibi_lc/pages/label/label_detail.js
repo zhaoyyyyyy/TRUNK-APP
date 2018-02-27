@@ -19,7 +19,6 @@ window.loc_onload = function() {
 	var labelId = $.getUrlParam("labelId");
 	var frwin = frameElement.lhgDG;
 	$.commAjax({
-		isShowMask : true,
 		url : $.ctx + '/api/label/labelInfo/get',
 		postData : {
 			"labelId" : labelId
@@ -106,7 +105,6 @@ window.loc_onload = function() {
 				}	
 			});*/ 	
 		},
-		maskMassage : 'load...'
 	})
 	frwin.addBtn("cancel", "确定", function() {
 		frwin.cancel();

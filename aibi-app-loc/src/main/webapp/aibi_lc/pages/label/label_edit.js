@@ -10,6 +10,8 @@ var model = {
 	dependIndexList : [],
 	sourcetableInfoList : [],  //纵表集合
 	sourceInfoList : [], //纵表对应的列集合
+	sourceTableId : "",
+	
 	categoryId : "",
 	labelName : "",
 	failTime : "",
@@ -56,16 +58,19 @@ window.loc_onload = function() {
 				var categoryId = data.data.categoryId;
 				$.commAjax({
 					ansyc : false,
+					isShowMask : true,
 					url : $.ctx + '/api/label/categoryInfo/get',
 					postData : {
 						"categoryId" : categoryId
 					},
 				    onSuccess : function(data2){
 				    	model.categoryName = data2.data.categoryName
-				    }
+				    },
+					maskMassage : 'load...'
 				});
 				$.commAjax({
 					ansyc : false,
+					isShowMask : true,
 					url : $.ctx + '/api/label/mdaSysTableCol/queryList',
 					postData : {
 						"labelId" : labelId
@@ -75,12 +80,51 @@ window.loc_onload = function() {
 						if(list.length!=0){
 							if(model.labelTypeId==5){
 								model.isemmu=true;
-//								model.dataName = list[0].dataType;
 								model.dimId = list[0].dimTransId;
 							}else if(model.labelTypeId==8){
 								model.isfhbq = true;
 								model.isemmu = false;
 								model.sourceInfoList = list;
+								for(var i=0; i<model.sourceInfoList.length; i++){
+									if(model.sourceInfoList[i].labelTypeId==5){
+										model.sourceInfoList[i]["showdim"] = true
+									}
+								}
+								$.commAjax({
+									async : false,
+									url : $.ctx+'/api/label/mdaSysTable/get',
+									postData : {
+										"tableId" : list[0].tableId
+									},
+								    onSuccess : function(data){
+								    	var sourcetablename = data.data.tableName;
+								    	var index = sourcetablename.indexOf('_',sourcetablename.indexOf('_')+1)
+								    	sourcetablename = sourcetablename.substr(index+1,sourcetablename.length);
+								    	$.commAjax({
+								    		url : $.ctx + '/api/source/sourceTableInfo/queryList',
+								    		postData : {
+								    			"sourceTableName" : sourcetablename,
+								    			"sourceTableType" : 2
+								    		},
+								    	    onSuccess : function(data){
+								    	    	var sourcetablelist = data.data
+								    	    	model.sourceTableId = sourcetablelist[0].sourceTableId
+								    	    }
+								    	});
+								    }
+								});	
+								$.commAjax({
+									async : false,
+									url : $.ctx + '/api/source/sourceTableInfo/queryList',
+									postData : {
+										"configId" : model.configId,
+										"readCycle" : model.updateCycle,
+										"sourceTableType" : 2
+									},
+									onSuccess : function(data){
+										model.sourcetableInfoList = data.data
+									}
+								});
 							}
 							model.unit = list[0].unit
 						};
@@ -103,7 +147,8 @@ window.loc_onload = function() {
 								}	
 							});
 						}	
-					}
+					},
+					maskMassage : 'load...'
 				});
 				model.approveStatusId = data.data.approveInfo.approveStatusId;
 			},
@@ -150,31 +195,40 @@ window.loc_onload = function() {
 				},
 				//不同周期获取不同的纵表
 				change_updateCycle : function(){
+					model.sourceInfoList = [];
 					$.commAjax({
 						async : false,
 						url : $.ctx + '/api/source/sourceTableInfo/queryList',
 						postData : {
 							"configId" : model.configId,
-							"readCycle" : model.updateCycle
+							"readCycle" : model.updateCycle,
+							"sourceTableType" : 2
 						},
 						onSuccess : function(data){
 							model.sourcetableInfoList = data.data
 						}
 					});
-				},
+				},		
 				//选择不同的纵表，获取对应的列信息
-				change_sourceId : function(){	
-					if(!model.updateCycle){
+				change_sourceId : function(event){
+					var sourceTableId = event.target.value;
+					$.commAjax({
+						url : $.ctx + '/api/source/sourceTableInfo/get?sourceTableId='+sourceTableId,
+						onSuccess : function(data){			
+							model.sourceInfoList = data.data.sourceInfoList
+						}
+					});
+					/*if(!model.updateCycle){
 						$.alert("请选择周期")
 					}else{
-						var sourceTableId = $("#sourceTableId").val();
+						var sourceTableId = event.target.value;
 						$.commAjax({
 							url : $.ctx + '/api/source/sourceTableInfo/get?sourceTableId='+sourceTableId,
-							onSuccess : function(data){					
+							onSuccess : function(data){			
 								model.sourceInfoList = data.data.sourceInfoList
 							}
 						});
-					}
+					}*/
 				},
 				//删除列
 				del_form : function(index){
@@ -182,6 +236,7 @@ window.loc_onload = function() {
 				},
 				//显示维表详情
 				showdimdetail : function(sourceInfo){
+					debugger
 					$.commAjax({
 						ansyc : false,
 					    url : $.ctx + '/api/dimtable/dimTableInfo/get',
@@ -251,6 +306,9 @@ window.loc_onload = function() {
 		}
 	});
 	
+	
+	
+	
 	//指标选择
 	$('#btn_index_select').click(function() {
 		if(model.updateCycle==""){
@@ -272,8 +330,9 @@ window.loc_onload = function() {
 			}
 		}	
 	});
-	
 }
+
+
 
 function fun_to_save(){
 	if($("form").validateForm()){
@@ -319,6 +378,10 @@ function fun_to_save(){
 						});
 						k++;
 					})
+				}else{
+					$.success(msg,function(){
+						history.back(-1);
+					});
 				}
 			}	
 		});		

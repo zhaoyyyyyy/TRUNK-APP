@@ -153,14 +153,20 @@ public class MdaSysTableColumn extends BaseEntity {
      */
     @Transient
     private Integer isMustColumn;
-    
+
+    /**
+     * 列顺序
+     */
+    @Transient
+    private Integer columnNum;
+
     @Transient
     private DimTableInfo dimtableInfo;
 
     @ManyToOne(cascade = CascadeType.REFRESH, optional = false)
     @JoinColumn(name = "TABLE_ID", insertable = false, updatable = false)
     private MdaSysTable mdaSysTable;
-
+    
     public String getTableId() {
         return tableId;
     }
@@ -265,26 +271,28 @@ public class MdaSysTableColumn extends BaseEntity {
         this.countRulesCode = countRulesCode;
     }
 
-    
     public Integer getLabelTypeId() {
         return labelTypeId;
     }
 
-    
     public void setLabelTypeId(Integer labelTypeId) {
         this.labelTypeId = labelTypeId;
     }
 
-    
     public Integer getIsMustColumn() {
         return isMustColumn;
     }
 
-    
     public void setIsMustColumn(Integer isMustColumn) {
         this.isMustColumn = isMustColumn;
     }
 
+    public Integer getColumnNum() {
+        return columnNum;
+    }
 
+    public void setColumnNum(Integer columnNum) {
+        this.columnNum = columnNum;
+    }
 
 }

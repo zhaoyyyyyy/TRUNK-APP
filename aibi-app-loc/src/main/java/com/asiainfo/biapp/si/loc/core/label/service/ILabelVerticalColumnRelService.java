@@ -17,7 +17,7 @@ import com.asiainfo.biapp.si.loc.core.label.vo.LabelVerticalColumnRelVo;
 /**
  * Title : ILabelVerticalColumnRelService
  * <p/>
- * Description : 
+ * Description :
  * <p/>
  * CopyRight : CopyRight (c) 2017
  * <p/>
@@ -27,23 +27,30 @@ import com.asiainfo.biapp.si.loc.core.label.vo.LabelVerticalColumnRelVo;
  * <p/>
  * Modification History :
  * <p/>
- * <pre>NO.    Date    Modified By    Why & What is modified</pre>
- * <pre>1    2017年11月21日    wangrd        Created</pre>
+ * 
+ * <pre>
+ * NO.    Date    Modified By    Why & What is modified
+ * </pre>
+ * 
+ * <pre>
+ * 1    2017年11月21日    wangrd        Created
+ * </pre>
  * <p/>
  *
- * @author  wangrd
+ * @author wangrd
  * @version 1.0.0.2017年11月21日
  */
-public interface ILabelVerticalColumnRelService extends BaseService<LabelVerticalColumnRel, String>{
+public interface ILabelVerticalColumnRelService extends BaseService<LabelVerticalColumnRel, String> {
 
     /**
      * 根据条件分页查询
      * 
      * @param page
      * @param LabelVerticalColumnRel
-     * @return 
+     * @return
      */
-    public Page<LabelVerticalColumnRel> selectLabelVerticalColumnRelPageList(Page<LabelVerticalColumnRel> page, LabelVerticalColumnRelVo labelVerticalColumnRelVo) throws BaseException;
+    public Page<LabelVerticalColumnRel> selectLabelVerticalColumnRelPageList(Page<LabelVerticalColumnRel> page,
+            LabelVerticalColumnRelVo labelVerticalColumnRelVo) throws BaseException;
 
     /**
      * 根据条件查询列表
@@ -51,17 +58,18 @@ public interface ILabelVerticalColumnRelService extends BaseService<LabelVertica
      * @param LabelVerticalColumnRel
      * @return
      */
-    public List<LabelVerticalColumnRel> selectLabelVerticalColumnRelList(LabelVerticalColumnRelVo labelVerticalColumnRelVo) throws BaseException;
+    public List<LabelVerticalColumnRel> selectLabelVerticalColumnRelList(
+            LabelVerticalColumnRelVo labelVerticalColumnRelVo) throws BaseException;
 
     /**
      * 通过ID得到一个实体类Description
      * 
      * @param labelId
-     * @return 
+     * @return
      * @throws BaseException
      */
     public LabelVerticalColumnRel selectLabelVerticalColumnRelById(String labelId) throws BaseException;
-    
+
     /**
      * 新增或修改一个实体 Description:
      *
@@ -69,7 +77,7 @@ public interface ILabelVerticalColumnRelService extends BaseService<LabelVertica
      * @throws BaseException
      */
     public void addLabelVerticalColumnRel(LabelVerticalColumnRel labelVerticalColumnRel) throws BaseException;
-    
+
     /**
      * 修改一个实体 Description:
      *
@@ -77,7 +85,7 @@ public interface ILabelVerticalColumnRelService extends BaseService<LabelVertica
      * @throws BaseException
      */
     public void modifyLabelVerticalColumnRel(LabelVerticalColumnRel labelVerticalColumnRel) throws BaseException;
-    
+
     /**
      * 通过ID删除一个实体 Description:
      *
@@ -85,4 +93,13 @@ public interface ILabelVerticalColumnRelService extends BaseService<LabelVertica
      * @throws BaseException
      */
     public void deleteLabelVerticalColumnRelById(String labelId) throws BaseException;
+
+    /**
+     * Description: 根据列id和标签id查找标签与纵表列关系数据
+     *
+     * @param columnId
+     * @param labelId
+     * @return
+     */
+    public LabelVerticalColumnRel queryLabelVerticalCol(String columnId, String labelId);
 }

@@ -127,7 +127,7 @@ public class MdaSysTableColServiceImpl extends BaseServiceImpl<MdaSysTableColumn
             labelVerticalColumnRel.setLabelVerticalColumnRelId(labelVerticalColumnRelId);
             labelVerticalColumnRel.setIsMustColumn(mdaSysTableColumn.getIsMustColumn());
             labelVerticalColumnRel.setLabelTypeId(mdaSysTableColumn.getLabelTypeId());
-            labelVerticalColumnRel.setSortNum(null);
+            labelVerticalColumnRel.setSortNum(mdaSysTableColumn.getColumnNum());
             iLabelVerticalColumnRelService.addLabelVerticalColumnRel(labelVerticalColumnRel); 
         } else{
             super.saveOrUpdate(mdaSysTableColumn);
@@ -136,6 +136,12 @@ public class MdaSysTableColServiceImpl extends BaseServiceImpl<MdaSysTableColumn
 
     public void modifyMdaSysTableColumn(MdaSysTableColumn mdaSysTableColumn) throws BaseException {
         super.saveOrUpdate(mdaSysTableColumn);
+        
+        //修改标签与纵表列对应关系表
+        LabelVerticalColumnRel labelVerticalColumnRel = iLabelVerticalColumnRelService.queryLabelVerticalCol(mdaSysTableColumn.getColumnId(), mdaSysTableColumn.getLabelId());
+        labelVerticalColumnRel.setLabelTypeId(mdaSysTableColumn.getLabelTypeId());
+        labelVerticalColumnRel.setIsMustColumn(mdaSysTableColumn.getIsMustColumn());
+        iLabelVerticalColumnRelService.modifyLabelVerticalColumnRel(labelVerticalColumnRel);
     };
 
     @Override
@@ -149,5 +155,18 @@ public class MdaSysTableColServiceImpl extends BaseServiceImpl<MdaSysTableColumn
     @Override
     public MdaSysTableColumn selectMdaSysTableColBylabelId(String labelId) {
         return iMdaSysTableColumnDao.selectMdaSysTableColBylabelId(labelId);
+    }
+    
+    @Override
+    public List<MdaSysTableColumn> addMdaSysTableColList(List<MdaSysTableColumn> mdaSysTableColList){
+        for (MdaSysTableColumn mdaSysTableColumn : mdaSysTableColList) {
+            LabelInfo labelInfo = iLabelInfoService.get(mdaSysTableColumn.getLabelId());
+            if (labelInfo.getLabelTypeId()==8) {
+                LabelVerticalColumnRel labelVerticalColumnRel = iLabelVerticalColumnRelService.queryLabelVerticalCol(mdaSysTableColumn.getColumnId(), mdaSysTableColumn.getLabelId());
+                mdaSysTableColumn.setLabelTypeId(labelVerticalColumnRel.getLabelTypeId());
+                mdaSysTableColumn.setIsMustColumn(labelVerticalColumnRel.getIsMustColumn());
+            }
+        }
+        return mdaSysTableColList;
     }
 }

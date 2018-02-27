@@ -88,6 +88,7 @@ public class MdaSysTableColumnController extends BaseController<MdaSysTableColum
         List<MdaSysTableColumn> mdaSysTableColList = new ArrayList<>();
         try {
             mdaSysTableColList = iMdaSysTableColService.selectMdaSysTableColList(mdaSysTableColumnVo);
+            mdaSysTableColList = iMdaSysTableColService.addMdaSysTableColList(mdaSysTableColList);
         } catch (BaseException e) {
             return webResult.fail(e);
         }
@@ -216,6 +217,9 @@ public class MdaSysTableColumnController extends BaseController<MdaSysTableColum
         }
         if (null != mda.getIsMustColumn()) {
             oldmda.setIsMustColumn(mda.getIsMustColumn());
+        }
+        if (null != mda.getColumnNum()) {
+            oldmda.setColumnNum(mda.getColumnNum());
         }
         return oldmda;
     }

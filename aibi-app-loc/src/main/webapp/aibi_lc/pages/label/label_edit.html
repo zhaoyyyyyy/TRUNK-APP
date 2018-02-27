@@ -158,8 +158,8 @@
 							<span class="input-required">*</span>
 							请选择纵表</label> 
 							<div class="control-input has-icon">
-                                <select v-on:click="change_sourceId" id="sourceTableId" name="sourceTableId" class="form-control ml10 input-pointer ">
-                                <option>请选择指标源表</option>
+                                <select v-on:change="change_sourceId($event)" v-model="sourceTableId" name="sourceTableId" class="form-control ml10 input-pointer ">
+                                <option disabled value="">请选择指标源表</option>
                                 <option v-for ="source in sourcetableInfoList" :value="source.sourceTableId">{{source.sourceTableName}}</option>
                                 </select>
                             </div>
@@ -183,6 +183,7 @@
 	                    <legend>列信息</legend>
 	                    <i v-on:click="del_form(index)" class="del-btn-icon fright mr10 mt5" ></i>
 	                    <div class="form-horizontal fleft ui-form">
+	                        <input type="hidden" v-model="sourceInfo.columnId" name="columnId"/>
 	                        <div class="ui-form-group ml70">
 								<label class="control-label">
 								<span class="input-required">*</span>
@@ -223,7 +224,7 @@
 								<span class="input-required">*</span>
 								列名</label> 
 								<div class="control-input ml10">
-									<input v-model="sourceInfo.sourceName" name="columnName" type="text" required="true" class="easyui-validatebox fleft form-control"
+									<input v-model="sourceInfo.columnName" name="columnName" type="text" required="true" class="easyui-validatebox fleft form-control"
 									placeholder="请输入列名称" />
 							    </div>
 							</div>
@@ -247,6 +248,7 @@
 								    </select>
 							    </div>
 							</div>
+							<input type="hidden" v-model="sourceInfo.columnNum" name="columnNum" />
 	                    </div>
 	                </fieldset>
 	                </form>

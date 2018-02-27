@@ -54,6 +54,7 @@ import com.asiainfo.biapp.si.loc.core.label.service.IMdaSysTableColService;
 import com.asiainfo.biapp.si.loc.core.label.service.IMdaSysTableService;
 import com.asiainfo.biapp.si.loc.core.label.vo.LabelInfoVo;
 import com.asiainfo.biapp.si.loc.core.label.vo.LabelRuleVo;
+import com.asiainfo.biapp.si.loc.core.label.vo.MdaSysTableColumnVo;
 
 /**
  * Title : LabelInfoServiceImpl
@@ -209,32 +210,36 @@ public class LabelInfoServiceImpl extends BaseServiceImpl<LabelInfo, String> imp
         }
         super.saveOrUpdate(labelInfo); 
         
-        //修改元数据表列信息
-        MdaSysTableColumn mdaSysTableColumn = iMdaSysTableColService.selectMdaSysTableColBylabelId(labelInfo.getLabelId());
-        MdaSysTable mdaSysTable = iMdaSysTableService.queryMdaSysTable(labelInfo.getConfigId(),labelInfo.getUpdateCycle(),1);
-        mdaSysTableColumn.setTableId(mdaSysTable.getTableId());
-        mdaSysTableColumn.setColumnCnName(labelInfo.getLabelName());
-        if (StringUtil.isNotBlank(labelInfo.getDimId())) {
-            DimTableInfo dimTable = iDimTableInfoService.selectDimTableInfoById(labelInfo.getDimId());
-            mdaSysTableColumn.setDimTransId(labelInfo.getDimId());
-            int columnDataTypeId = Integer.parseInt(dimTable.getCodeColType());
-            mdaSysTableColumn.setColumnDataTypeId(columnDataTypeId);
-            mdaSysTableColumn.setUnit(labelInfo.getUnit());
-        }else if(StringUtil.isNotBlank(labelInfo.getDependIndex())&&StringUtil.isBlank(labelInfo.getDimId())){
-            mdaSysTableColumn.setDimTransId(null);
-            mdaSysTableColumn.setColumnDataTypeId(null);
-            mdaSysTableColumn.setUnit(labelInfo.getUnit());
-        }
         
-        //修改标签规则维表信息
-        LabelCountRules labelCountRules = iLabelCountRulesService.selectLabelCountRulesById(mdaSysTableColumn.getCountRulesCode());
-        if (StringUtil.isNotBlank(labelInfo.getDependIndex())) {
-            labelCountRules.setDependIndex(labelInfo.getDependIndex());
-        }
-        if (StringUtil.isNotBlank(labelInfo.getCountRules())) {
-            labelCountRules.setCountRules(labelInfo.getCountRules());
-        }
-        iMdaSysTableColService.modifyMdaSysTableColumn(mdaSysTableColumn);
+        if (labelInfo.getLabelTypeId()!=8) {
+          //修改元数据表列信息
+            MdaSysTableColumn mdaSysTableColumn = iMdaSysTableColService.selectMdaSysTableColBylabelId(labelInfo.getLabelId());
+            MdaSysTable mdaSysTable = iMdaSysTableService.queryMdaSysTable(labelInfo.getConfigId(),labelInfo.getUpdateCycle(),1);
+            mdaSysTableColumn.setTableId(mdaSysTable.getTableId());
+            mdaSysTableColumn.setColumnCnName(labelInfo.getLabelName());
+            if (StringUtil.isNotBlank(labelInfo.getDimId())) {
+                DimTableInfo dimTable = iDimTableInfoService.selectDimTableInfoById(labelInfo.getDimId());
+                mdaSysTableColumn.setDimTransId(labelInfo.getDimId());
+                int columnDataTypeId = Integer.parseInt(dimTable.getCodeColType());
+                mdaSysTableColumn.setColumnDataTypeId(columnDataTypeId);
+                mdaSysTableColumn.setUnit(labelInfo.getUnit());
+            }else if(StringUtil.isNotBlank(labelInfo.getDependIndex())&&StringUtil.isBlank(labelInfo.getDimId())){
+                mdaSysTableColumn.setDimTransId(null);
+                mdaSysTableColumn.setColumnDataTypeId(null);
+                mdaSysTableColumn.setUnit(labelInfo.getUnit());
+            } 
+            iMdaSysTableColService.modifyMdaSysTableColumn(mdaSysTableColumn);
+            
+          //修改标签规则维表信息
+            LabelCountRules labelCountRules = iLabelCountRulesService.selectLabelCountRulesById(mdaSysTableColumn.getCountRulesCode());
+            if (StringUtil.isNotBlank(labelInfo.getDependIndex())) {
+                labelCountRules.setDependIndex(labelInfo.getDependIndex());
+            }
+            if (StringUtil.isNotBlank(labelInfo.getCountRules())) {
+                labelCountRules.setCountRules(labelInfo.getCountRules());
+            }
+            iLabelCountRulesService.modifyLabelCountRules(labelCountRules);
+        }  
     }
 
     public void deleteLabelInfo(String labelId) throws BaseException {
@@ -343,4 +348,14 @@ public class LabelInfoServiceImpl extends BaseServiceImpl<LabelInfo, String> imp
 		 }
 	}
 	
+	/*public MdaSysTableColumn queryMdaColumn(String columnId,String labelId){
+	    MdaSysTableColumnVo mdaSysTableColumnVo = new MdaSysTableColumnVo();
+	    mdaSysTableColumnVo.setColumnId(columnId);
+	    mdaSysTableColumnVo.setLabelId(labelId);
+	    List<MdaSysTableColumn> mdaList = iMdaSysTableColService.selectMdaSysTableColList(mdaSysTableColumnVo);
+	    if (mdaList !=null && mdaList.size()>0) {
+            return mdaList.get(0);
+        }
+	    return null;
+	}*/
 }

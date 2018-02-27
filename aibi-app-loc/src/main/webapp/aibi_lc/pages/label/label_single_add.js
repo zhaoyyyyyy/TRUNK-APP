@@ -79,7 +79,8 @@ window.loc_onload = function() {
 		async : false,
 		url : $.ctx + '/api/source/sourceTableInfo/queryList',
 		postData : {
-			"configId" : model.configId
+			"configId" : model.configId,
+			"sourceTableType" : 1
 		},
 		onSuccess : function(data){
 			model.sourcetableInfoList = data.data

@@ -93,5 +93,22 @@ public interface IMdaSysTableColService extends BaseService<MdaSysTableColumn, S
      */
     public void deleteMdaSysTableColumnById(String columnId) throws BaseException;
     
+    /**
+     * 
+     * Description:根据标签id获取实体 
+     *
+     * @param labelId
+     * @return
+     */
     public MdaSysTableColumn selectMdaSysTableColBylabelId(String labelId);
+    
+    
+    /**
+     * 
+     * Description: 向mdaSysTableColList中添加属性值 
+     *
+     * @param mdaSysTableColList
+     * @return
+     */
+    public List<MdaSysTableColumn> addMdaSysTableColList(List<MdaSysTableColumn> mdaSysTableColList);
 }

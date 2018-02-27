@@ -21,6 +21,7 @@ import com.asiainfo.biapp.si.loc.base.service.impl.BaseServiceImpl;
 import com.asiainfo.biapp.si.loc.base.utils.StringUtil;
 import com.asiainfo.biapp.si.loc.core.label.dao.ILabelVerticalColumnRelDao;
 import com.asiainfo.biapp.si.loc.core.label.entity.LabelVerticalColumnRel;
+import com.asiainfo.biapp.si.loc.core.label.entity.LabelVerticalColumnRelId;
 import com.asiainfo.biapp.si.loc.core.label.service.ILabelVerticalColumnRelService;
 import com.asiainfo.biapp.si.loc.core.label.vo.LabelVerticalColumnRelVo;
 
@@ -89,7 +90,29 @@ public class LabelVerticalColumnRelServiceImpl extends BaseServiceImpl<LabelVert
         super.delete(labelId);
         
     }
-
+    
+    /**
+     * 
+     * Description: 根据列id和标签id查找标签与纵表列关系数据
+     *
+     * @param columnId
+     * @param labelId
+     * @return
+     */
+    @Override
+    public LabelVerticalColumnRel queryLabelVerticalCol(String columnId,String labelId){
+        LabelVerticalColumnRelVo labelVerticalColumnRelVo = new LabelVerticalColumnRelVo();
+        LabelVerticalColumnRelId labelVerticalColumnRelId = new LabelVerticalColumnRelId();
+        labelVerticalColumnRelId.setColumnId(columnId);
+        labelVerticalColumnRelId.setLabelId(labelId);
+        labelVerticalColumnRelVo.setLabelVerticalColumnRelId(labelVerticalColumnRelId);
+        List<LabelVerticalColumnRel> labelVerList = iLabelVerticalColumnRelDao.selectLabelVerticalColumnRelList(labelVerticalColumnRelVo);
+        System.out.println("cdcsc");
+        if (labelVerList !=null && labelVerList.size()>0) {
+            return labelVerList.get(0);
+        }
+        return null;
+    }
     
 
 }
