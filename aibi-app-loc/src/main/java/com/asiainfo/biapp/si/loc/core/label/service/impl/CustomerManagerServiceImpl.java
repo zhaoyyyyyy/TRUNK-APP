@@ -57,7 +57,10 @@ public class CustomerManagerServiceImpl implements ICustomerManagerService {
 			List<LabelRuleVo> labelRuleList = ruleService.queryCiLabelRuleList(customId,LabelRuleContants.LABEL_RULE_FROM_COSTOMER);
 			String countSqlStr = "";
 			if(haveCustomOrVerticalLabel(labelRuleList)) {
-				countSqlStr = exploreServiceImpl.getFromSqlForMultiLabel(labelRuleList, model);
+				StringBuffer sql = new StringBuffer();
+				String querySql = exploreServiceImpl.getFromSqlForMultiLabel(labelRuleList, model);
+				sql.append(" from (").append(querySql).append(") abc");
+				countSqlStr=sql.toString();
 			}else{
 			     countSqlStr = exploreServiceImpl.getCountSqlStr(labelRuleList, model);
 			}

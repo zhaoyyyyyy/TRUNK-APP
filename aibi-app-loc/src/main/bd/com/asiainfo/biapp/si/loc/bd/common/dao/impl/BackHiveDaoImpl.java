@@ -296,7 +296,7 @@ public class BackHiveDaoImpl extends BaseBackDaoImpl implements IBackSqlDao{
             
         }catch (Exception e){
             res = false;
-            throw new SqlRunException(e.getMessage());
+            throw new SqlRunException(e.getMessage()+"--errorSql:"+sql);
         }finally{
         	JDBCUtil.getInstance().free(conn, st, rs);
         }
@@ -402,7 +402,7 @@ public class BackHiveDaoImpl extends BaseBackDaoImpl implements IBackSqlDao{
 		try{
             return this.executeResBoolean(sb.toString());
         }catch (Exception e){
-            throw new SqlRunException(e.getMessage());
+            throw new SqlRunException(e.getMessage()+"--errorSql:"+sb.toString());
         }
 	}
 	
