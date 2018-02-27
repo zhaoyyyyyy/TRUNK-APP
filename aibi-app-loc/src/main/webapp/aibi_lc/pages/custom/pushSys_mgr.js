@@ -101,6 +101,7 @@ window.loc_onload = function() {
         viewrecords: true,
         
     });
+    $("#mainGrid").jqGrid('setLabel',0, '序号');
     $("#btn_to_add").click(function(){
     	var wd = $.window('新增推送平台', $.ctx
     		+ '/aibi_lc/pages/custom/pushSys_add.html', 600, 500);
