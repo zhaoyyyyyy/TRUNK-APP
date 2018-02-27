@@ -87,6 +87,7 @@ window.loc_onload = function() {
 		},
 		height: '100%'
 	});
+	$("#jsonmap1").jqGrid('setLabel',0, '序号');
 }
 function fun_to_up(id) {
 	window.location = 'dataSource_add.html?isEdit=1&sourceTableId=' + id;

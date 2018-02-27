@@ -138,6 +138,7 @@ window.loc_onload = function(){
 	
 	
 	 var obj = $("#preConfig_list").find("span");
+	
 	 $("#mainGrid").jqGrid({
 	    	url: $.ctx + "/api/label/labelInfo/queryPage",
 	        datatype: "json",
@@ -205,6 +206,7 @@ window.loc_onload = function(){
 	        multiselect:true,
 	        pager: '#mainGridPager'  
 	    });
+	    $("#mainGrid").jqGrid('setLabel',0, '序号');
 }
 
 function fun_to_detail(id){

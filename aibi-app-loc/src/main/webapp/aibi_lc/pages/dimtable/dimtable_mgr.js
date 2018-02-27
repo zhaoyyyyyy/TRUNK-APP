@@ -39,55 +39,54 @@ window.loc_onload = function() {
 			} ]);
     	}
     })
-	$("#mainGrid")
-			.jqGrid(
-					{
-						url : $.ctx + "/api/dimtable/dimTableInfo/queryPage",
-						datatype : "json",
-						postData :{"configId": configId},
-						colNames : [ '维表表名',"维表中文名", '操作' ],
-						colModel : [
-								{
-									name : 'dimTableName',
-									index : 'dimTableName',
-									width : 80,
-									sortable : false,
-									frozen : true,
-									align : "center",
-									formatter : function(value, opts, data) {
-										return "<font class='detail-text' >"
-												+ data.dimTableName
-												+ "</font></a> ";
-									}
-								},
-								{
-									name : 'dimComment',
-									index : 'dimComment',
-									width : 50,
-									sortable : false,
-									frozen : true,
-									align : "center"
-								},
-								{
-									name : 'dimId',
-									index : 'dimId',
-									width : 80,
-									sortable : false,
-									align : "center",
-									title:false,
-									formatter : function(value, opts, data) {
-										return "<button type='button' class='btn btn-default  ui-table-btn ui-table-btn' onclick='fun_to_edit(\""
-												+ value
-												+ "\")'>修改</button> <button type='button' class='btn btn-default ui-table-btn' onclick='fun_to_detail( \""
-												+ data.dimTableName + "\" )'>查看</button>"
-												+ "<button type='button' class='btn btn-default ui-table-btn' onclick='fun_to_del( \""
-												+ value + "\" )'>删除</button>"
-									}
-								} ],
-								rowList: [10, 20, 30],
-						        pager: '#mainGridPager',
-						        viewrecords: true,
-					});
+	$("#mainGrid").jqGrid({
+		url : $.ctx + "/api/dimtable/dimTableInfo/queryPage",
+		datatype : "json",
+		postData :{"configId": configId},
+		colNames : [ '维表表名',"维表中文名", '操作' ],
+		colModel : [
+			{
+				name : 'dimTableName',
+				index : 'dimTableName',
+				width : 80,
+				sortable : false,
+				frozen : true,
+				align : "center",
+				formatter : function(value, opts, data) {
+					return "<font class='detail-text' >"
+							+ data.dimTableName
+							+ "</font></a> ";
+				}
+			},
+			{
+				name : 'dimComment',
+				index : 'dimComment',
+				width : 50,
+				sortable : false,
+				frozen : true,
+				align : "center"
+			},
+			{
+				name : 'dimId',
+				index : 'dimId',
+				width : 80,
+				sortable : false,
+				align : "center",
+				title:false,
+				formatter : function(value, opts, data) {
+					return "<button type='button' class='btn btn-default  ui-table-btn ui-table-btn' onclick='fun_to_edit(\""
+							+ value
+							+ "\")'>修改</button> <button type='button' class='btn btn-default ui-table-btn' onclick='fun_to_detail( \""
+							+ data.dimTableName + "\" )'>查看</button>"
+							+ "<button type='button' class='btn btn-default ui-table-btn' onclick='fun_to_del( \""
+							+ value + "\" )'>删除</button>"
+				}
+			} ],
+			rowList: [10, 20, 30],
+	        pager: '#mainGridPager',
+	        viewrecords: true,
+	});
+	$("#mainGrid").jqGrid('setLabel',0, '序号');
 }
 function fun_to_del(dimId) {
 	$.confirm('确认删除此维表吗', function() {
