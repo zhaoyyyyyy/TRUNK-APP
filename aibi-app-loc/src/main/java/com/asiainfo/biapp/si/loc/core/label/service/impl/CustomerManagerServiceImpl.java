@@ -54,9 +54,13 @@ public class CustomerManagerServiceImpl implements ICustomerManagerService {
 			// 1.获取sql
 		    customGroup = labelInfoService.get(customId);
 		    model.setOrgId(customGroup.getOrgId());// 权限
-			List<LabelRuleVo> labelRuleList = ruleService.queryCiLabelRuleList(customId,
-					LabelRuleContants.LABEL_RULE_FROM_COSTOMER);
-			String countSqlStr = exploreServiceImpl.getCountSqlStr(labelRuleList, model);
+			List<LabelRuleVo> labelRuleList = ruleService.queryCiLabelRuleList(customId,LabelRuleContants.LABEL_RULE_FROM_COSTOMER);
+			String countSqlStr = "";
+			if(haveCustomOrVerticalLabel(labelRuleList)) {
+				countSqlStr = exploreServiceImpl.getFromSqlForMultiLabel(labelRuleList, model);
+			}else{
+			     countSqlStr = exploreServiceImpl.getCountSqlStr(labelRuleList, model);
+			}
 			// 2.生成表
 			String tableName = "no table";
 			if (LabelInfoContants.CUSTOM_CYCLE_TYPE_ONE == customGroup.getUpdateCycle()) {
@@ -87,5 +91,31 @@ public class CustomerManagerServiceImpl implements ICustomerManagerService {
 		}
 		return true;
 	}
+	
+	
+	/**
+	 * 验证是否包含用户群或者纵表标签
+	 * @param rules List<CiLabelRule> 处理过的规则
+	 * @return
+	 */
+	private boolean haveCustomOrVerticalLabel(List<LabelRuleVo> rules) {
+		boolean result = false;
+		if(rules != null) {
+			for (LabelRuleVo rule : rules) {
+				if (rule.getElementType() == LabelRuleContants.ELEMENT_TYPE_CUSTOM_RULES 
+						|| rule.getElementType() == LabelRuleContants.ELEMENT_TYPE_LIST_ID) {
+					result = true;
+					break;
+				} else if (rule.getElementType() == LabelRuleContants.ELEMENT_TYPE_LABEL_ID) {
+					if (rule.getLabelTypeId() == LabelInfoContants.LABEL_TYPE_VERT) {
+						result = true;
+						break;
+					}
+				}
+			}
+		}
+		return result;
+	}
+	
 
 }
