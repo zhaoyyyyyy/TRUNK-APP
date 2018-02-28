@@ -49,7 +49,7 @@
 									</li>
 						        </ul>
 						    </div>
-						    <div id="filePush" v-if="pushType==1">
+						    <div id="filePush" v-show="pushType==1">
 							    <fieldset class="push-fieldest">
 									<legend>FTP/SFTP信息</legend>
 									<div class="ui-form-group">
@@ -185,7 +185,7 @@
 									</div>
 								</div>
 							</div>
-							<div id="labelPush" v-if="pushType ==2">
+							<div id="labelPush" v-show="pushType ==2">
 							<fieldset class="push-fieldest">
 									<legend>表推送</legend>
 									<div class="ui-form-group">
