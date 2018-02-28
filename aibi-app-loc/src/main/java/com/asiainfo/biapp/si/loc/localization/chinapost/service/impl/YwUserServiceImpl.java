@@ -94,8 +94,8 @@ public class YwUserServiceImpl extends DevUserServiceImpl implements IUserServic
 		User user = new User();
 		String username = null;
 		String userId = null;
-		String orgId = "21";
-		String districtId = "370000";
+		String orgId = "21";//TODO
+		String districtId = "370000";//TODO
 		
 		Map<String,Object> params = new HashMap<String,Object>();
 		params.put("token", token);
@@ -126,8 +126,8 @@ public class YwUserServiceImpl extends DevUserServiceImpl implements IUserServic
 	        
 	        
 	        username = staffvalue.getString("STAFF_NAME");
-//	        orgId = orginfo.getString("ORGANIZE_ID");
-//	        districtId = districtinfo.getString("DISTRICT_ID");
+//	        orgId = orginfo.getString("ORGANIZE_ID");//TODO
+//	        districtId = districtinfo.getString("DISTRICT_ID");//TODO
 	        
 	        user.setUserName(username);
         }catch(Exception e){
@@ -148,6 +148,8 @@ public class YwUserServiceImpl extends DevUserServiceImpl implements IUserServic
 			addOrgChildren(organizationYwx.getChildren(), organizationSetYwx);
 			
 			Set<Organization> organizationPrivaliege = new HashSet<Organization>();
+			organizationPrivaliege.add(organizationXzqh);
+			organizationPrivaliege.add(organizationYwx);
 			
 //			organizationPrivaliege.add(organizationXzqh);
 //			organizationPrivaliege.add(organizationYwx);
