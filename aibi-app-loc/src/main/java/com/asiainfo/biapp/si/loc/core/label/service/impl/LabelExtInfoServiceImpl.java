@@ -93,7 +93,7 @@ public class LabelExtInfoServiceImpl extends BaseServiceImpl<LabelExtInfo, Strin
         return iLabelExtInfoDao.selectLabelExtInfoList(labelExtInfoVo);
     }
 
-    @CacheEvict(value="LabelInfo", key="'selectLabelExtInfoById_'+#labelId")
+    @Cacheable(value="LabelInfo", key="'selectLabelExtInfoById_'+#labelId")
     @Override
     public LabelExtInfo selectLabelExtInfoById(String labelId) throws BaseException {
         if (StringUtils.isBlank(labelId)) {

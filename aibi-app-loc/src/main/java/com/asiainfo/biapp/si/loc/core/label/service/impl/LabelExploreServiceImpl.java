@@ -103,8 +103,7 @@ public class LabelExploreServiceImpl implements ILabelExploreService {
 				}
 			} else if (LabelRuleContants.ELEMENT_TYPE_LIST_ID == rule.getElementType()) {
 				String listTableId = rule.getCalcuElement();
-				String customId = rule.getCustomId();
-				String singleLabelSql = this.getListTableSql(customId,rule.getAttrVal());
+				String singleLabelSql = this.getListTableSql(listTableId,rule.getAttrVal());
 				labelRuleToSql.put(listTableId,singleLabelSql);
 				calcExpr.append(listTableId);
 			}//end ELEMENT_TYPE

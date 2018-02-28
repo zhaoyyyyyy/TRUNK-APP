@@ -45,4 +45,19 @@ public interface ICustomerManagerService {
 	 */
 	public boolean createCustomerList(String customId,ExploreQueryParam customRunModel) throws BaseException;
 
+	
+	/**
+	 * 根据给定的月和日，判别规则是否都具备该月份或者该日的数据，根据不同清单生成策略，返回不同值
+	 * 返回值：	1、等待创建，等下次日、月周期性定时调度调用；
+	 * 			2、立即执行；
+	 * 			3、不会出现在日、月调度中，单独的job夜间执行
+	 * @param customId
+	 * @param month yyyyMM
+	 * @param day yyyyMMdd
+	 * @return
+	 * @version ZJ
+	 */
+	public String validateLabelDataDate(String customId, String month, String day) throws BaseException;
+	
+	
 }

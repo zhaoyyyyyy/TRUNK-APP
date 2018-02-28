@@ -185,4 +185,25 @@ public interface LabelInfoContants {
 	/** 客户群数据状态：4、 预约状态 */
 	public static final int CUSTOM_DATA_STATUS_ORDER = 4;
 	
+	/**
+	 * 清单策略
+	 */
+	/** 预约策略 清单策略一：按统一的最新数据执行，没有数据，延迟生成清单 **/
+	public static final String LIST_TABLE_TACTICS_ID_ONE = "1";
+	/** 保守策略 清单策略三：按最晚（用户选定的日期或者月份）执行跑清单 **/
+	public static final String LIST_TABLE_TACTICS_ID_THREE = "2";
+	
+	/**
+	 * 验证标签数据以确定清单如何处理
+	 */
+	/** 标签失效 **/
+	public static final String VALIDATE_RESULT_INVALID = "-1";
+	/** 等待创建 **/
+	public static final String VALIDATE_RESULT_WAIT = "1";
+	/** 立即执行 **/
+	public static final String VALIDATE_RESULT_GO = "2";
+	/** 等待周期job执行 **/
+	public static final String VALIDATE_RESULT_NEW = "3";
+	
+	
 }

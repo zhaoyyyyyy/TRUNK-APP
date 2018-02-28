@@ -13,10 +13,12 @@ import com.asiainfo.biapp.si.loc.base.common.LabelInfoContants;
 import com.asiainfo.biapp.si.loc.base.common.LabelRuleContants;
 import com.asiainfo.biapp.si.loc.base.exception.BaseException;
 import com.asiainfo.biapp.si.loc.base.utils.LogUtil;
+import com.asiainfo.biapp.si.loc.base.utils.StringUtil;
 import com.asiainfo.biapp.si.loc.bd.common.service.IBackSqlService;
 import com.asiainfo.biapp.si.loc.bd.list.service.IListInfoService;
 import com.asiainfo.biapp.si.loc.bd.listinfo.entity.ListInfo;
 import com.asiainfo.biapp.si.loc.bd.listinfo.entity.ListInfoId;
+import com.asiainfo.biapp.si.loc.cache.CocCacheProxy;
 import com.asiainfo.biapp.si.loc.core.label.entity.LabelExtInfo;
 import com.asiainfo.biapp.si.loc.core.label.entity.LabelInfo;
 import com.asiainfo.biapp.si.loc.core.label.model.ExploreQueryParam;
@@ -95,6 +97,82 @@ public class CustomerManagerServiceImpl implements ICustomerManagerService {
 		return true;
 	}
 	
+	@Override
+	public String validateLabelDataDate(String customId, String month, String day) throws BaseException {
+		String result = null;
+		boolean satisfyMonth = true;
+		boolean satisfyDay = true;
+		int monthNum = 0;
+		int dayNum = 0;
+		if (StringUtil.isNotEmpty(month)) {
+			monthNum = Integer.valueOf(month);
+		}
+		if (StringUtil.isNotEmpty(day)) {
+			dayNum = Integer.valueOf(day);
+		}
+		List<LabelRuleVo> labelRuleList = ruleService.queryCiLabelRuleList(customId,
+				LabelRuleContants.LABEL_RULE_FROM_COSTOMER);
+		for (LabelRuleVo rule : labelRuleList) {
+			int elementType = rule.getElementType();
+			if (elementType == LabelRuleContants.ELEMENT_TYPE_LABEL_ID) {
+				String labelIdStr = rule.getCalcuElement();
+				LabelInfo ciLabelInfo = CocCacheProxy.getCacheProxy().getLabelInfoById(labelIdStr);
+				if(ciLabelInfo == null){
+					LogUtil.error("标签失效 ciCustomGroupInfo："+ customId + ",labelId="+labelIdStr);
+					return LabelInfoContants.VALIDATE_RESULT_INVALID;
+				}
+				String dataDate = ciLabelInfo.getDataDate();
+				if (LabelInfoContants.LABEL_CYCLE_TYPE_D == ciLabelInfo.getUpdateCycle()
+						&& StringUtil.isNotEmpty(dataDate) && dayNum != 0) {
+					int tempNum = Integer.valueOf(dataDate);
+					if (tempNum < dayNum) {
+						satisfyDay = false;
+					}
+				} else if (LabelInfoContants.LABEL_CYCLE_TYPE_M == ciLabelInfo.getUpdateCycle()
+						&& StringUtil.isNotEmpty(dataDate) && monthNum != 0) {
+					int tempNum = Integer.valueOf(dataDate);
+					if (tempNum < monthNum) {
+						satisfyMonth = false;
+					}
+				}
+				if (!satisfyDay && !satisfyMonth) {
+					break;
+				}
+
+			} // end LABEL
+		}
+		LabelInfo customGroup = labelInfoService.get(customId);
+		String tactics = customGroup.getLabelExtInfo().getTacticsId();
+		int updateCycle = customGroup.getUpdateCycle();
+		LogUtil.info("周期：" + updateCycle + "  策略：" + tactics + "    ciCustomGroupInfo：" + customGroup.getLabelId()
+				+ "     satisfyDay:=============" + satisfyDay + "     satisfyMonth:=============" + satisfyMonth);
+		if (LabelInfoContants.CUSTOM_CYCLE_TYPE_ONE == updateCycle) { // 一次性
+			if (LabelInfoContants.LIST_TABLE_TACTICS_ID_ONE.equals(tactics)) {
+				if (!satisfyDay) { // 日不满足
+					result = LabelInfoContants.VALIDATE_RESULT_NEW;
+				} else {
+					result = LabelInfoContants.VALIDATE_RESULT_GO;
+				}
+			} else if (LabelInfoContants.LIST_TABLE_TACTICS_ID_THREE.equals(tactics)) {
+				result = LabelInfoContants.VALIDATE_RESULT_GO;
+			}
+		} else if (LabelInfoContants.CUSTOM_CYCLE_TYPE_M == updateCycle) { // 月周期
+			if (!satisfyMonth) { // 月不满足
+				result = LabelInfoContants.VALIDATE_RESULT_WAIT;
+			} else if (satisfyMonth && !satisfyDay) { // 月满足，日不满足
+				result = LabelInfoContants.VALIDATE_RESULT_NEW;
+			} else if (satisfyMonth && satisfyDay) { // 日、月都满足
+				result = LabelInfoContants.VALIDATE_RESULT_GO;
+			}
+		} else if (LabelInfoContants.CUSTOM_CYCLE_TYPE_D == updateCycle) { // 日周期
+			if (!satisfyDay) {
+				result = LabelInfoContants.VALIDATE_RESULT_WAIT;
+			} else {
+				result = LabelInfoContants.VALIDATE_RESULT_GO;
+			}
+		}
+		return result;
+	}
 	
 	/**
 	 * 验证是否包含用户群或者纵表标签
@@ -119,6 +197,5 @@ public class CustomerManagerServiceImpl implements ICustomerManagerService {
 		}
 		return result;
 	}
-	
 
 }
