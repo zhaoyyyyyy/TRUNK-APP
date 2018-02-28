@@ -44,7 +44,7 @@
 						        <label for="inputEmail3" class="control-label fleft"><span class="input-required">*</span>推送方式:</label>
 						        <ul id="radioList" class="clearfix fleft">
 							        <li class="radio circle success"  v-for="(item,index) in tsfszd" v-on:click="select(index)"> 
-									   	<input type="radio" name="pushType" :value="item.code" id="pushType" required="true" > 
+									   	<input type="radio" name="pushType" :value="item.code" id="pushType" required="true" :checked="index==curentIndex"> 
 										<label id="tsfszd" name="tsfszd" for="pushType" v-bind:class="{active:index==curentIndex}"><i class="default" ></i>{{item.dataName}}</label>
 									</li>
 						        </ul>

@@ -25,7 +25,7 @@ var model = {
 		pushClassName:"",//实现类名
 		tableNamePre:"",//推送清单表前缀
 		customTaskTable:"",//客户群调度信息表
-		curentIndex:false,//radio选中
+		curentIndex:null,//radio选中
 	//	isChecked:false,
 	//	isActive:false,
 	//  isShow:false,
@@ -71,9 +71,9 @@ window.loc_onload = function() {
 				model.tableNamePre = data.data.tableNamePre;
 				model.customTaskTable = data.data.customTaskTable;
 				if(data.data.pushType ==1){
-					var b =document.getElementById("pushType");
-					$(b).prop("checked", true);
-					model.curentIndex =true;
+//					var b =document.getElementById("pushType");
+//					$(b).prop("checked", true);
+					model.curentIndex =0;
 					if(model.webserviceWsdl){
 						model.checked=true;
 					}else{
@@ -106,8 +106,8 @@ window.loc_onload = function() {
 					}
 				}
 				if(data.data.pushType ==2){
-					$("input[name='pushType']").prop("checked", true);
-					model.curentIndex =true;
+//					$("input[name='pushType']").prop("checked", true);
+					model.curentIndex =1;
 				}
 			}
 		})
@@ -117,6 +117,7 @@ window.loc_onload = function() {
 		data : model,
 		methods:{
 			select : function(index){
+				model.curentIndex=index;
     			if(index==0){
     				model.pushType=1;
     			}else{
