@@ -18,8 +18,11 @@ var auto_Login = (function (model){
         		autoLoginFun:function(callback){
         			var flag = false;
         			
-        			//获取spring的acrmUrl 配置
-        			var acrmUrl = auto_Login._util.getSpringConfig("acrm-url");
+        			//必须与OCRM同域获取spring的acrmUrl
+        			//var acrmUrl = auto_Login._util.getSpringConfig("acrm-url");
+        			//测试环境没有DNS 前后端先分开写 TODO
+        			var acrmUrl = "http://crm.chinapost.com:8442/acrm";
+        			
         			 $.ajax({
         				 url: acrmUrl+'/api/sso/userinfo',
         				 type: 'get',
@@ -28,7 +31,9 @@ var auto_Login = (function (model){
         			     },
      					 async: false,
         				 success: function(data){
-        					 flag = callback(data.cnpost.id);
+        					 if(data && data.cnpost && data.cnpost.id){
+        						 flag = callback(data.cnpost.id);
+        					 }
         				 }
         			 })
                 	return flag;
@@ -109,7 +114,6 @@ $(function(){
 	var hash = window.location.hash;
 	
 	if(hash){//存  #label/label_mgr 则走单点登录逻辑
-		
 		//获取spring的active配置
 		var springActive = auto_Login._util.getSpringConfig("spring.profiles.active");
 		if(springActive && springActive != ""){
