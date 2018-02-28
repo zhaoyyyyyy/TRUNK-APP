@@ -183,7 +183,7 @@ var  mainPage={
 									            .addClass( feedback.vertical )
 									            .addClass( feedback.horizontal )
 									            .appendTo( this );
-									        }
+									         }
 									      }
 									    });
 	
