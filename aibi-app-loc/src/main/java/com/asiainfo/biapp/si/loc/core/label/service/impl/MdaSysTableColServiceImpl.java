@@ -138,10 +138,12 @@ public class MdaSysTableColServiceImpl extends BaseServiceImpl<MdaSysTableColumn
         super.saveOrUpdate(mdaSysTableColumn);
         
         //修改标签与纵表列对应关系表
-        LabelVerticalColumnRel labelVerticalColumnRel = iLabelVerticalColumnRelService.queryLabelVerticalCol(mdaSysTableColumn.getColumnId(), mdaSysTableColumn.getLabelId());
-        labelVerticalColumnRel.setLabelTypeId(mdaSysTableColumn.getLabelTypeId());
-        labelVerticalColumnRel.setIsMustColumn(mdaSysTableColumn.getIsMustColumn());
-        iLabelVerticalColumnRelService.modifyLabelVerticalColumnRel(labelVerticalColumnRel);
+        if (mdaSysTableColumn.getLabelTypeId()!= null) {
+            LabelVerticalColumnRel labelVerticalColumnRel = iLabelVerticalColumnRelService.queryLabelVerticalCol(mdaSysTableColumn.getColumnId(), mdaSysTableColumn.getLabelId());
+            labelVerticalColumnRel.setLabelTypeId(mdaSysTableColumn.getLabelTypeId());
+            labelVerticalColumnRel.setIsMustColumn(mdaSysTableColumn.getIsMustColumn());
+            iLabelVerticalColumnRelService.modifyLabelVerticalColumnRel(labelVerticalColumnRel);
+        }  
     };
 
     @Override
