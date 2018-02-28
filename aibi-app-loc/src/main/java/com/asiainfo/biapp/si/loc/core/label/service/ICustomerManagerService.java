@@ -43,7 +43,7 @@ public interface ICustomerManagerService {
 	 * @author  tianxy3
 	 * @date 2018年2月26日
 	 */
-	public boolean createCustomerList(String customId,ExploreQueryParam customRunModel) throws BaseException;
+	public boolean createCustomerList(String customId,ExploreQueryParam model) throws BaseException;
 
 	
 	/**

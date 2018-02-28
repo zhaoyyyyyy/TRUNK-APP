@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.asiainfo.biapp.si.loc.base.exception.BaseException;
 import com.asiainfo.biapp.si.loc.base.utils.LogUtil;
-import com.asiainfo.biapp.si.loc.core.label.model.CustomRunModel;
+import com.asiainfo.biapp.si.loc.core.label.model.ExploreQueryParam;
 import com.asiainfo.biapp.si.loc.core.label.service.ICustomerManagerService;
 
 /**
@@ -41,9 +41,9 @@ import com.asiainfo.biapp.si.loc.core.label.service.ICustomerManagerService;
 @Scope("prototype")
 public class CustomerListCreaterThread extends Thread {
 
-	private String customGroupId;// 客户群id
+	private String customId;// 客户群id
 
-	private CustomRunModel customRunModel;
+	private ExploreQueryParam model;
 
 	@Autowired
 	private ICustomerManagerService customerManagerService;
@@ -56,18 +56,18 @@ public class CustomerListCreaterThread extends Thread {
 			LogUtil.error("InterruptedException", e);
 		}
 		try {
-			customerManagerService.createCustomerList(customGroupId, customRunModel);
+			customerManagerService.createCustomerList(customId, model);
 		} catch (BaseException e) {
 			LogUtil.error("生成客户群的清单异常", e);
 		}
 	}
-	
-	public void setCustomRunModel(CustomRunModel customRunModel) {
-		this.customRunModel = customRunModel;
-		this.customGroupId = customRunModel.getCustomGroupId();
-		if (this.customGroupId == null) {
-			throw new RuntimeException("customRunModel.customGroupId can not be null!" + customRunModel);
-		}
+
+	public void setCustomId(String customId) {
+		this.customId = customId;
+	}
+
+	public void setModel(ExploreQueryParam model) {
+		this.model = model;
 	}
 
 }

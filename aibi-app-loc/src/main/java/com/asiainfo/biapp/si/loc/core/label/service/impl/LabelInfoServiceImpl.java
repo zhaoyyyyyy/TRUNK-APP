@@ -7,7 +7,6 @@
 package com.asiainfo.biapp.si.loc.core.label.service.impl;
 
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 
 import javax.transaction.Transactional;
@@ -44,7 +43,7 @@ import com.asiainfo.biapp.si.loc.core.label.entity.LabelInfo;
 import com.asiainfo.biapp.si.loc.core.label.entity.LabelRule;
 import com.asiainfo.biapp.si.loc.core.label.entity.MdaSysTable;
 import com.asiainfo.biapp.si.loc.core.label.entity.MdaSysTableColumn;
-import com.asiainfo.biapp.si.loc.core.label.model.CustomRunModel;
+import com.asiainfo.biapp.si.loc.core.label.model.ExploreQueryParam;
 import com.asiainfo.biapp.si.loc.core.label.service.IApproveInfoService;
 import com.asiainfo.biapp.si.loc.core.label.service.ILabelCountRulesService;
 import com.asiainfo.biapp.si.loc.core.label.service.ILabelExtInfoService;
@@ -54,7 +53,6 @@ import com.asiainfo.biapp.si.loc.core.label.service.IMdaSysTableColService;
 import com.asiainfo.biapp.si.loc.core.label.service.IMdaSysTableService;
 import com.asiainfo.biapp.si.loc.core.label.vo.LabelInfoVo;
 import com.asiainfo.biapp.si.loc.core.label.vo.LabelRuleVo;
-import com.asiainfo.biapp.si.loc.core.label.vo.MdaSysTableColumnVo;
 
 /**
  * Title : LabelInfoServiceImpl
@@ -312,12 +310,9 @@ public class LabelInfoServiceImpl extends BaseServiceImpl<LabelInfo, String> imp
 		CustomerListCreaterThread creator = null;
 		try {
 			creator = (CustomerListCreaterThread) context.getBean("customerListCreaterThread");
-			CustomRunModel model = new CustomRunModel();
-			model.setCustomGroupId(customId);
-			model.setDataDate(customInfo.getDataDate());
-			model.setDayDate(labelExtInfo.getDayLabelDate());
-			model.setMonthDate(labelExtInfo.getMonthLabelDate());
-			creator.setCustomRunModel(model);
+			ExploreQueryParam model=new ExploreQueryParam(customInfo.getDataDate(), labelExtInfo.getMonthLabelDate(), labelExtInfo.getDayLabelDate());
+			creator.setModel(model);
+			creator.setCustomId(customId);
 			ThreadPool.getInstance().execute(creator, false);
 		} catch (Exception e) {
 			LogUtil.error("线程池异常", e);
