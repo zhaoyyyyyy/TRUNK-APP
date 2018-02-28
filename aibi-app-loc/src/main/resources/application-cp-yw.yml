@@ -2,6 +2,8 @@ jauth-url:
   http://127.0.0.1:8440/jauth
 acrm-url:
   http://127.0.0.1:8442/acrm
+loadLevel:
+  1
 spring:
   datasource:
     driver-class-name: com.mysql.jdbc.Driver

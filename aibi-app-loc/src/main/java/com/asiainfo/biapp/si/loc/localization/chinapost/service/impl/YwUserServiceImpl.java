@@ -60,6 +60,9 @@ public class YwUserServiceImpl extends DevUserServiceImpl implements IUserServic
 	@Value("${acrm-url}")  
     private String acrmUrl; 
 	
+	@Value("${loadLevel}")
+	private Integer loadLevel;
+	
 	@Autowired
     private IOrganizationService organizationService; 
 	
@@ -148,21 +151,21 @@ public class YwUserServiceImpl extends DevUserServiceImpl implements IUserServic
 			addOrgChildren(organizationYwx.getChildren(), organizationSetYwx);
 			
 			Set<Organization> organizationPrivaliege = new HashSet<Organization>();
-			organizationPrivaliege.add(organizationXzqh);
+			if(!organizationXzqh.getOrgCode().equals("1")){
+			    organizationPrivaliege.add(organizationXzqh);
+			}
 			organizationPrivaliege.add(organizationYwx);
 			
-//			organizationPrivaliege.add(organizationXzqh);
-//			organizationPrivaliege.add(organizationYwx);
-//			
-//			organizationPrivaliege.addAll(organizationSetXzqh);
-//			organizationPrivaliege.addAll(organizationSetYwx);
-			
+			//行政区划
 			for(Organization organization : organizationSetXzqh){
 			    if(organization.getOrgCode().equals(districtId)){
-			        organizationPrivaliege.add(organization);
-			        addOrgChildren(organization.getChildren(), organizationPrivaliege);
+			        if(!organization.getOrgCode().equals("1")){
+			            organizationPrivaliege.add(organization);
+		            }
+			        addXZQHOrgChildren(organization.getChildren(),organizationPrivaliege);
 			    }
 			}
+			//业务线
 			for(Organization organization : organizationSetYwx){
 			    if(organization.getOrgCode().equals(orgId)){
                     organizationPrivaliege.add(organization);
@@ -248,6 +251,18 @@ public class YwUserServiceImpl extends DevUserServiceImpl implements IUserServic
 	    }
 	    return organizationSet;
 	}
+	
+	
+	private Set<Organization> addXZQHOrgChildren(Set<Organization> children,Set<Organization> organizationSet){
+	    loadLevel--;
+	    organizationSet.addAll(children);
+	    if(loadLevel>0){
+	        for(Organization o : children){
+	            addOrgChildren(o.getChildren(),organizationSet);
+	        }
+	    }
+        return organizationSet;
+    }
 
 	
 	
