@@ -131,7 +131,7 @@ public class LabelInfoController extends BaseController {
 			labelInfo.setOrgId(orgId);
 			labelInfo.setBusiLegend(busiLegend);
 			labelInfo.setConfigId(configId);
-			labelInfo.setDataDate(DateUtil.date2String(new Date(), DateUtil.FORMAT_YYYYMMDD));
+			labelInfo.setDataDate(dataDate);
 			// 拓展信息
 			LabelExtInfo labelExtInfo = new LabelExtInfo();
 	        labelExtInfo.setTacticsId(tacticsId);
@@ -142,9 +142,15 @@ public class LabelInfoController extends BaseController {
 			
 			iLabelInfoService.saveCustomerLabelInfo(labelExtInfo, labelInfo, labelRules);
 		} catch (Exception e) {
-			e.printStackTrace();
 			LogUtil.error("保存客户群型标签异常", e);
 			return webResult.fail("保存客户群型标签异常");
+		}finally {
+			//清除缓存
+			try {
+				setSessionAttribute(LabelRuleContants.SHOP_CART_RULE, "");
+			} catch (BaseException e) {
+				LogUtil.error("清除购物车的对象异常", e);
+			}
 		}
 		return webResult.success("保存客户群型标签信息成功", SUCCESS);
 	}

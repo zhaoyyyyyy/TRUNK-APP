@@ -142,9 +142,12 @@ var labelInfoModel = (function (model){
     		 }
     		 if($('#labelMonth').val()){
     			 dataModel.labelInfo.monthLabelDate = $('#labelMonth').val().replace(/-/g,"");
-    			 dataModel.labelInfo.dataDate = $('#labelMonth').val().replace(/-/g,"");
     		 }
-			 
+    		 if(data.updateCycle =1){
+    			 dataModel.labelInfo.dataDate = dataModel.newDayDate.replace(/-/g,""); 
+    		 }else{
+    			 dataModel.labelInfo.dataDate = dataModel.newMonthDate.replace(/-/g,""); 
+    		 }
     		 dataModel._submitFlag = true;
     		 $.commAjax({
     			  url: url,
