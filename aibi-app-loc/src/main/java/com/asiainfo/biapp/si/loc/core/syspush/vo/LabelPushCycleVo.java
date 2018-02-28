@@ -32,4 +32,17 @@ public class LabelPushCycleVo extends LabelPushCycle{
 
     private static final long serialVersionUID = 1L;
 
+    /** 选择的平台ids */
+    private String selSysIds;
+
+    
+    public String getSelSysIds() {
+        return selSysIds;
+    }
+
+    public void setSelSysIds(String selSysIds) {
+        this.selSysIds = selSysIds;
+    }
+    
+    
 }

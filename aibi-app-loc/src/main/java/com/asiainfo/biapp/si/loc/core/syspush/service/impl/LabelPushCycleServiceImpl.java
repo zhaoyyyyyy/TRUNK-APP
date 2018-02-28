@@ -9,6 +9,7 @@ package com.asiainfo.biapp.si.loc.core.syspush.service.impl;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Executors;
 
 import javax.transaction.Transactional;
 
@@ -20,6 +21,7 @@ import com.asiainfo.biapp.si.loc.base.common.LabelInfoContants;
 import com.asiainfo.biapp.si.loc.base.dao.BaseDao;
 import com.asiainfo.biapp.si.loc.base.exception.BaseException;
 import com.asiainfo.biapp.si.loc.base.exception.ParamRequiredException;
+import com.asiainfo.biapp.si.loc.base.extend.SpringContextHolder;
 import com.asiainfo.biapp.si.loc.base.page.Page;
 import com.asiainfo.biapp.si.loc.base.service.impl.BaseServiceImpl;
 import com.asiainfo.biapp.si.loc.base.utils.LogUtil;
@@ -35,6 +37,7 @@ import com.asiainfo.biapp.si.loc.core.syspush.entity.LabelAttrRel;
 import com.asiainfo.biapp.si.loc.core.syspush.entity.LabelPushCycle;
 import com.asiainfo.biapp.si.loc.core.syspush.service.ILabelAttrRelService;
 import com.asiainfo.biapp.si.loc.core.syspush.service.ILabelPushCycleService;
+import com.asiainfo.biapp.si.loc.core.syspush.task.ICustomerPublishThread;
 import com.asiainfo.biapp.si.loc.core.syspush.vo.CustomGroupListVo;
 import com.asiainfo.biapp.si.loc.core.syspush.vo.LabelPushCycleVo;
 
@@ -111,6 +114,14 @@ public class LabelPushCycleServiceImpl extends BaseServiceImpl<LabelPushCycle, S
                 }
             }
         super.saveOrUpdate(labelPushCycle);
+
+        //推送
+        ICustomerPublishThread curCustomerPublishThread = (ICustomerPublishThread) SpringContextHolder.getBean("customerPublishDefaultThread");
+        List<LabelPushCycle> labelPushCycles = new ArrayList<>();
+        labelPushCycles.add(labelPushCycle);
+        curCustomerPublishThread.initParamter(labelPushCycles, false, new ArrayList<Map<String, Object>>());
+        Executors.newFixedThreadPool(10).execute(curCustomerPublishThread);
+    
     }
 
     public void modifyLabelPushCycle(LabelPushCycle labelPushCycle) throws BaseException {
@@ -124,6 +135,9 @@ public class LabelPushCycleServiceImpl extends BaseServiceImpl<LabelPushCycle, S
         super.delete(recordId);
     }
     
+    public Integer deleteLabelPushCycle(LabelPushCycle labelPushCycle) throws BaseException{
+        return this.iLabelPushCycleDao.deleteByLabelPushCycle(labelPushCycle);
+    }
 
     public Page<CustomGroupListVo> findGroupList(Page<CustomGroupListVo> page, LabelInfoVo customGroup) throws BaseException {
         String sql = this.getGroupListSql(customGroup);

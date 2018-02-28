@@ -6,7 +6,10 @@
 
 package com.asiainfo.biapp.si.loc.core.syspush.vo;
 
+import com.asiainfo.biapp.si.loc.core.label.vo.LabelInfoVo;
 import com.asiainfo.biapp.si.loc.core.syspush.entity.LabelPushReq;
+
+import io.swagger.annotations.ApiParam;
 
 /**
  * Title : LabelPushReqVo
@@ -31,5 +34,26 @@ import com.asiainfo.biapp.si.loc.core.syspush.entity.LabelPushReq;
 public class LabelPushReqVo extends LabelPushReq{
 
     private static final long serialVersionUID = 1L;
+    
+    /*
+     * 逗号分隔的选中的对端系统ID
+     */
+    public static final String REQID_PREFIX = "COC_";
+    
+    /*
+     * 标签信息
+     */
+    @ApiParam(value="标签信息")
+    private LabelInfoVo customInfoVo;
+
+    
+    
+    public LabelInfoVo getCustomInfoVo() {
+        return customInfoVo;
+    }
+    
+    public void setCustomInfoVo(LabelInfoVo customInfoVo) {
+        this.customInfoVo = customInfoVo;
+    }
 
 }

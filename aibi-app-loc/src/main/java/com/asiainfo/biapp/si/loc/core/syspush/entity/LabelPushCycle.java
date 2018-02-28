@@ -18,6 +18,7 @@ import javax.persistence.Transient;
 import org.hibernate.annotations.GenericGenerator;
 
 import com.asiainfo.biapp.si.loc.base.entity.BaseEntity;
+import com.asiainfo.biapp.si.loc.core.syspush.vo.LabelPushCycleVo;
 
 import io.swagger.annotations.ApiParam;
 
@@ -111,10 +112,33 @@ public class LabelPushCycle extends BaseEntity{
      */
     @Transient
     private String AttrbuteId;
+
     
-    
-    
-    
+    /**
+     * no field constructor
+     */
+    public LabelPushCycle() {
+        super();
+    }
+    /**
+     * main field constructor
+     */
+    public LabelPushCycle(String customGroupId, Integer status) {
+        super();
+        this.customGroupId = customGroupId;
+        this.status = status;
+    }
+    public LabelPushCycle(LabelPushCycleVo labelPushCycleVo) {
+        this.recordId = labelPushCycleVo.getRecordId();
+        this.customGroupId = labelPushCycleVo.getCustomGroupId();
+        this.sysId = labelPushCycleVo.getSysId();
+        this.keyType = labelPushCycleVo.getKeyType();
+        this.pushCycle = labelPushCycleVo.getPushCycle();
+        this.pushUserIds = labelPushCycleVo.getPushUserIds();
+        this.modifyTime = labelPushCycleVo.getModifyTime();
+        this.status = labelPushCycleVo.getStatus();
+    }
+
     public String getAttrbuteId() {
         return AttrbuteId;
     }

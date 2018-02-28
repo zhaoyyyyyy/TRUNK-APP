@@ -13,8 +13,11 @@ import java.util.Map;
 import org.springframework.stereotype.Repository;
 
 import com.asiainfo.biapp.si.loc.base.dao.BaseDaoImpl;
+import com.asiainfo.biapp.si.loc.base.exception.BaseException;
 import com.asiainfo.biapp.si.loc.base.page.Page;
+import com.asiainfo.biapp.si.loc.base.utils.LogUtil;
 import com.asiainfo.biapp.si.loc.base.utils.StringUtil;
+import com.asiainfo.biapp.si.loc.core.syspush.common.constant.ServiceConstants;
 import com.asiainfo.biapp.si.loc.core.syspush.dao.ILabelPushCycleDao;
 import com.asiainfo.biapp.si.loc.core.syspush.entity.LabelPushCycle;
 import com.asiainfo.biapp.si.loc.core.syspush.vo.LabelPushCycleVo;
@@ -108,4 +111,15 @@ public class LabelPushCycleDaoImpl extends BaseDaoImpl<LabelPushCycle, String> i
         return reMap;
     }
 
+    
+    public Integer deleteByLabelPushCycle(LabelPushCycle labelPushCycle) throws BaseException{
+        String sql = new StringBuilder("UPDATE LabelPushCycle SET status = ").append(ServiceConstants.LabelPushCycle.STATUS_DEL)
+                .append(" WHERE customGroupId=? AND pushCycle=?").toString();
+        
+        LogUtil.debug("条件逻辑删除LabelPushCycle sql:"+sql);
+        
+        return this.excuteHql(sql, labelPushCycle.getCustomGroupId(),labelPushCycle.getPushCycle());
+    }
+    
+    
 }

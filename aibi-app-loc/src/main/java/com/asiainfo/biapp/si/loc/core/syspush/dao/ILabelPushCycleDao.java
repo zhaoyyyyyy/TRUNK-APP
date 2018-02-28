@@ -9,6 +9,7 @@ package com.asiainfo.biapp.si.loc.core.syspush.dao;
 import java.util.List;
 
 import com.asiainfo.biapp.si.loc.base.dao.BaseDao;
+import com.asiainfo.biapp.si.loc.base.exception.BaseException;
 import com.asiainfo.biapp.si.loc.base.page.Page;
 import com.asiainfo.biapp.si.loc.core.syspush.entity.LabelPushCycle;
 import com.asiainfo.biapp.si.loc.core.syspush.vo.LabelPushCycleVo;
@@ -51,5 +52,13 @@ public interface ILabelPushCycleDao extends BaseDao<LabelPushCycle, String>{
      * @return
      */
     public List<LabelPushCycle> selectLabelPushCycleList(LabelPushCycleVo labelPushCycleVo);
+    
+    /**
+     * Description: 条件逻辑删除LabelPushCycle
+     * 
+     * @param labelPushCycle 删除条件
+     */
+    public Integer deleteByLabelPushCycle(LabelPushCycle labelPushCycle) throws BaseException;
+    
 
 }

@@ -153,9 +153,10 @@
 		<dependency>
 			<groupId>jdk.tools</groupId>
 			<artifactId>jdk.tools</artifactId>
-			<version>1.6</version>
+			<version>1.8</version>
 			<scope>system</scope>
-			<systemPath>${JAVA_HOME}/lib/tools.jar</systemPath>
+			<systemPath>/Library/Java/JavaVirtualMachines/jdk1.8.0_112.jdk/Contents/Home/lib/tools.jar</systemPath>
+<!-- 			<systemPath>${JAVA_HOME}/lib/tools.jar</systemPath> -->
 		</dependency>
 		<dependency>
 			<groupId>org.scala-lang</groupId>
@@ -164,6 +165,28 @@
 		</dependency>
 		<!-- 大数据结束 -->		
 		
+		<!-- 读写xml -->
+		<!-- https://mvnrepository.com/artifact/commons-betwixt/commons-betwixt -->
+		<dependency>
+		    <groupId>commons-betwixt</groupId>
+		    <artifactId>commons-betwixt</artifactId>
+		    <version>0.8</version>
+		</dependency>
+		
+		<!-- springboot cxf start -->
+        <dependency>
+            <groupId>org.apache.cxf</groupId>
+            <artifactId>cxf-spring-boot-starter-jaxws</artifactId>
+            <version>3.1.12</version>
+        </dependency>
+		<!-- springboot cxf end -->
+		  
+        <!-- jsch -->  
+        <dependency>
+            <groupId>com.jcraft</groupId>  
+            <artifactId>jsch</artifactId>  
+            <version>0.1.52</version>  
+        </dependency>  
 
 	</dependencies>
 

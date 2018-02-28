@@ -21,7 +21,7 @@ import com.asiainfo.biapp.si.loc.base.entity.BaseEntity;
 import io.swagger.annotations.ApiParam;
 
 /**
- * Title : LabelAttrRel
+ * Title : LabelAttrRel-客户群标签与属性对应关系
  * <p/>
  * Description : 
  * <p/>

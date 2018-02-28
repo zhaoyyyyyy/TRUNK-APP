@@ -8,10 +8,21 @@ package com.asiainfo.biapp.si.loc.base.utils;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.nio.charset.Charset;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.tools.zip.ZipEntry;
+import org.apache.tools.zip.ZipOutputStream;
 
 import com.asiainfo.biapp.si.loc.cache.CocCacheProxy;
 
@@ -131,5 +142,252 @@ public class FileUtil {
         LogUtil.info("getFileCharset cost:" + (System.currentTimeMillis() - start));
         return charset;
     }
+    
 
+    /**
+     * 创建文件目录
+     * @param fileName 文件名（全路径）或目录
+     * @throws IOException 
+     */
+    public static File createLocDir(String fileName) throws Exception {
+        File f = new File(fileName);
+        File dir = null;
+        if (f != null && !f.exists()) {
+            if (f.isDirectory()) {//判断是否是文件
+                dir = f;
+            } else {
+                dir = f.getParentFile();
+            }
+            if (dir != null && !dir.exists()) {
+                boolean result = dir.mkdirs();
+                if (!result) {
+                    LogUtil.error("can not mkdir [" + dir + "] ,please check OS User'S privilege!");
+                    throw new Exception("can not mkdir [" + dir + "] ,please check OS User'S privilege!");
+                }
+            }
+        } else {
+            dir = f.isFile() ? f.getParentFile() : f;
+        }
+        return dir;
+    }
+
+    /**
+     * 创建文件或目录
+     * @param fileName 文件名(绝对路径)或目录
+     * @param content
+     * @throws Exception 
+     */
+    public static void createFile(String fileName, String content) throws Exception {
+        if (StringUtil.isEmpty(fileName)) {
+            throw new Exception("file name is null!");
+        }
+        File f = new File(fileName);
+        if (f.exists()) {
+            throw new Exception("The file " + fileName + " has exists!");
+        }
+        createLocDir(fileName);
+        if (f.getName().contains(".")) {
+            if (StringUtil.isEmpty(content)) {
+                f.createNewFile();//仅创建一个空文件
+            } else {//向文件中写入内容
+                BufferedWriter bw = new BufferedWriter(new FileWriter(f));
+                bw.append(content.replace("\\n", System.getProperty("line.separator")));
+                bw.flush();
+                bw.close();
+            }
+        }
+    }
+
+    /**
+     * 将输入的源文件目录打成zip包:支持目录和单个文件压缩，不支持多级目录
+     * @param srcDir 源文件或目录
+     * @param destFile 目标zip文件名称，全路径
+     * @param password 压缩文件密码
+     * @param encode 文件名编码
+     * @throws Exception
+     */
+    public static void zipFileByPassword(String srcFile, String destFile, String password, String encode)
+            throws Exception {
+        File file = null;
+        File destZipFile = null;
+        File[] files = null;
+        if (StringUtil.isEmpty(srcFile) || StringUtil.isEmpty(destFile)) {
+            throw new Exception("source file's directory or dest zip file is null!");
+        }
+        if (StringUtil.isEmpty(password)) {
+            throw new Exception("password is null!");
+        }
+        file = new File(srcFile);
+        destZipFile = new File(destFile);
+        if (!file.exists()) {
+            throw new Exception("source file[" + srcFile + "] not exists!");
+        }
+        //判断是否是目录
+        if (!file.isDirectory()) {
+            files = new File[] { file };
+        } else {
+            files = getFileList(srcFile);
+        }
+        if (destZipFile.isDirectory()) {
+            throw new Exception("dest file[" + destFile + "] must be file,but directory!");
+        }
+        //创建目录
+        try {
+            createLocDir(destFile);
+            byte[] zipByte = ZipUtil.getEncryptZipByte(files, password, encode);
+            writeByteFile(zipByte, new File(destFile));
+        } catch (Exception e) {
+            if (destZipFile != null && destZipFile.exists()) {
+                destZipFile.delete();
+            }
+            LogUtil.error("zipFileByPassword error:", e);
+        }
+    }
+
+    /**
+     * 将输入的源文件目录打成zip包：支持单个文件和目录压缩，不支持多级目录
+     * @param srcDir 源文件或目录
+     * @param destFile 目标zip文件名称，全路径
+     * @throws Exception
+     */
+    public static void zipFileUnPassword(String srcFile, String destFile, String encode) throws Exception {
+        File file = null;
+        File destZipFile = null;
+        if (StringUtil.isEmpty(srcFile) || StringUtil.isEmpty(destFile)) {
+            LogUtil.error("source file or dest zip file is null!");
+            throw new RuntimeException("source file or dest zip file is null!");
+        }
+        file = new File(srcFile);
+        destZipFile = new File(destFile);
+        if (!file.exists()) {
+            LogUtil.error("source file[" + srcFile + "] not exists!");
+            throw new RuntimeException("source file[" + srcFile + "] not exists!");
+        }
+        if (destZipFile.isDirectory()) {
+            LogUtil.error("dest file[" + destFile + "] must be file,but directory!");
+            throw new RuntimeException("dest file[" + destFile + "] must be file,but directory!");
+        }
+        long t1 = System.currentTimeMillis();
+        //创建目录
+        createLocDir(destFile);
+        OutputStream os = null;
+        ZipOutputStream zipOut = null;
+        ZipEntry entry = null;
+        int bufferSize = 2048;
+        InputStream in = null;
+        try {
+            os = new BufferedOutputStream(new FileOutputStream(destZipFile), bufferSize);
+            zipOut = new ZipOutputStream(os);
+            zipOut.setEncoding(encode);
+            File[] files = null;
+            //获取待压缩的文件
+            if (file.isFile()) {//文件
+                files = new File[] { file };
+            } else {//目录
+                files = getFileList(srcFile);
+            }
+            //遍历文件集合压缩
+            for (File f : files) {
+                entry = new ZipEntry(f.getName());
+                zipOut.putNextEntry(entry);
+                //byte data[] = readFileByte(f);一次读取性能较慢
+                in = new BufferedInputStream(new FileInputStream(f), bufferSize);
+                byte data[] = new byte[bufferSize];
+                int count;
+                while ((count = in.read(data, 0, bufferSize)) != -1) {
+                    zipOut.write(data, 0, count);
+                }
+                zipOut.closeEntry();
+                in.close();
+            }
+            zipOut.flush();
+        } catch (Exception e) {
+            if (destZipFile != null && destZipFile.exists()) {
+                destZipFile.delete();
+            }
+            LogUtil.error("zipFileUnPassword error:", e);
+        } finally {
+            LogUtil.debug("The cost of compressing files :  " + (System.currentTimeMillis() - t1) + "ms");
+            zipOut.close();
+            os.close();
+        }
+    }
+
+    /**
+     * 将文件压缩成zip包[如果password为空则不进行加密压缩，否则进行加密压缩]
+     * @param srcFile
+     * @param destFile
+     * @param password
+     * @param encode
+     * @return
+     * @throws Exception
+     */
+    public static boolean zipFile(String srcFile, String destFile, String password, String encode) {
+        boolean flag = true;
+        try {
+            if (StringUtil.isEmpty(password)) {
+                zipFileUnPassword(srcFile, destFile, encode);
+            } else {
+                zipFileByPassword(srcFile, destFile, password, encode);
+            }
+        } catch (Exception e) {
+            flag = false;
+            LogUtil.error("zipFile[srcFile=" + srcFile + ";destFile=" + destFile + ";password=" + password + "] error: ", e);
+        }
+        return flag;
+    }
+
+
+    /**
+     * 获取目录的文件清单[仅文件]
+     * @param fileDir
+     * @return
+     */
+    public static File[] getFileList(String fileDir) throws Exception {
+        File dir = new File(fileDir);
+        List<File> files = new ArrayList<File>();
+        if (dir.isDirectory()) {
+            for (File f : dir.listFiles()) {
+                if (f.isFile() && !f.isHidden()) {
+                    files.add(f);
+                }
+            }
+        } else {
+            LogUtil.warn(fileDir + " is not dir!");
+        }
+        return files.toArray(new File[] {});
+    }
+
+
+    /**
+     * 将字节数组写入文件
+     * @param bytes
+     * @param file
+     * @return
+     */
+    public static boolean writeByteFile(byte[] bytes, File file) throws Exception {
+        FileOutputStream fos = null;
+        boolean flag = true;
+        try {
+            fos = new FileOutputStream(file);
+            fos.write(bytes);
+        } catch (FileNotFoundException e) {
+            flag = false;
+            LogUtil.error("writeByteFile error:", e);
+        } catch (IOException e) {
+            flag = false;
+            LogUtil.error("writeByteFile error:", e);
+        } finally {
+            if (fos != null) {
+                try {
+                    fos.close();
+                } catch (IOException e) {
+                    LogUtil.error(e);
+                }
+            }
+        }
+        return flag;
+    }
+    
+    
 }
