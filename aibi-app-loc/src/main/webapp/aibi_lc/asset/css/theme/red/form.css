@@ -588,13 +588,13 @@ radio样式
 	width:100px;
 }
 .ui-tooltip, .arrow:after {
-    background-color: #1F2D3D;
+    background: #1F2D3D;
 }
 .ui-tooltip {
     padding: 3px 8px;
     color: #fff;
     text-align: center;
-    background-color: #1F2D3D;
+    background: #1F2D3D;
     border-radius: 4px;
     border:none!important;
     box-shadow: none;
