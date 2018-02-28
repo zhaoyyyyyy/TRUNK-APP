@@ -3,7 +3,8 @@ var model = {
 		dimComment:"",
 		codeColType : "",
 		dimCodeCol : "",
-		dimValueCol:""	
+		dimValueCol:"",
+		dimId:""
 }
 window.loc_onload = function() {
 	var wd = frameElement.lhgDG;
