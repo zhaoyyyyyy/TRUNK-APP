@@ -24,6 +24,7 @@ import com.asiainfo.biapp.si.loc.base.BaseConstants;
 
 import com.asiainfo.biapp.si.loc.base.exception.DbConnectException;
 import com.asiainfo.biapp.si.loc.base.exception.SqlRunException;
+import com.asiainfo.biapp.si.loc.base.utils.LogUtil;
 import com.asiainfo.biapp.si.loc.bd.common.util.JDBCUtil;
 import com.asiainfo.biapp.si.loc.cache.CocCacheProxy;
 
@@ -103,9 +104,11 @@ public class BaseBackDaoImpl {
 //            conn = dataSource.getConnection();
             conn = JDBCUtil.getInstance().getBackConnection();
         } catch (SQLTimeoutException e) {
-            throw new DbConnectException("后台库连接异常");
+        	LogUtil.error("后台库连接超时异常", e);
+            throw new DbConnectException("后台库连接超时异常");
         } catch (SQLException e) {
-            throw new SqlRunException("sql执行异常");
+        	LogUtil.error("获取数据库连接异常", e);
+            throw new SqlRunException("获取数据库连接异常");
         }
         
         return conn;

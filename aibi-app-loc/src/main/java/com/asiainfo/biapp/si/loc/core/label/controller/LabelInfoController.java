@@ -131,13 +131,7 @@ public class LabelInfoController extends BaseController {
 			labelInfo.setOrgId(orgId);
 			labelInfo.setBusiLegend(busiLegend);
 			labelInfo.setConfigId(configId);
-			if (LabelInfoContants.CUSTOM_CYCLE_TYPE_D == updateCycle) {
-				labelInfo.setDataDate(dayLabelDate);
-			} else if (LabelInfoContants.CUSTOM_CYCLE_TYPE_D == updateCycle) {
-				labelInfo.setDataDate(monthLabelDate);
-			} else if (LabelInfoContants.CUSTOM_CYCLE_TYPE_ONE == updateCycle) {
-				labelInfo.setDataDate(DateUtil.date2String(new Date(), DateUtil.FORMAT_YYYYMMDD));
-			}
+			labelInfo.setDataDate(DateUtil.date2String(new Date(), DateUtil.FORMAT_YYYYMMDD));
 			// 拓展信息
 			LabelExtInfo labelExtInfo = new LabelExtInfo();
 	        labelExtInfo.setTacticsId(tacticsId);
