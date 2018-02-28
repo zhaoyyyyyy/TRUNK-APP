@@ -185,28 +185,5 @@ window.loc_onload = function() {
 	wd.addBtn("cancel", "取消", function() {
 		wd.cancel();
 	});
-//	$("input[name='pushType']").on("click",function(){	//选择推送方式来隐藏或者显示下面内容
-//		var rdoValue = $("#pushType").is(":checked") ? "文件推送":"表推送";
-//		if(rdoValue == "文件推送"){
-//			model.showPushType="文件推送";			
-//		}else{
-//			model.showPushType="表推送";
-//		}
-//	})
 }
-//function isShowDesKey(obj) {
-//	if (obj.checked) {
-//		$("#isNeedDes").val("1");
-//		model.showDesKey = true;
-//	}else{
-//		model.showDesKey = false;
-//	}
-//}
-//function isShowCompressType(obj) {
-//	if (obj.checked) {
-//		$("#compressType").val("1");
-//		model.showCompressType = true;
-//	}else{
-//		model.showCompressType = false;
-//	}
-//}
+

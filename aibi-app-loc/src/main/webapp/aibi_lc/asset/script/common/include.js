@@ -172,6 +172,21 @@ var  mainPage={
     	     						loc_common_init();
     	     						if(window.loc_onload){
     	     							window.loc_onload();
+    	     							$("span[title]").tooltip({
+									    	position: {
+									        my: "center bottom-20",
+									        at: "center top+10",
+									        using: function( position, feedback ) {
+									          $( this ).css( position );
+									          $( "<div>" )
+									            .addClass( "arrow" )
+									            .addClass( feedback.vertical )
+									            .addClass( feedback.horizontal )
+									            .appendTo( this );
+									        }
+									      }
+									    });
+	
     	     						}
     	     					}
     	     			});
