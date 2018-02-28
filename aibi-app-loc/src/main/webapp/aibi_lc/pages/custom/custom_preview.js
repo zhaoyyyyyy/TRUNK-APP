@@ -5,6 +5,7 @@ window.loc_onload = function() {
 	                     {name : 'id',index : 'id',width : 60,align : "center"},
 	                   ],
 	      });
+	$("#mainGrid").jqGrid('setLabel',0, '序号');
 	  var mydata = [ 
 	                 {id : "123456789"}, 
 	                 {id : "223456789"}, 
