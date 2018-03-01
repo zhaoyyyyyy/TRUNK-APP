@@ -602,7 +602,7 @@
 	width:12px;
 	height:12px;
 	border-radius:50%;
-	background: #FFBF00;
+	background: #70b5e6;
 	color:#fff;
 	text-align:center;
 	line-height:12px;
@@ -611,7 +611,7 @@
 	margin:14px 8px 0 0;
 }
 .ui-calc-content > .ui-conditionCT > .ui-conditionCT-h4 > b:hover{
-	background:#fcd666;
+	background:#108EE9;
 }
 .ui-conditionBox{
 	position:absolute;
