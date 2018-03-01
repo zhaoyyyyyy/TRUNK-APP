@@ -36,13 +36,12 @@ window.loc_onload = function() {
 			model.applySuggest = data.data.applySuggest;
 			model.labelTypeId = $.getCodeDesc("BQLXZD",data.data.labelTypeId);
 			model.updateCycle = $.getCodeDesc("GXZQZD",data.data.updateCycle);
-			var labelId = data.data.labelId;
 			if(model.labelTypeId!="复合型"){
 				$.commAjax({
 					ansyc : false,
 					url : $.ctx + '/api/label/mdaSysTableCol/queryList',
 					postData : {
-						"labelId" : labelId
+						"labelId" : model.labelId
 					},
 					onSuccess : function(data2){
 						var list = data2.data;
