@@ -33,6 +33,26 @@ var calculateCenter = (function (model){
 		return classStr ;
 	}
 	/**
+	 * 格式化规则精确值日期
+	 */
+	model.formatDateExactValue  = function(item){
+		var valueStr = "";
+		if(item.exactValue){
+			var valueStrArr = item.exactValue.split(',');
+			if(valueStrArr[0] && valueStrArr[0] != -1){
+				valueStr = valueStrArr[0] + "年" ;
+			}
+			if(valueStrArr[1] && valueStrArr[1] != -1){
+				valueStr += valueStrArr[1] + "月" ;
+			}
+			if(valueStrArr[2] && valueStrArr[2] != -1){
+				valueStr += valueStrArr[2] + "日" ;
+			}
+		}
+		
+		return valueStr ;
+	}
+	/**
      * @description 标签添加缓存，购物车动画效果===true ,组装rule
      * @param  
      * @return  

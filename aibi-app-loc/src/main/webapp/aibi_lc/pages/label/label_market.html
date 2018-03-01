@@ -290,7 +290,7 @@
 							</div>
 							<div class="clearfix" v-if="item.queryWay == 2">
 								精确值：
-								<span v-if="item.exactValue !=''" v-text="item.exactValue"></span>
+								<span v-if="item.exactValue !=''" v-text="calculateCenter.formatDateExactValue(item)"></span>
 							</div>
 							<i class="ui-nothing-icon" v-if="item.queryWay == null "><em></em>请点击设置</i>
 						</div>

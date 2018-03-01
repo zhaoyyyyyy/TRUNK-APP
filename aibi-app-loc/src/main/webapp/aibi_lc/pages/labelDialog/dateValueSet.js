@@ -205,6 +205,7 @@ var dateRule = (function (model){
 			var leftZoneSign="";
 			var rightZoneSign="";
 			var isNeedOffset = 0;
+			var exactValueDate="";
 			
 			if(ruleDataModel.rule.queryWay == "1"){
 				var isNeedOffsetVal = ruleDataModel.dynamicUpdate;
@@ -240,8 +241,22 @@ var dateRule = (function (model){
 				var exactValueDateYear = $.trim(ruleDataModel.exactValueDateYear);
 				var exactValueDateMonth = $.trim(ruleDataModel.exactValueDateMonth);
 				var exactValueDateDay = $.trim(ruleDataModel.exactValueDateDay);
-				ruleDataModel.rule.exactValue = ruleDataModel.exactValueDateYear+","+ruleDataModel.exactValueDateMonth
-				+","+ruleDataModel.exactValueDateDay;
+				if(exactValueDateYear && exactValueDateYear !=""){
+					exactValueDate=exactValueDateYear;
+				}else{
+					exactValueDate="-1";
+				}
+				if(exactValueDateMonth && exactValueDateMonth !=""){
+					exactValueDate += ","+exactValueDateMonth;
+				}else{
+					exactValueDate += ",-1";
+				}
+				if(exactValueDateDay && exactValueDateDay !=""){
+					exactValueDate += ","+exactValueDateDay;
+				}else{
+					exactValueDate += ",-1";
+				}
+				ruleDataModel.rule.exactValue = exactValueDate;
 			}
 			var wd = frameElement.lhgDG;
 			//提交变量
