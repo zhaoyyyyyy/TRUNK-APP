@@ -264,6 +264,17 @@ jQuery.extend({
 		var alertDG;
 		var id = getDgId('message');
 		
+		
+		var setTopWindow = $.hasTopWin();
+		
+		var dg = frameElement;
+		if (setTopWindow  && parent.frameElement != null && frameElement.lhgDG == undefined) {
+			dg = parent.frameElement.lhgDG;
+		} else {
+			dg = frameElement ? frameElement.lhgDG : null;
+		}
+		
+		
 		// 如果没有content、width和height参数
 		if (typeof(content) == 'function') {
 			callback = content;

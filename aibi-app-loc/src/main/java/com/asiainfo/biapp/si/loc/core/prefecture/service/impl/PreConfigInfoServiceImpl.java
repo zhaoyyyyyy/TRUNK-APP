@@ -73,6 +73,9 @@ public class PreConfigInfoServiceImpl extends BaseServiceImpl<PreConfigInfo, Str
 
     public Page<PreConfigInfo> selectPreConfigInfoPageList(Page<PreConfigInfo> page, PreConfigInfoVo preConfigInfoVo,User user)
             throws BaseException {
+        if(user.getOrgPrivaliege() == null ||( user.getOrgPrivaliege() != null && user.getOrgPrivaliege().size() == 0)){
+            throw new UserAuthException("请给当前用户赋予专区组织权限。");
+        }
         return iPreConfigInfoDao.selectPreConfigInfoPageList(page, preConfigInfoVo,user);
     }
 

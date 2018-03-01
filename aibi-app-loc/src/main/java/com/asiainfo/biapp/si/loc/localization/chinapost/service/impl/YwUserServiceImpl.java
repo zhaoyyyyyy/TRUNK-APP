@@ -97,7 +97,7 @@ public class YwUserServiceImpl extends DevUserServiceImpl implements IUserServic
 		User user = new User();
 		String username = null;
 		String userId = null;
-		String orgId = "21";//TODO
+		String serviceCode = "21";//TODO
 		String districtId = "370000";//TODO
 		
 		Map<String,Object> params = new HashMap<String,Object>();
@@ -114,7 +114,8 @@ public class YwUserServiceImpl extends DevUserServiceImpl implements IUserServic
 		
 		//拿到用户名称
 		try{
-		    params.put("staffId","2000001");
+//		    params.put("operatorId",userId);
+		    params.put("operatorId","2000001");//TODO
 	        
 	        String staffInfo = HttpUtil.sendPost(acrmUrl+"/api/auth/userinfo", params);
             JSONObject staffInfoObj = JSONObject.fromObject(staffInfo);
@@ -129,7 +130,7 @@ public class YwUserServiceImpl extends DevUserServiceImpl implements IUserServic
 	        
 	        
 	        username = staffvalue.getString("STAFF_NAME");
-//	        orgId = orginfo.getString("ORGANIZE_ID");//TODO
+//	        serviceCode = orginfo.getString("SERVICE_CODE");//TODO
 //	        districtId = districtinfo.getString("DISTRICT_ID");//TODO
 	        
 	        user.setUserName(username);
@@ -154,7 +155,7 @@ public class YwUserServiceImpl extends DevUserServiceImpl implements IUserServic
 			if(!organizationXzqh.getOrgCode().equals("1")){
 			    organizationPrivaliege.add(organizationXzqh);
 			}
-			organizationPrivaliege.add(organizationYwx);
+            organizationPrivaliege.add(organizationYwx);
 			
 			//行政区划
 			for(Organization organization : organizationSetXzqh){
@@ -167,7 +168,7 @@ public class YwUserServiceImpl extends DevUserServiceImpl implements IUserServic
 			}
 			//业务线
 			for(Organization organization : organizationSetYwx){
-			    if(organization.getOrgCode().equals(orgId)){
+			    if(organization.getOrgCode().equals(serviceCode)){
                     organizationPrivaliege.add(organization);
                     addOrgChildren(organization.getChildren(), organizationPrivaliege);
                 }

@@ -115,7 +115,7 @@ public class AllUserMsgServiceImpl extends BaseServiceImpl<AllUserMsg, String>im
         AllUserMsgVo allUserMsgVo = new AllUserMsgVo();
         allUserMsgVo.setTableDesc(allUserMsg.getTableDesc());
         List<AllUserMsg> allUserMsgList = selectAllUserMsgList(allUserMsgVo);
-        if(!allUserMsgList.isEmpty()&&oldAll.getTableDesc().equals(allUserMsg.getTableDesc())){
+        if(!allUserMsgList.isEmpty()&&!oldAll.getTableDesc().equals(allUserMsg.getTableDesc())){
             throw new ParamRequiredException("全量表名称已存在");
         }
         oldAll = fromToBean(allUserMsg,oldAll);

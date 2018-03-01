@@ -309,12 +309,12 @@ $.fn.extend({
 			if ($maskText)
 				$maskText.html(text + '...');
 		};
-		$(top).bind('resize.mask', function() {
-			$mask.css({
-				width	: $self.width(),
-				height	: $self.height()
-			});
-		});
+//		$(top).bind('resize.mask', function() {
+//			$mask.css({
+//				width	: $self.width(),
+//				height	: $self.height()
+//			});
+//		});
 		this.init();
 		if (options.autoShow)
 			this.show();
@@ -325,7 +325,7 @@ $.fn.extend({
 		var unmaskId = id || 'massk';
 		$('#' + unmaskId, this).remove();
 		$('#' + unmaskId + '_text', this).remove();
-		$(top).unbind('resize.mask');
+//		$(top).unbind('resize.mask');
 	},
 	validateForm : function() {
 		var form = $(this);
