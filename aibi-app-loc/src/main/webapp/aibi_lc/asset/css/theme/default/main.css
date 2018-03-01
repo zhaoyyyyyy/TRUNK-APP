@@ -1069,6 +1069,9 @@ span.del-btn{
 .label-select-head{
 	padding:0 0 10px 0;
 }
+.label-select-head .form-group{
+	float:right;
+}
 .label-select-main{
 	padding:10px 0;
 	border-top:1px solid #e9e9e9;
