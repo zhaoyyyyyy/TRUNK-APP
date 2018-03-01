@@ -431,7 +431,6 @@ var calculateCenter = (function (model){
 	 */
 	model.clearShopRules = function(){
 		$.confirm('确定要清空？', function() {
-			$('.ui-calc-h3>span').remove();
 			$.commAjax({
 				url : $.ctx + "/api/shopCart/delShopSession",
 				onSuccess:function(returnObj){
