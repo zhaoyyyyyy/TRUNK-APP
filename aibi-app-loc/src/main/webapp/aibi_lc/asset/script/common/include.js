@@ -163,6 +163,7 @@ var  mainPage={
 			        "../../asset/script/component/fileUpload/jQuery.fileUpload.js",
 			        "../../asset/script/component/My97DatePicker/WdatePicker.js",
 			         "../../asset/script/component/flyAnimate/jquery.fly.min.js",
+			         "../../asset/script/component/flyAnimate/requestAnimationFrame.js",
 			        ],
 			        callback:function(){
 			        	Scripts.loadScript({src:[

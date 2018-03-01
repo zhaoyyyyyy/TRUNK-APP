@@ -68,7 +68,7 @@ var calculateCenter = (function (model){
     	
     };
     model.addAnimate = function(animatePrar){
-    	var elem=animatePrar.event.currentTarget;
+    	var elem=animatePrar.event.currentTarget||animatePrar.event.srcElement;
 		var flyer = $("<span class='flying ui-btn ui-btn-default'></span>");
 		$(flyer).text(animatePrar.item.labelName);
 		flyer.fly({
