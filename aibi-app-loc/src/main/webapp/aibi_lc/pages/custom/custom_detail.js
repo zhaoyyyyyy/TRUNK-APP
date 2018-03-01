@@ -15,7 +15,7 @@ var model = {
 		customRule:"",//客户群规则
 		haveAttr:false,
 		customNum:"",//客户群人数
-		calcuElementName:"",//已选属性名称
+		calcuElementName:"",//已选属性名称(字符串)
 		calcuElementNames:[],//已选属性名称
 		AttrbuteId : "",//推送的属性标签ID
 		labelOptRuleShow:"",//枚举标签选择的条件
@@ -144,10 +144,17 @@ window.loc_onload = function() {
 			showDialog:function(){
 				model.sortAttrAndType="";
 				$(".selectList").each(function(){
-					model.sortAttrAndType+=$(this).find(".select-Sort").val()+","+$(this).find("label[class~=active]").text()+";";
+					if(model.sortAttrAndType.indexOf($(this).find(".select-Sort").val()) !=-1 || $(this).find("label[class~=active]").text() ==null ||$(this).find("label[class~=active]").text()==""){
+						model.sortAttrAndType=null;
+						$.alert("请正确选择排序属性及方式");
+						return false;
+					}else{
+						model.sortAttrAndType+=$(this).find(".select-Sort").val()+","+$(this).find("label[class~=active]").text()+";";
+					}
 				})
 //				console.log($(".selectBox label[class~=active]").text())
-				$("#dialog").dialog({
+				if(model.sortAttrAndType!=null){
+					$("#dialog").dialog({
 		    		autoOpen: true,
 		    		width: 550,
 		    		buttons: [
@@ -164,28 +171,32 @@ window.loc_onload = function() {
 			    	        "class":"ui-btn ui-btn-default",
 			    	        click: function() {
 			    	        	$( this ).dialog( "close" );
-								//console.log($("#radioList label[class~=active]").siblings("input").val()+$("#checkboxList label[class~=active]"))
-								for(var i=0;i<$("#checkboxList label[class~=active]").length;i++){
-									var sysId = $("#checkboxList label[class~=active]")[i].htmlFor;
-									$.commAjax({			
-									    url : $.ctx+'/api/syspush/labelPushCycle/save',
-									    dataType : 'json', 
-									    async : false,
-									    postData : {
-												"customGroupId" :labelId,
-												"sysId" :sysId,
-												"pushCycle" :$("#radioList label[class~=active]").siblings("input").val(),
-												"AttrbuteId" :model.AttrbuteId,
-												"sortAttrAndType" :model.sortAttrAndType,
-											},
-									    maskMassage : '推送中...'
-								   });
-									if(i == $("#checkboxList label[class~=active]").length-1){
-										$.success("推送设置成功",function(){
-											//history.back(-1);
-										});
+			    	        	if($("#checkboxList label[class~=active]").length ==0){
+			    	        		$.alert("请正确选择推送平台");
+			    	        	}else{
+			    	        		for(var i=0;i<$("#checkboxList label[class~=active]").length;i++){
+										var sysId = $("#checkboxList label[class~=active]")[i].htmlFor;
+										$.commAjax({			
+										    url : $.ctx+'/api/syspush/labelPushCycle/save',
+										    dataType : 'json', 
+										    async : false,
+										    postData : {
+													"customGroupId" :labelId,
+													"sysId" :sysId,
+													"pushCycle" :$("#radioList label[class~=active]").siblings("input").val(),
+													"AttrbuteId" :model.AttrbuteId,
+													"sortAttrAndType" :model.sortAttrAndType,
+												},
+										    maskMassage : '推送中...'
+									   });
+										if(i == $("#checkboxList label[class~=active]").length-1){
+											$.success("推送设置成功",function(){
+												//history.back(-1);
+											});
+										}
 									}
-								}
+			    	        	}
+								//console.log($("#radioList label[class~=active]").siblings("input").val()+$("#checkboxList label[class~=active]"))
 			    	        }
 				    	}
 			  		]
@@ -196,6 +207,7 @@ window.loc_onload = function() {
 		    			model.sysName=data.data;
 		    		}
 		    	})
+		    	}
 			},
 		},
 		mounted: function () {
@@ -227,12 +239,16 @@ window.loc_onload = function() {
 	})
 
 	$("#fun_to_add").click(function(){
-		var html ="<div class='mt20 selectList'> <div class='form-group mr100 optionhtml'> <div class=''><select class='form-control input-pointer select-Sort' name='dataStatusId' ></select></div></div><div class='radio circle success'> <input type='radio' name='radio"+nameNumber+"' id='myr'> <label for='myr'><i class='default'></i>升序</label</div></div><div class='radio circle success'><input type='radio' name='radio"+nameNumber+++"'  id='myr1'> <label  for='myr1'><i class='default'></i>降序</label></div></div> ";
-		$("#addALine").append(html);
-		$(".optionhtml").find("select").html("");
-		for(var i=0;i<model.calcuElementNames.length;i++){
-			var option = "<option>"+model.calcuElementNames[i]+"</option>";
-			$(".optionhtml").find("select").append(option);
+		if($(".selectList").length>2){
+			$.alert("只能添加三行");
+		}else{
+			var html ="<div class='mt20 selectList'> <div class='form-group mr100 optionhtml'> <div class=''><select class='form-control input-pointer select-Sort' name='dataStatusId' ></select></div></div><div class='radio circle success'> <input type='radio' name='radio"+nameNumber+"' id='myr'> <label for='myr'><i class='default'></i>升序</label</div></div><div class='radio circle success'><input type='radio' name='radio"+nameNumber+++"'  id='myr1'> <label  for='myr1'><i class='default'></i>降序</label></div></div> ";
+			$("#addALine").append(html);
+			$(".optionhtml").find("select").html("");
+			for(var i=0;i<model.calcuElementNames.length;i++){
+				var option = "<option>"+model.calcuElementNames[i]+"</option>";
+				$(".optionhtml").find("select").append(option);
+			}
 		}
 	})
 	//标签体系
@@ -286,16 +302,18 @@ window.loc_onload = function() {
 		    onSuccess: function(data){
 		    	$("#OptionalLabel").html("");
 		    	for(var i=0;i<data.rows.length;i++){
-		    		html="<li>"+
-		    		"<div class='checkbox'>"+
-		    		"<input type='checkbox' id='"+data.rows[i].labelId+"L' class='checkbix'>"+
-		    		"<label for='"+data.rows[i].labelId+"L' aria-label role='checkbox' class='checkbix' data-id='"+data.rows[i].labelId+"L' data-name='"+data.rows[i].labelName+"'>"+
-		    		"<span class='large'></span>"+
-		    		data.rows[i].labelName+
-		    		"</label>"+
-		    		"</div>"+
-		    		"</li>";
-		    		$("#OptionalLabel").append(html);
+		    		if(model.AttrbuteId =="" || model.AttrbuteId.indexOf(data.rows[i].labelId) == -1){
+			    		html="<li>"+
+			    		"<div class='checkbox'>"+
+			    		"<input type='checkbox' id='"+data.rows[i].labelId+"L' class='checkbix'>"+
+			    		"<label for='"+data.rows[i].labelId+"L' aria-label role='checkbox' class='checkbix' data-id='"+data.rows[i].labelId+"L' data-name='"+data.rows[i].labelName+"'>"+
+			    		"<span class='large'></span>"+
+			    		data.rows[i].labelName+
+			    		"</label>"+
+			    		"</div>"+
+			    		"</li>";
+			    		$("#OptionalLabel").append(html);
+		    		}
 		    	}
 		    },
 		    maskMassage : '搜索中...'
