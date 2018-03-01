@@ -19,6 +19,7 @@ var model = {
 		calcuElementNames:[],//已选属性名称
 		AttrbuteId : "",//推送的属性标签ID
 		labelOptRuleShow:"",//枚举标签选择的条件
+		sortAttrAndType:"",//排序的属性和类型（asc,desc）
 		
 }
 window.loc_onload = function() {
@@ -128,7 +129,7 @@ window.loc_onload = function() {
 		el : '#dataD',
 		data : model,
 		methods:{
-			previewDialog:function (dimTableName) {
+			previewDialog:function () {
 				var wd = $.window('客户群预览', $.ctx
 						+ '/aibi_lc/pages/custom/custom_preview.html', 900,
 						600);
@@ -141,6 +142,11 @@ window.loc_onload = function() {
 				}
 			},
 			showDialog:function(){
+				model.sortAttrAndType="";
+				$(".selectList").each(function(){
+					model.sortAttrAndType+=$(this).find(".select-Sort").val()+","+$(this).find("label[class~=active]").text()+";";
+				})
+//				console.log($(".selectBox label[class~=active]").text())
 				$("#dialog").dialog({
 		    		autoOpen: true,
 		    		width: 550,
@@ -170,6 +176,7 @@ window.loc_onload = function() {
 												"sysId" :sysId,
 												"pushCycle" :$("#radioList label[class~=active]").siblings("input").val(),
 												"AttrbuteId" :model.AttrbuteId,
+												"sortAttrAndType" :model.sortAttrAndType,
 											},
 									    maskMassage : '推送中...'
 								   });
@@ -201,8 +208,26 @@ window.loc_onload = function() {
 		}
 	})
 	var nameNumber=0;
+	$(".selectBox").delegate(".selectList .radio","click",function(){
+		var e=arguments.callee.caller.arguments[0]||event; 
+	    if (e && e.stopPropagation) {			     
+	    e.stopPropagation();
+	    } else if (window.event) {
+	      window.event.cancelBubble = true;
+	    }
+		if($(this).find("label").hasClass("active")){				
+			$(this).siblings(".radio").find("label").removeClass("active");
+			$(this).siblings(".radio").find("input").prop("checked", false);
+		}else{
+			$(this).find("label").addClass("active");
+			$(this).find("input").prop("checked", true);
+			$(this).siblings(".radio").find("label").removeClass("active");
+			$(this).siblings(".radio").find("input").prop("checked", false);
+		}
+	})
+
 	$("#fun_to_add").click(function(){
-		var html ="<div class='mt20'> <div class='form-group mr100 optionhtml'> <div class=''><select class='form-control input-pointer' name='dataStatusId' ></select></div></div><div class='radio circle success'> <input type='radio' name='radio"+nameNumber+"' id='myr'> <label for='myr'><i class='default'></i> 升序</label</div></div><div class='radio circle success'><input type='radio' name='radio"+nameNumber+++"'  id='myr1'> <label  for='myr1'> <i class='default'></i> 降序</label></div></div> ";
+		var html ="<div class='mt20 selectList'> <div class='form-group mr100 optionhtml'> <div class=''><select class='form-control input-pointer select-Sort' name='dataStatusId' ></select></div></div><div class='radio circle success'> <input type='radio' name='radio"+nameNumber+"' id='myr'> <label for='myr'><i class='default'></i>升序</label</div></div><div class='radio circle success'><input type='radio' name='radio"+nameNumber+++"'  id='myr1'> <label  for='myr1'><i class='default'></i>降序</label></div></div> ";
 		$("#addALine").append(html);
 		$(".optionhtml").find("select").html("");
 		for(var i=0;i<model.calcuElementNames.length;i++){
@@ -280,7 +305,8 @@ window.loc_onload = function() {
     	if(event.keyCode == 13){
     		$("#btn_search").click();
     	}
-    })
+    });
+	
     $("#btn_search").click(function() {
     	var txt = $("#labelName").val();
     	$.commAjax({			

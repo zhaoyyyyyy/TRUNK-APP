@@ -92,28 +92,29 @@
 						</div>
 					</div>
 				</div>	
-				<div>
-				 <div class="mt20">
-					 <div class="form-group mr100">
-	                    <div class="">
-	                        <select class="form-control input-pointer" name="dataStatusId" >
-	                        <option v-for="(item,index) in calcuElementNames">{{calcuElementNames[index]}}</option>
-	                        </select>
-	                    </div>
-	                </div>
-		            <div class="radio circle success"> 
-					   <input type="radio" name="radio20" id="myr3" checked="checked"> 
-					   <label for="myr3"><i class="default"></i> 升序</label>
+				<div class="selectBox">
+					 <div class="mt20 selectList">
+						 <div class="form-group mr100">
+		                    <div class="">
+		                        <select class="form-control input-pointer select-Sort" name="dataStatusId" >
+		                        <option v-for="(item,index) in calcuElementNames">{{calcuElementNames[index]}}</option>
+		                        </select>
+		                    </div>
+		                </div>
+			            <div class="radio circle success"> 
+						   <input type="radio" name="radio20" id="myr3" checked="checked"> 
+						   <label for="myr3" class="active"><i class="default"></i>升序</label>
+						</div>
+					    <div class="radio circle success">
+						   <input type="radio" name="radio20"  id="myr4"> 
+						   <label  for="myr4"><i class="default"></i>降序</label>
+						</div>
+						<button type="button" class="ui-btn ui-btn-second ml30" id="fun_to_add">添加</button>
 					</div>
-				    <div class="radio circle success">
-					   <input type="radio" name="radio20"  id="myr4"> 
-					   <label  for="myr4"><i class="default"></i> 降序</label>
+					<div id="addALine">
 					</div>
-					<button type="button" class="ui-btn ui-btn-second ml30" id="fun_to_add">添加</button>
-				</div>
 				</div> 
-				<div id="addALine">
-				</div>
+				
 			</div>
 		</div>
 		<div class="ui-custom-btn mt10">

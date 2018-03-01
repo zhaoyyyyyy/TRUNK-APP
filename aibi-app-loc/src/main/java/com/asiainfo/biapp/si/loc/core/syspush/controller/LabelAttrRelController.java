@@ -117,7 +117,9 @@ public class LabelAttrRelController extends BaseController<LabelAttrRel>{
         @ApiImplicitParam(name = "attrVal", value = "属性值", required = false, paramType = "query", dataType = "string"),
         @ApiImplicitParam(name = "tableName", value = "条件对应表名", required = false, paramType = "query", dataType = "string"),
         @ApiImplicitParam(name = "sortType", value = "排序类型", required = false, paramType = "query", dataType = "string"),
-        @ApiImplicitParam(name = "sortNum", value = "排序优先级", required = false, paramType = "query", dataType = "int")})
+        @ApiImplicitParam(name = "sortNum", value = "排序优先级", required = false, paramType = "query", dataType = "int"),
+        @ApiImplicitParam(name = "attrSettingType", value = "属性设置类型", required = false, paramType = "query", dataType = "int"),
+        @ApiImplicitParam(name = "attrCreateUserId", value = "属性创建人", required = false, paramType = "query", dataType = "string")})
     @RequestMapping(value = "/labelAttrRel/save", method = RequestMethod.POST)
     public WebResult<String> save(@ApiIgnore LabelAttrRel labelAttrRel) {
             WebResult<String> webResult = new WebResult<>();
@@ -147,7 +149,9 @@ public class LabelAttrRelController extends BaseController<LabelAttrRel>{
         @ApiImplicitParam(name = "attrVal", value = "属性值", required = false, paramType = "query", dataType = "string"),
         @ApiImplicitParam(name = "tableName", value = "条件对应表名", required = false, paramType = "query", dataType = "string"),
         @ApiImplicitParam(name = "sortType", value = "排序类型", required = false, paramType = "query", dataType = "string"),
-        @ApiImplicitParam(name = "sortNum", value = "排序优先级", required = false, paramType = "query", dataType = "int")})
+        @ApiImplicitParam(name = "sortNum", value = "排序优先级", required = false, paramType = "query", dataType = "int"),
+        @ApiImplicitParam(name = "attrSettingType", value = "属性设置类型", required = false, paramType = "query", dataType = "int"),
+        @ApiImplicitParam(name = "attrCreateUserId", value = "属性创建人", required = false, paramType = "query", dataType = "string")})
     @RequestMapping(value = "/labelAttrRel/update", method = RequestMethod.POST)
     public WebResult<String> edit(@ApiIgnore LabelAttrRel labelAttrRel) {
         WebResult<String> webResult = new WebResult<>();

@@ -7,6 +7,7 @@
 package com.asiainfo.biapp.si.loc.core.syspush.service.impl;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Executors;
@@ -100,19 +101,36 @@ public class LabelPushCycleServiceImpl extends BaseServiceImpl<LabelPushCycle, S
         return super.get(recordId);
     }
 
-    public void addLabelPushCycle(LabelPushCycle labelPushCycle) throws BaseException {
-        String[] attrbuteIdList = labelPushCycle.getAttrbuteId().split(",");
-            for(int i=0;i<attrbuteIdList.length;i++){
-                if(!("").equals(attrbuteIdList[i])){
-                    LabelInfo labelInfo = iLabelInfoService.selectLabelInfoById(attrbuteIdList[i]);
-                    LabelAttrRel labelAttrRel = new LabelAttrRel();
-                    labelAttrRel.setRecordId(labelPushCycle.getRecordId());
-                    labelAttrRel.setLabelId(labelPushCycle.getCustomGroupId());
-                    labelAttrRel.setAttrCol(labelInfo.getLabelName());
-                    labelAttrRel.setAttrColType(labelInfo.getLabelTypeId().toString());
-                    iLabelAttrRelService.addLabelAttrRel(labelAttrRel);
-                }
-            }
+    public void addLabelPushCycle(LabelPushCycle labelPushCycle,String userName) throws BaseException {
+    	 String[] attrbuteIdList = labelPushCycle.getAttrbuteId().split(",");
+         String[] sortAttrAndTypeList = labelPushCycle.getSortAttrAndType().split(";");
+             for(int i=0;i<attrbuteIdList.length;i++){
+                 if(!("").equals(attrbuteIdList[i])){
+                     LabelInfo labelInfo = iLabelInfoService.selectLabelInfoById(attrbuteIdList[i]);
+                     LabelAttrRel labelAttrRel = new LabelAttrRel();
+                     for(int j=0;j<sortAttrAndTypeList.length;j++){
+                     	if(sortAttrAndTypeList[j].indexOf(labelInfo.getLabelName()) != -1){
+                     		String attrSortType =sortAttrAndTypeList[j].split(",")[1];
+                         	if(attrSortType.equals("升序")){
+                         		labelAttrRel.setSortType("asc");
+                         	}else if(attrSortType.equals("降序")){
+                         		labelAttrRel.setSortType("desc");
+                         	}
+                         	labelAttrRel.setSortNum(j+1);
+                     	}
+                     }
+                     labelAttrRel.setRecordId(labelPushCycle.getRecordId());
+                     labelAttrRel.setLabelId(labelPushCycle.getCustomGroupId());	
+                     labelAttrRel.setModifyTime(new Date());
+                     labelAttrRel.setAttrColName(labelInfo.getLabelName());
+                     labelAttrRel.setAttrSource(2);
+                     labelAttrRel.setLabelOrCustomId(labelInfo.getLabelId());
+                     labelAttrRel.setAttrColType(labelInfo.getLabelTypeId().toString());
+                     labelAttrRel.setAttrCreateUserId(userName);
+                     labelAttrRel.setPageSortNum(i+1);
+                     iLabelAttrRelService.addLabelAttrRel(labelAttrRel);
+                 }
+             }
         super.saveOrUpdate(labelPushCycle);
 
         //推送

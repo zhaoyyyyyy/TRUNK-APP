@@ -139,6 +139,18 @@ public class LabelAttrRelDaoImpl extends BaseDaoImpl<LabelAttrRel, String> imple
             hql.append("and l.sortNum = :sortNum ");
             params.put("sortNum", labelAttrRelVo.getSortNum());
         }
+        if(null != labelAttrRelVo.getAttrSettingType()){
+            hql.append("and l.attrSettingType = :attrSettingType ");
+            params.put("attrSettingType", labelAttrRelVo.getAttrSettingType());
+        }
+        if(StringUtil.isNoneBlank(labelAttrRelVo.getAttrCreateUserId())){
+            hql.append("and l.attrCreateUserId = :attrCreateUserId ");
+            params.put("attrCreateUserId", labelAttrRelVo.getAttrCreateUserId());
+        }
+        if(null != labelAttrRelVo.getPageSortNum()){
+            hql.append("and l.pageSortNum = :pageSortNum ");
+            params.put("pageSortNum", labelAttrRelVo.getPageSortNum());
+        }
         reMap.put("hql", hql);
         reMap.put("params", params);
         return reMap;

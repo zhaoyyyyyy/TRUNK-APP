@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.asiainfo.biapp.si.loc.auth.model.User;
 import com.asiainfo.biapp.si.loc.base.controller.BaseController;
 import com.asiainfo.biapp.si.loc.base.exception.BaseException;
 import com.asiainfo.biapp.si.loc.base.page.Page;
@@ -116,8 +117,11 @@ public class LabelPushCycleController extends BaseController<LabelPushCycle>{
     public WebResult<String> save(@ApiIgnore LabelPushCycle labelPushCycle) {
             WebResult<String> webResult = new WebResult<>();
             labelPushCycle.setModifyTime(new Date());
+            User user = new User(); 
             try {
-                iLabelPushCycleService.addLabelPushCycle(labelPushCycle);
+            	user = this.getLoginUser();
+            	String userName = user.getUserName();
+                iLabelPushCycleService.addLabelPushCycle(labelPushCycle,userName);
             } catch (BaseException e) {
                 return webResult.fail(e);
             }

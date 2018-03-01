@@ -113,6 +113,24 @@ public class LabelPushCycle extends BaseEntity{
     @Transient
     private String AttrbuteId;
 
+    /**
+     * 排序的属性和类型（asc,desc）
+     */
+    @Transient
+    private String sortAttrAndType;
+    
+    
+    
+    
+    public String getSortAttrAndType() {
+		return sortAttrAndType;
+	}
+
+
+	public void setSortAttrAndType(String sortAttrAndType) {
+		this.sortAttrAndType = sortAttrAndType;
+	}
+
     
     /**
      * no field constructor

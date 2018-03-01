@@ -168,6 +168,58 @@ public class LabelAttrRel extends BaseEntity{
     @ApiParam(value = "排序优先级")
     private Integer sortNum;
 
+    /**
+     * 属性设置类型
+     */
+    @Column(name = "ATTR_SETTING_TYPE")
+    @ApiParam(value = "属性设置类型")
+    private Integer attrSettingType;
+
+    /**
+     * 属性创建人
+     */
+    @Column(name = "ATTR_CREATE_USER_ID")
+    @ApiParam(value = "属性创建人")
+    private String attrCreateUserId;
+    
+    /**
+     * 页面显示顺序
+     */
+    @Column(name = "PAGE_SORT_NUM")
+    @ApiParam(value = "页面显示顺序")
+    private Integer pageSortNum;
+    
+    
+    
+    
+    public Integer getPageSortNum() {
+		return pageSortNum;
+	}
+
+
+	public void setPageSortNum(Integer pageSortNum) {
+		this.pageSortNum = pageSortNum;
+	}
+
+
+	public Integer getAttrSettingType() {
+		return attrSettingType;
+	}
+
+
+	public void setAttrSettingType(Integer attrSettingType) {
+		this.attrSettingType = attrSettingType;
+	}
+
+
+	public String getAttrCreateUserId() {
+		return attrCreateUserId;
+	}
+
+
+	public void setAttrCreateUserId(String attrCreateUserId) {
+		this.attrCreateUserId = attrCreateUserId;
+	}
     
     
     public String getPriKey() {
