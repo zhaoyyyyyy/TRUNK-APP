@@ -368,6 +368,12 @@
 }
 .ui-shop-cart .ui-btn{
 	margin: 0 40px 0 10px;
+	vertical-align:middle;
+}
+.ui-shop-cart .ui-btn > .create-white{
+	display:none;
+	display:inline-block;
+	vertical-align: middle;
 }
 .ui-shop-cart .shop-icon{
 	width:38px;
