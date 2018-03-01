@@ -1,4 +1,5 @@
 var model={
+		labelId : "",
 		labelName : "",
 		busiCaliber : "",
 		failTime : "",
@@ -16,12 +17,12 @@ var model={
 		sourceNameList : []
 }
 window.loc_onload = function() {
-	var labelId = $.getUrlParam("labelId");
+	model.labelId = $.getUrlParam("labelId");
 	var frwin = frameElement.lhgDG;
 	$.commAjax({
 		url : $.ctx + '/api/label/labelInfo/get',
 		postData : {
-			"labelId" : labelId
+			"labelId" : model.labelId
 		},
 		onSuccess : function(data) {
 			var time = new Date(data.data.failTime);
@@ -36,48 +37,50 @@ window.loc_onload = function() {
 			model.labelTypeId = $.getCodeDesc("BQLXZD",data.data.labelTypeId);
 			model.updateCycle = $.getCodeDesc("GXZQZD",data.data.updateCycle);
 			var labelId = data.data.labelId;
-			$.commAjax({
-				ansyc : false,
-				url : $.ctx + '/api/label/mdaSysTableCol/queryList',
-				postData : {
-					"labelId" : labelId
-				},
-				onSuccess : function(data2){
-					var list = data2.data;
-					var countRulesCode = list[0].countRulesCode;
-					$.commAjax({
-						ansyc : false,
-						url : $.ctx + '/api/label/labelCountRules/get',
-						postData : {
-							"countRulesCode" : countRulesCode
-						},
-						onSuccess : function(data4){
-							model.dependIndex = data4.data.dependIndex;
-							model.countRules = data4.data.countRules;
-							var dependList = model.dependIndex.split(",");
-							for(var i=0; i<dependList.length ; i++){
-								model.sourceName += dependList[i]+","
-							}
-							model.sourceName = model.sourceName.substr(0,model.sourceName.length-1);
-						}	
-					}); 
-					model.unit = list[0].unit;
-					if(model.labelTypeId=="枚举型"){	
-						model.dataType = list[0].dataType;
-						var dimId = list[0].dimTransId;
+			if(model.labelTypeId!="复合型"){
+				$.commAjax({
+					ansyc : false,
+					url : $.ctx + '/api/label/mdaSysTableCol/queryList',
+					postData : {
+						"labelId" : labelId
+					},
+					onSuccess : function(data2){
+						var list = data2.data;
+						var countRulesCode = list[0].countRulesCode;
 						$.commAjax({
 							ansyc : false,
-							url : $.ctx + '/api/dimtable/dimTableInfo/get',
+							url : $.ctx + '/api/label/labelCountRules/get',
 							postData : {
-								"dimId" : dimId
+								"countRulesCode" : countRulesCode
 							},
-						    onSuccess : function(data3){
-						    	model.dimTableName = data3.data.dimTableName;
-						    }
-						});
-					}	
-				}
-			});	
+							onSuccess : function(data4){
+								model.dependIndex = data4.data.dependIndex;
+								model.countRules = data4.data.countRules;
+								var dependList = model.dependIndex.split(",");
+								for(var i=0; i<dependList.length ; i++){
+									model.sourceName += dependList[i]+","
+								}
+								model.sourceName = model.sourceName.substr(0,model.sourceName.length-1);
+							}	
+						}); 
+						model.unit = list[0].unit;
+						if(model.labelTypeId=="枚举型"){	
+							model.dataType = list[0].dataType;
+							var dimId = list[0].dimTransId;
+							$.commAjax({
+								ansyc : false,
+								url : $.ctx + '/api/dimtable/dimTableInfo/get',
+								postData : {
+									"dimId" : dimId
+								},
+							    onSuccess : function(data3){
+							    	model.dimTableName = data3.data.dimTableName;
+							    }
+							});
+						}	
+					}
+				});	
+			}
 			var categoryId = data.data.categoryId;
 			$.commAjax({
 				url : $.ctx + '/api/label/categoryInfo/get',
