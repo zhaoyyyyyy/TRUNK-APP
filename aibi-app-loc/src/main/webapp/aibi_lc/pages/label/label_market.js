@@ -34,7 +34,7 @@ var dataModel = {
 		categoryPath1 : "",  //一级目录
 		categoryPath2 : "",  //二级目录
 		categoryPath3 : "",  //三级目录
-		offset:"",//购物车动画偏移量
+		offset:""//购物车动画偏移量
 }
 window.loc_onload = function() {
 	//初始化参数

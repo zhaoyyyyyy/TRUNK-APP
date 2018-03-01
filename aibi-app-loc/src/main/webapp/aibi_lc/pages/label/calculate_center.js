@@ -5,6 +5,34 @@
  */
 var calculateCenter = (function (model){
 	/**
+	 * 计算中心规则展示的样式，转换成方法，主要是ie中:class中对象的样式过长，不支持换行
+	 */
+	model.getRuleClass = function(item){
+		var classStr = "" ;
+		if(item){
+			if(item.elementType ==1){//链接
+				classStr += " ui-chaining";
+			}else if(item.elementType == 2 || item.elementType == 5){
+				classStr += " ui-conditionCT";//元素
+			}else if(item.elementType == 3){//括号
+				classStr += " ui-bracket";
+			}else{
+				//
+			}
+			if(item.calcuElement == '('){
+				classStr += " left";
+			}
+			if(item.calcuElement == ')'){
+				classStr += " right";
+			}
+			if(item.waitClose){
+				classStr += " waitClose";
+			}
+		}
+		
+		return classStr ;
+	}
+	/**
      * @description 标签添加缓存，购物车动画效果===true ,组装rule
      * @param  
      * @return  
@@ -246,7 +274,7 @@ var calculateCenter = (function (model){
 		var index = $(elem).parent().parent().attr("index");
 		var rule = dataModel.ruleList[index];
 		$(document).click(function(){$(".ui-conditionBox").hide()});
-		if($(".ui-conditionBox").attr("index") == '' || $(".ui-conditionBox").attr("index") !=index){
+		if($(".ui-conditionBox").attr("index") == '' || $(".ui-conditionBox").attr("index") !=index || $(".ui-conditionBox").is(':hidden')){
 			if(rule){
 				$.commAjax({
 					url : $.ctx + "/api/label/labelInfo/get",

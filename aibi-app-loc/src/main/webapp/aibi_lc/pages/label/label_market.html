@@ -208,13 +208,8 @@
 					</span>
 				</h3>
 				<div class="ui-calc-content clearfix" id="sortable">
-					<div v-for="(item,index) in ruleList" :class="{
-						'ui-chaining' : item.elementType ==1,
-						'ui-conditionCT' : ( item.elementType == 2 || item.elementType == 5),
-                		'ui-bracket': item.elementType == 3,
-                		'left' : item.calcuElement == '(',
-                		'right' : item.calcuElement == ')',
-                		'waitClose' : item.waitClose}" v-bind:index="index" v-bind:creat="item.createBrackets">
+					<div v-for="(item,index) in ruleList" :class="calculateCenter.getRuleClass(item)"
+                		v-bind:index="index" v-bind:creat="item.createBrackets">
 						<!--左括号 -->
 						<span v-if="item.calcuElement == '('" v-text="item.calcuElement"></span>
 						<!--右括号 -->
@@ -330,7 +325,7 @@
 				<!-----------------------鼠标经过弹窗  begin------------------>
 				<div class="ui-conditionBox">
 					<i></i>
-					<p class="ui-advanced-sreach mt10">已选条件</p>
+					<p class="ui-advanced-sreach mt10">详情信息</p>
 					<div class="clearfix ui-contidion-info mt10">
 						<div class="fleft">
 							<label>更新周期：</label> 

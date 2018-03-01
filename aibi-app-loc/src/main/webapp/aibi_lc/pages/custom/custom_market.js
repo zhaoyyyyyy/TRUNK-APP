@@ -33,7 +33,7 @@ var dataModel = {
 		updateCycleList : [] ,//更新周期
 		labelTypeIdList : [] ,//创建类型
 		labelInfoViewObj : {},
-		offset:"",//购物车动画偏移量
+		offset:""//购物车动画偏移量
 }
 window.loc_onload = function() {
 	//初始化参数

@@ -216,13 +216,8 @@
 					</span>
 				</h3>
 				<div class="ui-calc-content clearfix" id="sortable">
-					<div v-for="(item,index) in ruleList" :class="{
-						'ui-chaining' : item.elementType ==1,
-						'ui-conditionCT' : ( item.elementType == 2 || item.elementType == 5),
-                		'ui-bracket': item.elementType == 3,
-                		'left' : item.calcuElement == '(',
-                		'right' : item.calcuElement == ')',
-                		'waitClose' : item.waitClose}" v-bind:index="index" v-bind:creat="item.createBrackets">
+					<div v-for="(item,index) in ruleList" :class="calculateCenter.getRuleClass(item)" 
+						v-bind:index="index" v-bind:creat="item.createBrackets">
 						<!--左括号 -->
 						<span v-if="item.calcuElement == '('" v-text="item.calcuElement"></span>
 						<!--右括号 -->
@@ -259,7 +254,7 @@
 						</div>
 						<!-- 指标型 -->
 						<div class="ui-conditionCT-content align_center" v-if="item.labelTypeId == 4" onclick="calculateCenter.setLabelAttr(this)">
-							<h5 v-if="item.queryWay != null">已选条件：</h5>
+							<h5 v-if="item.queryWay != null">详情信息：</h5>
 							<div class="clearfix" v-if="item.queryWay == 1">
 								数值范围：
 								<span v-if="item.contiueMinVal !=''">
