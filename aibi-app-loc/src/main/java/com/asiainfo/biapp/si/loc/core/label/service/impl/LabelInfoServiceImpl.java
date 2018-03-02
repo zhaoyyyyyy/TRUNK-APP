@@ -313,7 +313,9 @@ public class LabelInfoServiceImpl extends BaseServiceImpl<LabelInfo, String> imp
 			ExploreQueryParam model=new ExploreQueryParam(customInfo.getDataDate(), labelExtInfo.getMonthLabelDate(), labelExtInfo.getDayLabelDate());
 			creator.setModel(model);
 			creator.setCustomId(customId);
-			ThreadPool.getInstance().execute(creator, false);
+			if (LabelInfoContants.LIST_TABLE_TACTICS_ID_THREE.equals(labelExtInfo.getTacticsId())) {
+				ThreadPool.getInstance().execute(creator, false);
+			}
 		} catch (Exception e) {
 			LogUtil.error("线程池异常", e);
 		}

@@ -148,6 +148,14 @@ public class LabelRuleServiceImpl extends BaseServiceImpl<LabelRule, String> imp
 						rule.append(attrVal);
 						rule.append("]");
 					}
+				}else if(elementType == LabelRuleContants.ELEMENT_TYPE_LIST_ID){
+					rule.append("客户群：");
+					rule.append(labelRule.getCustomOrLabelName());
+					if(StringUtil.isNotEmpty(labelRule.getAttrVal())){
+						rule.append("[已选清单：");
+						rule.append(labelRule.getAttrVal());
+						rule.append("]");
+	            	}
 				}
 			}
 				

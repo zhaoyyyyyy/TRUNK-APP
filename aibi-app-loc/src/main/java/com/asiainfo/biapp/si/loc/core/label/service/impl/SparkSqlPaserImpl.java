@@ -13,15 +13,15 @@ public class SparkSqlPaserImpl implements IGroupCalcSqlPaser {
 
 	// private Logger log = Logger.getLogger(SparkSqlPaserImpl.class);
 	/**
-	 * 并集sql模板
+	 * 并集sql模板（或）
 	 */
 	private String UNION_SQL = "";
 	/**
-	 * 交集sql模板
+	 * 交集sql模板（且）
 	 */
 	private String INTERSECT_SQL = "";
 	/**
-	 * 差集sql模板
+	 * 差集sql模板（剔除）
 	 */
 	private String EXCEPT_SQL = "";
 	/**
@@ -35,7 +35,7 @@ public class SparkSqlPaserImpl implements IGroupCalcSqlPaser {
 		String pk = LabelInfoContants.KHQ_CROSS_COLUMN;
 		// 根据不同的数据库类型进行优化
 		UNION_SQL = "select distinct tableName3.pk from (select  tableName1.pk from table1 tableName1 UNION all select pk from table2 tableName2) tableName3";
-		INTERSECT_SQL = "select tableName1.pk from table1 tableName1 join table2 tableName2 on tableName1.pk = tableName2.pk ";
+		INTERSECT_SQL = "select tableName1.pk from table1 tableName1 inner join table2 tableName2 on tableName1.pk = tableName2.pk ";
 		EXCEPT_SQL = " select tableName1.pk from table1 tableName1 left join table2 tableName2 on tableName1.pk = tableName2.pk where tableName2.pk is null ";
 		UNION_SQL = UNION_SQL.replace("pk", pk);
 		INTERSECT_SQL = INTERSECT_SQL.replace("pk", pk);

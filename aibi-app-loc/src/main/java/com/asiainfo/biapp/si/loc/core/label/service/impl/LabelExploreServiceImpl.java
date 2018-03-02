@@ -166,7 +166,7 @@ public class LabelExploreServiceImpl implements ILabelExploreService {
 				String asName = alias + "." + column.getColumnName(); // 格式为：“别名.字段名”
 				fac.setLabelElement(rel.getLabelTypeId());
 				String labelConditionSql = fac.getLabelElement().getConditionSql(ciLabelRule, column, asName,
-						queryParam.getInterval(), queryParam.getUpdateCycle(), queryParam.isValidate());
+						ciLabelRule.getIsNeedOffset(), queryParam.getUpdateCycle(), queryParam.isValidate());
 				wherelabel.append(labelConditionSql);
 			} 
 		}
@@ -218,7 +218,7 @@ public class LabelExploreServiceImpl implements ILabelExploreService {
 				String asName = alias + "." + column.getColumnName(); // 格式为：“别名.字段名”
 				fac.setLabelElement(ciLabelInfo.getLabelTypeId());
 				String labelConditionSql = fac.getLabelElement().getConditionSql(ciLabelRule, column, asName,
-						queryParam.getInterval(), queryParam.getUpdateCycle(), queryParam.isValidate());
+						ciLabelRule.getIsNeedOffset(), queryParam.getUpdateCycle(), queryParam.isValidate());
 				wherelabel.append(labelConditionSql);
 			} else {
 				wherelabel.append(" ").append(ciLabelRule.getCalcuElement());
