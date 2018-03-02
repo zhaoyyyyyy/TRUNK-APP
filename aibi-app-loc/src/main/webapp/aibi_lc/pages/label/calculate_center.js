@@ -639,7 +639,7 @@ var calculateCenter = (function (model){
 	/**
 	 * 进入客户群编辑界面
 	 */
-	model.gotoSaveCustomer = function(e){
+	model.gotoSaveCustomer = function(e,from){
 		var e=arguments.callee.caller.arguments[0]||event;
 		    if (e && e.stopPropagation) {
 		       e.stopPropagation();
@@ -665,7 +665,7 @@ var calculateCenter = (function (model){
 						}
 						if(existLabel){
 							if(model.validateSql(dataModel.labelMonth.replace(/-/g,""),dataModel.labelDay.replace(/-/g,""))){
-								window.location='../custom/custom_edit.html?from=labelmarket';
+								window.location='../custom/custom_edit.html?from='+from;
 							}
 						}
 						

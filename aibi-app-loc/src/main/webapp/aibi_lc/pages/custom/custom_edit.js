@@ -188,6 +188,9 @@ var labelInfoModel = (function (model){
 		if(from == 'labelmarket'){//跳转到客户群集市
 			returnUrl = "../label/label_market.html";
 		}
+		if(from == 'custommarket'){//跳转到客户群集市
+			returnUrl = "./custom_market.html";
+		}
 		window.location.href = returnUrl;
 	};
 	/**
