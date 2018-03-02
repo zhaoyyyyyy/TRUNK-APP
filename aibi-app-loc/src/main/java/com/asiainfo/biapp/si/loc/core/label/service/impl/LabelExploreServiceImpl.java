@@ -374,7 +374,7 @@ public class LabelExploreServiceImpl implements ILabelExploreService {
 	public String getListTableSql(String customId, String dataDate) throws BaseException {
 		LabelInfo customGroup = labelInfoService.get(customId);
 		if(customGroup == null){
-			throw new RuntimeException("客户群不存在！");
+			throw new RuntimeException("客户群不存在！---customId:"+customId);
 		}
 		String tableName = "no table";
 		if (LabelInfoContants.CUSTOM_CYCLE_TYPE_ONE == customGroup.getUpdateCycle()) {

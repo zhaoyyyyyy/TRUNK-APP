@@ -47,16 +47,13 @@ public class CyclicityListDataServiceImpl implements ICyclicityListDataService{
 	@Override
 	public void runAllDayListData() {
 		String newDayDate = CocCacheProxy.getCacheProxy().getNewLabelDay();
-		newDayDate = "20180212";
 		Map<String,List<String>> allList = this.getAllListIdAndConfig(newDayDate,dayUpdateCycle,null);
-		
 		if(null == allList || allList.isEmpty()){
 			return ;
 		}
 		Set<String> keySet = allList.keySet();
 		ExecutorService executorService = Executors.newFixedThreadPool(keySet.size());
 		List<Future<String>> resultList = new ArrayList<Future<String>>();
-		
 		for (String key : keySet) {
 			List<String> listList = allList.get(key);
 			// 使用ExecutorService执行Callable类型的任务，并将结果保存在future变量中  
@@ -64,7 +61,6 @@ public class CyclicityListDataServiceImpl implements ICyclicityListDataService{
             // 将任务执行结果存储到List中  
             resultList.add(future);
 		}
-		
 		// 遍历任务的结果  
         for (Future<String> fs : resultList) { 
         	try {
@@ -78,7 +74,6 @@ public class CyclicityListDataServiceImpl implements ICyclicityListDataService{
 	@Override
 	public void runAllMonthListData() {
 		String newDayDate = CocCacheProxy.getCacheProxy().getNewLabelMonth();
-		newDayDate = "201802";
 		Map<String,List<String>> allList = this.getAllListIdAndConfig(newDayDate,monthUpdateCycle,null);
 		
 		if(null == allList || allList.isEmpty()){
@@ -109,9 +104,7 @@ public class CyclicityListDataServiceImpl implements ICyclicityListDataService{
 	@Override
 	public void runDayListDataByConfigId(String configId) {
 		String newDayDate = CocCacheProxy.getCacheProxy().getNewLabelDay();
-		newDayDate = "20180212";
 		Map<String,List<String>> allList = this.getAllListIdAndConfig(newDayDate,dayUpdateCycle,configId);
-		
 		if(null == allList || allList.isEmpty()){
 			return ;
 		}
@@ -126,7 +119,6 @@ public class CyclicityListDataServiceImpl implements ICyclicityListDataService{
             // 将任务执行结果存储到List中  
             resultList.add(future);
 		}
-		
 		// 遍历任务的结果  
         for (Future<String> fs : resultList) { 
         	try {
@@ -140,7 +132,6 @@ public class CyclicityListDataServiceImpl implements ICyclicityListDataService{
 	@Override
 	public void runMonthListDataByConfigId(String configId) {
 		String newDayDate = CocCacheProxy.getCacheProxy().getNewLabelMonth();
-		newDayDate = "201802";
 		Map<String,List<String>> allList = this.getAllListIdAndConfig(newDayDate,monthUpdateCycle,configId);
 		
 		if(null == allList || allList.isEmpty()){
@@ -275,7 +266,6 @@ public class CyclicityListDataServiceImpl implements ICyclicityListDataService{
 					}else if(columnName.equals("LABEL_ID")){
 						label_id = rs.getString(columnName);
 					}
-					System.out.println("---------------- columnName = " + columnName + "::::::: " + rs.getString(columnName));
 				}
 				if(StringUtils.isNoneBlank(label_id) && StringUtils.isNoneBlank(config_id)){
 					if(res.containsKey(config_id)){

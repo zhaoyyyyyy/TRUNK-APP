@@ -76,7 +76,7 @@ public class CustomerManagerServiceImpl implements ICustomerManagerService {
 			backServiceImpl.insertCustomerData(countSqlStr, tableName, customId);
 			// 3.发通知 setCustomNum
 			int customNum = backServiceImpl.queryCount("select count(1) " + countSqlStr);
-		    labelExtInfo = customGroup.getLabelExtInfo();
+			labelExtInfo = customGroup.getLabelExtInfo();
 			labelExtInfo.setCustomNum(customNum);
 			customGroup.setDataStatusId(LabelInfoContants.CUSTOM_DATA_STATUS_SUCCESS);
 			//4、处理清单表LOC_LIST_INFO
@@ -90,7 +90,7 @@ public class CustomerManagerServiceImpl implements ICustomerManagerService {
 			listInfoService.addListInfo(listInfo);
 		} catch (Exception e) {
 			customGroup.setDataStatusId(LabelInfoContants.CUSTOM_DATA_STATUS_FAILED);
-			LogUtil.error("生成客户群的清单过程异常", e);
+			LogUtil.error("生成客户群的清单过程异常---customId:"+customId, e);
 		} finally {
 			labelInfoService.syncUpdateCustomGroupInfo(customGroup, labelExtInfo);
 		}
