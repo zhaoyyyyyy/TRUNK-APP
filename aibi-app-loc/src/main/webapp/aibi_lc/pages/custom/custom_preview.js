@@ -1,27 +1,22 @@
 window.loc_onload = function() {
-	$("#mainGrid").jqGrid({
-	        colNames : [ '客户编码' ],
-	        colModel : [ 
-	                     {name : 'id',index : 'id',width : 60,align : "center"},
-	                   ],
-	      });
-	$("#mainGrid").jqGrid('setLabel',0, '序号');
-	  var mydata = [ 
-	                 {id : "123456789"}, 
-	                 {id : "223456789"}, 
-	                 {id : "323456789"}, 
-	                 {id : "423456789"}, 
-	                 {id : "523456789"}, 
-	                 {id : "623456789"}, 
-	                 {id : "723456789"}, 
-	                 {id : "823456789"}, 
-	                 {id : "923456789"},
-	                 {id : "923456789"} 
-	               ];
-	  for ( var i = 0; i <= mydata.length; i++){
-	    $("#mainGrid").jqGrid('addRowData', i + 1, mydata[i]);
-	};
-	
+	 labelId = $.getUrlParam("labelId");
+	 $("#mainGrid").jqGrid({
+			url : $.ctx + "/api/syspush/labelPushCycle/findGroupList",
+			datatype : "json",
+			postData :{"labelId": labelId},
+			colNames : [ '手机号', ],
+			colModel : [
+				{
+					name : 'productNo',
+					index : 'productNo',
+					width : 80,
+					sortable : false,
+					frozen : true,
+					align : "center",
+				},
+				],
+		});
+		$("#mainGrid").jqGrid('setLabel',0, '序号');
 	var wd = frameElement.lhgDG;
 	wd.addBtn("cancel", "确定", function() {
 		wd.cancel();

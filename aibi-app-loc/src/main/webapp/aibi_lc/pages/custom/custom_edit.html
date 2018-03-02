@@ -31,7 +31,7 @@
 					<div class="clearfix create-main mt10 dataSource-tab">
 			            <div class="form-horizontal fleft mt20 ml30">
 			            	<div class="ui-form-group ml70">
-			                    <a id="showRulesBtn" href="javascript:void(0);" class="ui-advanced-sreach fright" onclick="labelInfoModel.showRules()">客户群规则</a>  
+			                    <a id="showRulesBtn" href="javascript:void(0);" class="ui-btn ui-btn-default fright" onclick="labelInfoModel.showRules()">客户群规则</a>  
 			                </div>
 			                <div class="ui-form-group ml70">
 			                    <label class="control-label" for="labelName" ><span class="input-required">*</span>客户群名称:</label>
@@ -87,10 +87,10 @@
 			                   	<label class="control-label" for="inputEmail4"><span class="input-required">*</span>数据限制:</label>
 			                    <div class="control-input has-icon ml10">
 			                       <ul>
-										<li v-for="item in dataPrivaliegeList" style="display: inline">
+										<li v-for="item in dataPrivaliegeList" class="fleft">
 											<div class="radio circle success">
-												<input type="checkbox" v-model='checkedModelList' :value="item.orgCode" />
-												<label>{{item.fullName}}</label>
+												<input :id="item.orgCode" class="checkbix" type="checkbox" v-model='checkedModelList' :value="item.orgCode" />
+												<label :for="item.orgCode" class="checkbix"><span class="large"></span>{{item.fullName}}</label>
 											</div>
 										</li>
 									</ul>
