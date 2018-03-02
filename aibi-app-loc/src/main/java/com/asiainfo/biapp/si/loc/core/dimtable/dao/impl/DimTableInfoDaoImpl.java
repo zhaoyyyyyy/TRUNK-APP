@@ -18,7 +18,6 @@ import com.asiainfo.biapp.si.loc.base.utils.StringUtil;
 import com.asiainfo.biapp.si.loc.core.dimtable.dao.IDimTableInfoDao;
 import com.asiainfo.biapp.si.loc.core.dimtable.entity.DimTableInfo;
 import com.asiainfo.biapp.si.loc.core.dimtable.vo.DimTableInfoVo;
-import com.asiainfo.biapp.si.loc.core.prefecture.entity.PreConfigInfo;
 
 /**
  * Title : DimTableInfoDaoImpl
@@ -67,9 +66,18 @@ public class DimTableInfoDaoImpl extends BaseDaoImpl<DimTableInfo, String> imple
         Map<String, Object> params = (Map<String, Object>)reMap.get("params");
         return super.findListByHql(reMap.get("hql").toString(), params);
     }
-    
-    public DimTableInfo selectOneByDimTableName(String dimTableName) {
-        return super.findOneByHql("from DimTableInfo d where d.dimTableName = ?0", dimTableName);
+    public DimTableInfo selectOneByDimTableName(String dimTableName,String configId) {
+    	StringBuffer hql = new StringBuffer("from DimTableInfo d where 1=1 ");
+    	Map<String, Object> params = new HashMap<>();
+        if(StringUtil.isNotBlank(dimTableName)){
+            hql.append("and d.dimTableName = :dimTableName ");
+            params.put("dimTableName", dimTableName);
+        }
+        if(StringUtil.isNotBlank(configId)){
+            hql.append("and d.configId = :configId ");
+            params.put("configId", configId);
+        }
+        return super.findOneByHql(hql.toString(),params );
     }
     
     public Map<String, Object> fromBean(DimTableInfoVo dimTableInfoVo){

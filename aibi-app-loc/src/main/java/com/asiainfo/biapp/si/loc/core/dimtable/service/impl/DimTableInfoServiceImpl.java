@@ -78,11 +78,11 @@ public class DimTableInfoServiceImpl extends BaseServiceImpl<DimTableInfo, Strin
         return super.get(dimId);
     }
     
-    public DimTableInfo selectOneByDimTableName(String dimTableName) throws BaseException {
+    public DimTableInfo selectOneByDimTableName(String dimTableName,String configId) throws BaseException {
         if (StringUtils.isBlank(dimTableName)) {
             throw new ParamRequiredException("名称不能为空");
         }
-        return iDimTableInfoDao.selectOneByDimTableName(dimTableName);
+        return iDimTableInfoDao.selectOneByDimTableName(dimTableName,configId);
     }
 
     public void addDimTableInfo(DimTableInfo dimTableInfo) throws BaseException {

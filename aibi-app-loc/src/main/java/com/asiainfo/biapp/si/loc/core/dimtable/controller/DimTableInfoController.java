@@ -121,7 +121,7 @@ public class DimTableInfoController extends BaseController<DimTableInfo>{
             try {
             	user = this.getLoginUser();
                 dimTableInfo.setCreateUserId(user.getUserName());
-                dimTable = iDimTableInfoService.selectOneByDimTableName(dimTableInfo.getDimTableName());
+                dimTable = iDimTableInfoService.selectOneByDimTableName(dimTableInfo.getDimTableName(),dimTableInfo.getConfigId());
                 if (null != dimTable) {
                     return webResult.fail("维表名称已存在");
                 }
@@ -149,9 +149,9 @@ public class DimTableInfoController extends BaseController<DimTableInfo>{
         DimTableInfo oldDim = new DimTableInfo();
         DimTableInfo dimTable = new DimTableInfo();
         try {
-            dimTable = iDimTableInfoService.selectOneByDimTableName(dimTableInfo.getDimTableName());
+            dimTable = iDimTableInfoService.selectOneByDimTableName(dimTableInfo.getDimTableName(),dimTableInfo.getConfigId());
             oldDim = iDimTableInfoService.selectDimTableInfoById(dimTableInfo.getDimId());
-            if(!dimTableInfo.getDimTableName().equals(oldDim.getDimTableName()) && null != dimTable){
+            if(!oldDim.getDimTableName().equals(dimTableInfo.getDimTableName()) && null != dimTable){
                 return webResult.fail("维表名称已存在");
             }
             oldDim = fromToBean(dimTableInfo, oldDim);

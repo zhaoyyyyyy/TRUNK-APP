@@ -16,16 +16,15 @@ window.loc_onload = function() {
 		$.commAjax({
 			postData : {
 				"dimId" : dimId,
-				"configId": configId
 			},
 			url : $.ctx + '/api/dimtable/dimTableInfo/get',
 			onSuccess : function(data) {
-				console.log(data.data);
 				model.dimTableName = data.data.dimTableName;
 				model.dimComment = data.data.dimComment;
 				model.codeColType = data.data.codeColType;
 				model.dimCodeCol = data.data.dimCodeCol;
 				model.dimValueCol = data.data.dimValueCol;
+				configId = data.data.configId;
 				if(data.data.dimCodeCol!=("DIM_CODE") && data.data.dimValueCol!=("DIM_VALUE")){
 					var useDefaultCol = document.getElementById("no");
 					useDefaultCol.checked = true;
@@ -63,7 +62,6 @@ window.loc_onload = function() {
 			if(model.dimId!=null && model.dimId!=undefined && model.dimId!= ""){
 				url_ = $.ctx + '/api/dimtable/dimTableInfo/update';
 				msss = "修改成功";
-				
 			}else{
 				$("#dimId").removeAttr("name");;
 				url_ = $.ctx + '/api/dimtable/dimTableInfo/save';
@@ -107,7 +105,7 @@ window.loc_onload = function() {
 			}
 			if(result){
 				var data1 =$('#saveDataForm').formToJson();
-				data1.configId = configId;
+					data1.configId = configId;
 				$.commAjax({
 					url : url_,
 					postData :data1,

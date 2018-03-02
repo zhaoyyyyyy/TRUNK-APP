@@ -71,7 +71,7 @@ public interface IDimTableInfoService extends BaseService<DimTableInfo, String>{
      * @return
      * @throws BaseException
      */
-    public DimTableInfo selectOneByDimTableName(String dimTableName) throws BaseException;
+    public DimTableInfo selectOneByDimTableName(String dimTableName,String configId) throws BaseException;
 
     /**
      * 新增或修改一个实体 Description:

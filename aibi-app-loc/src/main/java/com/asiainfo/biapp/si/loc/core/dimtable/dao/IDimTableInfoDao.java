@@ -59,6 +59,6 @@ public interface IDimTableInfoDao extends BaseDao<DimTableInfo, String>{
      * @param dimTableName
      * @return
      */
-    public DimTableInfo selectOneByDimTableName(String dimTableName);
+    public DimTableInfo selectOneByDimTableName(String dimTableName,String configId);
 
 }
