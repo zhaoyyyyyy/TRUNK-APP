@@ -289,9 +289,9 @@ public class BackHiveDaoImpl extends BaseBackDaoImpl implements IBackSqlDao{
         ResultSet rs = null;
         try{
             conn = this.getBackConnection();
-            st = conn.prepareStatement(sql);
-            rs =  st.executeQuery();
-
+            //st = conn.prepareStatement(sql);
+            //rs =  st.executeQuery();
+            boolean execute = conn.createStatement().execute(sql);
             LogUtil.debug(new StringBuffer(sql).append(" cost:").append(System.currentTimeMillis()-s).append("ms."));
             
         }catch (Exception e){
