@@ -114,8 +114,8 @@ public class YwUserServiceImpl extends DevUserServiceImpl implements IUserServic
 		
 		//拿到用户名称
 		try{
-//		    params.put("operatorId",userId);
-		    params.put("operatorId","2000001");//TODO
+		    params.put("operatorId",userId);
+//		    params.put("operatorId","2000001");//TODO
 	        
 	        String staffInfo = HttpUtil.sendPost(acrmUrl+"/api/auth/userinfo", params);
             JSONObject staffInfoObj = JSONObject.fromObject(staffInfo);
@@ -130,8 +130,8 @@ public class YwUserServiceImpl extends DevUserServiceImpl implements IUserServic
 	        
 	        
 	        username = staffvalue.getString("STAFF_NAME");
-//	        serviceCode = orginfo.getString("SERVICE_CODE");//TODO
-//	        districtId = districtinfo.getString("DISTRICT_ID");//TODO
+	        serviceCode = orginfo.getString("SERVICE_CODE");//TODO
+	        districtId = districtinfo.getString("DISTRICT_ID");//TODO
 	        
 	        user.setUserName(username);
         }catch(Exception e){

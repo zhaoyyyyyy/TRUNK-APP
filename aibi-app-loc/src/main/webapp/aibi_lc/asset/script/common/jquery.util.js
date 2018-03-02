@@ -97,7 +97,8 @@ $.extend({
 								$.alert("系统无法响应请求，请联系管理员");
 							}
 						} else if (obj.msg) {
-							$.message(obj.msg);
+//							$.message(obj.msg);
+							$.alert(obj.msg);
 							try {console.log(obj.execption);} catch (e) {}
 						}
 					} else {

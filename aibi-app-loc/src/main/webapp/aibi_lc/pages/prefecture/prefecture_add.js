@@ -12,7 +12,7 @@ var model = {
 		dataAccessType0 : 0,
 		sourceName : "",
 		sourceEnName : "",
-		invalidTime : "",
+//		invalidTime : "",
 		configId : "",
 		orgId : "",
 		ztreeObj : [],
@@ -48,11 +48,11 @@ window.loc_onload = function() {
 				model.sourceName = data.data.sourceName;
 				model.sourceEnName = data.data.sourceEnName;
 				model.orgId = data.data.orgId;
-				var time = new Date(data.data.invalidTime);
-				var y = time.getFullYear();//年
-				var m = (time.getMonth()+1<10 ? '0'+(time.getMonth()+1):time.getMonth()+1);//月
-				var d = (time.getDate()+1<10 ? '0' +(time.getDate()):time.getDate());//日	
-				$("#invalidTime").val(y+"-"+m+"-"+d);
+//				var time = new Date(data.data.invalidTime);
+//				var y = time.getFullYear();//年
+//				var m = (time.getMonth()+1<10 ? '0'+(time.getMonth()+1):time.getMonth()+1);//月
+//				var d = (time.getDate()+1<10 ? '0' +(time.getDate()):time.getDate());//日	
+//				$("#invalidTime").val(y+"-"+m+"-"+d);
 				model.priKey = data.data.allUserMsg.priKey;
 			}
 		})
