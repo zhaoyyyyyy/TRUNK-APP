@@ -70,7 +70,7 @@
 										<li v-for="item in updateCycles" style="display: inline">
 											<div class="radio circle success">
 												<input type="radio" :id="'update_'+item.code" v-model="updateCycle" :value="item.code"  />
-												<label><i class="default"></i>{{item.dataName}}</label>
+												<label :for="'update_'+item.code"><i class="default"></i>{{item.dataName}}</label>
 											</div>
 										</li>
 									</ul>
