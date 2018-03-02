@@ -19,6 +19,7 @@ import com.asiainfo.biapp.si.loc.base.exception.BaseException;
 import com.asiainfo.biapp.si.loc.base.exception.ParamRequiredException;
 import com.asiainfo.biapp.si.loc.base.page.Page;
 import com.asiainfo.biapp.si.loc.base.service.impl.BaseServiceImpl;
+import com.asiainfo.biapp.si.loc.bd.common.service.impl.BackServiceImpl;
 import com.asiainfo.biapp.si.loc.core.back.dao.IAllUserMsgDao;
 import com.asiainfo.biapp.si.loc.core.back.entity.AllUserMsg;
 import com.asiainfo.biapp.si.loc.core.back.entity.DimOrgLevel;
@@ -65,6 +66,9 @@ public class AllUserMsgServiceImpl extends BaseServiceImpl<AllUserMsg, String>im
     
     @Autowired
     private IDimOrgLevelService iDimOrgLevelService;
+    
+    @Autowired
+    private BackServiceImpl backServiceImpl;
 
     @Override
     protected BaseDao<AllUserMsg, String> getBaseDao() {
@@ -95,6 +99,16 @@ public class AllUserMsgServiceImpl extends BaseServiceImpl<AllUserMsg, String>im
         if(!allUserMsgList.isEmpty()){
             throw new ParamRequiredException("全量表名称已存在");
         }
+        //去后台查看表是否存在
+        boolean isExitDay = backServiceImpl.isExistsTable(allUserMsg.getDayTableName());
+        if(!isExitDay){
+            throw new ParamRequiredException("日表不存在");
+        }
+        boolean isExitMonth = backServiceImpl.isExistsTable(allUserMsg.getMonthTableName());
+        if(!isExitMonth){
+            throw new ParamRequiredException("月表不存在");
+        }
+        
         super.saveOrUpdate(allUserMsg);
         for(String d : dimOrgStr){
             JSONObject obj = JSONObject.fromObject(d);
