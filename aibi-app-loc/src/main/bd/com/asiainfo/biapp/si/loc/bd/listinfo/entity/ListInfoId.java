@@ -16,7 +16,7 @@ public class ListInfoId extends BaseEntity{
 	/**
 	 * 清单ID
 	 */
-	@Column(name = "CUSTOM_GROUP_ID")
+	@Column(name = "GROUP_ID")
 	@ApiParam(value = "清单ID")
 	private String customGroupId;
 	

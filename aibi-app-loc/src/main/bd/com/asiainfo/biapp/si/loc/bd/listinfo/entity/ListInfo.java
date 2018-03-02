@@ -52,7 +52,7 @@ public class ListInfo extends BaseEntity{
 	/**
 	 * 清单总数
 	 */
-	@Column(name = "CUSTOM_NUM")
+	@Column(name = "GROUP_NUM")
 	@ApiParam(value = "清单总数")
 	private Integer customNum;
 	
