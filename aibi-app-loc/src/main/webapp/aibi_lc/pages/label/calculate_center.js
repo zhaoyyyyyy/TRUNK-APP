@@ -560,7 +560,10 @@ var calculateCenter = (function (model){
 			  },
 			  onFailure:function(returnObj){
 				  $.alert(returnObj.msg);
-			  }
+			  },
+			  beforeSend:function(){
+			 	$(".shop-icon").addClass("loading");
+			 }
 		});
 		return flag;
 	}
@@ -630,9 +633,6 @@ var calculateCenter = (function (model){
 			 onFailure:function(returnObj){
 				dataModel.exploreCustomNum = 0;
 				$.alert(returnObj.msg);
-			 },
-			 beforeSend:function(){
-			 	$(".shop-icon").addClass("loading");
 			 }
 		});
 	};
