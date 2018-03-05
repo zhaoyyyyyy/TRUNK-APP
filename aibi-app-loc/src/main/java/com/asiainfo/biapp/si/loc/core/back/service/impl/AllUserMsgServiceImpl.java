@@ -196,9 +196,7 @@ public class AllUserMsgServiceImpl extends BaseServiceImpl<AllUserMsg, String>im
         if (StringUtils.isNotBlank(all.getMonthPartitionColumn())) {
             oldAll.setMonthPartitionColumn(all.getMonthPartitionColumn());
         }
-        if (StringUtils.isNotBlank(all.getOtherColumn())) {
-            oldAll.setOtherColumn(all.getOtherColumn());
-        }
+        oldAll.setOtherColumn(all.getOtherColumn());
         return oldAll;
     }
 
