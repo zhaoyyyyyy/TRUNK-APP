@@ -243,6 +243,9 @@ window.loc_onload = function() {
 			    	        	if($("#checkboxList label[class~=active]").length ==0){
 			    	        		$.alert("请正确选择推送平台");
 			    	        	}else{
+			    	        		if(!model.haveAttr){
+			    	        			model.sortAttrAndType =null;
+			    	        		}
 			    	        		for(var i=0;i<$("#checkboxList label[class~=active]").length;i++){
 										var sysId = $("#checkboxList label[class~=active]")[i].htmlFor;
 										$.commAjax({			

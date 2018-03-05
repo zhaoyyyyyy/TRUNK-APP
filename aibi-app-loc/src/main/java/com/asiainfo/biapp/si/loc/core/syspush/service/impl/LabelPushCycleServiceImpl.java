@@ -103,21 +103,23 @@ public class LabelPushCycleServiceImpl extends BaseServiceImpl<LabelPushCycle, S
 
     public void addLabelPushCycle(LabelPushCycle labelPushCycle,String userName) throws BaseException {
     	 String[] attrbuteIdList = labelPushCycle.getAttrbuteId().split(",");
-         String[] sortAttrAndTypeList = labelPushCycle.getSortAttrAndType().split(";");
              for(int i=0;i<attrbuteIdList.length;i++){
                  if(!("").equals(attrbuteIdList[i])){
                      LabelInfo labelInfo = iLabelInfoService.selectLabelInfoById(attrbuteIdList[i]);
                      LabelAttrRel labelAttrRel = new LabelAttrRel();
-                     for(int j=0;j<sortAttrAndTypeList.length;j++){
-                     	if(sortAttrAndTypeList[j].indexOf(labelInfo.getLabelName()) != -1){
-                     		String attrSortType =sortAttrAndTypeList[j].split(",")[1];
-                         	if(attrSortType.equals("升序")){
-                         		labelAttrRel.setSortType("asc");
-                         	}else if(attrSortType.equals("降序")){
-                         		labelAttrRel.setSortType("desc");
-                         	}
-                         	labelAttrRel.setSortNum(j+1);
-                     	}
+                     if(StringUtil.isNoneBlank(labelPushCycle.getSortAttrAndType())){
+                    	 String[] sortAttrAndTypeList = labelPushCycle.getSortAttrAndType().split(";");
+                    	 for(int j=0;j<sortAttrAndTypeList.length;j++){
+                          	if(sortAttrAndTypeList[j].indexOf(labelInfo.getLabelName()) != -1){
+                          		String attrSortType =sortAttrAndTypeList[j].split(",")[1];
+                              	if(attrSortType.equals("升序")){
+                              		labelAttrRel.setSortType("asc");
+                              	}else if(attrSortType.equals("降序")){
+                              		labelAttrRel.setSortType("desc");
+                              	}
+                              	labelAttrRel.setSortNum(j+1);
+                          	}
+                         }
                      }
                      labelAttrRel.setRecordId(labelPushCycle.getRecordId());
                      labelAttrRel.setLabelId(labelPushCycle.getCustomGroupId());	
