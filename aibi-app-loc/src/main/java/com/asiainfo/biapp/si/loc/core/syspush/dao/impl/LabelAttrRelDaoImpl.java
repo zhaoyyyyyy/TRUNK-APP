@@ -151,6 +151,10 @@ public class LabelAttrRelDaoImpl extends BaseDaoImpl<LabelAttrRel, String> imple
             hql.append("and l.pageSortNum = :pageSortNum ");
             params.put("pageSortNum", labelAttrRelVo.getPageSortNum());
         }
+		
+		if(null != labelAttrRelVo.getOrderBy()){
+            hql.append("ORDER BY ").append(labelAttrRelVo.getOrderBy());
+        }
         reMap.put("hql", hql);
         reMap.put("params", params);
         return reMap;

@@ -31,5 +31,16 @@ import com.asiainfo.biapp.si.loc.core.syspush.entity.LabelAttrRel;
 public class LabelAttrRelVo extends LabelAttrRel{
 
     private static final long serialVersionUID = 1L;
+    
+    private String orderBy;
+    
+    public String getOrderBy() {
+        return orderBy;
+    }
+    public void setOrderBy(String orderBy) {
+        this.orderBy = orderBy;
+    }
 
+
+    
 }

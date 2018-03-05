@@ -31,7 +31,6 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 import org.xml.sax.SAXException;
 
-import com.asiainfo.biapp.si.loc.base.common.LabelInfoContants;
 import com.asiainfo.biapp.si.loc.base.extend.SpringContextHolder;
 import com.asiainfo.biapp.si.loc.base.utils.Bean2XMLUtils;
 import com.asiainfo.biapp.si.loc.base.utils.DESUtil;
@@ -48,8 +47,6 @@ import com.asiainfo.biapp.si.loc.bd.common.service.IBackSqlService;
 import com.asiainfo.biapp.si.loc.cache.CocCacheAble;
 import com.asiainfo.biapp.si.loc.cache.CocCacheProxy;
 import com.asiainfo.biapp.si.loc.core.label.entity.LabelInfo;
-import com.asiainfo.biapp.si.loc.core.label.entity.MdaSysTable;
-import com.asiainfo.biapp.si.loc.core.label.entity.MdaSysTableColumn;
 import com.asiainfo.biapp.si.loc.core.label.service.ILabelInfoService;
 import com.asiainfo.biapp.si.loc.core.syspush.common.constant.ServiceConstants;
 import com.asiainfo.biapp.si.loc.core.syspush.dao.ISysInfoDao;
@@ -57,6 +54,7 @@ import com.asiainfo.biapp.si.loc.core.syspush.entity.LabelAttrRel;
 import com.asiainfo.biapp.si.loc.core.syspush.entity.LabelPushCycle;
 import com.asiainfo.biapp.si.loc.core.syspush.entity.LabelPushReq;
 import com.asiainfo.biapp.si.loc.core.syspush.entity.SysInfo;
+import com.asiainfo.biapp.si.loc.core.syspush.service.ICustomerPublishCommService;
 import com.asiainfo.biapp.si.loc.core.syspush.service.ICustomerPublishService;
 import com.asiainfo.biapp.si.loc.core.syspush.service.ILabelAttrRelService;
 import com.asiainfo.biapp.si.loc.core.syspush.service.ILabelPushCycleService;
@@ -108,6 +106,9 @@ public class CustomerPublishDefaultThread implements ICustomerPublishThread {
     private ILabelInfoService iLabelInfoService;
     
     @Autowired
+    private ICustomerPublishCommService iCustomerPublishCommService;
+    
+    @Autowired
     private ILabelAttrRelService labelAttrRelServiceImpl;
     
     @Autowired
@@ -126,14 +127,16 @@ public class CustomerPublishDefaultThread implements ICustomerPublishThread {
 
     private CocCacheAble cacheProxy = null;     //缓存代理类
     
+    
     //内部变量
     private SysInfo sysInfo;                //当前的推送平台
     private LabelPushReq labelPushReq;      //当前的推送详情
     private LabelInfo customInfo;           //当前的推送客户群
     private String fileName;                //当前的文件名称
-    private int bufferedRowSize = 10000;    //每次读取数据的条数
+    List<LabelAttrRel> attrRelList = null;	//当前的推送客户群关联的属性列
 
-    private static final String encode = "GBK"; //当前的文件的编码
+    private int bufferedRowSize = 10000;    //每次读取数据的条数
+    private static final String encode = "UTF-8"; 			//当前的文件的编码
     private static final long CUSTOMER_PUBLISH_PRE_WAIT_TIME = 5000;     //客户群推送线程前置等待时间
     private static final long CUSTOMER_PUBLISH_FTP_WAIT_TIME = 60000;    //客户群推送线程FTP等待时间
 
@@ -170,17 +173,35 @@ public class CustomerPublishDefaultThread implements ICustomerPublishThread {
 		long start = System.currentTimeMillis();
 		
 		for(LabelPushCycle labelPushCycle : labelPushCycleList){
-            customInfo = iLabelInfoService.get(labelPushCycle.getCustomGroupId());
+//            customInfo = cacheProxy.getLabelInfoById(labelPushCycle.getCustomGroupId());
+//            if (null == customInfo) {
+                customInfo = iLabelInfoService.get(labelPushCycle.getCustomGroupId());
+//            }
+
+            //获取属性列
+            LabelAttrRelVo labelAttrRelVo = new LabelAttrRelVo();
+            labelAttrRelVo.setLabelId(customInfo.getLabelId());
+            labelAttrRelVo.setAttrSource(ServiceConstants.LabelAttrRel.ATTR_SOURCE_LABEL);
+            labelAttrRelVo.setAttrSettingType(ServiceConstants.LabelAttrRel.ATTR_SETTING_TYPE_PUSH);
+            labelAttrRelVo.setStatus(ServiceConstants.LabelAttrRel.STATUS_SUCCESS);
+            labelAttrRelVo.setOrderBy("pageSortNum ASC,sortNum ASC");
+            try {
+                attrRelList = labelAttrRelServiceImpl.selectLabelAttrRelList(labelAttrRelVo);
+            } catch (Exception e) {
+                LogUtil.error("查询客户群关联的属性错误！", e);
+            }
+            
             labelPushReq = new LabelPushReq();
             //在back库里确认一下清单数据是否存在
 			String customId = customInfo.getLabelId();
-            String sql = this.getCustomListSql();
+            String customListSql = iCustomerPublishCommService.getCustomListSql(customInfo, attrRelList);
+			String sql = new StringBuffer("SELECT COUNT(1) FROM (").append(customListSql).append(") tab ").toString();
             LogUtil.debug("客户群("+customId+")的清单数据是否存在sql："+sql);
 	        try {
                 int no = backSqlService.queryCount(sql);
                 LogUtil.debug("客户群("+customId+")的清单数据量："+no);
             } catch (Exception e) {
-                LogUtil.warn("客户群("+customId+")的清单数据不存在，不推送。");
+                LogUtil.warn("查询客户群("+customId+")的清单数据出错，不推送。");
                 continue;
             }
 	        
@@ -246,7 +267,17 @@ public class CustomerPublishDefaultThread implements ICustomerPublishThread {
 	                try {
 	                    LogUtil.debug("个性化推送...");
 	                    ICustomerPublishService myPush = (ICustomerPublishService) SpringContextHolder.getBean(sysInfo.getPushClassName());
-	                    flag = myPush.push(labelPushCycleList, isJobTask, reservedParameters);
+	                    if (null != sysInfo.getPushClassName()) {
+							if (null != myPush) {
+								flag = myPush.push(labelPushCycleList, isJobTask, reservedParameters);
+							} else {
+								msg = new StringBuffer().append("没有找到个性化推送接口实现类，").append(msg).toString();
+								throw new RuntimeException(msg);
+							} 
+						} else {
+							msg = new StringBuffer().append("SysInfo表没有配置个性化推送接口实现类，").append(msg).toString();
+							throw new RuntimeException(msg);
+						} 
 	                } catch (Exception e) {
 	                    flag = false;
 	                    LogUtil.error(msg, e);
@@ -312,25 +343,38 @@ public class CustomerPublishDefaultThread implements ICustomerPublishThread {
         String fileTmp = "";
         String desFile ="";
         
-        //1.1 创建清单文件
-        String sql = this.getCustomListSql();
-        result = this.getSql2FileUtils().sql2File(sql, null, fileName, encode, bufferedRowSize);
-	    //2.determine push file
+        //1.1 获取创建清单文件sql
+        String customListSql = iCustomerPublishCommService.getCustomListSql(customInfo, attrRelList);
+        LogUtil.info("查询清单数据："+customListSql);
+        //1.2 创建清单文件
+        result = this.getSql2FileUtils().sql2File(customListSql, null, fileName, encode, bufferedRowSize);
+        
+        
+	    //2.determine push file type
         if (result) {
             //2.1 是否有表头
             String title = cacheProxy.getSYSConfigInfoByKey("RELATED_COLUMN_CN_NAME");
             if(sysInfo.getIsNeedTitle() != null && ServiceConstants.SysInfo.IS_NEED_TITLE_YES == sysInfo.getIsNeedTitle()){
                 if (StringUtil.isEmpty(title)) {
                     title = ",手机号码";
+                } else {
+	                	title = "," + title;
+                }
+                if (null != attrRelList && !attrRelList.isEmpty()) {    //有属性列
+                		StringBuffer titleStr = new StringBuffer();
+                		for (LabelAttrRel labelAttrRel : attrRelList) {
+                			titleStr.append(",").append(labelAttrRel.getAttrColName());
+					}
+                		title += titleStr.toString();
                 }
             }
             //2.2 是否有加密描述文件
             if (sysInfo.getIsNeedDes() != null && ServiceConstants.SysInfo.IS_NEED_DES_YES == sysInfo.getIsNeedDes()) {
-                result = this.getSql2FileUtils().sql2File(sql, title, csvFileTmp, encode, bufferedRowSize);
+                result = this.getSql2FileUtils().sql2File(customListSql, title, csvFileTmp, encode, bufferedRowSize);
                 fileTmp = csvFileTmp;
                 desFile = csvFile;
             }else{
-                result = this.getSql2FileUtils().sql2File(sql, title, csvFile, encode, bufferedRowSize);
+                result = this.getSql2FileUtils().sql2File(customListSql, title, csvFile, encode, bufferedRowSize);
                 desFile = csvFile;
             }
             
@@ -344,7 +388,7 @@ public class CustomerPublishDefaultThread implements ICustomerPublishThread {
                 try {
                     FileUtil.createFile(fileName, "");
                 } catch (Exception e) {
-                    LogUtil.error("导出清单文件错误" + sql + fileTmp + zipFile, e);
+                    LogUtil.error("导出清单文件错误" + customListSql + fileTmp + zipFile, e);
                 }
             }
           
@@ -407,6 +451,7 @@ public class CustomerPublishDefaultThread implements ICustomerPublishThread {
                 }
             }
 
+            
             //3 download file
             //3.1 下载数据文件
             Integer protocoType = sysInfo.getProtocoType();//协议类型
@@ -475,7 +520,8 @@ public class CustomerPublishDefaultThread implements ICustomerPublishThread {
                     return false;
                 }
             }
-  
+
+            
             //4 call webService,or do nothing  to ALERT
             String isCallWebService = this.cacheProxy.getSYSConfigInfoByKey("TRANSFER_WEBSERVICE_BEFORE_PUBLISH");
             if (!Boolean.valueOf(isCallWebService) && StringUtil.isNotEmpty(sysInfo.getWebserviceWsdl())
@@ -503,47 +549,6 @@ public class CustomerPublishDefaultThread implements ICustomerPublishThread {
             labelPushReq.setExceInfo(emsg);
         }
         labelPushReqServiceImpl.update(labelPushReq);
-    }
-    
-    /*
-     * 根据标签信息表，以及标签推送设置信息表，找出需要推送的客户群
-     */
-    private String getCustomListSql() {
-        //获取表名
-        MdaSysTableColumn mdaSysTableColumn = customInfo.getMdaSysTableColumn();
-        MdaSysTable mdaSysTable = mdaSysTableColumn.getMdaSysTable();
-        String tableName = mdaSysTable.getTableName();
-        //获取列名
-//        MdaSysTableColumnVo mdaSysTableColumnVo = new MdaSysTableColumnVo();
-//        mdaSysTableColumnVo.setLabelId(customInfo.getLabelId());
-//        List<MdaSysTableColumn> cols = null;
-//        try {
-//            cols = iMdaSysTableColService.selectMdaSysTableColList(mdaSysTableColumnVo);
-//        } catch (BaseException e) {
-//            LogUtil.error("查询列表出错。", e);
-//        }
-        //拼装sql
-        StringBuilder sql = new StringBuilder("SELECT ").append(LabelInfoContants.KHQ_CROSS_COLUMN);
-        //拼接列
-//        if (null != cols && !cols.isEmpty()) {
-//            sql.append(", ");
-//            for (MdaSysTableColumn col : cols) {
-//                if (StringUtil.isNotEmpty(col.getColumnName())) {
-//                    sql.append(col.getColumnName()).append(",");
-//                }
-//            }
-//            sql.deleteCharAt(sql.length()-1).append(" ");//去掉末尾的逗号
-//        }
-        sql.append(" from ");
-        //拼接表名
-        //拼接Schema
-        if (StringUtil.isNotEmpty(mdaSysTable.getTableSchema())) {
-            sql.append(mdaSysTable.getTableSchema()).append(".");
-        }
-        sql.append(tableName).append(customInfo.getDataDate());
-
-        
-        return sql.toString();
     }
 
     /**
@@ -889,7 +894,7 @@ public class CustomerPublishDefaultThread implements ICustomerPublishThread {
                 int start = 1;
                 IBackSqlService backSqlService = (IBackSqlService) SpringContextHolder.getBean("backServiceImpl");
                 while (true) {
-                    dataList = backSqlService.queryForPage(sql.toString(), start, bufferedRowSize);
+                    dataList = backSqlService.queryForPage(sql, start, bufferedRowSize);
                     if (dataList.size() >= bufferSize){
                         if (fileName.toLowerCase().endsWith("csv") || fileName.toLowerCase().endsWith("txt")) {//纯文本文本格式
                             flag = this.writeToTextFile1(dataList, title, file, encode);
