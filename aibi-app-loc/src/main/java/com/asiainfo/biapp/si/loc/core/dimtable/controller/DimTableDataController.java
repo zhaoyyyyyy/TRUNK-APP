@@ -78,6 +78,9 @@ public class DimTableDataController extends BaseController<DimTableData>{
         Page<DimTableData> dimTableDatas = new Page<>();
         //组装参数
         DimTableData dimTableData = new DimTableData(new DimTableDataId(dimTableName));
+        if (StringUtil.isNoneBlank(dimKey)) {
+        	dimTableData.setDimKey(dimKey);
+        }
         if (StringUtil.isNoneBlank(dimValue)) {
             dimTableData.setDimValue(dimValue);
         }
