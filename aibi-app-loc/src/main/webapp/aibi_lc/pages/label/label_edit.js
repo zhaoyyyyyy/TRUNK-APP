@@ -236,7 +236,6 @@ window.loc_onload = function() {
 				},
 				//显示维表详情
 				showdimdetail : function(sourceInfo){
-					debugger
 					$.commAjax({
 						ansyc : false,
 					    url : $.ctx + '/api/dimtable/dimTableInfo/get',
@@ -363,8 +362,12 @@ function fun_to_save(){
 					var k=0;
 					$("form[class~=create-main-col]").each(function(){
 						var mdaSysTableColumn = $(this).formToJson();
+						/*if(mdaSysTableColumn['columnId']==""){
+							delete mdaSysTableColumn['columnId']
+						}*/
 						mdaSysTableColumn["labelId"]=labelId;
 						$.commAjax({
+							ansyc : false,
 							url : url_fh,
 							postData : mdaSysTableColumn,
 							onSuccess : function(data){

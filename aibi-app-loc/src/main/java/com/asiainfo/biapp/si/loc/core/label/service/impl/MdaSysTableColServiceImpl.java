@@ -23,11 +23,13 @@ import com.asiainfo.biapp.si.loc.base.utils.StringUtil;
 import com.asiainfo.biapp.si.loc.core.dimtable.entity.DimTableInfo;
 import com.asiainfo.biapp.si.loc.core.dimtable.service.IDimTableInfoService;
 import com.asiainfo.biapp.si.loc.core.label.dao.IMdaSysTableColumnDao;
+import com.asiainfo.biapp.si.loc.core.label.entity.LabelCountRules;
 import com.asiainfo.biapp.si.loc.core.label.entity.LabelInfo;
 import com.asiainfo.biapp.si.loc.core.label.entity.LabelVerticalColumnRel;
 import com.asiainfo.biapp.si.loc.core.label.entity.LabelVerticalColumnRelId;
 import com.asiainfo.biapp.si.loc.core.label.entity.MdaSysTable;
 import com.asiainfo.biapp.si.loc.core.label.entity.MdaSysTableColumn;
+import com.asiainfo.biapp.si.loc.core.label.service.ILabelCountRulesService;
 import com.asiainfo.biapp.si.loc.core.label.service.ILabelInfoService;
 import com.asiainfo.biapp.si.loc.core.label.service.ILabelVerticalColumnRelService;
 import com.asiainfo.biapp.si.loc.core.label.service.IMdaSysTableColService;
@@ -78,6 +80,9 @@ public class MdaSysTableColServiceImpl extends BaseServiceImpl<MdaSysTableColumn
     private IDimTableInfoService iDimTableInfoService;
     
     @Autowired
+    private ILabelCountRulesService iLabelCountRulesService;
+    
+    @Autowired
     private ILabelVerticalColumnRelService iLabelVerticalColumnRelService;
 
     @Override
@@ -107,8 +112,13 @@ public class MdaSysTableColServiceImpl extends BaseServiceImpl<MdaSysTableColumn
 
     @Override
     public void addMdaSysTableColumn(MdaSysTableColumn mdaSysTableColumn) throws BaseException {
-        //保存标签与纵表列关系
+        //纵表标签
         if (mdaSysTableColumn.getLabelTypeId()!=null) {
+            //保存标签规则维表
+            LabelCountRules labelCountRules = new LabelCountRules();
+            labelCountRules.setDependIndex(mdaSysTableColumn.getDependIndex());
+            iLabelCountRulesService.addLabelCountRules(labelCountRules);
+            
             if (StringUtil.isNotBlank(mdaSysTableColumn.getDimTransId())) {
                 mdaSysTableColumn.setDimTransId(mdaSysTableColumn.getDimTransId());
                 DimTableInfo dimTable = iDimTableInfoService.selectDimTableInfoById(mdaSysTableColumn.getDimTransId());
@@ -118,8 +128,12 @@ public class MdaSysTableColServiceImpl extends BaseServiceImpl<MdaSysTableColumn
             LabelInfo labelInfo = iLabelInfoService.get(mdaSysTableColumn.getLabelId());
             MdaSysTable mdaSysTable = iMdaSysTableService.queryMdaSysTable(labelInfo.getConfigId(), labelInfo.getUpdateCycle(), 3);
             mdaSysTableColumn.setTableId(mdaSysTable.getTableId());
+            mdaSysTableColumn.setCountRulesCode(labelCountRules.getCountRulesCode());
+            mdaSysTableColumn.setUnit(labelInfo.getUnit());
+            mdaSysTableColumn.setColumnId(null);
             super.saveOrUpdate(mdaSysTableColumn);
             
+          //保存标签与纵表列关系
             LabelVerticalColumnRel labelVerticalColumnRel = new LabelVerticalColumnRel();
             LabelVerticalColumnRelId labelVerticalColumnRelId = new LabelVerticalColumnRelId();
             labelVerticalColumnRelId.setLabelId(mdaSysTableColumn.getLabelId());
@@ -135,7 +149,11 @@ public class MdaSysTableColServiceImpl extends BaseServiceImpl<MdaSysTableColumn
     }
 
     public void modifyMdaSysTableColumn(MdaSysTableColumn mdaSysTableColumn) throws BaseException {
-        super.saveOrUpdate(mdaSysTableColumn);
+        if (mdaSysTableColumn.getLabelTypeId()!= null) {
+            LabelInfo labelInfo = iLabelInfoService.get(mdaSysTableColumn.getLabelId());
+            mdaSysTableColumn.setUnit(labelInfo.getUnit());
+        }   
+        super.saveOrUpdate(mdaSysTableColumn); 
         
         //修改标签与纵表列对应关系表
         if (mdaSysTableColumn.getLabelTypeId()!= null) {

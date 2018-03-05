@@ -254,10 +254,10 @@ function fun_to_save(){
 			  url : $.ctx + '/api/label/labelInfo/save',
 			  postData : labelInfo,
 			  onSuccess : function(data){
-				  flag = data.data
+				  flag = data.status
 			  }  
 			});	
-			if(k == $("form").size() && flag == "success"){	
+			if(k == $("form").size() && flag == 200){
 				$.success("创建成功",function(){
 					history.back(-1);
 //					frame.html.location.href='label_mgr.html';

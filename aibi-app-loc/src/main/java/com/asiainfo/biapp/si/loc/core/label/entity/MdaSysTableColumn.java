@@ -147,7 +147,7 @@ public class MdaSysTableColumn extends BaseEntity {
      */
     @Transient
     private Integer labelTypeId;
-    
+
     /**
      * 是否必选列
      */
@@ -160,13 +160,19 @@ public class MdaSysTableColumn extends BaseEntity {
     @Transient
     private Integer columnNum;
 
+    /**
+     * 规则依赖指标
+     */
+    @Transient
+    private String dependIndex;
+
     @Transient
     private DimTableInfo dimtableInfo;
 
     @ManyToOne(cascade = CascadeType.REFRESH, optional = false)
     @JoinColumn(name = "TABLE_ID", insertable = false, updatable = false)
     private MdaSysTable mdaSysTable;
-    
+
     public String getTableId() {
         return tableId;
     }
@@ -293,6 +299,14 @@ public class MdaSysTableColumn extends BaseEntity {
 
     public void setColumnNum(Integer columnNum) {
         this.columnNum = columnNum;
+    }
+
+    public String getDependIndex() {
+        return dependIndex;
+    }
+
+    public void setDependIndex(String dependIndex) {
+        this.dependIndex = dependIndex;
     }
 
 }

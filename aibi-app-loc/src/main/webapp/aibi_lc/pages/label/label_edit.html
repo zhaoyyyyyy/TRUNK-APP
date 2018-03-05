@@ -153,7 +153,7 @@
 	                            required="true" name="busiCaliber" placeholder="请输入业务口径">
 							</div>
 						</div>
-						<div v-if="isfhbq==true" class="ui-form-group ml70">
+						<div v-show="isfhbq==true" class="ui-form-group ml70">
 							<label class="control-label">
 							<span class="input-required">*</span>
 							请选择纵表</label> 
@@ -162,6 +162,7 @@
                                 <option disabled value="">请选择指标源表</option>
                                 <option v-for ="source in sourcetableInfoList" :value="source.sourceTableId">{{source.sourceTableName}}</option>
                                 </select>
+                                <span id="dimCodeColTxtTip" class="fleft columnGreenTip" title="请先选择更新周期">?</span>
                             </div>
 						</div>		            							                                               
 					</div>
@@ -183,11 +184,12 @@
 	                    <legend>列信息</legend>
 	                    <i v-on:click="del_form(index)" class="del-btn-icon fright mr10 mt5" ></i>
 	                    <div class="form-horizontal fleft ui-form">
-	                        <input type="hidden" v-model="sourceInfo.columnId" name="columnId"/>
+	                        <input type="hidden" v-model="sourceInfo.sourceId" name="dependIndex"/>
+	                        <input type="hidden" v-model="sourceInfo.columnId" name="columnId" id="columnId"/>
 	                        <div class="ui-form-group ml70">
 								<label class="control-label">
 								<span class="input-required">*</span>
-								标签类型</label> 
+								列标签类型</label> 
 								<div class="control-input ml10">
 									<select v-model="sourceInfo.labelTypeId" id="labelTypeId" name="labelTypeId" required="true" class="easyui-validatebox form-control"
 								     v-on:change="changeStatus(index,$event)">
@@ -208,16 +210,6 @@
 		                            </div>
 		                            <button type="button" v-on:click="showdimdetail(sourceInfo)" class="file-up-btn ml10" >详情</button>
 		                        </div> 
-		                        <!-- <div class="ui-form-group ml70">
-									<label class="control-label">
-									<span class="input-required">*</span>
-									数据类型:</label> 
-									<div class="control-input ml10">
-										<select v-model="sourceInfo.dataType" name="dataType" required="true" class="easyui-validatebox form-control" selected>
-										     <option v-for = "h in sjlx" :value="h.code">{{h.dataName}}</option>
-									    </select>
-								    </div>
-							    </div> -->
 		                    </div>
 							<div class="ui-form-group ml70">
 								<label class="control-label">

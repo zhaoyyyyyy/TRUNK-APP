@@ -221,6 +221,9 @@ public class MdaSysTableColumnController extends BaseController<MdaSysTableColum
         if (null != mda.getColumnNum()) {
             oldmda.setColumnNum(mda.getColumnNum());
         }
+        if (StringUtil.isNotBlank(mda.getDependIndex())) {
+            oldmda.setDependIndex(mda.getDependIndex());
+        }
         return oldmda;
     }
 
