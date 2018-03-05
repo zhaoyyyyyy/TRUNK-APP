@@ -7,6 +7,7 @@ window.loc_onload = function() {
 	//移动标签时所选中的标签ID数组
 	var transData = new Array();
 	var leftTreeCagyId;  //左边树选中的分类ID
+	var leftTreeCagyName;//左边树选中的分类名称
 	$("#labelLength").html(0);
 	$("#dialog").dialog({
 	      height:164,
@@ -273,7 +274,7 @@ window.loc_onload = function() {
 			$("#selectAll").removeClass("active");
 			leftTreeCagyId =treeNode.categoryId;
 			$("#exampleInputAmount1").val("");
-			$("#leftCategoryName").html(treeNode.categoryName);
+			leftTreeCagyName = treeNode.categoryName;
 			showLabelInfo();
 		};		
 	}
@@ -483,9 +484,21 @@ window.loc_onload = function() {
 	});
 	//符合条件的标签的拼写
 	function showLabelInfo(labelInfo,number){
-		var categoryId = leftTreeCagyId;
-		var text = labelInfo;			//模糊查询时的关键字
-		if(number == 1){text = labelInfo; categoryId = "";}//全部分类下的标签模糊查询
+		var categoryId;
+		var text = labelInfo;//模糊查询时的关键字
+		if(number == 1){//全部分类下的标签模糊查询
+			text = labelInfo; categoryId = "";
+			$("#leftCategoryName").html("全部分类");
+		}else{
+			if(leftTreeCagyId ==null){
+				$("#leftCategoryName").html("");
+				$("#labelList").html("");
+		    	$("#labelLength").html("");
+		    	return 
+				}
+			categoryId = leftTreeCagyId;
+			$("#leftCategoryName").html(leftTreeCagyName);
+		}
 		$.commAjax({			
 		    url : $.ctx+'/api/label/labelInfo/queryListEffective', 
 		    isShowMask : true,
