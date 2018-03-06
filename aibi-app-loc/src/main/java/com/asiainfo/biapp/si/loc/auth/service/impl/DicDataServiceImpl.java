@@ -1,6 +1,8 @@
 package com.asiainfo.biapp.si.loc.auth.service.impl;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.transaction.Transactional;
 
@@ -44,8 +46,10 @@ public class DicDataServiceImpl implements IDicDataService{
 	@Override
 	public List<DicData> queryAllDicData() throws BaseException {
 		List<DicData> allDicDataList = null;
+		Map<String,Object> params = new HashMap<String,Object>();
+		params.put("status", "1");
 		try {
-            String dataJson = HttpUtil.sendPost(jauthUrl + "/api/datadic/dicdatas/query", null);
+            String dataJson = HttpUtil.sendPost(jauthUrl + "/api/datadic/dicdatas/query", params);
             allDicDataList = (List<DicData>) JsonUtil.json2CollectionBean(dataJson, List.class, DicData.class);
         } catch (Exception e) {
             throw new JauthServerException("批量读取数据字典数据异常");
