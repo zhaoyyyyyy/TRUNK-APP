@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.asiainfo.biapp.si.loc.base.common.LabelInfoContants;
+import com.asiainfo.biapp.si.loc.base.exception.BaseException;
 import com.asiainfo.biapp.si.loc.base.utils.LogUtil;
 import com.asiainfo.biapp.si.loc.base.utils.StringUtil;
 import com.asiainfo.biapp.si.loc.cache.CocCacheAble;
@@ -19,6 +20,7 @@ import com.asiainfo.biapp.si.loc.cache.CocCacheProxy;
 import com.asiainfo.biapp.si.loc.core.label.entity.LabelInfo;
 import com.asiainfo.biapp.si.loc.core.label.entity.MdaSysTable;
 import com.asiainfo.biapp.si.loc.core.label.entity.MdaSysTableColumn;
+import com.asiainfo.biapp.si.loc.core.label.service.ILabelExploreService;
 import com.asiainfo.biapp.si.loc.core.label.service.ILabelInfoService;
 import com.asiainfo.biapp.si.loc.core.syspush.entity.LabelAttrRel;
 import com.asiainfo.biapp.si.loc.core.syspush.service.ICustomerPublishCommService;
@@ -50,14 +52,18 @@ public class CustomerPublishCommImplService implements ICustomerPublishCommServi
 
     @Autowired
     private ILabelInfoService iLabelInfoService;
+    @Autowired
+    private ILabelExploreService iLabelExploreService;
+    
     
 	public String getCustomListSql(LabelInfo customInfo, List<LabelAttrRel> attrRelList) {
         //获取主表表名
         MdaSysTableColumn mdaSysTableColumn = customInfo.getMdaSysTableColumn();
-		MdaSysTable mainMdaSysTable = mdaSysTableColumn.getMdaSysTable();
+		MdaSysTable mainMdaSysTable = null!=mdaSysTableColumn ? mdaSysTableColumn.getMdaSysTable() : null;
         //拼装sql
-        StringBuilder sql = new StringBuilder("SELECT m.").append(LabelInfoContants.KHQ_CROSS_COLUMN);
-        
+        StringBuilder sql = new StringBuilder("SELECT m.").append(LabelInfoContants.KHQ_CROSS_COLUMN).append(" ");
+
+        String fromSql = "";
         if (null != attrRelList && !attrRelList.isEmpty()) {    //有属性列
             //拼接列
             LabelAttrRel labelAttrRel = null;
@@ -66,16 +72,26 @@ public class CustomerPublishCommImplService implements ICustomerPublishCommServi
                 sql.append(",").append("attr_").append(i).append(".").append(labelAttrRel.getAttrCol());
             }
             sql.append(" from (");
+            
             //拼接主表
-            sql.append("SELECT t.").append(LabelInfoContants.KHQ_CROSS_COLUMN).append(" from ");
-            if (StringUtil.isNotEmpty(mainMdaSysTable.getTableSchema())) {
-                //拼接Schema
-                sql.append(mainMdaSysTable.getTableSchema()).append(".");
+            if (null != mdaSysTableColumn) {
+                sql.append("SELECT t.").append(LabelInfoContants.KHQ_CROSS_COLUMN).append(" from ");
+                if (StringUtil.isNotEmpty(mainMdaSysTable.getTableSchema())) {
+                    //拼接Schema
+                    sql.append(mainMdaSysTable.getTableSchema()).append(".");
+                }
+                sql.append(mainMdaSysTable.getTableName()).append(customInfo.getDataDate()).append(" t ")
+                   .append("where t.").append(LabelInfoContants.KHQ_CROSS_ID_PARTION).append("='")
+                   .append(customInfo.getLabelId()).append("'");
+            } else {
+                try {
+                    fromSql = iLabelExploreService.getListTableSql(customInfo.getLabelId(), customInfo.getDataDate());
+                } catch (BaseException e) {
+                    LogUtil.error("获取客户群清单sq出错：", e);;
+                }
+                sql.append(fromSql);
             }
-            sql.append(mainMdaSysTable.getTableName()).append(customInfo.getDataDate()).append(" t ")
-               .append("where t.").append(LabelInfoContants.KHQ_CROSS_ID_PARTION).append("='")
-               .append(customInfo.getLabelId()).append("') m ");
-//               .append(LabelInfoContants.KHQ_CROSS_ID_PARTION+" like '%') m ");//devtest
+            sql.append(") m ");
 
             //拼接left join
             CocCacheAble cacheProxy = CocCacheProxy.getCacheProxy();
@@ -96,25 +112,33 @@ public class CustomerPublishCommImplService implements ICustomerPublishCommServi
             }
             sql.delete(sql.length()-1, sql.length());
         } else {    //无属性列
-            //获取表名
-            sql.append(" from ");
-            //拼接主表名
-            if (StringUtil.isNotEmpty(mainMdaSysTable.getTableSchema())) {
-                //拼接Schema
-                sql.append(mainMdaSysTable.getTableSchema()).append(".");
+            //拼接主表
+	        	sql.append(" from ");
+            if (null != mdaSysTableColumn) {
+                //拼接主表名
+                if (StringUtil.isNotEmpty(mainMdaSysTable.getTableSchema())) {
+                    //拼接Schema
+                    sql.append(mainMdaSysTable.getTableSchema()).append(".");
+                }
+                sql.append(mainMdaSysTable.getTableName()).append(customInfo.getDataDate()).append(" m ")
+                   .append("where m.").append(LabelInfoContants.KHQ_CROSS_ID_PARTION).append("='")
+                   .append(customInfo.getLabelId()).append("'");
+            } else {
+                try {
+                    fromSql = iLabelExploreService.getListTableSql(customInfo.getLabelId(), customInfo.getDataDate());
+                } catch (BaseException e) {
+                    LogUtil.error("获取客户群清单sq出错：", e);;
+                }
+                sql.append(fromSql.replace(" where ", " m where m."));
             }
-            sql.append(mainMdaSysTable.getTableName()).append(customInfo.getDataDate()).append(" m ")
-               .append("where m.").append(LabelInfoContants.KHQ_CROSS_ID_PARTION).append("='")
-               .append(customInfo.getLabelId()).append("'");
-//                .append(customInfo.getDataDate()).append(" m");//devtest
-         }
-        
+        }
         
         return sql.toString();
     }
 	
     /**
-     * 根据标签id获取left join sql
+     * 根据标签id获取left join sql,形如：<br/>
+     * 	left join dw_A_111_20180301 t on maintable.product_no=t.product_no 
      * @param labelId	String	属性标签id
      * @param i		int		别名后缀
      * @param cacheProxy CocCacheAble	循环调用同一参数
@@ -124,7 +148,6 @@ public class CustomerPublishCommImplService implements ICustomerPublishCommServi
      */
     private String getJoinSqlByLabelId(String labelId,int i,CocCacheAble cacheProxy,LabelInfo label,
     		MdaSysTableColumn mdaSysTableColumn) {
-        // left join dw_A_111_20180301 t on maintable.product_no=t.product_no 
         StringBuffer sql = new StringBuffer("LEFT JOIN ");
         //获取表名
 //        label = cacheProxy.getLabelInfoById(labelId);

@@ -191,8 +191,7 @@ public class CustomerPublishDefaultThread implements ICustomerPublishThread {
                 LogUtil.error("查询客户群关联的属性错误！", e);
             }
             
-            labelPushReq = new LabelPushReq();
-            //在back库里确认一下清单数据是否存在
+            //在back库里确认一下清单数据是否存在,并查询有多少数据
 			String customId = customInfo.getLabelId();
             String customListSql = iCustomerPublishCommService.getCustomListSql(customInfo, attrRelList);
 			String sql = new StringBuffer("SELECT COUNT(1) FROM (").append(customListSql).append(") tab ").toString();
@@ -207,6 +206,7 @@ public class CustomerPublishDefaultThread implements ICustomerPublishThread {
 	        
 	        //保存推送详情
 	        String sysId = labelPushCycle.getSysId();
+	        labelPushReq = new LabelPushReq();
 //			if (isJobTask) {    //自启动推送
 //			    labelPushReq = new LabelPushReq();
 			    labelPushReq.setDataDate(customInfo.getDataDate());
