@@ -149,25 +149,17 @@ public class BackServiceImpl implements IBackSqlService{
 	}
 	
 	private boolean insertCustomDataHive(String sql, String tableName, String customerId) throws SqlRunException{
-
 		log.debug("-------------------- BackServiceImpl.insertCustomDataHive sql = " + sql);
 		log.debug("-------------------- BackServiceImpl.insertCustomDataHive tableName = " + tableName);
 		log.debug("-------------------- BackServiceImpl.insertCustomDataHive customerId = " + customerId);
-		
 		boolean isExistsTable = getBackDaoBean().isExistsTable(tableName);
 		boolean isCreateTable = true;
 		boolean isInsertTable = true;
 		log.debug("-------------------- BackServiceImpl.insertCustomDataHive isExistsTable = " + isExistsTable);
-		
 		List<String> primaryKey = new ArrayList<String>();
 		Map<String,String> columnName = new HashMap<String,String>();
-		StringBuffer sqlBuffer = new StringBuffer();
 		String insertcolumn = "";
-		
-		sqlBuffer.append("SELECT ").append(LabelInfoContants.KHQ_CROSS_COLUMN + " ");
-		sqlBuffer.append(sql);
 		insertcolumn= customerId;
-		
 		primaryKey.add(LabelInfoContants.KHQ_CROSS_ID_PARTION);
 		columnName.put(LabelInfoContants.KHQ_CROSS_ID_PARTION, "string");
 		columnName.put(LabelInfoContants.KHQ_CROSS_COLUMN, "string");
@@ -179,10 +171,8 @@ public class BackServiceImpl implements IBackSqlService{
 				return isCreateTable;
 			}
 		}
-		
-		log.debug("-------------------- BackServiceImpl.insertCustomDataHive sqlBuffer = " + sqlBuffer.toString());
-		LogUtil.info("-------------------- BackServiceImpl.insertCustomerData sqlBuffer = " + sqlBuffer.toString());
-		isInsertTable = getBackDaoBean().insertDataToTabByPartion(sqlBuffer.toString(), tableName, insertcolumn);
+		LogUtil.info("-------------------- BackServiceImpl.insertCustomerData sql = " + sql);
+		isInsertTable = getBackDaoBean().insertDataToTabByPartion(sql, tableName, insertcolumn);
 		log.debug("-------------------- BackServiceImpl.insertCustomDataHive isInsertTable = " + isInsertTable);
 		return isInsertTable;
 	

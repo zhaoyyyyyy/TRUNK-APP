@@ -41,6 +41,7 @@ public class ExploreQueryParam {
 	private Integer updateCycle;//客户群周期性	日期型标签使用
 	private boolean isValidate;//是否生成校验sql
 
+	private boolean isCreateCustom;//生成的是否是创建客户群sql
 	/**数据权限 20180117 */
 	private String orgId;
 	
@@ -117,6 +118,14 @@ public class ExploreQueryParam {
 
 	public void setOrgId(String orgId) {
 		this.orgId = orgId;
+	}
+
+	public boolean isCreateCustom() {
+		return isCreateCustom;
+	}
+
+	public void setCreateCustom(boolean isCreateCustom) {
+		this.isCreateCustom = isCreateCustom;
 	}
 
 }

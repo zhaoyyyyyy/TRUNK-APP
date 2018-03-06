@@ -56,28 +56,27 @@ public class CustomerManagerServiceImpl implements ICustomerManagerService {
 			// 1.获取sql
 		    customGroup = labelInfoService.get(customId);
 		    model.setOrgId(customGroup.getOrgId());// 权限
+		    model.setCreateCustom(true);
 			List<LabelRuleVo> labelRuleList = ruleService.queryCiLabelRuleList(customId,LabelRuleContants.LABEL_RULE_FROM_COSTOMER);
 			String countSqlStr = "";
-			if(haveCustomOrVerticalLabel(labelRuleList)) {
-				StringBuffer sql = new StringBuffer();
-				String querySql = exploreServiceImpl.getFromSqlForMultiLabel(labelRuleList, model);
-				sql.append(" from (").append(querySql).append(") abc");
-				countSqlStr=sql.toString();
-			}else{
-			     countSqlStr = exploreServiceImpl.getCountSqlStr(labelRuleList, model);
+			if (haveCustomOrVerticalLabel(labelRuleList)) {
+				countSqlStr = exploreServiceImpl.getFromSqlForMultiLabel(labelRuleList, model);
+			} else {
+				countSqlStr = exploreServiceImpl.getCountSqlStr(labelRuleList, model);
 			}
 			// 2.生成表
 			String tableName = "no table";
 			if (LabelInfoContants.CUSTOM_CYCLE_TYPE_ONE == customGroup.getUpdateCycle()) {
-				tableName = LabelInfoContants.KHQ_CROSS_ONCE_TABLE + customGroup.getConfigId() + "_"+ customGroup.getDataDate();
+				tableName = LabelInfoContants.KHQ_CROSS_ONCE_TABLE + customGroup.getConfigId() + "_"+ model.getDataDate();
 			} else {
-				tableName = LabelInfoContants.KHQ_CROSS_TABLE + customGroup.getConfigId() + "_"+ customGroup.getDataDate();
+				tableName = LabelInfoContants.KHQ_CROSS_TABLE + customGroup.getConfigId() + "_"+ model.getDataDate();
 			}
 			backServiceImpl.insertCustomerData(countSqlStr, tableName, customId);
 			// 3.发通知 setCustomNum
-			int customNum = backServiceImpl.queryCount("select count(1) " + countSqlStr);
+			int customNum = backServiceImpl.queryCount("select count(1) from (" + countSqlStr+") abc");
 			labelExtInfo = customGroup.getLabelExtInfo();
 			labelExtInfo.setCustomNum(customNum);
+			customGroup.setDataDate(model.getDataDate());
 			customGroup.setDataStatusId(LabelInfoContants.CUSTOM_DATA_STATUS_SUCCESS);
 			//4、处理清单表LOC_LIST_INFO
 			ListInfoId id=new ListInfoId();

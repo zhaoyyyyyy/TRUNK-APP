@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -189,6 +190,9 @@ public class LabelExploreServiceImpl implements ILabelExploreService {
 		Map<String, String> tableAliasMap = new LinkedHashMap<String, String>();
 		// 别名，要查询的字段集合 map (key:表别名 value：要查询的字段集合)
 		Map<String, Set<String>> aliasColumnMap = new HashMap<String, Set<String>>();
+		// 保存客户群使用：保存表名及别名20180306
+		Set<String> tableNameSet = new LinkedHashSet<String>();
+		
 		String dataTabelAlias = null;//表的别名（拼接where中的cityId，用于权限）
 		StringBuffer wherelabel = new StringBuffer(" (");
 		for (int i = 0; i < ciLabelRuleList.size(); i++) {
@@ -214,6 +218,7 @@ public class LabelExploreServiceImpl implements ILabelExploreService {
 				/** 2、日表、月表表名提取拼接 map处理 	*/
 				tableName = getTableName(queryParam, ciLabelInfo, tableName);
 				tableAliasMap.put(tableName.toUpperCase(), alias);
+				tableNameSet.add(tableName.toUpperCase() + " " + alias);
 				/** 3、获取where标签 sql条件	 */
 				String asName = alias + "." + column.getColumnName(); // 格式为：“别名.字段名”
 				fac.setLabelElement(ciLabelInfo.getLabelTypeId());
@@ -241,6 +246,20 @@ public class LabelExploreServiceImpl implements ILabelExploreService {
 		whereSb.append(wherelabel);
 		if (StringUtil.isNotEmpty(cityColumn)){
 			isNeedAuthen = true;
+		}
+		// 拼接客户群插入语句的select语句输出的字段 20180306
+		if (queryParam.isCreateCustom()) {
+			String sqlStr = getLeftJoinSqlStr(tableNameSet);
+			StringBuffer selectSql = new StringBuffer("");
+			String[] tableName = tableNameSet.toArray()[0].toString().split(" ");
+			if (tableName.length < 2) {
+				throw new RuntimeException("没有别名");
+			}
+			String singleTableAlias = tableName[1];
+			String columnName = LabelInfoContants.KHQ_CROSS_COLUMN;
+			selectSql.append("select " + singleTableAlias + "." + columnName);
+			selectSql.append(" from ").append(sqlStr).append(whereSb);
+			return selectSql.toString();
 		}
 		String leftJoinSqlStr = this.getLeftJoinSqlStr(tableAliasMap, aliasColumnMap, andFlag, whereSb, isNeedAuthen,cityColumn);
 		StringBuffer fromSqlSb = new StringBuffer("");
@@ -369,6 +388,41 @@ public class LabelExploreServiceImpl implements ILabelExploreService {
 		return joinSb.toString();
 	}
 
+	/**
+	 * 拼接left join语句
+	 * @param tableNameSet
+	 * @param dayTableName 日表
+	 * @param vertAttrTableNameMap
+	 * @return
+	 * @throws Exception
+	 * @version ZJ
+	 */
+	private String getLeftJoinSqlStr(Set<String> tableNameSet){
+		if (tableNameSet == null || tableNameSet.size() == 0) {
+			throw new RuntimeException("没有需要的表");
+		}
+		StringBuffer joinSb = new StringBuffer("");
+		String relatedColumn = LabelInfoContants.KHQ_CROSS_COLUMN;
+		int i = 0;
+		String lastAlias = "";
+		for (String tableNames : tableNameSet) {
+			String[] tableName = tableNames.split(" ");
+			if (tableName.length < 2) {
+				throw new RuntimeException("没有别名");
+			}
+			if (i == 0) {
+				joinSb.append(tableNames).append(" ");
+			} else {
+				joinSb.append("left join ").append(tableNames).append(" on ")
+						.append(lastAlias).append(".").append(relatedColumn).append(" = ")
+						.append(tableName[1]).append(".").append(relatedColumn).append(" ");
+			}
+			lastAlias = tableName[1];
+			i++;
+		}
+
+		return joinSb.toString();
+	}
 
 	@Override
 	public String getListTableSql(String customId, String dataDate) throws BaseException {
