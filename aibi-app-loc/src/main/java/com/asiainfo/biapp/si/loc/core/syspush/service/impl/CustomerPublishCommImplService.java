@@ -63,7 +63,6 @@ public class CustomerPublishCommImplService implements ICustomerPublishCommServi
         //拼装sql
         StringBuilder sql = new StringBuilder("SELECT m.").append(LabelInfoContants.KHQ_CROSS_COLUMN).append(" ");
 
-        String fromSql = "";
         if (null != attrRelList && !attrRelList.isEmpty()) {    //有属性列
             //拼接列
             LabelAttrRel labelAttrRel = null;
@@ -84,6 +83,7 @@ public class CustomerPublishCommImplService implements ICustomerPublishCommServi
                    .append("where t.").append(LabelInfoContants.KHQ_CROSS_ID_PARTION).append("='")
                    .append(customInfo.getLabelId()).append("'");
             } else {
+                String fromSql = "";
                 try {
                     fromSql = iLabelExploreService.getListTableSql(customInfo.getLabelId(), customInfo.getDataDate());
                 } catch (BaseException e) {
@@ -124,6 +124,7 @@ public class CustomerPublishCommImplService implements ICustomerPublishCommServi
                    .append("where m.").append(LabelInfoContants.KHQ_CROSS_ID_PARTION).append("='")
                    .append(customInfo.getLabelId()).append("'");
             } else {
+                String fromSql = "";
                 try {
                     fromSql = iLabelExploreService.getListTableSql(customInfo.getLabelId(), customInfo.getDataDate());
                 } catch (BaseException e) {
