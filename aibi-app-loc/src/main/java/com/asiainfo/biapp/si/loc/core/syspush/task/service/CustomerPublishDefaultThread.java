@@ -173,10 +173,10 @@ public class CustomerPublishDefaultThread implements ICustomerPublishThread {
 		long start = System.currentTimeMillis();
 		
 		for(LabelPushCycle labelPushCycle : labelPushCycleList){
-//            customInfo = cacheProxy.getLabelInfoById(labelPushCycle.getCustomGroupId());
-//            if (null == customInfo) {
+            customInfo = cacheProxy.getLabelInfoById(labelPushCycle.getCustomGroupId());
+            if (null == customInfo) {
                 customInfo = iLabelInfoService.get(labelPushCycle.getCustomGroupId());
-//            }
+            }
 
             //获取属性列
             LabelAttrRelVo labelAttrRelVo = new LabelAttrRelVo();

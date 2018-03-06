@@ -151,10 +151,10 @@ public class CustomerPublishCommImplService implements ICustomerPublishCommServi
     		MdaSysTableColumn mdaSysTableColumn) {
         StringBuffer sql = new StringBuffer("LEFT JOIN ");
         //获取表名
-//        label = cacheProxy.getLabelInfoById(labelId);
-//        if (null == label) {
+        label = cacheProxy.getLabelInfoById(labelId);
+        if (null == label) {
             label = iLabelInfoService.get(labelId);
-//        }
+        }
         mdaSysTableColumn = label.getMdaSysTableColumn();
         if (null != mdaSysTableColumn) {
             MdaSysTable mdaSysTable = mdaSysTableColumn.getMdaSysTable();
