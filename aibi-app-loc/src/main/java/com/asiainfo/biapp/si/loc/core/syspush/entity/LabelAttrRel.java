@@ -13,6 +13,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.hibernate.annotations.GenericGenerator;
 
@@ -189,10 +190,41 @@ public class LabelAttrRel extends BaseEntity{
     @ApiParam(value = "页面显示顺序")
     private Integer pageSortNum;
     
+    /**
+     * 推送属性ID
+     */
+    @Transient
+    private String AttrbuteId;
+
+    /**
+     * 排序的属性和类型（asc,desc）
+     */
+    @Transient
+    private String sortAttrAndType;
     
     
     
-    public Integer getPageSortNum() {
+    public String getAttrbuteId() {
+		return AttrbuteId;
+	}
+
+
+	public void setAttrbuteId(String attrbuteId) {
+		AttrbuteId = attrbuteId;
+	}
+
+
+	public String getSortAttrAndType() {
+		return sortAttrAndType;
+	}
+
+
+	public void setSortAttrAndType(String sortAttrAndType) {
+		this.sortAttrAndType = sortAttrAndType;
+	}
+
+
+	public Integer getPageSortNum() {
 		return pageSortNum;
 	}
 

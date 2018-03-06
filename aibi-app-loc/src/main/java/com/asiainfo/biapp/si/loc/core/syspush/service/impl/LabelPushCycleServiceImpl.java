@@ -40,6 +40,7 @@ import com.asiainfo.biapp.si.loc.core.syspush.service.ILabelAttrRelService;
 import com.asiainfo.biapp.si.loc.core.syspush.service.ILabelPushCycleService;
 import com.asiainfo.biapp.si.loc.core.syspush.task.ICustomerPublishThread;
 import com.asiainfo.biapp.si.loc.core.syspush.vo.CustomGroupListVo;
+import com.asiainfo.biapp.si.loc.core.syspush.vo.LabelAttrRelVo;
 import com.asiainfo.biapp.si.loc.core.syspush.vo.LabelPushCycleVo;
 
 /**
@@ -102,6 +103,18 @@ public class LabelPushCycleServiceImpl extends BaseServiceImpl<LabelPushCycle, S
     }
 
     public void addLabelPushCycle(LabelPushCycle labelPushCycle,String userName) throws BaseException {
+    	LabelAttrRelVo labelAttrRelVo = new LabelAttrRelVo();
+    	labelAttrRelVo.setLabelId(labelPushCycle.getCustomGroupId());
+    	labelAttrRelVo.setStatus(0);
+    	labelAttrRelVo.setAttrSettingType(1);
+    	if(iLabelAttrRelService.selectLabelAttrRelList(labelAttrRelVo) != null){
+    		List<LabelAttrRel> labelAttrRelList=iLabelAttrRelService.selectLabelAttrRelList(labelAttrRelVo);
+    		for(int i=0;i<labelAttrRelList.size();i++){
+    			LabelAttrRel labelAttrRel =labelAttrRelList.get(i);
+    			labelAttrRel.setStatus(1);
+    			iLabelAttrRelService.modifyLabelAttrRel(labelAttrRel);
+    		}
+    	}
     	 String[] attrbuteIdList = labelPushCycle.getAttrbuteId().split(",");
              for(int i=0;i<attrbuteIdList.length;i++){
                  if(!("").equals(attrbuteIdList[i])){
@@ -121,11 +134,13 @@ public class LabelPushCycleServiceImpl extends BaseServiceImpl<LabelPushCycle, S
                           	}
                          }
                      }
+                     labelAttrRel.setStatus(0);
                      labelAttrRel.setRecordId(labelPushCycle.getRecordId());
                      labelAttrRel.setLabelId(labelPushCycle.getCustomGroupId());	
                      labelAttrRel.setModifyTime(new Date());
                      labelAttrRel.setAttrColName(labelInfo.getLabelName());
                      labelAttrRel.setAttrSource(2);
+                     labelAttrRel.setAttrSettingType(1);
                      labelAttrRel.setLabelOrCustomId(labelInfo.getLabelId());
                      labelAttrRel.setAttrColType(labelInfo.getLabelTypeId().toString());
                      labelAttrRel.setAttrCreateUserId(userName);

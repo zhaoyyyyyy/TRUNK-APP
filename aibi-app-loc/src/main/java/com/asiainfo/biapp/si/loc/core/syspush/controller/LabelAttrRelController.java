@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.asiainfo.biapp.si.loc.auth.model.User;
 import com.asiainfo.biapp.si.loc.base.controller.BaseController;
 import com.asiainfo.biapp.si.loc.base.exception.BaseException;
 import com.asiainfo.biapp.si.loc.base.page.Page;
@@ -124,8 +125,11 @@ public class LabelAttrRelController extends BaseController<LabelAttrRel>{
     public WebResult<String> save(@ApiIgnore LabelAttrRel labelAttrRel) {
             WebResult<String> webResult = new WebResult<>();
             labelAttrRel.setModifyTime(new Date());
+            User user = new User(); 
             try {
-                iLabelAttrRelService.addLabelAttrRel(labelAttrRel);
+            	user = this.getLoginUser();
+            	String userName = user.getUserName();
+                iLabelAttrRelService.addLabelAttrRelPreview(labelAttrRel,userName);
             } catch (BaseException e) {
                 return webResult.fail(e);
             }

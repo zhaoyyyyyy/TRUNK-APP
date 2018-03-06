@@ -71,6 +71,14 @@ public interface ILabelAttrRelService extends BaseService<LabelAttrRel, String>{
      * @throws BaseException
      */
     public void addLabelAttrRel(LabelAttrRel labelAttrRel) throws BaseException;
+    
+    /**
+     * 新增或修改一个实体 Description:
+     *
+     * @param labelAttrRel
+     * @throws BaseException
+     */
+    public void addLabelAttrRelPreview(LabelAttrRel labelAttrRel,String userName) throws BaseException;
 
     /**
      * 修改一个实体 Description:

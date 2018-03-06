@@ -200,15 +200,42 @@ window.loc_onload = function() {
 		data : model,
 		methods:{
 			previewDialog:function () {
-				var wd = $.window('客户群预览', $.ctx
-						+ '/aibi_lc/pages/custom/custom_preview.html?labelId='+$.getUrlParam("labelId"), 900,
-						600);
-				wd.reload = function() {
-					$("#mainGrid").setGridParam({
-						postData : $("#formSearch").formToJson()
-					}).trigger("reloadGrid", [ {
-						page : 1
-					} ]);
+				model.sortAttrAndType="";
+				$(".selectList").each(function(){
+					if(model.sortAttrAndType.indexOf($(this).find(".select-Sort").val()) !=-1 || $(this).find("label[class~=active]").text() ==null ||$(this).find("label[class~=active]").text()==""){
+						model.sortAttrAndType=null;
+						$.alert("请正确选择排序属性及方式");
+						return false;
+					}else{
+						model.sortAttrAndType+=$(this).find(".select-Sort").val()+","+$(this).find("label[class~=active]").text()+";";
+					}
+				})
+				if(model.sortAttrAndType!=null){
+					if(!model.haveAttr){
+	        			model.sortAttrAndType =null;
+	        		}
+					$.commAjax({			
+					    url : $.ctx+'/api/syspush/labelAttrRel/save',
+					    dataType : 'json', 
+					    async : false,
+					    postData : {
+								"labelId" :labelId,
+								"AttrbuteId" :model.AttrbuteId,
+								"sortAttrAndType" :model.sortAttrAndType,
+							},
+						onSuccess:function(data){
+							var wd = $.window('客户群预览', $.ctx
+									+ '/aibi_lc/pages/custom/custom_preview.html?labelId='+$.getUrlParam("labelId"), 900,
+									600);
+							wd.reload = function() {
+								$("#mainGrid").setGridParam({
+									postData : $("#formSearch").formToJson()
+								}).trigger("reloadGrid", [ {
+									page : 1
+								} ]);
+							}
+				    	}
+				   });
 				}
 			},
 			showDialog:function(){

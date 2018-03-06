@@ -6,6 +6,7 @@
 
 package com.asiainfo.biapp.si.loc.core.syspush.service.impl;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.transaction.Transactional;
@@ -19,6 +20,8 @@ import com.asiainfo.biapp.si.loc.base.exception.ParamRequiredException;
 import com.asiainfo.biapp.si.loc.base.page.Page;
 import com.asiainfo.biapp.si.loc.base.service.impl.BaseServiceImpl;
 import com.asiainfo.biapp.si.loc.base.utils.StringUtil;
+import com.asiainfo.biapp.si.loc.core.label.entity.LabelInfo;
+import com.asiainfo.biapp.si.loc.core.label.service.ILabelInfoService;
 import com.asiainfo.biapp.si.loc.core.syspush.dao.ILabelAttrRelDao;
 import com.asiainfo.biapp.si.loc.core.syspush.entity.LabelAttrRel;
 import com.asiainfo.biapp.si.loc.core.syspush.service.ILabelAttrRelService;
@@ -51,10 +54,15 @@ public class LabelAttrRelServiceImpl extends BaseServiceImpl<LabelAttrRel, Strin
     @Autowired
     private ILabelAttrRelDao iLabelAttrRelDao;
     
+    @Autowired
+    private ILabelAttrRelService iLabelAttrRelService;
+    
     @Override
     protected BaseDao<LabelAttrRel, String> getBaseDao() {
         return iLabelAttrRelDao;
     }
+    @Autowired
+    private ILabelInfoService iLabelInfoService;
     
     public Page<LabelAttrRel> selectLabelAttrRelPageList(Page<LabelAttrRel> page, LabelAttrRelVo labelAttrRelVo) throws BaseException {
         return iLabelAttrRelDao.selectLabelAttrRelPageList(page, labelAttrRelVo);
@@ -72,7 +80,54 @@ public class LabelAttrRelServiceImpl extends BaseServiceImpl<LabelAttrRel, Strin
     }
 
     public void addLabelAttrRel(LabelAttrRel labelAttrRel) throws BaseException {
-        super.saveOrUpdate(labelAttrRel);
+    	super.saveOrUpdate(labelAttrRel);
+    }
+    
+    public void addLabelAttrRelPreview(LabelAttrRel labelAttrRel,String userName) throws BaseException {
+    	LabelAttrRelVo labelAttrRelVo = new LabelAttrRelVo();
+    	labelAttrRelVo.setLabelId(labelAttrRel.getLabelId());
+    	labelAttrRelVo.setStatus(0);
+    	labelAttrRelVo.setAttrSettingType(3);
+    	if(iLabelAttrRelService.selectLabelAttrRelList(labelAttrRelVo) != null){
+    		List<LabelAttrRel> labelAttrRelList=iLabelAttrRelService.selectLabelAttrRelList(labelAttrRelVo);
+    		for(int i=0;i<labelAttrRelList.size();i++){
+    			LabelAttrRel labelAttrRel1 =labelAttrRelList.get(i);
+    			labelAttrRel1.setStatus(1);
+    			iLabelAttrRelService.modifyLabelAttrRel(labelAttrRel1);
+    		}
+    	}
+    	String[] attrbuteIdList = labelAttrRel.getAttrbuteId().split(",");
+        for(int i=0;i<attrbuteIdList.length;i++){
+            if(!("").equals(attrbuteIdList[i])){
+            	LabelAttrRel labelAttrRelPreview = new LabelAttrRel();
+                LabelInfo labelInfo = iLabelInfoService.selectLabelInfoById(attrbuteIdList[i]);
+                if(StringUtil.isNoneBlank(labelAttrRel.getSortAttrAndType())){
+               	 String[] sortAttrAndTypeList = labelAttrRel.getSortAttrAndType().split(";");
+               	 for(int j=0;j<sortAttrAndTypeList.length;j++){
+                     	if(sortAttrAndTypeList[j].indexOf(labelInfo.getLabelName()) != -1){
+                     		String attrSortType =sortAttrAndTypeList[j].split(",")[1];
+                         	if(attrSortType.equals("升序")){
+                         		labelAttrRelPreview.setSortType("asc");
+                         	}else if(attrSortType.equals("降序")){
+                         		labelAttrRelPreview.setSortType("desc");
+                         	}
+                         	labelAttrRelPreview.setSortNum(j+1);
+                     	}
+                    }
+                }
+                labelAttrRelPreview.setStatus(0);
+                labelAttrRelPreview.setModifyTime(new Date());
+                labelAttrRelPreview.setLabelId(labelAttrRel.getLabelId());	
+                labelAttrRelPreview.setAttrColName(labelInfo.getLabelName());
+                labelAttrRelPreview.setAttrSource(2);
+                labelAttrRelPreview.setAttrSettingType(3);
+                labelAttrRelPreview.setLabelOrCustomId(labelInfo.getLabelId());
+                labelAttrRelPreview.setAttrColType(labelInfo.getLabelTypeId().toString());
+                labelAttrRelPreview.setAttrCreateUserId(userName);
+                labelAttrRelPreview.setPageSortNum(i+1);
+                super.saveOrUpdate(labelAttrRelPreview);
+            }
+        }
     }
 
     public void modifyLabelAttrRel(LabelAttrRel labelAttrRel) throws BaseException {
