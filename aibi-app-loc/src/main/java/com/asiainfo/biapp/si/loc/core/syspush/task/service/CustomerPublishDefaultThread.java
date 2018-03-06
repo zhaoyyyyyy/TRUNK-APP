@@ -136,6 +136,7 @@ public class CustomerPublishDefaultThread implements ICustomerPublishThread {
     List<LabelAttrRel> attrRelList = null;	//当前的推送客户群关联的属性列
 
     private int bufferedRowSize = 10000;    //每次读取数据的条数
+    private static final String FILE_PATH = "syspush"; 		//推送的文件的目录名称
     private static final String encode = "UTF-8"; 			//当前的文件的编码
     private static final long CUSTOMER_PUBLISH_PRE_WAIT_TIME = 5000;     //客户群推送线程前置等待时间
     private static final long CUSTOMER_PUBLISH_FTP_WAIT_TIME = 60000;    //客户群推送线程FTP等待时间
@@ -335,7 +336,17 @@ public class CustomerPublishDefaultThread implements ICustomerPublishThread {
 	    
 	    
 	    //1.data2file
-        final String localFilePath = sysInfo.getLocalPath() + File.separator;
+		//本地缓冲目录
+        String localPathTmp = cacheProxy.getSYSConfigInfoByKey("LOC_CONFIG_SYS_TEMP_PATH");  
+        if (null != sysInfo.getLocalPath()) {   //以数据库为准
+            localPathTmp = sysInfo.getLocalPath();
+        } else {   //否则以缓冲目录为准
+            if (!localPathTmp.endsWith(File.separator)) {
+                localPathTmp += File.separator;
+            }
+            localPathTmp += FILE_PATH;
+        }
+        final String localFilePath = localPathTmp + File.separator;
         String csvFile = localFilePath + fileName + ".csv";
         String csvFileTmp = localFilePath + fileName + "_tmp.csv";
         String zipFile = localFilePath + fileName + ".zip";
@@ -482,15 +493,14 @@ public class CustomerPublishDefaultThread implements ICustomerPublishThread {
                 if (!result) {
                     LogUtil.error(protocoTypeStr+" error");
                 }
-                LogUtil.debug(new File(desFile).exists());
                 LogUtil.debug("客户群推送线程"+protocoTypeStr+"等待时间: "+CUSTOMER_PUBLISH_FTP_WAIT_TIME/1000+" s");
                 Thread.sleep(CUSTOMER_PUBLISH_FTP_WAIT_TIME);
-//                result = new File(desFile).delete();    //FTP后删除本地des文件
+                result = new File(desFile).delete();    //FTP后删除本地des文件
                 LogUtil.debug(new File(desFile).exists());
                 //FTP后删除本地csv文件
                 if(sysInfo.getIsNeedCompress() != null && ServiceConstants.SysInfo.IS_NEED_COMPRESS_YES == sysInfo.getIsNeedCompress()){
                     if (result) {
-//                      result = new File(csvFile).delete();
+                        result = new File(csvFile).delete();
                     }
                 }
             } catch (Exception e) {
