@@ -84,16 +84,19 @@ window.loc_onload = function() {
 				}
 			}else{
 				var orgValue = $("#org").val();
-				if($("#type1")&&model.click!=1&&(orgValue==""||orgValue==null||orgValue==undefined)){
-					$("#type1").click();
-					model.click=1;
-				}else if($("#type2")&&model.click!=1&&(orgValue==""||orgValue==null||orgValue==undefined)){
-					$("#type2").click();
-					model.click=1;
-				}else if($("#type3")&&model.click!=1&&(orgValue==""||orgValue==null||orgValue==undefined)){
-					$("#type3").click();
-					model.click=1;
-				}
+				this.$nextTick(function(){
+					if($("#type1")&&model.click!=1&&(orgValue==""||orgValue==null||orgValue==undefined)){
+						$("#type1").click();
+						model.click=1;
+					}else if($("#type2")&&model.click!=1&&(orgValue==""||orgValue==null||orgValue==undefined)){
+						$("#type2").click();
+						model.click=1;
+					}else if($("#type3")&&model.click!=1&&(orgValue==""||orgValue==null||orgValue==undefined)){
+						$("#type3").click();
+						model.click=1;
+					}
+				})
+				
 			}
 				
 		}
