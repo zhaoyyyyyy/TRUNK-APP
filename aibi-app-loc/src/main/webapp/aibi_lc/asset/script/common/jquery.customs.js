@@ -77,7 +77,7 @@ $.fn.extend({
 		_self.append(html);
 		$.commAjax({
 			async : false,
-			url:"/api/prefecture/preConfigInfo/queryList",
+			url: $.ctx+"/api/prefecture/preConfigInfo/queryList",
 			postData:{"configStatus":1},
 			onSuccess:function(result){
 				if(result.data && result.data.length > 0){
