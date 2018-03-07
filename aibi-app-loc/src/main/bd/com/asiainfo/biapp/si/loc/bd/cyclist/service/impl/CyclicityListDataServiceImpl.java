@@ -242,12 +242,12 @@ public class CyclicityListDataServiceImpl implements ICyclicityListDataService{
 			StringBuffer sb = new StringBuffer();
 			sb.append("select t.LABEL_ID,t.CONFIG_ID from loc_label_info t ");
 			sb.append("left join  loc_pre_config_info c on c.config_id=t.config_id ");
-			sb.append(" where t.DATA_STATUS_ID=3 and c.config_status=1 and t.GROUP_TYPE=1 ");
+			sb.append(" where c.config_status=1 and t.GROUP_TYPE=1 ");
 			if(StringUtils.isNotBlank(configId)){
 				sb.append(" and c.config_id='").append(configId).append("' ");
 			}
 			sb.append(" and t.UPDATE_CYCLE=").append(Integer.toString(updateCycle)).append(" and t.label_id not in ");
-			sb.append("( select group_id from loc_list_info l where l.data_date='"+ dataDate + "' )");
+			sb.append("( select group_id from loc_list_info l where l.DATA_STATUS=3 and l.data_date='"+ dataDate + "' )");
 			
 			System.out.println("--------------------------- getAllDayListIdAndConfig = " + sb.toString());
 			
