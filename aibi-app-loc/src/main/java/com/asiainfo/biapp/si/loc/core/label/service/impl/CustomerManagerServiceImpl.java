@@ -64,7 +64,7 @@ public class CustomerManagerServiceImpl implements ICustomerManagerService {
 			} else {
 				countSqlStr = exploreServiceImpl.getCountSqlStr(labelRuleList, model);
 			}
-			// 2.生成表
+			// 2.生成表插入数据
 			String tableName = "no table";
 			if (LabelInfoContants.CUSTOM_CYCLE_TYPE_ONE == customGroup.getUpdateCycle()) {
 				tableName = LabelInfoContants.KHQ_CROSS_ONCE_TABLE + customGroup.getConfigId() + "_"+ model.getDataDate();
@@ -73,12 +73,13 @@ public class CustomerManagerServiceImpl implements ICustomerManagerService {
 			}
 			backServiceImpl.insertCustomerData(countSqlStr, tableName, customId);
 			// 3.发通知 setCustomNum
-			int customNum = backServiceImpl.queryCount("select count(1) from (" + countSqlStr+") abc");
+			String listTableSql = exploreServiceImpl.getListTableSql(customId, model.getDataDate());
+			int customNum = backServiceImpl.queryCount("select count(1) from "+listTableSql);
 			labelExtInfo = customGroup.getLabelExtInfo();
 			labelExtInfo.setCustomNum(customNum);
 			customGroup.setDataDate(model.getDataDate());
 			customGroup.setDataStatusId(LabelInfoContants.CUSTOM_DATA_STATUS_SUCCESS);
-			//4、处理清单表LOC_LIST_INFO
+			//4、处理清单表LOC_LIST_INFO  区分第一次
 			ListInfoId id=new ListInfoId();
 			id.setCustomGroupId(customId);
 			id.setDataDate(model.getDataDate());

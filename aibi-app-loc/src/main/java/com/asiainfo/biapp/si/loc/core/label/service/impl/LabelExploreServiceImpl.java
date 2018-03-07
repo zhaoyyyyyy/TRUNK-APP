@@ -251,13 +251,8 @@ public class LabelExploreServiceImpl implements ILabelExploreService {
 		if (queryParam.isCreateCustom()) {
 			String sqlStr = getLeftJoinSqlStr(tableNameSet);
 			StringBuffer selectSql = new StringBuffer("");
-			String[] tableName = tableNameSet.toArray()[0].toString().split(" ");
-			if (tableName.length < 2) {
-				throw new RuntimeException("没有别名");
-			}
-			String singleTableAlias = tableName[1];
 			String columnName = LabelInfoContants.KHQ_CROSS_COLUMN;
-			selectSql.append("select " + singleTableAlias + "." + columnName);
+			selectSql.append("select " + dataTabelAlias + "." + columnName);
 			selectSql.append(" from ").append(sqlStr).append(whereSb);
 			return selectSql.toString();
 		}
@@ -432,9 +427,9 @@ public class LabelExploreServiceImpl implements ILabelExploreService {
 		}
 		String tableName = "no table";
 		if (LabelInfoContants.CUSTOM_CYCLE_TYPE_ONE == customGroup.getUpdateCycle()) {
-			tableName = LabelInfoContants.KHQ_CROSS_ONCE_TABLE + customGroup.getConfigId() + "_"+ customGroup.getDataDate();
+			tableName = LabelInfoContants.KHQ_CROSS_ONCE_TABLE + customGroup.getConfigId() + "_"+ dataDate;
 		} else {
-			tableName = LabelInfoContants.KHQ_CROSS_TABLE + customGroup.getConfigId() + "_"+ customGroup.getDataDate();
+			tableName = LabelInfoContants.KHQ_CROSS_TABLE + customGroup.getConfigId() + "_"+ dataDate;
 		}
 		String singleLabelSql = backServiceImpl.getCurBackDbSchema()+"."+tableName+" where "+LabelInfoContants.KHQ_CROSS_ID_PARTION+" = '"+customId+"' ";
 		return singleLabelSql;
