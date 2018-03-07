@@ -45,7 +45,7 @@ window.loc_onload = function() {
 					}
 				}
 	      	});
-	      	model.dataName=$.getDicData("GXZQZD");
+	      	model.dataName=$.getDicData("QTGXZQ");
 	    }
     });
 	var labelId = $.getUrlParam("labelId");
