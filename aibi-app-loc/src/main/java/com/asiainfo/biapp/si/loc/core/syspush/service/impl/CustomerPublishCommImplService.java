@@ -22,8 +22,11 @@ import com.asiainfo.biapp.si.loc.core.label.entity.MdaSysTable;
 import com.asiainfo.biapp.si.loc.core.label.entity.MdaSysTableColumn;
 import com.asiainfo.biapp.si.loc.core.label.service.ILabelExploreService;
 import com.asiainfo.biapp.si.loc.core.label.service.ILabelInfoService;
+import com.asiainfo.biapp.si.loc.core.syspush.common.constant.ServiceConstants;
 import com.asiainfo.biapp.si.loc.core.syspush.entity.LabelAttrRel;
 import com.asiainfo.biapp.si.loc.core.syspush.service.ICustomerPublishCommService;
+import com.asiainfo.biapp.si.loc.core.syspush.service.ILabelAttrRelService;
+import com.asiainfo.biapp.si.loc.core.syspush.vo.LabelAttrRelVo;
 
 /**
  * Title : CustomerPublishCommImplService
@@ -55,7 +58,31 @@ public class CustomerPublishCommImplService implements ICustomerPublishCommServi
     @Autowired
     private ILabelExploreService iLabelExploreService;
     
+    @Autowired
+    private ILabelAttrRelService iLabelAttrRelService;
+
+
+    @Override
+    public List<LabelAttrRel> getLabelAttrRelsByCustom(LabelInfo customInfo, int attrSettingType) {
+        //获取属性列
+        List<LabelAttrRel> attrRelList = null;
+        
+        LabelAttrRelVo labelAttrRelVo = new LabelAttrRelVo();
+        labelAttrRelVo.setLabelId(customInfo.getLabelId());
+        labelAttrRelVo.setAttrSource(ServiceConstants.LabelAttrRel.ATTR_SOURCE_LABEL);
+        labelAttrRelVo.setAttrSettingType(attrSettingType);
+        labelAttrRelVo.setStatus(ServiceConstants.LabelAttrRel.STATUS_SUCCESS);
+        labelAttrRelVo.setOrderBy("pageSortNum ASC,sortNum ASC");
+        try {
+            attrRelList = iLabelAttrRelService.selectLabelAttrRelList(labelAttrRelVo);
+        } catch (Exception e) {
+            LogUtil.error("查询客户群关联的属性错误！", e);
+        }
+        
+        return attrRelList;
+    }
     
+    @Override
 	public String getCustomListSql(LabelInfo customInfo, List<LabelAttrRel> attrRelList) {
         //获取主表表名
         MdaSysTableColumn mdaSysTableColumn = customInfo.getMdaSysTableColumn();

@@ -33,13 +33,14 @@ import com.asiainfo.biapp.si.loc.core.label.entity.LabelInfo;
 import com.asiainfo.biapp.si.loc.core.label.service.ILabelExploreService;
 import com.asiainfo.biapp.si.loc.core.label.service.ILabelInfoService;
 import com.asiainfo.biapp.si.loc.core.label.vo.LabelInfoVo;
+import com.asiainfo.biapp.si.loc.core.syspush.common.constant.ServiceConstants;
 import com.asiainfo.biapp.si.loc.core.syspush.dao.ILabelPushCycleDao;
 import com.asiainfo.biapp.si.loc.core.syspush.entity.LabelAttrRel;
 import com.asiainfo.biapp.si.loc.core.syspush.entity.LabelPushCycle;
+import com.asiainfo.biapp.si.loc.core.syspush.service.ICustomerPublishCommService;
 import com.asiainfo.biapp.si.loc.core.syspush.service.ILabelAttrRelService;
 import com.asiainfo.biapp.si.loc.core.syspush.service.ILabelPushCycleService;
 import com.asiainfo.biapp.si.loc.core.syspush.task.ICustomerPublishThread;
-import com.asiainfo.biapp.si.loc.core.syspush.vo.CustomGroupListVo;
 import com.asiainfo.biapp.si.loc.core.syspush.vo.LabelAttrRelVo;
 import com.asiainfo.biapp.si.loc.core.syspush.vo.LabelPushCycleVo;
 
@@ -80,6 +81,9 @@ public class LabelPushCycleServiceImpl extends BaseServiceImpl<LabelPushCycle, S
     private ILabelExploreService iLabelExploreService;
     @Autowired
     private IBackSqlService iBackSqlService;
+    
+    @Autowired
+    private ICustomerPublishCommService iCustomerPublishCommService;
     
     @Override
     protected BaseDao<LabelPushCycle, String> getBaseDao() {
@@ -174,19 +178,53 @@ public class LabelPushCycleServiceImpl extends BaseServiceImpl<LabelPushCycle, S
         return this.iLabelPushCycleDao.deleteByLabelPushCycle(labelPushCycle);
     }
 
-    public Page<CustomGroupListVo> findGroupList(Page<CustomGroupListVo> page, LabelInfoVo customGroup) throws BaseException {
-        String sql = this.getGroupListSql(customGroup);
-        LogUtil.debug("清单预览sql："+sql);
-        //清单
-        List<Map<String, String>> pageMap = iBackSqlService.queryForPage(sql, page.getPageStart(), page.getPageSize());
+    @Override
+    public List<LabelAttrRel> findGroupListCols(LabelInfo customInfo) throws BaseException{
+        if(StringUtil.isBlank(customInfo.getLabelId())){
+            throw new ParamRequiredException("标签ID不能为空");
+        }
+        
+        List<LabelAttrRel> attrRelList = new ArrayList<>();
+        
+        //获取属性列
+        int attrType = ServiceConstants.LabelAttrRel.ATTR_SETTING_TYPE_PREVIEW;
+        attrRelList = iCustomerPublishCommService.getLabelAttrRelsByCustom(customInfo, attrType);
+
+        //默认列
+        LabelAttrRel col0 = new LabelAttrRel();
+        col0.setAttrCol(LabelInfoContants.KHQ_CROSS_COLUMN);
+        col0.setAttrColName("手机号");
+        attrRelList.add(0, col0);
+        
+        return attrRelList;
+    }
+    
+    @Override
+    public Page<Map<String, String>> findGroupList(Page<Map<String, String>> page, LabelInfoVo customGroup) throws BaseException {
+        //获取属性列
+        List<LabelAttrRel> attrRelList = null;
+        int attrType = ServiceConstants.LabelAttrRel.ATTR_SETTING_TYPE_PREVIEW;
+        try {
+            attrRelList = iCustomerPublishCommService.getLabelAttrRelsByCustom(customGroup, attrType);
+        } catch (Exception e) {
+            LogUtil.error("查询客户群关联的属性错误！", e);
+        }
+        
+        String customListSql = iCustomerPublishCommService.getCustomListSql(customGroup, attrRelList);
+        
+        LogUtil.debug("清单预览sql："+customListSql);
+        
+        //清单数据
+        List<Map<String, String>> pageMap = iBackSqlService.queryForPage(customListSql, page.getPageStart(), page.getPageSize());
+        
         String productNoHasPrivacy = CocCacheProxy.getCacheProxy().getSYSConfigInfoByKey(BaseConstants.PRODUCT_NO_HAS_PRIVACY);
         boolean isPrivate = true;
         if (StringUtil.isBlank(productNoHasPrivacy) || "false".equalsIgnoreCase(productNoHasPrivacy)) {
             isPrivate = false;
         }
         if (null != pageMap) {
-            List<CustomGroupListVo> customGroupListVos = new ArrayList<>();
             for (Map<String, String> map : pageMap) {
+                //对手机号做保密处理
                 String productNo = map.get(LabelInfoContants.KHQ_CROSS_COLUMN);
                 if (StringUtil.isNotBlank(productNo)) {
                     if (isPrivate) {
@@ -202,30 +240,12 @@ public class LabelPushCycleServiceImpl extends BaseServiceImpl<LabelPushCycle, S
                         }
                     }
                 }
-                customGroupListVos.add(new CustomGroupListVo(productNo));
+                map.put(LabelInfoContants.KHQ_CROSS_COLUMN, productNo);
             }
-            page.setData(customGroupListVos);
         }
+        
         return page;
-        
     }
-
-    /** 拼接查询客户群清单预览sql
-     * @param customGroup
-     * @return
-     * @throws BaseException
-     */
-    private String getGroupListSql(LabelInfoVo customGroup) throws BaseException {
-        String fromSql = iLabelExploreService.getListTableSql(customGroup.getLabelId(), customGroup.getDataDate());
-        
-        StringBuilder sql = new StringBuilder("select ").append(LabelInfoContants.KHQ_CROSS_COLUMN).append(" FROM ");
-        if (!fromSql.contains(".")) {
-            sql.append(iBackSqlService.getCurBackDbSchema()).append(".");
-        }
-        
-        return sql.append(fromSql).append(" order by ").append(LabelInfoContants.KHQ_CROSS_COLUMN).append(" asc").toString();
-    }
-    
 
 
 }

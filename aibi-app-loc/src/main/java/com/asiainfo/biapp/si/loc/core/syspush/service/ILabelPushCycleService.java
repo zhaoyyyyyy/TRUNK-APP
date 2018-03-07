@@ -7,13 +7,15 @@
 package com.asiainfo.biapp.si.loc.core.syspush.service;
 
 import java.util.List;
+import java.util.Map;
 
 import com.asiainfo.biapp.si.loc.base.exception.BaseException;
 import com.asiainfo.biapp.si.loc.base.page.Page;
 import com.asiainfo.biapp.si.loc.base.service.BaseService;
+import com.asiainfo.biapp.si.loc.core.label.entity.LabelInfo;
 import com.asiainfo.biapp.si.loc.core.label.vo.LabelInfoVo;
+import com.asiainfo.biapp.si.loc.core.syspush.entity.LabelAttrRel;
 import com.asiainfo.biapp.si.loc.core.syspush.entity.LabelPushCycle;
-import com.asiainfo.biapp.si.loc.core.syspush.vo.CustomGroupListVo;
 import com.asiainfo.biapp.si.loc.core.syspush.vo.LabelPushCycleVo;
 
 /**
@@ -88,6 +90,16 @@ public interface ILabelPushCycleService extends BaseService<LabelPushCycle, Stri
      * @throws BaseException
      */
     public void deleteLabelPushCycleById(String recordId) throws BaseException;
+
+
+    /**
+     * Description: 根据标签信息，获取客户群标签与属性对应关系。
+
+     * @param customInfo LabelInfo 客户群对象
+     * 
+     * @return attrRelList List<LabelAttrRel>  客户群关联的属性列List
+     */
+    public List<LabelAttrRel> findGroupListCols(LabelInfo customInfo) throws BaseException;
     
     /**
      * Description: 清单预览
@@ -95,7 +107,7 @@ public interface ILabelPushCycleService extends BaseService<LabelPushCycle, Stri
      * @param page
      * @param customGroup
      */
-    public Page<CustomGroupListVo> findGroupList(Page<CustomGroupListVo> page, LabelInfoVo customGroup) throws BaseException;
+    public Page<Map<String, String>> findGroupList(Page<Map<String, String>> page, LabelInfoVo customGroup) throws BaseException;
     
     
     

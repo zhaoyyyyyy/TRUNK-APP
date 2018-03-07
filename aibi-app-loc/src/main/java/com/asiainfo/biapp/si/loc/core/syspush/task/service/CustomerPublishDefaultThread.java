@@ -49,7 +49,6 @@ import com.asiainfo.biapp.si.loc.cache.CocCacheProxy;
 import com.asiainfo.biapp.si.loc.core.label.entity.LabelInfo;
 import com.asiainfo.biapp.si.loc.core.label.service.ILabelInfoService;
 import com.asiainfo.biapp.si.loc.core.syspush.common.constant.ServiceConstants;
-import com.asiainfo.biapp.si.loc.core.syspush.dao.ISysInfoDao;
 import com.asiainfo.biapp.si.loc.core.syspush.entity.LabelAttrRel;
 import com.asiainfo.biapp.si.loc.core.syspush.entity.LabelPushCycle;
 import com.asiainfo.biapp.si.loc.core.syspush.entity.LabelPushReq;
@@ -98,10 +97,8 @@ public class CustomerPublishDefaultThread implements ICustomerPublishThread {
     private IBackSqlService backSqlService;
 	
 	@Autowired
-	private ISysInfoService sysInfoServiceImpl;
-
-//    @Autowired
-//    private IMdaSysTableColService iMdaSysTableColService;
+	private ISysInfoService iSysInfoService;
+	
     @Autowired
     private ILabelInfoService iLabelInfoService;
     
@@ -109,16 +106,14 @@ public class CustomerPublishDefaultThread implements ICustomerPublishThread {
     private ICustomerPublishCommService iCustomerPublishCommService;
     
     @Autowired
-    private ILabelAttrRelService labelAttrRelServiceImpl;
+    private ILabelAttrRelService iLabelAttrRelService;
     
     @Autowired
-    ILabelPushCycleService labelPushCycleServiceImpl;
+    ILabelPushCycleService iLabelPushCycleService;
     
     @Autowired
-    ISysInfoDao sysInfoImpl;
+    ILabelPushReqService iLabelPushReqService;
     
-    @Autowired
-    ILabelPushReqService labelPushReqServiceImpl;
     
     //传入参数
     private List<LabelPushCycle> labelPushCycleList;
@@ -180,14 +175,9 @@ public class CustomerPublishDefaultThread implements ICustomerPublishThread {
 //            }
 
             //获取属性列
-            LabelAttrRelVo labelAttrRelVo = new LabelAttrRelVo();
-            labelAttrRelVo.setLabelId(customInfo.getLabelId());
-            labelAttrRelVo.setAttrSource(ServiceConstants.LabelAttrRel.ATTR_SOURCE_LABEL);
-            labelAttrRelVo.setAttrSettingType(ServiceConstants.LabelAttrRel.ATTR_SETTING_TYPE_PUSH);
-            labelAttrRelVo.setStatus(ServiceConstants.LabelAttrRel.STATUS_SUCCESS);
-            labelAttrRelVo.setOrderBy("pageSortNum ASC,sortNum ASC");
+            int attrType = ServiceConstants.LabelAttrRel.ATTR_SETTING_TYPE_PUSH;
             try {
-                attrRelList = labelAttrRelServiceImpl.selectLabelAttrRelList(labelAttrRelVo);
+                attrRelList = iCustomerPublishCommService.getLabelAttrRelsByCustom(customInfo, attrType);
             } catch (Exception e) {
                 LogUtil.error("查询客户群关联的属性错误！", e);
             }
@@ -214,7 +204,7 @@ public class CustomerPublishDefaultThread implements ICustomerPublishThread {
 			    labelPushReq.setPushStatus(ServiceConstants.LabelPushReq.PUSH_STATUS_PUSHING);
 			    labelPushReq.setStartTime(new Date(start));
 	            labelPushReq.setRecodeId(labelPushCycle.getRecordId());
-                labelPushReqServiceImpl.save(labelPushReq);
+	            iLabelPushReqService.save(labelPushReq);
 //			}
             //推送文件名称（无路径，无后缀）
             //格式：COC_标签创建人_YYYYMMDDHHMMSS_6位随机数,形如:【COC_admin_20180212150301_981235】
@@ -232,10 +222,11 @@ public class CustomerPublishDefaultThread implements ICustomerPublishThread {
                 return;
             }
 		}
-		//跟新实时更新推送状态
+		
+        //跟新实时更新推送状态
         this.updateLabelPushReq(ServiceConstants.LabelPushReq.PUSH_STATUS_SUCCESS, null);
         
-		LogUtil.debug("Customer("+customInfo.getLabelId()+")Publish end,cost:" + (System.currentTimeMillis() - start)/1000 + " s.");
+        LogUtil.debug("Customer("+customInfo.getLabelId()+")Publish end,cost:" + (System.currentTimeMillis() - start)/1000 + " s.");
 		LogUtil.info("Exist CustomerPublishDefaultThread.run()");
 	}
     
@@ -248,7 +239,7 @@ public class CustomerPublishDefaultThread implements ICustomerPublishThread {
 	private boolean customPublish(String sysId, String pushUserId){
 	    boolean flag = true;
 	    
-		sysInfo = sysInfoServiceImpl.get(sysId);
+		sysInfo = iSysInfoService.get(sysId);
 		if (sysInfo == null) {
             LogUtil.info("推送平台("+sysId+")不存在，不推送。");
 			flag = false;
@@ -298,7 +289,7 @@ public class CustomerPublishDefaultThread implements ICustomerPublishThread {
 	                    try {
 	                        LabelAttrRelVo labelAttrRelVo = new LabelAttrRelVo();
 	                        labelAttrRelVo.setLabelId(customInfo.getLabelId());
-	                        attrRelList = labelAttrRelServiceImpl.selectLabelAttrRelList(labelAttrRelVo);
+	                        attrRelList = iLabelAttrRelService.selectLabelAttrRelList(labelAttrRelVo);
 	                    } catch (Exception e) {
 	                        flag = false;
 	                        LogUtil.error("查询客户群属性表错误！", e);
@@ -548,7 +539,7 @@ public class CustomerPublishDefaultThread implements ICustomerPublishThread {
      * 更新推送实时状态
      */
     private void updateLabelPushReq(Integer pushStatus, Exception e) {
-        labelPushReq = labelPushReqServiceImpl.get(labelPushReq.getReqId());
+        labelPushReq = iLabelPushReqService.get(labelPushReq.getReqId());
         labelPushReq.setPushStatus(pushStatus);
         if (null != e) {
             String emsg = e.getMessage();
@@ -558,7 +549,7 @@ public class CustomerPublishDefaultThread implements ICustomerPublishThread {
 
             labelPushReq.setExceInfo(emsg);
         }
-        labelPushReqServiceImpl.update(labelPushReq);
+        iLabelPushReqService.update(labelPushReq);
     }
 
     /**
