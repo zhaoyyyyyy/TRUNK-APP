@@ -90,6 +90,9 @@ public class CustomerPublishCommImplService implements ICustomerPublishCommServi
         //拼装sql
         StringBuilder sql = new StringBuilder("SELECT m.").append(LabelInfoContants.KHQ_CROSS_COLUMN).append(" ");
 
+        if (null == customInfo.getDataDate()) {
+            customInfo = iLabelInfoService.get(customInfo.getLabelId());
+        }
         if (null != attrRelList && !attrRelList.isEmpty()) {    //有属性列
             CocCacheAble cacheProxy = CocCacheProxy.getCacheProxy();
             //拼接列
@@ -200,7 +203,7 @@ public class CustomerPublishCommImplService implements ICustomerPublishCommServi
     		MdaSysTableColumn mdaSysTableColumn) {
         StringBuffer sql = new StringBuffer("LEFT JOIN ");
         //获取表名
-        label = cacheProxy.getLabelInfoById(labelId);
+//        label = cacheProxy.getLabelInfoById(labelId); //datedate is null,so is error
         if (null == label) {
             label = iLabelInfoService.get(labelId);
         }
