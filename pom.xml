@@ -38,7 +38,7 @@
             <id>as-qa</id>    <!-- 亚信-测试 -->
             <properties>
                 <env>as-qa</env>
-                <ctx-loc>/</ctx-loc>
+                <ctx-loc>/loc</ctx-loc>
             </properties>
         </profile>
         <profile>
