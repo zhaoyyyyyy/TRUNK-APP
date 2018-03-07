@@ -104,52 +104,55 @@ public class LabelPushCycleServiceImpl extends BaseServiceImpl<LabelPushCycle, S
     }
 
     public void addLabelPushCycle(LabelPushCycle labelPushCycle,String userName) throws BaseException {
-    	LabelAttrRelVo labelAttrRelVo = new LabelAttrRelVo();
-    	labelAttrRelVo.setLabelId(labelPushCycle.getCustomGroupId());
-    	labelAttrRelVo.setStatus(0);
-    	labelAttrRelVo.setAttrSettingType(1);
-    	if(iLabelAttrRelService.selectLabelAttrRelList(labelAttrRelVo) != null){
-    		List<LabelAttrRel> labelAttrRelList=iLabelAttrRelService.selectLabelAttrRelList(labelAttrRelVo);
-    		for(int i=0;i<labelAttrRelList.size();i++){
-    			LabelAttrRel labelAttrRel =labelAttrRelList.get(i);
-    			labelAttrRel.setStatus(1);
-    			iLabelAttrRelService.modifyLabelAttrRel(labelAttrRel);
-    		}
-    	}
-    	 String[] attrbuteIdList = labelPushCycle.getAttrbuteId().split(",");
-             for(int i=0;i<attrbuteIdList.length;i++){
-                 if(!("").equals(attrbuteIdList[i])){
-                     LabelInfo labelInfo = iLabelInfoService.selectLabelInfoById(attrbuteIdList[i]);
-                     LabelAttrRel labelAttrRel = new LabelAttrRel();
-                     if(StringUtil.isNoneBlank(labelPushCycle.getSortAttrAndType())){
-                    	 String[] sortAttrAndTypeList = labelPushCycle.getSortAttrAndType().split(";");
-                    	 for(int j=0;j<sortAttrAndTypeList.length;j++){
-                          	if(sortAttrAndTypeList[j].indexOf(labelInfo.getLabelName()) != -1){
-                          		String attrSortType =sortAttrAndTypeList[j].split(",")[1];
-                              	if(attrSortType.equals("升序")){
-                              		labelAttrRel.setSortType("asc");
-                              	}else if(attrSortType.equals("降序")){
-                              		labelAttrRel.setSortType("desc");
-                              	}
-                              	labelAttrRel.setSortNum(j+1);
-                          	}
-                         }
-                     }
-                     labelAttrRel.setStatus(0);
-                     labelAttrRel.setRecordId(labelPushCycle.getRecordId());
-                     labelAttrRel.setLabelId(labelPushCycle.getCustomGroupId());	
-                     labelAttrRel.setModifyTime(new Date());
-                     labelAttrRel.setAttrColName(labelInfo.getLabelName());
-                     labelAttrRel.setAttrSource(2);
-                     labelAttrRel.setAttrSettingType(1);
-                     labelAttrRel.setLabelOrCustomId(labelInfo.getLabelId());
-                     labelAttrRel.setAttrColType(labelInfo.getLabelTypeId().toString());
-                     labelAttrRel.setAttrCreateUserId(userName);
-                     labelAttrRel.setPageSortNum(i+1);
-                     iLabelAttrRelService.addLabelAttrRel(labelAttrRel);
-                 }
-             }
-        super.saveOrUpdate(labelPushCycle);
+    	super.saveOrUpdate(labelPushCycle);
+      	 //先判断此客户群的推送历史，如果有，修改status为失效
+      	LabelAttrRelVo labelAttrRelVo = new LabelAttrRelVo();
+      	labelAttrRelVo.setLabelId(labelPushCycle.getCustomGroupId());
+      	labelAttrRelVo.setStatus(ServiceConstants.LabelAttrRel.STATUS_SUCCESS);
+      	labelAttrRelVo.setAttrSettingType(ServiceConstants.LabelAttrRel.ATTR_SETTING_TYPE_PUSH);
+      	if(iLabelAttrRelService.selectLabelAttrRelList(labelAttrRelVo) != null){
+      		List<LabelAttrRel> labelAttrRelList=iLabelAttrRelService.selectLabelAttrRelList(labelAttrRelVo);
+      		for(int i=0;i<labelAttrRelList.size();i++){
+      			LabelAttrRel labelAttrRel =labelAttrRelList.get(i);
+      			labelAttrRel.setStatus(ServiceConstants.LabelAttrRel.STATUS_FAILED);
+      			iLabelAttrRelService.modifyLabelAttrRel(labelAttrRel);
+      		}
+      	}
+      	 String[] attrbuteIdList = labelPushCycle.getAttrbuteId().split(",");
+               for(int i=0;i<attrbuteIdList.length;i++){
+                   if(!("").equals(attrbuteIdList[i])){
+                       LabelInfo labelInfo = iLabelInfoService.selectLabelInfoById(attrbuteIdList[i]);
+                       LabelAttrRel labelAttrRel = new LabelAttrRel();
+                       if(StringUtil.isNoneBlank(labelPushCycle.getSortAttrAndType())){
+                      	 String[] sortAttrAndTypeList = labelPushCycle.getSortAttrAndType().split(";");
+                      	 for(int j=0;j<sortAttrAndTypeList.length;j++){
+                            	if(sortAttrAndTypeList[j].indexOf(labelInfo.getLabelName()) != -1){
+                            		String attrSortType =sortAttrAndTypeList[j].split(",")[1];
+                                	if(attrSortType.equals("升序")){
+                                		labelAttrRel.setSortType("asc");
+                                	}else if(attrSortType.equals("降序")){
+                                		labelAttrRel.setSortType("desc");
+                                	}
+                                	labelAttrRel.setSortNum(j+1);
+                            	}
+                           }
+                       }
+                       labelAttrRel.setRecordId(labelPushCycle.getRecordId());
+                       labelAttrRel.setAttrCol("attr_col"+(i+1));
+                       labelAttrRel.setStatus(ServiceConstants.LabelAttrRel.STATUS_SUCCESS);
+                       labelAttrRel.setRecordId(labelPushCycle.getRecordId());
+                       labelAttrRel.setLabelId(labelPushCycle.getCustomGroupId());	
+                       labelAttrRel.setModifyTime(new Date());
+                       labelAttrRel.setAttrColName(labelInfo.getLabelName());
+                       labelAttrRel.setAttrSource(ServiceConstants.LabelAttrRel.ATTR_SOURCE_LABEL);
+                       labelAttrRel.setAttrSettingType(ServiceConstants.LabelAttrRel.ATTR_SETTING_TYPE_PUSH);
+                       labelAttrRel.setLabelOrCustomId(labelInfo.getLabelId());
+                       labelAttrRel.setAttrColType(labelInfo.getLabelTypeId().toString());
+                       labelAttrRel.setAttrCreateUserId(userName);
+                       labelAttrRel.setPageSortNum(i+1);
+                       iLabelAttrRelService.addLabelAttrRel(labelAttrRel);
+                   }
+               }
 
         //推送
         ICustomerPublishThread curCustomerPublishThread = (ICustomerPublishThread) SpringContextHolder.getBean("customerPublishDefaultThread");
