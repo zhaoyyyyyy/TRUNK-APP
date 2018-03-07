@@ -30,7 +30,6 @@ import com.asiainfo.biapp.si.loc.base.utils.StringUtil;
 import com.asiainfo.biapp.si.loc.bd.common.service.IBackSqlService;
 import com.asiainfo.biapp.si.loc.cache.CocCacheProxy;
 import com.asiainfo.biapp.si.loc.core.label.entity.LabelInfo;
-import com.asiainfo.biapp.si.loc.core.label.service.ILabelExploreService;
 import com.asiainfo.biapp.si.loc.core.label.service.ILabelInfoService;
 import com.asiainfo.biapp.si.loc.core.label.vo.LabelInfoVo;
 import com.asiainfo.biapp.si.loc.core.syspush.common.constant.ServiceConstants;
@@ -77,8 +76,6 @@ public class LabelPushCycleServiceImpl extends BaseServiceImpl<LabelPushCycle, S
     
     @Autowired
     private ILabelAttrRelService iLabelAttrRelService;
-    @Autowired
-    private ILabelExploreService iLabelExploreService;
     @Autowired
     private IBackSqlService iBackSqlService;
     
