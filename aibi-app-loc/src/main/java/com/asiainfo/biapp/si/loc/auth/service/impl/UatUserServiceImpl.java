@@ -28,7 +28,7 @@ import com.asiainfo.biapp.si.loc.auth.service.IUserService;
  * @author  zhougz3
  * @version 1.0.0.2017年11月7日
  */
-@Profile("loc")
+@Profile("as-qa")
 @Service("userService")
 @Transactional
 public class UatUserServiceImpl extends DevUserServiceImpl implements IUserService{

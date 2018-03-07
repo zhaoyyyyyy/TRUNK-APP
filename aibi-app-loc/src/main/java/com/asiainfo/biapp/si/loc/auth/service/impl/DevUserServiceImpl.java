@@ -48,7 +48,7 @@ import net.sf.json.JSONObject;
  * @author  zhougz3
  * @version 1.0.0.2017年11月7日
  */
-@Profile("dev")
+@Profile("as-dev")
 @Service("userService")
 @Transactional
 public class DevUserServiceImpl extends BaseServiceImpl<User, String> implements IUserService{
