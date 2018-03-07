@@ -109,7 +109,8 @@ var enumRule = (function (model){
 	        viewrecords: true,
 	        width : 200
 	        
-	    })
+	    });
+		$("#mainGrid").jqGrid('setLabel',0, '序号');
 	};
 	/**************
 	 * 分页查询枚举
