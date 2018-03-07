@@ -137,10 +137,10 @@ window.loc_onload = function() {
 		dateFormat: "yy-mm-dd",
 		onClose: function(dateText, inst) {// 关闭事件  
 			if($(this).hasClass("publishStar")){
-				$("#publishTimeStart").val($(this).val());
+				$("#createTimeStart").val($(this).val());
 				labelMarket.loadLabelInfoList();
 			}else if($(this).hasClass("publishEnd")){
-				$("#publishTimeEnd").val($( this).val());
+				$("#createTimeEnd").val($( this).val());
 				labelMarket.loadLabelInfoList();
 			}
 		}
@@ -379,28 +379,28 @@ var labelMarket = (function (model){
 		model.changePublishTime = function(obj){
 			var now = new Date();
 			if(obj.id == "allDate"){
-				$("#publishTimeStart").val("");
+				$("#createTimeStart").val("");
 				$("#allDate").addClass("all-active");
 				$("#oneDay").removeClass("all-active");
 				$("#oneMonth").removeClass("all-active");
 				$("#threeMonth").removeClass("all-active");
 			}
 			if(obj.id == "oneDay"){
-				$("#publishTimeStart").val($.dateFormat(new Date(now.getTime() - 24*60*60*1000),"yyyy-MM-dd HH:mm:ss"));
+				$("#createTimeStart").val($.dateFormat(new Date(now.getTime() - 24*60*60*1000),"yyyy-MM-dd HH:mm:ss"));
 				$("#allDate").removeClass("all-active");
 				$("#oneDay").addClass("all-active");
 				$("#oneMonth").removeClass("all-active");
 				$("#threeMonth").removeClass("all-active");
 			}
 			if(obj.id == "oneMonth"){
-				$("#publishTimeStart").val($.dateFormat(new Date(now.getTime() - 30*24*60*60*1000),"yyyy-MM-dd HH:mm:ss"));
+				$("#createTimeStart").val($.dateFormat(new Date(now.getTime() - 30*24*60*60*1000),"yyyy-MM-dd HH:mm:ss"));
 				$("#allDate").removeClass("all-active");
 				$("#oneDay").removeClass("all-active");
 				$("#oneMonth").addClass("all-active");
 				$("#threeMonth").removeClass("all-active");
 			}
 			if(obj.id == "threeMonth"){
-				$("#publishTimeStart").val($.dateFormat(new Date(now.getTime() - 90*24*60*60*1000),"yyyy-MM-dd HH:mm:ss"));
+				$("#createTimeStart").val($.dateFormat(new Date(now.getTime() - 90*24*60*60*1000),"yyyy-MM-dd HH:mm:ss"));
 				$("#allDate").removeClass("all-active");
 				$("#oneDay").removeClass("all-active");
 				$("#oneMonth").removeClass("all-active");

@@ -47,6 +47,10 @@ public class LabelInfoVo extends LabelInfo {
     
     private String publishTimeEnd;
     
+    private String createTimeStart;
+    
+    private String createTimeEnd;
+    
     public String getApproveStatusId() {
         return approveStatusId;
     }
@@ -70,5 +74,21 @@ public class LabelInfoVo extends LabelInfo {
     public void setpublishTimeEnd(String publishTimeEnd) {
         this.publishTimeEnd = publishTimeEnd;
     }
+
+	public String getCreateTimeStart() {
+		return createTimeStart;
+	}
+
+	public void setCreateTimeStart(String createTimeStart) {
+		this.createTimeStart = createTimeStart;
+	}
+
+	public String getCreateTimeEnd() {
+		return createTimeEnd;
+	}
+
+	public void setCreateTimeEnd(String createTimeEnd) {
+		this.createTimeEnd = createTimeEnd;
+	}
     
 }
