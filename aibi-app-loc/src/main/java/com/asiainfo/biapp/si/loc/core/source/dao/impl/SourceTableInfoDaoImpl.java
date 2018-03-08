@@ -78,8 +78,13 @@ public class SourceTableInfoDaoImpl extends BaseDaoImpl<SourceTableInfo, String>
             params.put("sourceFileName", sourceTableInfoVo.getSourceFileName());
         }
         if (StringUtil.isNotBlank(sourceTableInfoVo.getSourceTableName())) {
-            hql.append("and s.sourceTableName LIKE:sourceTableName ");
-            params.put("sourceTableName","%"+ sourceTableInfoVo.getSourceTableName() +"%");
+            if(sourceTableInfoVo.getSourceTableName().contains("=")){
+                hql.append("and s.sourceTableName =:sourceTableName ");
+                params.put("sourceTableName",sourceTableInfoVo.getSourceTableName().replace("=", ""));
+            }else{
+                hql.append("and s.sourceTableName LIKE:sourceTableName ");
+                params.put("sourceTableName","%"+sourceTableInfoVo.getSourceTableName()+"%");
+            }
         }
         if (StringUtil.isNotBlank(sourceTableInfoVo.getTableSchema())) {
             hql.append("and s.tableSchema = :tableSchema ");

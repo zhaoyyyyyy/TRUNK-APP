@@ -26,11 +26,13 @@ import au.com.bytecode.opencsv.CSVReader;
 import com.asiainfo.biapp.si.loc.base.dao.BaseDao;
 import com.asiainfo.biapp.si.loc.base.exception.BaseException;
 import com.asiainfo.biapp.si.loc.base.exception.ParamRequiredException;
+import com.asiainfo.biapp.si.loc.base.exception.SqlRunException;
 import com.asiainfo.biapp.si.loc.base.page.Page;
 import com.asiainfo.biapp.si.loc.base.service.impl.BaseServiceImpl;
 import com.asiainfo.biapp.si.loc.base.utils.FileUtil;
 import com.asiainfo.biapp.si.loc.base.utils.LogUtil;
 import com.asiainfo.biapp.si.loc.base.utils.StringUtil;
+import com.asiainfo.biapp.si.loc.bd.common.service.IBackSqlService;
 import com.asiainfo.biapp.si.loc.core.label.entity.MdaSysTable;
 import com.asiainfo.biapp.si.loc.core.label.service.IMdaSysTableService;
 import com.asiainfo.biapp.si.loc.core.source.dao.ISourceTableInfoDao;
@@ -85,6 +87,9 @@ public class SourceTableInfoServiceImpl extends BaseServiceImpl<SourceTableInfo,
     
     @Autowired
     private IMdaSysTableService iMdaSysTableService;
+    
+    @Autowired
+    private IBackSqlService iBackSqlService;
 
     @Override
     protected BaseDao<SourceTableInfo, String> getBaseDao() {
@@ -129,9 +134,15 @@ public class SourceTableInfoServiceImpl extends BaseServiceImpl<SourceTableInfo,
                 throw new ParamRequiredException("字段名称["+s.getColumnName()+"]已存在");
             }
         }
+        String tableSchema = "default";
+        try {
+            tableSchema = iBackSqlService.getCurBackDbSchema();
+        } catch (SqlRunException e1) {
+            LogUtil.info(e1);
+        }
         Date createTime = new Date();
         SourceTableInfoVo sourceTableInfoVo = new SourceTableInfoVo();
-        sourceTableInfoVo.setSourceTableName(sourceTableInfo.getSourceTableName());
+        sourceTableInfoVo.setSourceTableName("="+sourceTableInfo.getSourceTableName());
         sourceTableInfoVo.setConfigId(sourceTableInfo.getConfigId());
         List<SourceTableInfo> sourceTableInfoList = selectSourceTableInfoList(sourceTableInfoVo);
         if (!sourceTableInfoList.isEmpty() && StringUtil.isNotBlank(sourceTableInfoVo.getSourceTableName())) {
@@ -142,6 +153,9 @@ public class SourceTableInfoServiceImpl extends BaseServiceImpl<SourceTableInfo,
         sourceTableInfo.setDataExtractionType(0);
         sourceTableInfo.setStatusId(1);
         sourceTableInfo.setDataStore(1);
+        if(StringUtil.isBlank(sourceTableInfo.getTableSchema())){
+            sourceTableInfo.setTableSchema(tableSchema);
+        }
         super.saveOrUpdate(sourceTableInfo);
 
         // 添加指标源表状态
