@@ -20,6 +20,7 @@ var model = {
 		AttrbuteId : "",//推送的属性标签ID
 		labelOptRuleShow:"",//枚举标签选择的条件
 		sortAttrAndType:"",//排序的属性和类型（asc,desc）
+		sysIds:"",//选择的推送平台
 		
 }
 window.loc_onload = function() {
@@ -273,27 +274,30 @@ window.loc_onload = function() {
 			    	        		if(!model.haveAttr){
 			    	        			model.sortAttrAndType =null;
 			    	        		}
+			    	        		model.sysIds="";
 			    	        		for(var i=0;i<$("#checkboxList label[class~=active]").length;i++){
-										var sysId = $("#checkboxList label[class~=active]")[i].htmlFor;
-										$.commAjax({			
-										    url : $.ctx+'/api/syspush/labelPushCycle/save',
-										    dataType : 'json', 
-										    async : false,
-										    postData : {
-													"customGroupId" :labelId,
-													"sysId" :sysId,
-													"pushCycle" :$("#radioList label[class~=active]").siblings("input").val(),
-													"AttrbuteId" :model.AttrbuteId,
-													"sortAttrAndType" :model.sortAttrAndType,
-												},
-										    maskMassage : '推送中...'
-									   });
-										if(i == $("#checkboxList label[class~=active]").length-1){
-											$.success("推送设置成功",function(){
-												//history.back(-1);
-											});
-										}
-									}
+			    	        			if(i==$("#checkboxList label[class~=active]").length-1){
+			    	        				model.sysIds+=$("#checkboxList label[class~=active]")[i].htmlFor;
+			    	        			}else{
+			    	        				model.sysIds+=$("#checkboxList label[class~=active]")[i].htmlFor+",";
+			    	        			}
+			    	        		}
+									$.commAjax({			
+									    url : $.ctx+'/api/syspush/labelPushCycle/save',
+									    dataType : 'json', 
+									    async : false,
+									    postData : {
+												"customGroupId" :labelId,
+												"sysIds" :model.sysIds,
+												"pushCycle" :$("#radioList label[class~=active]").siblings("input").val(),
+												"AttrbuteId" :model.AttrbuteId,
+												"sortAttrAndType" :model.sortAttrAndType,
+											},
+									    maskMassage : '推送中...',
+									    onSuccess: function(data){
+									    	$.alert("推送设置成功");
+									    }
+								  });
 			    	        	}
 			    	        }
 				    	}

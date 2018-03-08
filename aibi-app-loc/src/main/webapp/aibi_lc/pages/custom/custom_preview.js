@@ -1,7 +1,5 @@
 window.loc_onload = function() {
 	 labelId = $.getUrlParam("labelId");
-	 var colNamesArr =[];
- 	var colModelArr =[];
 	 $.commAjax({			
 		    url : $.ctx+'/api/syspush/labelPushCycle/findGroupListCols',
 		    dataType : 'json', 
@@ -9,6 +7,9 @@ window.loc_onload = function() {
 		    	"labelId" : labelId,
 		    	},
 		    onSuccess: function(data){ 
+		    	debugger
+		   	 	var colNamesArr =[];
+		     	var colModelArr =[];
 		    	for(var i=0;i<data.data.length;i++){
 		    		colNamesArr.push(data.data[i].attrColName);
 		    		colModelArr.push({
@@ -17,12 +18,12 @@ window.loc_onload = function() {
 						width : 80,
 						sortable : false,
 						frozen : true,
-						align : "center",
+						align : "center"
 					})
 		    	}
-		    	colNamesArr.push("操作111");
+		    	colNamesArr.push("操作");
 		    	colModelArr.push({
-					hidden:true,
+					hidden:true
 				})
 		    	 $("#mainGrid").jqGrid({
 		 			url : $.ctx + "/api/syspush/labelPushCycle/findGroupList",
