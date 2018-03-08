@@ -143,7 +143,7 @@ var labelInfoModel = (function (model){
     		 if($('#labelMonth').val()){
     			 dataModel.labelInfo.monthLabelDate = $('#labelMonth').val().replace(/-/g,"");
     		 }
-    		 if(data.updateCycle =1){
+    		 if(data.updateCycle ==1){
     			 dataModel.labelInfo.dataDate = dataModel.newDayDate.replace(/-/g,""); 
     		 }else{
     			 dataModel.labelInfo.dataDate = dataModel.newMonthDate.replace(/-/g,""); 
