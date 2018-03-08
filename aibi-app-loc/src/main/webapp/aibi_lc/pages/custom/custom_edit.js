@@ -19,7 +19,7 @@ window.loc_onload = function() {
 	//初始化参数
 	dataModel.configId = $.getCurrentConfigId();
 	
-	var dicUpdateCycles = $.getDicData("GXZQZD");
+	var dicUpdateCycles = $.getDicData("QTGXZQ");
 	for(var i =0 ; i<dicUpdateCycles.length; i++){
 		dataModel.updateCycles.push(dicUpdateCycles[i]);
 	}
