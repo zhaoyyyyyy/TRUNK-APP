@@ -129,7 +129,7 @@ public class LabelInfoController extends BaseController {
 			labelInfo.setBusiLegend(busiLegend);
 			labelInfo.setConfigId(configId);
 			labelInfo.setDataDate(dataDate);
-			labelInfo.setCreateUserId(getLoginUser().getUserId());
+			labelInfo.setCreateUserId(getLoginUser().getUserName());
 			// 拓展信息
 			LabelExtInfo labelExtInfo = new LabelExtInfo();
 	        labelExtInfo.setTacticsId(tacticsId);
