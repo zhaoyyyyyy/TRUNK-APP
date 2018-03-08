@@ -947,6 +947,9 @@ public class CustomerPublishDefaultThread implements ICustomerPublishThread {
                 }
                 List<String> data = new ArrayList<String>();
                 for (Map<String, String> m : datas) {
+                    if (m.containsKey("rownum")) {  //不把序号写入文件
+                        m.remove("rownum");
+                    }
                     for (String col : m.keySet()) {
                         data.add(String.valueOf(m.get(col)).replace("\"", ""));
                     }

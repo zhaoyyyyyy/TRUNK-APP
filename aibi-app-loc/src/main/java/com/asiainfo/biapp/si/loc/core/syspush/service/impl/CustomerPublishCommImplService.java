@@ -108,8 +108,9 @@ public class CustomerPublishCommImplService implements ICustomerPublishCommServi
                 }
                 mdaSysTableCol = label.getMdaSysTableColumn();
                 if (null != mdaSysTableCol) {
-                    sql.append(",").append(labelAttrRel.getAttrCol()).append(".").append(mdaSysTableCol.getColumnName())
-                       .append(" as ").append(labelAttrRel.getAttrCol());
+                		//表别名
+                    sql.append(",").append(labelAttrRel.getAttrCol()).append("_t.").append(mdaSysTableCol.getColumnName())
+                       .append(" as ").append(labelAttrRel.getAttrCol());	//列别名
                 } else {
                     LogUtil.error("MdaSysTableColumn of labelinfo【"+label.getLabelId()+"】 is null!");
                 }
@@ -117,8 +118,8 @@ public class CustomerPublishCommImplService implements ICustomerPublishCommServi
             sql.append(" from (");
             
             //拼接主表
+            sql.append("SELECT t.").append(LabelInfoContants.KHQ_CROSS_COLUMN).append(" from ");
             if (null != mainMdaSysTableColumn) {
-                sql.append("SELECT t.").append(LabelInfoContants.KHQ_CROSS_COLUMN).append(" from ");
                 if (StringUtil.isNotEmpty(mainMdaSysTable.getTableSchema())) {
                     //拼接Schema
                     sql.append(mainMdaSysTable.getTableSchema()).append(".");
@@ -133,7 +134,7 @@ public class CustomerPublishCommImplService implements ICustomerPublishCommServi
                 } catch (BaseException e) {
                     LogUtil.error("获取客户群清单sq出错：", e);;
                 }
-                sql.append(fromSql);
+                sql.append(fromSql.replace(" where ", " t where t."));
             }
             sql.append(") m ");
 
@@ -157,7 +158,7 @@ public class CustomerPublishCommImplService implements ICustomerPublishCommServi
                 }
                 mdaSysTableCol = label.getMdaSysTableColumn();
                 if (null != mdaSysTableCol) {
-                    sql.append(labelAttrRel.getAttrCol()).append(".").append(mdaSysTableCol.getColumnName())
+                    sql.append(labelAttrRel.getAttrCol()).append("_t.").append(mdaSysTableCol.getColumnName())
                        .append(" ").append(sortType).append(",");
                 } else {
                     LogUtil.error("MdaSysTableColumn of labelinfo【"+label.getLabelId()+"】 is null!");
@@ -216,8 +217,8 @@ public class CustomerPublishCommImplService implements ICustomerPublishCommServi
                 sql.append(mdaSysTable.getTableSchema()).append(".");
             }
             sql.append(mdaSysTable.getTableName()).append(label.getDataDate()).append(" ").append(attrCol)
-               .append(" on ").append("m.").append(LabelInfoContants.KHQ_CROSS_COLUMN).append("=")
-               .append(attrCol).append(".").append(LabelInfoContants.KHQ_CROSS_COLUMN).append(" ");
+               .append("_t on ").append("m.").append(LabelInfoContants.KHQ_CROSS_COLUMN).append("=")
+               .append(attrCol).append("_t.").append(LabelInfoContants.KHQ_CROSS_COLUMN).append(" ");
         } else {
             sql = new StringBuffer("");
             LogUtil.error("标签【"+labelId+"】的 mdaSysTableColumn is null！");
