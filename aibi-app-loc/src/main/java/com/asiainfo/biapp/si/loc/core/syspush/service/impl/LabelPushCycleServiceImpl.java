@@ -213,7 +213,7 @@ public class LabelPushCycleServiceImpl extends BaseServiceImpl<LabelPushCycle, S
         String customListSql = iCustomerPublishCommService.getCustomListSql(customGroup, attrRelList);
         
         LogUtil.debug("清单预览sql："+customListSql);
-        
+
         //清单数据
         List<Map<String, String>> pageMap = iBackSqlService.queryForPage(customListSql, page.getPageStart(), page.getPageSize());
         
@@ -238,10 +238,11 @@ public class LabelPushCycleServiceImpl extends BaseServiceImpl<LabelPushCycle, S
                             }
                             productNo = start + end;
                         }
+                        map.put(LabelInfoContants.KHQ_CROSS_COLUMN, productNo);
                     }
                 }
-                map.put(LabelInfoContants.KHQ_CROSS_COLUMN, productNo);
             }
+            page.setData(pageMap);
         }
         
         return page;

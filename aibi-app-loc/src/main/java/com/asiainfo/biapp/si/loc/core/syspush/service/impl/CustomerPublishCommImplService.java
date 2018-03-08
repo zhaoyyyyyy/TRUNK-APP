@@ -203,8 +203,8 @@ public class CustomerPublishCommImplService implements ICustomerPublishCommServi
     		MdaSysTableColumn mdaSysTableColumn) {
         StringBuffer sql = new StringBuffer("LEFT JOIN ");
         //获取表名
-//        label = cacheProxy.getLabelInfoById(labelId); //datedate is null,so is error
-        if (null == label) {
+        label = cacheProxy.getLabelInfoById(labelId); //datedate is null,so it's error
+        if (null == label || (null!=label && null==label.getDataDate())) {
             label = iLabelInfoService.get(labelId);
         }
         mdaSysTableColumn = label.getMdaSysTableColumn();

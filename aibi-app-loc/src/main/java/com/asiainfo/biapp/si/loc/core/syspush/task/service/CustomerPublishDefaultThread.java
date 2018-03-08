@@ -169,10 +169,10 @@ public class CustomerPublishDefaultThread implements ICustomerPublishThread {
 		long start = System.currentTimeMillis();
 		
 		for(LabelPushCycle labelPushCycle : labelPushCycleList){
-//            customInfo = cacheProxy.getLabelInfoById(labelPushCycle.getCustomGroupId());
-//            if (null == customInfo) {
+            customInfo = cacheProxy.getLabelInfoById(labelPushCycle.getCustomGroupId()); //datedate is null,so it's error
+            if (null == customInfo || (null!=customInfo && null==customInfo.getDataDate())) {
                 customInfo = iLabelInfoService.get(labelPushCycle.getCustomGroupId());
-//            }
+            }
 
             //获取属性列
             int attrType = ServiceConstants.LabelAttrRel.ATTR_SETTING_TYPE_PUSH;
