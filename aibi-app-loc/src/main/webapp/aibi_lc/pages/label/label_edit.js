@@ -178,7 +178,7 @@ window.loc_onload = function() {
 					}else if(event.target.value==8){
 						model.isfhbq = true;
 						model.isemmu = false;
-						model.sourceInfoList=[];
+//						model.sourceInfoList=[];
 					}else{
 						model.isemmu = false;
 						model.isfhbq = false;
@@ -195,6 +195,7 @@ window.loc_onload = function() {
 				},
 				//不同周期获取不同的纵表
 				change_updateCycle : function(){
+					model.sourceTableId = "";
 					model.sourceInfoList = [];
 					$.commAjax({
 						async : false,
