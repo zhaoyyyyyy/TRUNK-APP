@@ -358,9 +358,7 @@ public class CustomerPublishDefaultThread implements ICustomerPublishThread {
             String title = cacheProxy.getSYSConfigInfoByKey("RELATED_COLUMN_CN_NAME");
             if(sysInfo.getIsNeedTitle() != null && ServiceConstants.SysInfo.IS_NEED_TITLE_YES == sysInfo.getIsNeedTitle()){
                 if (StringUtil.isEmpty(title)) {
-                    title = ",手机号码";
-                } else {
-	                	title = "," + title;
+                    title = "手机号码";
                 }
                 if (null != attrRelList && !attrRelList.isEmpty()) {    //有属性列
                 		StringBuffer titleStr = new StringBuffer();

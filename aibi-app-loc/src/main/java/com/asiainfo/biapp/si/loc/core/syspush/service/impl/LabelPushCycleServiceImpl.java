@@ -124,6 +124,7 @@ public class LabelPushCycleServiceImpl extends BaseServiceImpl<LabelPushCycle, S
       	//labelPushCycle和labelAttrRel存新数据
       	String[] sysIdsList = labelPushCycle.getSysIds().split(",");//推送的平台list
       	String[] attrbuteIdList = labelPushCycle.getAttrbuteId().split(",");//推送时附带的属性list
+      	List<LabelPushCycle> lPCycles = new ArrayList<>();
       	for(int m=0;m<sysIdsList.length;m++){//遍历需要推送的平台
       		LabelPushCycleVo labelPushCycleVo = new LabelPushCycleVo();  //查看labelPushCycle表中 此次推送的客户群在此平台上的推送，如果存在，则修改status为0
       		labelPushCycleVo.setCustomGroupId(labelPushCycle.getCustomGroupId());
@@ -139,6 +140,7 @@ public class LabelPushCycleServiceImpl extends BaseServiceImpl<LabelPushCycle, S
           	}
       		LabelPushCycle newLabelPushCycle =new LabelPushCycle(labelPushCycle.getCustomGroupId(),sysIdsList[m],labelPushCycle.getPushCycle(),new Date(),1);
       		super.saveOrUpdate(newLabelPushCycle);
+      		lPCycles.add(newLabelPushCycle);
             for(int i=0;i<attrbuteIdList.length;i++){//遍历推送时附带的属性
                 if(!("").equals(attrbuteIdList[i])){
                     LabelInfo labelInfo = iLabelInfoService.selectLabelInfoById(attrbuteIdList[i]);
@@ -173,11 +175,10 @@ public class LabelPushCycleServiceImpl extends BaseServiceImpl<LabelPushCycle, S
                 }
             }
       	}
+      	
         //推送
         ICustomerPublishThread curCustomerPublishThread = (ICustomerPublishThread) SpringContextHolder.getBean("customerPublishDefaultThread");
-        List<LabelPushCycle> labelPushCycles = new ArrayList<>();
-        labelPushCycles.add(labelPushCycle);
-        curCustomerPublishThread.initParamter(labelPushCycles, false, new ArrayList<Map<String, Object>>());
+        curCustomerPublishThread.initParamter(lPCycles, false, new ArrayList<Map<String, Object>>());
         Executors.newFixedThreadPool(10).execute(curCustomerPublishThread);
     
     }
