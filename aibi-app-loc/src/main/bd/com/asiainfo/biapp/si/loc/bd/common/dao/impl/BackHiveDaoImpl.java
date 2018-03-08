@@ -231,6 +231,8 @@ public class BackHiveDaoImpl extends BaseBackDaoImpl implements IBackSqlDao{
         String sql = new StringBuilder("select * from (").append(selectSql).append(") a where a.rownum >")
             .append(begin).append(" and a.rownum <=").append(end).toString();
         
+        LogUtil.debug("sql:" + sql);
+        
         try{
             return this.executeResList(sql);
         }catch (Exception e){
