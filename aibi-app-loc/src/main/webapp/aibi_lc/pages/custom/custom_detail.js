@@ -10,7 +10,7 @@ var model = {
 		monthLabelDate : "",
 		dataName:"",//推送周期
 		sysName:"",//推送系统
-		curentIndex:false,//radio选中
+		curentIndex:null,//radio选中
 		isActive:false,//check选中
 		customRule:"",//客户群规则
 		haveAttr:false,
@@ -268,8 +268,8 @@ window.loc_onload = function() {
 			    	        "class":"ui-btn ui-btn-default",
 			    	        click: function() {
 			    	        	$( this ).dialog( "close" );
-			    	        	if($("#checkboxList label[class~=active]").length ==0){
-			    	        		$.alert("请正确选择推送平台");
+			    	        	if($("#checkboxList label[class~=active]").length ==0 || $("#radioList label[class~=active]").length ==0){
+			    	        		$.alert("请正确选择推送周期与推送平台");
 			    	        	}else{
 			    	        		if(!model.haveAttr){
 			    	        			model.sortAttrAndType =null;

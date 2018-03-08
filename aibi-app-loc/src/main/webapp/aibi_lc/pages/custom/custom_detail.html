@@ -133,7 +133,7 @@
 <div class="ui-dialog" id="dialog">
 	<div class="form-horizontal mt10 ui-lc-mian">
 		<div class="ui-form-group clearfix" id="radioList">
-	        <label for="inputEmail3" class="control-label fleft">推送周期:</label>
+	        <label for="inputEmail3" class="control-label fleft"><span class="input-required">*</span>推送周期:</label>
 	        <ul id="radioList" class="clearfix fleft">
 		        <li class="radio circle success"  v-for="(item,index) in dataName" @click="radioSelect(index)"> 
 				   	<input type="radio" name="pushCycle" :value="item.code" id="myr3"> 
@@ -142,7 +142,7 @@
 	        </ul>
 	    </div>
 	    <div class="ui-form-group clearfix mt10">
-	        <label for="inputEmail3" class="control-label fleft">推送到:</label>
+	        <label for="inputEmail3" class="control-label fleft"><span class="input-required">*</span>推送到:</label>
 	        <div class="control-input">
 	        	<ul class="clearfix fleft" id="checkboxList">
 		        	<li class="checkbox fleft" v-for="(item,index) in sysName" @click.stop.prevent="checkSelect(item)" >
