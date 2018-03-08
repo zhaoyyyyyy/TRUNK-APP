@@ -109,7 +109,7 @@ public class CustomerPublishCommImplService implements ICustomerPublishCommServi
                 mdaSysTableCol = label.getMdaSysTableColumn();
                 if (null != mdaSysTableCol) {
                     sql.append(",").append(labelAttrRel.getAttrCol()).append(".").append(mdaSysTableCol.getColumnName())
-                       .append(labelAttrRel.getAttrCol());
+                       .append(" as ").append(labelAttrRel.getAttrCol());
                 } else {
                     LogUtil.error("MdaSysTableColumn of labelinfo【"+label.getLabelId()+"】 is null!");
                 }
