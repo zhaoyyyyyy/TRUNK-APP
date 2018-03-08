@@ -90,7 +90,7 @@ public class CustomerPublishCommImplService implements ICustomerPublishCommServi
         //拼装sql
         StringBuilder sql = new StringBuilder("SELECT m.").append(LabelInfoContants.KHQ_CROSS_COLUMN).append(" ");
 
-        if (null == customInfo.getDataDate()) {
+        if (null == customInfo || null == customInfo.getDataDate()) {
             customInfo = iLabelInfoService.get(customInfo.getLabelId());
         }
         if (null != attrRelList && !attrRelList.isEmpty()) {    //有属性列
@@ -102,13 +102,14 @@ public class CustomerPublishCommImplService implements ICustomerPublishCommServi
             for (int i = 0; i < attrRelList.size(); i++) {
                 labelAttrRel = attrRelList.get(i);
                 //获取列信息
-                label = cacheProxy.getLabelInfoById(labelAttrRel.getLabelOrCustomId());
-                if (null == label) {
+                label = cacheProxy.getLabelInfoById(labelAttrRel.getLabelOrCustomId()); //datedate is null,so it's error
+                if (null == label || (null!=label && null==label.getDataDate())) {
                     label = iLabelInfoService.get(labelAttrRel.getLabelOrCustomId());
                 }
                 mdaSysTableCol = label.getMdaSysTableColumn();
                 if (null != mdaSysTableCol) {
-                    sql.append(",").append(labelAttrRel.getAttrCol()).append(".").append(mdaSysTableCol.getColumnName());
+                    sql.append(",").append(labelAttrRel.getAttrCol()).append(".").append(mdaSysTableCol.getColumnName())
+                       .append(labelAttrRel.getAttrCol());
                 } else {
                     LogUtil.error("MdaSysTableColumn of labelinfo【"+label.getLabelId()+"】 is null!");
                 }
@@ -150,8 +151,8 @@ public class CustomerPublishCommImplService implements ICustomerPublishCommServi
                     sortType = labelAttrRel.getSortType();
                 }
                 //获取列信息
-                label = cacheProxy.getLabelInfoById(labelAttrRel.getLabelOrCustomId());
-                if (null == label) {
+                label = cacheProxy.getLabelInfoById(labelAttrRel.getLabelOrCustomId()); //datedate is null,so it's error
+                if (null == label || (null!=label && null==label.getDataDate())) {
                     label = iLabelInfoService.get(labelAttrRel.getLabelOrCustomId());
                 }
                 mdaSysTableCol = label.getMdaSysTableColumn();
