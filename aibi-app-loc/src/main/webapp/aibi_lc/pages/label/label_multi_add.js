@@ -121,7 +121,7 @@ function chooseKpi(obj){
 	if(readCycle ==undefined ||readCycle==null || readCycle==""){
 		$.alert("请选择更新周期")
 	}else{
-		var win = $.window('指标配置', $.ctx + '/aibi_lc/pages/label/sourceInfo_mgr.html?readCycle='+readCycle, 900, 600);
+		var win = $.window('指标配置', $.ctx + '/aibi_lc/pages/label/sourceInfo_mgr.html?readCycle='+readCycle, 900, 500);
 		win.addKpis = function(chooseKpis) {
 			model.sourceIdList = chooseKpis;
 			var index = obj.id;

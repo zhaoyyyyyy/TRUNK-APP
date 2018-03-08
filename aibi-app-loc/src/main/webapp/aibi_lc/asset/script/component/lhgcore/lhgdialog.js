@@ -116,7 +116,8 @@ while( top.parent && top.parent != top )
 if( top.document.getElementsByTagName('frameset').length > 0 )
     top = window; 
 
-doc = top.document;
+//doc = top.document; modify by zhougz3 20180306 IE下父弹出框问题
+doc = document;
 
 J.fn.fixie6png = function()
 {

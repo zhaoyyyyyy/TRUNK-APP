@@ -366,18 +366,18 @@ jQuery.extend({
 	/** 解决跨域问题，是否有父窗口 **/
 	hasTopWin: function(){
 		var setTopWindow = false;	 //true
-		try {
-		 	var t = parent.frameElement;
-			if(!t){
-		     setTopWindow = false;
-				window.parent = window.self;
-				window.top = window.self;
-			}
-		} catch(error) {
-		  setTopWindow = false;
+//		try {
+//		 	var t = parent.frameElement;
+//			if(!t){
+//		     setTopWindow = false;
+//				window.parent = window.self;
+//				window.top = window.self;
+//			}
+//		} catch(error) {
+//		  setTopWindow = false;
 		  window.parent = window.self;
 		  window.top = window.self;
-		}
+//		}
 		return setTopWindow;
 	}
 }

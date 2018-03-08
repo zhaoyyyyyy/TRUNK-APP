@@ -24,6 +24,41 @@
 		<java.version>1.7</java.version>
 	</properties>
   
+  	<!-- 设置现场打包参数 -->
+  	<profiles>
+  		<profile>
+            <id>as-dev</id>    <!-- 亚信-开发（默认）-->
+            <properties>
+                <env>as-dev</env>
+                <ctx-loc>/</ctx-loc>
+            </properties>
+            <activation><activeByDefault>true</activeByDefault></activation>
+        </profile>
+        <profile>
+            <id>as-qa</id>    <!-- 亚信-测试 -->
+            <properties>
+                <env>as-qa</env>
+                <ctx-loc>/</ctx-loc>
+            </properties>
+        </profile>
+        <profile>
+            <id>cp-yw-dev</id> <!-- 中邮-邮务-开发-->
+            <properties>
+                <env>cp-yw-dev</env>
+                <ctx-loc>/loc</ctx-loc>
+            </properties>
+        </profile>
+        <profile>
+            <id>cp-yw-prod</id><!-- 中邮-邮务-生产-->
+            <properties>
+                <env>cp-yw-prod</env>
+                <ctx-loc>/loc</ctx-loc>
+            </properties>
+        </profile>
+    </profiles>
+  	
+  	
+  	
   	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -119,24 +154,39 @@
 	  		<!--TODO 假设权限jauth为测试代码目录 20170927 -->
 	  		<testSourceDirectory>${basedir}/src/main/bd</testSourceDirectory>
 	        <testOutputDirectory>${basedir}/target/classes</testOutputDirectory> 
-	  		<!--springboot默认打成jar包-->
+	  		
+	  		<!--资源打包-->
 	  		<resources>
-		            <resource>
-		                <directory>${basedir}/src/main/webapp</directory>
-	                    
-		                <targetPath>META-INF/resources</targetPath> 
-		                <includes>
-		                    <include>**/**</include>
-		                </includes>
-		            </resource>
-		            <resource>
-		                <directory>${basedir}/src/main/resources</directory>
-		                <includes>
-		                    <include>**/**</include>
-		                </includes>
-		            </resource>
-		            
-		    </resources>
+	            <resource>
+	                <directory>src/main/resources</directory>
+	                <includes>
+	                    <include>*</include>
+	                </includes>
+	                <filtering>true</filtering>
+	                <excludes>
+	                    <exclude>envs/**</exclude>
+	                </excludes>
+	            </resource>
+	            <resource>
+	                <directory>src/main/resources/envs/${env}</directory>
+	            </resource>
+	            <resource>
+	                <directory>src/main/webapp</directory>
+	                <targetPath>META-INF/resources</targetPath>
+	                <includes>
+	                    <include>**/**</include>
+	                </includes>
+	            </resource>
+	            <resource>
+	                <directory>src/main/webapp/aibi_lc/asset/script</directory>
+	                <targetPath>META-INF/resources/aibi_lc/asset/script</targetPath>
+	                <includes>
+	                    <include>config.js</include>
+	                </includes>
+	                <filtering>true</filtering>
+	            </resource>
+	        </resources>
+
 		    
 			<plugins>
 				<plugin>
@@ -157,6 +207,16 @@
 					<artifactId>spring-boot-maven-plugin</artifactId>
 				</plugin>
 				
+				<!-- 支持springbootrun 
+	            <plugin>
+	                <groupId>org.springframework.boot</groupId>
+	                <artifactId>spring-boot-maven-plugin</artifactId>
+	                <configuration>
+	                    <fork>true</fork>
+	                </configuration>
+	            </plugin>
+        		-->
+        		<!-- 将bd包打进去 -->
 				<plugin>
 					<groupId>org.codehaus.mojo</groupId>
 					<artifactId>build-helper-maven-plugin</artifactId>

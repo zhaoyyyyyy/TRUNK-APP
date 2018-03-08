@@ -22,8 +22,11 @@ import com.asiainfo.biapp.si.loc.core.label.entity.MdaSysTable;
 import com.asiainfo.biapp.si.loc.core.label.entity.MdaSysTableColumn;
 import com.asiainfo.biapp.si.loc.core.label.service.ILabelExploreService;
 import com.asiainfo.biapp.si.loc.core.label.service.ILabelInfoService;
+import com.asiainfo.biapp.si.loc.core.syspush.common.constant.ServiceConstants;
 import com.asiainfo.biapp.si.loc.core.syspush.entity.LabelAttrRel;
 import com.asiainfo.biapp.si.loc.core.syspush.service.ICustomerPublishCommService;
+import com.asiainfo.biapp.si.loc.core.syspush.service.ILabelAttrRelService;
+import com.asiainfo.biapp.si.loc.core.syspush.vo.LabelAttrRelVo;
 
 /**
  * Title : CustomerPublishCommImplService
@@ -55,25 +58,65 @@ public class CustomerPublishCommImplService implements ICustomerPublishCommServi
     @Autowired
     private ILabelExploreService iLabelExploreService;
     
+    @Autowired
+    private ILabelAttrRelService iLabelAttrRelService;
+
+
+    @Override
+    public List<LabelAttrRel> getLabelAttrRelsByCustom(LabelInfo customInfo, int attrSettingType) {
+        //获取属性列
+        List<LabelAttrRel> attrRelList = null;
+        
+        LabelAttrRelVo labelAttrRelVo = new LabelAttrRelVo();
+        labelAttrRelVo.setLabelId(customInfo.getLabelId());
+        labelAttrRelVo.setAttrSource(ServiceConstants.LabelAttrRel.ATTR_SOURCE_LABEL);
+        labelAttrRelVo.setAttrSettingType(attrSettingType);
+        labelAttrRelVo.setStatus(ServiceConstants.LabelAttrRel.STATUS_SUCCESS);
+        labelAttrRelVo.setOrderBy("pageSortNum ASC,sortNum ASC");
+        try {
+            attrRelList = iLabelAttrRelService.selectLabelAttrRelList(labelAttrRelVo);
+        } catch (Exception e) {
+            LogUtil.error("查询客户群关联的属性错误！", e);
+        }
+        
+        return attrRelList;
+    }
     
+    @Override
 	public String getCustomListSql(LabelInfo customInfo, List<LabelAttrRel> attrRelList) {
         //获取主表表名
-        MdaSysTableColumn mdaSysTableColumn = customInfo.getMdaSysTableColumn();
-		MdaSysTable mainMdaSysTable = null!=mdaSysTableColumn ? mdaSysTableColumn.getMdaSysTable() : null;
+        MdaSysTableColumn mainMdaSysTableColumn = customInfo.getMdaSysTableColumn();
+		MdaSysTable mainMdaSysTable = null!=mainMdaSysTableColumn ? mainMdaSysTableColumn.getMdaSysTable() : null;
         //拼装sql
         StringBuilder sql = new StringBuilder("SELECT m.").append(LabelInfoContants.KHQ_CROSS_COLUMN).append(" ");
 
+        if (null == customInfo.getDataDate()) {
+            customInfo = iLabelInfoService.get(customInfo.getLabelId());
+        }
         if (null != attrRelList && !attrRelList.isEmpty()) {    //有属性列
+            CocCacheAble cacheProxy = CocCacheProxy.getCacheProxy();
             //拼接列
+            MdaSysTableColumn mdaSysTableCol = null;
             LabelAttrRel labelAttrRel = null;
+            LabelInfo label = null;
             for (int i = 0; i < attrRelList.size(); i++) {
                 labelAttrRel = attrRelList.get(i);
-                sql.append(",").append("attr_").append(i).append(".").append(labelAttrRel.getAttrCol());
+                //获取列信息
+                label = cacheProxy.getLabelInfoById(labelAttrRel.getLabelOrCustomId());
+                if (null == label) {
+                    label = iLabelInfoService.get(labelAttrRel.getLabelOrCustomId());
+                }
+                mdaSysTableCol = label.getMdaSysTableColumn();
+                if (null != mdaSysTableCol) {
+                    sql.append(",").append(labelAttrRel.getAttrCol()).append(".").append(mdaSysTableCol.getColumnName());
+                } else {
+                    LogUtil.error("MdaSysTableColumn of labelinfo【"+label.getLabelId()+"】 is null!");
+                }
             }
             sql.append(" from (");
             
             //拼接主表
-            if (null != mdaSysTableColumn) {
+            if (null != mainMdaSysTableColumn) {
                 sql.append("SELECT t.").append(LabelInfoContants.KHQ_CROSS_COLUMN).append(" from ");
                 if (StringUtil.isNotEmpty(mainMdaSysTable.getTableSchema())) {
                     //拼接Schema
@@ -94,10 +137,9 @@ public class CustomerPublishCommImplService implements ICustomerPublishCommServi
             sql.append(") m ");
 
             //拼接left join
-            CocCacheAble cacheProxy = CocCacheProxy.getCacheProxy();
             for (int i = 0; i < attrRelList.size(); i++) {
                 labelAttrRel = attrRelList.get(i);
-                sql.append(this.getJoinSqlByLabelId(labelAttrRel.getLabelOrCustomId(), i, cacheProxy, null, null));
+                sql.append(getJoinSqlByLabelId(labelAttrRel.getLabelOrCustomId(), labelAttrRel.getAttrCol(), cacheProxy, null, null));
             }
             //拼接orderby
             sql.append("order by ");
@@ -107,14 +149,24 @@ public class CustomerPublishCommImplService implements ICustomerPublishCommServi
                 if (StringUtil.isNoneBlank(labelAttrRel.getSortType())) {
                     sortType = labelAttrRel.getSortType();
                 }
-                sql.append("attr_").append(i).append(".").append(labelAttrRel.getAttrCol())
-                   .append(" ").append(sortType).append(",");
+                //获取列信息
+                label = cacheProxy.getLabelInfoById(labelAttrRel.getLabelOrCustomId());
+                if (null == label) {
+                    label = iLabelInfoService.get(labelAttrRel.getLabelOrCustomId());
+                }
+                mdaSysTableCol = label.getMdaSysTableColumn();
+                if (null != mdaSysTableCol) {
+                    sql.append(labelAttrRel.getAttrCol()).append(".").append(mdaSysTableCol.getColumnName())
+                       .append(" ").append(sortType).append(",");
+                } else {
+                    LogUtil.error("MdaSysTableColumn of labelinfo【"+label.getLabelId()+"】 is null!");
+                }
             }
             sql.delete(sql.length()-1, sql.length());
         } else {    //无属性列
             //拼接主表
 	        	sql.append(" from ");
-            if (null != mdaSysTableColumn) {
+            if (null != mainMdaSysTableColumn) {
                 //拼接主表名
                 if (StringUtil.isNotEmpty(mainMdaSysTable.getTableSchema())) {
                     //拼接Schema
@@ -141,18 +193,18 @@ public class CustomerPublishCommImplService implements ICustomerPublishCommServi
      * 根据标签id获取left join sql,形如：<br/>
      * 	left join dw_A_111_20180301 t on maintable.product_no=t.product_no 
      * @param labelId	String	属性标签id
-     * @param i		int		别名后缀
+     * @param attrCol		String		别名
      * @param cacheProxy CocCacheAble	循环调用同一参数
      * @param label	LabelInfo	循环调用同一参数
      * @param mdaSysTableColumn	MdaSysTableColumn	循环调用同一参数
      * @return
      */
-    private String getJoinSqlByLabelId(String labelId,int i,CocCacheAble cacheProxy,LabelInfo label,
+    private String getJoinSqlByLabelId(String labelId,String attrCol,CocCacheAble cacheProxy,LabelInfo label,
     		MdaSysTableColumn mdaSysTableColumn) {
         StringBuffer sql = new StringBuffer("LEFT JOIN ");
         //获取表名
-        label = cacheProxy.getLabelInfoById(labelId);
-        if (null == label) {
+        label = cacheProxy.getLabelInfoById(labelId); //datedate is null,so it's error
+        if (null == label || (null!=label && null==label.getDataDate())) {
             label = iLabelInfoService.get(labelId);
         }
         mdaSysTableColumn = label.getMdaSysTableColumn();
@@ -162,9 +214,9 @@ public class CustomerPublishCommImplService implements ICustomerPublishCommServi
             if (StringUtil.isNoneBlank(mdaSysTable.getTableSchema())) {
                 sql.append(mdaSysTable.getTableSchema()).append(".");
             }
-            sql.append(mdaSysTable.getTableName()).append(label.getDataDate()).append(" attr_").append(i)
-               .append(" on ").append("m.").append(LabelInfoContants.KHQ_CROSS_COLUMN).append("=").append("attr_")
-               .append(i).append(".").append(LabelInfoContants.KHQ_CROSS_COLUMN).append(" ");
+            sql.append(mdaSysTable.getTableName()).append(label.getDataDate()).append(" ").append(attrCol)
+               .append(" on ").append("m.").append(LabelInfoContants.KHQ_CROSS_COLUMN).append("=")
+               .append(attrCol).append(".").append(LabelInfoContants.KHQ_CROSS_COLUMN).append(" ");
         } else {
             sql = new StringBuffer("");
             LogUtil.error("标签【"+labelId+"】的 mdaSysTableColumn is null！");

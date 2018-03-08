@@ -1,0 +1,9 @@
+jauth-url: 
+  http://10.1.245.176:8440/jauth
+spring:
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://10.1.245.175:3306/coctest?useUnicode=true&characterEncoding=utf-8
+    username: coctest
+    password: coctest
+    maxActive: 300

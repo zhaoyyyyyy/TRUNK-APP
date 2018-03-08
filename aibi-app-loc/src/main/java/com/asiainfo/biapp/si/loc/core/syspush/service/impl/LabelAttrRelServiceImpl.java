@@ -22,6 +22,7 @@ import com.asiainfo.biapp.si.loc.base.service.impl.BaseServiceImpl;
 import com.asiainfo.biapp.si.loc.base.utils.StringUtil;
 import com.asiainfo.biapp.si.loc.core.label.entity.LabelInfo;
 import com.asiainfo.biapp.si.loc.core.label.service.ILabelInfoService;
+import com.asiainfo.biapp.si.loc.core.syspush.common.constant.ServiceConstants;
 import com.asiainfo.biapp.si.loc.core.syspush.dao.ILabelAttrRelDao;
 import com.asiainfo.biapp.si.loc.core.syspush.entity.LabelAttrRel;
 import com.asiainfo.biapp.si.loc.core.syspush.service.ILabelAttrRelService;
@@ -86,13 +87,13 @@ public class LabelAttrRelServiceImpl extends BaseServiceImpl<LabelAttrRel, Strin
     public void addLabelAttrRelPreview(LabelAttrRel labelAttrRel,String userName) throws BaseException {
     	LabelAttrRelVo labelAttrRelVo = new LabelAttrRelVo();
     	labelAttrRelVo.setLabelId(labelAttrRel.getLabelId());
-    	labelAttrRelVo.setStatus(0);
-    	labelAttrRelVo.setAttrSettingType(3);
+    	labelAttrRelVo.setStatus(ServiceConstants.LabelAttrRel.STATUS_SUCCESS);
+    	labelAttrRelVo.setAttrSettingType(ServiceConstants.LabelAttrRel.ATTR_SETTING_TYPE_PREVIEW);
     	if(iLabelAttrRelService.selectLabelAttrRelList(labelAttrRelVo) != null){
     		List<LabelAttrRel> labelAttrRelList=iLabelAttrRelService.selectLabelAttrRelList(labelAttrRelVo);
     		for(int i=0;i<labelAttrRelList.size();i++){
     			LabelAttrRel labelAttrRel1 =labelAttrRelList.get(i);
-    			labelAttrRel1.setStatus(1);
+    			labelAttrRel1.setStatus(ServiceConstants.LabelAttrRel.STATUS_FAILED);
     			iLabelAttrRelService.modifyLabelAttrRel(labelAttrRel1);
     		}
     	}
@@ -115,12 +116,13 @@ public class LabelAttrRelServiceImpl extends BaseServiceImpl<LabelAttrRel, Strin
                      	}
                     }
                 }
-                labelAttrRelPreview.setStatus(0);
+                labelAttrRelPreview.setAttrCol("attr_col"+(i+1));
+                labelAttrRelPreview.setStatus(ServiceConstants.LabelAttrRel.STATUS_SUCCESS);
                 labelAttrRelPreview.setModifyTime(new Date());
                 labelAttrRelPreview.setLabelId(labelAttrRel.getLabelId());	
                 labelAttrRelPreview.setAttrColName(labelInfo.getLabelName());
-                labelAttrRelPreview.setAttrSource(2);
-                labelAttrRelPreview.setAttrSettingType(3);
+                labelAttrRelPreview.setAttrSource(ServiceConstants.LabelAttrRel.ATTR_SOURCE_LABEL);
+                labelAttrRelPreview.setAttrSettingType(ServiceConstants.LabelAttrRel.ATTR_SETTING_TYPE_PREVIEW);
                 labelAttrRelPreview.setLabelOrCustomId(labelInfo.getLabelId());
                 labelAttrRelPreview.setAttrColType(labelInfo.getLabelTypeId().toString());
                 labelAttrRelPreview.setAttrCreateUserId(userName);

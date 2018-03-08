@@ -9,6 +9,7 @@ package com.asiainfo.biapp.si.loc.core.syspush.controller;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -23,9 +24,9 @@ import com.asiainfo.biapp.si.loc.base.page.Page;
 import com.asiainfo.biapp.si.loc.base.utils.StringUtil;
 import com.asiainfo.biapp.si.loc.base.utils.WebResult;
 import com.asiainfo.biapp.si.loc.core.label.vo.LabelInfoVo;
+import com.asiainfo.biapp.si.loc.core.syspush.entity.LabelAttrRel;
 import com.asiainfo.biapp.si.loc.core.syspush.entity.LabelPushCycle;
 import com.asiainfo.biapp.si.loc.core.syspush.service.ILabelPushCycleService;
-import com.asiainfo.biapp.si.loc.core.syspush.vo.CustomGroupListVo;
 import com.asiainfo.biapp.si.loc.core.syspush.vo.LabelPushCycleVo;
 
 import io.swagger.annotations.Api;
@@ -200,9 +201,22 @@ public class LabelPushCycleController extends BaseController<LabelPushCycle>{
         return oldLab;
     }
 
-    @ApiOperation(value = "预览清单")
+    @ApiOperation(value = "清单预览表头")
+    @RequestMapping(value = "/labelPushCycle/findGroupListCols", method = RequestMethod.POST)
+    public WebResult<List<LabelAttrRel>> findGroupListCols(@ModelAttribute LabelInfoVo customGroup) {
+        WebResult<List<LabelAttrRel>> webResult = new WebResult<>();
+        List<LabelAttrRel> attrRelList = new ArrayList<>();
+        try {
+            attrRelList = iLabelPushCycleService.findGroupListCols(customGroup);
+        } catch (BaseException e) {
+            webResult.fail(e);
+        }
+        return webResult.success("查询预览清单表头成功！", attrRelList);
+    }
+    
+    @ApiOperation(value = "清单预览数据")
     @RequestMapping(value = "/labelPushCycle/findGroupList", method = RequestMethod.POST)
-    public Page<CustomGroupListVo> findGroupList(@ModelAttribute Page<CustomGroupListVo> page, @ModelAttribute LabelInfoVo customGroup) {
+    public Page<Map<String, String>> findGroupList(@ModelAttribute Page<Map<String, String>> page, @ModelAttribute LabelInfoVo customGroup) {
         try {
             page = iLabelPushCycleService.findGroupList(page,customGroup);
         } catch (BaseException e) {

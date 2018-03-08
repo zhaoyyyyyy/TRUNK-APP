@@ -99,17 +99,43 @@ var enumRule = (function (model){
 	            sortable: false,
 	            width: 60,
 	            align: "center",
-	            formatter : function(value, opts, data) {
-	    			return "<a href='javascript:void(0)' onclick='enumRule.addItem(\"" + data.dimKey+ "\",\"" + value+ "\")' >"+value+"</a>";
-	    		}
+//	            formatter : function(value, opts, data) {
+//	    			return "<a href='javascript:void(0)' onclick='enumRule.addItem(\"" + data.dimKey+ "\",\"" + value+ "\")' >"+value+"</a>";
+//	    		}
 	        }],
 	        rowList: [10, 20, 30],
 	        pager: '#mainGridPager',
 	        // 分页的id
 	        viewrecords: true,
-	        width : 200
+	        width : 200,
+	    	/**
+	    	 * 添加
+	    	 */
+	        onSelectRow: function(ids) { //单击选择行  
+                var rodData= $("#mainGrid").jqGrid("getRowData",ids);//
+                var id=rodData.dimKey;
+                var name=rodData.dimValue;
+                var flag = false;//不存在
+        		for(var i=0;i<ruleDataModel.itemChooseListSrc.length;i++){
+        			if(id == ruleDataModel.itemChooseListSrc[i].dimKey){
+        				flag = true;
+        			}
+        		}
+        		if(!flag){
+        			var obj = {
+        					dimKey : id,
+        					dimValue : name
+        			}
+        			ruleDataModel.itemChooseListSrc[ruleDataModel.itemChooseListSrc.length] = obj;
+        			ruleDataModel.itemChooseCount = ruleDataModel.itemChooseListSrc.length;
+        			//该种赋值避免引用相同
+        			ruleDataModel.itemChooseList = JSON.parse(JSON.stringify(ruleDataModel.itemChooseListSrc));//赋值显示数据
+        			ruleDataModel.itemChooseSearch = '';//清空查询条件
+        		}
+            },  
 	        
-	    })
+	    });
+		$("#mainGrid").jqGrid('setLabel',0, '序号');
 	};
 	/**************
 	 * 分页查询枚举
@@ -145,26 +171,26 @@ var enumRule = (function (model){
 	/**
 	 * 添加
 	 */ 
-	model.addItem = function(id,name){
-		var flag = false;//不存在
-		for(var i=0;i<ruleDataModel.itemChooseListSrc.length;i++){
-			if(id == ruleDataModel.itemChooseListSrc[i].dimKey){
-				flag = true;
-			}
-		}
-		if(!flag){
-			var obj = {
-					dimKey : id,
-					dimValue : name
-			}
-			ruleDataModel.itemChooseListSrc[ruleDataModel.itemChooseListSrc.length] = obj;
-			ruleDataModel.itemChooseCount = ruleDataModel.itemChooseListSrc.length;
-			//该种赋值避免引用相同
-			ruleDataModel.itemChooseList = JSON.parse(JSON.stringify(ruleDataModel.itemChooseListSrc));//赋值显示数据
-			ruleDataModel.itemChooseSearch = '';//清空查询条件
-		}
-		
-    }
+//	model.addItem = function(id,name){
+//		var flag = false;//不存在
+//		for(var i=0;i<ruleDataModel.itemChooseListSrc.length;i++){
+//			if(id == ruleDataModel.itemChooseListSrc[i].dimKey){
+//				flag = true;
+//			}
+//		}
+//		if(!flag){
+//			var obj = {
+//					dimKey : id,
+//					dimValue : name
+//			}
+//			ruleDataModel.itemChooseListSrc[ruleDataModel.itemChooseListSrc.length] = obj;
+//			ruleDataModel.itemChooseCount = ruleDataModel.itemChooseListSrc.length;
+//			//该种赋值避免引用相同
+//			ruleDataModel.itemChooseList = JSON.parse(JSON.stringify(ruleDataModel.itemChooseListSrc));//赋值显示数据
+//			ruleDataModel.itemChooseSearch = '';//清空查询条件
+//		}
+//		
+//    }
 	/**
 	 * 全选添加
 	 */ 

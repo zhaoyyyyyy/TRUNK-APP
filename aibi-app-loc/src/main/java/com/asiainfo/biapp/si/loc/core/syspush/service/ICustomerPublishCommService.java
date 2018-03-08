@@ -35,6 +35,17 @@ import com.asiainfo.biapp.si.loc.core.syspush.entity.LabelAttrRel;
 public interface ICustomerPublishCommService {
 
     /**
+     * Description: 根据标签信息，获取客户群标签与属性对应关系。
+
+     * @param customInfo LabelInfo 客户群对象
+     * @param attrSettingType int 属性类型
+     * 
+     * @return attrRelList List<LabelAttrRel>  客户群关联的属性列List
+     */
+    public List<LabelAttrRel> getLabelAttrRelsByCustom(LabelInfo customInfo, int attrSettingType);
+    
+    
+    /**
      * Description: 根据标签信息，以及客户群标签与属性对应关系表，拼出创建清单文件sql。形如：
      *   select maintable.product_no, t1.A1,t2,A2,p.B1 from (
      *      select product_no from cross_111_20180301 f where f.custome_id=1111 ) maintable 
@@ -46,6 +57,6 @@ public interface ICustomerPublishCommService {
      * @return sql String 拼接好的创建清单文件sql
      */
 	public String getCustomListSql(LabelInfo customInfo, List<LabelAttrRel> attrRelList);
-	
-	
+
+
 }
