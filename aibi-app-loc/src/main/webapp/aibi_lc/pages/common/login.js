@@ -42,11 +42,13 @@ function COCLogin(){
 		  success: function(returnObj){
 			  if(returnObj && returnObj.status == '200'){
 				  var data = returnObj.data;
-				  var ssg = window.sessionStorage;
-				  if(ssg){
-					  ssg.setItem("token",data.token);
-					  ssg.setItem("refreshToken",data.refreshToken);
-				  }
+				  $.setCurrentToken(data.token,data.refreshToken);
+//				  var ssg = window.sessionStorage;
+//				  if(ssg){
+//					  ssg.setItem("token",data.token);
+//					  ssg.setItem("refreshToken",data.refreshToken);
+//				  }
+				  
 				  location.href = $.forward;
 			  }else{
 				  alert(returnObj.msg);

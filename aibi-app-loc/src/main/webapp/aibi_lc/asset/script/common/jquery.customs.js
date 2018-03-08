@@ -64,6 +64,7 @@ $.extend({
 $.fn.extend({
 	//专区渲染
 	preConfig : function() {
+		var start = new Date().getTime();//起始时间
 		 var _self = $(this);
 		 var html = '<div class="dropdown fright" id="preConfig_list">'
 					    +'<a href="javascript:;" class="dropdown-toggle" title="专区管理">'
@@ -129,6 +130,8 @@ $.fn.extend({
 			e.stopPropagation?e.stopPropagation():e.cancelBubble=true;
 			$("#preConfig_list").removeClass("open");
 		});
+		var end = new Date().getTime();//接受时间
+		$.alert((end - start)+"ms");
 	}
 });
 

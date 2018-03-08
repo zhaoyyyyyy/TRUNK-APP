@@ -7,6 +7,7 @@
 package com.asiainfo.biapp.si.loc.core.label.entity;
 
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -21,7 +22,6 @@ import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
 
 import com.asiainfo.biapp.si.loc.base.entity.BaseEntity;
-import com.asiainfo.biapp.si.loc.base.exception.BaseException;
 import com.asiainfo.biapp.si.loc.base.extend.SpringContextHolder;
 import com.asiainfo.biapp.si.loc.base.utils.LogUtil;
 import com.asiainfo.biapp.si.loc.core.label.service.ICategoryInfoService;
@@ -154,7 +154,7 @@ public class CategoryInfo extends BaseEntity {
 //    @OrderBy(value = "sortNum")
 //    @OneToMany(cascade = CascadeType.ALL ,fetch=FetchType.EAGER)
 //    @JoinColumn(name = "PARENT_ID", insertable = false, updatable = false)
-    private Set<CategoryInfo> children = new HashSet<>();
+    private Set<CategoryInfo> children = new LinkedHashSet<CategoryInfo>();
 
     public Set<CategoryInfo> getChildren() {
     	List<CategoryInfo> list = null;
@@ -165,10 +165,10 @@ public class CategoryInfo extends BaseEntity {
 	    	categoryInfoVo.setSysId(sysId);
 			list = categoryInfoService.selectCategoryInfoList(categoryInfoVo);
 			for(CategoryInfo categoryInfo: list){
-				categoryInfo.getChildren();
+				Set<CategoryInfo> s =  categoryInfo.getChildren();
 			}
 		} catch (Exception e) {LogUtil.error("标签目录以父查子异常",e);}
-        return new HashSet<CategoryInfo>(list);
+        return new LinkedHashSet<CategoryInfo>(list);
     }
 
     public void setChildren(Set<CategoryInfo> children) {

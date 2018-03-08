@@ -1,8 +1,10 @@
 package com.asiainfo.biapp.si.loc.localization.chinapost.service.impl;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -142,16 +144,16 @@ public class YwDevUserServiceImpl extends DevUserServiceImpl implements IUserSer
 		try{
 			
 			Organization organizationXzqh = organizationService.selectOrganizationByCode("1");
-			Set<Organization> organizationSetXzqh = new HashSet<>();
+			LinkedHashSet<Organization> organizationSetXzqh = new LinkedHashSet<>();
 			organizationSetXzqh.add(organizationXzqh);
-			addOrgChildren(organizationXzqh.getChildren(), organizationSetXzqh);
+			addOrgChildren(organizationXzqh.getChildList(), organizationSetXzqh);
 			
 			Organization organizationYwx = organizationService.selectOrganizationByCode("2");
-			Set<Organization> organizationSetYwx = new HashSet<>();
+			LinkedHashSet<Organization> organizationSetYwx = new LinkedHashSet<>();
 			organizationSetYwx.add(organizationYwx);
-			addOrgChildren(organizationYwx.getChildren(), organizationSetYwx);
+			addOrgChildren(organizationYwx.getChildList(), organizationSetYwx);
 			
-			Set<Organization> organizationPrivaliege = new HashSet<Organization>();
+			LinkedHashSet<Organization> organizationPrivaliege = new LinkedHashSet<>();
 			if(!organizationXzqh.getOrgCode().equals("1")){
 			    organizationPrivaliege.add(organizationXzqh);
 			}
@@ -163,14 +165,14 @@ public class YwDevUserServiceImpl extends DevUserServiceImpl implements IUserSer
 			        if(!organization.getOrgCode().equals("1")){
 			            organizationPrivaliege.add(organization);
 		            }
-			        addXZQHOrgChildren(organization.getChildren(),organizationPrivaliege);
+			        addXZQHOrgChildren(organization.getChildList(),organizationPrivaliege);
 			    }
 			}
 			//业务线
 			for(Organization organization : organizationSetYwx){
 			    if(organization.getOrgCode().equals(serviceCode)){
                     organizationPrivaliege.add(organization);
-                    addOrgChildren(organization.getChildren(), organizationPrivaliege);
+                    addOrgChildren(organization.getChildList(), organizationPrivaliege);
                 }
 			}
 			
@@ -243,24 +245,30 @@ public class YwDevUserServiceImpl extends DevUserServiceImpl implements IUserSer
 		return user;
 	}
 	
-	private Set<Organization> addOrgChildren(Set<Organization> children,Set<Organization> organizationSet){
+	private Set<Organization> addOrgChildren(List<Organization> children,Set<Organization> organizationSet){
+//	    organizationSet.addAll(children);
 	    for(Organization o : children){
 	        organizationSet.add(o);
 	        if(!o.getChildren().isEmpty()){
-	            addOrgChildren(o.getChildren(),organizationSet);
+	            addOrgChildren(o.getChildList(),organizationSet);
 	        }
 	    }
 	    return organizationSet;
 	}
 	
 	
-	private Set<Organization> addXZQHOrgChildren(Set<Organization> children,Set<Organization> organizationSet){
+	private Set<Organization> addXZQHOrgChildren(List<Organization> children,Set<Organization> organizationSet){
 	    loadLevel--;
-	    organizationSet.addAll(children);
+//	    organizationSet.addAll(children);
 	    if(loadLevel>0){
 	        for(Organization o : children){
-	            addOrgChildren(o.getChildren(),organizationSet);
+	            organizationSet.add(o);
+	            addOrgChildren(o.getChildList(),organizationSet);
 	        }
+	    }else{
+	        for(Organization o : children){
+                organizationSet.add(o);
+            }
 	    }
         return organizationSet;
     }

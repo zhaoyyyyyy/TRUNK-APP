@@ -1,6 +1,6 @@
 var token = "";
 try{
-	token = $.getToken();
+	token = $.getCurrentToken();
 }catch(e){}
 jQuery.extend(jQuery.jgrid.defaults, {        
    	url:'./grid.json',

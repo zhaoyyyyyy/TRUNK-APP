@@ -32,13 +32,13 @@
 			option =  $.extend(defaults,option);
 			//传给后台token
 			var ssg = window.sessionStorage;
-			if(ssg){
-				token = ssg.getItem("token");
+//			if(ssg){
+				var token = $.getCurrentToken();
 				if(token){
 					defaults.headers['X-Authorization'] = token;
 					option.data.token = token;
 				}
-			}
+//			}
 			$.ajaxFileUpload(option);
 		}
 			 
