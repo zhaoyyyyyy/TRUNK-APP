@@ -3,10 +3,10 @@ jauth-url:
 acrm-url:
   http://127.0.0.1:8442/acrm
 loadLevel:
-  3
+  1
 spring:
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:mysql://192.168.248.142:3306/coc_suit?useUnicode=true&characterEncoding=utf-8
-    username: cocsuit
-    password: cocsuit
+    url: jdbc:mysql://192.168.248.142:3306/coc_web?useUnicode=true&characterEncoding=utf-8
+    username: coc_web
+    password: coc_web
