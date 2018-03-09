@@ -841,6 +841,13 @@
 .create-main .ui-form  .ui-form-group > .control-select{
 	width:50%;
 }
+.label-rule .control-input > p{
+	line-height: 28px;
+}
+.label-rule .control-input > p.heightAuto{
+	height:28px;
+	overflow:hidden;
+}
 /*创建标签-多指标高佳佳*/
 
 .ui-create{

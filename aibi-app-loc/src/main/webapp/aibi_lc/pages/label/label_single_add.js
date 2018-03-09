@@ -5,7 +5,7 @@ var model = {
 		bqlx : [],
 		sjlx : [],
 		showdimDetail: [],
-		isActive:false, 
+		isActive:true, 
 		arrs:[],
 		labelInfoList:[],
 		readCycle : "",
@@ -17,6 +17,8 @@ var model = {
 		categoryId:"",
 		configId:"",
 		checked:false,//添加radio属性
+		isHeight:true,//具体规则
+		selected:true,//全选
 }
 function changeStatus(elem){
 	if($(elem).val()==5){
@@ -54,7 +56,27 @@ window.loc_onload = function() {
 				    			600);
 				    }
 				});
-	    	} 
+	    	},
+	    	toggle:function(){
+	    		model.isHeight=!model.isHeight;
+	    	},
+	    	allSelected:function(){
+				if(model.selected==false){
+					 model.selected=true;
+					 model.isActive=true;
+				}else{
+					  model.selected=false;
+					  model.isActive=false;
+				}
+	   		},
+//	   		getData:function(item){
+//				if (typeof(item.isActive) == 'undefined') {
+//					this.$set(item,"isActive",true);
+//					console.log(item)
+//				} else {
+//					item.isActive = !item.isActive;
+//				}
+//	   		}
 	    } ,
 	    mounted : function () {
 		    this.$nextTick(function () {
