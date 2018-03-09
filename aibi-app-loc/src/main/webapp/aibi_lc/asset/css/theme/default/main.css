@@ -1292,6 +1292,26 @@ span.del-btn{
 .ui-custom-btn{
 	text-align:right;
 }
+.customerTipBox i{
+	border: 7px solid transparent;
+    height: 0;
+    width: 0;
+    border-bottom: 5px solid #e7fbef;
+    transform: rotate(-90deg);
+    display:block;
+    float:left;
+    margin-top:6px;
+}
+.customerTipBox p{
+	height: 26px;
+    line-height: 26px;
+    padding: 0px 10px 0px 5px;
+    background: #e7fbef;
+    border-left: none;
+    white-space: nowrap;
+    float:left;
+    margin-left: -1px;
+}
 /*计算中心-显示规则*/
 .customer-rule-list > ul > li.tag-item{
 	border: 1px solid #ccc;

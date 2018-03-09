@@ -49,7 +49,8 @@
 										required="true"	v-model="labelInfo.tacticsId" placeholder="请选择生成策略">
 									</select>
 			                    </div>
-			                    <div id="tacticsIdTip" class="fleft infoTip customerTipBox" style="display:none;">
+			                    <div id="tacticsIdTip" class="fleft customerTipBox ml10 clearfix" style="display:none;">
+			                    	<i></i>
 						   			<p>标签没有最新数据，系统将等待执行；如需立即执行，请选择保守策略。</p>
 								</div>
 			                </div>
@@ -59,7 +60,10 @@
 			                    	<input id="labelMonth" name="labelMonth" type="text" class="form-control input-pointer easyui-validatebox" 
 									required="true"	 placeholder="请选择数据日期（月）" onclick="labelInfoModel.changeLabelMonth()"/>
 			                    </div>
-			                    <div id="labelMonthTip" class="tishi-page error" style="display:none;">所选日期早于标签生效日期，请重新选择!</div>
+			                    <div id="labelMonthTip" class="fleft customerTipBox ml10" style="display:none;">
+			                    	<i></i>
+			                    	<p >所选日期早于标签生效日期，请重新选择!</p>
+			                    </div>
 			                </div>
 			                <div class="ui-form-group ml70" v-if="isShowLabelDayDiv">
 			                   <label class="control-label" for="labelDay" ><span class="input-required">*</span>数据日期(日)</label>
@@ -67,7 +71,10 @@
 			                    	<input id="labelDay" name="labelDay" type="text" class="form-control input-pointer easyui-validatebox"
 									required="true"	 placeholder="请选择数据日期（日）" onclick="labelInfoModel.changeLabelDay()"/>
 			                    </div>
-			                    <div id="labelDayTip" class="tishi-page error" style="display:none;">所选日期早于标签生效日期，请重新选择!</div>
+			                    <div id="labelDayTip" class="fleft customerTipBox ml10" style="display:none;">
+			                    	<i></i>
+			                    	<p>所选日期早于标签生效日期，请重新选择!</p>
+			                    </div>
 			                </div>
 			                
 			                <div class="ui-form-group ml70" id="updateCycleDiv">
