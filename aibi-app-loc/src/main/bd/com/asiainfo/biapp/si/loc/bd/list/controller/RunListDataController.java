@@ -15,6 +15,9 @@ import io.swagger.annotations.ApiOperation;
 @RequestMapping("api/listData")
 @RestController
 public class RunListDataController {
+	
+	public static volatile boolean runDayListifRunning = false;
+	public static volatile boolean runMonthListifRunning = false;
 
 	@Autowired
 	private CyclicityListDataServiceImpl cyclicityListDataService;
@@ -22,25 +25,35 @@ public class RunListDataController {
 	@ApiOperation(value="刷新loc所有缓存数据")
     @PostMapping(value = "/runDayListData")
 	public void runDayListData(String configId,String dataDate){
-		if(StringUtils.isNotBlank(configId) && StringUtils.isNotBlank(dataDate)){
-			cyclicityListDataService.runDayListDataByConfigId(configId, dataDate);
-		}else if(StringUtils.isNotBlank(configId) && StringUtils.isBlank(dataDate)){
-			cyclicityListDataService.runDayListDataByConfigId(configId);
-		}else if(StringUtils.isBlank(configId) && StringUtils.isBlank(dataDate)){
-			cyclicityListDataService.runAllDayListData();
+		if(!runDayListifRunning){
+			runDayListifRunning = true;
+			if(StringUtils.isNotBlank(configId) && StringUtils.isNotBlank(dataDate)){
+				cyclicityListDataService.runDayListDataByConfigId(configId, dataDate);
+			}else if(StringUtils.isNotBlank(configId) && StringUtils.isBlank(dataDate)){
+				cyclicityListDataService.runDayListDataByConfigId(configId);
+			}else if(StringUtils.isBlank(configId) && StringUtils.isBlank(dataDate)){
+				cyclicityListDataService.runAllDayListData();
+			}
+			
+			runDayListifRunning = false;
 		}
+		
 	}
 	
 	@ApiOperation(value="刷新loc所有缓存数据")
     @PostMapping(value = "/runMonthListData")
 	public void runMonthListData(String configId,String dataDate){
-		
-		if(StringUtils.isNotBlank(configId) && StringUtils.isNotBlank(dataDate)){
-			cyclicityListDataService.runMonthListDataByConfigId(configId, dataDate);
-		}else if(StringUtils.isNotBlank(configId) && StringUtils.isBlank(dataDate)){
-			cyclicityListDataService.runMonthListDataByConfigId(configId);
-		}else if(StringUtils.isBlank(configId) && StringUtils.isBlank(dataDate)){
-			cyclicityListDataService.runAllMonthListData();
+		if(!runMonthListifRunning){
+			runMonthListifRunning = true;
+			if(StringUtils.isNotBlank(configId) && StringUtils.isNotBlank(dataDate)){
+				cyclicityListDataService.runMonthListDataByConfigId(configId, dataDate);
+			}else if(StringUtils.isNotBlank(configId) && StringUtils.isBlank(dataDate)){
+				cyclicityListDataService.runMonthListDataByConfigId(configId);
+			}else if(StringUtils.isBlank(configId) && StringUtils.isBlank(dataDate)){
+				cyclicityListDataService.runAllMonthListData();
+			}
+			runMonthListifRunning = false;
 		}
+		
 	}
 }
