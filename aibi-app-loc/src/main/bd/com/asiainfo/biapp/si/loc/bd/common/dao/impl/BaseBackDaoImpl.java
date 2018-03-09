@@ -56,6 +56,7 @@ public class BaseBackDaoImpl {
     private static final String REGEX_INTERRO = "?";
     /** 缓冲当前的schema */
     private static String SYS_BGDB_SCHEMA = null;
+    public String Tab_Format = "parquet";
     
     /**
      * Description: 查询当前后台库的schema
@@ -99,6 +100,7 @@ public class BaseBackDaoImpl {
 //		String username = CocCacheProxy.getCacheProxy().getSYSConfigInfoByKey(BaseConstants.SYS_BGDB_USERNAME);
 //		String password = CocCacheProxy.getCacheProxy().getSYSConfigInfoByKey(BaseConstants.SYS_BGDB_PASSWORD);
 //		DataSource dataSource = this.getDataSourceBuilder(driverClassName,url,username,password).build();
+		Tab_Format = CocCacheProxy.getCacheProxy().getSYSConfigInfoByKey(BaseConstants.STORAGE_FORMATE);
         Connection conn = null;
         try {
 //            conn = dataSource.getConnection();

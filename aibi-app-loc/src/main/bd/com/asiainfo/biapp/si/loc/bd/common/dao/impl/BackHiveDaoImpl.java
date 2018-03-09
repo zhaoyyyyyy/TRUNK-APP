@@ -50,10 +50,12 @@ import com.asiainfo.biapp.si.loc.bd.common.util.JDBCUtil;
 @Repository("backHiveDaoImpl")
 public class BackHiveDaoImpl extends BaseBackDaoImpl implements IBackSqlDao{
 	private Logger log = Logger.getLogger(BackHiveDaoImpl.class);
+	
 
 
     public String getCurBackDbSchema() throws SqlRunException{
         return super.getCurBackDbSchema();
+        
     }
 	
 	@Override
@@ -338,10 +340,13 @@ public class BackHiveDaoImpl extends BaseBackDaoImpl implements IBackSqlDao{
 
 	@Override
 	public boolean createVerticalTable(String tableName,String columnName) throws SqlRunException{
-		String sql ="CREATE TABLE IF NOT EXISTS "+tableName+" ("+
-					columnName+" string )  PARTITIONED BY ("+LabelInfoContants.KHQ_CROSS_ID_PARTION+" string) stored as parquet ";
+		StringBuffer sql = new StringBuffer();
+		sql.append("CREATE TABLE IF NOT EXISTS ").append(tableName).append(" (").append(columnName).append(" string )  PARTITIONED BY (");
+		sql.append(LabelInfoContants.KHQ_CROSS_ID_PARTION).append(" string) stored as ").append(this.Tab_Format);
+//		String sql ="CREATE TABLE IF NOT EXISTS "+tableName+" ("+
+//					columnName+" string )  PARTITIONED BY ("+LabelInfoContants.KHQ_CROSS_ID_PARTION+" string) stored as " + this.Tab_Format;
 		log.debug(" ----------------------  BackHiveDaoImpl.createVerticalTable  sql=" + sql);
-		return this.executeResBoolean(sql);
+		return this.executeResBoolean(sql.toString());
 	}
 
 	@Override
@@ -395,7 +400,7 @@ public class BackHiveDaoImpl extends BaseBackDaoImpl implements IBackSqlDao{
 		}
 		
 		if(ifPartition){
-			sb.append(" PARTITIONED BY (").append(primaryKeyStr.toString().substring(0,primaryKeyStr.toString().length()-1)).append(") stored as parquet  ");
+			sb.append(" PARTITIONED BY (").append(primaryKeyStr.toString().substring(0,primaryKeyStr.toString().length()-1)).append(") stored as ").append(this.Tab_Format);
 		}
 		
 		
