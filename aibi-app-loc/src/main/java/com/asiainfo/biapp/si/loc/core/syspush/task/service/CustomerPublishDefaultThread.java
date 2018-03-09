@@ -169,10 +169,10 @@ public class CustomerPublishDefaultThread implements ICustomerPublishThread {
 		long start = System.currentTimeMillis();
 		
 		for(LabelPushCycle labelPushCycle : labelPushCycleList){
-//            customInfo = cacheProxy.getLabelInfoById(labelPushCycle.getCustomGroupId());
-//            if (null == customInfo) {
+            customInfo = cacheProxy.getLabelInfoById(labelPushCycle.getCustomGroupId()); //datedate is null,so it's error
+            if (null == customInfo || (null!=customInfo && null==customInfo.getDataDate())) {
                 customInfo = iLabelInfoService.get(labelPushCycle.getCustomGroupId());
-//            }
+            }
 
             //获取属性列
             int attrType = ServiceConstants.LabelAttrRel.ATTR_SETTING_TYPE_PUSH;
@@ -358,9 +358,7 @@ public class CustomerPublishDefaultThread implements ICustomerPublishThread {
             String title = cacheProxy.getSYSConfigInfoByKey("RELATED_COLUMN_CN_NAME");
             if(sysInfo.getIsNeedTitle() != null && ServiceConstants.SysInfo.IS_NEED_TITLE_YES == sysInfo.getIsNeedTitle()){
                 if (StringUtil.isEmpty(title)) {
-                    title = ",手机号码";
-                } else {
-	                	title = "," + title;
+                    title = "手机号码";
                 }
                 if (null != attrRelList && !attrRelList.isEmpty()) {    //有属性列
                 		StringBuffer titleStr = new StringBuffer();
@@ -947,6 +945,9 @@ public class CustomerPublishDefaultThread implements ICustomerPublishThread {
                 }
                 List<String> data = new ArrayList<String>();
                 for (Map<String, String> m : datas) {
+                    if (m.containsKey("rownum")) {  //不把序号写入文件
+                        m.remove("rownum");
+                    }
                     for (String col : m.keySet()) {
                         data.add(String.valueOf(m.get(col)).replace("\"", ""));
                     }

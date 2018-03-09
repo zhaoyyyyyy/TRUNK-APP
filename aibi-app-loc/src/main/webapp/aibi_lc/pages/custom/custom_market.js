@@ -103,7 +103,7 @@ window.loc_onload = function() {
 	//加载购物车
 	calculateCenter.refreshShopCart();
 	//标签创建周期
-	dataModel.updateCycleList = $.getDicData("GXZQZD");
+	dataModel.updateCycleList = $.getDicData("QTGXZQ");
 	//标签创建类型
 	dataModel.labelTypeIdList = $.getDicData("BQLXZD");
 	//搜索框回车
@@ -286,7 +286,7 @@ var labelMarket = (function (model){
 	    //获取更新周期
 	    model.loadUpdateCycle = function(){
 	    	var gxzqList = [];
-	    	var dicGxzq = $.getDicData("GXZQZD");
+	    	var dicGxzq = $.getDicData("QTGXZQ");
 	    	for(var i=0; i<dicGxzq.length; i++){
 	    		gxzqList.push(dicGxzq[i]);
 	    	}

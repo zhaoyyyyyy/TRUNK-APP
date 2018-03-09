@@ -1,9 +1,9 @@
 server:
   port: 8441
-  context-path: /
+  context-path: @ctx-loc@
 spring:
   profiles:
-    active: dev
+    active: @env@
   application:
     name: loc
   jpa:

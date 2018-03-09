@@ -117,6 +117,7 @@ public class CategoryInfoDaoImpl extends BaseDaoImpl<CategoryInfo, String> imple
             hql.append("and c.levelId = :levelId ");
             params.put("levelId", categoryInfoVo.getLevelId());
         }
+        hql.append("order by c.sortNum ,c.categoryName ");
         reMap.put("hql", hql);
         reMap.put("params", params);
         return reMap;

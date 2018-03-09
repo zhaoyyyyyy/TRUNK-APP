@@ -18,7 +18,10 @@ import com.asiainfo.biapp.si.loc.base.exception.BaseException;
 import com.asiainfo.biapp.si.loc.base.exception.ParamRequiredException;
 import com.asiainfo.biapp.si.loc.base.page.Page;
 import com.asiainfo.biapp.si.loc.base.service.impl.BaseServiceImpl;
+import com.asiainfo.biapp.si.loc.base.utils.DESUtil;
+import com.asiainfo.biapp.si.loc.base.utils.LogUtil;
 import com.asiainfo.biapp.si.loc.base.utils.StringUtil;
+import com.asiainfo.biapp.si.loc.base.utils.model.DES;
 import com.asiainfo.biapp.si.loc.core.syspush.dao.ISysInfoDao;
 import com.asiainfo.biapp.si.loc.core.syspush.entity.SysInfo;
 import com.asiainfo.biapp.si.loc.core.syspush.service.ISysInfoService;
@@ -82,10 +85,20 @@ public class SysInfoServiceImpl extends BaseServiceImpl<SysInfo, String> impleme
     	if(null !=iSysInfoDao.selectSysInfoBySysName(sysInfo.getSysName())){
     		 throw new ParamRequiredException("平台名称已存在");
     	}
+    	try {
+			sysInfo.setFtpPwd(DES.encrypt(sysInfo.getFtpPwd()));
+		} catch (Exception e) {
+			LogUtil.error("加密出现错误", e);
+		}
         super.saveOrUpdate(sysInfo);
     }
 
     public void modifySysInfo(SysInfo sysInfo) throws BaseException {
+    	try {
+			sysInfo.setFtpPwd(DES.encrypt(sysInfo.getFtpPwd()));
+		} catch (Exception e) {
+			LogUtil.error("加密出现错误", e);
+		}
         super.saveOrUpdate(sysInfo);
     }
 

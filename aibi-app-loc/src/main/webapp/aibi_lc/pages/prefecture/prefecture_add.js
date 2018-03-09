@@ -163,7 +163,7 @@ window.loc_onload = function() {
 function changeStatus(obj){
 	model.showSelect = true;
 	if(obj.id == "type1"){
-		model.selectName = "产品线";
+		model.selectName = "业务线";
 		$("#org").val("");
 	}
 	if(obj.id == "type2"){
@@ -216,6 +216,8 @@ function openTtee(tag){
 		}else if(model.dataAccessType == "1"){
 			model.ztreeObj=model.cpxList;
 		}
+		var obj = model.ztreeObj;
+		renToList(obj);
     	$.fn.zTree.init($("#pretree"), install, model.ztreeObj);
 	}
 	
@@ -230,4 +232,12 @@ function openTtee(tag){
 }
 function changeSelect(){
 	model.selectNum = 1;
+}
+function renToList(list){
+	for(var i=0;i<list.length;i++){
+		list[i].children=list[i].childList;
+		if(list[i].children.length>0){
+			renToList(list[i].children);
+		}
+	}
 }

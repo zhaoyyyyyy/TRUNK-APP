@@ -119,10 +119,28 @@ public class LabelPushCycle extends BaseEntity{
     @Transient
     private String sortAttrAndType;
     
+    /**
+     * 推送的平台ID串，前台传以 , 隔开
+     */
+    @Transient
+    private String sysIds;
     
     
     
-    public String getSortAttrAndType() {
+    
+    
+    
+    public String getSysIds() {
+		return sysIds;
+	}
+
+
+	public void setSysIds(String sysIds) {
+		this.sysIds = sysIds;
+	}
+
+
+	public String getSortAttrAndType() {
 		return sortAttrAndType;
 	}
 
@@ -141,10 +159,14 @@ public class LabelPushCycle extends BaseEntity{
     /**
      * main field constructor
      */
-    public LabelPushCycle(String customGroupId, Integer status) {
+    public LabelPushCycle(String customGroupId, String sysId, Integer pushCycle, Date modifyTime, Integer status ) {
         super();
         this.customGroupId = customGroupId;
+        this.sysId = sysId;
+        this.pushCycle = pushCycle;
+        this.modifyTime = modifyTime;
         this.status = status;
+        
     }
     public LabelPushCycle(LabelPushCycleVo labelPushCycleVo) {
         this.recordId = labelPushCycleVo.getRecordId();
@@ -156,7 +178,12 @@ public class LabelPushCycle extends BaseEntity{
         this.modifyTime = labelPushCycleVo.getModifyTime();
         this.status = labelPushCycleVo.getStatus();
     }
-
+    public LabelPushCycle(String customGroupId, Integer status) {
+        super();
+        this.customGroupId = customGroupId;
+        this.status = status;
+    }
+    
     public String getAttrbuteId() {
         return AttrbuteId;
     }

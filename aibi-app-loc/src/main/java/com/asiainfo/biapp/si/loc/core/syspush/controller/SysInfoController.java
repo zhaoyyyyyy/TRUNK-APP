@@ -18,8 +18,10 @@ import org.springframework.web.bind.annotation.RestController;
 import com.asiainfo.biapp.si.loc.base.controller.BaseController;
 import com.asiainfo.biapp.si.loc.base.exception.BaseException;
 import com.asiainfo.biapp.si.loc.base.page.Page;
+import com.asiainfo.biapp.si.loc.base.utils.LogUtil;
 import com.asiainfo.biapp.si.loc.base.utils.StringUtil;
 import com.asiainfo.biapp.si.loc.base.utils.WebResult;
+import com.asiainfo.biapp.si.loc.base.utils.model.DES;
 import com.asiainfo.biapp.si.loc.core.syspush.entity.SysInfo;
 import com.asiainfo.biapp.si.loc.core.syspush.service.ISysInfoService;
 import com.asiainfo.biapp.si.loc.core.syspush.vo.SysInfoVo;
@@ -93,8 +95,10 @@ public class SysInfoController extends BaseController<SysInfo>{
         SysInfo sysInfo = new SysInfo();
         try {
             sysInfo = iSysInfoService.selectSysInfoById(sysId);
-        } catch (BaseException e) {
-            return webResult.fail(e);
+        	String str= DES.decrypt(sysInfo.getFtpPwd());
+        	sysInfo.setFtpPwd(str);
+        } catch (Exception e) {
+        	LogUtil.error("解密出现错误", e);
         }
         return webResult.success("获取推送信息成功", sysInfo);
     }
@@ -273,6 +277,8 @@ public class SysInfoController extends BaseController<SysInfo>{
         }
         if(StringUtil.isNoneBlank(sys.getPushClassName())){
             oldSys.setPushClassName(sys.getPushClassName());
+        }else{
+        	oldSys.setPushClassName(null);
         }
         if(null != sys.getIsNeedCompress()){
             oldSys.setIsNeedCompress(sys.getIsNeedCompress());

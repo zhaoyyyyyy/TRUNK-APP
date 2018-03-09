@@ -178,7 +178,7 @@ window.loc_onload = function() {
 					}else if(event.target.value==8){
 						model.isfhbq = true;
 						model.isemmu = false;
-						model.sourceInfoList=[];
+//						model.sourceInfoList=[];
 					}else{
 						model.isemmu = false;
 						model.isfhbq = false;
@@ -195,6 +195,7 @@ window.loc_onload = function() {
 				},
 				//不同周期获取不同的纵表
 				change_updateCycle : function(){
+					model.sourceTableId = "";
 					model.sourceInfoList = [];
 					$.commAjax({
 						async : false,
@@ -313,7 +314,7 @@ window.loc_onload = function() {
 		if(model.updateCycle==""){
 			$.alert("请先选择更新周期")
 		}else {
-			var win = $.window('指标配置', $.ctx + '/aibi_lc/pages/label/sourceInfo_mgr.html?readCycle='+model.updateCycle, 900, 600);
+			var win = $.window('指标配置', $.ctx + '/aibi_lc/pages/label/sourceInfo_mgr.html?readCycle='+model.updateCycle, 900, 500);
 			win.addKpis = function(chooseKpis) {
 				model.sourceIdList = chooseKpis;
 				var dependx="";

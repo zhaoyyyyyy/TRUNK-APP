@@ -204,18 +204,25 @@ public class BackHiveDaoImpl extends BaseBackDaoImpl implements IBackSqlDao{
         }
 	    int begin = (pageStart - 1) * pageSize;
         int end = begin + pageSize;
-//        String keyColumn = PropertiesUtils.getProperties("RELATED_COLUMN");
-        String keyColumn = "";
         selectSql = selectSql.trim();
+        String orderByStr = null;
+		if (selectSql.contains("order by") || selectSql.contains("ORDER BY")) {
+			int start = selectSql.indexOf("order by");
+			if (start < 0) {
+				start = selectSql.indexOf("ORDER BY");
+			}
+			orderByStr = selectSql.substring(start, selectSql.length());
+			selectSql = selectSql.replace(orderByStr, "");
+		}
         if (selectSql.startsWith("SELECT")){
-            if (StringUtil.isNotEmpty(keyColumn) && selectSql.contains(keyColumn)) {
-                selectSql = selectSql.replaceFirst("SELECT", "select row_number() over(order by "+keyColumn+") as rownum,");
+            if (StringUtil.isNotEmpty(orderByStr)) {
+                selectSql = selectSql.replaceFirst("SELECT", "select row_number() over("+orderByStr+") as rownum,");
             } else {
                 selectSql = selectSql.replaceFirst("SELECT", "select row_number() over() as rownum,");
             }
         } else if (selectSql.startsWith("select")) {
-            if (StringUtil.isNotEmpty(keyColumn) && selectSql.contains(keyColumn)) {
-                selectSql = selectSql.replaceFirst("select", "select row_number() over(order by "+keyColumn+") as rownum,");
+            if (StringUtil.isNotEmpty(orderByStr)) {
+                selectSql = selectSql.replaceFirst("select", "select row_number() over("+orderByStr+") as rownum,");
             } else {
                 selectSql = selectSql.replaceFirst("select", "select row_number() over() as rownum,");
             }
@@ -225,6 +232,8 @@ public class BackHiveDaoImpl extends BaseBackDaoImpl implements IBackSqlDao{
         
         String sql = new StringBuilder("select * from (").append(selectSql).append(") a where a.rownum >")
             .append(begin).append(" and a.rownum <=").append(end).toString();
+        
+        LogUtil.debug("sql:" + sql);
         
         try{
             return this.executeResList(sql);

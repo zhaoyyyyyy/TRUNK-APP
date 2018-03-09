@@ -133,7 +133,11 @@
 	                           <span class="input-required">*</span>
 	                                                      具体规则</label>
 	                           <div class="control-input ml10">
-	                               <textarea rows="4" id="countRules" name="countRules" required="true"
+	                               <textarea rows="4" id="countRules" name="countRules" required="true" title="1、如果原样抽取，配置为指标ID(单指标注册默认值，例如K00000001) 即可
+2、标识型标签需要拼写case when，例如case when  K00000001 >0 then 1  else 0 end
+3、分档和标识型标签需要拼写case when ，例如case when  K00000001 <18 then 1 when K00000001 >=18 and K00000001 <40 then 2 when  K00000001 >=40 then 3 else 0 end
+4、多条件使用指标ID 拼写符合SQL规则的伪SQL即可，例如 K00000001 > 0 or K00000002 > 0
+	                               "
 	                                   class="easyui-validatebox form-control form-control-textarea">{{countRules}}</textarea>
 	                           </div>
 	                        </div>

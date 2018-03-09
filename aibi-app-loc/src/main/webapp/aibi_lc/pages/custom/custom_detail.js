@@ -10,7 +10,7 @@ var model = {
 		monthLabelDate : "",
 		dataName:"",//推送周期
 		sysName:"",//推送系统
-		curentIndex:false,//radio选中
+		curentIndex:null,//radio选中
 		isActive:false,//check选中
 		customRule:"",//客户群规则
 		haveAttr:false,
@@ -20,6 +20,8 @@ var model = {
 		AttrbuteId : "",//推送的属性标签ID
 		labelOptRuleShow:"",//枚举标签选择的条件
 		sortAttrAndType:"",//排序的属性和类型（asc,desc）
+		sysIds:"",//选择的推送平台
+		calcuElementNamesLength:"",//已选择的标签个数
 		
 }
 window.loc_onload = function() {
@@ -45,7 +47,7 @@ window.loc_onload = function() {
 					}
 				}
 	      	});
-	      	model.dataName=$.getDicData("GXZQZD");
+	      	model.dataName=$.getDicData("QTGXZQ");
 	    }
     });
 	var labelId = $.getUrlParam("labelId");
@@ -266,34 +268,37 @@ window.loc_onload = function() {
 			    	        "id":"add-dialog-btn",
 			    	        "class":"ui-btn ui-btn-default",
 			    	        click: function() {
-			    	        	$( this ).dialog( "close" );
-			    	        	if($("#checkboxList label[class~=active]").length ==0){
-			    	        		$.alert("请正确选择推送平台");
+			    	        	if($("#checkboxList label[class~=active]").length ==0 || $("#radioList label[class~=active]").length ==0){
+			    	        		$.alert("请正确选择推送周期与推送平台");
 			    	        	}else{
+			    	        		$( this ).dialog( "close" );
 			    	        		if(!model.haveAttr){
 			    	        			model.sortAttrAndType =null;
 			    	        		}
+			    	        		model.sysIds="";
 			    	        		for(var i=0;i<$("#checkboxList label[class~=active]").length;i++){
-										var sysId = $("#checkboxList label[class~=active]")[i].htmlFor;
-										$.commAjax({			
-										    url : $.ctx+'/api/syspush/labelPushCycle/save',
-										    dataType : 'json', 
-										    async : false,
-										    postData : {
-													"customGroupId" :labelId,
-													"sysId" :sysId,
-													"pushCycle" :$("#radioList label[class~=active]").siblings("input").val(),
-													"AttrbuteId" :model.AttrbuteId,
-													"sortAttrAndType" :model.sortAttrAndType,
-												},
-										    maskMassage : '推送中...'
-									   });
-										if(i == $("#checkboxList label[class~=active]").length-1){
-											$.success("推送设置成功",function(){
-												//history.back(-1);
-											});
-										}
-									}
+			    	        			if(i==$("#checkboxList label[class~=active]").length-1){
+			    	        				model.sysIds+=$("#checkboxList label[class~=active]")[i].htmlFor;
+			    	        			}else{
+			    	        				model.sysIds+=$("#checkboxList label[class~=active]")[i].htmlFor+",";
+			    	        			}
+			    	        		}
+									$.commAjax({			
+									    url : $.ctx+'/api/syspush/labelPushCycle/save',
+									    dataType : 'json', 
+									    async : false,
+									    postData : {
+												"customGroupId" :labelId,
+												"sysIds" :model.sysIds,
+												"pushCycle" :$("#radioList label[class~=active]").siblings("input").val(),
+												"AttrbuteId" :model.AttrbuteId,
+												"sortAttrAndType" :model.sortAttrAndType,
+											},
+									    maskMassage : '推送中...',
+									    onSuccess: function(data){
+									    	$.alert("推送设置成功");
+									    }
+								  });
 			    	        	}
 			    	        }
 				    	}
@@ -481,6 +486,7 @@ window.loc_onload = function() {
 				}
 			}
 			model.calcuElementNames=model.calcuElementName.split(",");
+			model.calcuElementNamesLength=model.calcuElementNames.length;
 			var  html="<li>"+
     		"<div class='checkbox'>"+
     		"<input type='checkbox' id='"+attrId+"L' class='checkbix'>"+
@@ -507,33 +513,40 @@ window.loc_onload = function() {
 		}
 	})
     $("#custom_right").click(function(){
-    	var attrId ="",attrName="";
-		$("#OptionalLabel label[class~=active]").each(function(){
-			$("#addALine").html("");
-			attrId = $(this).attr('data-id').substring(0,$(this).attr('data-id').length-1);
-			attrName = $(this).attr('data-name');
-			if(model.AttrbuteId!=""){
-				model.AttrbuteId +=","+attrId;
-				model.calcuElementName +=","+attrName;
-			}else{
-				model.AttrbuteId +=attrId;
-				model.calcuElementName +=attrName;
-			}
-			model.calcuElementNames=model.calcuElementName.split(",");
-			var  html="<li>"+
-    		"<div class='checkbox'>"+
-    		"<input type='checkbox' id='"+attrId+"R' class='checkbix'>"+
-    		"<label for='"+attrId+"R' aria-label role='checkbox' class='checkbix' data-id='"+attrId+"R' data-name='"+attrName+"'>"+
-    		"<span class='large'></span>"+
-    		attrName+
-    		"</label>"+
-    		"</div>"+
-    		"</li>";
-			$("#selectedLabel").append(html);
-			$("#OptionalLabel label[class~=active]").parents("li").remove();
-		})
-		if(attrId== ""){
-			$.alert("请选择标签");
+    	$("#addALine").html("");
+    	if(model.calcuElementNamesLength + $("#OptionalLabel label[class~=active]").length<=10){
+    		$("#OptionalLabel label[class~=active]").each(function(){
+				var attrId ="",attrName="";
+				attrId = $(this).attr('data-id').substring(0,$(this).attr('data-id').length-1);
+				attrName = $(this).attr('data-name');
+				if(model.AttrbuteId!=""){
+					model.AttrbuteId +=","+attrId;
+					model.calcuElementName +=","+attrName;
+				}else{
+					model.AttrbuteId +=attrId;
+					model.calcuElementName +=attrName;
+				}
+				model.calcuElementNames=model.calcuElementName.split(",");
+				model.calcuElementNamesLength=model.calcuElementNames.length;
+				var  html="<li>"+
+	    		"<div class='checkbox'>"+
+	    		"<input type='checkbox' id='"+attrId+"R' class='checkbix'>"+
+	    		"<label for='"+attrId+"R' aria-label role='checkbox' class='checkbix' data-id='"+attrId+"R' data-name='"+attrName+"'>"+
+	    		"<span class='large'></span>"+
+	    		attrName+
+	    		"</label>"+
+	    		"</div>"+
+	    		"</li>";
+				$("#selectedLabel").append(html);
+				$("#OptionalLabel label[class~=active]").parents("li").remove();
+				if(attrId== ""){
+					$.alert("请选择标签");
+				}
+    		})
+    	}else{
+			$.alert("不超过10个");
+			return false
 		}
+		
     })
 }

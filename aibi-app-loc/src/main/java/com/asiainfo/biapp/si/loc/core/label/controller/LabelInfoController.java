@@ -7,6 +7,7 @@
 package com.asiainfo.biapp.si.loc.core.label.controller;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -114,13 +115,19 @@ public class LabelInfoController extends BaseController {
             @ApiImplicitParam(name = "tacticsId", value = "策略ID", required = true, paramType = "query", dataType = "string"),
             @ApiImplicitParam(name = "busiLegend", value = "客户群描述", required = true, paramType = "query", dataType = "string"),
             @ApiImplicitParam(name = "configId", value = "专区ID", required = false, paramType = "query", dataType = "string"),
+            @ApiImplicitParam(name = "effecTime", value = "生效时间", required = false, paramType = "query", dataType = "date"),
+            @ApiImplicitParam(name = "failTime", value = "失效时间", required = false, paramType = "query", dataType = "date"),
             @ApiImplicitParam(name = "dataDate", value = "日期", required = true, paramType = "query", dataType = "string"),
 			@ApiImplicitParam(name = "dayLabelDate", value = "数据日期(日)", required = true, paramType = "query", dataType = "string"),
 			@ApiImplicitParam(name = "monthLabelDate", value = "数据日期(月)", required = true, paramType = "query", dataType = "string") })
 	@RequestMapping(value = "/labelInfo/saveCustomerLabelInfo", method = RequestMethod.POST)
-	public WebResult<String> saveCustomerLabelInfo(String labelName,Integer updateCycle,String orgId,String tacticsId,String busiLegend,String dataDate,String configId, String dayLabelDate, String monthLabelDate) {
+	public WebResult<String> saveCustomerLabelInfo(String labelName,Integer updateCycle,String orgId,String tacticsId,String busiLegend,String dataDate,String configId, Date effecTime,Date failTime,String dayLabelDate, String monthLabelDate) {
 		WebResult<String> webResult = new WebResult<>();
 		try {
+			LabelInfo label = iLabelInfoService.selectOneByLabelName(labelName, configId);
+			if (label != null) {
+				return webResult.fail("客户群名称重复!");
+			}
 			//基本信息
 			LabelInfo labelInfo =new LabelInfo();
 			labelInfo.setLabelName(labelName);
@@ -128,8 +135,10 @@ public class LabelInfoController extends BaseController {
 			labelInfo.setOrgId(orgId);
 			labelInfo.setBusiLegend(busiLegend);
 			labelInfo.setConfigId(configId);
+			labelInfo.setEffecTime(effecTime);
+			labelInfo.setFailTime(failTime);
 			labelInfo.setDataDate(dataDate);
-			labelInfo.setCreateUserId(getLoginUser().getUserId());
+			labelInfo.setCreateUserId(getLoginUser().getUserName());
 			// 拓展信息
 			LabelExtInfo labelExtInfo = new LabelExtInfo();
 	        labelExtInfo.setTacticsId(tacticsId);

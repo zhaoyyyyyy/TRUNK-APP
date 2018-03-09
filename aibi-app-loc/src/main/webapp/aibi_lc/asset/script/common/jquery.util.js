@@ -15,6 +15,48 @@ $.extend({
 	     var r = window.location.search.substr(1).match(reg);
 	     if(r!=null)return  unescape(r[2]); return null;
 	},
+	getCookie : function(name){
+	    var arr,reg=new RegExp("(^| )"+name+"=([^;]*)(;|$)");
+	    if(arr=document.cookie.match(reg))
+	        return unescape(arr[2]); 
+	    else 
+	        return null; 
+	},
+	setCurrentToken : function(token,refreshToken){
+		if($.getCookie("cnpost") && $.getCookie("cnpost")!=""){
+			var Days = 30;   //cookie 将被保存30天
+			var exp  = new Date();  //获得当前时间
+			exp.setTime(exp.getTime() + Days*24*60*60*1000);  //换成毫秒
+			document.cookie = "token="+ token + ";expires=" + exp.toGMTString();
+		}else{
+			var ssg = window.sessionStorage;
+			if(ssg){
+				ssg.setItem("token",token);
+				ssg.setItem("refreshToken",refreshToken);
+			}
+		}
+		
+	},
+	getCurrentToken : function(){
+		var ssg = window.sessionStorage;
+		var sstoken = ssg.getItem("token");
+		
+		var cktoken=$.getCookie("token");
+		
+		var tokenStr;
+		if(sstoken){
+			tokenStr = sstoken;
+		}else if(cktoken){
+			tokenStr = cktoken;
+		}
+		if(!tokenStr){
+			alert('token失效，请重新登录');
+			window.location.href = $.ctx ? $.ctx : "/";
+		}else{
+			return tokenStr;
+		}
+		
+	},
 	
 	//通用异步请求
 	commAjax	: function(options, el) {
@@ -52,20 +94,22 @@ $.extend({
 			});
 		}
 		
+		var tokenStr=$.getCurrentToken();
+		
+//		var ssg = window.sessionStorage;
+//		var tokenStr;
+//		if(ssg){
+//			var token = ssg.getItem("token");
+//			if(token){
+//				tokenStr = token;
+//			}
+//		}
+//		if(!tokenStr){
+//			alert('token失效，请重新登录');
+//			window.location.href = $.ctx ? $.ctx : "/";
+//		}
 		
 		
-		var ssg = window.sessionStorage;
-		var tokenStr;
-		if(ssg){
-			var token = ssg.getItem("token");
-			if(token){
-				tokenStr = token;
-			}
-		}
-		if(!tokenStr){
-			alert('token失效，请重新登录');
-			window.location.href = $.ctx ? $.ctx : "/";
-		}
 		$.ajax({
 			headers 	: {'X-Authorization': tokenStr},
 			url			: options.url,
@@ -78,7 +122,6 @@ $.extend({
 			complete	: function(req, st) {
 				
 				if (options.isShowMask) {
-					//debugger
 					el.unmask();
 				}
 				// status：200为服务中成功的状态，0为本地打开时的成功状态

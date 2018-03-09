@@ -37,7 +37,7 @@ function exitLoc(){
  */
 function toAdminConsole(){
 	$.commAjax({
-		url:'/api/config/springConfig',
+		url: $.ctx+ '/api/config/springConfig',
 		postData:{'key':'jauth-url'},
 		onSuccess:function(obj){
 			var ssg = window.sessionStorage;
@@ -57,7 +57,8 @@ window.loc_onload = function(){
 	
 	//得到用户所拥有的菜单
 	$.commAjax({
-		url:'/api/user/get',
+		
+		url:$.ctx+'/api/user/get',
 		onSuccess:function(obj){
 			new Vue({ el:'#accordion', data: {resourceList:obj.data.menuResource} });
 			new Vue({ el:'#user_opt_ul', data: {username:obj.data.userName} });

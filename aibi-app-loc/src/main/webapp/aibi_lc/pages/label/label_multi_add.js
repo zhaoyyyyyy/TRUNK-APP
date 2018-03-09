@@ -21,6 +21,7 @@ var model = {
 		sourceIdList : [],
 		configId : "",
 		checked:false,//添加radio属性
+		isHeight:true,//具体规则
 }
 function changeStatus(elem){
 	if($(elem).val()==5){
@@ -81,7 +82,10 @@ window.loc_onload = function(){
 				    			600);
 				    }
 				});
-	    	}
+	    	},
+	    	toggle:function(){
+	    		model.isHeight=!model.isHeight;
+	    	},
 	    },
 	    /*mounted: function () {
 		    this.$nextTick(function () {
@@ -121,7 +125,7 @@ function chooseKpi(obj){
 	if(readCycle ==undefined ||readCycle==null || readCycle==""){
 		$.alert("请选择更新周期")
 	}else{
-		var win = $.window('指标配置', $.ctx + '/aibi_lc/pages/label/sourceInfo_mgr.html?readCycle='+readCycle, 900, 600);
+		var win = $.window('指标配置', $.ctx + '/aibi_lc/pages/label/sourceInfo_mgr.html?readCycle='+readCycle, 900, 500);
 		win.addKpis = function(chooseKpis) {
 			model.sourceIdList = chooseKpis;
 			var index = obj.id;

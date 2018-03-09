@@ -46,14 +46,14 @@
 	                            <div  class="form-group">
 	                                <label class="fleft mt5" for="exampleInputEmail4">指标源表</label>
 	                                <div class="control-input has-icon">
-	                                    <select id="sourceTableId" name="sourceTableId" class="form-control ml10 input-pointer ">
-	                                    <option>请选择指标源表</option>
+	                                    <select id="sourceTableId" name="sourceTableId" class="form-control ml10 input-pointer">
+	                                    <option >请选择指标源表</option>
 	                                    <option v-for ="source in sourcetableInfoList" :value="source.sourceTableId">{{source.sourceTableName}}</option>
 	                                    </select>
 	                                </div>
 	                                <div class="fleft clearfix">
 	                                    <a href="javascript:;" class="ui-advanced-sreach fleft mt5">没有元数据?</a>
-	                                    <button onclick="window.location='dataSource_add.html'" type="button" class="btn btn-default  ui-table-btn ui-table-btn" >点击创建</button>
+	                                    <button onclick="window.location='dataSource_add.html'" type="button" class="ui-table-btn" >点击创建</button>
 	                                </div>
 	
 	                            </div>
@@ -62,7 +62,25 @@
 	
 	                    </div>
 	                </div>
-	                <form class="clearfix create-main active mt10"  v-for="(sourceInfo,index) in sourceInfoList">
+	                <div class="ui-lc-mian mt10 label-rule form-inline">
+	                	<div class="form-group clearfix">
+                            <label for="countRules" class="control-label fleft mt5">具体规则</label>
+                            <div class="control-input ml10 height-toggle">
+                            	<p v-bind:class="{ heightAuto:isHeight}">1、如果原样抽取，配置为指标ID(单指标注册默认值，例如K00000001) 即可<button type="button" class="ui-table-btn" v-on:click="toggle()">点击展开</button><br>
+								2、标识型标签需要拼写case when，例如case when  K00000001 >0 then 1  else 0 end<br>
+								3、分档和标识型标签需要拼写case when ，例如case when  K00000001 <18 then 1 when K00000001 >=18 and K00000001 <40 then 2 when  K00000001 >=40 then 3 else 0 end<br>
+								4、多条件使用指标ID 拼写符合SQL规则的伪SQL即可，例如 K00000001 > 0 or K00000002 > 0"</p>
+                               
+                            </div>
+	                    </div>
+	                </div>
+	                <div class='checkbox mt10' v-on:click.prevent="allSelected()">
+					    <input id="mycheckbox2" type="checkbox" class="checkbix" :checked="selected">
+					    <label v-bind:class="{active:selected}" aria-label="" role="checkbox" for="mycheckbox2" class="checkbix">
+					    		<span class="large"></span>全选/反选
+					    	</label>
+					</div>
+	                <form class="clearfix create-main mt10" :class="{active:isActive}" v-for="(sourceInfo,index) in sourceInfoList">
 	                    <input type="hidden" name="configId" v-model="configId">
 	                    <div class="progress fleft">
 	                        <span class="progress-label">
@@ -131,7 +149,10 @@
 	                                    <span class="input-required">*</span>                                    
 	                                                                        具体规则</label>
 	                                    <div class="control-input">
-	                                        <textarea rows="5" id="countRules" name="countRules" 
+	                                        <textarea rows="5" id="countRules" name="countRules" title="1、如果原样抽取，配置为指标ID(单指标注册默认值，例如K00000001) 即可
+2、标识型标签需要拼写case when，例如case when  K00000001 >0 then 1  else 0 end
+3、分档和标识型标签需要拼写case when ，例如case when  K00000001 <18 then 1 when K00000001 >=18 and K00000001 <40 then 2 when  K00000001 >=40 then 3 else 0 end
+4、多条件使用指标ID 拼写符合SQL规则的伪SQL即可，例如 K00000001 > 0 or K00000002 > 0"
 	                                         required="true"  class="form-control form-control-textarea easyui-validatebox">{{sourceInfo.sourceId}}</textarea>
 	                                    </div>
 	                                </div>

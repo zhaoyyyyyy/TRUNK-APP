@@ -13,7 +13,7 @@ var auto_Login = (function (model){
         }
         
         /***************中邮(yw)版本的实现 ****************/
-        model.cpyw = {
+        model.cpywdev = {
         		failLoginUrl: "http://crm.chinapost.com:18880/login",
         		autoLoginFun:function(callback){
         			var flag = false;
@@ -21,7 +21,7 @@ var auto_Login = (function (model){
         			//必须与OCRM同域获取spring的acrmUrl
         			//var acrmUrl = auto_Login._util.getSpringConfig("acrm-url");
         			//测试环境没有DNS 前后端先分开写 TODO
-        			var acrmUrl = "http://crm.chinapost.com:8442/acrm";
+        			var acrmUrl = "http://crm.chinapost.com:18880/acrm";
         			
         			 $.ajax({
         				 url: acrmUrl+'/api/sso/userinfo',
@@ -71,11 +71,12 @@ var auto_Login = (function (model){
   					  success: function(returnObj){
   						  if(returnObj && returnObj.status == '200'){
   							  var data = returnObj.data;
-  							  var ssg = window.sessionStorage;
-  							  if(ssg){
-  								  ssg.setItem("token",data.token);
-  								  ssg.setItem("refreshToken",data.refreshToken);
-  							  }
+  							  $.setCurrentToken(data.token,data.refreshToken);
+//  							  var ssg = window.sessionStorage;
+//  							  if(ssg){
+//  								  ssg.setItem("token",data.token);
+//  								  ssg.setItem("refreshToken",data.refreshToken);
+//  							  }
   						  }else{
   							  flag = false;
   							  alert(returnObj.msg);
@@ -117,13 +118,13 @@ $(function(){
 		//获取spring的active配置
 		var springActive = auto_Login._util.getSpringConfig("spring.profiles.active");
 		if(springActive && springActive != ""){
-			auto_Login.active = springActive.replace("-","");
+			auto_Login.active = springActive.replace(/\-/g,"");
 		}
-		
 		var href = hash.split("#")[1];
-		var ssg = window.sessionStorage;
-		if(ssg){
-			var token = ssg.getItem("token");
+//		var ssg = window.sessionStorage;
+//		if(ssg){
+//			var token = ssg.getItem("token");
+			var token = $.getCurrentToken();
 			if(!token){
 				if(auto_Login[auto_Login.active].autoLoginFun(auto_Login._util.applyToken)){
 					window.location.href = "./aibi_lc/pages/"+ href+ ".html"
@@ -133,7 +134,7 @@ $(function(){
 			}else{
 				window.location.href = "./aibi_lc/pages/"+ href+ ".html"
 			}
-		}
+//		}
 	}else{
 		window.location.href = auto_Login[auto_Login.active].failLoginUrl
 	}
