@@ -81,6 +81,7 @@ public class IDimOrgLevelDaoImpl extends BaseDaoImpl<DimOrgLevel, String> implem
             hql.append("and d.sortNum = :sortNum ");
             params.put("sortNum",dimOrgLevelVo.getSortNum());
         }
+        hql.append("order by d.sortNum ");
         reMap.put("hql", hql);
         reMap.put("params", params);
         return reMap;
