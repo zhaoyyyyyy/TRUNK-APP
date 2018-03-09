@@ -58,12 +58,13 @@ public class Organization extends BaseEntity{
         childList = new ArrayList<>(children);
         Collections.sort(childList, new Comparator<Organization>(){
             public int compare(Organization o1,Organization o2){
-                if(null!=o1.getOrderNum() && null!=o2.getOrderNum()){
-                    return o1.getOrderNum() < o2.getOrderNum()? -1 :1;
-                }else{
-                    return -1;
+                if(o1.getOrderNum()==null){
+                    o1.setOrderNum(Integer.parseInt(o1.getOrgCode().replaceAll("[^0-9]","")));
                 }
-                
+                if(o2.getOrderNum()==null){
+                    o2.setOrderNum(Integer.parseInt(o1.getOrgCode().replaceAll("[^0-9]","")));
+                }
+                return o1.getOrderNum() < o2.getOrderNum()? -1 :1;
             }
         });
         return childList;

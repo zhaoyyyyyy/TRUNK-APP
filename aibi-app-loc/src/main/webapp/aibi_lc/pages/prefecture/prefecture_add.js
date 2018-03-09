@@ -217,9 +217,7 @@ function openTtee(tag){
 			model.ztreeObj=model.cpxList;
 		}
 		var obj = model.ztreeObj;
-		for(var sort=0;sort<obj.length;sort++){
-			obj[sort].children = obj[sort].childList;
-		}
+		renToList(obj);
     	$.fn.zTree.init($("#pretree"), install, model.ztreeObj);
 	}
 	
@@ -234,4 +232,12 @@ function openTtee(tag){
 }
 function changeSelect(){
 	model.selectNum = 1;
+}
+function renToList(list){
+	for(var i=0;i<list.length;i++){
+		list[i].children=list[i].childList;
+		if(list[i].children.length>0){
+			renToList(list[i].children);
+		}
+	}
 }
