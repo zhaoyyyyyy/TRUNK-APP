@@ -40,6 +40,18 @@
                         <li class="fleft"><a href="label_single_add.html">单指标</a></li>
                         <li class="fleft active"><a href="">多指标</a></li>
                     </ul>
+                    <div class="ui-lc-mian mt10 label-rule form-inline">
+	                	<div class="form-group clearfix">
+                            <label for="countRules" class="control-label fleft mt5">具体规则</label>
+                            <div class="control-input ml10 height-toggle">
+                            	<p v-bind:class="{ heightAuto:isHeight}">1、如果原样抽取，配置为指标ID(单指标注册默认值，例如K00000001) 即可<button type="button" class="ui-table-btn" v-on:click="toggle()">点击展开</button><br>
+								2、标识型标签需要拼写case when，例如case when  K00000001 >0 then 1  else 0 end<br>
+								3、分档和标识型标签需要拼写case when ，例如case when  K00000001 <18 then 1 when K00000001 >=18 and K00000001 <40 then 2 when  K00000001 >=40 then 3 else 0 end<br>
+								4、多条件使用指标ID 拼写符合SQL规则的伪SQL即可，例如 K00000001 > 0 or K00000002 > 0"</p>
+                               
+                            </div>
+	                    </div>
+	               </div>
                     <form class="clearfix create-main mt10" v-for="(sourceInfo,index) in sourceInfoList">
                         <input type="hidden" v-model="configId" name="configId">
                         <div class="ui-create">
@@ -60,6 +72,7 @@
                                 <i class="del-btn-icon form-del-btn fright mr10 mt5" ></i>
                             </div>
                         </div>
+
                         <div class="form-horizontal fleft ui-form">
                             <div class="ui-form-group clearfix">
                                 <label for="labelName" class="control-label">
