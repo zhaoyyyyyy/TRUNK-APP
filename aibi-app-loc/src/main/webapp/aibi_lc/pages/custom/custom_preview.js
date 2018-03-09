@@ -7,7 +7,6 @@ window.loc_onload = function() {
 		    	"labelId" : labelId,
 		    	},
 		    onSuccess: function(data){ 
-		    	debugger
 		   	 	var colNamesArr =[];
 		     	var colModelArr =[];
 		    	for(var i=0;i<data.data.length;i++){
