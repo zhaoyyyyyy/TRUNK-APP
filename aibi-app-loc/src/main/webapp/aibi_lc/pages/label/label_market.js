@@ -399,14 +399,12 @@ var labelMarket = (function (model){
 					$("#"+obj.id+"Asc").removeClass("active");
 					$("#"+obj.id+"Desc").addClass("active");
 					obj.title="点击标签按从大到小排序";
-					debugger;
 				}else if(dataModel.sortOrder == "DESC"){
 					dataModel.sortOrder = "ASC";
 					$("#sortOrder").val("ASC");
 					$("#"+obj.id+"Desc").removeClass("active");
 					$("#"+obj.id+"Asc").addClass("active");
 					obj.title="点击标签按从小到大排序";
-					debugger;
 				}
 			}else{
 				if(obj.id == "customNum"){

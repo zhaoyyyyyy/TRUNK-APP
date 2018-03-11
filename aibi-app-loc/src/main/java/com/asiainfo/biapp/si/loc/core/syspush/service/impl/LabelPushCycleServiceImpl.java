@@ -263,6 +263,9 @@ public class LabelPushCycleServiceImpl extends BaseServiceImpl<LabelPushCycle, S
                 }
             }
             page.setData(pageMap);
+            Integer count = iBackSqlService.queryCount(customListSql);
+			page.setTotalCount(count);
+			page.getTotalPageCount();
         }
         
         return page;

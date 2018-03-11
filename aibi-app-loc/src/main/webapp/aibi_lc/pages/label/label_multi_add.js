@@ -21,6 +21,7 @@ var model = {
 		sourceIdList : [],
 		configId : "",
 		checked:false,//添加radio属性
+		isHeight:true,//具体规则
 }
 function changeStatus(elem){
 	if($(elem).val()==5){
@@ -81,7 +82,10 @@ window.loc_onload = function(){
 				    			600);
 				    }
 				});
-	    	}
+	    	},
+	    	toggle:function(){
+	    		model.isHeight=!model.isHeight;
+	    	},
 	    },
 	    /*mounted: function () {
 		    this.$nextTick(function () {

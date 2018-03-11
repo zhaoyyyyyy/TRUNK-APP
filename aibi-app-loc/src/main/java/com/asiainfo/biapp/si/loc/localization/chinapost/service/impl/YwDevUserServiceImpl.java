@@ -116,8 +116,8 @@ public class YwDevUserServiceImpl extends DevUserServiceImpl implements IUserSer
 		
 		//拿到用户名称
 		try{
-		    params.put("operatorId",userId);
-//		    params.put("operatorId","2000001");//TODO
+//		    params.put("operatorId",userId);
+		    params.put("operatorId","2000001");//TODO
 	        
 	        String staffInfo = HttpUtil.sendPost(acrmUrl+"/api/auth/userinfo", params);
             JSONObject staffInfoObj = JSONObject.fromObject(staffInfo);

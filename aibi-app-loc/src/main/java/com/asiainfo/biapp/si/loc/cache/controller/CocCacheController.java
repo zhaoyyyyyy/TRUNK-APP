@@ -14,11 +14,18 @@ import io.swagger.annotations.ApiOperation;
 @RestController
 public class CocCacheController {
 	
+	public static volatile boolean cacheIfRunning = false;
+	
 	
 	@ApiOperation(value="刷新loc所有缓存数据")
     @PostMapping(value = "/cacheDataRefresh")
 	public void cacheDataRefresh(){
-		CocCacheProxy.getCacheProxy().reflashAllCache();
+		if(!cacheIfRunning){
+			cacheIfRunning = true;
+			CocCacheProxy.getCacheProxy().reflashAllCache();
+			cacheIfRunning = false;
+		}
+		
 	}
 
 }

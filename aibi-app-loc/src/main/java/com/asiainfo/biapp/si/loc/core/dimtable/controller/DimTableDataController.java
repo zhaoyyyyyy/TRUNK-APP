@@ -54,6 +54,8 @@ public class DimTableDataController extends BaseController<DimTableData>{
     
     private static final String SUCCESS = "success";
     
+    public static volatile boolean dimTableDataIfRunning = false;
+    
     @Autowired
     private IDimTableDataService iDimTableDataService;
     
@@ -98,13 +100,19 @@ public class DimTableDataController extends BaseController<DimTableData>{
     @RequestMapping(value = "/dimtableinfo2data", method = RequestMethod.POST)
     @ApiImplicitParam(name = "tableName", value = "表名称(可变参数，可选，不传是全量跑)",paramType = "query", dataType = "string")
     public WebResult<String> execute(String ...tableName) {
-        WebResult<String> webResult = new WebResult<>();
-        try {
-            iDimTableDataService.dimTableInfo2Data(tableName);
-        } catch (BaseException e) {
-            return webResult.fail(e);
-        }
-
+    	WebResult<String> webResult = new WebResult<>();
+    	if(!dimTableDataIfRunning){
+    		dimTableDataIfRunning = true;
+            try {
+                iDimTableDataService.dimTableInfo2Data(tableName);
+            } catch (BaseException e) {
+                return webResult.fail(e);
+            }
+            dimTableDataIfRunning = false;
+    	}else{
+    		return webResult.success("维表信息同步正在执行", SUCCESS);
+    	}
+        
         return webResult.success("维表信息跑数成功", SUCCESS);
     }
 
