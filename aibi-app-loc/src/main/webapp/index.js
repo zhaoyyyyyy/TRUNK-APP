@@ -3,7 +3,7 @@ var auto_Login = (function (model){
         
 		model.active  = "jauth"; //jauth  cpyw
         
-        /***************默认开饭版本的实现(基于jauth的) ****************/
+        /***************默认开发版本的实现(基于jauth的) ****************/
         model.jauth = {
         		failLoginUrl: "./aibi_lc/pages/common/login.html",
         		autoLoginFun:function(callback){
@@ -12,9 +12,9 @@ var auto_Login = (function (model){
         		}
         }
         
-        /***************中邮(yw)版本的实现 ****************/
+        /***************中邮-邮务-开发 ****************/
         model.cpywdev = {
-        		failLoginUrl: "http://crm.chinapost.com:18880/login",
+        		failLoginUrl: "http://crm.chinapost.com:18880/",
         		autoLoginFun:function(callback){
         			var flag = false;
         			
@@ -22,13 +22,31 @@ var auto_Login = (function (model){
         			//var acrmUrl = auto_Login._util.getSpringConfig("acrm-url");
         			//测试环境没有DNS 前后端先分开写 TODO
         			var acrmUrl = "http://crm.chinapost.com:18880/acrm";
-        			
         			 $.ajax({
         				 url: acrmUrl+'/api/sso/userinfo',
         				 type: 'get',
-        				 xhrFields: {
-        			            withCredentials: true
-        			     },
+        				 xhrFields: {withCredentials: true},
+     					 async: false,
+        				 success: function(data){
+        					 if(data && data.cnpost && data.cnpost.id){
+        						 flag = callback(data.cnpost.id);
+        					 }
+        				 }
+        			 })
+                	return flag;
+        		}
+        }
+        /***************中邮-邮务-生产 ****************/
+        model.cpywdevprod = {
+        		failLoginUrl: "http://crm.chinapost.com:18080/",
+        		autoLoginFun:function(callback){
+        			alert("请求改生产环境的acrm地址，以便能进行单点登录")
+        			var flag = false;
+        			var acrmUrl = "http://crm.chinapost.com:18080/acrm";
+        			 $.ajax({
+        				 url: acrmUrl+'/api/sso/userinfo',
+        				 type: 'get',
+        				 xhrFields: {withCredentials: true},
      					 async: false,
         				 success: function(data){
         					 if(data && data.cnpost && data.cnpost.id){
@@ -114,7 +132,8 @@ var auto_Login = (function (model){
 $(function(){
 	var hash = window.location.hash;
 	
-	if(hash){//存  #label/label_mgr 则走单点登录逻辑
+	//如果访问中带有形式类似于  #label/label_mgr 则走单点登录逻辑
+	if(hash){
 		//获取spring的active配置
 		var springActive = auto_Login._util.getSpringConfig("spring.profiles.active");
 		if(springActive && springActive != ""){

@@ -23,41 +23,6 @@
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<java.version>1.7</java.version>
 	</properties>
-  
-  	<!-- 设置现场打包参数 -->
-  	<profiles>
-  		<profile>
-            <id>as-dev</id>    <!-- 亚信-开发（默认）-->
-            <properties>
-                <env>as-dev</env>
-                <ctx-loc>/</ctx-loc>
-            </properties>
-            <activation><activeByDefault>true</activeByDefault></activation>
-        </profile>
-        <profile>
-            <id>as-qa</id>    <!-- 亚信-测试 -->
-            <properties>
-                <env>as-qa</env>
-                <ctx-loc>/</ctx-loc>
-            </properties>
-        </profile>
-        <profile>
-            <id>cp-yw-dev</id> <!-- 中邮-邮务-开发-->
-            <properties>
-                <env>cp-yw-dev</env>
-                <ctx-loc>/loc</ctx-loc>
-            </properties>
-        </profile>
-        <profile>
-            <id>cp-yw-prod</id><!-- 中邮-邮务-生产-->
-            <properties>
-                <env>cp-yw-prod</env>
-                <ctx-loc>/loc</ctx-loc>
-            </properties>
-        </profile>
-    </profiles>
-  	
-  	
   	
   	<dependencies>
 		<dependency>
@@ -165,10 +130,14 @@
 	                <filtering>true</filtering>
 	                <excludes>
 	                    <exclude>envs/**</exclude>
+	                    <!-- <exclude>application-*</exclude> -->
 	                </excludes>
 	            </resource>
 	            <resource>
 	                <directory>src/main/resources/envs/${env}</directory>
+	                <includes>
+	                    <include>*</include>
+	                </includes>
 	            </resource>
 	            <resource>
 	                <directory>src/main/webapp</directory>
@@ -194,6 +163,14 @@
 					<artifactId>maven-war-plugin</artifactId>
 					<version>2.1.1</version>
 					<configuration>
+						<webResources>
+		                    <resource>
+		                        <directory>src/main/webapp/aibi_lc/asset/script</directory>
+		                        <filtering>true</filtering>
+		                        <targetPath>aibi_lc/asset/script</targetPath>
+		                    </resource>
+		                </webResources>
+                
 						<archive>
 							<addMavenDescriptor>false</addMavenDescriptor>
 						</archive>

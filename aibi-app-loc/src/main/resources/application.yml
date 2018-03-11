@@ -1,5 +1,5 @@
 server:
-  port: 8441
+  port: @port-loc@
   context-path: @ctx-loc@
 spring:
   profiles:

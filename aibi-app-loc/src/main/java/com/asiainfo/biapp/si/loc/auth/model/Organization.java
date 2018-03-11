@@ -58,13 +58,28 @@ public class Organization extends BaseEntity{
         childList = new ArrayList<>(children);
         Collections.sort(childList, new Comparator<Organization>(){
             public int compare(Organization o1,Organization o2){
-                if(o1.getOrderNum()==null){
-                    o1.setOrderNum(Integer.parseInt(o1.getOrgCode().replaceAll("[^0-9]","")));
+                if(o1.getOrderNum() == null ){
+                	if(StringUtil.isNotEmpty(o1.getOrgCode())){
+                		String orgCodeInt = o1.getOrgCode().replaceAll("[^0-9]","");
+                		if(StringUtil.isNotEmpty(orgCodeInt)){
+                			o1.setOrderNum(Integer.parseInt(orgCodeInt));
+                		}
+                	}
                 }
-                if(o2.getOrderNum()==null){
-                    o2.setOrderNum(Integer.parseInt(o1.getOrgCode().replaceAll("[^0-9]","")));
+                if(o2.getOrderNum() == null){
+                	if(StringUtil.isNotEmpty(o2.getOrgCode())){
+                		String orgCodeInt = o2.getOrgCode().replaceAll("[^0-9]","");
+                		if(StringUtil.isNotEmpty(orgCodeInt)){
+                			o2.setOrderNum(Integer.parseInt(orgCodeInt));
+                		}
+                	}
                 }
-                return o1.getOrderNum() < o2.getOrderNum()? -1 :1;
+                if(o1.getOrderNum() != null && o2.getOrderNum() != null ){
+                	return o1.getOrderNum() < o2.getOrderNum()? -1 :1;
+                }else{
+                	return -1;
+                }
+               
             }
         });
         return childList;

@@ -22,6 +22,28 @@
 		<log4j.version>1.2.16</log4j.version>
 		<hadoop.version>2.5.0</hadoop.version>
 	</properties>
+	
+	<!-- 设置现场打包参数 -->
+  	<profiles>
+        <profile>
+            <id>cp-yw-dev</id> <!-- 中邮-邮务-开发-->
+            <properties>
+                <env>cp-yw-dev</env>
+                <ctx-loc>/loc</ctx-loc>
+                <port-loc>8441</port-loc> 
+            </properties>
+        </profile>
+        <profile>
+            <id>cp-yw-prod</id><!-- 中邮-邮务-生产-->
+            <properties>
+                <env>cp-yw-prod</env>
+                <ctx-loc>/loc</ctx-loc>
+                <port-loc>8441</port-loc> 
+            </properties>
+        </profile>
+    </profiles>
+    
+    
 	<dependencies>
 
 		<!-- eureka client -->
@@ -126,89 +148,6 @@
 			<artifactId>jsch</artifactId>
 			<version>0.1.52</version>
 		</dependency>
-
-
-		<!-- 大数据开始 
-		<dependency>
-			<artifactId>guava</artifactId>
-			<groupId>com.google.guava</groupId>
-		</dependency>
-
-		<dependency>
-			<groupId>org.apache.hadoop</groupId>
-			<artifactId>hadoop-client</artifactId>
-			<version>${hadoop.version}</version>
-			<exclusions>
-				<exclusion>
-					<artifactId>slf4j-log4j12</artifactId>
-					<groupId>org.slf4j</groupId>
-				</exclusion>
-				<exclusion>
-					<artifactId>slf4j-api</artifactId>
-					<groupId>org.slf4j</groupId>
-				</exclusion>
-				<exclusion>
-					<artifactId>jetty</artifactId>
-					<groupId>org.mortbay.jetty</groupId>
-				</exclusion>
-				<exclusion>
-					<artifactId>jetty-util</artifactId>
-					<groupId>org.mortbay.jetty</groupId>
-				</exclusion>
-				<exclusion>
-					<artifactId>servlet-api</artifactId>
-					<groupId>javax.servlet</groupId>
-				</exclusion>
-				<exclusion>
-					<artifactId>guava</artifactId>
-					<groupId>com.google.guava</groupId>
-				</exclusion>
-
-			</exclusions>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.hive</groupId>
-			<artifactId>hive-jdbc</artifactId>
-			<version>1.2.1</version>
-			<exclusions>
-				<exclusion>
-					<artifactId>slf4j-log4j12</artifactId>
-					<groupId>org.slf4j</groupId>
-				</exclusion>
-				<exclusion>
-					<artifactId>slf4j-api</artifactId>
-					<groupId>org.slf4j</groupId>
-				</exclusion>
-				<exclusion>
-					<artifactId>jetty-all</artifactId>
-					<groupId>org.eclipse.jetty.aggregate</groupId>
-				</exclusion>
-				<exclusion>
-					<artifactId>servlet-api</artifactId>
-					<groupId>org.mortbay.jetty</groupId>
-				</exclusion>
-				<exclusion>
-					<artifactId>guava</artifactId>
-					<groupId>com.google.guava</groupId>
-				</exclusion>
-
-			</exclusions>
-		</dependency>
-		<dependency>
-			<groupId>jdk.tools</groupId>
-			<artifactId>jdk.tools</artifactId>
-			<version>1.6</version>
-			<scope>system</scope>
-			<systemPath>${JAVA_HOME}/lib/tools.jar</systemPath>
-		</dependency>
-		<dependency>
-			<groupId>org.scala-lang</groupId>
-			<artifactId>scala-library</artifactId>
-			<version>2.11.0</version>
-		</dependency>-->
-		<!-- 大数据结束 -->
-
-
 
 	</dependencies>
 

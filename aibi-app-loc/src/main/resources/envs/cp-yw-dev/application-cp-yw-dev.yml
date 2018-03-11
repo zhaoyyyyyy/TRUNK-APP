@@ -1,7 +1,7 @@
 jauth-url: 
-  http://127.0.0.1:8440/jauth
+  http://192.168.252.52/jauth
 acrm-url:
-  http://127.0.0.1:8442/acrm
+  http://192.168.252.54/acrm
 loadLevel:
   1
 spring:
@@ -10,3 +10,8 @@ spring:
     url: jdbc:mysql://192.168.248.142:3306/coc_web?useUnicode=true&characterEncoding=utf-8
     username: coc_web
     password: coc_web
+  boot:
+    admin:  
+      client:
+        serviceUrl: http://192.168.248.166:18880/loc
+

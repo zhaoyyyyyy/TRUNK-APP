@@ -22,6 +22,28 @@
 		<log4j.version>1.2.16</log4j.version>
 		<hadoop.version>2.5.0</hadoop.version>
 	</properties>
+	
+	<!-- 设置现场打包参数 -->
+  	<profiles>
+        <profile>
+            <id>cp-yw-dev</id> <!-- 中邮-邮务-开发-->
+            <properties>
+                <env>cp-yw-dev</env>
+                <ctx-loc>/loc</ctx-loc>
+                <port-loc>8080</port-loc> 
+            </properties>
+        </profile>
+        <profile>
+            <id>cp-yw-prod</id><!-- 中邮-邮务-生产-->
+            <properties>
+                <env>cp-yw-prod</env>
+                <ctx-loc>/loc</ctx-loc>
+                <port-loc>8080</port-loc> 
+            </properties>
+        </profile>
+    </profiles>
+    
+    
 	<dependencies>
 
 		<!-- eureka client -->
@@ -221,10 +243,10 @@
 		</dependency>-->
 		<!-- 大数据结束 -->
 
-
-
 	</dependencies>
-
-
+	<build>
+    	<finalName>loc</finalName>
+	</build>
+	
 
 </project>

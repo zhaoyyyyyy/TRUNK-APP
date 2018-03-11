@@ -1,7 +1,7 @@
 /**
  * 前端配置文件
  */
-var _tempctx = "@ctx-loc@";
+var _tempctx = "/loc";
 $.ctx = _tempctx.indexOf("@")>-1 || _tempctx == "/" ? "" : _tempctx,   //获取后端服务器上下文（可以是绝对路径也可以是相对路径）
 $.forward = "frame.html",//登录成功跳转路径(可以是相对路径也可以是绝对路径)
 $.theme =  "default", //主题样式 default red

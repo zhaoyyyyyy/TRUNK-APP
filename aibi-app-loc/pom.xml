@@ -22,6 +22,29 @@
 		<log4j.version>1.2.16</log4j.version>
 		<hadoop.version>2.5.0</hadoop.version>
 	</properties>
+	
+	<!-- 设置现场打包参数 -->
+  	<profiles>
+  		<profile>
+            <id>as-dev</id>    <!-- 亚信-开发（默认）-->
+            <properties>
+                <env>as-dev</env>
+                <ctx-loc>/</ctx-loc>
+                <port-loc>8441</port-loc>
+            </properties>
+            <activation><activeByDefault>true</activeByDefault></activation>
+        </profile>
+        <profile>
+            <id>as-qa</id>    <!-- 亚信-测试 -->
+            <properties>
+                <env>as-qa</env>
+                <ctx-loc>/</ctx-loc>
+                <port-loc>8441</port-loc>
+            </properties>
+        </profile>
+    </profiles>
+    
+    
 	<dependencies>
 		
 		<!-- eureka client -->
