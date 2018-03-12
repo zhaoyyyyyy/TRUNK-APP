@@ -238,8 +238,8 @@ public class LabelPushCycleServiceImpl extends BaseServiceImpl<LabelPushCycle, S
         List<Map<String, String>> pageMap = iBackSqlService.queryForPage(customListSql, page.getPageStart(), page.getPageSize());
         
         String productNoHasPrivacy = CocCacheProxy.getCacheProxy().getSYSConfigInfoByKey(BaseConstants.PRODUCT_NO_HAS_PRIVACY);
-        boolean isPrivate = true;
-        if (StringUtil.isBlank(productNoHasPrivacy) || "false".equalsIgnoreCase(productNoHasPrivacy)) {
+        boolean isPrivate = true;	//是隐私的吗？
+        if (StringUtil.isNotBlank(productNoHasPrivacy) && "true".equalsIgnoreCase(productNoHasPrivacy)) {
             isPrivate = false;
         }
         if (null != pageMap) {
