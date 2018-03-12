@@ -292,7 +292,7 @@ public class ShopCartController extends BaseController {
 			return webResult.fail(baseException);
 		}catch (Exception e) {
 			LogUtil.error("添加(规则)到购物车异常", e);
-			return webResult.fail(msg,e);
+			return webResult.fail("添加(规则)到购物车异常",e);
 		}
 		if (success) {
 			return webResult.success("加入购物车成功", SUCCESS);
@@ -384,7 +384,7 @@ public class ShopCartController extends BaseController {
 			return webResult.fail(baseException);
 		}catch (Exception e) {
 			LogUtil.error("校验sql异常", e);
-			return webResult.fail(e.getMessage(),e);
+			return webResult.fail("校验sql异常");
 		}
 		return webResult.success("校验sql成功", SUCCESS);
 	}
@@ -426,7 +426,7 @@ public class ShopCartController extends BaseController {
 			num = backServiceImpl.queryCount(sql.toString());
 		} catch (Exception e) {
 			LogUtil.error("探索异常", e);
-			return webResult.fail(e.getMessage(), e);
+			return webResult.fail("探索异常");
 		}
 		return webResult.success("探索成功", String.valueOf(num));
 	}
@@ -465,7 +465,7 @@ public class ShopCartController extends BaseController {
 			setSessionAttribute(LabelRuleContants.SHOP_CART_RULE, JsonUtil.toJsonString(updateRules));
 		} catch (Exception e) {
 			LogUtil.error("设置属性更新session异常", e);
-			return webResult.fail(e.getMessage());
+			return webResult.fail("设置属性更新session异常");
 		}
 		return webResult.success("更新购物车成功", SUCCESS);
 
