@@ -5,10 +5,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
+import com.asiainfo.biapp.si.loc.base.common.LabelInfoContants;
 import com.asiainfo.biapp.si.loc.base.exception.BaseException;
 import com.asiainfo.biapp.si.loc.base.utils.LogUtil;
+import com.asiainfo.biapp.si.loc.core.label.entity.LabelInfo;
 import com.asiainfo.biapp.si.loc.core.label.model.ExploreQueryParam;
 import com.asiainfo.biapp.si.loc.core.label.service.ICustomerManagerService;
+import com.asiainfo.biapp.si.loc.core.label.service.ILabelInfoService;
 
 /**
  * 
@@ -48,6 +51,9 @@ public class CustomerListCreaterThread extends Thread {
 	@Autowired
 	private ICustomerManagerService customerManagerService;
 
+	@Autowired
+	private ILabelInfoService labelInfoService;
+	
 	@Override
 	public void run() {
 		try {
@@ -56,6 +62,9 @@ public class CustomerListCreaterThread extends Thread {
 			LogUtil.error("InterruptedException", e);
 		}
 		try {
+			LabelInfo customGroup = labelInfoService.get(customId);
+		    customGroup.setDataStatusId(LabelInfoContants.CUSTOM_DATA_STATUS_CREATING);
+		    labelInfoService.syncUpdateCustomGroupInfo(customGroup, null);
 			customerManagerService.createCustomerList(customId, model);
 		} catch (BaseException e) {
 			LogUtil.error("生成客户群的清单异常", e);

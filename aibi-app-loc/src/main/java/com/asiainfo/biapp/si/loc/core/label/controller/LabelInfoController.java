@@ -19,18 +19,22 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.asiainfo.biapp.si.loc.auth.model.User;
+import com.asiainfo.biapp.si.loc.base.common.LabelInfoContants;
 import com.asiainfo.biapp.si.loc.base.common.LabelRuleContants;
 import com.asiainfo.biapp.si.loc.base.controller.BaseController;
 import com.asiainfo.biapp.si.loc.base.exception.BaseException;
 import com.asiainfo.biapp.si.loc.base.exception.ParamRequiredException;
 import com.asiainfo.biapp.si.loc.base.page.Page;
+import com.asiainfo.biapp.si.loc.base.task.CustomerListCreaterThread;
 import com.asiainfo.biapp.si.loc.base.utils.JsonUtil;
 import com.asiainfo.biapp.si.loc.base.utils.LogUtil;
 import com.asiainfo.biapp.si.loc.base.utils.StringUtil;
+import com.asiainfo.biapp.si.loc.base.utils.ThreadPool;
 import com.asiainfo.biapp.si.loc.base.utils.WebResult;
 import com.asiainfo.biapp.si.loc.core.label.entity.CategoryInfo;
 import com.asiainfo.biapp.si.loc.core.label.entity.LabelExtInfo;
 import com.asiainfo.biapp.si.loc.core.label.entity.LabelInfo;
+import com.asiainfo.biapp.si.loc.core.label.model.ExploreQueryParam;
 import com.asiainfo.biapp.si.loc.core.label.service.IApproveInfoService;
 import com.asiainfo.biapp.si.loc.core.label.service.ICategoryInfoService;
 import com.asiainfo.biapp.si.loc.core.label.service.ILabelInfoService;
@@ -128,6 +132,19 @@ public class LabelInfoController extends BaseController {
 			if (label != null) {
 				return webResult.fail("客户群名称重复!");
 			}
+			if (LabelInfoContants.LIST_TABLE_TACTICS_ID_THREE.equals(tacticsId)) {
+				if (LabelInfoContants.CUSTOM_CYCLE_TYPE_M == updateCycle) { // 月周期
+					int tempNum = Integer.valueOf(dataDate);
+					if (StringUtil.isNotEmpty(monthLabelDate) && tempNum > Integer.valueOf(monthLabelDate)) {
+						dataDate = monthLabelDate;
+					}
+				} else { // 日周期 和 一次性
+					int tempNum = Integer.valueOf(dataDate);
+					if (StringUtil.isNotEmpty(dayLabelDate) && tempNum > Integer.valueOf(dayLabelDate)) {
+						dataDate = dayLabelDate;
+					}
+				}
+			}
 			//基本信息
 			LabelInfo labelInfo =new LabelInfo();
 			labelInfo.setLabelName(labelName);
@@ -146,7 +163,6 @@ public class LabelInfoController extends BaseController {
 	        labelExtInfo.setMonthLabelDate(monthLabelDate);
 			//标签规则
 			List<LabelRuleVo> labelRules =getSessionLabelRuleList();
-			
 			iLabelInfoService.saveCustomerLabelInfo(labelExtInfo, labelInfo, labelRules);
 		} catch (Exception e) {
 			LogUtil.error("保存客户群型标签异常", e);
