@@ -250,7 +250,7 @@ J.dialog = function( opts, elem )
 		if( r.cover )
 		    this.ShowCover();
 		
-		var fixpos = r.fixed && (!J.browser.ie || J.browser.i7) ? 'fixed' : 'absolute',
+		var fixpos = r.fixed && (!J.browser.ie || J.browser.i7) ? 'fixed' : 'fixed',
 		    html = this.SetIFramePage();
 		
 		this.dg = J(html,doc).css({
