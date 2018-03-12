@@ -143,7 +143,7 @@ var  mainPage={
 //			Scripts.loadStyle({src:"../../asset/css/theme/"+theme+"/tab.css"});
 //			Scripts.loadStyle({src:"../../asset/css/theme/"+theme+"/coc_frame.css"});
 			Scripts.loadStyle({src:"../../asset/css/theme/"+theme+"/common.css"});
-//			Scripts.loadStyle({src:"../../asset/css/theme/"+theme+"/main.css"});
+			Scripts.loadStyle({src:"../../asset/css/theme/"+theme+"/main.css"});
 			
 			Scripts.loadScript({src:[
 			        //图表组件            
