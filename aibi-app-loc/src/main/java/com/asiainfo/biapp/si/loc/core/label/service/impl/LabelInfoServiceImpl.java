@@ -287,7 +287,11 @@ public class LabelInfoServiceImpl extends BaseServiceImpl<LabelInfo, String> imp
 	@Override
 	public void saveCustomerLabelInfo(LabelExtInfo labelExtInfo, LabelInfo customInfo, List<LabelRuleVo> labelRuleList) throws BaseException {
 		customInfo.setLabelTypeId(LabelInfoContants.LABEL_TYPE_CUST);
-		customInfo.setDataStatusId(LabelInfoContants.CUSTOM_DATA_STATUS_WAIT);
+		if (LabelInfoContants.LIST_TABLE_TACTICS_ID_THREE.equals(labelExtInfo.getTacticsId())) {
+			customInfo.setDataStatusId(LabelInfoContants.CUSTOM_DATA_STATUS_ORDER);
+		}else{
+			customInfo.setDataStatusId(LabelInfoContants.CUSTOM_DATA_STATUS_WAIT);
+		}
 		customInfo.setCreateTime(new Date());
 		customInfo.setGroupType(LabelInfoContants.LABEL_GROUP_TYPE_CUST);
 		super.saveOrUpdate(customInfo);
