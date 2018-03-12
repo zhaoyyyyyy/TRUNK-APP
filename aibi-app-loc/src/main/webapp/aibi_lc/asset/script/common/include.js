@@ -135,6 +135,7 @@ var  mainPage={
 			Scripts.loadStyle({src:"../../asset/script/component/validate/css/jquery.easyui.css"});
 			Scripts.loadStyle({src:"../../asset/css/lhgcore/lhgdialog.css"});
 			Scripts.loadStyle({src:"../../asset/css/lhgcore/alertWindow.css"});
+						Scripts.loadStyle({src:"../../asset/css/theme/default/common.css"});
 //			Scripts.loadStyle({src:"../../asset/css/theme/"+theme+"/button.css"});
 //			Scripts.loadStyle({src:"../../asset/css/theme/"+theme+"/page.css"});
 //			Scripts.loadStyle({src:"../../asset/css/theme/"+theme+"/ui.jqgrid.owner.css"});
