@@ -51,7 +51,7 @@ public class ListInfoServiceImpl extends BaseServiceImpl<ListInfo, String>  impl
 
 	@Override
 	public void modifyListInfo(ListInfo listInfoVo) throws BaseException {
-		super.saveOrUpdate(listInfoVo);
+		super.update(listInfoVo);
 		
 	}
 

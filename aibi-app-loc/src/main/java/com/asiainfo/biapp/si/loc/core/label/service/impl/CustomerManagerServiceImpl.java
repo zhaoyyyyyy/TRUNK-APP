@@ -87,7 +87,7 @@ public class CustomerManagerServiceImpl implements ICustomerManagerService {
 			listInfo.setCustomNum(customNum);
 			listInfo.setDataStatus(LabelInfoContants.CUSTOM_DATA_STATUS_SUCCESS);
 			listInfo.setDataTime(new Date());
-			listInfoService.addListInfo(listInfo);
+			listInfoService.modifyListInfo(listInfo);
 		} catch (Exception e) {
 			customGroup.setDataStatusId(LabelInfoContants.CUSTOM_DATA_STATUS_FAILED);
 			LogUtil.error("生成客户群的清单过程异常---customId:"+customId, e);

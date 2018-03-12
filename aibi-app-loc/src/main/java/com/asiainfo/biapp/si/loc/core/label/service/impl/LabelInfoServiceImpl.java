@@ -31,6 +31,9 @@ import com.asiainfo.biapp.si.loc.base.utils.DateUtil;
 import com.asiainfo.biapp.si.loc.base.utils.LogUtil;
 import com.asiainfo.biapp.si.loc.base.utils.StringUtil;
 import com.asiainfo.biapp.si.loc.base.utils.ThreadPool;
+import com.asiainfo.biapp.si.loc.bd.list.service.IListInfoService;
+import com.asiainfo.biapp.si.loc.bd.listinfo.entity.ListInfo;
+import com.asiainfo.biapp.si.loc.bd.listinfo.entity.ListInfoId;
 import com.asiainfo.biapp.si.loc.cache.CocCacheProxy;
 import com.asiainfo.biapp.si.loc.core.dimtable.dao.IDimTableInfoDao;
 import com.asiainfo.biapp.si.loc.core.dimtable.entity.DimTableInfo;
@@ -113,6 +116,9 @@ public class LabelInfoServiceImpl extends BaseServiceImpl<LabelInfo, String> imp
     
     @Autowired
     private ILabelRuleService ruleService;
+    
+    @Autowired
+	private IListInfoService listInfoService;
     
 	private static ApplicationContext context;  
     
@@ -310,6 +316,15 @@ public class LabelInfoServiceImpl extends BaseServiceImpl<LabelInfo, String> imp
 			labelRule.setCustomType(LabelRuleContants.LABEL_RULE_FROM_COSTOMER);
 			ruleService.addLabelRule(labelRule);
 		}
+		ListInfoId id=new ListInfoId();
+		id.setCustomGroupId(customId);
+		id.setDataDate(customInfo.getDataDate());
+		ListInfo listInfo=new ListInfo();
+		listInfo.setListInfoId(id);
+		listInfo.setCustomNum(0);
+		listInfo.setDataStatus(LabelInfoContants.CUSTOM_DATA_STATUS_CREATING);
+		listInfo.setDataTime(new Date());
+		listInfoService.addListInfo(listInfo);
 		//生成清单
 		CustomerListCreaterThread creator = null;
 		try {
