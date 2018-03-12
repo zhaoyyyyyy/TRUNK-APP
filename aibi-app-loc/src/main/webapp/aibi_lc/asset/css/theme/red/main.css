@@ -170,7 +170,7 @@
 	overflow: hidden;
 }
 .ui-label-list > li{
-	width: 25%;
+	width: 33.33333%;
 	padding: 0 10px 0 0;
 	float: left;
 	margin: 0 0 10px;
@@ -231,7 +231,7 @@
     white-space: nowrap;
 }
 .ui-label-list > li .ui-label-info > h3 > .tooltip.top{
-	margin-top:-25px;
+	margin-top:-43px;
 }
 .ui-label-list > li:HOVER .ui-label-info > h3 > .tooltip.top{
 	opacity:1;
@@ -261,17 +261,17 @@
 	width: 43%;
 }
 .ui-label-item > a.ui-label-time{
-	width: 23%;
+	width: 17%;
 	text-align: center;
 	padding: 0;
 }
 .ui-label-item > a.ui-label-date{
-	width: 34%;
+	width: 20%;
 	text-align: center;
 	padding: 0;
 }
 .ui-label-item > a > b{
-	font-size: 26px;
+	font-size: 20px;
 	color: #FF7F3F;
 }
 .ui-business-caliber{

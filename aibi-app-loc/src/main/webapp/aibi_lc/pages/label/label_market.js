@@ -267,7 +267,7 @@ var labelMarket = (function (model){
 		model.loadLabelInfoList = function(){
 			$("#configId").val($.getCurrentConfigId());
 			var obj = $("#formSearch").formToJson();
-			obj.pageSize = 20;
+			obj.pageSize = 18;
 			obj.groupType = 0;
 			obj.dataStatusId = 2;
 			$.commAjax({
@@ -281,6 +281,10 @@ var labelMarket = (function (model){
 					dataModel.page.totalPageCount=data.totalPageCount;
 					for(var i=0 ; i<data.rows.length; i++){
 						if(data.rows[i].labelExtInfo!=undefined&&data.rows[i].labelExtInfo!=null){
+							if(data.rows[i].labelExtInfo.dayLabelDate==null||data.rows[i].labelExtInfo.monthLabelDate==null){
+								data.rows[i].labelExtInfo.dayLabelDate="无";
+								data.rows[i].labelExtInfo.monthLabelDate="无";
+							}
 							data.rows[i].customNum = data.rows[i].labelExtInfo.customNum;
 						}else{
 							data.rows[i].customNum = "0";

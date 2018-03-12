@@ -145,12 +145,19 @@
 				
 			</div>
 			<ul id="labelList" class="clearfix ui-label-list" >
-				<li v-for="(item,index) in labelInfoList" :class="{padding0 : (index+1)%4 ==0 }" >
+				<li v-for="(item,index) in labelInfoList" :class="{padding0 : (index+1)%3 ==0 }" >
 					<div class="ui-label-info">
 						<h3 class="clearfix">
 							<div class="tooltip top" role="tooltip">
 								<div class="tooltip-arrow"></div>
-								<div class="tooltip-inner" v-text="item.labelName"></div>
+								<div class="tooltip-inner">
+									<span v-text="item.labelName"></span>
+									<div>
+										<a style="color:#fff;" href="javascript:;">日标签:<span v-text="item.labelExtInfo.dayLabelDate"></span></a>
+										<span>|</span>
+										<a style="color:#fff;" href="javascript:;" >月标签:<span v-text="item.labelExtInfo.monthLabelDate"></span></a>
+									</div>
+								</div>
 							</div>
 							<span v-text="item.labelName"></span>
 							<i v-on:click="select(index,event,item)"></i>

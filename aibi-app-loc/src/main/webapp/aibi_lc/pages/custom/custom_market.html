@@ -130,13 +130,20 @@
 				<div class="fright mr10"><input type="checkbox" id="mySelf" onclick="labelMarket.myCreateCustom(this)"><span>我创建的客户群</span></input></div>
 			</div>
 			<ul id="labelList" class="clearfix ui-label-list" >
-				<li v-for="(item,index) in labelInfoList" :class="{padding0 : (index+1)%4 ==0 }" >
+				<li v-for="(item,index) in labelInfoList" :class="{padding0 : (index+1)%3 ==0 }" class=" clearfix">
 					<div class="ul-label-box">
 						<div class="ui-label-info">
 							<h3 class="clearfix">
 								<div class="tooltip top" role="tooltip">
 									<div class="tooltip-arrow"></div>
-									<div class="tooltip-inner" v-text="item.labelName"></div>
+									<div class="tooltip-inner">
+										<span v-text="item.labelName"></span>
+										<div>
+											<a style="color:#fff;" href="javascript:;">日标签:<span v-text="item.labelExtInfo.dayLabelDate" ></span></a>
+											<span>|</span>
+											<a style="color:#fff;" href="javascript:;" >月标签:<span v-text="item.labelExtInfo.monthLabelDate"></span></a>
+										</div>
+									</div>
 								</div>
 								<span v-text="item.labelName"></span>
 								<i v-on:click="select(index,event,item)"></i>
@@ -145,19 +152,22 @@
 								<a href="javascript:;">
 									<b v-text="item.customNum" ></b>人
 								</a>
+								<a href="javascript:;" class="ui-label-date">
+									<span>待创建</span>
+								</a>
 								<a href="javascript:;" class="ui-label-time">
 									<span v-if="item.updateCycle == 1 ">日</span>
 									<span v-if="item.updateCycle == 2 ">月</span>
 									<span v-if="item.updateCycle == 3 ">一次性</span>
 								</a>
-								<a href="javascript:;" class="not-border ui-label-date">
+								<a href="javascript:;" class="ui-label-date not-border">
 									<span v-text="item.dataDate"></span>
 								</a>
 							</div>
-							<div class="ui-label-item mt10">
+							<!--<div class="ui-label-item mt10">
 								<a href="javascript:;" style="width:50%">日标签:<span v-text="item.labelExtInfo.dayLabelDate"></span></a>
 								<a href="javascript:;" class="not-border ui-label-date"  style="width:50%">月标签:<span v-text="item.labelExtInfo.monthLabelDate"></span></a>
-							</div>
+							</div>-->
 							
 							<h4 class="ui-business-caliber ui-rule">
 								规则:<span>{{item.customRuleShow}}</span>
