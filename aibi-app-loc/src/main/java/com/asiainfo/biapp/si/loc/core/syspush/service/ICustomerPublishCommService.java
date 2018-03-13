@@ -7,8 +7,8 @@
 package com.asiainfo.biapp.si.loc.core.syspush.service;
 
 import java.util.List;
-import java.util.Map;
 
+import com.asiainfo.biapp.si.loc.core.dimtable.entity.DimTableInfo;
 import com.asiainfo.biapp.si.loc.core.label.entity.LabelInfo;
 import com.asiainfo.biapp.si.loc.core.syspush.entity.LabelAttrRel;
 
@@ -65,5 +65,5 @@ public interface ICustomerPublishCommService {
 	 * @param LabelId	标签id
 	 * @return
 	 */
-    public List<Map<String,String>> getDimTableDataByLabelId(String LabelId);
+    public DimTableInfo getDimTableInfoByLabelId(String LabelId);
 }

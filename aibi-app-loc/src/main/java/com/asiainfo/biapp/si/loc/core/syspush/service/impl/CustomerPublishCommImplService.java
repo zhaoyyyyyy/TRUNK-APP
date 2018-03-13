@@ -8,9 +8,10 @@ package com.asiainfo.biapp.si.loc.core.syspush.service.impl;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
+import org.apache.hadoop.yarn.webapp.hamlet.HamletSpec.A;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,10 +23,8 @@ import com.asiainfo.biapp.si.loc.base.utils.StringUtil;
 import com.asiainfo.biapp.si.loc.bd.common.service.IBackSqlService;
 import com.asiainfo.biapp.si.loc.cache.CocCacheAble;
 import com.asiainfo.biapp.si.loc.cache.CocCacheProxy;
-import com.asiainfo.biapp.si.loc.core.dimtable.entity.DimTableData;
 import com.asiainfo.biapp.si.loc.core.dimtable.entity.DimTableInfo;
 import com.asiainfo.biapp.si.loc.core.dimtable.service.IDimTableInfoService;
-import com.asiainfo.biapp.si.loc.core.dimtable.vo.DimTableInfoVo;
 import com.asiainfo.biapp.si.loc.core.label.entity.LabelInfo;
 import com.asiainfo.biapp.si.loc.core.label.entity.MdaSysTable;
 import com.asiainfo.biapp.si.loc.core.label.entity.MdaSysTableColumn;
@@ -114,6 +113,13 @@ public class CustomerPublishCommImplService implements ICustomerPublishCommServi
             MdaSysTableColumn mdaSysTableCol = null;
             LabelAttrRel labelAttrRel = null;
             LabelInfo label = null;
+            List<String> leftJoinEnumStrs = new ArrayList<>();
+            String curBackDbSchema = null;
+            try {
+				curBackDbSchema = iBackService.getCurBackDbSchema();
+			} catch (SqlRunException e1) {
+				LogUtil.warn("获取后台库Schema错误："+ e1.getMessage());
+			}
             for (int i = 0; i < attrRelList.size(); i++) {
                 labelAttrRel = attrRelList.get(i);
                 //获取列信息
@@ -132,25 +138,16 @@ public class CustomerPublishCommImplService implements ICustomerPublishCommServi
 	                       .append(" when 1 then '是' else '否' end as ").append(labelAttrRel.getAttrCol());	//列别名
 						break;
 					case ServiceConstants.LabelInfo.LABEL_TYPE_ID_ENUM:	//5=枚举型,关联维表
-						List<Map<String, String>> dimTableDatas = this.getDimTableDataByLabelId(customInfo.getLabelId());
-						if (null != dimTableDatas && !dimTableDatas.isEmpty()) {
-							//表别名
-		                    sql.append(",case ").append(labelAttrRel.getAttrCol()).append("_t.").append(mdaSysTableCol.getColumnName());
-	                        if (null != dimTableDatas && !dimTableDatas.isEmpty()) {
-	                        		Map<String, String> map = null; 
-	                        		for (int j = 0; j < dimTableDatas.size(); j++) {
-									map = dimTableDatas.get(j);
-								/*	sql.append(" when 1 then '男'")
-			                        	   .append(" when 2 then '女'")
-			                        	   .append(" else '未知'");*/
-									if (dimTableDatas.size() > 1 && j == dimTableDatas.size()-1) {
-										sql.append(" else '" + map.get("v") + "'");
-									} else {
-										sql.append(" when " + map.get("k") + " then '" + map.get("v") + "'");
-									}
-	                        		}
-	                        }
-	                        sql.append(" end as ").append(labelAttrRel.getAttrCol());	//列别名
+						DimTableInfo dimTableInfo = this.getDimTableInfoByLabelId(customInfo.getLabelId());
+						if (null != dimTableInfo) {
+		                    sql.append(",").append(labelAttrRel.getAttrCol()).append("_m.").append(dimTableInfo.getDimValueCol())
+		                       .append(" as ").append(labelAttrRel.getAttrCol());	//列别名
+//		                    left join coctest.dim_loc_sex attr_col2_m on attr_col2_t.L0000034=attr_col2_m.sex_name
+		                    leftJoinEnumStrs.add(new StringBuffer().append("left join ")
+		                    		.append(StringUtil.isEmpty(curBackDbSchema)?"":curBackDbSchema+".").append(dimTableInfo.getDimTableName()).append(" ")
+		                    		.append(labelAttrRel.getAttrCol()).append("_m on ").append(labelAttrRel.getAttrCol()).append("_t.")
+		                    		.append(mdaSysTableCol.getColumnName()).append("=").append(labelAttrRel.getAttrCol()).append("_m.")
+		                    		.append(dimTableInfo.getDimCodeCol()).append(" ").toString());
 						}
                        break;
 					default:
@@ -159,7 +156,6 @@ public class CustomerPublishCommImplService implements ICustomerPublishCommServi
 	                       .append(" as ").append(labelAttrRel.getAttrCol());	//列别名
 						break;
 					}
-                    
                 } else {
                     LogUtil.error("MdaSysTableColumn of labelinfo【"+label.getLabelId()+"】 is null!");
                 }
@@ -192,6 +188,10 @@ public class CustomerPublishCommImplService implements ICustomerPublishCommServi
                 labelAttrRel = attrRelList.get(i);
                 sql.append(getJoinSqlByLabelId(labelAttrRel.getLabelOrCustomId(),labelAttrRel.getAttrCol(),cacheProxy,null,null));
             }
+            //拼接枚举型 leftJoin
+            for (String leftJoinEnumStr : leftJoinEnumStrs) {
+            		sql.append(leftJoinEnumStr);
+			}
             //拼接orderby
             sql.append("order by ");
             String sortType = "ASC";
@@ -276,7 +276,7 @@ public class CustomerPublishCommImplService implements ICustomerPublishCommServi
         return sql.toString();
     }
     
-    public List<Map<String,String>> getDimTableDataByLabelId(String LabelId) {
+    public DimTableInfo getDimTableInfoByLabelId(String LabelId) {
 		StringBuffer sql = new StringBuffer("select ");
 		/**
 		 * 获取维表信息sql:
@@ -293,23 +293,7 @@ public class CustomerPublishCommImplService implements ICustomerPublishCommServi
         List<Object[]> dimTableInfoList = (List<Object[]>) iDimTableInfoService.findListBySql(sql.toString(), new HashMap<>());
         if (!dimTableInfoList.isEmpty()) {
         		Object[] dimTableInfo = dimTableInfoList.get(0);
-			//获取维表值
-			sql.delete(0, sql.length()).append("select ");
-			try {
-				sql.append(dimTableInfo[1]).append(" as k,").append(dimTableInfo[2]).append(" as v from ");
-				String curBackDbSchema = iBackService.getCurBackDbSchema();
-				if (StringUtil.isNoneBlank(curBackDbSchema)) {
-					sql.append(curBackDbSchema).append(".");
-				}
-				sql.append(dimTableInfo[0]);	//表名
-				
-				LogUtil.debug(sql.toString());
-				
-				return iBackService.queryForPage(sql.toString(), 1, 999);
-				
-			} catch (SqlRunException e) {
-				LogUtil.error("查询维表("+dimTableInfo[0]+")值错误：", e);	//表名
-			} 
+        		return new DimTableInfo(String.valueOf(dimTableInfo[0]),String.valueOf(dimTableInfo[1]),String.valueOf(dimTableInfo[2]));
 		}
         
 		return null;

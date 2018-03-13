@@ -120,7 +120,15 @@ public class DimTableInfo extends BaseEntity{
     private String createUserId;
 
     
-    public String getDimId() {
+    public DimTableInfo(String dimTableName, String dimCodeCol, String dimValueCol) {
+		super();
+		this.dimTableName = dimTableName;
+		this.dimCodeCol = dimCodeCol;
+		this.dimValueCol = dimValueCol;
+	}
+
+
+	public String getDimId() {
         return dimId;
     }
 
