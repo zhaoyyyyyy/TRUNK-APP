@@ -8,10 +8,8 @@ package com.asiainfo.biapp.si.loc.core.syspush.service.impl;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 
-import org.apache.hadoop.yarn.webapp.hamlet.HamletSpec.A;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
