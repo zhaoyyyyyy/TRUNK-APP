@@ -110,7 +110,10 @@ public class BackServiceImpl implements IBackSqlService{
 
 	@Override
 	public Integer queryCount(String selectSql) throws SqlRunException {
-		return getBackDaoBean().queryCount(selectSql);
+		long s = System.currentTimeMillis();
+		Integer count = getBackDaoBean().queryCount(selectSql);
+		LogUtil.debug(new StringBuffer("queryCount cost:").append(System.currentTimeMillis()-s).append("ms.--->").append(selectSql));
+		return count;
 	}
 
     @Override
