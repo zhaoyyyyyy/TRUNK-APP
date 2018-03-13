@@ -234,9 +234,15 @@ public class LabelPushCycleServiceImpl extends BaseServiceImpl<LabelPushCycle, S
         String customListSql = iCustomerPublishCommService.getCustomListSql(customGroup, attrRelList);
         
         LogUtil.debug("清单预览sql："+customListSql);
-
+        int customListNo = 10;//尹振华说只查10条,@2018-03-13 14:39:36
+        String customListNoStr = CocCacheProxy.getCacheProxy().getSYSConfigInfoByKey("CUSTOM_LIST_NUMBER");
+        if (StringUtil.isNotEmpty(customListNoStr)) {
+        		customListNo = Integer.parseInt(customListNoStr);
+        }
+        
         //清单数据
-        List<Map<String, String>> pageMap = iBackSqlService.queryForPage(customListSql, page.getPageStart(), page.getPageSize());
+//        List<Map<String, String>> pageMap = iBackSqlService.queryForPage(customListSql, page.getPageStart(), page.getPageSize());
+        List<Map<String, String>> pageMap = iBackSqlService.queryForPage(customListSql, 1, customListNo);
         
         String productNoHasPrivacy = CocCacheProxy.getCacheProxy().getSYSConfigInfoByKey(BaseConstants.PRODUCT_NO_HAS_PRIVACY);
         boolean isPrivate = true;	//是隐私的吗？
