@@ -82,8 +82,8 @@ public class SourceTableInfoServiceImpl extends BaseServiceImpl<SourceTableInfo,
     @Autowired
     private ISourceInfoService iSourceInfoService;
 
-    @Autowired
-    private ITargetTableStatusService iTargetTableStatusService;
+//    @Autowired
+//    private ITargetTableStatusService iTargetTableStatusService;
     
     @Autowired
     private IMdaSysTableService iMdaSysTableService;
@@ -159,14 +159,14 @@ public class SourceTableInfoServiceImpl extends BaseServiceImpl<SourceTableInfo,
         super.saveOrUpdate(sourceTableInfo);
 
         // 添加指标源表状态
-        TargetTableStatus targetTableStatus = new TargetTableStatus();
-        targetTableStatus.setSourceTableId(sourceTableInfo.getSourceTableId());
-        targetTableStatus.setSourceTableName(sourceTableInfo.getSourceTableName());
-        targetTableStatus.setSourceTableType(sourceTableInfo.getSourceTableType());
-        targetTableStatus.setManualExecution(0);
-        targetTableStatus.setIsDoing(0);
-        targetTableStatus.setDataStatus(1);
-        iTargetTableStatusService.addTargertTableStatus(targetTableStatus);
+//        TargetTableStatus targetTableStatus = new TargetTableStatus();
+//        targetTableStatus.setSourceTableId(sourceTableInfo.getSourceTableId());
+//        targetTableStatus.setSourceTableName(sourceTableInfo.getSourceTableName());
+//        targetTableStatus.setSourceTableType(sourceTableInfo.getSourceTableType());
+//        targetTableStatus.setManualExecution(0);
+//        targetTableStatus.setIsDoing(0);
+//        targetTableStatus.setDataStatus(1);
+//        iTargetTableStatusService.addTargertTableStatus(targetTableStatus);
 
         // 添加指标信息列
         if (!sourceTableInfo.getSourceInfoList().isEmpty()) {
@@ -235,10 +235,10 @@ public class SourceTableInfoServiceImpl extends BaseServiceImpl<SourceTableInfo,
         super.saveOrUpdate(fromToBean(sourceTableInfo, oldSou));
 
         // 修改状态表
-        TargetTableStatus targetTableStatus = iTargetTableStatusService.selectTargertTableStatusById(sourceTableInfo
-            .getSourceTableId());
-        targetTableStatus.setSourceTableName(sourceTableInfo.getSourceTableName());
-        iTargetTableStatusService.modifyTargertTableStatus(targetTableStatus);
+//        TargetTableStatus targetTableStatus = iTargetTableStatusService.selectTargertTableStatusById(sourceTableInfo
+//            .getSourceTableId());
+//        targetTableStatus.setSourceTableName(sourceTableInfo.getSourceTableName());
+//        iTargetTableStatusService.modifyTargertTableStatus(targetTableStatus);
 
         // 修改指标信息列
         List<String> newIds = new ArrayList<>();
@@ -292,7 +292,7 @@ public class SourceTableInfoServiceImpl extends BaseServiceImpl<SourceTableInfo,
             iSourceInfoService.deleteSourceInfo(s.getSourceId());
         }
         super.delete(sourceTableId);
-        iTargetTableStatusService.deleteTargertTableStatus(sourceTableId);
+//        iTargetTableStatusService.deleteTargertTableStatus(sourceTableId);
     }
 
     /**

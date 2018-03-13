@@ -28,6 +28,7 @@ $.extend({
 			var exp  = new Date();  //获得当前时间
 			exp.setTime(exp.getTime() + Days*24*60*60*1000);  //换成毫秒
 			document.cookie = "token="+ token + ";expires=" + exp.toGMTString();
+			document.cookie = "cpcnpost="+ $.getCookie("cnpost")+ ";expires=" + exp.toGMTString();
 		}else{
 			var ssg = window.sessionStorage;
 			if(ssg){
@@ -36,6 +37,24 @@ $.extend({
 			}
 		}
 		
+	},
+	isExistsToken : function(){
+		var ssg = window.sessionStorage;
+		var sstoken = ssg.getItem("token");
+		
+		var cktoken=$.getCookie("token");
+		
+		var tokenStr;
+		if(sstoken){
+			tokenStr = sstoken;
+		}else if(cktoken){
+			tokenStr = cktoken;
+		}
+		if(!tokenStr){
+			return false;
+		}else{
+			return true;
+		}
 	},
 	getCurrentToken : function(){
 		var ssg = window.sessionStorage;
@@ -49,13 +68,7 @@ $.extend({
 		}else if(cktoken){
 			tokenStr = cktoken;
 		}
-		if(!tokenStr){
-			alert('token失效，请重新登录');
-			window.location.href = $.ctx ? $.ctx : "/";
-		}else{
-			return tokenStr;
-		}
-		
+		return tokenStr;
 	},
 	
 	//通用异步请求
@@ -95,20 +108,6 @@ $.extend({
 		}
 		
 		var tokenStr=$.getCurrentToken();
-		
-//		var ssg = window.sessionStorage;
-//		var tokenStr;
-//		if(ssg){
-//			var token = ssg.getItem("token");
-//			if(token){
-//				tokenStr = token;
-//			}
-//		}
-//		if(!tokenStr){
-//			alert('token失效，请重新登录');
-//			window.location.href = $.ctx ? $.ctx : "/";
-//		}
-		
 		
 		$.ajax({
 			headers 	: {'X-Authorization': tokenStr},
