@@ -128,6 +128,9 @@ public class BackMysqlDaoImpl extends BaseBackDaoImpl implements IBackSqlDao{
         }
 		return null;
 	}
+    public List<Map<String, String>> queryBySql(String sql) throws SqlRunException{
+			return null;
+	}
 	
 	@Override
 	public Integer queryCount(String selectSql) throws SqlRunException {

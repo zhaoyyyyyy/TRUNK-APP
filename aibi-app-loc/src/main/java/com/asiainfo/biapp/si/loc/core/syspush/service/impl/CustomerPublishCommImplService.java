@@ -215,8 +215,10 @@ public class CustomerPublishCommImplService implements ICustomerPublishCommServi
             }
             if (StringUtil.isNotEmpty(orderbyStr)) {
             		orderbyStr.delete(orderbyStr.length()-1, orderbyStr.length());
-            		sql.append(" order by ").append(orderbyStr);
+            } else {
+            		orderbyStr.append(LabelInfoContants.KHQ_CROSS_COLUMN);
             }
+            sql.append(" order by ").append(orderbyStr);
             
             //纠正别名，所有属性都在同一张宽表
 			String sqlTmp = sql.toString();

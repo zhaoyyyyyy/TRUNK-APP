@@ -241,6 +241,15 @@ public class BackHiveDaoImpl extends BaseBackDaoImpl implements IBackSqlDao{
             throw new SqlRunException(e.getMessage());
         }
 	}
+    public List<Map<String, String>> queryBySql(String sql) throws SqlRunException{
+        LogUtil.debug("sql:" + sql);
+        
+        try{
+            return this.executeResList(sql);
+        }catch (Exception e){
+            throw new SqlRunException(e.getMessage());
+        }
+    }
 
 	@Override
 	public Integer queryCount(String selectSql) throws SqlRunException {

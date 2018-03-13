@@ -107,6 +107,10 @@ public class BackServiceImpl implements IBackSqlService{
 	public List<Map<String, String>> queryForPage(String selectSql, Integer pageStart, Integer pageSize) throws SqlRunException {
 		return getBackDaoBean().queryForPage(selectSql,pageStart,pageSize);
 	}
+	@Override
+    public List<Map<String, String>> queryBySql(String sql) throws SqlRunException {
+		return getBackDaoBean().queryBySql(sql);
+	}
 
 	@Override
 	public Integer queryCount(String selectSql) throws SqlRunException {

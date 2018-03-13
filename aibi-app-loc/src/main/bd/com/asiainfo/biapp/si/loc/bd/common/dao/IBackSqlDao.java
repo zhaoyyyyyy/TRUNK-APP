@@ -120,7 +120,14 @@ public interface IBackSqlDao {
      * @return
      */
     public List<Map<String,String>> queryForPage(String selectSql,Integer pageStart,Integer pageSize) throws SqlRunException;
-    
+
+    /**
+     * 直接执行指定sql
+     * @param sql  查询sql
+
+     * @throws SqlRunException
+     */
+    public List<Map<String, String>> queryBySql(String sql) throws SqlRunException;
     /**
      * 
      * Description: 查询共多少条数据
