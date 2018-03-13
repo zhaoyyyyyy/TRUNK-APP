@@ -209,7 +209,11 @@ window.loc_onload = function() {
 						$.alert("请正确选择排序属性及方式");
 						return false;
 					}else{
-						model.sortAttrAndType+=$(this).find(".select-Sort").val()+","+$(this).find("label[class~=active]").text()+";";
+						if($(this).find(".select-Sort").val() =="请选择属性"){
+							model.sortAttrAndType+=null+","+null+";";
+						}else{
+							model.sortAttrAndType+=$(this).find(".select-Sort").val()+","+$(this).find("label[class~=active]").text()+";";
+						}
 					}
 				})
 				if(model.sortAttrAndType!=null){
@@ -228,7 +232,7 @@ window.loc_onload = function() {
 						onSuccess:function(data){
 							var wd = $.window('客户群预览', $.ctx
 									+ '/aibi_lc/pages/custom/custom_preview.html?labelId='+$.getUrlParam("labelId"), 900,
-									600);
+									550);
 							wd.reload = function() {
 								$("#mainGrid").setGridParam({
 									postData : $("#formSearch").formToJson()
@@ -248,7 +252,11 @@ window.loc_onload = function() {
 						$.alert("请正确选择排序属性及方式");
 						return false;
 					}else{
-						model.sortAttrAndType+=$(this).find(".select-Sort").val()+","+$(this).find("label[class~=active]").text()+";";
+						if($(this).find(".select-Sort").val() =="请选择属性"){
+							model.sortAttrAndType+=null+","+null+";";
+						}else{
+							model.sortAttrAndType+=$(this).find(".select-Sort").val()+","+$(this).find("label[class~=active]").text()+";";
+						}
 					}
 				})
 				if(model.sortAttrAndType!=null){
@@ -322,7 +330,6 @@ window.loc_onload = function() {
 		    })
 		}
 	})
-	var nameNumber=0;
 	$(".selectBox").delegate(".selectList .radio","click",function(){
 		var e=arguments.callee.caller.arguments[0]||event; 
 	    if (e && e.stopPropagation) {			     
@@ -340,16 +347,18 @@ window.loc_onload = function() {
 			$(this).siblings(".radio").find("input").prop("checked", false);
 		}
 	})
-
+	var nameNumber=0;
 	$("#fun_to_add").click(function(){
 		if($(".selectList").length>2){
 			$.alert("只能添加三行");
 		}else{
-			var html ="<div class='mt20 selectList'> <div class='form-group mr100 optionhtml'> <div class=''><select class='form-control input-pointer select-Sort' name='dataStatusId' ></select></div></div><div class='radio circle success'> <input type='radio' name='radio"+nameNumber+"' id='myr'> <label for='myr'><i class='default'></i>升序</label</div></div><div class='radio circle success'><input type='radio' name='radio"+nameNumber+++"'  id='myr1'> <label  for='myr1'><i class='default'></i>降序</label></div></div> ";
+			var html ="<div class='mt20 selectList' id = radios"+nameNumber+"> <div class='form-group mr100 optionhtml'> <div class=''><select class='form-control input-pointer select-Sort' name='dataStatusId' ></select></div></div><div class='radio circle success'> <input type='radio' name='radio"+nameNumber+"' id='myr'> <label for='myr'><i class='default'></i>升序</label></div><div class='radio circle success'><input type='radio' name='radio"+nameNumber+"'  id='myr1'> <label  for='myr1'><i class='default'></i>降序</label></div><button type='button' class='ui-btn ui-btn-second ml30' onclick='fun_to_del(\"radios"+ nameNumber++ + "\")'>删除</button></div> ";
 			$("#addALine").append(html);
 			$(".optionhtml").find("select").html("");
+			var option = "<option>"+'请选择属性'+"</option>";
+			$(".optionhtml").find("select").append(option);
 			for(var i=0;i<model.calcuElementNames.length;i++){
-				var option = "<option>"+model.calcuElementNames[i]+"</option>";
+				option = "<option>"+model.calcuElementNames[i]+"</option>";
 				$(".optionhtml").find("select").append(option);
 			}
 		}
@@ -470,7 +479,7 @@ window.loc_onload = function() {
     $("#custom_left").click(function(){
     	var attrId ="",attrName="";
 		$("#selectedLabel label[class~=active]").each(function(){
-			$("#addALine").html("");
+			//$("#addALine").html("");
 			attrId = $(this).attr('data-id').substring(0,$(this).attr('data-id').length-1);
 			attrName = $(this).attr('data-name');
 			if(model.AttrbuteId.indexOf(attrId)!=0){
@@ -499,6 +508,13 @@ window.loc_onload = function() {
 			$("#OptionalLabel").append(html);
 			$("#selectedLabel label[class~=active]").parents("li").remove();
 		})
+		$(".optionhtml").find("select").html(null);
+		var option = "<option>"+'请选择属性'+"</option>";
+		$(".optionhtml").find("select").append(option);
+		for(var i=0;i<model.calcuElementNames.length;i++){
+			option = "<option>"+model.calcuElementNames[i]+"</option>";
+			$(".optionhtml").find("select").append(option);
+		}
 		if(attrId== ""){
 			$.alert("请选择标签");
 		}
@@ -513,7 +529,7 @@ window.loc_onload = function() {
 		}
 	})
     $("#custom_right").click(function(){
-    	$("#addALine").html("");
+    	//$("#addALine").html("");
     	if(model.calcuElementNamesLength + $("#OptionalLabel label[class~=active]").length<=10){
     		$("#OptionalLabel label[class~=active]").each(function(){
 				var attrId ="",attrName="";
@@ -527,6 +543,8 @@ window.loc_onload = function() {
 					model.calcuElementName +=attrName;
 				}
 				model.calcuElementNames=model.calcuElementName.split(",");
+				var option = "<option>"+attrName+"</option>";
+				$(".optionhtml").find("select").append(option);
 				model.calcuElementNamesLength=model.calcuElementNames.length;
 				var  html="<li>"+
 	    		"<div class='checkbox'>"+
@@ -544,9 +562,12 @@ window.loc_onload = function() {
 				}
     		})
     	}else{
-			$.alert("不超过10个");
+			$.alert("附带属性个数超出最大范围");
 			return false
 		}
 		
     })
+}
+function fun_to_del(radio){
+	$("#"+radio+"").remove();
 }
