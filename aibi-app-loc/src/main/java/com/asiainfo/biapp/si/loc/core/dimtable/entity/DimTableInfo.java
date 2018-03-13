@@ -119,7 +119,8 @@ public class DimTableInfo extends BaseEntity{
     @ApiParam(value = "创建人")
     private String createUserId;
 
-    
+
+    public DimTableInfo() {}
     public DimTableInfo(String dimTableName, String dimCodeCol, String dimValueCol) {
 		super();
 		this.dimTableName = dimTableName;
