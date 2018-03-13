@@ -281,12 +281,6 @@ var labelMarket = (function (model){
 					dataModel.page.totalPageCount=data.totalPageCount;
 					for(var i=0 ; i<data.rows.length; i++){
 						if(data.rows[i].labelExtInfo!=undefined&&data.rows[i].labelExtInfo!=null){
-							if(data.rows[i].labelExtInfo.dayLabelDate==null){
-								data.rows[i].labelExtInfo.dayLabelDate="无";
-							}
-							if(data.rows[i].labelExtInfo.monthLabelDate==null){
-								data.rows[i].labelExtInfo.monthLabelDate="无";
-							}
 							data.rows[i].customNum = data.rows[i].labelExtInfo.customNum;
 						}else{
 							data.rows[i].customNum = "0";
@@ -303,14 +297,6 @@ var labelMarket = (function (model){
 								isShowMask : true,
 								maskMassage : '正在查找...',
 								onSuccess: function(res){
-									for(var i=0 ; i<res.rows.length; i++){
-										if(res.rows[i].labelExtInfo.dayLabelDate==null){
-											res.rows[i].labelExtInfo.dayLabelDate="无";
-										}
-										if(res.rows[i].labelExtInfo.monthLabelDate==null){
-											res.rows[i].labelExtInfo.monthLabelDate="无";
-										}
-									}
 									dataModel.page.currentPageNo=pageIndex;
 									dataModel.labelInfoList = res.rows;
 								}
