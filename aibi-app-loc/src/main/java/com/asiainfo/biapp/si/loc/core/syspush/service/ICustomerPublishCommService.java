@@ -7,6 +7,7 @@
 package com.asiainfo.biapp.si.loc.core.syspush.service;
 
 import java.util.List;
+import java.util.Map;
 
 import com.asiainfo.biapp.si.loc.core.label.entity.LabelInfo;
 import com.asiainfo.biapp.si.loc.core.syspush.entity.LabelAttrRel;
@@ -58,5 +59,11 @@ public interface ICustomerPublishCommService {
      */
 	public String getCustomListSql(LabelInfo customInfo, List<LabelAttrRel> attrRelList);
 
-
+	
+	/**
+	 * Description:根据标签id查询维表值
+	 * @param LabelId	标签id
+	 * @return
+	 */
+    public List<Map<String,String>> getDimTableDataByLabelId(String LabelId);
 }

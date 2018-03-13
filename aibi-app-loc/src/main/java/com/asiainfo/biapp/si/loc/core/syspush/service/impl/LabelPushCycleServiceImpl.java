@@ -221,7 +221,8 @@ public class LabelPushCycleServiceImpl extends BaseServiceImpl<LabelPushCycle, S
     
     @Override
     public Page<Map<String, String>> findGroupList(Page<Map<String, String>> page, LabelInfoVo customGroup) throws BaseException {
-        //获取属性列
+        long s = System.currentTimeMillis();
+    		//获取属性列
         List<LabelAttrRel> attrRelList = null;
         int attrType = ServiceConstants.LabelAttrRel.ATTR_SETTING_TYPE_PREVIEW;
         try {
@@ -267,6 +268,8 @@ public class LabelPushCycleServiceImpl extends BaseServiceImpl<LabelPushCycle, S
 			page.setTotalCount(count);
 			page.getTotalPageCount();
         }
+        
+        LogUtil.debug("find customListData cost:"+((System.currentTimeMillis()-s)/1000.0)+" s.");
         
         return page;
     }

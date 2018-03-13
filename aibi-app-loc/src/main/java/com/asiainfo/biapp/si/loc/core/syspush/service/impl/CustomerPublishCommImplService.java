@@ -6,17 +6,26 @@
 
 package com.asiainfo.biapp.si.loc.core.syspush.service.impl;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.asiainfo.biapp.si.loc.base.common.LabelInfoContants;
 import com.asiainfo.biapp.si.loc.base.exception.BaseException;
+import com.asiainfo.biapp.si.loc.base.exception.SqlRunException;
 import com.asiainfo.biapp.si.loc.base.utils.LogUtil;
 import com.asiainfo.biapp.si.loc.base.utils.StringUtil;
+import com.asiainfo.biapp.si.loc.bd.common.service.IBackSqlService;
 import com.asiainfo.biapp.si.loc.cache.CocCacheAble;
 import com.asiainfo.biapp.si.loc.cache.CocCacheProxy;
+import com.asiainfo.biapp.si.loc.core.dimtable.entity.DimTableData;
+import com.asiainfo.biapp.si.loc.core.dimtable.entity.DimTableInfo;
+import com.asiainfo.biapp.si.loc.core.dimtable.service.IDimTableInfoService;
+import com.asiainfo.biapp.si.loc.core.dimtable.vo.DimTableInfoVo;
 import com.asiainfo.biapp.si.loc.core.label.entity.LabelInfo;
 import com.asiainfo.biapp.si.loc.core.label.entity.MdaSysTable;
 import com.asiainfo.biapp.si.loc.core.label.entity.MdaSysTableColumn;
@@ -60,6 +69,12 @@ public class CustomerPublishCommImplService implements ICustomerPublishCommServi
     
     @Autowired
     private ILabelAttrRelService iLabelAttrRelService;
+    
+    @Autowired
+    private IDimTableInfoService iDimTableInfoService;
+    
+    @Autowired
+    private IBackSqlService iBackService;
 
 
     @Override
@@ -108,9 +123,43 @@ public class CustomerPublishCommImplService implements ICustomerPublishCommServi
                 }
                 mdaSysTableCol = label.getMdaSysTableColumn();
                 if (null != mdaSysTableCol) {
-                		//表别名
-                    sql.append(",").append(labelAttrRel.getAttrCol()).append("_t.").append(mdaSysTableCol.getColumnName())
-                       .append(" as ").append(labelAttrRel.getAttrCol());	//列别名
+                    //翻译维表值
+					switch (label.getLabelTypeId()) {
+					case ServiceConstants.LabelInfo.LABEL_TYPE_ID_SIGN:	//1=标志型，case when
+//						case attr_col1_t.L0000031 when 1 then '是' else '否' end as attr_col1,
+						//表别名
+	                    sql.append(",case ").append(labelAttrRel.getAttrCol()).append("_t.").append(mdaSysTableCol.getColumnName())
+	                       .append(" when 1 then '是' else '否' end as ").append(labelAttrRel.getAttrCol());	//列别名
+						break;
+					case ServiceConstants.LabelInfo.LABEL_TYPE_ID_ENUM:	//5=枚举型,关联维表
+						List<Map<String, String>> dimTableDatas = this.getDimTableDataByLabelId(customInfo.getLabelId());
+						if (null != dimTableDatas && !dimTableDatas.isEmpty()) {
+							//表别名
+		                    sql.append(",case ").append(labelAttrRel.getAttrCol()).append("_t.").append(mdaSysTableCol.getColumnName());
+	                        if (null != dimTableDatas && !dimTableDatas.isEmpty()) {
+	                        		Map<String, String> map = null; 
+	                        		for (int j = 0; j < dimTableDatas.size(); j++) {
+									map = dimTableDatas.get(j);
+								/*	sql.append(" when 1 then '男'")
+			                        	   .append(" when 2 then '女'")
+			                        	   .append(" else '未知'");*/
+									if (dimTableDatas.size() > 1 && j == dimTableDatas.size()-1) {
+										sql.append(" else '" + map.get("v") + "'");
+									} else {
+										sql.append(" when " + map.get("k") + " then '" + map.get("v") + "'");
+									}
+	                        		}
+	                        }
+	                        sql.append(" end as ").append(labelAttrRel.getAttrCol());	//列别名
+						}
+                       break;
+					default:
+                			//表别名
+	                    sql.append(",").append(labelAttrRel.getAttrCol()).append("_t.").append(mdaSysTableCol.getColumnName())
+	                       .append(" as ").append(labelAttrRel.getAttrCol());	//列别名
+						break;
+					}
+                    
                 } else {
                     LogUtil.error("MdaSysTableColumn of labelinfo【"+label.getLabelId()+"】 is null!");
                 }
@@ -141,7 +190,7 @@ public class CustomerPublishCommImplService implements ICustomerPublishCommServi
             //拼接left join
             for (int i = 0; i < attrRelList.size(); i++) {
                 labelAttrRel = attrRelList.get(i);
-                sql.append(getJoinSqlByLabelId(labelAttrRel.getLabelOrCustomId(), labelAttrRel.getAttrCol(), cacheProxy, null, null));
+                sql.append(getJoinSqlByLabelId(labelAttrRel.getLabelOrCustomId(),labelAttrRel.getAttrCol(),cacheProxy,null,null));
             }
             //拼接orderby
             sql.append("order by ");
@@ -226,6 +275,48 @@ public class CustomerPublishCommImplService implements ICustomerPublishCommServi
         
         return sql.toString();
     }
-	
+    
+    public List<Map<String,String>> getDimTableDataByLabelId(String LabelId) {
+		StringBuffer sql = new StringBuffer("select ");
+		/**
+		 * 获取维表信息sql:
+		 * SELECT DIM_TABLENAME,DIM_CODE_COL,DIM_VALUE_COL  from coctest.loc_dimtable_info
+		 * left JOIN loc_mda_sys_table_column b on b.DIM_TRANS_ID=DIM_ID 
+		 * where  b.LABEL_ID='L0000034';
+		 */
+		sql.append("DIM_TABLENAME,DIM_CODE_COL,DIM_VALUE_COL from LOC_DIMTABLE_INFO d ");
+		sql.append("LEFT JOIN LOC_MDA_SYS_TABLE_COLUMN b on b.DIM_TRANS_ID=d.DIM_ID ");
+		sql.append("and b.LABEL_ID='"+LabelId+"'");
+		
+		LogUtil.debug(sql.toString());
+		
+        List<Object[]> dimTableInfoList = (List<Object[]>) iDimTableInfoService.findListBySql(sql.toString(), new HashMap<>());
+        
+        if (!dimTableInfoList.isEmpty()) {
+        		Object[] dimTableInfo = dimTableInfoList.get(0);
+			//获取维表值
+			sql.delete(0, sql.length()).append("select ");
+			try {
+				sql.append(dimTableInfo[1]).append(" as k,").append(dimTableInfo[2]).append(" as v from ");
+				String curBackDbSchema = iBackService.getCurBackDbSchema();
+				if (StringUtil.isNoneBlank(curBackDbSchema)) {
+					sql.append(curBackDbSchema).append(".");
+				}
+				sql.append(dimTableInfo[0]);	//表名
+				
+				LogUtil.debug(sql.toString());
+				
+				return iBackService.queryForPage(sql.toString(), 1, 999);
+				
+			} catch (SqlRunException e) {
+				LogUtil.error("查询维表("+dimTableInfo[1]+")值错误：", e);
+			} 
+		}
+        
+		return null;
+    }
+    
+    
+    
     
 }

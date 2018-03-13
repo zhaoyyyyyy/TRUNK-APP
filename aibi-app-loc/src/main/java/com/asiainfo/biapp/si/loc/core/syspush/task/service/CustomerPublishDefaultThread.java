@@ -31,6 +31,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 import org.xml.sax.SAXException;
 
+import com.asiainfo.biapp.si.loc.base.exception.BaseException;
 import com.asiainfo.biapp.si.loc.base.extend.SpringContextHolder;
 import com.asiainfo.biapp.si.loc.base.utils.Bean2XMLUtils;
 import com.asiainfo.biapp.si.loc.base.utils.DESUtil;
@@ -46,7 +47,12 @@ import com.asiainfo.biapp.si.loc.base.utils.model.OtherSysXmlBean;
 import com.asiainfo.biapp.si.loc.bd.common.service.IBackSqlService;
 import com.asiainfo.biapp.si.loc.cache.CocCacheAble;
 import com.asiainfo.biapp.si.loc.cache.CocCacheProxy;
+import com.asiainfo.biapp.si.loc.core.dimtable.entity.DimTableData;
+import com.asiainfo.biapp.si.loc.core.dimtable.entity.DimTableDataId;
+import com.asiainfo.biapp.si.loc.core.dimtable.service.IDimTableDataService;
 import com.asiainfo.biapp.si.loc.core.label.entity.LabelInfo;
+import com.asiainfo.biapp.si.loc.core.label.entity.MdaSysTable;
+import com.asiainfo.biapp.si.loc.core.label.entity.MdaSysTableColumn;
 import com.asiainfo.biapp.si.loc.core.label.service.ILabelInfoService;
 import com.asiainfo.biapp.si.loc.core.syspush.common.constant.ServiceConstants;
 import com.asiainfo.biapp.si.loc.core.syspush.entity.LabelAttrRel;
@@ -113,6 +119,9 @@ public class CustomerPublishDefaultThread implements ICustomerPublishThread {
     
     @Autowired
     ILabelPushReqService iLabelPushReqService;
+
+    @Autowired
+    IDimTableDataService iDimTableDataService;
     
     
     //传入参数
@@ -226,7 +235,7 @@ public class CustomerPublishDefaultThread implements ICustomerPublishThread {
         //跟新实时更新推送状态
         this.updateLabelPushReq(ServiceConstants.LabelPushReq.PUSH_STATUS_SUCCESS, null);
         
-        LogUtil.debug("Customer("+customInfo.getLabelId()+")Publish end,cost:" + (System.currentTimeMillis() - start)/1000 + " s.");
+        LogUtil.debug("Customer("+customInfo.getLabelId()+")Publish end,cost:" + (System.currentTimeMillis() - start)/1000.0 + " s.");
 		LogUtil.info("Exist CustomerPublishDefaultThread.run()");
 	}
     
@@ -529,7 +538,6 @@ public class CustomerPublishDefaultThread implements ICustomerPublishThread {
             }
         }
 	    
-	    
 		return result;
 	}
 	
@@ -647,64 +655,26 @@ public class CustomerPublishDefaultThread implements ICustomerPublishThread {
         int dataCycle = customInfo.getUpdateCycle();
         data.setDataCycle(dataCycle); //周期类型：1,一次性;2,月周期;3,日周期;
         String dataCycleDesc = "";
-//        if (ServiceConstants.CUSTOM_CYCLE_TYPE_ONE == dataCycle) {
-//            dataCycleDesc = ServiceConstants.CUSTOM_CYCLE_ONE;
-//        } else if (ServiceConstants.CUSTOM_CYCLE_TYPE_M == dataCycle) {
-//            dataCycleDesc = ServiceConstants.CUSTOM_CYCLE_M;
-//        } else if (ServiceConstants.CUSTOM_CYCLE_TYPE_D == dataCycle) {
-//            dataCycleDesc = ServiceConstants.CUSTOM_CYCLE_D;
-//        }
         data.setDataCycleDesc(dataCycleDesc); //周期类型描述：1,一次性;2,月周期;3,日周期;
         data.setCustomGroupId(customInfo.getLabelId()); //客户群Id:KHQ + 地市ID + 8位顺序码
         data.setCustomGroupName(customInfo.getLabelName()); //客户群名称
         data.setCustomGroupDesc(customInfo.getPublishDesc()); //客户群描述
         String dataDateStr = customInfo.getDataDate();
-//        if(ciCustomGroupInfo.getUpdateCycle() == ServiceConstants.CUSTOM_CYCLE_TYPE_ONE || ciCustomGroupInfo.getUpdateCycle() == ServiceConstants.CUSTOM_CYCLE_TYPE_D){
-//            if(StringUtil.isNotEmpty(ciCustomGroupInfo.getDayLabelDate())){
-//                dataDateStr = ciCustomGroupInfo.getDayLabelDate();
-//            }else{
-//                dataDateStr = CocCacheBase.getInstance().getNewLabelDay();
-//            }
-//        }
-//        if(ciCustomGroupInfo.getUpdateCycle() == ServiceConstants.CUSTOM_CYCLE_TYPE_M){
-//            if(StringUtil.isNotEmpty(ciCustomGroupInfo.getMonthLabelDate())){
-//                dataDateStr = ciCustomGroupInfo.getMonthLabelDate();
-//            }else{
-//                dataDateStr = CocCacheBase.getInstance().getNewLabelMonth();
-//            }
-//        }
         data.setDataDate(dataDateStr); //统计周期：如果是月周期就是yyyyMM，如果是日周期就是yyyyMMdd
-        //需要根据状态和是否允许发送未生成清单的客户群推送
-//        if(ciCustomGroupInfo.getDataStatus() == ServiceConstants.CUSTOM_DATA_STATUS_SUCCESS){
-//            data.setIsHasList(ServiceConstants.CUSTOM_IS_HAS_LIST);
-//        }else{
-//            data.setIsHasList(ServiceConstants.CUSTOM_NO_HAS_LIST);
-//        }
         
-//        //查询推送的清单的所有列
-//        String keyColumn = PropertiesUtils.getProperties("RELATED_COLUMN");
-//        String keyTitle = PropertiesUtils.getProperties("RELATED_COLUMN_CN_NAME");
+        //查询推送的清单的所有列
+        /*
+        String keyColumn = PropertiesUtils.getProperties("RELATED_COLUMN");
+        String keyTitle = PropertiesUtils.getProperties("RELATED_COLUMN_CN_NAME");
+        */
         List<StandardPushXmlBean.Data.Column> columns = new ArrayList<StandardPushXmlBean.Data.Column>();
         StandardPushXmlBean.Data.Column col = data.newColumn();
-//        col.setColumnName(keyColumn);
-//        col.setColumnCnName(keyTitle);
-//        Map<String, String> attrColMap = analysisColumnType(CommonConstants.MAIN_COLUMN_TYPE);
-//        String columnLength = attrColMap.get("LENGTH");
-//        String columnDataType = attrColMap.get("TYPE");
-//        col.setColumnLength(columnLength);
-//        col.setColumnDataType(columnDataType);
         col.setIsPrimaryKey(1);
         columns.add(col);
         
         for (LabelAttrRel rel : resultAttrs) {
             StandardPushXmlBean.Data.Column column = data.newColumn();
-//            column.setColumnName(rel.getId().getAttrCol());
             column.setColumnCnName(rel.getAttrColName());
-//            Map<String, String> attrColMapRel = analysisColumnType(rel.getAttrColType());
-//            String columnLengthRel = attrColMapRel.get("LENGTH");
-//            String columnDataTypeRel = attrColMapRel.get("TYPE");
-//            column.setColumnLength(columnLengthRel);
-//            column.setColumnDataType(columnDataTypeRel);
             column.setIsPrimaryKey(0);
             columns.add(column); //列集合
         }
@@ -916,8 +886,8 @@ public class CustomerPublishDefaultThread implements ICustomerPublishThread {
             
             return flag;
         }
-        
-        /**文件写入
+
+		/**文件写入
          * 
          * @param datas
          * @param title
