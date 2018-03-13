@@ -291,7 +291,6 @@ public class CustomerPublishCommImplService implements ICustomerPublishCommServi
 		LogUtil.debug(sql.toString());
 		
         List<Object[]> dimTableInfoList = (List<Object[]>) iDimTableInfoService.findListBySql(sql.toString(), new HashMap<>());
-        
         if (!dimTableInfoList.isEmpty()) {
         		Object[] dimTableInfo = dimTableInfoList.get(0);
 			//获取维表值
@@ -309,7 +308,7 @@ public class CustomerPublishCommImplService implements ICustomerPublishCommServi
 				return iBackService.queryForPage(sql.toString(), 1, 999);
 				
 			} catch (SqlRunException e) {
-				LogUtil.error("查询维表("+dimTableInfo[1]+")值错误：", e);
+				LogUtil.error("查询维表("+dimTableInfo[0]+")值错误：", e);	//表名
 			} 
 		}
         
