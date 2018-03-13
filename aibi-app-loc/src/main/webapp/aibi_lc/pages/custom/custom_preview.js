@@ -30,10 +30,10 @@ window.loc_onload = function() {
 		 			postData :{"labelId": labelId},
 		 			colNames : colNamesArr,
 		 			colModel : colModelArr,
-		 			rowList: [10, 20, 30],
-		 	        pager: '#mainGridPager',
-		 	        // 分页的id
-		 	        viewrecords: true,
+//		 			rowList: [10, 20, 30],
+//		 	        pager: '#mainGridPager',
+//		 	        // 分页的id
+//		 	        viewrecords: true,
 		 		});
 		    	 $("#mainGrid").jqGrid('setLabel',0, '序号');
 	    	}  
