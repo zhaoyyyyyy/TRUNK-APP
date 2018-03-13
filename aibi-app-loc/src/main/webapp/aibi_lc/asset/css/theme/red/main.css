@@ -230,8 +230,14 @@
     text-overflow: ellipsis;
     white-space: nowrap;
 }
-.ui-label-list > li .ui-label-info > h3 > .tooltip.top{
+.ui-label-info > h3 > .tooltip.top{
+	margin-top:-25px;
+}
+.ul-label-box  .ui-label-info > h3 > .tooltip.top{
 	margin-top:-43px;
+}
+.ul-label-box .ui-label-info > h3 > .tooltip.top > .tooltip-inner> span{
+	font-size:14px;
 }
 .ui-label-list > li:HOVER .ui-label-info > h3 > .tooltip.top{
 	opacity:1;
@@ -261,14 +267,20 @@
 	width: 43%;
 }
 .ui-label-item > a.ui-label-time{
-	width: 17%;
+	width: 23%;
 	text-align: center;
 	padding: 0;
 }
+.ul-label-box .ui-label-item > a.ui-label-time{
+	width: 17%;
+}
 .ui-label-item > a.ui-label-date{
-	width: 20%;
+	width: 34%;
 	text-align: center;
 	padding: 0;
+}
+.ul-label-box .ui-label-item > a.ui-label-date{
+	width: 20%;
 }
 .ui-label-item > a > b{
 	font-size: 20px;
