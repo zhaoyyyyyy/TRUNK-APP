@@ -15,6 +15,17 @@ var auto_Login = (function (model){
         /***************中邮-邮务-开发 ****************/
         model.cpywdev = {
         		failLoginUrl: "http://crm.chinapost.com:18880/",
+        		checkLogin:function(){
+					var flag = false;
+					
+					var cnpost = $.getCookie("cnpost");
+					var cpcnpost = $.getCookie("cpcnpost");
+					if(cnpost == cpcnpost){
+						flag = true;
+					}
+					
+					return flag;
+        		},
         		autoLoginFun:function(callback){
         			var flag = false;
         			
@@ -39,6 +50,17 @@ var auto_Login = (function (model){
         /***************中邮-邮务-生产 ****************/
         model.cpywdevprod = {
         		failLoginUrl: "http://crm.chinapost.com:18080/",
+        		checkLogin:function(){
+					var flag = false;
+					
+					var cnpost = $.getCookie("cnpost");
+					var cpcnpost = $.getCookie("cpcnpost");
+					if(cnpost == cpcnpost){
+						flag = true;
+					}
+					
+					return flag;
+        		},
         		autoLoginFun:function(callback){
         			alert("请求改生产环境的acrm地址，以便能进行单点登录")
         			var flag = false;
@@ -143,8 +165,22 @@ $(function(){
 //		var ssg = window.sessionStorage;
 //		if(ssg){
 //			var token = ssg.getItem("token");
-			var token = $.getCurrentToken();
-			if(!token){
+		var isExistsToken = $.isExistsToken();
+		var cnpost = $.getCookie("cnpost");
+		if(cnpost && cnpost != ""){
+			var checkLogin = auto_Login[auto_Login.active].checkLogin();
+			debugger;
+			if(isExistsToken && checkLogin){
+				window.location.href = "./aibi_lc/pages/"+ href+ ".html";
+			}else{
+				if(auto_Login[auto_Login.active].autoLoginFun(auto_Login._util.applyToken)){
+					window.location.href = "./aibi_lc/pages/"+ href+ ".html";
+				}else{
+					window.location.href = auto_Login[auto_Login.active].failLoginUrl;
+				}
+			}
+		}else{
+			if(!isExistsToken){
 				if(auto_Login[auto_Login.active].autoLoginFun(auto_Login._util.applyToken)){
 					window.location.href = "./aibi_lc/pages/"+ href+ ".html"
 				}else{
@@ -153,6 +189,7 @@ $(function(){
 			}else{
 				window.location.href = "./aibi_lc/pages/"+ href+ ".html"
 			}
+		}
 //		}
 	}else{
 		window.location.href = auto_Login[auto_Login.active].failLoginUrl

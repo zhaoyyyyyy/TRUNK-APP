@@ -28,7 +28,7 @@ $.extend({
 			var exp  = new Date();  //获得当前时间
 			exp.setTime(exp.getTime() + Days*24*60*60*1000);  //换成毫秒
 			document.cookie = "token="+ token + ";expires=" + exp.toGMTString();
-			document.cookie = "cpcnpost="+ $.getCookie("cnpost")+ ";expires=" + exp.toGMTString();
+			document.cookie = "cpcnpost="+ encodeURIComponent($.getCookie("cnpost"))+ ";expires=" + exp.toGMTString();
 		}else{
 			var ssg = window.sessionStorage;
 			if(ssg){
