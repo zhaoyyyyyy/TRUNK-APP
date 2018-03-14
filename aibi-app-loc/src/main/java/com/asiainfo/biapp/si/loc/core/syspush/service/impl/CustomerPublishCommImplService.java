@@ -137,7 +137,7 @@ public class CustomerPublishCommImplService implements ICustomerPublishCommServi
 	                       .append(" when 1 then '是' else '否' end as ").append(labelAttrRel.getAttrCol());	//列别名
 						break;
 					case ServiceConstants.LabelInfo.LABEL_TYPE_ID_ENUM:	//5=枚举型,关联维表
-						DimTableInfo dimTableInfo = this.getDimTableInfoByLabelId(customInfo.getLabelId());
+						DimTableInfo dimTableInfo = this.getDimTableInfoByLabelId(label.getLabelId());
 						if (null != dimTableInfo) {
 		                    sql.append(",").append(labelAttrRel.getAttrCol()).append("_m.").append(dimTableInfo.getDimValueCol())
 		                       .append(" as ").append(labelAttrRel.getAttrCol());	//列别名
@@ -191,10 +191,11 @@ public class CustomerPublishCommImplService implements ICustomerPublishCommServi
             sql.append(") m ");
 
             //拼接left join
-            Map<String,String> tabelName = new HashMap<>();
+            Map<String,String> tabelNameSql = new HashMap<>();	
+            Map<String,String> tabelNameReplace = new HashMap<>();//key:要替换的别名，value：真正可用的别名
             for (int i = 0; i < attrRelList.size(); i++) {
                 labelAttrRel = attrRelList.get(i);
-                sql.append(getJoinSqlByLabelId(labelAttrRel.getLabelOrCustomId(),labelAttrRel.getAttrCol(),cacheProxy,null,null,tabelName));
+                sql.append(getJoinSqlByLabelId(labelAttrRel.getLabelOrCustomId(),labelAttrRel.getAttrCol(),cacheProxy,null,null,sql,tabelNameSql, tabelNameReplace));
             }
             //拼接枚举型 leftJoin
             for (String leftJoinEnumStr : leftJoinEnumStrs) {
@@ -228,17 +229,16 @@ public class CustomerPublishCommImplService implements ICustomerPublishCommServi
             }
             sql.append(" order by ").append(orderbyStr);
             
-            //纠正别名，所有属性都在同一张宽表
+            //修正别名，所有属性都在同一张宽表
 			String sqlTmp = sql.toString();
 			if (sqlTmp.contains("LEFT JOIN")) {
 				int e = sqlTmp.indexOf("from");
 				String attrsStr = sqlTmp.substring(0, e);
 				String otherStr = sqlTmp.substring(e, sqlTmp.length());
-				int attrNo = attrsStr.split(",").length;
-				for (int i = 2; i <= attrNo; i++) {
-		    			attrsStr = attrsStr.replace("attr_col"+i+"_t", "attr_col1_t");
-		    			otherStr = otherStr.replace("attr_col"+i+"_t", "attr_col1_t");
-		    		}
+				for (String key : tabelNameReplace.keySet()) {
+					attrsStr = attrsStr.replace(key, tabelNameReplace.get(key));
+					otherStr = otherStr.replace(key, tabelNameReplace.get(key));
+				}
 		    		sql = new StringBuilder(attrsStr).append(otherStr);
 		    }
         } else {    //无属性列
@@ -287,7 +287,7 @@ public class CustomerPublishCommImplService implements ICustomerPublishCommServi
      * @return
      */
     private String getJoinSqlByLabelId(String labelId,String attrCol,CocCacheAble cacheProxy,LabelInfo label,
-    		MdaSysTableColumn mdaSysTableColumn, Map<String,String> tabelName) {
+    		MdaSysTableColumn mdaSysTableColumn,final StringBuilder mSql,Map<String,String> tabelName, Map<String,String> tabelNameReplace) {
         StringBuffer sql = new StringBuffer();
         //获取表名
         label = cacheProxy.getLabelInfoById(labelId); //datedate is null,so it's error
@@ -306,7 +306,17 @@ public class CustomerPublishCommImplService implements ICustomerPublishCommServi
                 sql.append(mdaSysTable.getTableName()).append(label.getDataDate()).append(" ").append(attrCol)
                    .append("_t on ").append("m.").append(LabelInfoContants.KHQ_CROSS_COLUMN).append("=")
                    .append(attrCol).append("_t.").append(LabelInfoContants.KHQ_CROSS_COLUMN).append(" ");
-                tabelName.put(mdaSysTable.getTableName(), attrCol);
+                tabelName.put(mdaSysTable.getTableName(), attrCol+"_t");
+            } else {
+            		String[] leftJoinArr = mSql.toString().split("LEFT JOIN ");
+            		//查找上次有效的别名
+            		String oldAlias=null;
+            		for (int i = leftJoinArr.length-1; i > 0; i--) {
+            			if (!leftJoinArr[i].contains("_m") && leftJoinArr[i].contains("_t")) {
+            				oldAlias = leftJoinArr[i].split("=")[1].split("\\.")[0];
+            			}
+            		}
+            		tabelNameReplace.put(attrCol+"_t", oldAlias);
             }
         } else {
             sql = new StringBuffer("");
@@ -324,9 +334,9 @@ public class CustomerPublishCommImplService implements ICustomerPublishCommServi
 		 * left JOIN loc_mda_sys_table_column b on b.DIM_TRANS_ID=DIM_ID 
 		 * where  b.LABEL_ID='L0000034';
 		 */
-		sql.append("DIM_TABLENAME,DIM_CODE_COL,DIM_VALUE_COL from LOC_DIMTABLE_INFO d ");
-		sql.append("LEFT JOIN LOC_MDA_SYS_TABLE_COLUMN b on b.DIM_TRANS_ID=d.DIM_ID ");
-		sql.append("and b.LABEL_ID='"+LabelId+"'");
+		sql.append("DIM_TABLENAME,DIM_CODE_COL,DIM_VALUE_COL from LOC_MDA_SYS_TABLE_COLUMN d ");
+		sql.append("INNER JOIN LOC_DIMTABLE_INFO b on b.DIM_ID=d.DIM_TRANS_ID ");
+		sql.append("where d.LABEL_ID='"+LabelId+"'");
 		
 		LogUtil.debug(sql.toString());
 		
@@ -338,6 +348,31 @@ public class CustomerPublishCommImplService implements ICustomerPublishCommServi
         
 		return null;
     }
+    public static void main(String[] args) {
+		String str = "attr_col2_t";
+		int tmp = Integer.parseInt(String.valueOf(str.charAt(str.indexOf("_t")-1)));
+		System.out.println(str.replaceFirst("[0-9]", String.valueOf(tmp+1)));
 		
+		String sql = "SELECT m.product_no ,attr_col1_t.L0000033 as attr_col1,attr_col1_t.L0000039 as attr_col2,"
+				+ "attr_col3_m.sex_name as attr_col3,"
+				+ "case attr_col1_t.L0000031 when 1 then '是' else '否' end as attr_col4,"
+				+ "attr_col1_t.L0000040 as attr_col5 "
+				+ "from (SELECT t.product_no from coctest.dw_khq_cross_p054_20180307 t where t.custom_id='L0000041') m "
+				+ "LEFT JOIN coctest.DW_L_PREF_P054_20180122 attr_col1_t on m.product_no=attr_col1_t.product_no "
+				+ "LEFT JOIN coctest.dim_loc_sex attr_col3_m on attr_col1_t.L0000034=attr_col3_m.sex_id  "
+				+ "order by attr_col1_t.L0000033 asc limit 10";
+		String[] leftJoinArr = sql.split("LEFT JOIN ");
+		int po = leftJoinArr.length;
+		System.out.println(po);
+		//查找上次有效的别名
+		String oldAlias=null;
+		for (int i = leftJoinArr.length-1; i > 0; i--) {
+			if (!leftJoinArr[i].contains("_m") && leftJoinArr[i].contains("_t")) {
+				oldAlias = leftJoinArr[i].split("=")[1].split("\\.")[0];
+			}
+		}
+		System.out.println(oldAlias);
+		
+	}
     
 }
