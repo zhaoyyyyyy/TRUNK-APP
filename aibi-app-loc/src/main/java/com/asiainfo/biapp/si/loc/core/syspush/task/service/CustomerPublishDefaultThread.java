@@ -364,7 +364,7 @@ public class CustomerPublishDefaultThread implements ICustomerPublishThread {
 	    //2.determine push file type
         if (result) {
             //2.1 是否有表头
-            String title = cacheProxy.getSYSConfigInfoByKey("RELATED_COLUMN_CN_NAME");
+            String title = cacheProxy.getSYSConfigInfoByKey("LOC_CONFIG_APP_RELATED_COLUMN_CN_NAME");
             if(sysInfo.getIsNeedTitle() != null && ServiceConstants.SysInfo.IS_NEED_TITLE_YES == sysInfo.getIsNeedTitle()){
                 if (StringUtil.isEmpty(title)) {
                     title = "手机号码";

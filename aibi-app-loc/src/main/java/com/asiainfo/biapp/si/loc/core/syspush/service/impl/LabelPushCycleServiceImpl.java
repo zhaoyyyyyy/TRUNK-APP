@@ -213,7 +213,7 @@ public class LabelPushCycleServiceImpl extends BaseServiceImpl<LabelPushCycle, S
         //默认列
         LabelAttrRel col0 = new LabelAttrRel();
         col0.setAttrCol(LabelInfoContants.KHQ_CROSS_COLUMN);
-        String title = CocCacheProxy.getCacheProxy().getSYSConfigInfoByKey("RELATED_COLUMN_CN_NAME");
+        String title = CocCacheProxy.getCacheProxy().getSYSConfigInfoByKey("LOC_CONFIG_APP_RELATED_COLUMN_CN_NAME");
         if (StringUtil.isEmpty(title)) {
             title = "手机号码";
         }
