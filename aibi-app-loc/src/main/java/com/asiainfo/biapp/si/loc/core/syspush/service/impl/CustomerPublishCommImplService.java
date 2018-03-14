@@ -262,6 +262,14 @@ public class CustomerPublishCommImplService implements ICustomerPublishCommServi
                 }
                 sql.append(fromSql.replace(" where ", " m where m."));
             }
+            if (!isPush) {	//清单预览
+                int customListNo = 10;//尹振华说只查10条,@2018-03-13 14:39:36
+                String customListNoStr = CocCacheProxy.getCacheProxy().getSYSConfigInfoByKey("LOC_CONFIG_APP_CUSTOM_LIST_NUMBER");
+                if (StringUtil.isNotEmpty(customListNoStr)) {
+                		customListNo = Integer.parseInt(customListNoStr);
+                }
+                sql.append(" limit ").append(customListNo);
+            }
         }
         
         return sql.toString();
