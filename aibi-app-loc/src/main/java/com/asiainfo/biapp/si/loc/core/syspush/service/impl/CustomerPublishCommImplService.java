@@ -229,7 +229,7 @@ public class CustomerPublishCommImplService implements ICustomerPublishCommServi
             }
             sql.append(" order by ").append(orderbyStr);
             
-            //修正别名，所有属性都在同一张宽表
+            //修正别名
 			String sqlTmp = sql.toString();
 			if (sqlTmp.contains("LEFT JOIN")) {
 				int e = sqlTmp.indexOf("from");
