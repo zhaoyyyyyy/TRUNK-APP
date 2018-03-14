@@ -348,31 +348,5 @@ public class CustomerPublishCommImplService implements ICustomerPublishCommServi
         
 		return null;
     }
-    public static void main(String[] args) {
-		String str = "attr_col2_t";
-		int tmp = Integer.parseInt(String.valueOf(str.charAt(str.indexOf("_t")-1)));
-		System.out.println(str.replaceFirst("[0-9]", String.valueOf(tmp+1)));
-		
-		String sql = "SELECT m.product_no ,attr_col1_t.L0000033 as attr_col1,attr_col1_t.L0000039 as attr_col2,"
-				+ "attr_col3_m.sex_name as attr_col3,"
-				+ "case attr_col1_t.L0000031 when 1 then '是' else '否' end as attr_col4,"
-				+ "attr_col1_t.L0000040 as attr_col5 "
-				+ "from (SELECT t.product_no from coctest.dw_khq_cross_p054_20180307 t where t.custom_id='L0000041') m "
-				+ "LEFT JOIN coctest.DW_L_PREF_P054_20180122 attr_col1_t on m.product_no=attr_col1_t.product_no "
-				+ "LEFT JOIN coctest.dim_loc_sex attr_col3_m on attr_col1_t.L0000034=attr_col3_m.sex_id  "
-				+ "order by attr_col1_t.L0000033 asc limit 10";
-		String[] leftJoinArr = sql.split("LEFT JOIN ");
-		int po = leftJoinArr.length;
-		System.out.println(po);
-		//查找上次有效的别名
-		String oldAlias=null;
-		for (int i = leftJoinArr.length-1; i > 0; i--) {
-			if (!leftJoinArr[i].contains("_m") && leftJoinArr[i].contains("_t")) {
-				oldAlias = leftJoinArr[i].split("=")[1].split("\\.")[0];
-			}
-		}
-		System.out.println(oldAlias);
-		
-	}
     
 }
