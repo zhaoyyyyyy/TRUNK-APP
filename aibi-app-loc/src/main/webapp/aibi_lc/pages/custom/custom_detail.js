@@ -232,7 +232,7 @@ window.loc_onload = function() {
 						onSuccess:function(data){
 							var wd = $.window('客户群预览', $.ctx
 									+ '/aibi_lc/pages/custom/custom_preview.html?labelId='+$.getUrlParam("labelId"), 900,
-									550);
+									630);
 							wd.reload = function() {
 								$("#mainGrid").setGridParam({
 									postData : $("#formSearch").formToJson()
