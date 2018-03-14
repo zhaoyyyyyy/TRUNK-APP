@@ -57,7 +57,10 @@ public class PreConfigInfoDaoImpl extends BaseDaoImpl<PreConfigInfo, String> imp
     public Page<PreConfigInfo> selectPreConfigInfoPageList(Page<PreConfigInfo> page, PreConfigInfoVo preConfigInfoVo,User user) {
         Map<String, Object> reMap = fromBean(preConfigInfoVo,user);
         Map<String, Object> params = (Map<String, Object>) reMap.get("params");
-        return super.findPageByHql(page, reMap.get("hql").toString(), params);
+        long startTime = System.currentTimeMillis();
+        Page<PreConfigInfo> ss = super.findPageByHql(page, reMap.get("hql").toString(), params);
+        LogUtil.debug("---------------------  selectPreConfigInfoPageList findPageByHql cost Time = " + (System.currentTimeMillis()-startTime));
+        return ss;
     }
 
     public List<PreConfigInfo> selectPreConfigInfoList(PreConfigInfoVo preConfigInfoVo,User user) {
