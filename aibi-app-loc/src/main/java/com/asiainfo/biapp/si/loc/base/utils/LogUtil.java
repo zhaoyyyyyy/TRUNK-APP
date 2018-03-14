@@ -1,6 +1,7 @@
 
 package com.asiainfo.biapp.si.loc.base.utils;
 
+import java.net.URLEncoder;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -184,7 +185,7 @@ public class LogUtil {
             params.put("levelId", level);
             params.put("threadName", threadName);
             params.put("interfaceUrl", interfaceUrl + "/" + method);
-            params.put("errorMsg", msg);
+            params.put("errorMsg",URLEncoder.encode(msg.toString()));//特殊符号处理  % 20180314
 
             HttpUtil.sendPost(jauthUrl + "/api/log/monitor/save", params);
         } catch (Exception e) {

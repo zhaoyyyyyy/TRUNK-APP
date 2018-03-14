@@ -172,8 +172,8 @@ public class ShopCartController extends BaseController {
 			result.put("existMonthLabel", existMonthLabel);
 			result.put("existDayLabel", existDayLabel);
 		} catch (Exception e) {
-			LogUtil.error(" 查找购物车规则中最早数据日期异常", e);
-			return webResult.fail(e.getMessage());
+			LogUtil.error("查找购物车规则中最早数据日期异常", e);
+			return webResult.fail("查找购物车规则中最早数据日期异常");
 		}
 		return webResult.success(" 查找购物车规则中最早数据日期成功", result);
 	}
@@ -196,7 +196,7 @@ public class ShopCartController extends BaseController {
 			}
 		} catch (Exception e) {
 			LogUtil.error("校验标签异常", e);
-			return webResult.fail(msg,e);
+			return webResult.fail("校验标签异常");
 		}
 		if (success) {
 			return webResult.success("查询标签是否能够加入到购物车成功", SUCCESS);
@@ -292,7 +292,7 @@ public class ShopCartController extends BaseController {
 			return webResult.fail(baseException);
 		}catch (Exception e) {
 			LogUtil.error("添加(规则)到购物车异常", e);
-			return webResult.fail("添加(规则)到购物车异常",e);
+			return webResult.fail("添加(规则)到购物车异常");
 		}
 		if (success) {
 			return webResult.success("加入购物车成功", SUCCESS);
@@ -323,7 +323,7 @@ public class ShopCartController extends BaseController {
 			return webResult.fail(baseException);
 		}catch (Exception e) {
 			LogUtil.error("计算中心修改异常", e);
-			return webResult.fail(e.getMessage());
+			return webResult.fail("计算中心修改异常");
 		}
 		return webResult.success("计算中心修改成功", SUCCESS);
 	}
@@ -348,7 +348,7 @@ public class ShopCartController extends BaseController {
 			result.put("shopCartRules", rules);
 		} catch (Exception e) {
 			LogUtil.error("刷新购物车页面异常", e);
-			return webResult.fail(e.getMessage());
+			return webResult.fail("刷新购物车页面异常");
 		}
 		return webResult.success("读取购物车数据成功", result);
 	}
@@ -381,7 +381,7 @@ public class ShopCartController extends BaseController {
 			LogUtil.info("querySql SQL : " + sql.toString());
 			backServiceImpl.queryCount(sql.toString());	
 		} catch (BaseException baseException) {
-			return webResult.fail(baseException);
+			return webResult.fail("校验sql异常");
 		}catch (Exception e) {
 			LogUtil.error("校验sql异常", e);
 			return webResult.fail("校验sql异常");
