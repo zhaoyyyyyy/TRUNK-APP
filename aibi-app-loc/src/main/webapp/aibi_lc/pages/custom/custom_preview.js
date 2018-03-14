@@ -30,6 +30,7 @@ window.loc_onload = function() {
 		 			postData :{"labelId": labelId},
 		 			colNames : colNamesArr,
 		 			colModel : colModelArr,
+		 			loadtext : "正在生成预览数据，请耐心等待...",
 //		 			rowList: [10, 20, 30],
 //		 	        pager: '#mainGridPager',
 //		 	        // 分页的id
