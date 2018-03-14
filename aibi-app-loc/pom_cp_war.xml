@@ -242,6 +242,13 @@
 			<version>2.11.0</version>
 		</dependency>-->
 		<!-- 大数据结束 -->
+		
+		<!-- 解决依赖漏掉的情况，偶尔发生 -->
+		<dependency>
+		    <groupId>net.sf.ezmorph</groupId>
+		    <artifactId>ezmorph</artifactId>
+		    <version>1.0.6</version>
+		</dependency>
 
 	</dependencies>
 	<build>
