@@ -58,9 +58,7 @@ public class PreConfigInfoDaoImpl extends BaseDaoImpl<PreConfigInfo, String> imp
         Map<String, Object> reMap = fromBean(preConfigInfoVo,user);
         Map<String, Object> params = (Map<String, Object>) reMap.get("params");
         long startTime = System.currentTimeMillis();
-        Page<PreConfigInfo> ss = super.findPageByHql(page, reMap.get("hql").toString(), params);
-        LogUtil.debug("---------------------  selectPreConfigInfoPageList findPageByHql cost Time = " + (System.currentTimeMillis()-startTime));
-        return ss;
+        return super.findPageByHql(page, reMap.get("hql").toString(), params);
     }
 
     public List<PreConfigInfo> selectPreConfigInfoList(PreConfigInfoVo preConfigInfoVo,User user) {
@@ -68,7 +66,10 @@ public class PreConfigInfoDaoImpl extends BaseDaoImpl<PreConfigInfo, String> imp
         Map<String, Object> params = (Map<String, Object>) reMap.get("params");
         LogUtil.debug(" select hql queryList : " + reMap.get("hql").toString());
         LogUtil.debug(" select hql params : " + params.size());
-        return super.findListByHql(reMap.get("hql").toString(), params);
+        long startTime = System.currentTimeMillis();
+        List<PreConfigInfo> ss = super.findListByHql(reMap.get("hql").toString(), params);
+        LogUtil.debug("---------------------  selectPreConfigInfoList findPageByHql cost Time = " + (System.currentTimeMillis()-startTime));
+        return ss;
     }
 
     public PreConfigInfo selectOneBySourceName(String sourceName) {
