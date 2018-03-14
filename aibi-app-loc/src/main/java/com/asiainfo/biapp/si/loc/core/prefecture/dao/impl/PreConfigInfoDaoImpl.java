@@ -63,6 +63,8 @@ public class PreConfigInfoDaoImpl extends BaseDaoImpl<PreConfigInfo, String> imp
     public List<PreConfigInfo> selectPreConfigInfoList(PreConfigInfoVo preConfigInfoVo,User user) {
         Map<String, Object> reMap = fromBean(preConfigInfoVo,user);
         Map<String, Object> params = (Map<String, Object>) reMap.get("params");
+        LogUtil.debug(" select hql queryList : " + reMap.get("hql").toString());
+        LogUtil.debug(" select hql params : " + params.size());
         return super.findListByHql(reMap.get("hql").toString(), params);
     }
 
@@ -132,6 +134,7 @@ public class PreConfigInfoDaoImpl extends BaseDaoImpl<PreConfigInfo, String> imp
         hql.append("order by p.createTime desc");
         reMap.put("hql", hql);
         reMap.put("params", params);
+        LogUtil.debug(" queryList ---- hql " + hql);
         return reMap;
     }
     
