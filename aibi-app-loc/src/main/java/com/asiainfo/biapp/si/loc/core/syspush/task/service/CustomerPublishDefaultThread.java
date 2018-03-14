@@ -193,7 +193,7 @@ public class CustomerPublishDefaultThread implements ICustomerPublishThread {
             
             //在back库里确认一下清单数据是否存在,并查询有多少数据
 			String customId = customInfo.getLabelId();
-            String customListSql = iCustomerPublishCommService.getCustomListSql(customInfo, attrRelList);
+            String customListSql = iCustomerPublishCommService.getCustomListSql(customInfo, attrRelList,true);
 			String sql = new StringBuffer("SELECT COUNT(1) FROM (").append(customListSql).append(") tab ").toString();
             LogUtil.debug("客户群("+customId+")的清单数据是否存在sql："+sql);
 	        try {
@@ -355,7 +355,7 @@ public class CustomerPublishDefaultThread implements ICustomerPublishThread {
         String desFile ="";
         
         //1.1 获取创建清单文件sql
-        String customListSql = iCustomerPublishCommService.getCustomListSql(customInfo, attrRelList);
+        String customListSql = iCustomerPublishCommService.getCustomListSql(customInfo, attrRelList,true);
         LogUtil.info("查询清单数据："+customListSql);
         //1.2 创建清单文件
         result = this.getSql2FileUtils().sql2File(customListSql, null, fileName, encode, bufferedRowSize);

@@ -213,7 +213,11 @@ public class LabelPushCycleServiceImpl extends BaseServiceImpl<LabelPushCycle, S
         //默认列
         LabelAttrRel col0 = new LabelAttrRel();
         col0.setAttrCol(LabelInfoContants.KHQ_CROSS_COLUMN);
-        col0.setAttrColName("手机号");
+        String title = CocCacheProxy.getCacheProxy().getSYSConfigInfoByKey("RELATED_COLUMN_CN_NAME");
+        if (StringUtil.isEmpty(title)) {
+            title = "手机号码";
+        }
+        col0.setAttrColName(title);
         attrRelList.add(0, col0);
         
         return attrRelList;
@@ -231,13 +235,7 @@ public class LabelPushCycleServiceImpl extends BaseServiceImpl<LabelPushCycle, S
             LogUtil.error("查询客户群关联的属性错误！", e);
         }
         
-        String customListSql = iCustomerPublishCommService.getCustomListSql(customGroup, attrRelList);
-        int customListNo = 10;//尹振华说只查10条,@2018-03-13 14:39:36
-        String customListNoStr = CocCacheProxy.getCacheProxy().getSYSConfigInfoByKey("CUSTOM_LIST_NUMBER");
-        if (StringUtil.isNotEmpty(customListNoStr)) {
-        		customListNo = Integer.parseInt(customListNoStr);
-        }
-        customListSql += " limit "+customListNo;
+        String customListSql = iCustomerPublishCommService.getCustomListSql(customGroup, attrRelList, false);
         
         LogUtil.debug("清单预览sql："+customListSql);
         

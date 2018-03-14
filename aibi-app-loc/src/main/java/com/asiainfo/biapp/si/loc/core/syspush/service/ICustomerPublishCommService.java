@@ -57,7 +57,7 @@ public interface ICustomerPublishCommService {
      * 
      * @return sql String 拼接好的创建清单文件sql
      */
-	public String getCustomListSql(LabelInfo customInfo, List<LabelAttrRel> attrRelList);
+	public String getCustomListSql(LabelInfo customInfo, List<LabelAttrRel> attrRelList, boolean isPush);
 
 	
 	/**

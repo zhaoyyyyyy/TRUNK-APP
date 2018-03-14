@@ -96,7 +96,7 @@ public class CustomerPublishCommImplService implements ICustomerPublishCommServi
     }
     
     @Override
-	public String getCustomListSql(LabelInfo customInfo, List<LabelAttrRel> attrRelList) {
+	public String getCustomListSql(LabelInfo customInfo, List<LabelAttrRel> attrRelList, boolean isPush) {
         //获取主表表名
         MdaSysTableColumn mainMdaSysTableColumn = customInfo.getMdaSysTableColumn();
 		MdaSysTable mainMdaSysTable = null!=mainMdaSysTableColumn ? mainMdaSysTableColumn.getMdaSysTable() : null;
@@ -256,6 +256,15 @@ public class CustomerPublishCommImplService implements ICustomerPublishCommServi
             }
         }
         
+        if (!isPush) {
+            int customListNo = 10;//尹振华说只查10条,@2018-03-13 14:39:36
+            String customListNoStr = CocCacheProxy.getCacheProxy().getSYSConfigInfoByKey("CUSTOM_LIST_NUMBER");
+            if (StringUtil.isNotEmpty(customListNoStr)) {
+            		customListNo = Integer.parseInt(customListNoStr);
+            }
+            sql.append(" limit ").append(customListNo);
+        }
+        
         return sql.toString();
     }
 	
@@ -322,6 +331,6 @@ public class CustomerPublishCommImplService implements ICustomerPublishCommServi
         
 		return null;
     }
-    
+		
     
 }
