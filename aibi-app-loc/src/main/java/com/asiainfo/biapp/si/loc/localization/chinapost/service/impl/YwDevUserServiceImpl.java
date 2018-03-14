@@ -161,7 +161,7 @@ public class YwDevUserServiceImpl extends DevUserServiceImpl implements IUserSer
 			
 			//行政区划
 			for(Organization organization : organizationSetXzqh){
-			    if(organization.getOrgCode().equals(districtId)){
+			    if(organization.getOrgCode().equals(districtId)&&organization.getOrgType().equals("3")){
 			        if(!organization.getOrgCode().equals("1")){
 			            organizationPrivaliege.add(organization);
 		            }
@@ -170,7 +170,7 @@ public class YwDevUserServiceImpl extends DevUserServiceImpl implements IUserSer
 			}
 			//业务线
 			for(Organization organization : organizationSetYwx){
-			    if(organization.getOrgCode().equals(serviceCode)){
+			    if(organization.getOrgCode().equals(serviceCode)&&organization.getOrgType().equals("1")){
                     organizationPrivaliege.add(organization);
                     addOrgChildren(organization.getChildList(), organizationPrivaliege);
                 }

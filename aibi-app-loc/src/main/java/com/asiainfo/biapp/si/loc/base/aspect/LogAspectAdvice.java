@@ -145,8 +145,9 @@ public class LogAspectAdvice {
         // 获取目标对象的类名(形如：com.action.admin.LoginAction)
         String targetName = pjp.getTarget().getClass().getName();
         // 执行完方法的返回值：调用proceed()方法，就会触发切入点方法执行
+        long startTime = System.currentTimeMillis();  
         Object result = pjp.proceed();// result的值就是被拦截方法的返回值
-        
+        long endTime = System.currentTimeMillis();  
         if(!"setReqAndRes".equals(method)){
             
         	
@@ -184,7 +185,7 @@ public class LogAspectAdvice {
         		}
         	}
         	String interfaceName = getbooleanMethod(pjp);
-        	this.saveLog(inputParams, interfaceName,method, targetName, resultStr );
+        	this.saveLog(inputParams, endTime-startTime+"ms：：："+interfaceName,method, targetName, resultStr );
         }
         return result;
     }
