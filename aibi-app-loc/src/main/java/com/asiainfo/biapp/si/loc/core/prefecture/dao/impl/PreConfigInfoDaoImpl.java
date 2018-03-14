@@ -76,7 +76,9 @@ public class PreConfigInfoDaoImpl extends BaseDaoImpl<PreConfigInfo, String> imp
         Map<String, Object> reMap = new HashMap<>();
         Map<String, Object> params = new HashMap<>();
         List<String> orgIdList = new ArrayList<>();
+        long startTime = System.currentTimeMillis();
         Map<String, List<Organization>> orgMap = user.getOrgPrivaliege();
+        LogUtil.debug(" getOrgPrivaliege cost Time = " + (System.currentTimeMillis() - startTime));
         for(int i=1;i<=3;i++){
             List<Organization> orgList = new ArrayList<>();
             if(i==1){
@@ -89,6 +91,7 @@ public class PreConfigInfoDaoImpl extends BaseDaoImpl<PreConfigInfo, String> imp
             if(orgList==null){
                 continue;
             }
+            LogUtil.debug(" getOrgPrivaliege orgList cost Time = " + orgList.size());
             for(Organization org : orgList){
                 orgIdList.add(org.getOrgCode());
             }
