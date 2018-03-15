@@ -196,7 +196,7 @@ public class ShopCartController extends BaseController {
 			}
 		} catch (Exception e) {
 			LogUtil.error("校验标签异常", e);
-			return webResult.fail("校验标签异常");
+			return webResult.fail(msg);
 		}
 		if (success) {
 			return webResult.success("查询标签是否能够加入到购物车成功", SUCCESS);
