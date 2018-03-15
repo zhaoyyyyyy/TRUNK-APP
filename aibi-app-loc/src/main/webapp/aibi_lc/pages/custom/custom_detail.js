@@ -203,6 +203,7 @@ window.loc_onload = function() {
 		methods:{
 			previewDialog:function () {
 				model.sortAttrAndType="";
+				var AttrbuteIdString = model.AttrbuteId;
 				$(".selectList").each(function(){
 					if(model.sortAttrAndType.indexOf($(this).find(".select-Sort").val()) !=-1 || $(this).find("label[class~=active]").text() ==null ||$(this).find("label[class~=active]").text()==""){
 						model.sortAttrAndType=null;
@@ -218,6 +219,7 @@ window.loc_onload = function() {
 				})
 				if(model.sortAttrAndType!=null){
 					if(!model.haveAttr){
+						AttrbuteIdString = null;
 	        			model.sortAttrAndType =null;
 	        		}
 					$.commAjax({			
@@ -226,7 +228,7 @@ window.loc_onload = function() {
 					    async : false,
 					    postData : {
 								"labelId" :labelId,
-								"AttrbuteId" :model.AttrbuteId,
+								"AttrbuteId" :AttrbuteIdString,
 								"sortAttrAndType" :model.sortAttrAndType,
 							},
 						onSuccess:function(data){
@@ -246,6 +248,7 @@ window.loc_onload = function() {
 			},
 			showDialog:function(){
 				model.sortAttrAndType="";
+				var AttrbuteIdString = model.AttrbuteId;
 				$(".selectList").each(function(){
 					if(model.sortAttrAndType.indexOf($(this).find(".select-Sort").val()) !=-1 || $(this).find("label[class~=active]").text() ==null ||$(this).find("label[class~=active]").text()==""){
 						model.sortAttrAndType=null;
@@ -282,6 +285,7 @@ window.loc_onload = function() {
 			    	        		$( this ).dialog( "close" );
 			    	        		if(!model.haveAttr){
 			    	        			model.sortAttrAndType =null;
+			    	        			AttrbuteIdString = null;
 			    	        		}
 			    	        		model.sysIds="";
 			    	        		for(var i=0;i<$("#checkboxList label[class~=active]").length;i++){
@@ -299,7 +303,7 @@ window.loc_onload = function() {
 												"customGroupId" :labelId,
 												"sysIds" :model.sysIds,
 												"pushCycle" :$("#radioList label[class~=active]").siblings("input").val(),
-												"AttrbuteId" :model.AttrbuteId,
+												"AttrbuteId" :AttrbuteIdString,
 												"sortAttrAndType" :model.sortAttrAndType,
 											},
 									    maskMassage : '推送中...',
