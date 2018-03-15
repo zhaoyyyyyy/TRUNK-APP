@@ -84,6 +84,16 @@ window.loc_onload = function() {
 		    this.$nextTick(function () {
 		       dataModel.offset = $("#end").offset();//加入购物车参数
 		    })
+		},
+		components : {
+			'calculate-center' :function (resolve, reject) {
+	            $.get("../label/calculate_center.html").then(function (res) {
+	                resolve({
+	                    template: res,
+	                    props: ['ruleList']
+	                })
+	            });
+	        }
 		}
     });
 
