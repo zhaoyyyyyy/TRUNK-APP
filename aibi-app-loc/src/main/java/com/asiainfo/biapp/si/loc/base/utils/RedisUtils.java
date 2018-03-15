@@ -32,6 +32,8 @@ public class RedisUtils {
 	private static String redisIp = null;
 
 	private static Integer redisPort = null;
+	
+	private static String redisPassword = null;
 
 	public static int redisExpire = 86400;
 
@@ -58,9 +60,8 @@ public class RedisUtils {
 						+ "; port = "
 						+ LocConfigUtil.getInstance(BaseConstants.JAUTH_URL).getProperties(BaseConstants.REDIS_PORT));
 				redisIp = LocConfigUtil.getInstance(BaseConstants.JAUTH_URL).getProperties(BaseConstants.REDIS_IP);
-				redisPort = Integer.valueOf(
-						LocConfigUtil.getInstance(BaseConstants.JAUTH_URL).getProperties(BaseConstants.REDIS_PORT));
-
+				redisPort = Integer.valueOf(LocConfigUtil.getInstance(BaseConstants.JAUTH_URL).getProperties(BaseConstants.REDIS_PORT));
+				redisPassword = LocConfigUtil.getInstance(BaseConstants.JAUTH_URL).getProperties(BaseConstants.REDIS_PASSWORD);
 				if (jedisPool == null) {
 					JedisPoolConfig config = new JedisPoolConfig();
 					// 设置连接池初始化大小和最大容量
@@ -75,7 +76,12 @@ public class RedisUtils {
 					// 在borrow一个jedis实例时，是否提前进行validate操作；如果为true，则得到的jedis实例均是可用的；
 					config.setTestOnBorrow(true);
 					// 写
-					jedisPool = new JedisPool(config, redisIp, redisPort, DEFAULT_TIME_OUT);
+					
+					if(StringUtils.isNoneBlank(redisPassword)){
+						jedisPool = new JedisPool(config, redisIp, redisPort, DEFAULT_TIME_OUT,redisPassword);
+					}else{
+						jedisPool = new JedisPool(config, redisIp, redisPort, DEFAULT_TIME_OUT);
+					}
 
 				}
 			}
