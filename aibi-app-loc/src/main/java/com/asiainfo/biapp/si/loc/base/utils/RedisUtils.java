@@ -77,7 +77,7 @@ public class RedisUtils {
 					config.setTestOnBorrow(true);
 					// 写
 					
-					if(StringUtils.isNotBlank(redisPassword)){
+					if(StringUtils.isNotBlank(redisPassword) && !"null".equals(redisPassword)){
 						jedisPool = new JedisPool(config, redisIp, redisPort, DEFAULT_TIME_OUT,redisPassword);
 					}else{
 						jedisPool = new JedisPool(config, redisIp, redisPort, DEFAULT_TIME_OUT);
