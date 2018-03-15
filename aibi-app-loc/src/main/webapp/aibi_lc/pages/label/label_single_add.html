@@ -56,16 +56,12 @@
 	                                    <button onclick="window.location='dataSource_add.html'" type="button" class="ui-table-btn" >点击创建</button>
 	                                </div>
 	                                
-	                                <div class="ui-form-group right ml30">
-							            <input type="hidden" v-model="sourceTableType" name="sourceTableType" id="sourceTableType">
-							            <input type="hidden" v-model="readCycle" name="updateCycle" id="updateCycle">
-							            <label for="updateCycle" class="control-label left mt10">更新周期</label>
-							            <div class="control-input right">
-	                                    	<span class="file-up-name">{{model.read}}</span>
-							            </div>          
-							        </div> 
-	
 	                            </div>
+	                            <div class="ui-form-group fright ml30">
+						            <input type="hidden" v-model="sourceTableType" name="sourceTableType" id="sourceTableType">
+						            <input type="hidden" v-model="readCycle" name="updateCycle" id="updateCycle">
+						            <label for="updateCycle" class="control-label left mt5">更新周期&nbsp&nbsp<span class="file-up-name">{{model.read}}</span></label>
+						        </div>
 	
 	                        </div>
 	
