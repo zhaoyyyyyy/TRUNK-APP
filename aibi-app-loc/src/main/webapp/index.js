@@ -169,7 +169,6 @@ $(function(){
 		var cnpost = $.getCookie("cnpost");
 		if(cnpost && cnpost != ""){
 			var checkLogin = auto_Login[auto_Login.active].checkLogin();
-			debugger;
 			if(isExistsToken && checkLogin){
 				window.location.href = "./aibi_lc/pages/"+ href+ ".html";
 			}else{
