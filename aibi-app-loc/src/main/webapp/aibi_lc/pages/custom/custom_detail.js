@@ -205,9 +205,13 @@ window.loc_onload = function() {
 				model.sortAttrAndType="";
 				var AttrbuteIdString = model.AttrbuteId;
 				$(".selectList").each(function(){
-					if(model.sortAttrAndType.indexOf($(this).find(".select-Sort").val()) !=-1 || $(this).find("label[class~=active]").text() ==null ||$(this).find("label[class~=active]").text()==""){
+					if(model.sortAttrAndType.indexOf($(this).find(".select-Sort").val()) !=-1 ){
 						model.sortAttrAndType=null;
-						$.alert("请正确选择排序属性及方式");
+						$.alert("排序的属性不可重复");
+						return false;
+					}else if($(this).find("label[class~=active]").text() ==null ||$(this).find("label[class~=active]").text()==""){
+						model.sortAttrAndType=null;
+						$.alert("请选择排序类型");
 						return false;
 					}else{
 						if($(this).find(".select-Sort").val() =="请选择属性"){
@@ -250,9 +254,13 @@ window.loc_onload = function() {
 				model.sortAttrAndType="";
 				var AttrbuteIdString = model.AttrbuteId;
 				$(".selectList").each(function(){
-					if(model.sortAttrAndType.indexOf($(this).find(".select-Sort").val()) !=-1 || $(this).find("label[class~=active]").text() ==null ||$(this).find("label[class~=active]").text()==""){
+					if(model.sortAttrAndType.indexOf($(this).find(".select-Sort").val()) !=-1 ){
 						model.sortAttrAndType=null;
-						$.alert("请正确选择排序属性及方式");
+						$.alert("排序的属性不可重复");
+						return false;
+					}else if($(this).find("label[class~=active]").text() ==null ||$(this).find("label[class~=active]").text()==""){
+						model.sortAttrAndType=null;
+						$.alert("请选择排序类型");
 						return false;
 					}else{
 						if($(this).find(".select-Sort").val() =="请选择属性"){
@@ -356,15 +364,16 @@ window.loc_onload = function() {
 		if($(".selectList").length>2){
 			$.alert("只能添加三行");
 		}else{
-			var html ="<div class='mt20 selectList' id = radios"+nameNumber+"> <div class='form-group mr100 optionhtml'> <div class=''><select class='form-control input-pointer select-Sort' name='dataStatusId' ></select></div></div><div class='radio circle success'> <input type='radio' name='radio"+nameNumber+"' id='myr'> <label for='myr'><i class='default'></i>升序</label></div><div class='radio circle success'><input type='radio' name='radio"+nameNumber+"'  id='myr1'> <label  for='myr1'><i class='default'></i>降序</label></div><button type='button' class='ui-btn ui-btn-second ml30' onclick='fun_to_del(\"radios"+ nameNumber++ + "\")'>删除</button></div> ";
+			var html ="<div class='mt20 selectList' id = radios"+nameNumber+"> <div class='form-group mr100 optionhtml' id=optionhtml"+nameNumber+"> <div class=''><select class='form-control input-pointer select-Sort' name='dataStatusId' ></select></div></div><div class='radio circle success'> <input type='radio' name='radio"+nameNumber+"' id='myr'> <label for='myr'><i class='default'></i>升序</label></div><div class='radio circle success'><input type='radio' name='radio"+nameNumber+"'  id='myr1'> <label  for='myr1'><i class='default'></i>降序</label></div><button type='button' class='ui-btn ui-btn-second ml30' onclick='fun_to_del(\"radios"+ nameNumber + "\")'>删除</button></div> ";
 			$("#addALine").append(html);
-			$(".optionhtml").find("select").html("");
+			$("#optionhtml"+nameNumber).find("select").html("");
 			var option = "<option>"+'请选择属性'+"</option>";
-			$(".optionhtml").find("select").append(option);
+			$("#optionhtml"+nameNumber).find("select").append(option);
 			for(var i=0;i<model.calcuElementNames.length;i++){
 				option = "<option>"+model.calcuElementNames[i]+"</option>";
-				$(".optionhtml").find("select").append(option);
+				$("#optionhtml"+nameNumber).find("select").append(option);	
 			}
+			nameNumber++;
 		}
 	})
 	//标签体系
@@ -498,8 +507,6 @@ window.loc_onload = function() {
 					model.calcuElementName = model.calcuElementName.replace(attrName,"");
 				}
 			}
-			model.calcuElementNames=model.calcuElementName.split(",");
-			model.calcuElementNamesLength=model.calcuElementNames.length;
 			var  html="<li>"+
     		"<div class='checkbox'>"+
     		"<input type='checkbox' id='"+attrId+"L' class='checkbix'>"+
@@ -515,9 +522,16 @@ window.loc_onload = function() {
 		$(".optionhtml").find("select").html(null);
 		var option = "<option>"+'请选择属性'+"</option>";
 		$(".optionhtml").find("select").append(option);
-		for(var i=0;i<model.calcuElementNames.length;i++){
-			option = "<option>"+model.calcuElementNames[i]+"</option>";
-			$(".optionhtml").find("select").append(option);
+		if(model.calcuElementName != null && model.calcuElementName != "" && model.calcuElementName != undefined){
+			model.calcuElementNames=model.calcuElementName.split(",");
+			model.calcuElementNamesLength=model.calcuElementNames.length;
+			for(var i=0;i<model.calcuElementNames.length;i++){
+				option = "<option>"+model.calcuElementNames[i]+"</option>";
+				$(".optionhtml").find("select").append(option);
+			}
+		}else{
+			model.calcuElementNames=null;
+			model.calcuElementNamesLength=0;
 		}
 		if(attrId== ""){
 			$.alert("请选择标签");
@@ -534,9 +548,9 @@ window.loc_onload = function() {
 	})
     $("#custom_right").click(function(){
     	//$("#addALine").html("");
+    	var attrId ="",attrName="";
     	if(model.calcuElementNamesLength + $("#OptionalLabel label[class~=active]").length<=10){
     		$("#OptionalLabel label[class~=active]").each(function(){
-				var attrId ="",attrName="";
 				attrId = $(this).attr('data-id').substring(0,$(this).attr('data-id').length-1);
 				attrName = $(this).attr('data-name');
 				if(model.AttrbuteId!=""){
@@ -561,13 +575,13 @@ window.loc_onload = function() {
 	    		"</li>";
 				$("#selectedLabel").append(html);
 				$("#OptionalLabel label[class~=active]").parents("li").remove();
-				if(attrId== ""){
-					$.alert("请选择标签");
-				}
     		})
     	}else{
 			$.alert("附带属性个数超出最大范围");
 			return false
+		}
+    	if(attrId== ""){
+			$.alert("请选择标签");
 		}
 		
     })
