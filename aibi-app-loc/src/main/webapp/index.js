@@ -18,9 +18,9 @@ var auto_Login = (function (model){
         		checkLogin:function(){
 					var flag = false;
 					
-					var cnpost = $.getCookie("cnpost");
-					var cpcnpost = $.getCookie("cpcnpost");
-					if(cnpost == cpcnpost){
+					var cpname = JSON.parse($.getCookie("cnpost")).username;
+					var cocname = $.getCookie("coccheck");
+					if(cpname == cocname){
 						flag = true;
 					}
 					
@@ -53,9 +53,9 @@ var auto_Login = (function (model){
         		checkLogin:function(){
 					var flag = false;
 					
-					var cnpost = $.getCookie("cnpost");
-					var cpcnpost = $.getCookie("cpcnpost");
-					if(cnpost == cpcnpost){
+					var cpname = JSON.parse($.getCookie("cnpost")).username;
+					var cocname = $.getCookie("coccheck");
+					if(cpname == cocname){
 						flag = true;
 					}
 					

@@ -131,7 +131,7 @@ $.fn.extend({
 			$("#preConfig_list").removeClass("open");
 		});
 		var end = new Date().getTime();//接受时间
-		console.log("专区选择列表渲染用时："+(end - start)+"ms");
+//		console.log("专区选择列表渲染用时："+(end - start)+"ms");
 	}
 });
 
