@@ -145,7 +145,8 @@ function fun_to_save(){
 	$("form[class~=active]").each(function(){
 		if($("form[class~=active]").validateForm()){	
 			var labelInfo = $(this).formToJson();
-			labelInfo["updateCycle"] = model.updateCycle;
+			var uc = model.readCycle;
+			labelInfo.updateCycle = uc;
 			$.commAjax({
 			  async : false,
 			  url : $.ctx + '/api/label/labelInfo/save',
