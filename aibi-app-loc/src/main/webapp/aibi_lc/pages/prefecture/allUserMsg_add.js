@@ -74,6 +74,7 @@ window.loc_onload = function() {
 			var list = $("#myjqgrid").jqGrid("getRowData");
 			var dimOrgLevelStr = "";
 			var levelList = [];
+			var sortList = [];
 			var exitLevel = false;
 			var nullNum = 0;
 			for (var k = 0; k < list.length; k++) {
@@ -82,6 +83,15 @@ window.loc_onload = function() {
 						levelList.push(list[k].levelId);
 					} else {
 						$.alert("层级不能重复");
+						for (var i = 1; i <= 5; i++) {
+							$('#myjqgrid').jqGrid('editRow', i);
+						}
+						return false;
+					}
+					if (!isInArray(sortList, list[k].sortNum)) {
+						sortList.push(list[k].sortNum);
+					} else {
+						$.alert("序号不能重复");
 						for (var i = 1; i <= 5; i++) {
 							$('#myjqgrid').jqGrid('editRow', i);
 						}

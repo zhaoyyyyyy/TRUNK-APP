@@ -85,6 +85,12 @@ public class DimOrgLevelServiceImpl extends BaseServiceImpl<DimOrgLevel, String>
         if(!dimOrgLevelList.isEmpty()){
             throw new ParamRequiredException("该层级已存在");
         }
+        dimOrgLevelVo.setLevelId(null);
+        dimOrgLevelVo.setSortNum(dimOrgLevel.getSortNum());
+        dimOrgLevelList = selectDimOrgLevelList(dimOrgLevelVo);
+        if(!dimOrgLevelList.isEmpty()){
+            throw new ParamRequiredException("该排序已存在");
+        }
         super.saveOrUpdate(dimOrgLevel);
     }
 
