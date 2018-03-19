@@ -68,12 +68,19 @@ public class LocCacheBase extends ICacheBase implements ApplicationContextAware{
 	}
 	
 	public synchronized void init(){
+		LogUtil.info("1111111111111111111111111111111111111111111");
 		this.iLabelInfoDao = (ILabelInfoDao)SpringContextHolder.getBean("labelInfoDaoImpl");
+		LogUtil.info("22222222222222222222222222222222222222222222");
 		this.newestLabelDao = (INewestLabelDateDao)SpringContextHolder.getBean("newestLabelDateDaoImpl");
+		LogUtil.info("33333333333333333333333333333333333333333333");
 		this.initAllLabelInfo();
+		LogUtil.info("44444444444444444444444444444444444444444444");
 		this.initAllConfigInfo();
+		LogUtil.info("55555555555555555555555555555555555555555555555");
 		this.initAllDicData();
+		LogUtil.info("66666666666666666666666666666666666666666666666");
 		this.initCiNewestLabelDate();
+		LogUtil.info("777777777777777777777777777777777777777777777777");
 	}
 	
 	/**
