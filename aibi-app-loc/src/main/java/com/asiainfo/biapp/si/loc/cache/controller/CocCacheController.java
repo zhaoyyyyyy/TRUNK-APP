@@ -19,12 +19,15 @@ public class CocCacheController {
 	
 	@ApiOperation(value="刷新loc所有缓存数据")
     @PostMapping(value = "/cacheDataRefresh")
-	public void cacheDataRefresh(){
+	public String cacheDataRefresh(){
 		if(!cacheIfRunning){
 			cacheIfRunning = true;
 			CocCacheProxy.getCacheProxy().reflashAllCache();
 			cacheIfRunning = false;
+		}else{
+			return "cacheDataRefresh have be running!!!";
 		}
+		return "cacheDataRefresh success!!!";
 		
 	}
 
