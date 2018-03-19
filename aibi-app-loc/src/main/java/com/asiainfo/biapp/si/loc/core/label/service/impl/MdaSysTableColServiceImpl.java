@@ -117,6 +117,7 @@ public class MdaSysTableColServiceImpl extends BaseServiceImpl<MdaSysTableColumn
             //保存标签规则维表
             LabelCountRules labelCountRules = new LabelCountRules();
             labelCountRules.setDependIndex(mdaSysTableColumn.getDependIndex());
+            labelCountRules.setCountRules(mdaSysTableColumn.getDependIndex());
             iLabelCountRulesService.addLabelCountRules(labelCountRules);
             
             if (StringUtil.isNotBlank(mdaSysTableColumn.getDimTransId())) {
