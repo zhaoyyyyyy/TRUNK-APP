@@ -96,6 +96,11 @@ window.loc_onload = function(){
 	   			}
 		    })
 		}*/
+	    mounted : function () {
+		    this.$nextTick(function () {
+		    	this.bqlx[0].checked=true;//默认第一个radio选中
+		    })
+		}
 	});
 	$.commAjax({
 		url : $.ctx + '/api/dimtable/dimTableInfo/queryList',

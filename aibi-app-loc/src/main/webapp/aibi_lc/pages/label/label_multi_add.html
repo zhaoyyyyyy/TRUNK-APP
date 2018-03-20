@@ -91,7 +91,7 @@
 									<li class="" v-for="g in bqlx" style="display: inline">
 									<div class="radio circle success">
 										<input :id="'type'+g.code+index" class="easyui-validatebox" validType="radio" :value="g.code" name="labelTypeId"
-										type="radio" onclick="changeStatus(this)" />				
+										:checked="g.checked" type="radio" onclick="changeStatus(this)" />				
 										<label :for="'type'+g.code+index"><i class="default"></i>{{g.dataName}}</label>
 										</div>											  	
 									</li>
