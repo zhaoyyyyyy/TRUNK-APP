@@ -62,6 +62,7 @@ public class LabelExploreServiceImpl implements ILabelExploreService {
 	@Override
 	public String getFromSqlForMultiLabel(List<LabelRuleVo> labelRuleList, ExploreQueryParam queryParam) throws BaseException {
 		Map<String, String> labelRuleToSql = new HashMap<String, String>();
+		List<String> listInfoIds = new ArrayList<String>();
 		StringBuffer calcExpr = new StringBuffer();
 		Integer duplicateLabelIdCount = 1;
 		/***/
@@ -95,23 +96,26 @@ public class LabelExploreServiceImpl implements ILabelExploreService {
 					singleLabelSql = trimSql.substring(4);
 				}
 				if (labelRuleToSql.keySet().contains(rule.getCalcuElement())) {
+					listInfoIds.add(rule.getCalcuElement() + "_"+ duplicateLabelIdCount);
 					labelRuleToSql.put(rule.getCalcuElement() + "_"+ duplicateLabelIdCount, singleLabelSql);
 					calcExpr.append(rule.getCalcuElement() + "_"+ duplicateLabelIdCount);
 					duplicateLabelIdCount++;
 				} else {
+					listInfoIds.add(rule.getCalcuElement());
 					labelRuleToSql.put(rule.getCalcuElement(),singleLabelSql);
 					calcExpr.append(rule.getCalcuElement());
 				}
 			} else if (LabelRuleContants.ELEMENT_TYPE_LIST_ID == rule.getElementType()) {
 				String listTableId = rule.getCalcuElement();
 				String singleLabelSql = this.getListTableSql(listTableId,rule.getAttrVal());
+				listInfoIds.add(listTableId);
 				labelRuleToSql.put(listTableId,singleLabelSql);
 				calcExpr.append(listTableId);
 			}//end ELEMENT_TYPE
 			
 		}//end for
 		String sql = "";
-		if (labelRuleToSql.keySet().size() == 1) {
+		if (listInfoIds.size() == 1) {
 			String calcExprStr = calcExpr.toString();
 			calcExprStr = calcExprStr.replace(String.valueOf(CommonConstants.LEFT_Q), "")
 					.replace(String.valueOf(CommonConstants.RIGHT_Q), "");
@@ -120,7 +124,7 @@ public class LabelExploreServiceImpl implements ILabelExploreService {
 			} else {
 				sql = "select " +LabelInfoContants.KHQ_CROSS_COLUMN+ " from " + calcExprStr ;
 			}
-		} else if (labelRuleToSql.keySet().size() > 1) {
+		} else if (listInfoIds.size() > 1) {
 			sql =sqlPaser.parseExprToSql(calcExpr.toString(), labelRuleToSql);
 		}
 		return sql;
