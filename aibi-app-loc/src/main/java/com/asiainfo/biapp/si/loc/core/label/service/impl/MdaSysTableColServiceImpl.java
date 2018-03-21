@@ -132,6 +132,7 @@ public class MdaSysTableColServiceImpl extends BaseServiceImpl<MdaSysTableColumn
             mdaSysTableColumn.setCountRulesCode(labelCountRules.getCountRulesCode());
             mdaSysTableColumn.setUnit(labelInfo.getUnit());
             mdaSysTableColumn.setColumnId(null);
+            mdaSysTableColumn.setColumnStatus(1);
             super.saveOrUpdate(mdaSysTableColumn);
             
           //保存标签与纵表列关系
