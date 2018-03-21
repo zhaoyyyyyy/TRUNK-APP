@@ -78,7 +78,7 @@ public class Page<T> implements Serializable {
 	
 	@ApiParam(value = "总行数")
 	private int totalCount;
-
+	@ApiParam(value = "总页数")
 	private int totalPageCount;
 	
 	
@@ -165,8 +165,9 @@ public class Page<T> implements Serializable {
 		}
 		if (this.totalCount % this.pageSize == 0) {
 			this.totalPageCount =  this.totalCount / this.pageSize;
+		}else{
+		    this.totalPageCount = this.totalCount / this.pageSize + 1;
 		}
-		this.totalPageCount = this.totalCount / this.pageSize + 1;
 		return totalPageCount;
 	}
 
