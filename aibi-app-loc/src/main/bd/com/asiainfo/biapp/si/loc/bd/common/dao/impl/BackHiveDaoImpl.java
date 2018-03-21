@@ -414,9 +414,10 @@ public class BackHiveDaoImpl extends BaseBackDaoImpl implements IBackSqlDao{
 			if(primaryKey.contains(colName)){
 				continue;
 			}
-			sb.append(colName).append(" ").append(columnName.get(colName)).append(")");
+			sb.append(colName).append(" ").append(columnName.get(colName)).append(",");
 		}
-		
+		sb.delete(sb.length()-1, sb.length());
+		sb.append(")");
 		if(ifPartition){
 			sb.append(" PARTITIONED BY (").append(primaryKeyStr.toString().substring(0,primaryKeyStr.toString().length()-1)).append(") stored as ").append(this.Tab_Format);
 		}

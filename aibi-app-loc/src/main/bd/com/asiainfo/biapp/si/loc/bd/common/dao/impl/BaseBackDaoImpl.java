@@ -18,6 +18,7 @@ import java.util.Map;
 
 import javax.sql.DataSource;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceBuilder;
 
 import com.asiainfo.biapp.si.loc.base.BaseConstants;
@@ -100,7 +101,10 @@ public class BaseBackDaoImpl {
 //		String username = CocCacheProxy.getCacheProxy().getSYSConfigInfoByKey(BaseConstants.SYS_BGDB_USERNAME);
 //		String password = CocCacheProxy.getCacheProxy().getSYSConfigInfoByKey(BaseConstants.SYS_BGDB_PASSWORD);
 //		DataSource dataSource = this.getDataSourceBuilder(driverClassName,url,username,password).build();
-		Tab_Format = CocCacheProxy.getCacheProxy().getSYSConfigInfoByKey(BaseConstants.STORAGE_FORMATE);
+		if(StringUtils.isNotBlank(CocCacheProxy.getCacheProxy().getSYSConfigInfoByKey(BaseConstants.STORAGE_FORMATE))){
+			Tab_Format = CocCacheProxy.getCacheProxy().getSYSConfigInfoByKey(BaseConstants.STORAGE_FORMATE);
+		}
+		
         Connection conn = null;
         try {
 //            conn = dataSource.getConnection();

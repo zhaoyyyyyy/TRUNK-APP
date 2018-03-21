@@ -170,6 +170,11 @@ public class BackServiceImpl implements IBackSqlService{
 		primaryKey.add(LabelInfoContants.KHQ_CROSS_ID_PARTION);
 		columnName.put(LabelInfoContants.KHQ_CROSS_ID_PARTION, "string");
 		columnName.put(LabelInfoContants.KHQ_CROSS_COLUMN, "string");
+		columnName.put("org1", "string");
+		columnName.put("org2", "string");
+		columnName.put("org3", "string");
+		columnName.put("org4", "string");
+		columnName.put("org5", "string");
 		if(!isExistsTable){
 			isCreateTable = getBackDaoBean().createTableByName(tableName, columnName, primaryKey);
 			log.debug("-------------------- BackServiceImpl.insertCustomDataHive isCreateTable = " + isCreateTable);
