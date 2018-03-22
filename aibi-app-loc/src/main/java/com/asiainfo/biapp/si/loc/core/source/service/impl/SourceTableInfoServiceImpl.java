@@ -189,7 +189,7 @@ public class SourceTableInfoServiceImpl extends BaseServiceImpl<SourceTableInfo,
         if(2==sourceTableInfo.getSourceTableType()){
             MdaSysTable mdaSysTable = new MdaSysTable();
             mdaSysTable.setConfigId(sourceTableInfo.getConfigId());
-            mdaSysTable.setTableName("LV_"+sourceTableInfo.getConfigId()+"_"+sourceTableInfo.getSourceTableName());
+            mdaSysTable.setTableName("LV_"+sourceTableInfo.getConfigId()+"_"+sourceTableInfo.getSourceTableName() + "_");
             mdaSysTable.setTableCnName(sourceTableInfo.getSourceTableCnName());
             mdaSysTable.setTableSchema(sourceTableInfo.getTableSchema());
             mdaSysTable.setTableType(3);
