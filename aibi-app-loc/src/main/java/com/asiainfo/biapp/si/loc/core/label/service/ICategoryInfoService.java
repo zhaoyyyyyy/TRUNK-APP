@@ -96,6 +96,13 @@ public interface ICategoryInfoService extends BaseService<CategoryInfo, String>{
     public CategoryInfo selectCategoryInfoByCategoryName(String categoryName,String sysId) throws BaseException;
 
     public String parseColumnInfoFile(InputStream inputStream, String fileName,String configId) throws Exception;
+    
+    /**
+     * 移动标签分类
+     * @param categoryInfo
+     * @throws BaseException
+     */
+    public void moveCategoryInfo(CategoryInfo categoryInfo) throws BaseException;
 
     
 }

@@ -6,7 +6,6 @@
 
 package com.asiainfo.biapp.si.loc.core.label.entity;
 
-import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
@@ -149,7 +148,23 @@ public class CategoryInfo extends BaseEntity {
     @ApiParam(value = "层次")
     private Integer levelId;
     
-    @ApiParam(value = "子分类")
+    /**
+     * 拖拽目的排序
+     */
+    @Transient
+    private  transient String targetSortNum;
+    
+    
+    
+    public String getTargetSortNum() {
+		return targetSortNum;
+	}
+
+	public void setTargetSortNum(String targetSortNum) {
+		this.targetSortNum = targetSortNum;
+	}
+
+	@ApiParam(value = "子分类")
     @Transient
 //    @OrderBy(value = "sortNum")
 //    @OneToMany(cascade = CascadeType.ALL ,fetch=FetchType.EAGER)
@@ -262,5 +277,6 @@ public class CategoryInfo extends BaseEntity {
     public void setLevelId(Integer levelId) {
         this.levelId = levelId;
     }
+
 
 }

@@ -144,6 +144,9 @@ public class CategoryInfoServiceImpl extends BaseServiceImpl<CategoryInfo, Strin
         if(categoryInfo.getCategoryName().length()>10){
             throw new ParamRequiredException("分类名称过长");
         }
+        CategoryInfoVo categoryInfoVo = new CategoryInfoVo();
+        categoryInfoVo.setSysId(categoryInfo.getSysId());
+        categoryInfo.setSortNum(iCategoryInfoDao.selectAllCategoryInfoList(categoryInfoVo).size()+1);
         super.saveOrUpdate(categoryInfo);
     }
 
@@ -152,11 +155,13 @@ public class CategoryInfoServiceImpl extends BaseServiceImpl<CategoryInfo, Strin
         if(StringUtils.isBlank(categoryInfo.getCategoryName())){
             throw new ParamRequiredException("分类名称不能为空");
         }
-        if(categoryInfo.getCategoryName().length()>8){
+       /* if(categoryInfo.getCategoryName().length()>8){
             throw new ParamRequiredException("分类名称过长");
-        }
+        }*/
         CategoryInfo categoryInfo2 = iCategoryInfoDao.get(categoryInfo.getCategoryId());
         categoryInfo2.setCategoryName(categoryInfo.getCategoryName());
+        categoryInfo2.setSortNum(categoryInfo.getSortNum());
+        categoryInfo2.setParentId(categoryInfo.getParentId());
         super.saveOrUpdate(categoryInfo2);
         
     }
@@ -177,8 +182,24 @@ public class CategoryInfoServiceImpl extends BaseServiceImpl<CategoryInfo, Strin
 //        if(iLabelInfoDao.selectLabelAllEffectiveInfoList(labelInfoVo).size() != 0){
 //            throw new ParamRequiredException("该分类下存在有效标签或者分类，不能删除");
 //        }
+        ICategoryInfoService categoryInfoService = (ICategoryInfoService)SpringContextHolder.getBean("categoryInfoServiceImpl");
+        if(null !=categoryInfoService.selectCategoryInfoById(categoryId).getSortNum()){
+        	String sysId =categoryInfoService.selectCategoryInfoById(categoryId).getSysId();
+            int sortNum = categoryInfoService.selectCategoryInfoById(categoryId).getSortNum();
+            CategoryInfoVo categoryInfoVo = new CategoryInfoVo();
+            categoryInfoVo.setSysId(sysId);
+            List<CategoryInfo> categoryInfoList =iCategoryInfoDao.selectAllCategoryInfoList(categoryInfoVo);
+            if(categoryInfoList.size()>0){
+            	for(int i=0;i<categoryInfoList.size();i++){
+                	if(categoryInfoList.get(i).getSortNum() > sortNum){
+                		CategoryInfo categoryInfoLists = categoryInfoList.get(i);
+                		categoryInfoLists.setSortNum(categoryInfoLists.getSortNum()-1);
+                		categoryInfoService.modifyCategoryInfo(categoryInfoLists);
+                	}
+                }	
+            }
+        }
         super.delete(categoryId);
-        
     }
     
     @CacheEvict(value="LabelInfo",allEntries=true)
@@ -292,5 +313,46 @@ public class CategoryInfoServiceImpl extends BaseServiceImpl<CategoryInfo, Strin
         return msg;
     }
 
+    
+    @CacheEvict(value="LabelInfo",allEntries=true)
+    public void moveCategoryInfo(CategoryInfo categoryInfo) throws BaseException{
+    	ICategoryInfoService categoryInfoService = (ICategoryInfoService)SpringContextHolder.getBean("categoryInfoServiceImpl");
+    	if(null !=categoryInfo.getSortNum()){
+	    	int targetSortNum = Integer.parseInt(categoryInfo.getTargetSortNum());
+	    	String parentId =categoryInfo.getParentId();
+	    	CategoryInfoVo categoryInfoVo = new CategoryInfoVo();
+	        categoryInfoVo.setSysId(categoryInfo.getSysId());
+	        List<CategoryInfo> categoryInfoList =iCategoryInfoDao.selectAllCategoryInfoList(categoryInfoVo);
+	        categoryInfo=categoryInfoService.selectCategoryInfoById(categoryInfo.getCategoryId());
+	        for(int i=0;i<categoryInfoList.size();i++){
+	        	if(categoryInfoList.get(i).getSortNum()!=null){
+		        	//从下往上移
+		        	if(categoryInfoList.get(i).getSortNum() >= targetSortNum && categoryInfoList.get(i).getSortNum() < categoryInfo.getSortNum()){
+		        		CategoryInfo categoryInfoLists = categoryInfoList.get(i);
+		        		categoryInfoLists.setSortNum(categoryInfoLists.getSortNum()+1);
+		        		categoryInfoService.modifyCategoryInfo(categoryInfoLists);
+		        	}
+		        	//从上往下移
+		        	if(categoryInfoList.get(i).getSortNum() < targetSortNum && categoryInfoList.get(i).getSortNum() > categoryInfo.getSortNum()){
+		        		CategoryInfo categoryInfoLists = categoryInfoList.get(i);
+		        		categoryInfoLists.setSortNum(categoryInfoLists.getSortNum()-1);
+		        		categoryInfoService.modifyCategoryInfo(categoryInfoLists);
+		        	}
+	        	}
+	        }
+	        if(targetSortNum<categoryInfo.getSortNum()){
+	       	 categoryInfo.setSortNum(targetSortNum);
+	        }
+	        if(targetSortNum>categoryInfo.getSortNum()){
+	        	categoryInfo.setSortNum(targetSortNum-1);
+	        }
+	        if(StringUtil.isNotBlank(parentId) ){
+	        	 categoryInfo.setParentId(parentId);
+	        }else{
+	        	categoryInfo.setParentId(null);
+	        }
+    	}
+        categoryInfoService.modifyCategoryInfo(categoryInfo);
+    }
 
 }
