@@ -1167,6 +1167,12 @@ span.del-btn{
 .dataSource-tab .ui-form  > .ui-form-group > .control-input{
 	width: 56%;
 }
+.dataSource-tab.create-main{
+	text-align:center;
+}
+.dataSource-tab > .form-horizontal{
+	display:inline-block;
+}
 /*维表管理*/
 .dimtable-table .ui-form-group > .ui-form-group{
 	margin-bottom:0;
@@ -1235,8 +1241,7 @@ span.del-btn{
     color: #000;
 }
 .ui-custom-info .ui-custom-item{
-	width:80%;
-	background: #F7F7F7;
+	background: transparent;
 	padding:6px 10px;
 }
 .ui-custom-info .ui-custom-item > a{
@@ -1257,7 +1262,7 @@ span.del-btn{
 	width:200px;
 }
 .ui-custom-col{
-	width:22%;
+	width:32%;
 	border:1px solid #DCE2E4;
 }
 .ui-custom-col > h3{
@@ -1268,7 +1273,8 @@ span.del-btn{
 }
 .ui-custom-col > .ui-custom-mes{
 	padding:10px;
-	height:320px;
+	min-height:320px;
+	max-height:460px;
 	overflow-y:auto;
 }
 .ui-custom-col > .ui-custom-mes > p{
