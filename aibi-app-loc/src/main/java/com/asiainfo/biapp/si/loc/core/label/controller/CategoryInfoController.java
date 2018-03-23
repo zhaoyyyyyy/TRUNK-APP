@@ -232,5 +232,31 @@ public class CategoryInfoController extends BaseController<CategoryInfo>{
         return webResult.success(msg, null);
     }
     
+    @ApiOperation(value = "分类拖拽")
+    @ApiImplicitParams({
+        @ApiImplicitParam(name = "categoryId", value = "分类ID", required = true, paramType = "query", dataType = "string"),
+        @ApiImplicitParam(name = "sysId", value = "系统ID", required = false, paramType = "query", dataType = "string"),
+        @ApiImplicitParam(name = "sysType", value = "系统类型", required = false, paramType = "query", dataType = "string"),
+        @ApiImplicitParam(name = "categoryDesc", value = "分类描述", required = false, paramType = "query", dataType = "string"),
+        @ApiImplicitParam(name = "categoryName", value = "分类名称", required = false, paramType = "query", dataType = "string"),
+        @ApiImplicitParam(name = "parentId", value = "父分类ID", required = false, paramType = "query", dataType = "string"),
+        @ApiImplicitParam(name = "categoryPath", value = "分类ID路径", required = false, paramType = "query", dataType = "string"),
+        @ApiImplicitParam(name = "isLeaf", value = "叶子节点", required = false, paramType = "query", dataType = "int"),
+        @ApiImplicitParam(name = "statusId", value = "状态", required = false, paramType = "query", dataType = "int"),
+        @ApiImplicitParam(name = "sortNum", value = "排序", required = false, paramType = "query", dataType = "int"),
+        @ApiImplicitParam(name = "levelId", value = "层级", required = false, paramType = "query", dataType = "int") })
+    @RequestMapping(value = "/categoryInfo/move", method = RequestMethod.POST)
+    public WebResult<CategoryInfo> categoryInfoMove(@ApiIgnore CategoryInfo categoryInfo){
+    	 WebResult<CategoryInfo> webResult = new WebResult<>();
+    	 CategoryInfo category = new CategoryInfo();
+         try {
+             iCategoryInfoService.moveCategoryInfo(categoryInfo);
+             category = iCategoryInfoService.selectCategoryInfoById(categoryInfo.getCategoryId());
+         } catch (BaseException e) {
+             return webResult.fail(e);
+         }
+         return webResult.success("移动标签分类成功", category);
+    }
+    
 
 }

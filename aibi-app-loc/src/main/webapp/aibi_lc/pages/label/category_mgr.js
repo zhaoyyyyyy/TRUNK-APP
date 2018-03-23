@@ -40,6 +40,16 @@ window.loc_onload = function() {
 		    maskMassage : 'Load...'
 	   });
 		setting = {  
+			edit:{
+				drag:{
+					isCopy: false,
+					isMove: true,
+					prev:true,
+					next:true,
+					inner:true,
+				},
+				enable:true,
+			},
 			view: {
 				selectedMulti: false,
 				addHoverDom: addHoverDom,
@@ -54,16 +64,23 @@ window.loc_onload = function() {
 				selectedMulti: false,			
 				simpleData: {  
 	                enable: true,   //设置是否使用简单数据模式(Array)  	                    
-	            },  	
+	            },  
+	            keep : {
+	            	parent:true,
+	            },
 	            key: {             	
 	            	idKey: "categoryId",    //设置节点唯一标识属性名称  
 	                pIdKey: "parentId" ,     //设置父节点唯一标识属性名称  
 	                name:'categoryName',//zTree 节点数据保存节点名称的属性名称  
-	                title: "categoryName"//zTree 节点数据保存节点提示信息的属性名称        
+	                title: "categoryName",//zTree 节点数据保存节点提示信息的属性名称        
+	                sortNum:"sortNum"// // 节点排序
 	            }  
 			},
 			callback: {
 				onClick: zTreeOnClick,
+				beforeDrag: zTreeBeforeDrag,
+				beforeDrop: zTreeBeforeDrop,
+				onDrop:zTreeOnDrop,
 //				onAsyncSuccess: zTreeOnAsyncSuccess
 			}
 		}	
@@ -121,6 +138,9 @@ window.loc_onload = function() {
 			            return;
 				    } else if (Ppname == "") {
 				            $.alert("标签分类名称不能为空");
+				    }
+				    else if(Ppname.length>8){
+			    		$.alert("分类名称过长");
 				    }else {
 				        $.commAjax({						
 							url : $.ctx + '/api/label/categoryInfo/save',
@@ -131,14 +151,15 @@ window.loc_onload = function() {
 								"categoryName":Ppname,
 								"parentId":treeNode.categoryId,
 							},
-							onSuccess:function(data){		
+							onSuccess:function(data){	
 								var treeObj = $.fn.zTree.getZTreeObj("ztree");
 								var newNode = {
 									categoryName:Ppname,
 									categoryId:data.data.categoryId,
 									sysId:data.data.sysId,
 									categoryName:data.data.categoryName,
-									parentId:data.data.parentId
+									parentId:data.data.parentId,
+									sortNum:data.data.sortNum
 								};
 								var nodes = treeObj.getNodesByParam("tId", treeNode.tId, null);
 								newNode = treeObj.addNodes(nodes[0], newNode);
@@ -237,15 +258,18 @@ window.loc_onload = function() {
 		        	 });
 			    }
         	 $('#add-dialog-btn').click(function(){	        	 	
-        	 	var Ppname=$( "#dialog" ).find("input").val();	  
+        	 	var Ppname=$( "#dialog" ).find("input").val();	
         	 	if (Ppname == null) {
 		            return;
 			    } else if (Ppname == "") {
-			            alert("标签分类名称不能为空");
-			    }else {
+			            $.alert("标签分类名称不能为空");
+			    }else if(Ppname.length>8){
+			    		$.alert("分类名称过长");
+			    }
+			    else {
 			        $.commAjax({						
 						url : $.ctx + '/api/label/categoryInfo/update',
-						isShowMask : true,
+						isShowMask : true,	
 						async:true,
 						postData : {
 							"sysId" :labelId,
@@ -276,7 +300,86 @@ window.loc_onload = function() {
 			$("#exampleInputAmount1").val("");
 			leftTreeCagyName = treeNode.categoryName;
 			showLabelInfo();
-		};		
+		};
+		//标签分类页面拖拽返回函数
+		function zTreeOnDrop(event, treeId, treeNodes, targetNode, moveType, isCopy){
+			var targetSortNum, parentId;
+			if(moveType =="next"){
+				targetSortNum = targetNode.sortNum+1;
+				parentId = targetNode.parentId;
+			}
+			if(moveType == "inner"){
+				targetSortNum = targetNode.sortNum;
+				parentId = targetNode.categoryId;
+			}
+			if(moveType == "prev"){
+				targetSortNum = targetNode.sortNum;
+				parentId = targetNode.parentId;
+			}
+			$.commAjax({			
+			    url : $.ctx+'/api/label/categoryInfo/move',  
+			    dataType : 'json', 
+			    postData : {
+						"categoryId" :treeNodes[0].categoryId,
+						"targetSortNum":targetSortNum,
+						"sysId":targetNode.sysId,
+						"sortNum":treeNodes[0].sortNum,
+						"parentId":parentId,
+					},
+				onSuccess: function(data){
+					$.commAjax({			
+					    url : $.ctx+'/api/label/categoryInfo/queryList',
+					    isShowMask : true,
+					    dataType : 'json', 
+					    async:true,
+					    postData : {
+								"sysId" :labelId,
+							},
+					    onSuccess: function(data){
+					    	//整体SortNum发生变化，重新刷一遍树，默认展开操作节点
+					    	var ztreeObj = [{"categoryId":null,"sysId":null,"sysType":null,"categoryDesc":null,"categoryName":"根","parentId":null,"categoryPath":null,"isLeaf":null,"statusId":null,"sortNum":null,"levelId":null,"children":[]}]
+					    	if(data.data.length != 0){
+					    		ztreeObj[0].children = data.data;
+					    	}
+					    	$.fn.zTree.init($("#ztree"), setting, ztreeObj);
+					    	var treeObj = $.fn.zTree.getZTreeObj("ztree");
+					    	var nodes ;
+					    	if(treeNodes[0].parentTId =="ztree_1"){
+					    		nodes = treeObj.getNodesByParam("tId", "ztree_1", null);
+					    	}else{
+					    		nodes = treeObj.getNodesByParam("tId", targetNode.parentTId, null);
+					    	}
+					    	treeObj.expandNode(nodes[0]);
+					    	labeltree();
+					    },
+					    maskMassage : '正在移动...'
+				   });
+				},
+				maskMassage : '正在移动...'
+			});
+		}
+		function zTreeBeforeDrag(treeId, treeNodes){
+			var falg;
+			if(treeNodes[0].sortNum!= null && treeNodes[0].sortNum != "" &&treeNodes[0].sortNum  != undefined){
+				falg = true;
+			}else{
+				falg = false;
+			}
+			return falg;
+		}
+		function zTreeBeforeDrop(treeId, treeNodes, targetNode, moveType) {//用于捕获节点拖拽操作结束之前的事件回调函数
+			var falg;
+			if(targetNode.sortNum!= null && targetNode.sortNum != "" &&targetNode.sortNum  != undefined){
+				if(targetNode.categoryName == treeNodes[0].categoryName){
+					falg = false;
+				}else{
+					falg = true;
+				}
+			}else{
+				falg = false;
+			}
+			return falg;
+		};
 	}
 	//标签全部选中
 	$("#selectAll").click(function(){	
@@ -407,7 +510,8 @@ window.loc_onload = function() {
 	            	idKey: "sysId",    //设置节点唯一标识属性名称  
 	                pIdKey: "parentId" ,     //设置父节点唯一标识属性名称  
 	                name:'categoryName',//zTree 节点数据保存节点名称的属性名称  
-	                title: "categoryName"//zTree 节点数据保存节点提示信息的属性名称        
+	                title: "categoryName",//zTree 节点数据保存节点提示信息的属性名称 
+	                sortNum:"sortNum"// // 节点排序
 	            }  
 			},
 			callback: {
