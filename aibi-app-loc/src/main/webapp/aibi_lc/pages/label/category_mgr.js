@@ -10,7 +10,7 @@ window.loc_onload = function() {
 	var leftTreeCagyName;//左边树选中的分类名称
 	$("#labelLength").html(0);
 	$("#dialog").dialog({
-	      height:164,
+	      height:180,
 	      width: 300,
 	      modal: true,
 	      autoOpen: false,

@@ -1118,12 +1118,9 @@ span.del-btn{
 	right:-260px;
 	z-index:99;
 	width:260px;
-	min-height:400px;
-	max-height:520px;
 	background:#fff;
 	border-left: 1px solid #2EA658;
 	transition:all 0.2s linear;
-	overflow-y:auto;
 }
 .label-dialog.active{
 	right:0;
@@ -1138,12 +1135,15 @@ span.del-btn{
 .label-dialog .ztree{
 	padding:10px;
 	margin-bottom:40px;
+	overflow-y:auto;
+	min-height:400px;
+	max-height:520px;
 }
 .label-dialog > .form-group{
 	padding:10px;
 }
 .label-dialog > p{
-	position:fixed;
+	position:absolute;
 	right:20px;
 	bottom:0;
 	padding:10px
