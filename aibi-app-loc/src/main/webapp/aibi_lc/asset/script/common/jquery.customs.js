@@ -58,6 +58,33 @@ $.extend({
 			}
 		});
 		return codes;
+	},
+	/**
+	 * 页面中根据resourceId 属性，判断该用户是否有按钮的权限
+	 */
+	initWarrentButton : function() {
+		//1.隐藏所有受权限控制的按钮
+		//2.获取用户有哪些按钮权限
+		//3.判断资源中按钮是否展示
+		$("*[resourceCode]").hide();
+		var resourceList;
+		$.commAjax({
+			url: $.ctx+"/api/user/resourceDom/queryDomCodeList",
+			async : false,
+			postData:{"tocken":$.getCurrentToken()},
+			onSuccess:function(result){
+				resourceList = result.data;
+			}
+		});
+		if(resourceList){
+			$("*[resourceCode]").each(function(){
+			    if($.inArray($(this).attr("resourceCode"), resourceList)>-1){
+			    	$(this).show();
+			    }
+			});
+		}
+		return resourceList;
+		
 	}
 })
 	

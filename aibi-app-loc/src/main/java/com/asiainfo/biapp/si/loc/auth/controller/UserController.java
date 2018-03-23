@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -145,6 +146,25 @@ public class UserController extends BaseController<User>{
             return webResult.fail(e);
         }
         return webResult.success("查询页面元素权限成功",user.getDomResource());
+    }
+	
+	@ApiOperation(value = "返回当前用户的页面元素权限")
+    @RequestMapping(value="/resourceDom/queryDomCodeList", method=RequestMethod.POST, produces={ MediaType.APPLICATION_JSON_VALUE })
+    public WebResult<List<String>> findDomResourceMap(){
+        WebResult<List<String>> webResult = new WebResult<>();
+        List<String> list = new ArrayList<String>();
+        User user;
+        try {
+            user = super.getLoginUser();
+            if(user.getDomResource()!=null && user.getDomResource().size()>0){
+                for(Resource resource : user.getDomResource()){
+                    list.add(resource.getResourceCode());
+                }
+            }
+        } catch (BaseException e) {
+            return webResult.fail(e);
+        }
+        return webResult.success("查询页面元素权限成功",list);
     }
 	
 	@ApiOperation(value = "查询菜单权限")
