@@ -7,8 +7,8 @@
     	<meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
     <![endif]-->
     <link rel="stylesheet" theme="default" href="../../asset/css/common/reset.css"/> 
-    <link rel="stylesheet" theme="default" href="../../asset/css/theme/default/coc_frame.css"/> 
-	<link rel="stylesheet" theme="default" href="../../asset/css/theme/default/main.css"/> 
+	<link rel="stylesheet" theme="default" href="../../asset/css/theme/default/public.css"/>
+	<link rel="stylesheet" theme="default" href="../../asset/css/theme/default/main.css"/>
    	<script type="text/javascript" src="../../asset/script/common/include.js"></script>
    	<script type="text/javascript" src="frame.js"></script>
     <!--[if lt IE 9]>
@@ -29,7 +29,14 @@
 		          <span class="glyphicon-search form-control-feedback"></span>
 		        </div>
  			</div>
- 			<div class="ui-notice fright">
+ 			<div class="ui-notice fright clearfix">
+				<!-- <select class="form-control themeBtn" onchange="setTheme()">
+				    <option value="default">绿色主题</option>
+				    <option value="red">红色主题</option>
+				    <option value="blue">蓝色主题</option>
+				</select> -->
+				
+				
  				<!-- 
 	 				<i class="ui-help"></i>
 	 				<i class="ui-clock"></i>
@@ -72,7 +79,7 @@
  	</div>
  	<div class="ui-main fleft">
 		<div class="iframe">
-			<iframe height="100%" frameborder="0"></iframe>
+			<iframe height="100%" frameborder="0" id="iframe"></iframe>
  		</div> 
 	</div>
  </div>

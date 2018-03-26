@@ -1119,7 +1119,7 @@ span.del-btn{
 	z-index:99;
 	width:260px;
 	background:#fff;
-	border-left: 1px solid #2EA658;
+	/* border-left: 1px solid #2EA658; */
 	transition:all 0.2s linear;
 }
 .label-dialog.active{

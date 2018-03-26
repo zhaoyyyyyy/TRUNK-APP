@@ -144,7 +144,7 @@ input[type=checkbox].checkbix+label>span {
     background-color: #3D9CEB !important;
 }
 .radio.success input:checked+label i:before {
-    background-color: #3DAC6E !important;
+    background-color: #3D9CEB !important;
 }
 .radio.success input[type='radio']:checked+label i.default:after {
     border-color: #3D9CEB;
@@ -297,6 +297,9 @@ input[type=checkbox].checkbix+label>span {
 	color: #3D9CEB;
 }
 /* 新增 */
+.label-dialog{
+	border-left: 1px solid #3D9CEB;
+}
 .label-dialog > h3{
 	background:#3D9CEB;
 }

@@ -135,7 +135,7 @@ var  mainPage={
 			Scripts.loadStyle({src:"../../asset/script/component/validate/css/jquery.easyui.css"});
 			Scripts.loadStyle({src:"../../asset/css/lhgcore/lhgdialog.css"});
 			Scripts.loadStyle({src:"../../asset/css/lhgcore/alertWindow.css"});
-			Scripts.loadStyle({src:"../../asset/css/theme/default/common.css"});
+			Scripts.loadStyle({src:"../../asset/css/theme/default/public.css"});
 //			Scripts.loadStyle({src:"../../asset/css/theme/"+theme+"/button.css"});
 //			Scripts.loadStyle({src:"../../asset/css/theme/"+theme+"/page.css"});
 //			Scripts.loadStyle({src:"../../asset/css/theme/"+theme+"/ui.jqgrid.owner.css"});
@@ -143,7 +143,7 @@ var  mainPage={
 //			Scripts.loadStyle({src:"../../asset/css/theme/"+theme+"/tab.css"});
 //			Scripts.loadStyle({src:"../../asset/css/theme/"+theme+"/coc_frame.css"});
 			Scripts.loadStyle({src:"../../asset/css/theme/"+theme+"/common.css"});
-			Scripts.loadStyle({src:"../../asset/css/theme/"+theme+"/main.css"});
+//			Scripts.loadStyle({src:"../../asset/css/theme/"+theme+"/main.css"});
 			
 			Scripts.loadScript({src:[
 			        //图表组件            
