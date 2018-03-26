@@ -1954,10 +1954,70 @@ radio样式
 .ui-table-static .frozen-bdiv.ui-jqgrid-bdiv{
 	top: 40px !important;
 }
-
-
-
-
-
+/* 新增 */
+.label-dialog > h3{
+	background:#009241;
+}
+.ui-label-system > li > div > div > a.all-active{
+	background-color: #009241;
+}
+.ui-lc-mian > .ui-label-mes > span > b{
+	color: #009241;
+}
+.ui-label-system > li > div > div > a.active{
+	border:1px solid #009241;
+	color: #007F3B;
+	border-bottom: 0;
+}
+.ui-label-sec{
+	border: 1px solid #009241;
+}
+.ui-label-system > li > div > div > a > i{
+    background: url(./images/lc-icon.png) no-repeat -24px -271px;
+}
+.ui-label-system > li > label > a.active{
+	color:#009241;
+}
+.ui-label-sec > li > div > a.active{
+	color:#009241;
+}
+.ui-label-list > li:HOVER .ui-label-info,
+.ui-label-list > li:HOVER .ui-lable-icon,
+.ui-label-list > li.active .ui-label-info,
+.ui-label-list > li.active .ui-lable-icon{
+	border-color:#009241;
+}
+.ui-label-list > li:HOVER .ui-label-info > h3 > i,
+.ui-label-list > li.active .ui-label-info > h3 > i{
+	background: url(./images/lc-icon.png) no-repeat -382px -17px;
+}
+.ui-label-list > li:HOVER .ui-label-info > h3,
+.ui-label-list > li.active .ui-label-info > h3{
+	color: #007F3B;
+}
+.ui-calc-content > .ui-conditionCT > .ui-conditionCT-content > h5{
+	color: #009241;
+}
+.ui-conditionBox{
+	border-top:5px solid #009241;
+	border-left:1px solid #E9E9E9;
+	border-right:1px solid #E9E9E9;
+	border-bottom:1px solid #E9E9E9;
+}
+.ui-calc-content > .ui-bracket,.ui-bracket{
+    color: #009241;
+}
+.create-main:hover{
+	border-color: #009241;
+}
+.ui-filter-bar > a.active{
+	color: #009241;
+}
+.ui-filter-bar > a.active .f-ico-triangle-mt.active{
+	border-bottom: 4px solid #009241;
+}
+.ui-filter-bar > a.active .f-ico-triangle-mb.active{
+	border-top: 4px solid #009241;
+}
 
 
