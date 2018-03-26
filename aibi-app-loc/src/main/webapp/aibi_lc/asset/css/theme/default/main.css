@@ -1376,7 +1376,7 @@ span.del-btn{
 }
 /*推送设置*/
 .checkbox-radio {
-    line-height: 1;
+    line-height: 1em!important;
     position: relative;
     display: inline-block;
     margin: 0 10px 0px 0;
