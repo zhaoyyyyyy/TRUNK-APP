@@ -817,13 +817,16 @@
 	position:relative;
 	z-index:9999;
 }
-.create-main.active > .progress  > .progress-label > i{
-	background-position: -458px -258px;
-}
+/* .progress .progress-label > i.icon{
+	background: transparent url(./images/lc-icon.png) no-repeat -458px -257px;
+} */
+/* .create-main.active > .progress  > .progress-label > i{
+	background-position: -458px -257px;
+} */
 .create-main > .progress  > .progress-label > i{
-	 background-position: -458px -294px;
-	 width:24px;
-	 height:24px;
+	/*  background-position: -458px -293px; */
+	 width:25px;
+	 height:25px;
 	 background-color:transparent;
 	 cursor:pointer;
  }
@@ -1425,12 +1428,12 @@ span.del-btn{
 }
 
 .checkbox-radio input[type='checkbox']:checked+label i.default:before {
-    background-color: #3DAC6E !important;
+   /*  background-color: #3DAC6E !important; */
     color: transparent;
 }
 .checkbox-radio  input:checked+label i:before {
     color: #fff;
-    background-color: #3DAC6E !important;
+  /*   background-color: #3DAC6E !important; */
 }
 .checkbox-radio >input[type='checkbox']+label>i.default:before {
     left: 0;
@@ -1463,12 +1466,12 @@ span.del-btn{
 }
 .checkbox-radio  input[type='checkbox']:checked+label i.default:after {
     background-color: initial !important;
-    border-color: #3DAC6E;
+  /*   border-color: #3DAC6E; */
 }
-.checkbox-radio  input:checked+label i:after {
+/* .checkbox-radio  input:checked+label i:after {
     border-color: #3DAC6E;
     background-color: #3DAC6E !important;
-}
+} */
 
 .checkbox-radio  label i:after, .radio.circle label i:before {
     border-radius: 100px;

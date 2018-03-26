@@ -237,7 +237,10 @@ input[type=checkbox].checkbix+label>span {
 	border-color:#009241;
 }
 .progress .progress-label > i.icon{
-	background: #fff url(./images/lc-icon.png) no-repeat -382px -166px;
+	background: transparent url(./images/lc-icon.png) no-repeat -458px -293px;
+}
+.create-main.active > .progress  > .progress-label > i{
+	background-position: -458px -257px;
 }
 .progress-bar.has-error{
     border-color:  #f04134;
@@ -365,6 +368,17 @@ input[type=checkbox].checkbix+label>span {
 .ui-filter-bar > a.active .f-ico-triangle-mb.active{
 	border-top: 4px solid #009241;
 }
-
-
+.checkbox-radio input[type='checkbox']:checked+label i.default:before{
+	 background-color: #3DAC6E !important;
+}
+.checkbox-radio  input:checked+label i:before{
+	  background-color: #3DAC6E !important;
+}
+.checkbox-radio  input[type='checkbox']:checked+label i.default:after {
+    border-color: #3DAC6E;
+}
+.checkbox-radio  input:checked+label i:after {
+    border-color: #3DAC6E;
+    background-color: #3DAC6E !important;
+}
 
