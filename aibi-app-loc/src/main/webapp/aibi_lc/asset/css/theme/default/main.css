@@ -1172,6 +1172,7 @@ span.del-btn{
 }
 .dataSource-tab > .form-horizontal{
 	display:inline-block;
+	text-align:left;
 }
 /*维表管理*/
 .dimtable-table .ui-form-group > .ui-form-group{
