@@ -53,7 +53,7 @@ import com.asiainfo.biapp.si.loc.core.syspush.vo.LabelPushCycleVo;
  */
 
 @Service
-public class CustomerPublishServiceTaskImpl implements ICustomerPublishTaskService{
+public class CustomerPublishTaskServiceImpl implements ICustomerPublishTaskService{
     
     
     @Autowired

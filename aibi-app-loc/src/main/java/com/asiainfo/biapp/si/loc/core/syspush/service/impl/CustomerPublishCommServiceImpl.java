@@ -57,7 +57,7 @@ import com.asiainfo.biapp.si.loc.core.syspush.vo.LabelAttrRelVo;
  */
 
 @Service
-public class CustomerPublishCommImplService implements ICustomerPublishCommService {
+public class CustomerPublishCommServiceImpl implements ICustomerPublishCommService {
 	
 
     @Autowired
