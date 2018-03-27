@@ -13,9 +13,9 @@ import com.asiainfo.biapp.si.loc.base.page.Page;
 import com.asiainfo.biapp.si.loc.base.service.BaseService;
 import com.asiainfo.biapp.si.loc.core.label.entity.LabelExtInfo;
 import com.asiainfo.biapp.si.loc.core.label.entity.LabelInfo;
-import com.asiainfo.biapp.si.loc.core.label.model.ExploreQueryParam;
 import com.asiainfo.biapp.si.loc.core.label.vo.LabelInfoVo;
 import com.asiainfo.biapp.si.loc.core.label.vo.LabelRuleVo;
+import com.asiainfo.biapp.si.loc.core.syspush.vo.LabelPushCycleVo;
 
 /**
  * Title : ILabelInfoService
@@ -148,4 +148,15 @@ public interface ILabelInfoService extends BaseService<LabelInfo, String> {
  	 * @version ZJ
  	 */
  	public void syncUpdateCustomGroupInfo(LabelInfo customGroupInfo,LabelExtInfo labelExtInfo);
+
+    /**
+     * Description:查询标签信息列表
+     *
+     * @param labelInfoVo
+     * @param labelPushCycleVo
+     * @return
+     * @throws BaseException
+     */
+    public List<LabelInfo> getCycleCustom(LabelInfoVo labelInfoVo, LabelPushCycleVo labelPushCycleVo) throws BaseException;
+
 }

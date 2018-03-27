@@ -279,5 +279,14 @@ public class LabelPushCycleServiceImpl extends BaseServiceImpl<LabelPushCycle, S
         return page;
     }
 
+    
+    /**
+     * Description:根据查询条件查询标签推送设置信息
+     * @param LabelPushCycle 查询条件
+     * @return List<LabelPushCycle>
+     */
+    public List<LabelPushCycle> queryLabelPushCycle(LabelPushCycleVo labelPushCycleVo) throws BaseException{
+        return this.iLabelPushCycleDao.selectLabelPushCycle(labelPushCycleVo);
+    }
 
 }

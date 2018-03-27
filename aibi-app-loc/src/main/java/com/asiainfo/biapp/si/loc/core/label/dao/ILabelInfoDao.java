@@ -9,9 +9,11 @@ package com.asiainfo.biapp.si.loc.core.label.dao;
 import java.util.List;
 
 import com.asiainfo.biapp.si.loc.base.dao.BaseDao;
+import com.asiainfo.biapp.si.loc.base.exception.BaseException;
 import com.asiainfo.biapp.si.loc.base.page.Page;
 import com.asiainfo.biapp.si.loc.core.label.entity.LabelInfo;
 import com.asiainfo.biapp.si.loc.core.label.vo.LabelInfoVo;
+import com.asiainfo.biapp.si.loc.core.syspush.vo.LabelPushCycleVo;
 
 /**
  * Title : ILabelInfoDao
@@ -72,5 +74,16 @@ public interface ILabelInfoDao extends BaseDao<LabelInfo, String> {
      * @return
      */
     public List<LabelInfo> selectLabelAllEffectiveInfoList(LabelInfoVo labelInfoVo);
+    
+    /**
+     * Description:查询标签信息列表
+     *
+     * @param labelInfoVo
+     * @param labelPushCycleVo
+     * @return
+     * @throws BaseException
+     */
+    public List<LabelInfo> selectLabelInfoList(LabelInfoVo labelInfoVo, LabelPushCycleVo labelPushCycleVo);
+
 
 }

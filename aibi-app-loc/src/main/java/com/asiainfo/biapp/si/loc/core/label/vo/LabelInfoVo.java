@@ -51,6 +51,8 @@ public class LabelInfoVo extends LabelInfo {
     
     private String createTimeEnd;
     
+    private String labelTypeIds;
+    
     public String getApproveStatusId() {
         return approveStatusId;
     }
@@ -90,5 +92,13 @@ public class LabelInfoVo extends LabelInfo {
 	public void setCreateTimeEnd(String createTimeEnd) {
 		this.createTimeEnd = createTimeEnd;
 	}
+    
+    public String getLabelTypeIds() {
+        return labelTypeIds;
+    }
+
+    public void setLabelTypeIds(String labelTypeIds) {
+        this.labelTypeIds = labelTypeIds;
+    }
     
 }

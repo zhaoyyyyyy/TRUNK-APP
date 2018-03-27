@@ -59,6 +59,14 @@ public interface ILabelPushCycleDao extends BaseDao<LabelPushCycle, String>{
      * @param labelPushCycle 删除条件
      */
     public Integer deleteByLabelPushCycle(LabelPushCycle labelPushCycle) throws BaseException;
+
     
+    
+    /**
+     * Description:根据查询条件查询标签推送设置信息
+     * @param labelPushCycle 查询条件
+     * @return List<LabelPushCycle>
+     */
+    public List<LabelPushCycle> selectLabelPushCycle(LabelPushCycleVo labelPushCycleVo) throws BaseException;
 
 }

@@ -56,6 +56,7 @@ import com.asiainfo.biapp.si.loc.core.label.service.IMdaSysTableColService;
 import com.asiainfo.biapp.si.loc.core.label.service.IMdaSysTableService;
 import com.asiainfo.biapp.si.loc.core.label.vo.LabelInfoVo;
 import com.asiainfo.biapp.si.loc.core.label.vo.LabelRuleVo;
+import com.asiainfo.biapp.si.loc.core.syspush.vo.LabelPushCycleVo;
 
 /**
  * Title : LabelInfoServiceImpl
@@ -374,4 +375,9 @@ public class LabelInfoServiceImpl extends BaseServiceImpl<LabelInfo, String> imp
         }
 	    return null;
 	}*/
+    
+    @Override
+    public List<LabelInfo> getCycleCustom(LabelInfoVo labelInfoVo, LabelPushCycleVo labelPushCycleVo) throws BaseException{
+        return iLabelInfoDao.selectLabelInfoList(labelInfoVo, labelPushCycleVo);
+    }
 }

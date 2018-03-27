@@ -120,6 +120,18 @@ public class LabelPushCycleDaoImpl extends BaseDaoImpl<LabelPushCycle, String> i
         
         return this.excuteHql(sql, labelPushCycle.getCustomGroupId(),labelPushCycle.getPushCycle());
     }
+
     
+    /**
+     * Description:根据查询条件查询标签推送设置信息
+     * @param labelPushCycle 查询条件
+     * @return List<LabelPushCycle>
+     */
+    public List<LabelPushCycle> selectLabelPushCycle(LabelPushCycleVo labelPushCycleVo) throws BaseException {
+        Map<String,Object> reMap = this.fromBean(labelPushCycleVo);
+        Map<String, Object> params = (Map<String, Object>)reMap.get("params");
+        
+        return this.findListByHql(reMap.get("hql").toString(), params);
+    }
     
 }

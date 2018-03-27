@@ -108,8 +108,15 @@ public interface ILabelPushCycleService extends BaseService<LabelPushCycle, Stri
      * @param customGroup
      */
     public Page<Map<String, String>> findGroupList(Page<Map<String, String>> page, LabelInfoVo customGroup) throws BaseException;
+
     
     
+    /**
+     * Description:根据查询条件查询标签推送设置信息
+     * @param LabelPushCycle 查询条件
+     * @return List<LabelPushCycle>
+     */
+    public List<LabelPushCycle> queryLabelPushCycle(LabelPushCycleVo labelPushCycleVo) throws BaseException;
     
 
 }

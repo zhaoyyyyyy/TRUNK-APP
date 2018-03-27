@@ -45,6 +45,8 @@ public class LabelPushReqVo extends LabelPushReq{
      */
     @ApiParam(value="标签信息")
     private LabelInfoVo customInfoVo;
+    
+    private String selSysIds;
 
     
     
@@ -54,6 +56,14 @@ public class LabelPushReqVo extends LabelPushReq{
     
     public void setCustomInfoVo(LabelInfoVo customInfoVo) {
         this.customInfoVo = customInfoVo;
+    }
+    
+    public String getSelSysIds() {
+        return selSysIds;
+    }
+    
+    public void setSelSysIds(String selSysIds) {
+        this.selSysIds = selSysIds;
     }
 
 }

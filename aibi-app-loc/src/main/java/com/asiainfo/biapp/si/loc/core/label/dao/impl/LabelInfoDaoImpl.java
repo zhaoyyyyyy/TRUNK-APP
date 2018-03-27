@@ -14,15 +14,16 @@ import java.util.Map;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Repository;
 
-import com.asiainfo.biapp.si.loc.base.utils.DateUtil;
 import com.asiainfo.biapp.si.loc.base.dao.BaseDaoImpl;
 import com.asiainfo.biapp.si.loc.base.exception.BaseException;
 import com.asiainfo.biapp.si.loc.base.page.Page;
+import com.asiainfo.biapp.si.loc.base.utils.DateUtil;
 import com.asiainfo.biapp.si.loc.base.utils.LogUtil;
 import com.asiainfo.biapp.si.loc.base.utils.StringUtil;
 import com.asiainfo.biapp.si.loc.core.label.dao.ILabelInfoDao;
 import com.asiainfo.biapp.si.loc.core.label.entity.LabelInfo;
 import com.asiainfo.biapp.si.loc.core.label.vo.LabelInfoVo;
+import com.asiainfo.biapp.si.loc.core.syspush.vo.LabelPushCycleVo;
 
 /**
  * Title : LabelInfoDaoImpl
@@ -306,4 +307,28 @@ public class LabelInfoDaoImpl extends BaseDaoImpl<LabelInfo, String> implements 
         return super.findListByHql(hql.toString(), params);
     }
 
+    public List<LabelInfo> selectLabelInfoList(LabelInfoVo labelInfoVo, LabelPushCycleVo labelPushCycleVo){
+        Map<String, Object> reMap = fromBean(labelInfoVo, new Page<LabelInfo>());
+        Map<String, Object> params = (Map<String, Object>) reMap.get("params");
+        StringBuffer hql = new StringBuffer(reMap.get("hql").toString());
+        //处理多个labelTypeId的情况
+        if (null != labelInfoVo) {
+            if (StringUtil.isNotEmpty(labelInfoVo.getLabelTypeIds())) {
+                String labelTypeIds = labelInfoVo.getLabelTypeIds();
+                hql.append(" and l.labelTypeId in (").append(labelTypeIds).append(") ");
+            }
+        }
+        //处理多表关联的情况
+        if (null != labelPushCycleVo) {
+            if (StringUtil.isNotEmpty(labelPushCycleVo.getCustomGroupId())) {
+                if (labelPushCycleVo.getCustomGroupId().contains("SELECT DISTINCT")) {
+                    hql.append(" and l.labelId not in (").append(labelPushCycleVo.getCustomGroupId()).append(") ");
+                }
+            }
+        }
+        LogUtil.debug("查询标签信息列表sql:"+hql.toString());
+        return super.findListByHql(hql.toString(), params);
+    }
+    
+    
 }

@@ -227,8 +227,10 @@ public class CustomerPublishDefaultThread implements ICustomerPublishThread {
             }
 		}
 		
-        //跟新实时更新推送状态
-        this.updateLabelPushReq(ServiceConstants.LabelPushReq.PUSH_STATUS_SUCCESS, null);
+        if (StringUtil.isNoneBlank(labelPushReq.getReqId())) {
+            //跟新实时更新推送状态
+            this.updateLabelPushReq(ServiceConstants.LabelPushReq.PUSH_STATUS_SUCCESS, null);
+        }
         
         LogUtil.debug("Customer("+customInfo.getLabelId()+")Publish end,cost:" + (System.currentTimeMillis() - start)/1000.0 + " s.");
 		LogUtil.info("Exist CustomerPublishDefaultThread.run()");
