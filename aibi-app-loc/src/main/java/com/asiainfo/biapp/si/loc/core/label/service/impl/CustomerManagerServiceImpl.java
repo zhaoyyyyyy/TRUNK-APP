@@ -57,6 +57,7 @@ public class CustomerManagerServiceImpl implements ICustomerManagerService {
 		    customGroup = labelInfoService.get(customId);
 		    model.setOrgId(customGroup.getOrgId());// 权限
 		    model.setCreateCustom(true);
+		    model.setConfigId(customGroup.getConfigId());
 			List<LabelRuleVo> labelRuleList = ruleService.queryCiLabelRuleList(customId,LabelRuleContants.LABEL_RULE_FROM_COSTOMER);
 			String countSqlStr = "";
 			if (haveCustomOrVerticalLabel(labelRuleList)) {
@@ -71,7 +72,7 @@ public class CustomerManagerServiceImpl implements ICustomerManagerService {
 			} else {
 				tableName = LabelInfoContants.KHQ_CROSS_TABLE + customGroup.getConfigId() + "_"+ model.getDataDate();
 			}
-			backServiceImpl.insertCustomerData(countSqlStr, tableName, customId);
+			backServiceImpl.insertCustomerData(countSqlStr, tableName, customId,customGroup.getConfigId());
 			// 3.发通知 setCustomNum
 			String listTableSql = exploreServiceImpl.getListTableSql(customId, model.getDataDate());
 			int customNum = backServiceImpl.queryCount("select count(1) from "+listTableSql);

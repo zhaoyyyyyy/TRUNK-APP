@@ -42,6 +42,7 @@ public class ExploreQueryParam {
 	private boolean isValidate;//是否生成校验sql
 
 	private boolean isCreateCustom;//生成的是否是创建客户群sql
+	private String configId;
 	/**数据权限 20180117 */
 	private String orgId;
 	
@@ -126,6 +127,14 @@ public class ExploreQueryParam {
 
 	public void setCreateCustom(boolean isCreateCustom) {
 		this.isCreateCustom = isCreateCustom;
+	}
+
+	public String getConfigId() {
+		return configId;
+	}
+
+	public void setConfigId(String configId) {
+		this.configId = configId;
 	}
 
 }

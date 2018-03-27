@@ -257,6 +257,10 @@ public class LabelExploreServiceImpl implements ILabelExploreService {
 			StringBuffer selectSql = new StringBuffer("");
 			String columnName = LabelInfoContants.KHQ_CROSS_COLUMN;
 			selectSql.append("select " + dataTabelAlias + "." + columnName);
+			List<String> orgColumns = CocCacheProxy.getCacheProxy().getAllOrgColumnByConfig(queryParam.getConfigId());
+			for(String s: orgColumns){
+				selectSql.append("," + dataTabelAlias + "." + s);
+			}
 			selectSql.append(" from ").append(sqlStr).append(whereSb);
 			return selectSql.toString();
 		}

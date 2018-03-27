@@ -292,7 +292,6 @@ public class LocCacheBase extends ICacheBase implements ApplicationContextAware{
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		Map<String,String> configOrg = new HashMap<String,String>();
-		Map<String,String> iOrgoOrg = new HashMap<String,String>();
 		try {
 			conn = JDBCUtil.getInstance().getWebConnection();
 			ps = conn.prepareStatement(sql.toString());
@@ -300,17 +299,14 @@ public class LocCacheBase extends ICacheBase implements ApplicationContextAware{
 			while(rs.next()){
 				if(configOrg.containsKey(rs.getString("config_id"))){
 					String iOrgs = configOrg.get(rs.getString("config_id"));
-					iOrgs =  iOrgs + ",org" + rs.getString("level_id");
+					iOrgs =  iOrgs + ",org_level_" + rs.getString("level_id");
 					configOrg.put(rs.getString("config_id"), iOrgs);
 				}else{
-					configOrg.put(rs.getString("config_id"), "org"+rs.getString("level_id"));
+					configOrg.put(rs.getString("config_id"), "org_level_"+rs.getString("level_id"));
 				}
-				iOrgoOrg.put("org"+rs.getString("level_id"), rs.getString("org_column_name"));
-				
 			}
 			System.out.println(configOrg.toString());
-			this.setHashMap(Prefix.LOC+Prefix.KV+CacheKey.ALL_CONFIG_ORG_MAP, configOrg);
-//			System.out.println(iOrgoOrg.toString());
+			this.setHashMap(Prefix.LOC+Prefix.CONFIG+CacheKey.ALL_CONFIG_ORG_MAP, configOrg);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}finally{
@@ -322,7 +318,7 @@ public class LocCacheBase extends ICacheBase implements ApplicationContextAware{
 	public List<String> getAllOrgColumnByConfig(String configId){
 		List<String> list = null;
 		try {
-			String ss = this.getStringByKey(Prefix.KV+CacheKey.ALL_CONFIG_ORG_MAP, configId);
+			String ss = this.getStringByKey(CacheKey.ALL_CONFIG_ORG_MAP, configId);
 			if(StringUtils.isNotBlank(ss)){
 				list = Arrays.asList(ss.split(","));
 			}
