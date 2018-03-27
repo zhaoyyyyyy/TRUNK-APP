@@ -40,7 +40,7 @@ import io.swagger.annotations.ApiOperation;
  * @version 1.0.0.2018年3月26日
  */
 
-@Api(value = "周期性推送",description="日周期、月周期")
+@Api(value = "客户群推送",description="日周期、月周期")
 @RequestMapping("api/syspush/task")
 @RestController
 public class CustomerPublishTaskController {
