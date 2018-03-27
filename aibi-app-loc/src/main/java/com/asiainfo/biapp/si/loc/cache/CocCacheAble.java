@@ -80,5 +80,10 @@ public interface CocCacheAble {
 	 */
 	public Integer getNewLabelMonthStatus();
 	
-	
+	/**
+	 * 根据专区id 获取该专区对应的coc权限字段名称
+	 * @param configId
+	 * @return
+	 */
+	public List<String> getAllOrgColumnByConfig(String configId);
 }

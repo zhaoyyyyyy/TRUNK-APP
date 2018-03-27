@@ -8,6 +8,7 @@ package com.asiainfo.biapp.si.loc.bd.common.service.impl;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -138,7 +139,7 @@ public class BackServiceImpl implements IBackSqlService{
     }
 
 	@Override
-	public boolean insertCustomerData(String sql, String tableName, String customerId) throws SqlRunException {
+	public boolean insertCustomerData(String sql, String tableName, String customerId,String configId) throws SqlRunException {
 		log.debug("-------------------- BackServiceImpl.insertCustomerData sql = " + sql);
 		log.debug("-------------------- BackServiceImpl.insertCustomerData tableName = " + tableName);
 		log.debug("-------------------- BackServiceImpl.insertCustomerData customerId = " + customerId);
@@ -148,14 +149,14 @@ public class BackServiceImpl implements IBackSqlService{
 		String backType =  CocCacheProxy.getCacheProxy().getSYSConfigInfoByKey("LOC_CONFIG_SYS_BGDB_TYPE");
 		System.out.println(backType);
 		if(backType.equals("Hive")||backType.equals("SparkSql")){
-			isInsertTable = this.insertCustomDataHive(sql, tableName, customerId);
+			isInsertTable = this.insertCustomDataHive(sql, tableName, customerId,configId);
 		}else if(backType.equals("Ads")){
 			isInsertTable = this.insertCustomDataAds(sql, tableName, customerId);
 		}
 		return isInsertTable;
 	}
 	
-	private boolean insertCustomDataHive(String sql, String tableName, String customerId) throws SqlRunException{
+	private boolean insertCustomDataHive(String sql, String tableName, String customerId,String configId) throws SqlRunException{
 		log.debug("-------------------- BackServiceImpl.insertCustomDataHive sql = " + sql);
 		log.debug("-------------------- BackServiceImpl.insertCustomDataHive tableName = " + tableName);
 		log.debug("-------------------- BackServiceImpl.insertCustomDataHive customerId = " + customerId);
@@ -164,17 +165,18 @@ public class BackServiceImpl implements IBackSqlService{
 		boolean isInsertTable = true;
 		log.debug("-------------------- BackServiceImpl.insertCustomDataHive isExistsTable = " + isExistsTable);
 		List<String> primaryKey = new ArrayList<String>();
-		Map<String,String> columnName = new HashMap<String,String>();
+		Map<String,String> columnName = new LinkedHashMap<String,String>();
 		String insertcolumn = "";
 		insertcolumn= customerId;
 		primaryKey.add(LabelInfoContants.KHQ_CROSS_ID_PARTION);
 		columnName.put(LabelInfoContants.KHQ_CROSS_ID_PARTION, "string");
 		columnName.put(LabelInfoContants.KHQ_CROSS_COLUMN, "string");
-		columnName.put("org1", "string");
-		columnName.put("org2", "string");
-		columnName.put("org3", "string");
-		columnName.put("org4", "string");
-		columnName.put("org5", "string");
+		List<String> orgColumns = CocCacheProxy.getCacheProxy().getAllOrgColumnByConfig(configId);
+		if(null != orgColumns && !orgColumns.isEmpty()){
+			for(String org: orgColumns){
+				columnName.put(org, "String");
+			}
+		}
 		if(!isExistsTable){
 			isCreateTable = getBackDaoBean().createTableByName(tableName, columnName, primaryKey);
 			log.debug("-------------------- BackServiceImpl.insertCustomDataHive isCreateTable = " + isCreateTable);

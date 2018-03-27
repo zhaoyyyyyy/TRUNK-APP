@@ -89,6 +89,13 @@ public class CocJavaCache implements CocCacheAble{
 	}
 
 
+	@Override
+	public List<String> getAllOrgColumnByConfig(String configId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
 	
 
 }

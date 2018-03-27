@@ -1,7 +1,11 @@
 package com.asiainfo.biapp.si.loc.base;
 
 import java.io.Serializable;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -9,6 +13,7 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
@@ -16,7 +21,6 @@ import org.springframework.context.ApplicationContextAware;
 
 import com.asiainfo.biapp.si.loc.auth.model.DicData;
 import com.asiainfo.biapp.si.loc.auth.service.IDicDataService;
-import com.asiainfo.biapp.si.loc.auth.utils.DicDataUtil;
 import com.asiainfo.biapp.si.loc.auth.utils.LocConfigUtil;
 import com.asiainfo.biapp.si.loc.base.common.CommonConstants;
 import com.asiainfo.biapp.si.loc.base.common.LabelInfoContants;
@@ -25,6 +29,7 @@ import com.asiainfo.biapp.si.loc.base.extend.SpringContextHolder;
 import com.asiainfo.biapp.si.loc.base.utils.JsonUtil;
 import com.asiainfo.biapp.si.loc.base.utils.LogUtil;
 import com.asiainfo.biapp.si.loc.base.utils.RedisUtils;
+import com.asiainfo.biapp.si.loc.bd.common.util.JDBCUtil;
 import com.asiainfo.biapp.si.loc.core.label.dao.ILabelInfoDao;
 import com.asiainfo.biapp.si.loc.core.label.dao.INewestLabelDateDao;
 import com.asiainfo.biapp.si.loc.core.label.entity.LabelExtInfo;
@@ -74,6 +79,7 @@ public class LocCacheBase extends ICacheBase implements ApplicationContextAware{
 		this.initAllConfigInfo();
 		this.initAllDicData();
 		this.initCiNewestLabelDate();
+		this.initOrgColumn();
 	}
 	
 	/**
@@ -273,6 +279,57 @@ public class LocCacheBase extends ICacheBase implements ApplicationContextAware{
 	
 	public <T extends Serializable> T getSessionCache(String token,String key) throws Exception{
 		return this.getSessionHashMap(Prefix.LOC+Prefix.SESSION+token, key);
+	}
+	
+	public void initOrgColumn(){
+		StringBuffer sql = new StringBuffer();
+		sql.append("select l.level_id,l.org_column_name,t.config_id from loc_config_table_rel t");
+		sql.append(" left join  LOC_PRE_CONFIG_INFO p on p.config_id=t.config_id");
+		sql.append(" left join DIM_ORG_LEVEL l on l.pri_key=t.pri_key ");
+		sql.append(" where p.CONFIG_STATUS=1  order by l.level_id");
+		
+		Connection conn = null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		Map<String,String> configOrg = new HashMap<String,String>();
+		Map<String,String> iOrgoOrg = new HashMap<String,String>();
+		try {
+			conn = JDBCUtil.getInstance().getWebConnection();
+			ps = conn.prepareStatement(sql.toString());
+			rs = ps.executeQuery();
+			while(rs.next()){
+				if(configOrg.containsKey(rs.getString("config_id"))){
+					String iOrgs = configOrg.get(rs.getString("config_id"));
+					iOrgs =  iOrgs + ",org" + rs.getString("level_id");
+					configOrg.put(rs.getString("config_id"), iOrgs);
+				}else{
+					configOrg.put(rs.getString("config_id"), "org"+rs.getString("level_id"));
+				}
+				iOrgoOrg.put("org"+rs.getString("level_id"), rs.getString("org_column_name"));
+				
+			}
+			System.out.println(configOrg.toString());
+			this.setHashMap(Prefix.LOC+Prefix.KV+CacheKey.ALL_CONFIG_ORG_MAP, configOrg);
+//			System.out.println(iOrgoOrg.toString());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}finally{
+			JDBCUtil.getInstance().free(conn, ps, rs);
+		}
+		
+	}
+	
+	public List<String> getAllOrgColumnByConfig(String configId){
+		List<String> list = null;
+		try {
+			String ss = this.getStringByKey(Prefix.KV+CacheKey.ALL_CONFIG_ORG_MAP, configId);
+			if(StringUtils.isNotBlank(ss)){
+				list = Arrays.asList(ss.split(","));
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return list;
 	}
 	
 

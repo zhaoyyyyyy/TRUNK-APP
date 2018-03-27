@@ -156,5 +156,5 @@ public interface IBackSqlService {
      * @return
      * @throws SqlRunException
      */
-    public boolean insertCustomerData(String sql,String tableName,String customerId) throws SqlRunException;
+    public boolean insertCustomerData(String sql,String tableName,String customerId,String configId) throws SqlRunException;
 }

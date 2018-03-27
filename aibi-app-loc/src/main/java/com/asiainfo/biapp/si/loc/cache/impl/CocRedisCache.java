@@ -96,6 +96,10 @@ public class CocRedisCache implements CocCacheAble{
 		res= LocCacheBase.getInstance().getNewestLabelDate().getMonthNewestStatus();
 		return res;
 	}
+	
+	public List<String> getAllOrgColumnByConfig(String configId){
+		return LocCacheBase.getInstance().getAllOrgColumnByConfig(configId);
+	}
 
 
 }

@@ -440,6 +440,9 @@ public abstract class ICacheBase {
 		/** 所有有效的标签集合 */
 		String ALL_EFFECTIVE_LABEL_MAP = "ALL_EFFECTIVE_LABEL_MAP";
 		
+		/** 所有有效专区对应的全量表权限字段名称map */
+		String ALL_CONFIG_ORG_MAP = "ALL_CONFIG_ORG_MAP";
+		
 		/** 所有有效的标签对应的column集合 */
 		String ALL_EFFECTIVE_LABEL_COLUMNS = "ALL_EFFECTIVE_LABEL_COLUMNS";
 		
