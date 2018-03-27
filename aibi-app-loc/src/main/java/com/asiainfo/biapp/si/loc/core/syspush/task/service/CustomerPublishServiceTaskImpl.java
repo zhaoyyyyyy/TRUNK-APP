@@ -104,6 +104,25 @@ public class CustomerPublishServiceTaskImpl implements ICustomerPublishTaskServi
         return res;
     }
 
+    @Override
+    public boolean pushCustom(String customId) {
+        LogUtil.info(this.getClass().getSimpleName()+".excutor() begin");
+        long s = System.currentTimeMillis();
+        
+        //1，推送
+        boolean res = true;
+        if (StringUtil.isNoneBlank(customId)) {
+            LabelInfo cycleCustom = new LabelInfo();
+            cycleCustom.setLabelId(customId);
+            res = this.pushCustom(cycleCustom, true);
+        } else {
+            LogUtil.info("周期性客户群ID为空！本周期不推送。");
+        }
+
+        LogUtil.info(this.getClass().getSimpleName()+".excutor() end.cost:"+((System.currentTimeMillis()-s)/1000L)+" s.");
+        
+        return res;
+    }
     
     /**
      * 根据标签信息表，以及标签推送设置信息表，找出需要推送的客户群
@@ -149,7 +168,9 @@ public class CustomerPublishServiceTaskImpl implements ICustomerPublishTaskServi
      * Description:根据客户群去启动客户群推送线程
      * @param cycleCustoms
      */
-    private void pushCustom(LabelInfo cycleCustom, boolean isJobTask) {
+    private boolean pushCustom(LabelInfo cycleCustom, boolean isJobTask) {
+        boolean res = true;
+        
         if (null != cycleCustom) {
             //获取清单表名
             String customId = cycleCustom.getLabelId();
@@ -163,6 +184,7 @@ public class CustomerPublishServiceTaskImpl implements ICustomerPublishTaskServi
             try {
                 labelPushCycles = labelPushCycleServiceImpl.queryLabelPushCycle(labelPushCycleVo);
             } catch (BaseException e) {
+                res = false;
                 String msg = "查询标签推送设置信息失败";
                 LogUtil.error(msg, e);
             }
@@ -183,8 +205,11 @@ public class CustomerPublishServiceTaskImpl implements ICustomerPublishTaskServi
             } else {
                 LogUtil.info("周期性客户群(" + customId + ")没有设置推送平台，本周期不推送。");
             }
+        } else {
+            LogUtil.info("周期性客户群为空！本周期不推送。");
         }
         
+        return res;
     }
     
 

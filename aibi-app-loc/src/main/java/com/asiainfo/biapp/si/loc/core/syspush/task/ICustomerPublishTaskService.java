@@ -3,8 +3,8 @@
  *
  * CopyRight (c) 2018 北京亚信智慧数据科技有限公司 保留所有权利。
  */
-package com.asiainfo.biapp.si.loc.core.syspush.task;
 
+package com.asiainfo.biapp.si.loc.core.syspush.task;
 
 /**
  * Title : ICustomerPublishService
@@ -30,8 +30,16 @@ package com.asiainfo.biapp.si.loc.core.syspush.task;
 public interface ICustomerPublishTaskService {
 
     /**
-     * 周期性客户群推送接口
+     * 周期性客户群推送接口(后台自己查找需要推送的客户群)
      */
     public boolean excutor(int updateCycle);
+    
+    /**
+     * 周期性客户群推送接口(指定需要推送的客户群)
+     * 
+     * @param customId 客户群ID
+     * @return boolean 是否成功启动推送线程
+     */
+    public boolean pushCustom(String customId);
 
 }
