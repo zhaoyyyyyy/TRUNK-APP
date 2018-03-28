@@ -17,6 +17,9 @@ var model = {
 }
 window.loc_onload = function() {
 	var priKey = $.getUrlParam("priKey");
+    var isObj = $("#isPartitionCheckedInput");
+    isObj.click();
+    isObj.attr('checked',true);
 	var wd = frameElement.lhgDG;
 	var number = "1:1;2:2;3:3;4:4;5:5";
 	if (priKey != null && priKey != "" && priKey != undefined) {
