@@ -450,7 +450,7 @@ function getHeight(content, defHeight) {
 		if (height > parseInt(height)) {
 			height = parseInt(height) + 1;
 		}
-		height = 110 + height * 21;
+		height = 130 + height * 21;
 
 		height = height > 160 ? height : 160;
 		if (height > 500)
