@@ -364,7 +364,7 @@ window.loc_onload = function() {
 		if($(".selectList").length>2){
 			$.alert("只能添加三行");
 		}else{
-			var html ="<div class='mt20 selectList' id = radios"+nameNumber+"> <div class='form-group mr100 optionhtml' id=optionhtml"+nameNumber+"> <div class=''><select class='form-control input-pointer select-Sort' name='dataStatusId' ></select></div></div><div class='radio circle success'> <input type='radio' name='radio"+nameNumber+"' id='myr'> <label for='myr'><i class='default'></i>升序</label></div><div class='radio circle success'><input type='radio' name='radio"+nameNumber+"'  id='myr1'> <label  for='myr1'><i class='default'></i>降序</label></div><button type='button' class='ui-btn ui-btn-second ml30' onclick='fun_to_del(\"radios"+ nameNumber + "\")'>删除</button></div> ";
+			var html ="<div class='mt20 selectList' id = radios"+nameNumber+"> <div class='form-group mr100 optionhtml' id=optionhtml"+nameNumber+"> <div class=''><select class='form-control input-pointer select-Sort' name='dataStatusId' ></select></div></div><div class='radio circle success'> <input type='radio' name='radio"+nameNumber+"' id='myr'checked='checked'> <label for='myr'class='active'><i class='default'></i>升序</label></div><div class='radio circle success'><input type='radio' name='radio"+nameNumber+"'  id='myr1'> <label  for='myr1'><i class='default'></i>降序</label></div><button type='button' class='ui-btn ui-btn-second ml30' onclick='fun_to_del(\"radios"+ nameNumber + "\")'>删除</button></div> ";
 			$("#addALine").append(html);
 			$("#optionhtml"+nameNumber).find("select").html("");
 			var option = "<option>"+'请选择属性'+"</option>";
