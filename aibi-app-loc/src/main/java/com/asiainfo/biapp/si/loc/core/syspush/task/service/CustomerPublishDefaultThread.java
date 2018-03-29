@@ -227,7 +227,7 @@ public class CustomerPublishDefaultThread implements ICustomerPublishThread {
             }
 		}
 		
-        if (StringUtil.isNoneBlank(labelPushReq.getReqId())) {
+        if (null!=labelPushReq && StringUtil.isNoneBlank(labelPushReq.getReqId())) {
             //跟新实时更新推送状态
             this.updateLabelPushReq(ServiceConstants.LabelPushReq.PUSH_STATUS_SUCCESS, null);
         }
@@ -490,12 +490,14 @@ public class CustomerPublishDefaultThread implements ICustomerPublishThread {
                 }
                 LogUtil.debug("客户群推送线程"+protocoTypeStr+"等待时间: "+CUSTOMER_PUBLISH_FTP_WAIT_TIME/1000+" s");
                 Thread.sleep(CUSTOMER_PUBLISH_FTP_WAIT_TIME);
-                result = new File(desFile).delete();    //FTP后删除本地des文件
-                LogUtil.debug(new File(desFile).exists());
-                //FTP后删除本地csv文件
-                if(sysInfo.getIsNeedCompress() != null && ServiceConstants.SysInfo.IS_NEED_COMPRESS_YES == sysInfo.getIsNeedCompress()){
-                    if (result) {
-                        result = new File(csvFile).delete();
+                if (!isJobTask) {    //手动推送，不删除，以便下载,下载后删除
+                    result = new File(desFile).delete();    //FTP后删除本地des文件
+                    LogUtil.debug(new File(desFile).exists());
+                    //FTP后删除本地csv文件
+                    if(sysInfo.getIsNeedCompress() != null && ServiceConstants.SysInfo.IS_NEED_COMPRESS_YES == sysInfo.getIsNeedCompress()){
+                        if (result) {
+                            result = new File(csvFile).delete();
+                        }
                     }
                 }
             } catch (Exception e) {

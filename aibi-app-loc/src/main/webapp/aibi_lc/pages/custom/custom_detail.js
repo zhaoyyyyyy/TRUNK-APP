@@ -341,6 +341,39 @@ window.loc_onload = function() {
 		    	})
 		    	}
 			},
+			downloadGroupList:function(){
+				model.sortAttrAndType="";
+				var AttrbuteIdString = model.AttrbuteId;
+				$(".selectList").each(function(){
+					if(model.sortAttrAndType.indexOf($(this).find(".select-Sort").val()) !=-1 ){
+						model.sortAttrAndType=null;
+						$.alert("排序的属性不可重复");
+						return false;
+					}else if($(this).find("label[class~=active]").text() ==null ||$(this).find("label[class~=active]").text()==""){
+						model.sortAttrAndType=null;
+						$.alert("请选择排序类型");
+						return false;
+					}else{
+						if($(this).find(".select-Sort").val() =="请选择属性"){
+							model.sortAttrAndType+=null+","+null+";";
+						}else{
+							model.sortAttrAndType+=$(this).find(".select-Sort").val()+","+$(this).find("label[class~=active]").text()+";";
+						}
+					}
+				});
+				if(model.sortAttrAndType!=null){
+					$.confirm('等待时间会超过1分钟，确定继续？', function() {
+				    	  	//模拟form提交下载文件
+						var url = $.ctx+'/api/syspush/labelPushCycle/downloadGroupList';
+						var form = $("<form></form>").attr("action", url).attr("method", "post");
+						form.append($("<input></input>").attr("type", "hidden").attr("name", "token").attr("value", $.getToken()));
+						form.append($("<input></input>").attr("type", "hidden").attr("name", "customGroupId").attr("value", labelId));
+						form.append($("<input></input>").attr("type", "hidden").attr("name", "AttrbuteId").attr("value", AttrbuteIdString));
+						form.append($("<input></input>").attr("type", "hidden").attr("name", "sortAttrAndType").attr("value", model.sortAttrAndType));
+						form.appendTo('body').submit().remove();
+					});
+				}
+			}
 		},
 		mounted: function () {
 		    this.$nextTick(function () {

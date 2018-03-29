@@ -6,12 +6,20 @@
 
 package com.asiainfo.biapp.si.loc.core.syspush.controller;
 
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.ResourceUtils;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -21,13 +29,24 @@ import com.asiainfo.biapp.si.loc.auth.model.User;
 import com.asiainfo.biapp.si.loc.base.controller.BaseController;
 import com.asiainfo.biapp.si.loc.base.exception.BaseException;
 import com.asiainfo.biapp.si.loc.base.page.Page;
+import com.asiainfo.biapp.si.loc.base.utils.DateUtil;
+import com.asiainfo.biapp.si.loc.base.utils.LogUtil;
 import com.asiainfo.biapp.si.loc.base.utils.StringUtil;
 import com.asiainfo.biapp.si.loc.base.utils.WebResult;
+import com.asiainfo.biapp.si.loc.base.utils.model.DES;
+import com.asiainfo.biapp.si.loc.cache.CocCacheAble;
+import com.asiainfo.biapp.si.loc.cache.CocCacheProxy;
+import com.asiainfo.biapp.si.loc.core.label.entity.LabelInfo;
+import com.asiainfo.biapp.si.loc.core.label.service.ILabelInfoService;
 import com.asiainfo.biapp.si.loc.core.label.vo.LabelInfoVo;
+import com.asiainfo.biapp.si.loc.core.syspush.common.constant.ServiceConstants;
 import com.asiainfo.biapp.si.loc.core.syspush.entity.LabelAttrRel;
 import com.asiainfo.biapp.si.loc.core.syspush.entity.LabelPushCycle;
+import com.asiainfo.biapp.si.loc.core.syspush.entity.SysInfo;
 import com.asiainfo.biapp.si.loc.core.syspush.service.ILabelPushCycleService;
+import com.asiainfo.biapp.si.loc.core.syspush.service.ISysInfoService;
 import com.asiainfo.biapp.si.loc.core.syspush.vo.LabelPushCycleVo;
+import com.asiainfo.biapp.si.loc.core.syspush.vo.LabelPushReqVo;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -61,8 +80,16 @@ import springfox.documentation.annotations.ApiIgnore;
 @RestController
 public class LabelPushCycleController extends BaseController<LabelPushCycle>{
 
+    private static final String FILE_PATH = "syspush" + File.separator +"groupListDownload";  //推送的文件的目录名称
+    
     @Autowired
     private ILabelPushCycleService iLabelPushCycleService;
+    
+    @Autowired
+    private ISysInfoService iSysInfoService;
+    
+    @Autowired
+    private ILabelInfoService iLabelInfoService;
     
     private static final String SUCCESS = "success";
     
@@ -225,6 +252,153 @@ public class LabelPushCycleController extends BaseController<LabelPushCycle>{
         return page;
     }
     
+    @ApiOperation(value = "清单下载")
+    @RequestMapping(value = "/labelPushCycle/downloadGroupList", method = RequestMethod.POST)
+    public void downloadGroupList(@ModelAttribute LabelPushCycle labelPushCycle, HttpServletResponse response) {
+        //1.走手动推送流程
+        //获取属性
+        CocCacheAble cacheProxy = CocCacheProxy.getCacheProxy();
+        String sftpUsername = cacheProxy.getSYSConfigInfoByKey("LOC_CONFIG_SYS_SFTP_USERNAME");
+        String sftpPwd = cacheProxy.getSYSConfigInfoByKey("LOC_CONFIG_SYS_SFTP_PASSWORD");
+        String sftpIp = cacheProxy.getSYSConfigInfoByKey("LOC_CONFIG_SYS_SFTP_IP");
+        String sftpPort = cacheProxy.getSYSConfigInfoByKey("LOC_CONFIG_SYS_SFTP_PORT");
+        String sftpBasePath = cacheProxy.getSYSConfigInfoByKey("LOC_CONFIG_SYS_SFTP_BASE_PATH");
+        if (StringUtil.isNotBlank(sftpBasePath)) {
+            if (sftpBasePath.endsWith(File.separator)) {
+                sftpBasePath = sftpBasePath.replace(File.separator, "");
+            } 
+        }
+        String sysName = "coc默认的ftp服务器";
+        
+        //保存sysInfo,以便走手动推送流程
+        SysInfo sysInfo = null;
+        try {//确认数据库中是否存在
+            sysInfo = iSysInfoService.selectSysInfoBySysName(sysName);
+        } catch (BaseException e) {
+            LogUtil.info("根据名称查询平台");
+        }
+        if (null == sysInfo || StringUtil.isBlank(sysInfo.getSysId())) {//数据库中不存在
+            sysInfo = new SysInfo();
+            sysInfo.setSysName(sysName);
+        }
+        sysInfo.setFtpUser(sftpUsername);
+        try {
+            sysInfo.setFtpPwd(DES.encrypt(sftpPwd));
+        } catch (Exception e) {
+            LogUtil.error("加密字符串出错！", e);
+        }
+        sysInfo.setFtpPort(sftpPort);
+        sysInfo.setFtpPath(sftpBasePath);
+        sysInfo.setFtpServerIp(sftpIp);
+        sysInfo.setProtocoType(ServiceConstants.SysInfo.PROTOCO_TYPE_SFTP);
+        sysInfo.setShowInPage(ServiceConstants.SysInfo.SHOW_IN_PAGE_NO);
+        //本地缓冲目录
+        String localPathTmp = cacheProxy.getSYSConfigInfoByKey("LOC_CONFIG_SYS_TEMP_PATH");  
+        if (StringUtil.isNotBlank(localPathTmp)) {   //以缓冲目录为准
+            if (!localPathTmp.endsWith(File.separator)) {
+                localPathTmp += File.separator;
+            }
+            localPathTmp += FILE_PATH;
+        }
+        sysInfo.setLocalPath(localPathTmp);
+        if (StringUtil.isBlank(sysInfo.getSysId())) {
+            iSysInfoService.save(sysInfo);
+        } else {
+            iSysInfoService.saveOrUpdate(sysInfo);
+        }
+        
+        String sysIds = new StringBuffer(sysInfo.getSysId()).toString();
+        labelPushCycle.setSysIds(sysIds);
+        LabelInfo customInfo = iLabelInfoService.get(labelPushCycle.getCustomGroupId());
+        labelPushCycle.setPushCycle(customInfo.getUpdateCycle());
+        WebResult<String> saveRes = this.save(labelPushCycle);
+
+        //2.把推送文件打到浏览器
+        //推送文件名称（无路径，无后缀）
+        //格式：COC_标签创建人_YYYYMMDDHHMMSS_6位随机数,形如:【COC_admin_20180212150301_981235】
+        String fileName = LabelPushReqVo.REQID_PREFIX + customInfo.getCreateUserId() + "_"
+                + DateUtil.date2String(new Date(),DateUtil.FORMAT_YYYYMMDD);
+        LogUtil.debug("查找文件前缀："+fileName);
+        //保存成功
+        if (String.valueOf(WebResult.Code.OK).equals(saveRes.getStatus())) {
+            //探测并等待文件生成
+            int num = 1;
+            boolean isSleep = true;
+            File dir = new File(localPathTmp);
+            /**
+             * 获取目录下的所有文件和文件夹
+             */
+            String[] names = null;
+            while (isSleep) {
+                try {
+                    //等待文件生成
+                    Thread.sleep((75+(num*10)*1000));
+                    
+                    names = dir.list();
+                    for (String name : names) {
+                        if (name.contains(fileName)) {
+                            LogUtil.debug("查找文件完整名称："+name);
+                            fileName = name;
+                            isSleep = false;
+                            Thread.sleep((75+(num*10)*1000));//再睡一会儿，防止文件未写完
+                        }
+                    }
+                    if (num > 20) {//超时失败
+                        isSleep = false;
+                    }
+                } catch (InterruptedException e) {
+                    isSleep = false;
+                    LogUtil.warn(e);
+                }
+                num++;
+            }
+            
+            if (!isSleep) {
+                //返回文件生成
+                localPathTmp += File.separator + fileName;
+                BufferedInputStream bis = null;
+                response.setContentType("application/octet-stream");
+                response.setContentType("application/force-download");// 设置强制下载不打开
+                response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+                response.setHeader("Content-Disposition", String.format("attachment; filename=\"%s\"", fileName));  
+                
+                byte[] buffer = new byte[1024];
+                try {
+                    String realPath = ResourceUtils.getURL("classpath:").getPath();//获取web项目的路径
+                    //在开发测试模式时，得到的地址为：{项目跟目录}/target/classes/
+                    //在打包成jar正式发布时，得到的地址为：{发布jar包目录}/
+                    if (realPath.endsWith("target/classes/")) {    //次分支只有在dev下运行
+                        realPath = realPath.replace("target/classes/", "");
+                    }
+                    File file = new File(realPath,localPathTmp);
+                    if(file.exists()){ //判断文件父目录是否存在
+                        bis = new BufferedInputStream(new FileInputStream(file));
+                         
+                        //输出流
+                        OutputStream os = response.getOutputStream();
+                        int i = bis.read(buffer);
+                        while(i != -1){
+                            os.write(buffer, 0, i);
+                            os.flush();
+                            i = bis.read(buffer);
+                        }
+                        LogUtil.debug("file download：" + fileName);
+                        file.delete();//删除推送的本地文件
+                    }
+                } catch (IOException e) {
+                    LogUtil.error("IO Exception!", e);
+                } finally {
+                    if (bis != null) {
+                        try {
+                          bis.close();
+                        } catch (IOException e) {
+                            LogUtil.error("IO Exception!", e);
+                        }
+                    }
+                }
+            }
+        }
+    }
     
     
 }

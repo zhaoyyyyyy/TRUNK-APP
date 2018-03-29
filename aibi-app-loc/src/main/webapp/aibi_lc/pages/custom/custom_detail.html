@@ -122,16 +122,13 @@
 				<button type="button" class="ui-btn ui-btn-ghost-brand mr10" onclick="window.history.go(-1)">取消</button>
 				<button type="button" class="ui-btn ui-btn-default mr10" @click="previewDialog()" >预览</button>
 <!-- 				注释掉，中邮暂时不用 -->
-<!-- 				<button type="button" class="ui-btn ui-btn-default" @click="showDialog()">推送</button> -->
+				<button type="button" class="ui-btn ui-btn-default" @click="showDialog()">推送</button>
+				<button type="button" class="ui-btn ui-btn-default" @click="downloadGroupList()">下载</button>
 		</div>
 	</div>
-	
-	
 </div>
 
-
-
-
+<!-- 推送弹窗 -->
 <div class="ui-dialog" id="dialog">
 	<div class="form-horizontal mt10 ui-lc-mian">
 		<div class="ui-form-group clearfix" id="radioList">
@@ -158,5 +155,16 @@
 	    </div>
 	</div>
 </div>
+
+<!-- 下载弹窗 -->
+<div class="ui-dialog add-dialog" id="downloadDialog">
+	<div class="ui-form-group">
+        <label for="inputEmail3" class="control-label">下载数据生成中...</label>
+<!--         <div class="control-input mt10"> -->
+<!--           <input type="text" class="form-control" id="inputEmail3" placeholder="请输入"> -->
+<!--         </div> -->
+    </div>
+</div>
+
 </body>
 </html>
