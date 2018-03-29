@@ -25,6 +25,7 @@ var model = {
 		
 }
 window.loc_onload = function() {
+	model.dataName=$.getDicData("QTGXZQ");
 	$("#dialog").dialog({
 	    autoOpen: false,
 	    title:"推送设置",
@@ -47,7 +48,6 @@ window.loc_onload = function() {
 					}
 				}
 	      	});
-	      	model.dataName=$.getDicData("QTGXZQ");
 	    }
     });
 	var labelId = $.getUrlParam("labelId");
@@ -70,6 +70,15 @@ window.loc_onload = function() {
 			model.monthLabelDate = data.data.monthLabelDate;
 			model.customNum = data.data.labelExtInfo.customNum;
 			model.labelOptRuleShow = data.data.labelExtInfo.labelOptRuleShow;
+			if(data.data.updateCycle == 1){//客户群更新周期为日周期，推送只能是日周期和一次性
+				model.dataName.splice(1,1);
+			}
+			if(data.data.updateCycle == 2){//客户群更新周期为月周期，推送只能是月周期和一次性
+				model.dataName.splice(0,1);
+			}
+			if(data.data.updateCycle == 3){//客户群更新周期为一次性，推送只能是一次性
+				model.dataName.splice(0,2);
+			}
 		}
 	})
 	$.commAjax({
