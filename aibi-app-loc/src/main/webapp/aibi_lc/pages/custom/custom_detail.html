@@ -122,8 +122,8 @@
 				<button type="button" class="ui-btn ui-btn-ghost-brand mr10" onclick="window.history.go(-1)">取消</button>
 				<button type="button" class="ui-btn ui-btn-default mr10" @click="previewDialog()" >预览</button>
 <!-- 				注释掉，中邮暂时不用 -->
-				<button type="button" class="ui-btn ui-btn-default" @click="showDialog()">推送</button>
-				<button type="button" class="ui-btn ui-btn-default" @click="downloadGroupList()">下载</button>
+				<button type="button" id="customPush" class="ui-btn ui-btn-default mr10" style="display:none" @click="showDialog()">推送</button>
+				<button type="button" id="customDownload" class="ui-btn ui-btn-default mr10" style="display:none" @click="downloadGroupList()">下载</button>
 		</div>
 	</div>
 </div>

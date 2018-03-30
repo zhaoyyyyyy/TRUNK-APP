@@ -25,6 +25,13 @@ var model = {
 		
 }
 window.loc_onload = function() {
+	var resource = $.initWarrentButton().toString();//当前用户拥有的按钮权限
+	if(resource.indexOf("custom_push")!=-1){
+		$("#customPush").show();
+	}
+	if(resource.indexOf('custom_download') !=-1){
+		$("#customDownload").show();
+	}
 	model.dataName=$.getDicData("QTGXZQ");
 	$("#dialog").dialog({
 	    autoOpen: false,
