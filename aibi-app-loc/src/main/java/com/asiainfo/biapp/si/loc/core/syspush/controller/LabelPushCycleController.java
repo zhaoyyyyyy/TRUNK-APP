@@ -75,7 +75,7 @@ import springfox.documentation.annotations.ApiIgnore;
  * @version 1.0.0.2018年1月17日
  */
 
-@Api(value = "标签推送设置信息表",description="王瑞冬")
+@Api(value = "009.03->-标签推送设置信息表",description="王瑞冬")
 @RequestMapping("api/syspush")
 @RestController
 public class LabelPushCycleController extends BaseController<LabelPushCycle>{

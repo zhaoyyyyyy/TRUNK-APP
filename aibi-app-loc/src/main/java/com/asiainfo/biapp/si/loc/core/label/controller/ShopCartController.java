@@ -61,7 +61,7 @@ import io.swagger.annotations.ApiOperation;
  * @author tianxy3
  * @version 1.0.0.2017年12月13日
  */
-@Api(value = "购物车管理", description = "田旭阳")
+@Api(value = "007.04->-购物车管理", description = "田旭阳")
 @RequestMapping("api/shopCart")
 @RestController
 public class ShopCartController extends BaseController {

@@ -41,7 +41,7 @@ import io.swagger.annotations.ApiOperation;
  * @author  zhougz3
  * @version 1.0.0.2018年01月30日
  */
-@Api(value = "101->-配置项获取")
+@Api(value = "003.01->-配置项获取")
 @RequestMapping("api/config")
 @RestController
 public class ConfigController extends BaseController<DicData>{

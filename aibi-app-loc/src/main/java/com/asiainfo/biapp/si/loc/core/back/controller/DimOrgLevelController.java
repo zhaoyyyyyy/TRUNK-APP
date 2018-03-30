@@ -56,7 +56,7 @@ import springfox.documentation.annotations.ApiIgnore;
  * @author zhangnan7
  * @version 1.0.0.2018年1月25日
  */
-@Api(value = "数据权限组织层级管理", description = "张楠")
+@Api(value = "004.02->-数据权限组织层级管理", description = "张楠")
 @RequestMapping("api/back")
 @RestController
 public class DimOrgLevelController extends BaseController<DimOrgLevel> {

@@ -50,7 +50,7 @@ import springfox.documentation.annotations.ApiIgnore;
  * @author  wangrd
  * @version 1.0.0.2018年1月18日
  */
-@Api(value = "推送请求信息表",description="王瑞冬")
+@Api(value = "009.02->-推送请求信息表",description="王瑞冬")
 @RequestMapping("api/syspush")
 @RestController
 public class LabelPushReqController extends BaseController<LabelPushReq>{

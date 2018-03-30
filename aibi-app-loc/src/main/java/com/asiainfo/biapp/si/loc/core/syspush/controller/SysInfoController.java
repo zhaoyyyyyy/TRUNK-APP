@@ -52,7 +52,7 @@ import springfox.documentation.annotations.ApiIgnore;
  * @author  wangrd
  * @version 1.0.0.2018年1月17日
  */
-@Api(value = "系统信息，记录推送到的系统的ftp等信息",description="王瑞冬")
+@Api(value = "009.01->-系统信息，记录推送到的系统的ftp等信息",description="王瑞冬")
 @RequestMapping("api/syspush")
 @RestController
 public class SysInfoController extends BaseController<SysInfo>{

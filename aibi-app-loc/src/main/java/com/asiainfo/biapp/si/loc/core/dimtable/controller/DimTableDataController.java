@@ -47,7 +47,7 @@ import io.swagger.annotations.ApiOperation;
  * @version 1.0.0.2018年1月3日
  */
 
-@Api(value = "维表数据管理",description="洪福宝")
+@Api(value = "008.02->-维表数据管理",description="洪福宝")
 @RequestMapping("api/dimtabledata")
 @RestController
 public class DimTableDataController extends BaseController<DimTableData>{

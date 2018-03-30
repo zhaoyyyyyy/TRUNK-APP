@@ -9,7 +9,7 @@ import com.asiainfo.biapp.si.loc.cache.CocCacheProxy;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
-@Api(value = "刷新缓存",description="用于jauth定时任务调起的刷缓存")
+@Api(value = "003.02->-刷新缓存",description="用于jauth定时任务调起的刷缓存")
 @RequestMapping("api/loccacherefresh")
 @RestController
 public class CocCacheController {
