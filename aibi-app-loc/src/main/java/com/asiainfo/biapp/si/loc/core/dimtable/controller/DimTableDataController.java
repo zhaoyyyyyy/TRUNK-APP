@@ -14,11 +14,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.asiainfo.biapp.si.loc.base.controller.BaseController;
 import com.asiainfo.biapp.si.loc.base.exception.BaseException;
+import com.asiainfo.biapp.si.loc.base.exception.ParamRequiredException;
 import com.asiainfo.biapp.si.loc.base.page.Page;
 import com.asiainfo.biapp.si.loc.base.utils.StringUtil;
 import com.asiainfo.biapp.si.loc.base.utils.WebResult;
+import com.asiainfo.biapp.si.loc.core.dimtable.dao.IDimTableInfoDao;
 import com.asiainfo.biapp.si.loc.core.dimtable.entity.DimTableData;
 import com.asiainfo.biapp.si.loc.core.dimtable.entity.DimTableDataId;
+import com.asiainfo.biapp.si.loc.core.dimtable.entity.DimTableInfo;
 import com.asiainfo.biapp.si.loc.core.dimtable.service.IDimTableDataService;
 
 import io.swagger.annotations.Api;
@@ -59,6 +62,8 @@ public class DimTableDataController extends BaseController<DimTableData>{
     @Autowired
     private IDimTableDataService iDimTableDataService;
     
+    @Autowired
+    private IDimTableInfoDao dimTableInfoDao;  
     
     /**
      * @Description:分页查询维表值
@@ -94,6 +99,39 @@ public class DimTableDataController extends BaseController<DimTableData>{
         
         return dimTableDatas;
     }
+    
+    /**根据维表id分页查询维表值*/
+    @ApiOperation(value = "根据维表id分页查询维表值")
+    @RequestMapping(value = "/queryPageById", method = RequestMethod.POST)
+    @ApiImplicitParams({
+        @ApiImplicitParam(name = "dimTransId", value = "维表id(必填)",paramType = "query", dataType = "string"),
+        @ApiImplicitParam(name = "dimKey", value = "维表key(选填)",paramType = "query", dataType = "string"),
+        @ApiImplicitParam(name = "dimValue", value = "维表值(选填，支持模糊搜索)",paramType = "query", dataType = "string")
+    })
+    public Page<DimTableData> queryPageById(@ModelAttribute Page<DimTableData> page,
+            String dimTransId, String dimKey, String dimValue){
+        Page<DimTableData> dimTableDatas = new Page<>();
+        //组装参数
+        DimTableInfo dimTableInfo = dimTableInfoDao.get(dimTransId);
+        String dimTableName = dimTableInfo.getDimTableName();
+        if (StringUtil.isBlank(dimTableName)) {
+            throw new RuntimeException("找不到对应的维表名");
+        }
+        DimTableData dimTableData = new DimTableData(new DimTableDataId(dimTableName));
+        if (StringUtil.isNoneBlank(dimKey)) {
+        	dimTableData.setDimKey(dimKey);
+        }
+        if (StringUtil.isNoneBlank(dimValue)) {
+            dimTableData.setDimValue(dimValue);
+        }
+        try {
+            dimTableDatas = iDimTableDataService.selectDimTableDataPageList(page, dimTableData);
+        } catch (BaseException e) {
+            dimTableDatas.fail(e);
+        }
+        return dimTableDatas;
+    }
+    
     
     
     @ApiOperation(value = "维表信息跑数")
