@@ -115,23 +115,7 @@ var enumRule = (function (model){
                 var rodData= $("#mainGrid").jqGrid("getRowData",ids);//
                 var id=rodData.dimKey;
                 var name=rodData.dimValue;
-                var flag = false;//不存在
-        		for(var i=0;i<ruleDataModel.itemChooseListSrc.length;i++){
-        			if(id == ruleDataModel.itemChooseListSrc[i].dimKey){
-        				flag = true;
-        			}
-        		}
-        		if(!flag){
-        			var obj = {
-        					dimKey : id,
-        					dimValue : name
-        			}
-        			ruleDataModel.itemChooseListSrc[ruleDataModel.itemChooseListSrc.length] = obj;
-        			ruleDataModel.itemChooseCount = ruleDataModel.itemChooseListSrc.length;
-        			//该种赋值避免引用相同
-        			ruleDataModel.itemChooseList = JSON.parse(JSON.stringify(ruleDataModel.itemChooseListSrc));//赋值显示数据
-        			ruleDataModel.itemChooseSearch = '';//清空查询条件
-        		}
+                model.addItem(id,name);
             },  
 	        
 	    });
@@ -171,26 +155,26 @@ var enumRule = (function (model){
 	/**
 	 * 添加
 	 */ 
-//	model.addItem = function(id,name){
-//		var flag = false;//不存在
-//		for(var i=0;i<ruleDataModel.itemChooseListSrc.length;i++){
-//			if(id == ruleDataModel.itemChooseListSrc[i].dimKey){
-//				flag = true;
-//			}
-//		}
-//		if(!flag){
-//			var obj = {
-//					dimKey : id,
-//					dimValue : name
-//			}
-//			ruleDataModel.itemChooseListSrc[ruleDataModel.itemChooseListSrc.length] = obj;
-//			ruleDataModel.itemChooseCount = ruleDataModel.itemChooseListSrc.length;
-//			//该种赋值避免引用相同
-//			ruleDataModel.itemChooseList = JSON.parse(JSON.stringify(ruleDataModel.itemChooseListSrc));//赋值显示数据
-//			ruleDataModel.itemChooseSearch = '';//清空查询条件
-//		}
-//		
-//    }
+	model.addItem = function(id,name){
+		var flag = false;//不存在
+		for(var i=0;i<ruleDataModel.itemChooseListSrc.length;i++){
+			if(id == ruleDataModel.itemChooseListSrc[i].dimKey){
+				flag = true;
+			}
+		}
+		if(!flag){
+			var obj = {
+					dimKey : id,
+					dimValue : name
+			}
+			ruleDataModel.itemChooseListSrc[ruleDataModel.itemChooseListSrc.length] = obj;
+			ruleDataModel.itemChooseCount = ruleDataModel.itemChooseListSrc.length;
+			//该种赋值避免引用相同
+			ruleDataModel.itemChooseList = JSON.parse(JSON.stringify(ruleDataModel.itemChooseListSrc));//赋值显示数据
+			ruleDataModel.itemChooseSearch = '';//清空查询条件
+		}
+		
+    }
 	/**
 	 * 全选添加
 	 */ 
