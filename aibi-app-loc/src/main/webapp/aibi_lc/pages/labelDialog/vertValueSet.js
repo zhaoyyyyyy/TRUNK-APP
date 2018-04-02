@@ -17,8 +17,8 @@ window.loc_onload = function() {
 	ruleDataModel.ruleIndex = ruleIndex;
 	//获取数据rule
 	wd.addBtn("ok", "确定", function() {
-		if(dateRule.validateForm()){
-			dateRule.setVertValue();
+		if(vertValueRule.validateForm()){
+			vertValueRule.setVertValue();
 		}
 		
 	});
@@ -44,8 +44,17 @@ window.loc_onload = function() {
 	   			}
 	   			//导航切换选择方式
 	   	    	$("div [id^='labelElement']").hide();
-	   	    	$("div [id^='labelElement']")[0].show();
-	   			
+	   	    	//$("div [id^='labelElement']")[0].show();
+	   	    	$("input[name^=queryWay7]").click(function(){
+	   		    	if($(this).val()==1){
+	   		    		$('#darkValue'+childCalcuElementId).removeAttr('disabled');
+	   		    		$('#exactValue'+childCalcuElementId).attr('disabled',true);
+	   		    	}else{
+	   		    		$('#exactValue'+childCalcuElementId).removeAttr('disabled');
+	   		    		$('#darkValue'+childCalcuElementId).attr('disabled',true);
+	   		    	}
+	   		    	
+	   			});
 		    })
 		}
     });
@@ -81,6 +90,7 @@ var vertValueRule = (function (model){
 		for(var i=0 ; i< ruleDataModel.labelVerticalColumnRelList.length; i++ ){
 			var item = ruleDataModel.labelVerticalColumnRelList[i];
 			var labelTypeId 		= item.labelTypeId;
+			var dimTransId 				= item.mdaSysTableColumn.dimTransId;
 			var childCalcuElementId = item.labelVerticalColumnRelId.columnId;
 			var unit 				= item.unit;
 			var childCalcEl			= model.getChildLabel(childCalcuElementId);//获取设置的值
@@ -93,7 +103,6 @@ var vertValueRule = (function (model){
 			}
 			if(labelTypeId == 4) {
 				var queryWay = 1;
-				$(".numberUnit" + childCalcuElementId).html(unit);//初始化所有的单位
 				if(isExist) {//有可能没有设置值
 					queryWay = item.rule.queryWay ;
 					if(queryWay == 1) {
@@ -111,13 +120,6 @@ var vertValueRule = (function (model){
 						} 
 					}
 				}
-				
-				$('.queryMethodControl' + childCalcuElementId).click(function() {
-					$('.queryMethod').removeClass('current');
-					$(this).addClass('current');
-					$('.queryMethod').parent().siblings('dd').find('input').attr('disabled', 'disabled');
-					$('.current').parent().siblings('dd').find('input').removeAttr('disabled');
-				});
 			} else if(labelTypeId == 5) {
 				if(isExist) {
 					var attrVal 	= childCalcEl.attrVal;
@@ -200,18 +202,7 @@ var vertValueRule = (function (model){
 						$(this).addClass('itemLiNextAHover');
 					}
 				});
-				/**
-				serchItemList(childCalcuElementId);
-				
-				initEnumCategorys(childCalcuElementId);
-				var tableChild = '';
-				var items = $('#itemChooseDetailBox'  + childCalcuElementId).children('li');
-				if(items) {
-					for(var i=0; i<items.length; i++) {
-						var item = $(items[i]);
-						tableChild += '<tr><td>' + item.children('a').attr('data') + '</td><td>' + item.text() + '</td></tr>';
-					}
-				}**/
+				model.initDimtabledataPage(childCalcuElementId,dimTransId);
 			} else if(labelTypeId == 6) {
 				//初始化参数
 		    	if(!item.rule.queryWay){
@@ -312,16 +303,6 @@ var vertValueRule = (function (model){
 				if(!item.rule.queryWay){
 					item.rule.queryWay = 1;
 				}
-				$("input[name=queryWay7"+childCalcuElementId+"]").click(function(){
-	   		    	if($(this).val()==1){
-	   		    		$('#darkValue'+childCalcuElementId).removeAttr('disabled');
-	   		    		$('#exactValue'+childCalcuElementId).attr('disabled',true);
-	   		    	}else{
-	   		    		$('#exactValue'+childCalcuElementId).removeAttr('disabled');
-	   		    		$('#darkValue'+childCalcuElementId).attr('disabled',true);
-	   		    	}
-	   		    	
-	   			});
 			}
 		}
 		
@@ -359,14 +340,14 @@ var vertValueRule = (function (model){
     /**************
 	 * 分页查询枚举
 	 */
-	model.initDimtabledataPage = function(gridId){
+	model.initDimtabledataPage = function(gridId,dimTransId){
 		$("#mainGrid"+gridId).jqGrid({
 	        url: $.ctx + "/api/dimtabledata/queryPage",
 	        datatype: "json",
 	        postData: {
                 "dimKey": '',
                 "dimValue": ruleDataModel.dimValueSearch,
-                "dimTableName" : ruleDataModel.dimTableName
+                "dimTransId" : dimTransId
             },
 	        colNames : [ '','选项'],
 	        colModel: [{
@@ -430,7 +411,7 @@ var vertValueRule = (function (model){
 			  postData:{
 				  "dimKey": '',
 	              "dimValue": ruleDataModel.dimValue,
-	              "dimTableName" : ruleDataModel.dimTableName
+	              "dimTableName" : ruleDataModel.dimTransId
 			  },
 			  onSuccess: function(returnObj){
 				  objModel.itemChooseListSrc = returnObj.rows ; 
@@ -464,31 +445,43 @@ var vertValueRule = (function (model){
 		objModel.itemChooseListSrc = [];
 		objModel.itemChooseCount = 0;
 	}
+	/**
+	 * 展示标签设置tab
+	 */
+	model.showTabDiv = function (item){
+		var id = item.labelTypeId + item.labelVerticalColumnRelId.columnId ;
+		$("div [id^='labelElement']").hide();
+		$("div [id^='labelElement"+id+"']").show();
+	}
     /**
      * 校验表单
      */
 	model.validateForm = function(){
 		var flag = true ;
-		for(var i= 0 ; i < ruleDataModel.labelVerticalColumnRelList ;i++){
+		for(var i= 0 ; i < ruleDataModel.labelVerticalColumnRelList.length ;i++){
 			var item = ruleDataModel.labelVerticalColumnRelList[i] ;
-			if(item.labelTypeId = 4){
-				if(model.validateNumberForm()){
+			if(item.labelTypeId == 4){
+				if(!model.validateNumberForm(item)){
 					flag = false ;
+					model.showTabDiv(item);
 					break;
 				}
-			}else if(item.labelTypeId = 5){
-				if(model.validateEnumForm()){
+			}else if(item.labelTypeId == 5){
+				if(!model.validateEnumForm(item)){
 					flag = false ;
+					model.showTabDiv(item);
 					break;
 				}
-			}else if(item.labelTypeId = 6){
-				if(model.validateDateForm()){
+			}else if(item.labelTypeId == 6){
+				if(!model.validateDateForm(item)){
 					flag = false ;
+					model.showTabDiv(item);
 					break;
 				}
-			}else if(item.labelTypeId = 7){
-				if(model.validateTextForm()){
+			}else if(item.labelTypeId == 7){
+				if(!model.validateTextForm(item)){
 					flag = false ;
+					model.showTabDiv(item);
 					break;
 				}
 			}else{
@@ -502,6 +495,7 @@ var vertValueRule = (function (model){
      */
 	model.validateNumberForm = function(item){
 		var queryWay= item.rule.queryWay;
+		var isMustColumn = item.isMustColumn;
 		if(queryWay == "1"){
 			var contiueMinVal=$.trim(item.rule.contiueMinVal);
 			var contiueMaxVal=$.trim(item.rule.contiueMaxVal);
@@ -512,7 +506,7 @@ var vertValueRule = (function (model){
 				contiueMaxVal="";
 			}
 			var contiueVal=contiueMinVal+contiueMaxVal;
-			if($.trim(contiueVal) == ""){
+			if(isMustColumn == 1 && $.trim(contiueVal) == ""){
 				$.alert("请输入数值！");
 				return false;
 			}
@@ -538,7 +532,7 @@ var vertValueRule = (function (model){
 			}
 		}else {
 			var exactValue = $.trim(item.rule.exactValue);
-			if(exactValue == ""){
+			if(isMustColumn == 1 && exactValue == ""){
 				$.alert("精确值不能为空！");
 				return false;
 			}
@@ -555,15 +549,9 @@ var vertValueRule = (function (model){
 		return true;
 	};
 	/**
-	 * 校验标签 枚举5
+	 * 校验标签 枚举5,暂时没有校验
 	 */
 	model.validateEnumForm = function(item){
-		var id = item.labelVerticalColumnRelId.columnId ; 
-        var selectItemList= $("#addItemDetailBox"+id).find("li");
-        if(selectItemList.length <= 0){
-        	$.alert("选项不能为空，请重新选择");
-            return false;
-        }
         return true;
     }
     /**
@@ -571,12 +559,13 @@ var vertValueRule = (function (model){
      */
 	model.validateDateForm = function(item){
 		var queryWay= item.rule.queryWay;
+		var isMustColumn = item.isMustColumn;
 		var id = item.labelVerticalColumnRelId.columnId ; 
 		if(queryWay == "1"){
 			var startTime = $.trim($("#startTime"+id).val());
 			var endTime= $.trim($("#endTime"+id).val());
 			var timeStr=startTime+endTime;
-			if($.trim(timeStr) == ""){
+			if(isMustColumn == 1 && $.trim(timeStr) == ""){
 				$.alert("时间段至少一个不能为空");
 				return false;
 			}
@@ -637,9 +626,10 @@ var vertValueRule = (function (model){
      */
 	model.validateTextForm = function(item){
 		var queryWay= item.rule.queryWay;
+		var isMustColumn = item.isMustColumn;
 		if(queryWay == "1"){
 			var darkValue=$.trim(item.rule.darkValue);
-			if($.trim(darkValue) == ""){
+			if(isMustColumn == 1 && $.trim(darkValue) == ""){
 				$.alert("模糊值不能为空！");
 				return false;
 			}
@@ -658,25 +648,160 @@ var vertValueRule = (function (model){
 		return true;
 	};
 	/**
+	 * 设置指标标签 4
+	 */
+	model.setNumberValue = function(item){
+			var contiueMinVal = "";
+			var contiueMaxVal = "";
+			var leftZoneSign="";
+			var rightZoneSign="";
+			var rule = item.rule;
+			
+			if(ruleDataModel.rule.queryWay == "1"){
+				contiueMinVal=$.trim(rule.contiueMinVal);
+				contiueMaxVal=$.trim(rule.contiueMaxVal);
+				if(contiueMinVal == "输入下限"){
+					contiueMinVal="";
+				}
+				if(contiueMaxVal == "输入上限") {
+					contiueMaxVal="";
+				}
+				var leftChecked = item.leftClosed;
+				if(leftChecked){
+					leftZoneSign=">=";
+				}else{
+					leftZoneSign=">";
+				}
+				var rightChecked = item.rightClosed;
+				if(rightChecked){
+					rightZoneSign="<=";
+				}else{
+					rightZoneSign="<";
+				}
+				rule.leftZoneSign = leftZoneSign;
+				rule.rightZoneSign = rightZoneSign;
+				rule.exactValue = '';
+			}else{
+				rule.contiueMinVal = '';
+				rule.contiueMaxVal = '';
+				rule.leftZoneSign = '';
+				rule.rightZoneSign = '';
+			}
+			return rule ;
+	}
+	/**
+	 * 设置参数 5
+	 */
+	model.setEnumValue = function(item){
+		var attrVals = "";
+		var attrNames ="";
+		var rule = item.rule;
+		for(var i=0;i<item.itemChooseListSrc.length ;i++){
+			if(i==0){
+				attrVals +=item.itemChooseListSrc[i].dimKey;
+				attrNames +=item.itemChooseListSrc[i].dimValue;
+			}else{
+				attrVals +=","+item.itemChooseListSrc[i].dimKey;
+				attrNames +=","+item.itemChooseListSrc[i].dimValue;
+			}
+			
+		}
+		rule.attrVal = attrVals;
+		rule.attrName = attrNames;
+		return rule ;
+	}
+	/**
+	 * 设置参数日期值，6
+	 */
+	model.setDateValue = function(item){
+			var leftZoneSign="";
+			var rightZoneSign="";
+			var isNeedOffset = 0;
+			var exactValueDate="";
+			var rule = item.rule;
+			var columnId = item.labelVerticalColumnRelId.columnId ; 
+			if(rule.queryWay == "1"){
+				var isNeedOffsetVal = item.dynamicUpdate;
+				if(isNeedOffsetVal) {
+					isNeedOffset = 1;	
+				}
+				var leftChecked = item.leftClosed;
+				if(leftChecked){
+					leftZoneSign=">=";
+				}else{
+					leftZoneSign=">";
+				}
+				var rightChecked= item.rightClosed;
+				if(rightChecked){
+					rightZoneSign="<=";
+				}else{
+					rightZoneSign="<";
+				}
+				var startTime = $.trim($("#startTime"+columnId).val());
+				var endTime= $.trim($("#endTime"+columnId).val());
+				rule.startTime = startTime;
+				rule.endTime = endTime;
+				rule.leftZoneSign = leftZoneSign;
+				rule.rightZoneSign = rightZoneSign;
+				rule.isNeedOffset = isNeedOffset;
+				rule.exactValue = '';
+			}else{
+				rule.startTime = '';
+				rule.endTime = '';
+				rule.leftZoneSign = '';
+				rule.rightZoneSign = '';
+				rule.isNeedOffsetVal = '';
+				var exactValueDateYear = $.trim(item.exactValueDateYear);
+				var exactValueDateMonth = $.trim(item.exactValueDateMonth);
+				var exactValueDateDay = $.trim(item.exactValueDateDay);
+				if(exactValueDateYear && exactValueDateYear !=""){
+					exactValueDate=exactValueDateYear;
+				}else{
+					exactValueDate="-1";
+				}
+				if(exactValueDateMonth && exactValueDateMonth !=""){
+					exactValueDate += ","+exactValueDateMonth;
+				}else{
+					exactValueDate += ",-1";
+				}
+				if(exactValueDateDay && exactValueDateDay !=""){
+					exactValueDate += ","+exactValueDateDay;
+				}else{
+					exactValueDate += ",-1";
+				}
+				rule.exactValue = exactValueDate;
+			}
+			return rule ;
+	}
+	/**
 	 * 设置参数
 	 */
 	model.setVertValue = function(){
-			var childrenRule = [];
-			for(var i= 0 ; i < ruleDataModel.labelVerticalColumnRelList ;i++){
+			var childrenRule = new Array();
+			for(var i= 0 ; i < ruleDataModel.labelVerticalColumnRelList.length ;i++){
 				var item = ruleDataModel.labelVerticalColumnRelList[i] ;
+				var rule = ruleDataModel.labelVerticalColumnRelList[i].rule ;
+				rule.calcuElement = item.labelVerticalColumnRelId.columnId ;
 				if(item.labelTypeId = 4){
-					
+					rule = model.setNumberValue(item);
 				}else if(item.labelTypeId = 5){
-					
+					rule = model.setEnumValue(item);
 				}else if(item.labelTypeId = 6){
-					
+					rule = model.setDateValue(item);
 				}else if(item.labelTypeId = 7){
-					
+					if(rule.queryWay == "1"){
+						rule.exactValue = '';
+					}else{
+						rule.darkValue = '';
+					}
 				}else{
 					//
 				}
+				if(rule){
+					childrenRule[childrenRule.length] = rule ;
+				}
 			}
-			ruleDataModel.rule.childrenRule = childrenRule ;
+			ruleDataModel.rule.childLabelRuleList = childrenRule ;
 			var wd = frameElement.lhgDG;
 			//提交变量
 			wd.curWin.calculateCenter.setDialogRuleValue(ruleDataModel.ruleIndex,ruleDataModel.rule);
