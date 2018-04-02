@@ -593,7 +593,9 @@ public class ShopCartController extends BaseController {
 		rule.setElementType(LabelRuleContants.ELEMENT_TYPE_LABEL_ID);
 		rule.setDataDate(ciLabelInfo.getDataDate());// 设置最新数据日期
 		rule.setUpdateCycle(ciLabelInfo.getUpdateCycle());// 设置标签周期性
-		rule.setUnit(ciLabelInfo.getMdaSysTableColumn().getUnit());
+		if(ciLabelInfo.getMdaSysTableColumn()!=null){
+			rule.setUnit(ciLabelInfo.getMdaSysTableColumn().getUnit());
+		}
 		Date effectTime = ciLabelInfo.getEffecTime();
 		int updateCycle = ciLabelInfo.getUpdateCycle();
 		if(updateCycle == LabelInfoContants.LABEL_CYCLE_TYPE_D){
