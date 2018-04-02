@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,6 +25,7 @@ import com.asiainfo.biapp.si.loc.base.utils.WebResult;
 import com.asiainfo.biapp.si.loc.bd.common.service.IBackSqlService;
 import com.asiainfo.biapp.si.loc.cache.CocCacheProxy;
 import com.asiainfo.biapp.si.loc.core.label.entity.LabelInfo;
+import com.asiainfo.biapp.si.loc.core.label.entity.LabelVerticalColumnRel;
 import com.asiainfo.biapp.si.loc.core.label.model.ExploreQueryParam;
 import com.asiainfo.biapp.si.loc.core.label.service.ILabelExploreService;
 import com.asiainfo.biapp.si.loc.core.label.service.ILabelInfoService;
@@ -204,6 +206,30 @@ public class ShopCartController extends BaseController {
 			return webResult.fail(msg);
 		}
 	}
+	
+	/**
+	 * 纵表标签设置参数弹出页面 
+	 * @return
+	 * @version ZJ
+	 */
+	@ApiOperation(value = "纵表标签设置参数弹出页面 ")
+	@ApiImplicitParam(name = "labelId", value = "标签id", required = true, paramType = "query", dataType = "string")
+	@RequestMapping(value = "/findVerticalLabel", method = RequestMethod.POST)
+	public WebResult<Map<String, Object>> findVerticalLabel(String labelId) {
+		Map<String, Object> result = new HashMap<String, Object>();
+		WebResult<Map<String, Object>> webResult = new WebResult<>();
+		try {
+			LabelInfo labelInfo = CocCacheProxy.getCacheProxy().getLabelInfoById(labelId);
+			Set<LabelVerticalColumnRel> verticalColumnRels = labelInfo.getVerticalColumnRels();
+			result.put("ciLabelVerticalColumnRelList", verticalColumnRels);
+			result.put("vertLabelName", labelInfo.getLabelName());
+		} catch(Exception e) {
+			LogUtil.error("查询纵表标签异常", e);
+			return webResult.fail("查询纵表标签异常");
+		}
+		return webResult.success("查询纵表标签成功", result);
+	}
+	
 	
 	/**
 	 * 查询客户群是否能够加入到购物车
