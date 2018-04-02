@@ -111,7 +111,10 @@
 				</div>
 				<i class="ui-nothing-icon" v-if="item.queryWay == null "><em></em>请点击设置</i>
 			</div>
-			
+			<!-- 复合型-->
+			<div class="ui-conditionCT-content align_center"  v-if="item.labelTypeId == 8" onclick="calculateCenter.setLabelAttr(this)">
+				<i class="ui-nothing-icon"><em></em>请点击设置</i>
+			</div>
 			<!-- 客户群-->
 			<div class="ui-conditionCT-content align_center" v-if="item.elementType == 5">
 				<h5>已选条件：</h5>
