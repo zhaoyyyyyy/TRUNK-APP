@@ -4,7 +4,8 @@ var ruleDataModel = {
 		childLabelRuleList : [],
 		ruleIndex : -1,
 		dimValueSearch : '',
-		dimTableName : ''
+		dimTableName : '',
+		showDivColumnId : '' //默认展示的div序列号
 }
 /**
  * 需要注意：
@@ -43,7 +44,6 @@ window.loc_onload = function() {
 	   				r.validatebox();
 	   			}
 	   			//导航切换选择方式
-	   	    	$("div [id^='labelElement']").hide();
 	   	    	//$("div [id^='labelElement']")[0].show();
 	   	    	$("input[name^=queryWay7]").click(function(){
 	   		    	if($(this).val()==1){
@@ -85,7 +85,8 @@ var vertValueRule = (function (model){
 				  ruleDataModel.labelVerticalColumnRelList = returnObj.data.ciLabelVerticalColumnRelList;
 			  }
 		});
-    	
+    	//默认展示
+    	model.showTabDiv(ruleDataModel.labelVerticalColumnRelList[0]) ;
     	//初始化数据,事件
 		for(var i=0 ; i< ruleDataModel.labelVerticalColumnRelList.length; i++ ){
 			var item = ruleDataModel.labelVerticalColumnRelList[i];
@@ -450,8 +451,7 @@ var vertValueRule = (function (model){
 	 */
 	model.showTabDiv = function (item){
 		var id = item.labelTypeId + item.labelVerticalColumnRelId.columnId ;
-		$("div [id^='labelElement']").hide();
-		$("div [id^='labelElement"+id+"']").show();
+		ruleDataModel.showDivColumnId = 'labelElement' + id ;
 	}
     /**
      * 校验表单
@@ -782,6 +782,8 @@ var vertValueRule = (function (model){
 				var item = ruleDataModel.labelVerticalColumnRelList[i] ;
 				var rule = ruleDataModel.labelVerticalColumnRelList[i].rule ;
 				rule.calcuElement = item.labelVerticalColumnRelId.columnId ;
+				rule.labelTypeId = item.labelTypeId ;
+				rule.mdaSysTableColumn.columnCnName = item.mdaSysTableColumn.columnCnName ;
 				if(item.labelTypeId = 4){
 					rule = model.setNumberValue(item);
 				}else if(item.labelTypeId = 5){

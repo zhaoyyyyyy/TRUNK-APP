@@ -113,7 +113,60 @@
 			</div>
 			<!-- 复合型-->
 			<div class="ui-conditionCT-content align_center"  v-if="item.labelTypeId == 8" onclick="calculateCenter.setLabelAttr(this)">
-				<i class="ui-nothing-icon"><em></em>请点击设置</i>
+				<h5 v-if="item.childLabelRuleList != null">已选条件：</h5>
+				<div class="clearfix" v-if="item.childLabelRuleList!=null">
+					<span v-for="(childRule,childIndex) in item.childLabelRuleList">
+						<span v-if="(childRule.labelTypeId == 4 && childRule.queryWay == 1)" >
+							{{childRule.columnCnName}}：
+							<span v-if="childRule.contiueMinVal !=''">
+								<span v-if="childRule.leftZoneSign == '>='" >大于等于{{childRule.contiueMinVal}}</span>
+								<span v-if="childRule.leftZoneSign == '>'" >大于{{childRule.contiueMinVal}}</span>
+							</span>
+							<span v-if="childRule.contiueMaxVal !=''">
+								<span v-if="childRule.rightZoneSign == '<='" >小于等于{{childRule.contiueMaxVal}}</span>
+								<span v-if="childRule.rightZoneSign == '<'" >小于{{childRule.contiueMaxVal}}</span>
+							</span>
+							<span v-text="childRule.unit"></span>;
+						</span>
+						<span v-if="(childRule.labelTypeId == 4 && childRule.queryWay == 1)">
+							{{childRule.columnCnName}}：
+							<span v-if="childRule.exactValue !=''" v-text="childRule.exactValue">
+							</span>
+							<span v-text="childRule.unit"></span>;
+						</span>
+						
+						<span v-if="childRule.attrVal != null ">{{childRule.attrName}};</span>
+						
+						<span v-if="(childRule.labelTypeId == 6 && childRule.queryWay == 1)">
+							{{childRule.columnCnName}}：
+							<span v-if="childRule.startTime !=''">
+								<span v-if="childRule.leftZoneSign == '>='" >大于等于{{childRule.startTime}}</span>
+								<span v-if="childRule.leftZoneSign == '>'" >大于{{childRule.startTime}}</span>
+							</span>
+							<span v-if="childRule.endTime !=''">
+								<span v-if="childRule.rightZoneSign == '<='" >小于等于{{childRule.endTime}}</span>
+								<span v-if="childRule.rightZoneSign == '<'" >小于{{childRule.endTime}}</span>
+							</span>
+							<span v-if="childRule.isNeedOffset == 1">（动态偏移更新）</span>
+							;
+						</span>
+						<span v-if="(childRule.labelTypeId == 6 && childRule.queryWay == 2)">
+							{{childRule.columnCnName}}：
+							<span v-if="childRule.exactValue !=''" v-text="calculateCenter.formatDateExactValue(childRule)"></span>
+							;
+						</span>
+						
+						<span v-if="(childRule.labelTypeId == 7 && childRule.queryWay == 1)">
+							{{childRule.columnCnName}}：
+							<span v-if="childRule.darkValue !=''" v-text="childRule.darkValue"></span>;
+						</span>
+						<span v-if="(childRule.labelTypeId == 7 && childRule.queryWay == 2)">
+							{{childRule.columnCnName}}：
+							<span v-if="childRule.exactValue !=''" v-text="childRule.exactValue"></span>;
+						</span>
+					</span>
+				</div>
+				<i class="ui-nothing-icon" v-if="item.childLabelRuleList ==null"><em></em>请点击设置</i>
 			</div>
 			<!-- 客户群-->
 			<div class="ui-conditionCT-content align_center" v-if="item.elementType == 5">

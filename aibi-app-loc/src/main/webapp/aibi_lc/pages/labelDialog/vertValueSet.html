@@ -30,7 +30,8 @@
 			</div>
 			<div class="fleft vertical-table-pannel">
 				<div>
-					<div v-for="(item,index) in labelVerticalColumnRelList" v-bind:index="index" v-bind:id="'labelElement'+item.labelTypeId+item.labelVerticalColumnRelId.columnId">
+					<div v-for="(item,index) in labelVerticalColumnRelList" v-bind:index="index" v-bind:id="'labelElement'+item.labelTypeId+item.labelVerticalColumnRelId.columnId"
+					 	v-show = "showDivColumnId == ('labelElement'+item.labelTypeId+item.labelVerticalColumnRelId.columnId)">
 							<!-- 指标型标签   	begin -------------------->
 							<div class="form-horizontal mt20"  v-if="item.labelTypeId == 4">
 				      				<div class="ui-form-group">
