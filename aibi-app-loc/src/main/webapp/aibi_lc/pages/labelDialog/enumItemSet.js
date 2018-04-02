@@ -17,7 +17,7 @@ window.loc_onload = function() {
 
 	wd.addBtn("ok", "确定", function() {
 		if(enumRule.validateForm()){
-			enumRule.setNumberValue();
+			enumRule.setEnumValue();
 		}else{
 			$.alert("表单校验失败");
 		}
@@ -236,7 +236,7 @@ var enumRule = (function (model){
 	/**
 	 * 设置参数
 	 */
-	model.setNumberValue = function(){
+	model.setEnumValue = function(){
 		var wd = frameElement.lhgDG;
 		var attrVals = "";
 		var attrNames ="";
