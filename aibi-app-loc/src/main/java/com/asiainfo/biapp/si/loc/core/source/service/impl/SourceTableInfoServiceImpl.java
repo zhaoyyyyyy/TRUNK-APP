@@ -35,6 +35,7 @@ import com.asiainfo.biapp.si.loc.base.utils.StringUtil;
 import com.asiainfo.biapp.si.loc.bd.common.service.IBackSqlService;
 import com.asiainfo.biapp.si.loc.core.label.entity.MdaSysTable;
 import com.asiainfo.biapp.si.loc.core.label.service.IMdaSysTableService;
+import com.asiainfo.biapp.si.loc.core.label.vo.MdaSysTableVo;
 import com.asiainfo.biapp.si.loc.core.source.dao.ISourceTableInfoDao;
 import com.asiainfo.biapp.si.loc.core.source.entity.SourceInfo;
 import com.asiainfo.biapp.si.loc.core.source.entity.SourceTableInfo;
@@ -189,7 +190,13 @@ public class SourceTableInfoServiceImpl extends BaseServiceImpl<SourceTableInfo,
         if(2==sourceTableInfo.getSourceTableType()){
             MdaSysTable mdaSysTable = new MdaSysTable();
             mdaSysTable.setConfigId(sourceTableInfo.getConfigId());
-            mdaSysTable.setTableName("LV_"+sourceTableInfo.getConfigId()+"_"+sourceTableInfo.getSourceTableName() + "_");
+            if(sourceTableInfo.getSourceTableName().contains(".")){
+                int charX = sourceTableInfo.getSourceTableName().lastIndexOf(".");
+                String sourceTableName = sourceTableInfo.getSourceTableName().substring(charX+1);
+                mdaSysTable.setTableName("LV_"+sourceTableInfo.getConfigId()+"_"+sourceTableName + "_");
+            }else{
+                mdaSysTable.setTableName("LV_"+sourceTableInfo.getConfigId()+"_"+sourceTableInfo.getSourceTableName() + "_");
+            }
             mdaSysTable.setTableCnName(sourceTableInfo.getSourceTableCnName());
             mdaSysTable.setTableSchema(sourceTableInfo.getTableSchema());
             mdaSysTable.setTableType(3);
@@ -279,10 +286,11 @@ public class SourceTableInfoServiceImpl extends BaseServiceImpl<SourceTableInfo,
     }
 
     public void deleteSourceTableInfo(String sourceTableId) throws BaseException {
+        SourceTableInfo sourceTableInfo = selectSourceTableInfoById(sourceTableId);
         if (StringUtils.isBlank(sourceTableId)) {
             throw new ParamRequiredException("ID不能为空");
         }
-        if (selectSourceTableInfoById(sourceTableId) == null) {
+        if (sourceTableInfo == null) {
             throw new ParamRequiredException("ID不存在");
         }
         SourceInfoVo sourceInfoVo = new SourceInfoVo();
@@ -291,6 +299,20 @@ public class SourceTableInfoServiceImpl extends BaseServiceImpl<SourceTableInfo,
         for (SourceInfo s : delList) {
             iSourceInfoService.deleteSourceInfo(s.getSourceId());
         }
+        //删除mdaSysTable中相关联数据
+        if(2==sourceTableInfo.getSourceTableType()){
+            MdaSysTableVo mdaSysTableVo = new MdaSysTableVo();
+            if(sourceTableInfo.getSourceTableName().contains(".")){
+                int charX = sourceTableInfo.getSourceTableName().lastIndexOf(".");
+                String sourceTableName = sourceTableInfo.getSourceTableName().substring(charX+1);
+                mdaSysTableVo.setTableName("LV_"+sourceTableInfo.getConfigId()+"_"+sourceTableName + "_");
+            }else{
+                mdaSysTableVo.setTableName("LV_"+sourceTableInfo.getConfigId()+"_"+sourceTableInfo.getSourceTableName() + "_");
+            }
+            String id = iMdaSysTableService.selectMdaSysTableList(mdaSysTableVo).get(0).getTableId();
+            iMdaSysTableService.delete(id);
+        }
+        
         super.delete(sourceTableId);
 //        iTargetTableStatusService.deleteTargertTableStatus(sourceTableId);
     }
