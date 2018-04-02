@@ -77,6 +77,7 @@ window.loc_onload = function() {
             'sourceTableId': id
         }
         $("#sourceTableName").attr("disabled", true);
+        $("#tableSchema").attr("disabled", true);
         model.isEdit = isEdit;
     }else{
 		pD = {

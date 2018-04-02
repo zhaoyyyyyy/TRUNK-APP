@@ -239,8 +239,12 @@ var calculateCenter = (function (model){
 	    	wd.reload = function() {
 	    		model.refreshShopCart();
 	    	}
-			
-		} else {
+		}else if(labelType == "8"){
+			var wd = $.window(name + "-条件设置", $.ctx + '/aibi_lc/pages/labelDialog/vertValueSet.html?index='+index, 800, 500);
+	    	wd.reload = function() {
+	    		model.refreshShopCart();
+	    	}
+		}else {
 			//showAlert("计算元素类型错误！", "failed");
 		}
 	};
