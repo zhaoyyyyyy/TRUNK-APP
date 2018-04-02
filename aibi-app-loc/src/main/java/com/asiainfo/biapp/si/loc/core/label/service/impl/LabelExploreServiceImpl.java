@@ -140,7 +140,7 @@ public class LabelExploreServiceImpl implements ILabelExploreService {
 		LabelInfo labelInfo = CocCacheProxy.getCacheProxy().getLabelInfoById(verticalLabelRule.getCalcuElement());
 		// 纵表标签列关系
 		Map<String, LabelVerticalColumnRel> map = new HashMap<String, LabelVerticalColumnRel>();
-		Set<LabelVerticalColumnRel> verticalColumnRels = labelInfo.getVerticalColumnRels();
+		List<LabelVerticalColumnRel> verticalColumnRels = labelInfo.getVerticalColumnRels();
 		for (LabelVerticalColumnRel rel : verticalColumnRels) {
 			String key = rel.getLabelVerticalColumnRelId().getColumnId();
 			map.put(key, rel);

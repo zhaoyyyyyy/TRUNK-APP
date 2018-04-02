@@ -61,9 +61,12 @@ public class LabelVerticalColumnRelDaoImpl extends BaseDaoImpl<LabelVerticalColu
         Map<String, Object> reMap = new HashMap<>();
         Map<String, Object> params = new HashMap<>();
         StringBuffer hql = new StringBuffer("from LabelVerticalColumnRel l where 1=1 ");
-        if(StringUtil.isNoneBlank(labelVerticalColumnRelVo.getLabelVerticalColumnRelId().getLabelId()) && (null != labelVerticalColumnRelVo.getLabelVerticalColumnRelId().getColumnId())){
-            hql.append("and l.labelVerticalColumnRelId.labelId = :labelId and l.labelVerticalColumnRelId.columnId = :columnId ");
+        if(StringUtil.isNoneBlank(labelVerticalColumnRelVo.getLabelVerticalColumnRelId().getLabelId())){
+            hql.append("and l.labelVerticalColumnRelId.labelId = :labelId ");
             params.put("labelId", labelVerticalColumnRelVo.getLabelVerticalColumnRelId().getLabelId());
+        }
+        if(null != labelVerticalColumnRelVo.getLabelVerticalColumnRelId().getColumnId()){
+            hql.append("and l.labelVerticalColumnRelId.columnId = :columnId ");
             params.put("columnId", labelVerticalColumnRelVo.getLabelVerticalColumnRelId().getColumnId());
         }
         if(null != labelVerticalColumnRelVo.getLabelTypeId()){
@@ -78,6 +81,7 @@ public class LabelVerticalColumnRelDaoImpl extends BaseDaoImpl<LabelVerticalColu
             hql.append("and l.sortNum = :sortNum ");
             params.put("sortNum", labelVerticalColumnRelVo.getSortNum());
         }
+        hql.append("order by l.sortNum ");
         reMap.put("hql", hql);
         reMap.put("params",params );
         return reMap;

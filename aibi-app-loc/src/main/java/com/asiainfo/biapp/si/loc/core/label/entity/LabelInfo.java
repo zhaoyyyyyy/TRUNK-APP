@@ -28,6 +28,7 @@ import org.hibernate.annotations.Parameter;
 import com.asiainfo.biapp.si.loc.base.entity.BaseEntity;
 import com.asiainfo.biapp.si.loc.base.exception.BaseException;
 import com.asiainfo.biapp.si.loc.base.extend.SpringContextHolder;
+import com.asiainfo.biapp.si.loc.base.utils.LogUtil;
 import com.asiainfo.biapp.si.loc.base.utils.StringUtil;
 import com.asiainfo.biapp.si.loc.core.label.service.ICategoryInfoService;
 import com.asiainfo.biapp.si.loc.core.label.service.ILabelExtInfoService;
@@ -301,7 +302,7 @@ public class LabelInfo extends BaseEntity {
     // @OneToMany(fetch = FetchType.LAZY)
     // @JoinColumn(name = "LABEL_ID", referencedColumnName = "LABEL_ID",
     // insertable = false, updatable = false)
-    private Set<LabelVerticalColumnRel> verticalColumnRels;
+    private List<LabelVerticalColumnRel> verticalColumnRels;
 
     @Transient
     // @OneToOne(fetch = FetchType.EAGER)
@@ -553,7 +554,7 @@ public class LabelInfo extends BaseEntity {
         this.mdaSysTableColumn = mdaSysTableColumn;
     }
 
-    public Set<LabelVerticalColumnRel> getVerticalColumnRels() {
+    public List<LabelVerticalColumnRel> getVerticalColumnRels() {
         ILabelVerticalColumnRelService labelVerticalColumnRelService = (ILabelVerticalColumnRelService) SpringContextHolder
             .getBean("labelVerticalColumnRelServiceImpl");
         LabelVerticalColumnRelVo labelVerticalColumnRelVo = new LabelVerticalColumnRelVo();
@@ -563,17 +564,17 @@ public class LabelInfo extends BaseEntity {
         List<LabelVerticalColumnRel> list = null;
         try {
             list = labelVerticalColumnRelService.selectLabelVerticalColumnRelList(labelVerticalColumnRelVo);
-            return new HashSet(list);
         } catch (BaseException e) {
+        	LogUtil.error(e);
         }
-        return null;
+        return list;
     }
 
-    public void setVerticalColumnRels(Set<LabelVerticalColumnRel> verticalColumnRels) {
-        this.verticalColumnRels = verticalColumnRels;
-    }
+    public void setVerticalColumnRels(List<LabelVerticalColumnRel> verticalColumnRels) {
+		this.verticalColumnRels = verticalColumnRels;
+	}
 
-    public String getDependIndex() {
+	public String getDependIndex() {
         return dependIndex;
     }
 

@@ -193,6 +193,7 @@ public class ShopCartController extends BaseController {
 		String msg = "抱歉，该标签数据未准备好，不能添加到收纳篮！";
 		try {
 			LabelInfo ciLabelInfo = CocCacheProxy.getCacheProxy().getLabelInfoById(labelId);
+			List<LabelVerticalColumnRel> verticalColumnRels = ciLabelInfo.getVerticalColumnRels();
 			if (StringUtil.isEmpty(ciLabelInfo.getDataDate())) {
 				success = false;
 			}
@@ -220,7 +221,7 @@ public class ShopCartController extends BaseController {
 		WebResult<Map<String, Object>> webResult = new WebResult<>();
 		try {
 			LabelInfo labelInfo = CocCacheProxy.getCacheProxy().getLabelInfoById(labelId);
-			Set<LabelVerticalColumnRel> verticalColumnRels = labelInfo.getVerticalColumnRels();
+			List<LabelVerticalColumnRel> verticalColumnRels = labelInfo.getVerticalColumnRels();
 			result.put("ciLabelVerticalColumnRelList", verticalColumnRels);
 			result.put("vertLabelName", labelInfo.getLabelName());
 		} catch(Exception e) {
