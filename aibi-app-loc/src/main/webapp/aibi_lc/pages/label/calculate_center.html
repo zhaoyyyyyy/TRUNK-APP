@@ -135,7 +135,7 @@
 							<span v-text="childRule.unit"></span>;
 						</span>
 						
-						<span v-if="childRule.attrVal != null ">{{childRule.attrName}};</span>
+						<span v-if="childRule.attrVal != null ">{{childRule.columnCnName}}：{{childRule.attrName}};</span>
 						
 						<span v-if="(childRule.labelTypeId == 6 && childRule.queryWay == 1)">
 							{{childRule.columnCnName}}：

@@ -1,10 +1,7 @@
 var ruleDataModel = {
 		rule : {},
 		labelVerticalColumnRelList : [],
-		childLabelRuleList : [],
 		ruleIndex : -1,
-		dimValueSearch : '',
-		dimTableName : '',
 		showDivColumnId : '' //默认展示的div序列号
 }
 /**
@@ -27,6 +24,8 @@ window.loc_onload = function() {
 	wd.addBtn("cancel", "取消", function() {
 		wd.cancel();
 	});
+	//初始化数据
+	vertValueRule.initData(); 
 	/**
      * ------------------------------------------------------------------
      * 数值标签修改
@@ -37,28 +36,16 @@ window.loc_onload = function() {
     	data : ruleDataModel,
 		mounted: function () {
 			//初始化数据
-   			
 		    this.$nextTick(function () {
 			    var r = $(".easyui-validatebox");
 	   			if (r.length){
 	   				r.validatebox();
 	   			}
-	   			//导航切换选择方式
-	   	    	//$("div [id^='labelElement']")[0].show();
-	   	    	$("input[name^=queryWay7]").click(function(){
-	   		    	if($(this).val()==1){
-	   		    		$('#darkValue'+childCalcuElementId).removeAttr('disabled');
-	   		    		$('#exactValue'+childCalcuElementId).attr('disabled',true);
-	   		    	}else{
-	   		    		$('#exactValue'+childCalcuElementId).removeAttr('disabled');
-	   		    		$('#darkValue'+childCalcuElementId).attr('disabled',true);
-	   		    	}
-	   		    	
-	   			});
+	   			vertValueRule.initMethod();
 		    })
 		}
     });
-    vertValueRule.init(); 
+    
 }
 
 /**
@@ -73,7 +60,7 @@ var vertValueRule = (function (model){
     /**
      * 初始化数据
      */
-    model.init = function(){
+    model.initData = function(){
     	//舒适化纵表标签
     	$.commAjax({
 			  url: $.ctx + "/api/shopCart/findVerticalLabel",
@@ -85,8 +72,6 @@ var vertValueRule = (function (model){
 				  ruleDataModel.labelVerticalColumnRelList = returnObj.data.ciLabelVerticalColumnRelList;
 			  }
 		});
-    	//默认展示
-    	model.showTabDiv(ruleDataModel.labelVerticalColumnRelList[0]) ;
     	//初始化数据,事件
 		for(var i=0 ; i< ruleDataModel.labelVerticalColumnRelList.length; i++ ){
 			var item = ruleDataModel.labelVerticalColumnRelList[i];
@@ -107,19 +92,21 @@ var vertValueRule = (function (model){
 				if(isExist) {//有可能没有设置值
 					queryWay = item.rule.queryWay ;
 					if(queryWay == 1) {
-						var leftClosed		= item.rule.leftZoneSign;
-						var rightClosed		= item.rule.rightZoneSign;
-						if(leftClosed){
-							if(leftClosed.indexOf("=")>=0){
-								$('#leftClosed'  + childCalcuElementId).attr("checked" ,true);
+						if(item.rule.leftZoneSign){
+							if(item.rule.leftZoneSign.indexOf("=")>=0){
+								item.leftClosed = true;
 							}
 						}
-						if(rightClosed){
-							if(rightClosed.indexOf("=")>=0){
-								$('#rightClosed' + childCalcuElementId).attr("checked" ,true);
+						if(item.rule.rightZoneSign){
+							if(item.rule.rightZoneSign.indexOf("=")>=0){
+								item.rightClosed = true;
 							}
-						} 
+						}
 					}
+				}
+				//初始化参数
+				if(!item.rule.queryWay){
+					item.rule.queryWay = 1;
 				}
 			} else if(labelTypeId == 5) {
 				if(isExist) {
@@ -135,83 +122,13 @@ var vertValueRule = (function (model){
 						}
 					}
 				}
-				
-				$('#calcuElement' + childCalcuElementId).val(childCalcuElementId);
-				// 添加和删除操作
-				$('#addItemAction' + childCalcuElementId).click(function() {
-					model.addEnumItem(childCalcuElementId);
-				});
-				$('#removeItemAction' + childCalcuElementId).click(function() {
-					$('#addItemDetailBox' + childCalcuElementId).find('.itemLiNextAHover').parent().remove();
-					calcEnumChooseItemNum(childCalcuElementId);
-				});
-				// 添加和删除操作
-				$('#addAllItemAction' + childCalcuElementId).click(function() {
-					$("#_loading"+childCalcuElementId).show();
-					var dimName = $("#dimName" + childCalcuElementId).val();
-					var calcuElement = $("#calcuElement" + childCalcuElementId).val();
-					var enumCategoryId=$("#enumCategoryId"+childCalcuElementId).val();
-					var para = {
-						"columnId" : calcuElement,
-						"dimName" : dimName,
-						"enumCategoryId" : enumCategoryId
-					};
-					var actionUrl = '${ctx}/ciLabelInfo/findAllLabelDimValueByColumnId';
-					$.ajax({
-						url:actionUrl,
-						type:"POST",
-						dataType: "json",
-						data: para,
-						success:function(result){
-							if(result.success){
-								var dimValueList = result.dimValueList;
-								var $liTemp = '';
-								$.each(dimValueList, function (n, value) {  
-									$('#addItemDetailBox' + childCalcuElementId).find('a[id="'+value.V_KEY+'"]').parent().remove();
-									$liTemp += '<li><a href="javascript:void(0);" ondblclick="delEnumItemByDbClick(\'' 
-											+ childCalcuElementId + '\',this);" ' 
-											+ 'onclick="aAddOrRemoveClass(this);" id="'
-											+ value.V_KEY
-											+ '" data="'
-											+ value.V_KEY
-											+ '" >'
-											+ value.V_NAME + '</a></li>';
-					          	}); 
-								$('#addItemDetailBox' + childCalcuElementId).append($liTemp);
-								calcEnumChooseItemNum(childCalcuElementId);
-								$("#_loading"+childCalcuElementId).hide();
-							}else{
-								$("#_loading"+childCalcuElementId).hide();
-								$.fn.weakTip({"tipTxt":result.msg});
-							}
-						},
-						error:function(){
-							$("#_loading"+childCalcuElementId).hide();
-							$.fn.weakTip({"tipTxt":'获取所有枚举类型标签的维值失败!'});
-						}
-					});
-				});
-				$('#removeAllItemAction' + childCalcuElementId).click(function() {
-					$('#addItemDetailBox' + childCalcuElementId).empty();
-					$('#selectedItemSize' + childCalcuElementId).html(0);
-				});
-				//添加选中效果
-				$('#addItemDetailBox' + childCalcuElementId + ' a, #itemChooseDetailBox' + childCalcuElementId + ' a').click(function() {
-					if ($(this).hasClass('itemLiNextAHover')) {
-						$(this).removeClass('itemLiNextAHover');
-					} else {
-						$(this).addClass('itemLiNextAHover');
-					}
-				});
-				model.initDimtabledataPage(childCalcuElementId,dimTransId);
 			} else if(labelTypeId == 6) {
 				//初始化参数
 		    	if(!item.rule.queryWay){
 		    		item.rule.queryWay = 1;
 		    	}
 				if(isExist) {
-					var queryWay = item.rule.queryWay ;
-					if(queryWay == "1"){
+					if(item.rule.queryWay == "1"){
 						if(item.rule.leftZoneSign){
 				    		if(item.rule.leftZoneSign.indexOf("=")>=0){
 				    			item.leftClosed = true;
@@ -225,12 +142,7 @@ var vertValueRule = (function (model){
 				    	if(item.rule.isNeedOffset == 1) {
 				    		item.dynamicUpdate = 1;
 						}
-				    	if(item.rule.startTime) {
-					    	('#startTime'+childCalcuElementId).val(item.rule.startTime);
-						}
-				    	if(item.rule.endTime) {
-				    		$('#endTime'+childCalcuElementId).val(item.rule.endTime);
-						}
+				    	
 					}else{
 						//精确值
 						if(item.rule.exactValue){
@@ -252,51 +164,7 @@ var vertValueRule = (function (model){
 						}
 					}
 				}
-				if(queryWay == "1"){
-					
-					$("#exactValueDateYear"+ childCalcuElementId).attr("disabled","disabled");
-					$("#exactValueDateMonth"+ childCalcuElementId).attr("disabled","disabled");
-					$("#exactValueDateDay"+ childCalcuElementId).attr("disabled","disabled");
-					
-					$("#startTime"+ childCalcuElementId).removeAttr("disabled");
-					$("#endTime"+ childCalcuElementId).removeAttr("disabled");
-					$("#dynamicUpdate"+ childCalcuElementId).removeAttr("disabled");
-					$("#leftClosed"+ childCalcuElementId).removeAttr("disabled");
-					$("#rightClosed"+ childCalcuElementId).removeAttr("disabled");
-				}else{
-					$("#startTime"+ childCalcuElementId).attr("disabled","disabled");
-					$("#endTime"+ childCalcuElementId).attr("disabled","disabled");
-					$("#dynamicUpdate"+ childCalcuElementId).attr("disabled","disabled");
-					$("#leftClosed"+ childCalcuElementId).attr("disabled","disabled");
-					$("#rightClosed"+ childCalcuElementId).attr("disabled","disabled");
-					
-					$("#exactValueDateYear"+ childCalcuElementId).removeAttr("disabled");
-					$("#exactValueDateMonth"+ childCalcuElementId).removeAttr("disabled");
-					$("#exactValueDateDay"+ childCalcuElementId).removeAttr("disabled");
-				}
 				
-				$("input[name=queryWay6"+childCalcuElementId+"]").click(function(){
-	   		    	if($(this).val()==1){
-	   		    		$("#exactValueDateYear"+ childCalcuElementId).attr("disabled","disabled");
-						$("#exactValueDateMonth"+ childCalcuElementId).attr("disabled","disabled");
-						$("#exactValueDateDay"+ childCalcuElementId).attr("disabled","disabled");
-	   					$("#startTime"+childCalcuElementId).removeAttr("disabled");
-	   					$("#endTime"+childCalcuElementId).removeAttr("disabled");
-	   					$("#dynamicUpdate"+childCalcuElementId).removeAttr("disabled");
-	   					$("#leftClosed"+childCalcuElementId).removeAttr("disabled");
-	   					$("#rightClosed"+childCalcuElementId).removeAttr("disabled");
-	   		    	}else{
-	   		    		$("#startTime"+childCalcuElementId).attr("disabled","disabled");
-	   					$("#endTime"+childCalcuElementId).attr("disabled","disabled");
-	   					$("#dynamicUpdate"+childCalcuElementId).attr("disabled","disabled");
-	   					$("#leftClosed"+childCalcuElementId).attr("disabled","disabled");
-	   					$("#rightClosed"+childCalcuElementId).attr("disabled","disabled");
-	   					$("#exactValueDateYear"+ childCalcuElementId).removeAttr("disabled");
-						$("#exactValueDateMonth"+ childCalcuElementId).removeAttr("disabled");
-						$("#exactValueDateDay"+ childCalcuElementId).removeAttr("disabled");
-	   		    	}
-	   		    	$("#dateSnameTip" + childCalcuElementId).hide();
-	   			});
 				
 			} else if(labelTypeId == 7) {
 				
@@ -307,6 +175,87 @@ var vertValueRule = (function (model){
 			}
 		}
 		
+    }
+    /***
+     * 初始化事件，事件必须在vue和数据创建之后
+     */
+    model.initMethod = function(){
+    		//默认展示
+    		model.showTabDiv(ruleDataModel.labelVerticalColumnRelList[0]) ;
+	    	//初始化事件
+			for(var i=0 ; i< ruleDataModel.labelVerticalColumnRelList.length; i++ ){
+				var item = ruleDataModel.labelVerticalColumnRelList[i];
+				var labelTypeId 		= item.labelTypeId;
+				var dimTransId 				= item.mdaSysTableColumn.dimTransId;
+				var childCalcuElementId = item.labelVerticalColumnRelId.columnId;
+				if(labelTypeId == 5){//初始化分页grid
+					vertValueRule.initDimtabledataPage(childCalcuElementId,dimTransId);
+				}else if(labelTypeId == 6){
+					if(item.rule.startTime) {
+				    	$('#startTime'+childCalcuElementId).val(item.rule.startTime);
+					}
+			    	if(item.rule.endTime) {
+			    		$('#endTime'+childCalcuElementId).val(item.rule.endTime);
+					}
+			    	if(item.rule.queryWay == "1"){
+						
+						$("#exactValueDateYear"+ childCalcuElementId).attr("disabled","disabled");
+						$("#exactValueDateMonth"+ childCalcuElementId).attr("disabled","disabled");
+						$("#exactValueDateDay"+ childCalcuElementId).attr("disabled","disabled");
+						
+						$("#startTime"+ childCalcuElementId).removeAttr("disabled");
+						$("#endTime"+ childCalcuElementId).removeAttr("disabled");
+						$("#dynamicUpdate"+ childCalcuElementId).removeAttr("disabled");
+						$("#leftClosed"+ childCalcuElementId).removeAttr("disabled");
+						$("#rightClosed"+ childCalcuElementId).removeAttr("disabled");
+					}else{
+						$("#startTime"+ childCalcuElementId).attr("disabled","disabled");
+						$("#endTime"+ childCalcuElementId).attr("disabled","disabled");
+						$("#dynamicUpdate"+ childCalcuElementId).attr("disabled","disabled");
+						$("#leftClosed"+ childCalcuElementId).attr("disabled","disabled");
+						$("#rightClosed"+ childCalcuElementId).attr("disabled","disabled");
+						
+						$("#exactValueDateYear"+ childCalcuElementId).removeAttr("disabled");
+						$("#exactValueDateMonth"+ childCalcuElementId).removeAttr("disabled");
+						$("#exactValueDateDay"+ childCalcuElementId).removeAttr("disabled");
+					}
+					
+					$("input[name='queryWay6"+childCalcuElementId+"']").click(function(){
+		   		    	if($(this).val()==1){
+		   		    		$("#exactValueDateYear"+ childCalcuElementId).attr("disabled","disabled");
+							$("#exactValueDateMonth"+ childCalcuElementId).attr("disabled","disabled");
+							$("#exactValueDateDay"+ childCalcuElementId).attr("disabled","disabled");
+		   					$("#startTime"+childCalcuElementId).removeAttr("disabled");
+		   					$("#endTime"+childCalcuElementId).removeAttr("disabled");
+		   					$("#dynamicUpdate"+childCalcuElementId).removeAttr("disabled");
+		   					$("#leftClosed"+childCalcuElementId).removeAttr("disabled");
+		   					$("#rightClosed"+childCalcuElementId).removeAttr("disabled");
+		   		    	}else{
+		   		    		$("#startTime"+childCalcuElementId).attr("disabled","disabled");
+		   					$("#endTime"+childCalcuElementId).attr("disabled","disabled");
+		   					$("#dynamicUpdate"+childCalcuElementId).attr("disabled","disabled");
+		   					$("#leftClosed"+childCalcuElementId).attr("disabled","disabled");
+		   					$("#rightClosed"+childCalcuElementId).attr("disabled","disabled");
+		   					$("#exactValueDateYear"+ childCalcuElementId).removeAttr("disabled");
+							$("#exactValueDateMonth"+ childCalcuElementId).removeAttr("disabled");
+							$("#exactValueDateDay"+ childCalcuElementId).removeAttr("disabled");
+		   		    	}
+		   			});
+				}
+				
+			}
+			//导航切换选择方式
+	    	$("input[name^=queryWay7]").click(function(){
+		    	if($(this).val()==1){
+		    		$('#darkValue'+childCalcuElementId).removeAttr('disabled');
+		    		$('#exactValue'+childCalcuElementId).attr('disabled',true);
+		    	}else{
+		    		$('#exactValue'+childCalcuElementId).removeAttr('disabled');
+		    		$('#darkValue'+childCalcuElementId).attr('disabled',true);
+		    	}
+		    	
+			});
+    	
     }
     /**
      * 判断是否已经存在对应的子标签，如果存在则对div属性进行重新修改，如果不存在则新加div
@@ -327,29 +276,24 @@ var vertValueRule = (function (model){
 		return result;
     }
     /**
-     * 切换标签
-     */
-    model.changeTabFun = function(objTab){
-    	$("div [id^='labelElement']").hide();
-    	$('#switchImportWayBox li').removeClass('current');
-		$(this).addClass('current');
-		var index  = Number($(objTab).attr('index'));
-		var labelTypeId = ruleDataModel.labelVerticalColumnRelList[index].labelTypeId;
-		var columnId = ruleDataModel.labelVerticalColumnRelList[index].labelVerticalColumnRelId.columnId;
-		$('#labelElement' + labelTypeId + '' + columnId).show();
-    }
+	 * 展示标签设置tab
+	 */
+	model.showTabDiv = function (item){
+		var id = item.labelTypeId + item.labelVerticalColumnRelId.columnId ;
+		ruleDataModel.showDivColumnId = 'labelElement' + id ;
+	}
     /**************
 	 * 分页查询枚举
 	 */
 	model.initDimtabledataPage = function(gridId,dimTransId){
 		$("#mainGrid"+gridId).jqGrid({
-	        url: $.ctx + "/api/dimtabledata/queryPage",
+	        url: $.ctx + "/api/dimtabledata/queryPageById",
+	        postData:{
+				  "dimKey": '',
+	              "dimValue": '',
+	              "dimTransId" : dimTransId
+			},
 	        datatype: "json",
-	        postData: {
-                "dimKey": '',
-                "dimValue": ruleDataModel.dimValueSearch,
-                "dimTransId" : dimTransId
-            },
 	        colNames : [ '','选项'],
 	        colModel: [{
 	            name: 'dimKey',
@@ -372,22 +316,76 @@ var vertValueRule = (function (model){
 	    	 * 添加
 	    	 */
 	        onSelectRow: function(ids) { //单击选择行  
-                var rodData= $("#mainGrid").jqGrid("getRowData",ids);//
+	        	var id = this.id ;
+	        	var columnId = id.substring("mainGrid".length,id.length);
+                var rodData= $("#"+id).jqGrid("getRowData",ids);
                 var id=rodData.dimKey;
                 var name=rodData.dimValue;
-            }  
+                var item = {};
+              //初始化数据,事件
+        		for(var i=0 ; i< ruleDataModel.labelVerticalColumnRelList.length; i++ ){
+        			var temp = ruleDataModel.labelVerticalColumnRelList[i];
+        			if(columnId == ruleDataModel.labelVerticalColumnRelList[i].labelVerticalColumnRelId.columnId){
+        				item = ruleDataModel.labelVerticalColumnRelList[i];
+        			}
+        		}
+        		if(item){
+        			model.addEnumItem(item,id,name);
+        		}
+            }
+	        
 	    });
 		$("#mainGrid"+gridId).jqGrid('setLabel',0, '序号');
 	};
+	/**************
+	 * 分页查询枚举
+	 */
+	model.searchGrid = function(item){
+		var columnId = item.labelVerticalColumnRelId.columnId;
+		var dimTransId = item.mdaSysTableColumn.dimTransId;
+		
+		$("#mainGrid"+columnId).setGridParam({
+            postData: {
+                "dimKey": '',
+                "dimValue": item.dimValueSearch,
+                "dimTransId" : dimTransId
+            },
+            dataType : 'json'
+        }).trigger("reloadGrid", [{
+            page: 1
+        }]);
+	}
+	/**
+	 * 查询已经选择的条件
+	 * item.itemChooseListSrc,添加后的结果集
+	 * item.itemChooseList ，代表展示在页面上的结果
+	 */
+	model.searchChooseEnum = function(item,index){
+		//该种赋值避免引用相同,将原数据赋值给临时值
+		var temp = JSON.parse(JSON.stringify(item.itemChooseListSrc));
+		for(var i=0;i<temp.length ;i++){
+			//不包含则删除
+			if(temp[i].dimValue.indexOf(item.itemChooseSearch)<0){
+				temp.splice(i,1);
+				i--;//下边恢复上一个，重新判断删除后的数组
+			}
+		}
+		//该种赋值避免引用相同
+		item.itemChooseList = JSON.parse(JSON.stringify(temp));
+	}
 	/**
 	 * 枚举标签：添加
 	 */ 
 	model.addEnumItem = function(objModel,id,name){
 		var flag = false;//不存在
-		for(var i=0;i<objModel.itemChooseListSrc.length;i++){
-			if(id == objModel.itemChooseListSrc[i].dimKey){
-				flag = true;
+		if(objModel.itemChooseListSrc){
+			for(var i=0;i<objModel.itemChooseListSrc.length;i++){
+				if(id == objModel.itemChooseListSrc[i].dimKey){
+					flag = true;
+				}
 			}
+		}else{
+			objModel.itemChooseListSrc = [];
 		}
 		if(!flag){
 			var obj = {
@@ -405,19 +403,21 @@ var vertValueRule = (function (model){
 	/**
 	 * 全选添加
 	 */ 
-	model.addAllEnumItem = function(objModel){
+	model.addAllEnumItem = function(objModel,index){
+		var indexNumber = Number(index);
 		$.commAjax({
-			  url: $.ctx + "/api/dimtabledata/queryPage",
+			  url: $.ctx + "/api/dimtabledata/queryPageById",
 			  postData:{
 				  "dimKey": '',
-	              "dimValue": ruleDataModel.dimValue,
-	              "dimTableName" : ruleDataModel.dimTransId
+	              "dimValue": '',
+	              "dimTransId" : objModel.mdaSysTableColumn.dimTransId
 			  },
 			  onSuccess: function(returnObj){
 				  objModel.itemChooseListSrc = returnObj.rows ; 
 				  objModel.itemChooseList = returnObj.rows;//赋值显示数据
 				  objModel.itemChooseCount = objModel.itemChooseListSrc.length;
 				  objModel.itemChooseSearch = '';//清空查询条件
+				  ruleDataModel.labelVerticalColumnRelList[indexNumber] = objModel;
 			  }
 		});
 	}
@@ -425,17 +425,16 @@ var vertValueRule = (function (model){
 	/**
 	 * 删除已选择的
 	 */ 
-	model.delEnumItem = function(t){
-		var index = $(t).parent().parent().attr("index");
-		var item = ruleDataModel.itemChooseList[index];
-		ruleDataModel.itemChooseList.splice(index,1);
-		for(var i=0;i<ruleDataModel.itemChooseListSrc.length ;i++){
-			if(ruleDataModel.itemChooseListSrc[i].dimKey == item.dimKey){
-				ruleDataModel.itemChooseListSrc.splice(i,1);
+	model.delEnumItem = function(item,indexDim){
+		var itemDim = item.itemChooseList[indexDim];
+		item.itemChooseList.splice(indexDim,1);
+		for(var i=0;i<item.itemChooseListSrc.length ;i++){
+			if(item.itemChooseListSrc[i].dimKey == itemDim.dimKey){
+				item.itemChooseListSrc.splice(i,1);
 				break;
 			}
 		}
-		ruleDataModel.itemChooseCount = ruleDataModel.itemChooseListSrc.length;
+		item.itemChooseCount = item.itemChooseListSrc.length;
 	}
 	/**
 	 * 全选删除已选择的
@@ -445,13 +444,7 @@ var vertValueRule = (function (model){
 		objModel.itemChooseListSrc = [];
 		objModel.itemChooseCount = 0;
 	}
-	/**
-	 * 展示标签设置tab
-	 */
-	model.showTabDiv = function (item){
-		var id = item.labelTypeId + item.labelVerticalColumnRelId.columnId ;
-		ruleDataModel.showDivColumnId = 'labelElement' + id ;
-	}
+	
     /**
      * 校验表单
      */
@@ -656,7 +649,7 @@ var vertValueRule = (function (model){
 			var rightZoneSign="";
 			var rule = item.rule;
 			
-			if(ruleDataModel.rule.queryWay == "1"){
+			if(item.rule.queryWay == "1"){
 				contiueMinVal=$.trim(rule.contiueMinVal);
 				contiueMaxVal=$.trim(rule.contiueMaxVal);
 				if(contiueMinVal == "输入下限"){
@@ -695,18 +688,23 @@ var vertValueRule = (function (model){
 		var attrVals = "";
 		var attrNames ="";
 		var rule = item.rule;
-		for(var i=0;i<item.itemChooseListSrc.length ;i++){
-			if(i==0){
-				attrVals +=item.itemChooseListSrc[i].dimKey;
-				attrNames +=item.itemChooseListSrc[i].dimValue;
-			}else{
-				attrVals +=","+item.itemChooseListSrc[i].dimKey;
-				attrNames +=","+item.itemChooseListSrc[i].dimValue;
+		if(item.itemChooseListSrc){
+			for(var i=0;i<item.itemChooseListSrc.length ;i++){
+				if(i==0){
+					attrVals +=item.itemChooseListSrc[i].dimKey;
+					attrNames +=item.itemChooseListSrc[i].dimValue;
+				}else{
+					attrVals +=","+item.itemChooseListSrc[i].dimKey;
+					attrNames +=","+item.itemChooseListSrc[i].dimValue;
+				}
+				
 			}
-			
+			rule.attrVal = attrVals;
+			rule.attrName = attrNames;
+		}else{
+			rule = null ;
 		}
-		rule.attrVal = attrVals;
-		rule.attrName = attrNames;
+		
 		return rule ;
 	}
 	/**
@@ -782,14 +780,14 @@ var vertValueRule = (function (model){
 				var rule = ruleDataModel.labelVerticalColumnRelList[i].rule ;
 				rule.calcuElement = item.labelVerticalColumnRelId.columnId ;
 				rule.labelTypeId = item.labelTypeId ;
-				rule.mdaSysTableColumn.columnCnName = item.mdaSysTableColumn.columnCnName ;
-				if(item.labelTypeId = 4){
+				rule.columnCnName = item.mdaSysTableColumn.columnCnName ;
+				if(item.labelTypeId == 4){
 					rule = model.setNumberValue(item);
-				}else if(item.labelTypeId = 5){
+				}else if(item.labelTypeId == 5){
 					rule = model.setEnumValue(item);
-				}else if(item.labelTypeId = 6){
+				}else if(item.labelTypeId == 6){
 					rule = model.setDateValue(item);
-				}else if(item.labelTypeId = 7){
+				}else if(item.labelTypeId == 7){
 					if(rule.queryWay == "1"){
 						rule.exactValue = '';
 					}else{
