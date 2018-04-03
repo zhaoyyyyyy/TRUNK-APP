@@ -307,7 +307,7 @@ var vertValueRule = (function (model){
 	        	name: 'dimValue',
 	            index: 'dimValue',
 	            sortable: false,
-	            width: 60,
+	            width: 263,
 	            align: "center"
 	        }],
 	        rowList: [10, 20, 30],
