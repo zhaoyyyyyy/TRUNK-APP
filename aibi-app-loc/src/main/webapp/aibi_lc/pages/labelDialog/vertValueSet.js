@@ -219,31 +219,32 @@ var vertValueRule = (function (model){
 						$("#exactValueDateMonth"+ childCalcuElementId).removeAttr("disabled");
 						$("#exactValueDateDay"+ childCalcuElementId).removeAttr("disabled");
 					}
-					
-					$("input[name='queryWay6"+childCalcuElementId+"']").click(function(){
-		   		    	if($(this).val()==1){
-		   		    		$("#exactValueDateYear"+ childCalcuElementId).attr("disabled","disabled");
-							$("#exactValueDateMonth"+ childCalcuElementId).attr("disabled","disabled");
-							$("#exactValueDateDay"+ childCalcuElementId).attr("disabled","disabled");
-		   					$("#startTime"+childCalcuElementId).removeAttr("disabled");
-		   					$("#endTime"+childCalcuElementId).removeAttr("disabled");
-		   					$("#dynamicUpdate"+childCalcuElementId).removeAttr("disabled");
-		   					$("#leftClosed"+childCalcuElementId).removeAttr("disabled");
-		   					$("#rightClosed"+childCalcuElementId).removeAttr("disabled");
-		   		    	}else{
-		   		    		$("#startTime"+childCalcuElementId).attr("disabled","disabled");
-		   					$("#endTime"+childCalcuElementId).attr("disabled","disabled");
-		   					$("#dynamicUpdate"+childCalcuElementId).attr("disabled","disabled");
-		   					$("#leftClosed"+childCalcuElementId).attr("disabled","disabled");
-		   					$("#rightClosed"+childCalcuElementId).attr("disabled","disabled");
-		   					$("#exactValueDateYear"+ childCalcuElementId).removeAttr("disabled");
-							$("#exactValueDateMonth"+ childCalcuElementId).removeAttr("disabled");
-							$("#exactValueDateDay"+ childCalcuElementId).removeAttr("disabled");
-		   		    	}
-		   			});
 				}
 				
 			}
+			$("input[name^=queryWay6]").click(function(){
+				var name = this.name ;
+				var childCalcuElementId = this.name.substring('queryWay6'.length,name.length);
+   		    	if($(this).val()==1){
+   		    		$("#exactValueDateYear"+ childCalcuElementId).attr("disabled","disabled");
+					$("#exactValueDateMonth"+ childCalcuElementId).attr("disabled","disabled");
+					$("#exactValueDateDay"+ childCalcuElementId).attr("disabled","disabled");
+   					$("#startTime"+childCalcuElementId).removeAttr("disabled");
+   					$("#endTime"+childCalcuElementId).removeAttr("disabled");
+   					$("#dynamicUpdate"+childCalcuElementId).removeAttr("disabled");
+   					$("#leftClosed"+childCalcuElementId).removeAttr("disabled");
+   					$("#rightClosed"+childCalcuElementId).removeAttr("disabled");
+   		    	}else{
+   		    		$("#startTime"+childCalcuElementId).attr("disabled","disabled");
+   					$("#endTime"+childCalcuElementId).attr("disabled","disabled");
+   					$("#dynamicUpdate"+childCalcuElementId).attr("disabled","disabled");
+   					$("#leftClosed"+childCalcuElementId).attr("disabled","disabled");
+   					$("#rightClosed"+childCalcuElementId).attr("disabled","disabled");
+   					$("#exactValueDateYear"+ childCalcuElementId).removeAttr("disabled");
+					$("#exactValueDateMonth"+ childCalcuElementId).removeAttr("disabled");
+					$("#exactValueDateDay"+ childCalcuElementId).removeAttr("disabled");
+   		    	}
+   			});
 			//导航切换选择方式
 	    	$("input[name^=queryWay7]").click(function(){
 		    	if($(this).val()==1){

@@ -90,8 +90,8 @@
 							                    <span v-bind:id="'addEnumAll'+item.labelVerticalColumnRelId.columnId" v-on:click="vertValueRule.addAllEnumItem(item,index)">全部添加</span>
 							                    <div class="form-group fright">
 							                        <div class="input-group">
-							                            <input type="text" class="form-control" placeholder="搜索" v-model="item.dimValueSearch" v-on:click="vertValueRule.searchGrid(item)">
-							                            <div class="input-group-addon input-group-icon right-child" v-bind:id="'searchEnum'+item.labelVerticalColumnRelId.columnId"></div>
+							                            <input type="text" class="form-control" placeholder="搜索" v-model="item.dimValueSearch" >
+							                            <div class="input-group-addon input-group-icon right-child" v-on:click="vertValueRule.searchGrid(item)"></div>
 							                        </div>
 							                    </div>
 							                </div>
