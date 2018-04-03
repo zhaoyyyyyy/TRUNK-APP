@@ -375,8 +375,7 @@ var vertValueRule = (function (model){
                 var rodData= $("#mainGrid").jqGrid("getRowData",ids);//
                 var id=rodData.dimKey;
                 var name=rodData.dimValue;
-            },  
-	        
+            }  
 	    });
 		$("#mainGrid"+gridId).jqGrid('setLabel',0, '序号');
 	};
