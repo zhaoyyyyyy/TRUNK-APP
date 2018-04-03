@@ -240,7 +240,7 @@ var calculateCenter = (function (model){
 	    		model.refreshShopCart();
 	    	}
 		}else if(labelType == "8"){
-			var wd = $.window(name + "-条件设置", $.ctx + '/aibi_lc/pages/labelDialog/vertValueSet.html?index='+index, 800, 500);
+			var wd = $.window(name + "-条件设置", $.ctx + '/aibi_lc/pages/labelDialog/vertValueSet.html?index='+index, 900, 500);
 	    	wd.reload = function() {
 	    		model.refreshShopCart();
 	    	}

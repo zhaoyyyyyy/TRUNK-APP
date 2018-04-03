@@ -307,14 +307,15 @@ var vertValueRule = (function (model){
 	        	name: 'dimValue',
 	            index: 'dimValue',
 	            sortable: false,
-	            width: 263,
+	            width: 310,
 	            align: "center"
 	        }],
 	        rowList: [10, 20, 30],
 	        pager: '#mainGridPager'+gridId,
 	        // 分页的id
 	        viewrecords: true,
-	        width : 200,
+	        width :'100%',
+	        autowidth:true,
 	    	/**
 	    	 * 添加
 	    	 */

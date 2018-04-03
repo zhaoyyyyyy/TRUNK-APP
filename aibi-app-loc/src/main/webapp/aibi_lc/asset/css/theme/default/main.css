@@ -1532,3 +1532,9 @@ span.del-btn{
 	margin: 0 0 0 150px;
 	height: 100%;
 }
+.vertical-table-pannel table{
+	width:100%!important;
+}
+.vertical-table-pannel .tcdPageCode{
+	padding: 10px 0px;
+}
