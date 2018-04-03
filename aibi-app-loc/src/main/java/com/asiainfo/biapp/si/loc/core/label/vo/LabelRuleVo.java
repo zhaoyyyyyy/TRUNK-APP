@@ -58,6 +58,8 @@ public class LabelRuleVo extends LabelRule {
 	
 	private String unit;
 	
+	private String columnCnName;
+	
 	public Integer getLabelTypeId() {
 		return labelTypeId;
 	}
@@ -130,6 +132,13 @@ public class LabelRuleVo extends LabelRule {
 	}
 	public void setCreateBrackets(String createBrackets) {
 		this.createBrackets = createBrackets;
+	}
+	
+	public String getColumnCnName() {
+		return columnCnName;
+	}
+	public void setColumnCnName(String columnCnName) {
+		this.columnCnName = columnCnName;
 	}
 	@Override
     public LabelRuleVo clone() throws CloneNotSupportedException {
