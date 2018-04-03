@@ -26,7 +26,7 @@
 	<div class="clearfix vertical-table">
 		<div id="switchImportWayBox" class="fleft vertical-tab">
 			<ul class="mt10">
-				<li v-for="(item,index) in labelVerticalColumnRelList" v-bind:index="index" v-on:click="vertValueRule.showTabDiv(item)">{{item.mdaSysTableColumn.columnCnName}}</li>
+				<li v-for="(item,index) in labelVerticalColumnRelList" v-bind:index="index" v-on:click="vertValueRule.showTabDiv(item,index)">{{item.mdaSysTableColumn.columnCnName}}</li>
 			</ul>
 		</div>
 		<div class="fleft vertical-table-pannel">

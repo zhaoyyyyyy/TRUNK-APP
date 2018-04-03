@@ -181,7 +181,7 @@ var vertValueRule = (function (model){
      */
     model.initMethod = function(){
     		//默认展示
-    		model.showTabDiv(ruleDataModel.labelVerticalColumnRelList[0]) ;
+    		model.showTabDiv(ruleDataModel.labelVerticalColumnRelList[0],0) ;
 	    	//初始化事件
 			for(var i=0 ; i< ruleDataModel.labelVerticalColumnRelList.length; i++ ){
 				var item = ruleDataModel.labelVerticalColumnRelList[i];
@@ -279,9 +279,11 @@ var vertValueRule = (function (model){
     /**
 	 * 展示标签设置tab
 	 */
-	model.showTabDiv = function (item){
+	model.showTabDiv = function (item,index){
 		var id = item.labelTypeId + item.labelVerticalColumnRelId.columnId ;
 		ruleDataModel.showDivColumnId = 'labelElement' + id ;
+		$('#switchImportWayBox  li').removeClass('current');
+		$('#switchImportWayBox  li[index='+index+']').addClass('current');
 	}
     /**************
 	 * 分页查询枚举
@@ -456,25 +458,25 @@ var vertValueRule = (function (model){
 			if(item.labelTypeId == 4){
 				if(!model.validateNumberForm(item)){
 					flag = false ;
-					model.showTabDiv(item);
+					model.showTabDiv(item,i);
 					break;
 				}
 			}else if(item.labelTypeId == 5){
 				if(!model.validateEnumForm(item)){
 					flag = false ;
-					model.showTabDiv(item);
+					model.showTabDiv(item,i);
 					break;
 				}
 			}else if(item.labelTypeId == 6){
 				if(!model.validateDateForm(item)){
 					flag = false ;
-					model.showTabDiv(item);
+					model.showTabDiv(item,i);
 					break;
 				}
 			}else if(item.labelTypeId == 7){
 				if(!model.validateTextForm(item)){
 					flag = false ;
-					model.showTabDiv(item);
+					model.showTabDiv(item,i);
 					break;
 				}
 			}else{
