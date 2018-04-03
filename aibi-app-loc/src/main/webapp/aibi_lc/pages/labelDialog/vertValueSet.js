@@ -674,6 +674,8 @@ var vertValueRule = (function (model){
 				}else{
 					rightZoneSign="<";
 				}
+				rule.contiueMinVal = contiueMinVal;
+				rule.contiueMaxVal = contiueMaxVal;
 				rule.leftZoneSign = leftZoneSign;
 				rule.rightZoneSign = rightZoneSign;
 				rule.exactValue = '';
