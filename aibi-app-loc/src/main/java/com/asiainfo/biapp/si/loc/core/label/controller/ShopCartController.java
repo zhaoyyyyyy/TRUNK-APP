@@ -193,7 +193,6 @@ public class ShopCartController extends BaseController {
 		String msg = "抱歉，该标签数据未准备好，不能添加到收纳篮！";
 		try {
 			LabelInfo ciLabelInfo = CocCacheProxy.getCacheProxy().getLabelInfoById(labelId);
-			List<LabelVerticalColumnRel> verticalColumnRels = ciLabelInfo.getVerticalColumnRels();
 			if (StringUtil.isEmpty(ciLabelInfo.getDataDate())) {
 				success = false;
 			}
@@ -408,6 +407,7 @@ public class ShopCartController extends BaseController {
 			LogUtil.info("querySql SQL : " + sql.toString());
 			backServiceImpl.queryCount(sql.toString());	
 		} catch (BaseException baseException) {
+			LogUtil.error("校验sql异常", baseException);
 			return webResult.fail("校验sql异常");
 		}catch (Exception e) {
 			LogUtil.error("校验sql异常", e);
