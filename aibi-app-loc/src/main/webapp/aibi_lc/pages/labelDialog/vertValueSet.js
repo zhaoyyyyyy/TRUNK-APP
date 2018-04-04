@@ -46,6 +46,7 @@ window.loc_onload = function() {
 		}
     });
     
+    
 }
 
 /**
@@ -59,6 +60,7 @@ var vertValueRule = (function (model){
     model.version = "1.0.0";
     /**
      * 初始化数据
+     * 默认需要vue监控的属性，给予默认值，否则初始化后，再加入不受vue控制，改变数据视图不会同步更新
      */
     model.initData = function(){
     	//舒适化纵表标签
@@ -109,6 +111,8 @@ var vertValueRule = (function (model){
 					item.rule.queryWay = 1;
 				}
 			} else if(labelTypeId == 5) {
+				item.itemChooseListSrc = [];//默认增加属性，提供vue监控
+				item.itemChooseList = [];//默认增加属性，提供vue监控
 				if(isExist) {
 					var attrVal 	= childCalcEl.attrVal;
 					var attrName 	= childCalcEl.attrName;
@@ -390,6 +394,7 @@ var vertValueRule = (function (model){
 			}
 		}else{
 			objModel.itemChooseListSrc = [];
+			objModel.itemChooseList = [];
 		}
 		if(!flag){
 			var obj = {
@@ -402,7 +407,6 @@ var vertValueRule = (function (model){
 			objModel.itemChooseList = JSON.parse(JSON.stringify(objModel.itemChooseListSrc));//赋值显示数据
 			objModel.itemChooseSearch = '';//清空查询条件
 		}
-		
     }
 	/**
 	 * 全选添加
