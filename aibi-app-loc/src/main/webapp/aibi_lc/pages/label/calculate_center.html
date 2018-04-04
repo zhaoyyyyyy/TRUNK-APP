@@ -116,6 +116,10 @@
 				<h5 v-if="item.childLabelRuleList != null">已选条件：</h5>
 				<div class="clearfix" v-if="item.childLabelRuleList!=null">
 					<span v-for="(childRule,childIndex) in item.childLabelRuleList">
+						<span v-if="childRule.labelTypeId == 1" >
+							<span v-if="childRule.labelFlag == 1">{{childRule.columnCnName}}：是</span>
+							<span v-if="childRule.labelFlag == 0">{{childRule.columnCnName}}：否</span>
+						</span>
 						<span v-if="(childRule.labelTypeId == 4 && childRule.queryWay == 1)" >
 							{{childRule.columnCnName}}：
 							<span v-if="childRule.contiueMinVal !=''">

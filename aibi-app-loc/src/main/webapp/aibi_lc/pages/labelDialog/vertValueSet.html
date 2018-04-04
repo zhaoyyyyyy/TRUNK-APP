@@ -33,6 +33,23 @@
 			<div>
 				<div v-for="(item,index) in labelVerticalColumnRelList" v-bind:index="index" v-bind:id="'labelElement'+item.labelTypeId+item.labelVerticalColumnRelId.columnId"
 				 	 v-show = "showDivColumnId == ('labelElement'+item.labelTypeId+item.labelVerticalColumnRelId.columnId)">
+				 	 	<!-- 标志标签   	begin -------------------->
+						<div class="form-horizontal mt20"  v-if="item.labelTypeId == 1">
+							<div class="form-horizontal mt20">
+				      				<div class="ui-form-group">
+								        <div class="radio circle success fleft"> 
+										   <input type="radio" v-bind:id="'labelFlag1'+item.labelVerticalColumnRelId.columnId" v-bind:name="'labelFlag'+item.labelVerticalColumnRelId.columnId" v-model="item.rule.labelFlag" value="1"> 
+										   <label v-bind:for="'labelFlag1'+item.labelVerticalColumnRelId.columnId"><i class="default"></i> 是</label>
+										</div>
+								        <div class="radio circle success fleft">
+									       	<input type="radio" v-bind:id="'labelFlag2'+item.labelVerticalColumnRelId.columnId" v-bind:name="'labelFlag'+item.labelVerticalColumnRelId.columnId" v-model="item.rule.labelFlag" value="0"> 
+										   <label v-bind:for="'labelFlag2'+item.labelVerticalColumnRelId.columnId"><i class="default"></i> 否</label>
+								   		 </div>
+								    </div>			      		
+				      			</div>
+						</div>
+						<!-- 标志标签   	end -------------------->
+						
 						<!-- 指标型标签   	begin -------------------->
 						<div class="form-horizontal mt20"  v-if="item.labelTypeId == 4">
 			      				<div class="ui-form-group">

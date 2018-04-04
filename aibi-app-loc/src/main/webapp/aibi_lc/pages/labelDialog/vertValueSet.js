@@ -89,7 +89,10 @@ var vertValueRule = (function (model){
 			}else{
 				item.rule = {};
 			}
-			if(labelTypeId == 4) {
+			
+			if(labelTypeId == 1){
+				
+			}else if(labelTypeId == 4) {
 				var queryWay = 1;
 				if(isExist) {//有可能没有设置值
 					queryWay = item.rule.queryWay ;
@@ -460,7 +463,14 @@ var vertValueRule = (function (model){
 		var flag = true ;
 		for(var i= 0 ; i < ruleDataModel.labelVerticalColumnRelList.length ;i++){
 			var item = ruleDataModel.labelVerticalColumnRelList[i] ;
-			if(item.labelTypeId == 4){
+			if(item.labelTypeId == 1){
+				var isMustColumn = item.isMustColumn;
+				if(isMustColumn == 1 && item.rule.labelFlag == null){
+					flag = false ;
+					model.showTabDiv(item,i);
+					break;
+				}
+			}if(item.labelTypeId == 4){
 				if(!model.validateNumberForm(item)){
 					flag = false ;
 					model.showTabDiv(item,i);
@@ -791,7 +801,10 @@ var vertValueRule = (function (model){
 				rule.calcuElement = item.labelVerticalColumnRelId.columnId ;
 				rule.labelTypeId = item.labelTypeId ;
 				rule.columnCnName = item.mdaSysTableColumn.columnCnName ;
-				if(item.labelTypeId == 4){
+				rule.elementType = 2 ;//标签
+				if(item.labelTypeId == 1){
+					
+				}else if(item.labelTypeId == 4){
 					rule = model.setNumberValue(item);
 				}else if(item.labelTypeId == 5){
 					rule = model.setEnumValue(item);
