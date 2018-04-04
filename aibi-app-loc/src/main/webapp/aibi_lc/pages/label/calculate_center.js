@@ -275,7 +275,7 @@ var calculateCenter = (function (model){
 	model.againstLabel = function(t){
 		var index = $(t).parent().parent().attr("index");
 		var rule = dataModel.ruleList[index];
-		if(rule){
+		if(rule && rule.elementType == 2 && rule.labelTypeId != 8){
 			if(rule.labelFlag == 1){
 				dataModel.ruleList[index].labelFlag = 0 ;
 			}else{
