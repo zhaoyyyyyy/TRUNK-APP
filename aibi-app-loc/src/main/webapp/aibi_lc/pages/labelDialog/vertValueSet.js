@@ -801,9 +801,17 @@ var vertValueRule = (function (model){
 				rule.calcuElement = item.labelVerticalColumnRelId.columnId ;
 				rule.labelTypeId = item.labelTypeId ;
 				rule.columnCnName = item.mdaSysTableColumn.columnCnName ;
-				rule.elementType = 2 ;//标签
+				rule.elementType = 2 ;//标签,默认必须
+				if(rule.labelFlag == null || rule.labelFlag == ''){//标签,labelFlag必须
+					rule.labelFlag = 1 ;
+					rule.maxVal = 1	;
+				}
 				if(item.labelTypeId == 1){
-					
+					if(rule.labelFlag == 0 ){
+						rule.minVal = 0 ;
+					}else if(rule.labelFlag == 1 ){
+						rule.maxVal = 1	;
+					}
 				}else if(item.labelTypeId == 4){
 					rule = model.setNumberValue(item);
 				}else if(item.labelTypeId == 5){
