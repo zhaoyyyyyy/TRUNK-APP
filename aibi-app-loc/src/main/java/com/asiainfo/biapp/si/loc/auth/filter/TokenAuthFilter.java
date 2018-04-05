@@ -24,7 +24,6 @@ import com.asiainfo.biapp.si.loc.base.exception.UserAuthException;
 import com.asiainfo.biapp.si.loc.base.utils.ServletUtil;
 
 @Component
-@ServletComponentScan
 @WebFilter(urlPatterns = "/api/*", filterName = "tokenAuthFilter")
 public class TokenAuthFilter implements Filter {
 	
