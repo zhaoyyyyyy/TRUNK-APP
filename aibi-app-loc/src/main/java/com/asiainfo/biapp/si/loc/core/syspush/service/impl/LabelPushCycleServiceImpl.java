@@ -6,6 +6,7 @@
 
 package com.asiainfo.biapp.si.loc.core.syspush.service.impl;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -33,7 +34,9 @@ import com.asiainfo.biapp.si.loc.core.label.entity.LabelInfo;
 import com.asiainfo.biapp.si.loc.core.label.service.ILabelInfoService;
 import com.asiainfo.biapp.si.loc.core.label.vo.LabelInfoVo;
 import com.asiainfo.biapp.si.loc.core.syspush.common.constant.ServiceConstants;
+import com.asiainfo.biapp.si.loc.core.syspush.dao.ICustomDownloadRecordDao;
 import com.asiainfo.biapp.si.loc.core.syspush.dao.ILabelPushCycleDao;
+import com.asiainfo.biapp.si.loc.core.syspush.entity.CustomDownloadRecord;
 import com.asiainfo.biapp.si.loc.core.syspush.entity.LabelAttrRel;
 import com.asiainfo.biapp.si.loc.core.syspush.entity.LabelPushCycle;
 import com.asiainfo.biapp.si.loc.core.syspush.service.ICustomerPublishCommService;
@@ -70,6 +73,8 @@ public class LabelPushCycleServiceImpl extends BaseServiceImpl<LabelPushCycle, S
 
     @Autowired
     private ILabelPushCycleDao iLabelPushCycleDao;
+    @Autowired
+    private ICustomDownloadRecordDao iCustomDownloadRecordDao;
     
     @Autowired
     private ILabelInfoService iLabelInfoService;
@@ -288,5 +293,58 @@ public class LabelPushCycleServiceImpl extends BaseServiceImpl<LabelPushCycle, S
     public List<LabelPushCycle> queryLabelPushCycle(LabelPushCycleVo labelPushCycleVo) throws BaseException{
         return this.iLabelPushCycleDao.selectLabelPushCycle(labelPushCycleVo);
     }
+    
+    /**
+     * Description:根据条件生成清单
+     * @param LabelPushCycle 条件
+     * @return 
+     */
+    @Override
+    public void preDownloadGroupList(String localPathTmp, CustomDownloadRecord customDownloadRecord) throws BaseException{
+        iCustomDownloadRecordDao.save(customDownloadRecord);
 
+        //探测并等待文件生成
+        String fileNameTmp = customDownloadRecord.getFileName();
+        String localPath = localPathTmp;
+        
+        int num = 1;
+        boolean isSleep = true;
+        File dir = new File(localPath);
+        /**
+         * 获取目录下的所有文件和文件夹
+         */
+        String[] names = null;
+        while (isSleep) {
+            try {
+                //等待文件生成
+                Thread.sleep((15+(num*10)*1000));
+                
+                names = dir.list();
+                for (String name : names) {
+                    if (name.contains(fileNameTmp)) {
+                        LogUtil.debug("查找文件完整名称："+name);
+                        fileNameTmp = name;
+                        isSleep = false;
+                        Thread.sleep(num*10*1000);//再睡一会儿，防止文件未写完
+                    }
+                }
+                if (num > 20) {//超时失败
+                    isSleep = false;
+                }
+            } catch (InterruptedException e) {
+                isSleep = false;
+                LogUtil.warn(e);
+            }
+            num++;
+        }
+        if (!isSleep) {
+            localPath += File.separator + fileNameTmp;
+            customDownloadRecord.setFileName(fileNameTmp);
+            customDownloadRecord.setDataStatus(ServiceConstants.CustomDownloadRecord.DATA_STATUS_SUCCESS);
+            iCustomDownloadRecordDao.update(customDownloadRecord);
+        }
+    
+    }
+    
+    
 }

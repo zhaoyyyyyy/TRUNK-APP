@@ -138,7 +138,6 @@ public class CustomerPublishDefaultThread implements ICustomerPublishThread {
     private static final String FILE_PATH = "syspush"; 		//推送的文件的目录名称
     private static final String encode = "UTF-8"; 			//当前的文件的编码
     private static final long CUSTOMER_PUBLISH_PRE_WAIT_TIME = 5000;     //客户群推送线程前置等待时间
-    private static final long CUSTOMER_PUBLISH_FTP_WAIT_TIME = 60000;    //客户群推送线程FTP等待时间
 
     
     /**
@@ -476,21 +475,21 @@ public class CustomerPublishDefaultThread implements ICustomerPublishThread {
                 
                 LogUtil.debug("推送方式：------"+protocoTypeStr+"------");
                 LogUtil.info(protocoTypeStr+" :" + sysInfo.toString());
-                LogUtil.debug("desFile :" + desFile);
+                LogUtil.debug("push File :" + desFile);
 
                 if (null == protocoType || ServiceConstants.SysInfo.PROTOCO_TYPE_FTP == protocoType) {   //默认 ftp
                     result = FtpUtil.ftp(sysInfo.getFtpServerIp(), sysInfo.getFtpPort(), sysInfo.getFtpUser(),
                         DES.decrypt(sysInfo.getFtpPwd()), desFile, sysInfo.getFtpPath() + "/");
                 } else if (ServiceConstants.SysInfo.PROTOCO_TYPE_SFTP == protocoType) {  //sftp
                     result = SftpUtil.sftp(sysInfo.getFtpServerIp(), sysInfo.getFtpPort(), sysInfo.getFtpUser(),
-                        DES.decrypt(sysInfo.getFtpPwd()), desFile, sysInfo.getFtpPath() + "/");
+                        DES.decrypt(sysInfo.getFtpPwd()), desFile, sysInfo.getFtpPath() + "/", true);
                 }
                 if (!result) {
                     LogUtil.error(protocoTypeStr+" error");
+                } else {
+                    LogUtil.debug("push File ("+desFile+") success.");
                 }
-                LogUtil.debug("客户群推送线程"+protocoTypeStr+"等待时间: "+CUSTOMER_PUBLISH_FTP_WAIT_TIME/1000+" s");
-                Thread.sleep(CUSTOMER_PUBLISH_FTP_WAIT_TIME);
-                if (!isJobTask) {    //手动推送，不删除，以便下载,下载后删除
+                if (isJobTask) {    //手动推送，不删除，以便下载,下载后删除
                     result = new File(desFile).delete();    //FTP后删除本地des文件
                     LogUtil.debug(new File(desFile).exists());
                     //FTP后删除本地csv文件
@@ -515,7 +514,7 @@ public class CustomerPublishDefaultThread implements ICustomerPublishThread {
                             DES.decrypt(sysInfo.getFtpPwd()), xmlFile, sysInfo.getFtpPath() + "/");
                     } else if (ServiceConstants.SysInfo.PROTOCO_TYPE_SFTP == protocoType) {  //sftp
                         result = SftpUtil.sftp(sysInfo.getFtpServerIp(), sysInfo.getFtpPort(), sysInfo.getFtpUser(),
-                            DES.decrypt(sysInfo.getFtpPwd()), xmlFile, sysInfo.getFtpPath() + "/");
+                            DES.decrypt(sysInfo.getFtpPwd()), xmlFile, sysInfo.getFtpPath() + "/", true);
                     }
                     
                     if (!result) {
@@ -592,7 +591,7 @@ public class CustomerPublishDefaultThread implements ICustomerPublishThread {
             this.updateLabelPushReq(ServiceConstants.LabelPushReq.PUSH_STATUS_FAILED, e);
             LogUtil.error("调用webService出错" + sysInfo, e);
             
-            return false;
+            result = false;
         }
         return result;
     }

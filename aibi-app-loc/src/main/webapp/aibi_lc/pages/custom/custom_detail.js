@@ -303,8 +303,10 @@ window.loc_onload = function() {
 			    	        "id":"add-dialog-btn",
 			    	        "class":"ui-btn ui-btn-default",
 			    	        click: function() {
-			    	        	if($("#checkboxList label[class~=active]").length ==0 || $("#radioList label[class~=active]").length ==0){
-			    	        		$.alert("请正确选择推送周期与推送平台");
+			    	        	if($("#radioList label[class~=active]").length ==0){
+			    	        		$.alert("请选择推送周期");
+			    	        	}else if($("#checkboxList label[class~=active]").length ==0){
+			    	        		$.alert("请选择推送平台");
 			    	        	}else{
 			    	        		$( this ).dialog( "close" );
 			    	        		if(!model.haveAttr){
@@ -348,7 +350,8 @@ window.loc_onload = function() {
 		    	})
 		    	}
 			},
-			downloadGroupList:function(){
+			/*显示下载窗口*/
+			showDownload:function(){
 				model.sortAttrAndType="";
 				var AttrbuteIdString = model.AttrbuteId;
 				$(".selectList").each(function(){
@@ -369,16 +372,9 @@ window.loc_onload = function() {
 					}
 				});
 				if(model.sortAttrAndType!=null){
-					$.confirm('等待时间会超过1分钟，确定继续？', function() {
-				    	  	//模拟form提交下载文件
-						var url = $.ctx+'/api/syspush/labelPushCycle/downloadGroupList';
-						var form = $("<form></form>").attr("action", url).attr("method", "post");
-						form.append($("<input></input>").attr("type", "hidden").attr("name", "token").attr("value", $.getToken()));
-						form.append($("<input></input>").attr("type", "hidden").attr("name", "customGroupId").attr("value", labelId));
-						form.append($("<input></input>").attr("type", "hidden").attr("name", "AttrbuteId").attr("value", AttrbuteIdString));
-						form.append($("<input></input>").attr("type", "hidden").attr("name", "sortAttrAndType").attr("value", model.sortAttrAndType));
-						form.appendTo('body').submit().remove();
-					});
+					var dg = $.window('客户群清单下载', $.ctx + '/aibi_lc/pages/custom/custom_download.html?customGroupId='
+					 +labelId+'&AttrbuteId='+AttrbuteIdString+'&sortAttrAndType='+model.sortAttrAndType+'&dataDate='+model.dataDate, 
+					 560, 300, {id:'customDownloadWin'});
 				}
 			}
 		},

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>客户群预览</title>
+    <!--[if IE]>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <![endif]-->
+    <link rel="stylesheet" theme="default" href="../../asset/css/theme/default/coc_frame.css" />
+	<link rel="stylesheet" theme="default" href="../../asset/css/theme/default/main.css" />
+	<script type="text/javascript" src="../../asset/script/common/include.js"></script>
+    <script type="text/javascript" src="custom_download.js"></script>
+    <!--
+        H5兼容js CSS3 兼容JS
+    -->
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="http://apps.bdimg.com/libs/html5shiv/3.7/html5shiv.min.js"></script>
+    <script src="http://apps.bdimg.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <style type="text/css">
+     	/* jqgrid内容过长将出现省略号 */
+ 		.ui-jqgrid tr.jqgrow td {text-overflow:ellipsis;}
+ 		.s_export{
+			background-image:url(images/page-last-disabled.gif) 10 20;
+		}
+	    	.ui-dialog > .form-horizontal{
+	    		display:none;
+	    	}
+	</style>
+</head>
+<body>
+
+	<!-- 下载 -->
+	<div id="downloadDialog">
+		<!-- 下载列表 -->
+		<div class="downloadListArea">
+			<table id="downloadGrid" class="table"></table>
+			<!-- 分页 -->
+			<div id="downloadGridPager"></div>
+		</div>
+    </div>
+
+<!-- 弹窗 -->
+<div class="ui-dialog" id="alertDialog">
+	<div class="form-horizontal mt5 ui-lc-mian">
+        <label>生成中，请稍等...</label>
+	</div>
+</div>
+</body>
+</html>

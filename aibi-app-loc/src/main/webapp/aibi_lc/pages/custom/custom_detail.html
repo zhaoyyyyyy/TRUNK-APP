@@ -123,7 +123,7 @@
 				<button type="button" class="ui-btn ui-btn-default mr10" @click="previewDialog()" >预览</button>
 <!-- 				注释掉，中邮暂时不用 -->
 				<button type="button" id="customPush" class="ui-btn ui-btn-default mr10" style="display:none" @click="showDialog()">推送</button>
-				<button type="button" id="customDownload" class="ui-btn ui-btn-default mr10" style="display:none" @click="downloadGroupList()">下载</button>
+				<button type="button" id="customDownload" class="ui-btn ui-btn-default mr10" style="display:none" @click="showDownload()">下载</button>
 		</div>
 	</div>
 </div>
@@ -145,7 +145,7 @@
 	        <div class="control-input">
 	        	<ul class="clearfix fleft" id="checkboxList">
 		        	<li class="checkbox fleft" v-for="(item,index) in sysName" @click.stop.prevent="checkSelect(item)" >
-					    <input :id="item.sysId" type="checkbox" class="checkbix"  :checked="item.isActive">
+					    <input :id="item.sysId" type="checkbox" class="checkbix" :checked="item.isActive">
 					    <label  v-bind:class="{active:item.isActive}" aria-label="" role="checkbox" :for="item.sysId" class="checkbix">
 					    		<span class="large"></span>{{item.sysName}}
 					    </label>
@@ -154,16 +154,6 @@
 	        </div>
 	    </div>
 	</div>
-</div>
-
-<!-- 下载弹窗 -->
-<div class="ui-dialog add-dialog" id="downloadDialog">
-	<div class="ui-form-group">
-        <label for="inputEmail3" class="control-label">下载数据生成中...</label>
-<!--         <div class="control-input mt10"> -->
-<!--           <input type="text" class="form-control" id="inputEmail3" placeholder="请输入"> -->
-<!--         </div> -->
-    </div>
 </div>
 
 </body>

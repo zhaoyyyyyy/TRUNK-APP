@@ -46,6 +46,14 @@ public class ServiceConstants {
 	    public static final int PROTOCO_TYPE_FTP = 1;
 	    /** 协议类型：2:sftp **/
 	    public static final int PROTOCO_TYPE_SFTP = 2;
+	    
+	    /**
+	     * 协议类型：1:文件推送；2：表接口
+	     */
+	    /** 协议类型：1:文件推送 **/
+	    public static final int PUSH_TYPE_FILE = 1;
+	    /** 协议类型：2：表接口 **/
+	    public static final int PUSH_TYPE_TABLE = 2;
 
         /**
          * 是否需要压缩 不需要压缩：0；需要压缩：1
@@ -194,6 +202,20 @@ public class ServiceConstants {
 	  public static final int PUSH_STATUS_SUCCESS = 3;
 	  /** 推送，0 = 推送失败 */
 	  public static final int PUSH_STATUS_FAILED = 0;
+	}
+	/** 客户群下载记录表 */
+	public interface CustomDownloadRecord{
+	    /**
+	     * 数据状态：1:未生成，2：生成中，3：已生成，4：失败
+	     */
+	    /** 数据状态:1:未生成  */
+	    public static final int DATA_STATUS_WAIT = 1;
+	    /** 数据状态:2：生成中 */
+	    public static final int DATA_STATUS_DOING = 2;
+	    /** 数据状态:3：已生成 */
+	    public static final int DATA_STATUS_SUCCESS = 3;
+	    /** 数据状态:4：失败 */
+	    public static final int DATA_STATUS_FAILED = 0;
 	}
 	public interface LabelAttrRel{
 	    /**

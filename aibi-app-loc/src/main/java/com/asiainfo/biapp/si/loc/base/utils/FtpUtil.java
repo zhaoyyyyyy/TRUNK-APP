@@ -234,13 +234,13 @@ public class FtpUtil {
 						remotefile = remotefile + "/" + locfile.getName();
 					}
 					remotefile = new String(remotefile.getBytes("UTF-8"), "iso-8859-1");
-					upload(client, localpath, remotefile + UN_UPLOADED);
+					flag = upload(client, localpath, remotefile + UN_UPLOADED);
 				} else {
 					remotefile = new String(remotefile.getBytes("UTF-8"), "iso-8859-1");
 					flag = uploadAll(client, localpath, remotefile + UN_UPLOADED);
 				}
 				log.debug("ftp rename [" + remotefile + UN_UPLOADED + "] to [" + remotefile + "]");
-				client.rename(new File(remotefile + UN_UPLOADED).getName(), new File(remotefile).getName());// 上传完改名
+				flag = client.rename(new File(remotefile + UN_UPLOADED).getName(), new File(remotefile).getName());// 上传完改名
 			} else {
 				throw new Exception("localpath[" + localpath + "] not exist!");
 			}
@@ -346,8 +346,7 @@ public class FtpUtil {
 				log.debug("ftp login success!");
 			}
 
-			upload(client, localPath, remotePath);
-			flag = true;
+			flag = upload(client, localPath, remotePath);
 		} catch (Exception e) {
 			flag = false;
 			log.error("ftp error:", e);
@@ -371,7 +370,7 @@ public class FtpUtil {
 	 * @param remote
 	 * @throws IOException
 	 */
-	private static void upload(FTPClient client, String local, String remote) throws Exception {
+	private static boolean upload(FTPClient client, String local, String remote) throws Exception {
 		log.debug("FTP from:" + local + " to : " + remote);
 		// 设置PassiveMode传输
 		client.enterLocalPassiveMode();
@@ -389,21 +388,23 @@ public class FtpUtil {
 			}
 		}
 		File f = new File(local);
-		uploadFile(client, remote, f);
+		return uploadFile(client, remote, f);
 	}
 
-	private static void uploadFile(FTPClient client, String remoteFile, File localFile) throws IOException {
+	private static boolean uploadFile(FTPClient client, String remoteFile, File localFile) throws IOException {
+	    boolean res = true;
 		log.debug("upload file: " + localFile.getName());
 		InputStream in = new FileInputStream(localFile);
 		try {
-			client.storeFile(remoteFile, in);
+		    res = client.storeFile(remoteFile, in);
 		} catch (Exception e) {
 			// 改为主动模式再次上传文件
 			client.enterLocalActiveMode();
-			client.storeFile(remoteFile, in);
+			res = client.storeFile(remoteFile, in);
 		} finally {
 			in.close();
 		}
+		return res;
 	}
 
 	/**
