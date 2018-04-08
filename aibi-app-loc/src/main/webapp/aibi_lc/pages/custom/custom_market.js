@@ -166,9 +166,7 @@ window.loc_onload = function() {
 			$(".ui-calculate-center").addClass("heightAuto");
 		}
 	});
-	$(".J-min").click(function(){
-		$(".ui-calculate-center").removeClass("heightAuto");
-	});
+	
 	
 }
 

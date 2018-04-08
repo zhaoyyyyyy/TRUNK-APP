@@ -679,5 +679,11 @@ var calculateCenter = (function (model){
 		}
 		
 	};
+	/**
+	 * 隐藏计算中心
+	 */
+	model.hideCalculateCenter = function(){
+		$(".ui-calculate-center").removeClass("heightAuto");
+	}
 	return model ;
 })(window.calculateCenter || {});
