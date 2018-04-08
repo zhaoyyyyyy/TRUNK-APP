@@ -25,13 +25,7 @@ var model = {
 		
 }
 window.loc_onload = function() {
-	var resource = $.initWarrentButton().toString();//当前用户拥有的按钮权限
-	if(resource.indexOf("custom_push")!=-1){
-		$("#customPush").show();
-	}
-	if(resource.indexOf('custom_download') !=-1){
-		$("#customDownload").show();
-	}
+	$.initWarrentButton();//当前用户拥有的按钮权限
 	model.dataName=$.getDicData("QTGXZQ");
 	$("#dialog").dialog({
 	    autoOpen: false,
@@ -97,6 +91,9 @@ window.loc_onload = function() {
 			model.customRule=data.data;
 			for (var i=0;i<model.customRule.length;i++){
 				var html="";
+				if(model.customRule[i].elementType ==5){
+					html = "<div class='ui-custom-item clearfix clearfix' ><a><span> "+model.customRule[i].attrName+"</span></a><a><span>清单:"+model.customRule[i].attrVal+"</span></div>"
+				}
         		if(model.customRule[i].elementType ==2){
         			var leftZoneSign, rightZoneSign;
     					if(model.customRule[i].leftZoneSign == ">="){
@@ -208,8 +205,8 @@ window.loc_onload = function() {
         					html+="</span></div>"
         				}
         			}
-        		$("#labelDetail").append(html);
         		}
+        		$("#labelDetail").append(html);
 			}
 		}
 	})
