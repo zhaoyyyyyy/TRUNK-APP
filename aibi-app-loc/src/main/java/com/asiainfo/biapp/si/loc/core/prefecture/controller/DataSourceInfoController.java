@@ -58,7 +58,7 @@ import com.asiainfo.biapp.si.loc.core.prefecture.vo.DataSourceInfoVo;
  * @version 1.0.0.2017年11月7日
  */
 
-@Api(value = "专区数据源信息管理",description="张楠")
+@Api(value = "005.02->-专区数据源信息管理",description="张楠")
 @RequestMapping("api/prefecture")
 @RestController
 public class DataSourceInfoController extends BaseController<DataSourceInfo> {

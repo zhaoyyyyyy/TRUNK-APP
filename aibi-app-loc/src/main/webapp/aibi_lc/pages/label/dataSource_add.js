@@ -21,6 +21,8 @@ var model = {
 }
 window.loc_onload = function() {
     model.configId = $.getCurrentConfigId();
+    
+    var tableTypeCode = [];
 
     var dicGxzq = $.getDicData("GXZQZD");
     for (var i = 0; i < dicGxzq.length; i++) {
@@ -29,9 +31,11 @@ window.loc_onload = function() {
     var dicYblx = $.getDicData("SJYBLX");
     for (var i = 0; i < dicYblx.length; i++) {
         model.tableType.push(dicYblx[i]);
+        tableTypeCode.push(dicYblx[i].code);
     };
     var isEdit = $.getUrlParam("isEdit");
     var id = $.getUrlParam("sourceTableId");
+    var num = $.getUrlParam("num");
     if (id != null && id != "" && id != undefined) {
         model.sourceTableId = id;
         $.commAjax({
@@ -53,6 +57,14 @@ window.loc_onload = function() {
                 model.idDataType = data.data.idDataType;
                 model.tableSchema = data.data.tableSchema;
                 $("#code" + data.data.readCycle).click();
+                $("#type" + data.data.sourceTableType).click();
+                if(num == 1){
+                	for(var i=0;i<tableTypeCode.length;i++){
+                		var obj = $("#type"+tableTypeCode[i]);
+                		obj[0].disabled = true;
+                    	debugger;
+                    }
+                }
             }
         })
     };
@@ -77,6 +89,7 @@ window.loc_onload = function() {
             'sourceTableId': id
         }
         $("#sourceTableName").attr("disabled", true);
+        $("#tableSchema").attr("disabled", true);
         model.isEdit = isEdit;
     }else{
 		pD = {

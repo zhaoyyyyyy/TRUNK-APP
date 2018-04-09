@@ -18,13 +18,14 @@ import com.asiainfo.biapp.si.loc.base.exception.BaseException;
 import com.asiainfo.biapp.si.loc.base.exception.ParamRequiredException;
 import com.asiainfo.biapp.si.loc.base.page.Page;
 import com.asiainfo.biapp.si.loc.base.service.impl.BaseServiceImpl;
-import com.asiainfo.biapp.si.loc.base.utils.DESUtil;
 import com.asiainfo.biapp.si.loc.base.utils.LogUtil;
 import com.asiainfo.biapp.si.loc.base.utils.StringUtil;
 import com.asiainfo.biapp.si.loc.base.utils.model.DES;
 import com.asiainfo.biapp.si.loc.core.syspush.dao.ISysInfoDao;
 import com.asiainfo.biapp.si.loc.core.syspush.entity.SysInfo;
+import com.asiainfo.biapp.si.loc.core.syspush.service.ILabelPushCycleService;
 import com.asiainfo.biapp.si.loc.core.syspush.service.ISysInfoService;
+import com.asiainfo.biapp.si.loc.core.syspush.vo.LabelPushCycleVo;
 import com.asiainfo.biapp.si.loc.core.syspush.vo.SysInfoVo;
 
 /**
@@ -53,6 +54,10 @@ public class SysInfoServiceImpl extends BaseServiceImpl<SysInfo, String> impleme
 
     @Autowired
     private ISysInfoDao iSysInfoDao;
+    
+    @Autowired
+    private ILabelPushCycleService iLabelPushCycleService;
+    
     
     @Override
     protected BaseDao<SysInfo, String> getBaseDao() {
@@ -103,6 +108,12 @@ public class SysInfoServiceImpl extends BaseServiceImpl<SysInfo, String> impleme
     }
 
     public void deleteSysInfoById(String sysId) throws BaseException {
+    	LabelPushCycleVo labelPushCycleVo = new LabelPushCycleVo();//判断此推送平台的推送历史
+    	labelPushCycleVo.setSysId(sysId);
+    	labelPushCycleVo.setStatus(1);
+    	if(iLabelPushCycleService.selectLabelPushCycleList(labelPushCycleVo).size() != 0){
+    		throw new ParamRequiredException("平台有客户群推送，不可删除");
+    	}
         if(StringUtil.isBlank(sysId)){
             throw new ParamRequiredException("ID不能为空");
         }

@@ -192,9 +192,9 @@ input[type=checkbox].checkbix+label>span {
 .table-page-box>ol>li span.current, .table-page-box>ol>li span.current:hover{
 	background:#337ab7;
 }
-.tcdPageCode a:HOVER{
+/* .tcdPageCode a:HOVER{
 	background: none;
-}
+} */
 .tcdPageCode a:hover ,.jumpPageNum:hover{
 	border: 1px solid #009241;
 }
@@ -381,4 +381,7 @@ input[type=checkbox].checkbix+label>span {
     border-color: #3DAC6E;
     background-color: #3DAC6E !important;
 }
-
+.vertical-tab > ul > li.current{
+	color:#009241;
+	font-weight: bold;
+}

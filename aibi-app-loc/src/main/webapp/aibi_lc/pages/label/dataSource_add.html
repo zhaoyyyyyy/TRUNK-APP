@@ -35,7 +35,7 @@
 								<label class="control-label" for="exampleInputEmail3">SCHEMA</label>
 								<div class="control-input">
 									<input required="true" v-model="tableSchema" id="tableSchema" name="tableSchema" type="text" class="form-control" placeholder="表名SCHEMA"> <span
-										id="dimCodeColTxtTip" class="fleft columnGreenTip" title="表所在的SCHEMA，默认可填写default">?</span>
+                                        id="dimCodeColTxtTip" class="fleft columnGreenTip" title="表所在的SCHEMA，如不填写，默认为后台库SCHEMA">?</span>
 								</div>
 							</div>
 							<div class="ui-form-group">
@@ -108,7 +108,7 @@
 								<div class="control-input has-icon">
 									<ul class="validate-radioList clearfix">
 										<li class="radio circle success fleft mr10" v-for="t in tableType">
-											<input class="easyui-validatebox" validType="radio" :value="t.code"
+											<input class="easyui-validatebox sourceTableTypeClass" validType="radio" :value="t.code"
 											:id="'type'+t.code" name="sourceTableType" type="radio" /> 
 											<label :for="'type'+t.code"><i class="default"></i>{{t.dataName}}</label></li>
 									</ul>

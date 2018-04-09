@@ -72,7 +72,7 @@ import springfox.documentation.annotations.ApiIgnore;
  * @version 1.0.0.2017年11月16日
  */
 @SuppressWarnings("rawtypes")
-@Api(value = "标签信息管理", description = "张楠")
+@Api(value = "007.01->-标签信息管理", description = "张楠")
 @RequestMapping("api/label")
 @RestController
 public class LabelInfoController extends BaseController {

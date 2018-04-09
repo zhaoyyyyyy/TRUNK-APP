@@ -52,7 +52,7 @@ import springfox.documentation.annotations.ApiIgnore;
  * @author  wangrd
  * @version 1.0.0.2018年1月19日
  */
-@Api(value = "客户群标签与属性对应关系",description="王瑞冬")
+@Api(value = "009.04->-客户群标签与属性对应关系",description="王瑞冬")
 @RequestMapping("api/syspush")
 @RestController
 public class LabelAttrRelController extends BaseController<LabelAttrRel>{

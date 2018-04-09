@@ -25,6 +25,8 @@ var model = {
 		
 }
 window.loc_onload = function() {
+	$.initWarrentButton();//当前用户拥有的按钮权限
+	model.dataName=$.getDicData("QTGXZQ");
 	$("#dialog").dialog({
 	    autoOpen: false,
 	    title:"推送设置",
@@ -47,7 +49,6 @@ window.loc_onload = function() {
 					}
 				}
 	      	});
-	      	model.dataName=$.getDicData("QTGXZQ");
 	    }
     });
 	var labelId = $.getUrlParam("labelId");
@@ -70,6 +71,15 @@ window.loc_onload = function() {
 			model.monthLabelDate = data.data.monthLabelDate;
 			model.customNum = data.data.labelExtInfo.customNum;
 			model.labelOptRuleShow = data.data.labelExtInfo.labelOptRuleShow;
+			if(data.data.updateCycle == 1){//客户群更新周期为日周期，推送只能是日周期和一次性
+				model.dataName.splice(1,1);
+			}
+			if(data.data.updateCycle == 2){//客户群更新周期为月周期，推送只能是月周期和一次性
+				model.dataName.splice(0,1);
+			}
+			if(data.data.updateCycle == 3){//客户群更新周期为一次性，推送只能是一次性
+				model.dataName.splice(0,2);
+			}
 		}
 	})
 	$.commAjax({
@@ -81,6 +91,9 @@ window.loc_onload = function() {
 			model.customRule=data.data;
 			for (var i=0;i<model.customRule.length;i++){
 				var html="";
+				if(model.customRule[i].elementType ==5){
+					html = "<div class='ui-custom-item clearfix clearfix' ><a><span> "+model.customRule[i].attrName+"</span></a><a><span>清单:"+model.customRule[i].attrVal+"</span></div>"
+				}
         		if(model.customRule[i].elementType ==2){
         			var leftZoneSign, rightZoneSign;
     					if(model.customRule[i].leftZoneSign == ">="){
@@ -192,8 +205,8 @@ window.loc_onload = function() {
         					html+="</span></div>"
         				}
         			}
-        		$("#labelDetail").append(html);
         		}
+        		$("#labelDetail").append(html);
 			}
 		}
 	})
@@ -287,8 +300,10 @@ window.loc_onload = function() {
 			    	        "id":"add-dialog-btn",
 			    	        "class":"ui-btn ui-btn-default",
 			    	        click: function() {
-			    	        	if($("#checkboxList label[class~=active]").length ==0 || $("#radioList label[class~=active]").length ==0){
-			    	        		$.alert("请正确选择推送周期与推送平台");
+			    	        	if($("#radioList label[class~=active]").length ==0){
+			    	        		$.alert("请选择推送周期");
+			    	        	}else if($("#checkboxList label[class~=active]").length ==0){
+			    	        		$.alert("请选择推送平台");
 			    	        	}else{
 			    	        		$( this ).dialog( "close" );
 			    	        		if(!model.haveAttr){
@@ -332,6 +347,33 @@ window.loc_onload = function() {
 		    	})
 		    	}
 			},
+			/*显示下载窗口*/
+			showDownload:function(){
+				model.sortAttrAndType="";
+				var AttrbuteIdString = model.AttrbuteId;
+				$(".selectList").each(function(){
+					if(model.sortAttrAndType.indexOf($(this).find(".select-Sort").val()) !=-1 ){
+						model.sortAttrAndType=null;
+						$.alert("排序的属性不可重复");
+						return false;
+					}else if($(this).find("label[class~=active]").text() ==null ||$(this).find("label[class~=active]").text()==""){
+						model.sortAttrAndType=null;
+						$.alert("请选择排序类型");
+						return false;
+					}else{
+						if($(this).find(".select-Sort").val() =="请选择属性"){
+							model.sortAttrAndType+=null+","+null+";";
+						}else{
+							model.sortAttrAndType+=$(this).find(".select-Sort").val()+","+$(this).find("label[class~=active]").text()+";";
+						}
+					}
+				});
+				if(model.sortAttrAndType!=null){
+					var dg = $.window('客户群清单下载', $.ctx + '/aibi_lc/pages/custom/custom_download.html?customGroupId='
+					 +labelId+'&AttrbuteId='+AttrbuteIdString+'&sortAttrAndType='+model.sortAttrAndType+'&dataDate='+model.dataDate, 
+					 560, 300, {id:'customDownloadWin'});
+				}
+			}
 		},
 		mounted: function () {
 		    this.$nextTick(function () {
@@ -364,7 +406,7 @@ window.loc_onload = function() {
 		if($(".selectList").length>2){
 			$.alert("只能添加三行");
 		}else{
-			var html ="<div class='mt20 selectList' id = radios"+nameNumber+"> <div class='form-group mr100 optionhtml' id=optionhtml"+nameNumber+"> <div class=''><select class='form-control input-pointer select-Sort' name='dataStatusId' ></select></div></div><div class='radio circle success'> <input type='radio' name='radio"+nameNumber+"' id='myr'> <label for='myr'><i class='default'></i>升序</label></div><div class='radio circle success'><input type='radio' name='radio"+nameNumber+"'  id='myr1'> <label  for='myr1'><i class='default'></i>降序</label></div><button type='button' class='ui-btn ui-btn-second ml30' onclick='fun_to_del(\"radios"+ nameNumber + "\")'>删除</button></div> ";
+			var html ="<div class='mt20 selectList' id = radios"+nameNumber+"> <div class='form-group mr100 optionhtml' id=optionhtml"+nameNumber+"> <div class=''><select class='form-control input-pointer select-Sort' name='dataStatusId' ></select></div></div><div class='radio circle success'> <input type='radio' name='radio"+nameNumber+"' id='myr'checked='checked'> <label for='myr'class='active'><i class='default'></i>升序</label></div><div class='radio circle success'><input type='radio' name='radio"+nameNumber+"'  id='myr1'> <label  for='myr1'><i class='default'></i>降序</label></div><button type='button' class='ui-btn ui-btn-second ml30' onclick='fun_to_del(\"radios"+ nameNumber + "\")'>删除</button></div> ";
 			$("#addALine").append(html);
 			$("#optionhtml"+nameNumber).find("select").html("");
 			var option = "<option>"+'请选择属性'+"</option>";

@@ -90,7 +90,32 @@ window.loc_onload = function() {
 	$("#jsonmap1").jqGrid('setLabel',0, '序号');
 }
 function fun_to_up(id) {
-	window.location = 'dataSource_add.html?isEdit=1&sourceTableId=' + id;
+	$.commAjax({
+		url:$.ctx+"/api/source/sourceInfo/queryList",
+		isShowMask : true,
+		maskMassage : '正在校验...',
+		postData:{"sourceTableId":id},
+		onSuccess:function(data){
+			var is = "";
+			var num = 0;
+			for(var num = 0 ;num <data.data.length; num++){
+				$.commAjax({
+					url:$.ctx+"/api/label/labelCountRules/queryList",
+					async:false,
+					postData:{"dependIndex":data.data[num].sourceId},
+					onSuccess:function(data){
+						if(data.data.length!=0){
+							is="have";
+						}
+					}
+				})
+			}
+			if(is=="have"){
+				num = 1;
+			}
+			window.location = 'dataSource_add.html?isEdit=1&sourceTableId=' + id+ '&num=' + num;
+		}
+	})
 }
 function fun_to_detail(id) {
 	var wd = $.window('指标详情', $.ctx

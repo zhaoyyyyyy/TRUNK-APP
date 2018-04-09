@@ -32,6 +32,7 @@ import com.asiainfo.biapp.si.loc.cache.CocCacheProxy;
 import com.asiainfo.biapp.si.loc.core.label.dao.ILabelRuleDao;
 import com.asiainfo.biapp.si.loc.core.label.entity.LabelInfo;
 import com.asiainfo.biapp.si.loc.core.label.entity.LabelRule;
+import com.asiainfo.biapp.si.loc.core.label.service.ILabelInfoService;
 import com.asiainfo.biapp.si.loc.core.label.service.ILabelRuleService;
 import com.asiainfo.biapp.si.loc.core.label.vo.LabelRuleVo;
 
@@ -67,6 +68,9 @@ public class LabelRuleServiceImpl extends BaseServiceImpl<LabelRule, String> imp
 
     @Autowired
     private ILabelRuleDao iLabelRuleDao;
+    
+    @Autowired
+    private ILabelInfoService iLabelInfoService;
 
     @Override
     protected BaseDao<LabelRule, String> getBaseDao() {
@@ -85,6 +89,11 @@ public class LabelRuleServiceImpl extends BaseServiceImpl<LabelRule, String> imp
 			try {
 				BeanUtils.copyProperties(labelRuleVo, entity);
 			} catch (Exception e) {}
+			if (LabelRuleContants.ELEMENT_TYPE_LIST_ID == entity.getElementType()) {
+				LabelInfo labelInfo = iLabelInfoService.selectLabelInfoById(entity.getCalcuElement());
+				labelRuleVo.setAttrName(labelInfo.getLabelName());
+				//TODO 设置其他参数
+			}
 			if (LabelRuleContants.ELEMENT_TYPE_LABEL_ID == entity.getElementType()) {
 				String labelIdStr = entity.getCalcuElement();
 				LabelInfo labelInfo = CocCacheProxy.getCacheProxy().getLabelInfoById(labelIdStr);

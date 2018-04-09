@@ -119,7 +119,7 @@ public class LocCacheBase extends ICacheBase implements ApplicationContextAware{
 			if (null != col) {
 				columnMap.put(CacheKey.EFFECTIVE_LABEL_COLUMN_PREFIX + col.getColumnId(), col);
 				if (LabelInfoContants.LABEL_TYPE_VERT == labelType) {
-					Set<LabelVerticalColumnRel> relSet = c.getVerticalColumnRels();
+					List<LabelVerticalColumnRel> relSet = c.getVerticalColumnRels();
 					for (LabelVerticalColumnRel rel : relSet) {
 						MdaSysTableColumn child = rel.getMdaSysTableColumn();
 						columnMap.put(CacheKey.EFFECTIVE_LABEL_COLUMN_PREFIX + child.getColumnId(), child);

@@ -239,8 +239,12 @@ var calculateCenter = (function (model){
 	    	wd.reload = function() {
 	    		model.refreshShopCart();
 	    	}
-			
-		} else {
+		}else if(labelType == "8"){
+			var wd = $.window(name + "-条件设置", $.ctx + '/aibi_lc/pages/labelDialog/vertValueSet.html?index='+index, 900, 500);
+	    	wd.reload = function() {
+	    		model.refreshShopCart();
+	    	}
+		}else {
 			//showAlert("计算元素类型错误！", "failed");
 		}
 	};
@@ -271,7 +275,7 @@ var calculateCenter = (function (model){
 	model.againstLabel = function(t){
 		var index = $(t).parent().parent().attr("index");
 		var rule = dataModel.ruleList[index];
-		if(rule){
+		if(rule && rule.elementType == 2 && rule.labelTypeId != 8){
 			if(rule.labelFlag == 1){
 				dataModel.ruleList[index].labelFlag = 0 ;
 			}else{
@@ -675,5 +679,11 @@ var calculateCenter = (function (model){
 		}
 		
 	};
+	/**
+	 * 隐藏计算中心
+	 */
+	model.hideCalculateCenter = function(){
+		$(".ui-calculate-center").removeClass("heightAuto");
+	}
 	return model ;
 })(window.calculateCenter || {});

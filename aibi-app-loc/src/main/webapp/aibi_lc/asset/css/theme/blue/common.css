@@ -380,5 +380,8 @@ input[type=checkbox].checkbix+label>span {
     border-color: #3D9CEB;
     background-color: #3D9CEB !important;
 }
-
+.vertical-tab > ul > li.current{
+	color:#3D9CEB;
+	font-weight: bold;
+}
 

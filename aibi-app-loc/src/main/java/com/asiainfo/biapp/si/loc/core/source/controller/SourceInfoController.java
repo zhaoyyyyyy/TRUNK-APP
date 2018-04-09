@@ -58,7 +58,7 @@ import com.asiainfo.biapp.si.loc.core.source.vo.SourceInfoVo;
  * @author zhangnan7
  * @version 1.0.0.2017年11月15日
  */
-@Api(value = "指标信息管理",description="张楠")
+@Api(value = "006.01->-指标信息管理",description="张楠")
 @RequestMapping("api/source")
 @RestController
 public class SourceInfoController extends BaseController<SourceInfo> {

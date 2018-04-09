@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>复合标签规则设置</title>
+<!--[if IE]>
+    	<meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <![endif]-->
+	<link rel="stylesheet" theme="default" href="../../asset/css/theme/default/coc_frame.css" />
+	<link rel="stylesheet" theme="default" href="../../asset/css/theme/default/main.css" />
+	<script type="text/javascript" src="../../asset/script/common/include.js"></script>
+	<script type="text/javascript" src="vertValueSet.js"></script>
+<style type="text/css">
+[v-cloak] {
+	display: none;
+}
+</style>
+<!--[if lt IE 9]>
+	    <script src="../../asset/script/component/h5compatibility/html5shiv.min.js"></script>
+	    <script src="../../asset/script/component/h5compatibility/respond.min.js"></script>
+	    
+    <![endif]-->
+</head>
+<body>
+<div id="vertValueSet" class="vertical" v-cloak>
+	<div class="clearfix vertical-table">
+		<div id="switchImportWayBox" class="fleft vertical-tab">
+			<ul class="mt10">
+				<li v-for="(item,index) in labelVerticalColumnRelList" v-bind:index="index" v-on:click="vertValueRule.showTabDiv(item,index)">{{item.mdaSysTableColumn.columnCnName}}</li>
+			</ul>
+		</div>
+		<div class="fleft vertical-table-pannel">
+			<div>
+				<div v-for="(item,index) in labelVerticalColumnRelList" v-bind:index="index" v-bind:id="'labelElement'+item.labelTypeId+item.labelVerticalColumnRelId.columnId"
+				 	 v-show = "showDivColumnId == ('labelElement'+item.labelTypeId+item.labelVerticalColumnRelId.columnId)">
+				 	 	<!-- 标志标签   	begin -------------------->
+						<div class="form-horizontal mt20"  v-if="item.labelTypeId == 1">
+							<div class="form-horizontal" style="margin-top:150px;">
+				      				<div class="ui-form-group">
+								        <div class="radio circle success fleft"> 
+										   <input type="radio" v-bind:id="'labelFlag1'+item.labelVerticalColumnRelId.columnId" v-bind:name="'labelFlag'+item.labelVerticalColumnRelId.columnId" v-model="item.rule.labelFlag" value="1"> 
+										   <label v-bind:for="'labelFlag1'+item.labelVerticalColumnRelId.columnId"><i class="default"></i> 是</label>
+										</div>
+								        <div class="radio circle success fleft">
+									       	<input type="radio" v-bind:id="'labelFlag2'+item.labelVerticalColumnRelId.columnId" v-bind:name="'labelFlag'+item.labelVerticalColumnRelId.columnId" v-model="item.rule.labelFlag" value="0"> 
+										   <label v-bind:for="'labelFlag2'+item.labelVerticalColumnRelId.columnId"><i class="default"></i> 否</label>
+								   		 </div>
+								    </div>			      		
+				      			</div>
+						</div>
+						<!-- 标志标签   	end -------------------->
+						
+						<!-- 指标型标签   	begin -------------------->
+						<div class="form-horizontal mt20"  v-if="item.labelTypeId == 4">
+			      				<div class="ui-form-group">
+							        <div class="radio circle success fleft"> 
+									   <input type="radio" v-bind:name="'queryWay4'+item.labelVerticalColumnRelId.columnId" v-bind:id="'queryWay41'+item.labelVerticalColumnRelId.columnId" v-model="item.rule.queryWay" value="1"> 
+									   <label for="queryWay4'+item.labelVerticalColumnRelId.columnId"><i class="default"></i> 数值范围</label>
+									</div>
+							        <div class="control-input">
+								       	<div class='checkbox fleft'>
+										    <input v-bind:id="'contiueMinVal'+item.labelVerticalColumnRelId.columnId" type="text" class="form-control fleft mr10"  placeholder="输入下限" v-model="item.rule.contiueMinVal">
+										    <span class="file-up-name fleft">{{item.unit}}</span>
+										</div>
+								       	<div class='checkbox fleft'>
+										    <input v-bind:id="'leftClosed'+item.labelVerticalColumnRelId.columnId" type="checkbox" class="checkbix" v-model="item.leftClosed" value="true">
+										    <label aria-label="" role="checkbox" v-bind:for="'leftClosed'+item.labelVerticalColumnRelId.columnId" class="checkbix">
+										    		<span class="large"></span>包含当前值
+										    </label>
+										</div>
+										<div class='checkbox fleft mt10'>
+										    <input v-bind:id="'contiueMaxVal'+item.labelVerticalColumnRelId.columnId" type="text" class="form-control fleft mr10" placeholder="输入上限" v-model="item.rule.contiueMaxVal">
+										    <span class="file-up-name fleft">{{item.unit}}</span>
+										</div>
+								       	<div class='checkbox fleft mt10'>
+										     <input v-bind:id="'rightClosed'+item.labelVerticalColumnRelId.columnId" type="checkbox" class="checkbix" v-model="item.rightClosed" value="true">
+										    <label aria-label="" role="checkbox" v-bind:for="'rightClosed'+item.labelVerticalColumnRelId.columnId" class="checkbix">
+										    		<span class="large"></span>包含当前值
+										    </label>
+										</div>
+										
+							   		 </div>
+							    </div>
+								<div class="ui-form-group">
+							        <div class="radio circle success fleft"> 
+									   <input type="radio" v-bind:name="'queryWay4'+item.labelVerticalColumnRelId.columnId" v-bind:id="'queryWay42'+item.labelVerticalColumnRelId.columnId" v-model="item.rule.queryWay" value="2"> 
+									   <label for="queryWay4'+item.labelVerticalColumnRelId.columnId"><i class="default"></i> 精确值</label>
+									</div>
+							        <div class="control-input ml10">
+								       	<div class='checkbox'>
+										    <input v-bind:id="'exactValue'+item.labelVerticalColumnRelId.columnId" type="text" class="form-control fleft mr10" v-model="item.rule.exactValue">
+										    <span class="file-up-name fleft">{{rule.unit}}</span>
+										</div>
+								       	<p class="mt10">多条件用","分割,且不能用","结尾</p>
+							   		 </div>
+							    </div>					      		
+			      		</div>
+						<!-- 指标型标签    end ---------------------->	
+						
+						<!-- 枚举类型标签    begin ------------------>
+				        <div class="iframe-dialog"  v-if="item.labelTypeId == 5">
+							    <div class="clearfix ui-enum-content">
+							        <div class="fleft">
+							            <div class="ui-enum-list">
+							                <div class="ui-enum-header clearfix">
+							                    <span></span>
+							                    <span v-bind:id="'addEnumAll'+item.labelVerticalColumnRelId.columnId" v-on:click="vertValueRule.addAllEnumItem(item,index)">全部添加</span>
+							                    <div class="form-group fright">
+							                        <div class="input-group">
+							                            <input type="text" class="form-control" placeholder="搜索" v-model="item.dimValueSearch" >
+							                            <div class="input-group-addon input-group-icon right-child" v-on:click="vertValueRule.searchGrid(item)"></div>
+							                        </div>
+							                    </div>
+							                </div>
+							                <div class="ui-table-static mt10">
+								                <table v-bind:id="'mainGrid'+item.labelVerticalColumnRelId.columnId" class="table"></table>
+												<div v-bind:id="'mainGridPager'+item.labelVerticalColumnRelId.columnId"></div>
+											</div>
+							            </div>
+							        </div>
+							        <div class="fleft">
+							            <div class="ui-enum-header">
+							               	 已选<span v-text="item.itemChooseCount"></span>个
+							                <span v-on:click="vertValueRule.delEnumAllItem(item,index)">全部取消</span>
+							                <div class="form-group fright">
+							                    <div class="input-group">
+							                        <input type="text" class="form-control" placeholder="搜索" v-model="item.itemChooseSearch">
+							                        <div class="input-group-addon input-group-icon right-child" v-on:click="vertValueRule.searchChooseEnum(item,index)"></div>
+							                    </div>
+							                </div>
+							            </div>
+							            <ul class="ui-enum-item" v-bind:id="'addItemDetailBox'+item.labelVerticalColumnRelId.columnId">
+							                <li v-for="(itemDim,indexDim) in item.itemChooseList" v-bind:index="indexDim">
+							                    <span class="del-btn">{{itemDim.dimValue}}
+							                         <i class="del-btn-icon" v-on:click="vertValueRule.delEnumItem(item,indexDim)"></i>
+							                    </span>
+							                </li>
+							            </ul>
+							        </div>
+							    </div>
+						</div>
+						<!-- 枚举类型标签   end -------------------->
+						
+						<!-- 日期类型       begin--------------------->
+				      	<div class=""  v-if="item.labelTypeId == 6">
+				      			<div class="form-horizontal mt20">
+				      				<div class="ui-form-group">
+				      				<h3>标签数据范围</h3>
+								        <div class="radio circle success fleft"> 
+										   <input type="radio" v-bind:name="'queryWay6'+item.labelVerticalColumnRelId.columnId" v-bind:id="'queryWay61'+item.labelVerticalColumnRelId.columnId" v-model="item.rule.queryWay" value="1"> 
+										   <label v-bind:for="'queryWay61'+item.labelVerticalColumnRelId.columnId"><i class="default"></i>日期范围</label>
+										</div>
+								        <div class="fleft">
+								        	<div class="clearfix">
+								        		<div class='form-inline fleft clearfix form-input100'>
+										       		<span class="file-up-name fleft">开始时间 :</span>
+												    <input v-bind:id="'startTime'+item.labelVerticalColumnRelId.columnId" type="text" class="form-control fleft ml10"  placeholder="输入开始时间" value=""
+												    	readonly="readonly" v-on:click="WdatePicker({maxDate:'#F{$dp.$D(\'endTime'+item.labelVerticalColumnRelId.columnId+'\')}',dateFmt:'yyyy-MM-dd',isShowToday:true,isShowClear:true,readOnly:true})">
+												</div>
+										       	<div class='checkbox fleft ml10'>
+												    <input v-bind:id="'leftClosed'+item.labelVerticalColumnRelId.columnId" type="checkbox" class="checkbix" v-model="item.leftClosed" value="true">
+												    <label aria-label="" role="checkbox" v-bind:for="'leftClosed'+item.labelVerticalColumnRelId.columnId" class="checkbix">
+												    		<span class="large"></span>包含当前值
+												    </label>
+												</div>
+								        	</div>
+									       	<div class="clearfix">
+									       		<div class='form-inline fleft mt10 clearfix form-input100'>
+												<span class="file-up-name fleft">结束时间 :</span>
+												    <input v-bind:id="'endTime'+item.labelVerticalColumnRelId.columnId" type="text" class="form-control fleft ml10" placeholder="输入结束时间" value=""
+												    	readonly="readonly" v-on:click="WdatePicker({minDate:'#F{$dp.$D(\'startTime'+item.labelVerticalColumnRelId.columnId+'\')}',dateFmt:'yyyy-MM-dd',isShowToday:true,isShowClear:true,readOnly:true})">
+												</div>
+										       	<div class='checkbox fleft mt10 ml10'>
+												     <input v-bind:id="'rightClosed'+item.labelVerticalColumnRelId.columnId" type="checkbox" class="checkbix" v-model="item.rightClosed" value="true">
+												    <label aria-label="" role="checkbox" v-bind:for="'rightClosed'+item.labelVerticalColumnRelId.columnId" class="checkbix">
+												    		<span class="large"></span>包含当前值
+												    </label>
+												</div>
+									       	</div>
+											
+											<div class='checkbox fleft mt10'>
+											    <input  type="checkbox" class="checkbix" v-bind:id="'dynamicUpdate'+item.labelVerticalColumnRelId.columnId" v-model="item.dynamicUpdate" value="1">
+											    <label aria-label="" role="checkbox" v-bind:for="'dynamicUpdate'+item.labelVerticalColumnRelId.columnId" class="checkbix">
+											    		<span class="large"></span>按此日期动态偏移1个周期
+											    </label>
+											</div>
+								   		 </div>
+								    </div>
+									<div class="ui-form-group">
+								        <div class="radio circle success fleft"> 
+										   <input type="radio" v-bind:name="'queryWay6'+item.labelVerticalColumnRelId.columnId" v-bind:id="'queryWay62'+item.labelVerticalColumnRelId.columnId" v-model="item.rule.queryWay" value="2"> 
+										   <label v-bind:for="'queryWay62'+item.labelVerticalColumnRelId.columnId"><i class="default"></i>精确值</label>
+										</div>
+								        <div class="fleft ml10">
+									       	<div class='form-inline clearfix form-input60'>
+											    <input type="text" v-bind:id="'exactValueDateYear'+item.labelVerticalColumnRelId.columnId"  v-model="item.exactValueDateYear" class="form-control fleft" maxlength="4"/>
+												<span class="fleft  ml10 mt5">年</span>
+												<input type="text" v-bind:id="'exactValueDateMonth'+item.labelVerticalColumnRelId.columnId" v-model="item.exactValueDateMonth" class="form-control fleft ml10" maxlength="2"/>
+												<span class="fleft  ml10 mt5">月</span>
+												<input type="text" v-bind:id="'exactValueDateDay'+item.labelVerticalColumnRelId.columnId" v-model="item.exactValueDateDay" class="form-control fleft ml10" maxlength="2"/>
+												<span class="fleft  ml10 mt5">日</span>
+											</div>
+											
+								   		 </div>
+								    </div>
+								      						      		
+				      			</div>
+				        </div>
+						<!-- 日期类型     end -------------------->
+						
+						<!-- 文本类型标签 begin ---------------->
+						<div class=""  v-if="item.labelTypeId == 7">
+				      			<div class="form-horizontal mt20">
+				      				<div class="ui-form-group">
+								        <div class="radio circle success fleft"> 
+										   <input type="radio" v-bind:id="'queryWay71'+item.labelVerticalColumnRelId.columnId" v-bind:name="'queryWay7'+item.labelVerticalColumnRelId.columnId" v-model="item.rule.queryWay" value="1"> 
+										   <label v-bind:for="'queryWay71'+item.labelVerticalColumnRelId.columnId"><i class="default"></i> 模糊值</label>
+										</div>
+								        <div class="control-input ml10">
+									       	<div class='checkbox'>
+											    <input type="text" class="form-control fleft mr10"  v-bind:id="'darkValue'+item.labelVerticalColumnRelId.columnId" v-model="item.rule.darkValue">
+											</div>
+											<p class="mt10">输入您想查询的任意内容</p>
+								   		 </div>
+								    </div>
+									<div class="ui-form-group">
+								        <div class="radio circle success fleft"> 
+										   <input type="radio" v-bind:id="'queryWay72'+item.labelVerticalColumnRelId.columnId" v-bind:name="'queryWay7'+item.labelVerticalColumnRelId.columnId" v-model="item.rule.queryWay" value="2"> 
+										   <label v-bind:for="'queryWay72'+item.labelVerticalColumnRelId.columnId"><i class="default"></i> 精确值</label>
+										</div>
+								        <div class="control-input ml10">
+									       	<div class='checkbox'>
+											    <input type="text" class="form-control fleft mr10" v-bind:id="'exactValue'+item.labelVerticalColumnRelId.columnId" v-model="item.rule.exactValue">
+											</div>
+									       	<p class="mt10">多条件用","分割,且不能用","结尾</p>
+											
+								   		 </div>
+								    </div>
+								      						      		
+				      			</div>
+				        </div>
+						<!-- 文本类型标签 end ------------------>
+			    </div>
+			</div>
+		</div>	    
+	</div>
+</div>     
+</body>
+</html>

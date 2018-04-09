@@ -52,7 +52,7 @@ import springfox.documentation.annotations.ApiIgnore;
  * @author  wangrd
  * @version 1.0.0.2017年11月27日
  */
-@Api(value = "维表信息管理",description="王瑞冬")
+@Api(value = "008.01->-维表信息管理",description="王瑞冬")
 @RequestMapping("api/dimtable")
 @RestController
 public class DimTableInfoController extends BaseController<DimTableInfo>{

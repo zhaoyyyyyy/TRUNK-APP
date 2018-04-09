@@ -57,7 +57,7 @@ import com.asiainfo.biapp.si.loc.core.source.vo.TargetTableStatusVo;
  * @author zhangnan7
  * @version 1.0.0.2017年11月15日
  */
-@Api(value = "指标源表状态管理",description="张楠")
+@Api(value = "006.03->-指标源表状态管理",description="张楠")
 @RequestMapping("api/source")
 @RestController
 public class TargetTableStatusController extends BaseController<TargetTableStatus> {

@@ -53,7 +53,7 @@ import springfox.documentation.annotations.ApiIgnore;
  * @author   wangrd
  * @version 1.0.0.2017年11月20日
  */
-@Api(value = "标签分类管理",description="王瑞冬")
+@Api(value = "007.02->-标签分类管理",description="王瑞冬")
 @RequestMapping("api/label")
 @RestController
 public class CategoryInfoController extends BaseController<CategoryInfo>{

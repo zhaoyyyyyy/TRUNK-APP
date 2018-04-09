@@ -2,11 +2,15 @@ package com.asiainfo.biapp.si.loc.auth.utils;
 
 import java.util.HashMap;
 import java.util.Map;
+
 import org.apache.commons.lang3.StringUtils;
+
 import com.asiainfo.biapp.si.loc.base.exception.BaseException;
 import com.asiainfo.biapp.si.loc.base.exception.JauthServerException;
 import com.asiainfo.biapp.si.loc.base.exception.ParamRequiredException;
+import com.asiainfo.biapp.si.loc.base.exception.UserAuthException;
 import com.asiainfo.biapp.si.loc.base.utils.HttpUtil;
+
 import net.sf.json.JSONNull;
 import net.sf.json.JSONObject;
 
@@ -14,12 +18,34 @@ public class LocConfigUtil {
 
     private String jauthUrl;
     
-    private String tokenStr = "getALLKV";
+    private String tokenStr ;
     
     private static volatile LocConfigUtil instance = null;
 	
+    
+    
+
+	//自动登录标识
+    protected String autoLoginSign = "xm8EV6Hy5RMFK4EEACIDAwQus" ;
+	
+	public String getTokenStr() throws BaseException {
+		if(tokenStr == null){
+			Map<String,Object> map = new HashMap<String,Object>();
+			map.put("username", "sys_loc");
+			map.put("password", autoLoginSign);
+			try{
+				String	tokenStr = HttpUtil.sendPost(jauthUrl+"/api/auth/login", map);
+				JSONObject jsObject = JSONObject.fromObject(tokenStr);
+				return jsObject.getString("token");
+			}catch(Exception e){
+				throw new UserAuthException("错误的用户名/密码");
+			}
+		}
+		return tokenStr;
+	}
+
+
 	public static LocConfigUtil getInstance(String jauthUrl) {
-		
 		if(instance == null) {
 			synchronized(LocConfigUtil.class){
 	            if(instance == null) {
@@ -28,7 +54,6 @@ public class LocConfigUtil {
 	         }
 	      }
 		return instance;
-		
 	}
     
     public LocConfigUtil(String ijauthUrl){
@@ -47,7 +72,7 @@ public class LocConfigUtil {
         }
         Map<String, Object> map = new HashMap<>();
         map.put("parentCode", parentCode);
-        map.put("token", this.tokenStr);
+        map.put("token", getTokenStr());
         String config = "";
         try {
         	config = HttpUtil.sendPost(jauthUrl + "/api/config/getChild", map);
@@ -80,7 +105,7 @@ public class LocConfigUtil {
         }
         Map<String, Object> map = new HashMap<>();
         map.put("coKey", code);
-        map.put("token", this.tokenStr);
+        map.put("token", getTokenStr());
         String configValue = "";
         try {
         	configValue = HttpUtil.sendPost(jauthUrl + "/api/config/get", map);
@@ -103,7 +128,7 @@ public class LocConfigUtil {
     public Map<String, String> selectAll() throws BaseException {
         Map<String, Object> map = new HashMap<>();
         String config = "";
-        map.put("token", this.tokenStr);
+        map.put("token", getTokenStr());
         try {
             config = HttpUtil.sendPost(jauthUrl + "/api/config/queryList", map);
         } catch (Exception e) {

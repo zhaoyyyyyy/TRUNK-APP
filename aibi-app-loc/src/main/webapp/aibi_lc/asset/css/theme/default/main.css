@@ -1487,4 +1487,64 @@ span.del-btn{
     border: 1px solid #b9b9b9;
     border-radius: 0;
 }
-
+/* 主题 */
+.themeBtn.form-control{
+	display: inline-block;
+    width: 120px;
+}
+/*纵表*/
+.vertical{
+	height: 100%;
+	overflow: hidden;
+}
+.vertical-table{
+	overflow: hidden;
+	height: 100%;
+	padding:0 10px;
+}
+.vertical-tab{
+	width:140px;
+	margin: 0 -100% 0 0;
+	position:relative;
+	z-index:999;
+	margin-bottom: -10000px;
+    padding-bottom: 10000px;
+    height: 100%;
+    border-right:1px solid #ddd;
+}
+.vertical-tab > ul{
+	display:inline-block;
+}
+.vertical-tab > ul > li{
+	vertical-align: middle;
+    line-height: 24px;
+    cursor:pointer;
+    color:#000;
+}
+.vertical-table-pannel{
+	width: 100%;
+    height: 100%;
+    overflow: hidden;
+    position: relative;
+    height: 100%;
+}
+.vertical-table-pannel > div{
+	margin: 0 0 0 150px;
+	height: 100%;
+}
+.vertical-table-pannel > div .form-horizontal{
+	margin:70px 0 0;
+}
+.vertical-table-pannel > div .ui-form-group{
+	margin:0 auto 15px;
+}
+.vertical-table-pannel > div .ui-form-group > h3{
+	font-size:16px;
+	line-height:34px;
+}
+.vertical-table-pannel table{
+	width:100%!important;
+}
+.vertical-table-pannel .tcdPageCode{
+	padding: 10px 0px;
+}

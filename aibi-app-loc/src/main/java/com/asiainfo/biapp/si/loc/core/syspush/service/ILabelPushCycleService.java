@@ -14,6 +14,7 @@ import com.asiainfo.biapp.si.loc.base.page.Page;
 import com.asiainfo.biapp.si.loc.base.service.BaseService;
 import com.asiainfo.biapp.si.loc.core.label.entity.LabelInfo;
 import com.asiainfo.biapp.si.loc.core.label.vo.LabelInfoVo;
+import com.asiainfo.biapp.si.loc.core.syspush.entity.CustomDownloadRecord;
 import com.asiainfo.biapp.si.loc.core.syspush.entity.LabelAttrRel;
 import com.asiainfo.biapp.si.loc.core.syspush.entity.LabelPushCycle;
 import com.asiainfo.biapp.si.loc.core.syspush.vo.LabelPushCycleVo;
@@ -117,6 +118,13 @@ public interface ILabelPushCycleService extends BaseService<LabelPushCycle, Stri
      * @return List<LabelPushCycle>
      */
     public List<LabelPushCycle> queryLabelPushCycle(LabelPushCycleVo labelPushCycleVo) throws BaseException;
+    
+    /**
+     * Description:根据条件生成清单
+     * @param LabelPushCycle 条件
+     * @return 
+     */
+    public void preDownloadGroupList(String localPathTmp, CustomDownloadRecord customDownloadRecord) throws BaseException;
     
 
 }

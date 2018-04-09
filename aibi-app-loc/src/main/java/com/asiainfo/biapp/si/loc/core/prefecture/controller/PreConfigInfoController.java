@@ -57,7 +57,7 @@ import springfox.documentation.annotations.ApiIgnore;
  * @version 1.0.0.2017年11月7日
  */
 
-@Api(value = "专区信息管理",description="张楠")
+@Api(value = "005.01->-专区信息管理",description="张楠")
 @RequestMapping("api/prefecture")
 @RestController
 public class PreConfigInfoController extends BaseController<PreConfigInfo> {
