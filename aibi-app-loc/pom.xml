@@ -60,6 +60,12 @@
 			<version>1.5.1</version>
 		</dependency>
 		
+		<dependency>
+ 			<groupId>org.springframework.boot</groupId>
+ 			<artifactId>spring-boot-starter-test</artifactId>
+ 			<scope>test</scope>
+ 		</dependency>
+
 		<!-- 如果是打war包开启,打jar包需要注释掉 
 		<dependency>
             <groupId>org.springframework.boot</groupId>
