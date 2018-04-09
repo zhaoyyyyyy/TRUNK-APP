@@ -35,7 +35,7 @@
 				 	 v-show = "showDivColumnId == ('labelElement'+item.labelTypeId+item.labelVerticalColumnRelId.columnId)">
 				 	 	<!-- 标志标签   	begin -------------------->
 						<div class="form-horizontal mt20"  v-if="item.labelTypeId == 1">
-							<div class="form-horizontal mt20">
+							<div class="form-horizontal" style="margin-top:150px;">
 				      				<div class="ui-form-group">
 								        <div class="radio circle success fleft"> 
 										   <input type="radio" v-bind:id="'labelFlag1'+item.labelVerticalColumnRelId.columnId" v-bind:name="'labelFlag'+item.labelVerticalColumnRelId.columnId" v-model="item.rule.labelFlag" value="1"> 
@@ -143,9 +143,9 @@
 						
 						<!-- 日期类型       begin--------------------->
 				      	<div class=""  v-if="item.labelTypeId == 6">
-				      			<h3>标签数据范围</h3>
 				      			<div class="form-horizontal mt20">
-				      				<div class="ui-form-group ml30">
+				      				<div class="ui-form-group">
+				      				<h3>标签数据范围</h3>
 								        <div class="radio circle success fleft"> 
 										   <input type="radio" v-bind:name="'queryWay6'+item.labelVerticalColumnRelId.columnId" v-bind:id="'queryWay61'+item.labelVerticalColumnRelId.columnId" v-model="item.rule.queryWay" value="1"> 
 										   <label v-bind:for="'queryWay61'+item.labelVerticalColumnRelId.columnId"><i class="default"></i>日期范围</label>
@@ -186,7 +186,7 @@
 											</div>
 								   		 </div>
 								    </div>
-									<div class="ui-form-group ml30">
+									<div class="ui-form-group">
 								        <div class="radio circle success fleft"> 
 										   <input type="radio" v-bind:name="'queryWay6'+item.labelVerticalColumnRelId.columnId" v-bind:id="'queryWay62'+item.labelVerticalColumnRelId.columnId" v-model="item.rule.queryWay" value="2"> 
 										   <label v-bind:for="'queryWay62'+item.labelVerticalColumnRelId.columnId"><i class="default"></i>精确值</label>

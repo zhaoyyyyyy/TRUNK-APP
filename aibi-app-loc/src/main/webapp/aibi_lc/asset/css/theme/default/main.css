@@ -1532,6 +1532,16 @@ span.del-btn{
 	margin: 0 0 0 150px;
 	height: 100%;
 }
+.vertical-table-pannel > div .form-horizontal{
+	margin:70px 0 0;
+}
+.vertical-table-pannel > div .ui-form-group{
+	margin:0 auto 15px;
+}
+.vertical-table-pannel > div .ui-form-group > h3{
+	font-size:16px;
+	line-height:34px;
+}
 .vertical-table-pannel table{
 	width:100%!important;
 }
