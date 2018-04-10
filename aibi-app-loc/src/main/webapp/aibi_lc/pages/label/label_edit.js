@@ -31,6 +31,8 @@ var model = {
 	isemmu : false,
 	isfhbq : false, //复合标签判断相应的显隐
 	showdim : false,
+	ismodify: false,
+	isAdd: true,
 }
 
 window.loc_onload = function() {
@@ -83,6 +85,8 @@ window.loc_onload = function() {
 								model.dimId = list[0].dimTransId;
 							}else if(model.labelTypeId==8){
 								model.isfhbq = true;
+								model.ismodify =true;
+								model.isAdd= false;
 								model.isemmu = false;
 								model.sourceInfoList = list;
 								for(var i=0; i<model.sourceInfoList.length; i++){

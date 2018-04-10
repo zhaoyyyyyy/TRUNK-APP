@@ -142,7 +142,7 @@
 	                           </div>
 	                        </div>
                         </div>
-		                <div class="ui-form-group ml70">
+		                <div class="ui-form-group ml70" v-if="isfhbq==false">
 							<label class="control-label">单位</label> 
 							<div class="control-input ml10">
 								<input v-model="unit" name="unit" type="text" class="fleft form-control" placeholder="请输入单位" />
@@ -224,12 +224,22 @@
 									placeholder="请输入列名称" />
 							    </div>
 							</div>
-							<div class="ui-form-group ml70">
+							<div class="ui-form-group ml70" v-if="isAdd == true">
 								<label class="control-label">
 								<span class="input-required">*</span>
 								列中文名</label> 
 								<div class="control-input ml10">
 									<input v-model="sourceInfo.sourceName" name="columnCnName" type="text" required="true" class="easyui-validatebox fleft form-control"
+									placeholder="请输入列中文名称" />
+							    </div>
+							</div>
+							
+							<div class="ui-form-group ml70" v-if="ismodify == true">
+								<label class="control-label">
+								<span class="input-required">*</span>
+								列中文名</label> 
+								<div class="control-input ml10">
+									<input v-model="sourceInfo.columnCnName" name="columnCnName" type="text" required="true" class="easyui-validatebox fleft form-control"
 									placeholder="请输入列中文名称" />
 							    </div>
 							</div>
