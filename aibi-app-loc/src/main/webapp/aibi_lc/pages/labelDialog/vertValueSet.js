@@ -124,8 +124,8 @@ var vertValueRule = (function (model){
 					if(attrVal) {
 						itemKeyArr = attrVal.split(',');
 						itemNameArr = attrName.split(',');
-						for ( var i = 0, len; i < itemKeyArr.length; i++) {
-							model.addEnumItem(item,itemKeyArr[i],itemNameArr[i]);
+						for ( var j = 0, len; j < itemKeyArr.length; j++) {
+							model.addEnumItem(item,itemKeyArr[j],itemNameArr[ji]);
 						}
 					}
 				}
