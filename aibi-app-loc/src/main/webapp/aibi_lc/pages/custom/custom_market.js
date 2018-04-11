@@ -33,9 +33,16 @@ var dataModel = {
 		updateCycleList : [] ,//更新周期
 		labelTypeIdList : [] ,//创建类型
 		labelInfoViewObj : {},
-		offset:""//购物车动画偏移量
+		offset:"",//购物车动画偏移量
+		loginUserId:"",//当前登录用户名
 }
 window.loc_onload = function() {
+	$.commAjax({
+		  url: $.ctx + "/api/user/getUserId",
+		  onSuccess: function(returnObj){
+			  dataModel.loginUserId = returnObj.data;
+		  }
+	});
 	//初始化参数
 	dataModel.configId = $.getCurrentConfigId();
 	var ulListId;
@@ -78,6 +85,29 @@ window.loc_onload = function() {
 				}else{
 					item.isOpen=!item.isOpen;
 				}
+			},
+			updateCustom : function(labelId){
+				var wd = $.window('修改客户群', $.ctx
+						+ '/aibi_lc/pages/custom/custom_update.html?labelId='+labelId, 500, 500);
+			    	wd.reload = function() {
+			    		labelMarket.loadLabelInfoList();
+			    	}
+			},
+			deleteCustomById : function(labelId){
+				$.confirm("确认删除该客户群？",function(){
+					$.commAjax({
+						  url: $.ctx + "/api/label/labelInfo/update",
+						  postData:{
+							  labelId : labelId,
+							  dataStatusId : 6
+						  },
+						  onSuccess: function(returnObj){
+							  $.confirm("删除成功",function(){
+								  labelMarket.loadLabelInfoList();
+							  });
+						  }
+					});
+				});
 			}
     	},
     	mounted: function () {

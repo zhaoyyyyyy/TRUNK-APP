@@ -176,6 +176,15 @@
 							</br>
 						</div>
 						<ul class="ui-lable-icon">
+						
+							<li v-if="item.createUserId==loginUserId" title="修改">
+	 							<a class="label-icon4" herf="javascript:" @click="updateCustom(item.labelId)"></a>
+	 						</li>
+							
+							<li v-if="item.createUserId==loginUserId" title="删除">
+	 							<a class="label-icon4" herf="javascript:" @click="deleteCustomById(item.labelId)"></a>
+	 						</li>
+							
 							<li v-bind:class="{open:item.isOpen}" title="详情" @click="toggleDropdown(item)">
 	 							<a class="label-icon4" herf="javascript:" @click = "window.location='custom_detail.html?labelId='+item.labelId+''"></a>
 	 							<!--<ul class="dropdown-menu">

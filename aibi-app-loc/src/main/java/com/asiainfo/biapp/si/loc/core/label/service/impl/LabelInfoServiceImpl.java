@@ -216,7 +216,7 @@ public class LabelInfoServiceImpl extends BaseServiceImpl<LabelInfo, String> imp
         super.saveOrUpdate(labelInfo); 
         
         
-        if (labelInfo.getLabelTypeId()!=8) {
+        if (labelInfo.getLabelTypeId()!=8 && labelInfo.getGroupType()!=1) {
           //修改元数据表列信息
             MdaSysTableColumn mdaSysTableColumn = iMdaSysTableColService.selectMdaSysTableColBylabelId(labelInfo.getLabelId());
             MdaSysTable mdaSysTable = iMdaSysTableService.queryMdaSysTable(labelInfo.getConfigId(),labelInfo.getUpdateCycle(),1);

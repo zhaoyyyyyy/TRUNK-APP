@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>修改客户群</title>
+<!--[if IE]>
+    	<meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <![endif]-->
+<link rel="stylesheet" theme="default" href="../../asset/css/theme/default/coc_frame.css" />
+<link rel="stylesheet" theme="default" href="../../asset/css/theme/default/main.css" />
+<script type="text/javascript" src="../../asset/script/common/include.js"></script>
+<script type="text/javascript" src="custom_update.js"></script>
+<style type="text/css">
+[v-cloak] {
+	display: none;
+}
+</style>
+<!--[if lt IE 9]>
+	    <script src="../../asset/script/component/h5compatibility/html5shiv.min.js"></script>
+	    <script src="../../asset/script/component/h5compatibility/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+	<div id="dataD" class="iframe-nest" v-cloak>
+		<div class="ui-reg-main">
+			<div class="ui-lc-mian">
+				<form id="saveDataForm">
+					<input type="hidden" v-model="labelId" id="labelId" name="labelId" />
+					<div class="ui-reg-search">
+						<div class="form-horizontal ui-form dimtable-table">
+							<div class="ui-form-group">
+								<label class="control-label fleft"><span class="input-required">*</span>客户群名称</label>
+								<div class="control-input">
+									<input v-model="labelName" name="labelName" type="text"  class="fleft form-control easyui-validatebox"
+									required="true"/>
+								</div>
+							</div>
+							<div class="ui-form-group">
+								<label class="control-label fleft" for="busiLegend">客户群描述</label>
+								<div class="control-input">
+									<textarea rows="5" v-model="busiLegend" name="busiLegend" class="form-control form-control-textarea"></textarea>
+								</div>
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

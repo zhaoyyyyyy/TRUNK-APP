@@ -95,6 +95,19 @@ public class UserController extends BaseController<User>{
         return webResult.success("获取用户组织访问权限跟同专区权限成功",user);
 	}
 	
+	@ApiOperation(value = "通过token拿到当前登录用户的用户名")
+    @RequestMapping(value="/getUserId", method=RequestMethod.POST, produces={ MediaType.APPLICATION_JSON_VALUE })
+    public WebResult<String> getUserId(){
+        WebResult<String> webResult = new WebResult<>();
+        User user;
+        try {
+            user = super.getLoginUser();
+        } catch (BaseException e) {
+            return webResult.fail(e);
+        }
+        return webResult.success("获取用户组织访问权限跟同专区权限成功",user.getUserName());
+    }
+	
 	
 	@ApiOperation(value = "返回当前用户的组织访问权限跟同专区权限(不建议使用)")
 	@RequestMapping(value="/privaliegeOrg/query", method=RequestMethod.POST, produces={ MediaType.APPLICATION_JSON_VALUE })
