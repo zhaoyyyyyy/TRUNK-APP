@@ -15,6 +15,7 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import com.asiainfo.biapp.si.loc.auth.utils.AuthUtils;
+import com.asiainfo.biapp.si.loc.auth.utils.LocConfigUtil;
 
 @Component
 public class LogUtil {
@@ -153,7 +154,15 @@ public class LogUtil {
      * @param msg
      */
     private static void saveLog(String level, String threadName, String interfaceUrl, String method, Object msg) {
+    	
+    	
         try {
+        	
+        	//是否记录DEBUG日志
+        	String saveDebugLog = LocConfigUtil.getInstance(jauthUrl).getProperties("LOC_CONFIG_APP_SAVE_ALL_DEBUG_LOG");
+        	if(LEVEL_DEBUG.equals(level) && !"true".equals(saveDebugLog)){
+        		return ;
+        	}
         	
         	HttpServletRequest request = null;
         	String url = "local";
