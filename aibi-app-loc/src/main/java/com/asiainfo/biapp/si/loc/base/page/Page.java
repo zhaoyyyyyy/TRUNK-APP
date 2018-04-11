@@ -7,6 +7,7 @@ import java.util.List;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import com.asiainfo.biapp.si.loc.base.exception.BaseException;
+import com.asiainfo.biapp.si.loc.base.utils.LogUtil;
 import com.asiainfo.biapp.si.loc.base.utils.WebResult;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -243,6 +244,7 @@ public class Page<T> implements Serializable {
 	public void fail(BaseException baseException) {
 		setMsg(baseException.getMessage());
 		setStatus(baseException.getErrorCode());
+		LogUtil.error(baseException.getMessage(), baseException);
 	}
 
 	/**
