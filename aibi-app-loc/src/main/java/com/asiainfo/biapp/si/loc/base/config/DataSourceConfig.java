@@ -54,7 +54,7 @@ public class DataSourceConfig {
 			} else {        								  //去spring配置文件拿配置
 				dataSource = getDataSourceSpring();
 			}
-			dataSource.setConnectionProperties("druid.stat.mergeSql=true;druid.stat.slowSqlMillis=500 ");
+			dataSource.setConnectionProperties("druid.stat.mergeSql=false;druid.stat.slowSqlMillis=800 ");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
