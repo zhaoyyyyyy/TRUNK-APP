@@ -102,8 +102,8 @@ window.loc_onload = function() {
 									},
 								    onSuccess : function(data){
 								    	var sourcetablename = data.data.tableName;
-								    	var index = sourcetablename.indexOf('_',sourcetablename.indexOf('_')+1)
-								    	sourcetablename = sourcetablename.substr(index+1,sourcetablename.length);
+								    	var index = sourcetablename.indexOf('_',sourcetablename.indexOf('_')+1);
+								    	sourcetablename = sourcetablename.substr(index+1,sourcetablename.length-index-2);
 								    	$.commAjax({
 								    		url : $.ctx + '/api/source/sourceTableInfo/queryList',
 								    		postData : {
@@ -285,7 +285,7 @@ window.loc_onload = function() {
 	
 	//复合标签列数据类型
 	for(var i = 0; i<dicBqlx.length; i++){
-		if(dicBqlx[i].code!=10&&dicBqlx[i].code!=12&&dicBqlx[i].code!=11&&dicBqlx[i].code!=8){
+		if(dicBqlx[i].code!=10&&dicBqlx[i].code!=12&&dicBqlx[i].code!=11&&dicBqlx[i].code!=8&&dicBqlx[i].code!=1){
 			model.fhbqlx.push(dicBqlx[i]);
 		}	
 	}
@@ -358,41 +358,57 @@ function fun_to_save(){
 			}
 			msg = "保存成功";
 		}
-		$.commAjax({
-			url : url_,
-			postData : $('#saveDataForm').formToJson(),
-			onSuccess : function(data){
-				var labelId = data.data.labelId;
-				if(url_fh !="" && labelId!=""){
-					var k=0;
-					$("form[class~=create-main-col]").each(function(){
-						var mdaSysTableColumn = $(this).formToJson();
-						/*if(mdaSysTableColumn['columnId']==""){
-							delete mdaSysTableColumn['columnId']
-						}*/
-						mdaSysTableColumn["labelId"]=labelId;
-						$.commAjax({
-							ansyc : false,
-							url : url_fh,
-							postData : mdaSysTableColumn,
-							onSuccess : function(data){
-								savemda = data.status
-								if(k==$("form[class~=create-main-col]").size() && savemda== 200){
-									$.success(msg,function(){
-										history.back(-1);
-									});
-								};
-							}
-						});
-						k++;
-					})
+		var falg = true;
+		if(model.labelTypeId == 8){
+			var columnCnNameList =[];
+			$("form[class~=create-main-col]").each(function(){
+				var mdaSysTableColumn = $(this).formToJson();
+				if(!isInArray(columnCnNameList,mdaSysTableColumn.columnCnName)){
+					columnCnNameList.push(mdaSysTableColumn.columnCnName);
 				}else{
-					$.success(msg,function(){
-						history.back(-1);
-					});
+					$.alert("列中文名不能重复");
+					falg =false;
+					return false;
 				}
-			}	
-		});		
+			})
+		}
+		if(falg){
+			$.commAjax({
+				url : url_,
+				postData : $('#saveDataForm').formToJson(),
+				onSuccess : function(data){
+					var labelId = data.data.labelId;
+					if(url_fh !="" && labelId!=""){
+						var k=0;
+						$("form[class~=create-main-col]").each(function(){
+							var mdaSysTableColumn = $(this).formToJson();
+							/*if(mdaSysTableColumn['columnId']==""){
+								delete mdaSysTableColumn['columnId']
+							}*/
+							mdaSysTableColumn["labelId"]=labelId;
+							$.commAjax({
+								ansyc : false,
+								url : url_fh,
+								postData : mdaSysTableColumn,
+								onSuccess : function(data){
+									savemda = data.status
+									if(k==$("form[class~=create-main-col]").size() && savemda== 200){
+										$.success(msg,function(){
+											history.back(-1);
+										});
+									};
+								}
+							});
+							k++;
+						})
+					}else{
+						$.success(msg,function(){
+							history.back(-1);
+						});
+					}
+				}	
+			});	
+		}
 	}else{
 		$.alert("表单校验失败");
 	}
@@ -473,3 +489,12 @@ function ztreeFunc(){
 		$(".ui-form-ztree").removeClass("open");
 	};		
 }
+function isInArray(arr, value) {
+	for (var i = 0; i < arr.length; i++) {
+		if (value === arr[i]) {
+			return true;
+		}
+	}
+	return false;
+}
+

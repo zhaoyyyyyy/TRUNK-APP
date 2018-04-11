@@ -130,7 +130,7 @@ public class MdaSysTableColServiceImpl extends BaseServiceImpl<MdaSysTableColumn
             MdaSysTable mdaSysTable = iMdaSysTableService.queryMdaSysTable(labelInfo.getConfigId(), labelInfo.getUpdateCycle(), 3);
             mdaSysTableColumn.setTableId(mdaSysTable.getTableId());
             mdaSysTableColumn.setCountRulesCode(labelCountRules.getCountRulesCode());
-            mdaSysTableColumn.setUnit(labelInfo.getUnit());
+            //mdaSysTableColumn.setUnit(labelInfo.getUnit());
             mdaSysTableColumn.setColumnId(null);
             mdaSysTableColumn.setColumnStatus(1);
             super.saveOrUpdate(mdaSysTableColumn);
@@ -153,7 +153,7 @@ public class MdaSysTableColServiceImpl extends BaseServiceImpl<MdaSysTableColumn
     public void modifyMdaSysTableColumn(MdaSysTableColumn mdaSysTableColumn) throws BaseException {
         if (mdaSysTableColumn.getLabelTypeId()!= null) {
             LabelInfo labelInfo = iLabelInfoService.get(mdaSysTableColumn.getLabelId());
-            mdaSysTableColumn.setUnit(labelInfo.getUnit());
+            //mdaSysTableColumn.setUnit(labelInfo.getUnit());
         }   
         super.saveOrUpdate(mdaSysTableColumn); 
         
