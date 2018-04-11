@@ -469,17 +469,19 @@ window.loc_onload = function() {
 		    onSuccess: function(data){
 		    	$("#OptionalLabel").html("");
 		    	for(var i=0;i<data.rows.length;i++){
-		    		if(model.AttrbuteId =="" || model.AttrbuteId.indexOf(data.rows[i].labelId) == -1){
-			    		html="<li>"+
-			    		"<div class='checkbox'>"+
-			    		"<input type='checkbox' id='"+data.rows[i].labelId+"L' class='checkbix'>"+
-			    		"<label for='"+data.rows[i].labelId+"L' aria-label role='checkbox' class='checkbix' data-id='"+data.rows[i].labelId+"L' data-name='"+data.rows[i].labelName+"'>"+
-			    		"<span class='large'></span>"+
-			    		data.rows[i].labelName+
-			    		"</label>"+
-			    		"</div>"+
-			    		"</li>";
-			    		$("#OptionalLabel").append(html);
+		    		if(data.rows[i].labelTypeId !=8){
+		    			if(model.AttrbuteId =="" || model.AttrbuteId.indexOf(data.rows[i].labelId) == -1){
+				    		html="<li>"+
+				    		"<div class='checkbox'>"+
+				    		"<input type='checkbox' id='"+data.rows[i].labelId+"L' class='checkbix'>"+
+				    		"<label for='"+data.rows[i].labelId+"L' aria-label role='checkbox' class='checkbix' data-id='"+data.rows[i].labelId+"L' data-name='"+data.rows[i].labelName+"'>"+
+				    		"<span class='large'></span>"+
+				    		data.rows[i].labelName+
+				    		"</label>"+
+				    		"</div>"+
+				    		"</li>";
+				    		$("#OptionalLabel").append(html);
+			    		}
 		    		}
 		    	}
 		    },
