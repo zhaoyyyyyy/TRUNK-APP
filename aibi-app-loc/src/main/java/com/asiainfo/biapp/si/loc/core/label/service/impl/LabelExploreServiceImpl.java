@@ -176,7 +176,12 @@ public class LabelExploreServiceImpl implements ILabelExploreService {
 			} 
 		}
 		wherelabel.append(")");
-		StringBuffer whereSb = new StringBuffer("where 1=1 and ");
+		StringBuffer whereSb = new StringBuffer();
+		if(queryParam.isValidate()){
+			whereSb.append("where 1=2 and ");
+		}else{
+			whereSb.append("where 1=1 and ");
+		}
 		whereSb.append(wherelabel);
 		StringBuffer fromSqlSb = new StringBuffer("");
 		fromSqlSb.append(" from ").append(dayTableName).append(" ").append(whereSb.toString());;
