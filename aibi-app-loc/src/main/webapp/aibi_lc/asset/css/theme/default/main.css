@@ -1116,17 +1116,17 @@ span.del-btn{
 	line-height:34px;
 }
 .label-dialog{
-	position:fixed;
-	bottom:0;
-	right:-260px;
+	position:absolute;
+	bottom:20px;
+	right:-20%;
 	z-index:99;
-	width:260px;
+	width:20%;
 	background:#fff;
 	/* border-left: 1px solid #2EA658; */
 	transition:all 0.2s linear;
 }
 .label-dialog.active{
-	right:0;
+	right:20px;
 	transition:all 0.2s linear;
 }
 .label-dialog > h3{
