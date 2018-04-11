@@ -685,5 +685,120 @@ var calculateCenter = (function (model){
 	model.hideCalculateCenter = function(){
 		$(".ui-calculate-center").removeClass("heightAuto");
 	}
+	/**
+	 * 格式化纵表标签
+	 */
+	model.formatVertRule = function(childLabelRuleListParam){
+		var value = model.getVertRule(childLabelRuleListParam);
+		if(value.length>100){
+			value = value.substring(0,100)+"...";
+		}
+		return value ; 
+	}
+	/**
+	 * 格式化纵表标签
+	 */
+	model.getVertRule = function(childLabelRuleListParam){
+		var value = "";
+		for(var i=0 ;i<childLabelRuleListParam.length ;i++){
+			var childRule = childLabelRuleListParam[i];
+			value += ";"+childRule.columnCnName + ":";
+			value += model.formatCenterRule(childRule);
+			
+		}
+		if(value.length>0){
+			value = value.substring(1,value.length);
+		}
+		return value ; 
+	};
+	/**
+	 * 拼接标签描述
+	 */
+	model.formatCenterRule = function(itemRule,isTip){
+		var value = "";
+		if(itemRule.labelTypeId == 1){
+			if(itemRule.labelFlag == 1){
+				value += "是";
+			}
+			if(itemRule.labelFlag == 0){
+				value += "否";
+			}
+		}
+		if(itemRule.labelTypeId == 4 && itemRule.queryWay == 1){
+			if(itemRule.contiueMinVal){
+				if(itemRule.leftZoneSign == '>='){
+					value += "大于等于"+itemRule.contiueMinVal ;
+				}
+				if(itemRule.leftZoneSign == '>'){
+					value += "大于"+itemRule.contiueMinVal ;
+				}
+			}
+			if(itemRule.contiueMaxVal){
+				if(itemRule.rightZoneSign == '<='){
+					value += "小于等于"+itemRule.contiueMaxVal ;
+				}
+				if(itemRule.rightZoneSign == '<'){
+					value += "小于"+itemRule.contiueMaxVal ;
+				}
+			}
+			if(itemRule.unit){
+				value += itemRule.unit ;
+			}
+		}
+		if(itemRule.labelTypeId == 4 && itemRule.queryWay == 2){
+			if(itemRule.exactValue){
+				value += itemRule.exactValue;
+				if(itemRule.unit){
+					value += itemRule.unit ;
+				}
+			}
+		}
+		if(itemRule.labelTypeId == 5 && itemRule.attrVal){
+			value += itemRule.attrName ;
+		}
+		if(itemRule.labelTypeId == 6 && itemRule.queryWay == 1){
+			if(itemRule.startTime){
+				if(itemRule.leftZoneSign == '>='){
+					value += "大于等于"+itemRule.startTime ;
+				}
+				if(itemRule.leftZoneSign == '>'){
+					value += "大于"+itemRule.startTime ;
+				}
+			}
+			if(itemRule.endTime){
+				if(itemRule.rightZoneSign == '<='){
+					value += "小于等于"+itemRule.endTime ;
+				}
+				if(itemRule.rightZoneSign == '<'){
+					value += "小于"+itemRule.endTime ;
+				}
+			}
+			if(itemRule.isNeedOffset == 1){
+				value += "（动态偏移更新）" ;
+			}
+		}
+		if(itemRule.labelTypeId == 6 && itemRule.queryWay == 2){
+			if(itemRule.exactValue){
+				value += calculateCenter.formatDateExactValue(itemRule);
+			}
+		}
+		if(itemRule.labelTypeId == 7 && itemRule.queryWay == 1){
+			if(itemRule.darkValue){
+				value += itemRule.darkValue ;
+			}
+		}
+		if(itemRule.labelTypeId == 7 && itemRule.queryWay == 2){
+			if(itemRule.exactValue){
+				value += itemRule.exactValue ;
+			}
+		}
+		if(itemRule.labelTypeId == 8){
+			value += model.getVertRule(itemRule.childLabelRuleList);
+		}
+		if(isTip && value && value.length>80){
+			value = value.substring(1,80)+"...";
+		}
+		return value ;
+	}
 	return model ;
 })(window.calculateCenter || {});

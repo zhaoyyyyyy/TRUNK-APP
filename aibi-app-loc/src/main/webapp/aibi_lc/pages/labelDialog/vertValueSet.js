@@ -125,7 +125,7 @@ var vertValueRule = (function (model){
 						itemKeyArr = attrVal.split(',');
 						itemNameArr = attrName.split(',');
 						for ( var j = 0, len; j < itemKeyArr.length; j++) {
-							model.addEnumItem(item,itemKeyArr[j],itemNameArr[ji]);
+							model.addEnumItem(item,itemKeyArr[j],itemNameArr[j]);
 						}
 					}
 				}
@@ -802,6 +802,7 @@ var vertValueRule = (function (model){
 				rule.labelTypeId = item.labelTypeId ;
 				rule.columnCnName = item.mdaSysTableColumn.columnCnName ;
 				rule.elementType = 2 ;//标签,默认必须
+				var flag = false;
 				if(rule.labelFlag == null || rule.labelFlag == ''){//标签,labelFlag必须
 					rule.labelFlag = 1 ;
 					rule.maxVal = 1	;
@@ -812,22 +813,55 @@ var vertValueRule = (function (model){
 					}else if(rule.labelFlag == 1 ){
 						rule.maxVal = 1	;
 					}
+					flag = true ;
 				}else if(item.labelTypeId == 4){
 					rule = model.setNumberValue(item);
+					var contiueMinVal=$.trim(item.rule.contiueMinVal);
+					var contiueMaxVal=$.trim(item.rule.contiueMaxVal);
+					var exactValue = $.trim(item.rule.exactValue);
+					if(contiueMinVal == "输入下限"){
+						contiueMinVal="";
+					}
+					if(contiueMaxVal == "输入上限") {
+						contiueMaxVal="";
+					}
+					var contiueVal=contiueMinVal+contiueMaxVal+exactValue;
+					if(contiueVal){
+						flag = true ;
+					}
 				}else if(item.labelTypeId == 5){
 					rule = model.setEnumValue(item);
+					if(rule && item.rule.attrVal){
+						flag = true ;
+					}
 				}else if(item.labelTypeId == 6){
 					rule = model.setDateValue(item);
+					var id = item.labelVerticalColumnRelId.columnId ; 
+					var startTime = $.trim($("#startTime"+id).val());
+					var endTime= $.trim($("#endTime"+id).val());
+					var exactValueDateYear = $.trim(item.exactValueDateYear);
+					var exactValueDateMonth = $.trim(item.exactValueDateMonth);
+					var exactValueDateDay = $.trim(item.exactValueDateDay);
+					var exactValueDate = exactValueDateYear+exactValueDateMonth+exactValueDateDay+startTime+endTime;
+					if(exactValueDate){
+						flag = true ;
+					}
 				}else if(item.labelTypeId == 7){
 					if(rule.queryWay == "1"){
 						rule.exactValue = '';
 					}else{
 						rule.darkValue = '';
 					}
+					var darkValue=$.trim(item.rule.darkValue);
+					var exactValue = $.trim(item.rule.exactValue);
+					exactValue = exactValue + darkValue;
+					if(exactValue){
+						flag = true ;
+					}
 				}else{
 					//
 				}
-				if(rule){
+				if(flag){
 					childrenRule[childrenRule.length] = rule ;
 				}
 			}
