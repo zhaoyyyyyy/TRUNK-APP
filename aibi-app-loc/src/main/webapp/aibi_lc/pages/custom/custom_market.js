@@ -130,8 +130,6 @@ window.loc_onload = function() {
 	
 	//初始化加载标签体系
 	labelMarket.loadLabelCategoryList();
-	//初始化计算中心事件
-	calculateDragSort.dragParenthesis();
 	//初始化地市
 	labelMarket.loadOrg();
 	
