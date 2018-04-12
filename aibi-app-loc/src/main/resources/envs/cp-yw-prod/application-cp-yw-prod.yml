@@ -1,16 +1,16 @@
 jauth-url: 
-  http://192.168.252.52/jauth
+  http://10.3.232.192/jauth
 acrm-url:
-  http://192.168.252.54/acrm
+  http://10.3.232.193/acrm
 loadLevel:
   1
 spring:
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:mysql://192.168.248.142:3306/coc_suit?useUnicode=true&characterEncoding=utf-8
-    username: cocsuit
-    password: cocsuit
+    url: jdbc:mysql://10.3.232.106:3306/ywcoc?useUnicode=true&characterEncoding=utf-8
+    username: ywcoc
+    password: Ywcoc_123
   boot:
     admin:  
       client:
-        serviceUrl: http://192.168.248.166:18880/loc
+        serviceUrl: http://10.3.232.192:18880/loc
