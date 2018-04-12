@@ -316,6 +316,20 @@ public class LabelInfoServiceImpl extends BaseServiceImpl<LabelInfo, String> imp
 			labelRule.setCustomId(customId);
 			labelRule.setCustomType(LabelRuleContants.LABEL_RULE_FROM_COSTOMER);
 			ruleService.addLabelRule(labelRule);
+			if (LabelInfoContants.LABEL_TYPE_VERT==labelRuleVo.getLabelTypeId()  ) {
+				List<LabelRuleVo> childLabelRuleList = labelRuleVo.getChildLabelRuleList();
+				for (LabelRuleVo ruleVo : childLabelRuleList) {
+					LabelRule childRule = new LabelRule();
+					try {
+						BeanUtils.copyProperties(childRule, ruleVo);
+					} catch (Exception e) {}
+					childRule.setParentId(labelRule.getRuleId());
+					childRule.setCustomId(customId);
+					childRule.setCustomType(LabelRuleContants.LABEL_RULE_FROM_COSTOMER);
+					ruleService.addLabelRule(childRule);
+				}
+			}
+			
 		}
 		ListInfoId id=new ListInfoId();
 		id.setCustomGroupId(customId);

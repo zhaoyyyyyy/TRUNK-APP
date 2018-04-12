@@ -7,8 +7,10 @@
 package com.asiainfo.biapp.si.loc.core.label.service.impl;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import javax.transaction.Transactional;
 
@@ -32,6 +34,7 @@ import com.asiainfo.biapp.si.loc.cache.CocCacheProxy;
 import com.asiainfo.biapp.si.loc.core.label.dao.ILabelRuleDao;
 import com.asiainfo.biapp.si.loc.core.label.entity.LabelInfo;
 import com.asiainfo.biapp.si.loc.core.label.entity.LabelRule;
+import com.asiainfo.biapp.si.loc.core.label.entity.LabelVerticalColumnRel;
 import com.asiainfo.biapp.si.loc.core.label.service.ILabelInfoService;
 import com.asiainfo.biapp.si.loc.core.label.service.ILabelRuleService;
 import com.asiainfo.biapp.si.loc.core.label.vo.LabelRuleVo;
@@ -84,24 +87,45 @@ public class LabelRuleServiceImpl extends BaseServiceImpl<LabelRule, String> imp
 		param.setCustomId(customId);
 		param.setCustomType(customType);
 		List<LabelRule> labelRuleList = iLabelRuleDao.selectLabelRuleList(param);
-		for (LabelRule entity : labelRuleList) {
-			LabelRuleVo labelRuleVo=new LabelRuleVo();
+		List<LabelRule> resultRuleList = new ArrayList<LabelRule>();
+		List<LabelRule> childrenRulesList = new ArrayList<LabelRule>();
+		// 非子规则和子规则分离
+		for (LabelRule r : labelRuleList) {
+			if (StringUtil.isEmpty(r.getParentId())) {
+				resultRuleList.add(r);
+			} else {
+				childrenRulesList.add(r);
+			}
+		}
+		for (LabelRule entity : resultRuleList) {
+			LabelRuleVo rule=new LabelRuleVo();
 			try {
-				BeanUtils.copyProperties(labelRuleVo, entity);
+				BeanUtils.copyProperties(rule, entity);
 			} catch (Exception e) {}
 			if (LabelRuleContants.ELEMENT_TYPE_LIST_ID == entity.getElementType()) {
 				LabelInfo labelInfo = iLabelInfoService.selectLabelInfoById(entity.getCalcuElement());
-				labelRuleVo.setAttrName(labelInfo.getLabelName());
+				rule.setAttrName(labelInfo.getLabelName());
 				//TODO 设置其他参数
 			}
 			if (LabelRuleContants.ELEMENT_TYPE_LABEL_ID == entity.getElementType()) {
-				String labelIdStr = entity.getCalcuElement();
-				LabelInfo labelInfo = CocCacheProxy.getCacheProxy().getLabelInfoById(labelIdStr);
-				labelRuleVo.setLabelTypeId(labelInfo.getLabelTypeId());
-				labelRuleVo.setAttrName(labelInfo.getLabelName());
-				//TODO 设置其他参数
-			}
-			list.add(labelRuleVo);
+				LabelInfo labelInfo = CocCacheProxy.getCacheProxy().getLabelInfoById( entity.getCalcuElement());
+				rule.setLabelTypeId(labelInfo.getLabelTypeId());
+				rule.setAttrName(labelInfo.getLabelName());
+				if (LabelInfoContants.LABEL_TYPE_VERT == labelInfo.getLabelTypeId()) {
+					List<LabelRuleVo> childRuleList = new ArrayList<LabelRuleVo>();
+					for (LabelRule childRule : childrenRulesList) {
+						if (!rule.getRuleId().equals(childRule.getParentId()))
+							continue;
+						LabelRuleVo vo=new LabelRuleVo();
+						try {
+							BeanUtils.copyProperties(vo, childRule);
+						} catch (Exception e) {}
+						childRuleList.add(vo);
+					}
+					rule.setChildLabelRuleList(childRuleList);
+				}//end 纵表
+			}//end 标签
+			list.add(rule);
 		}
 		return list;
 	}

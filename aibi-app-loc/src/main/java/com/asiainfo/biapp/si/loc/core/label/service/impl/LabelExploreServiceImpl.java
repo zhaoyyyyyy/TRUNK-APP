@@ -119,10 +119,18 @@ public class LabelExploreServiceImpl implements ILabelExploreService {
 			String calcExprStr = calcExpr.toString();
 			calcExprStr = calcExprStr.replace(String.valueOf(CommonConstants.LEFT_Q), "")
 					.replace(String.valueOf(CommonConstants.RIGHT_Q), "");
+			StringBuffer selectSql = new StringBuffer("");
+			selectSql.append("select " +LabelInfoContants.KHQ_CROSS_COLUMN);
+			if (queryParam.isCreateCustom()) {
+				List<String> orgColumns = CocCacheProxy.getCacheProxy().getAllOrgColumnByConfig(queryParam.getConfigId());
+				for(String s: orgColumns){
+					selectSql.append("," + s);
+				}
+			}
 			if (labelRuleToSql.containsKey(calcExprStr)) {
-				sql = "select " +LabelInfoContants.KHQ_CROSS_COLUMN+ " from " + labelRuleToSql.get(calcExprStr);
+				sql = selectSql.toString()+ " from " + labelRuleToSql.get(calcExprStr);
 			} else {
-				sql = "select " +LabelInfoContants.KHQ_CROSS_COLUMN+ " from " + calcExprStr ;
+				sql = selectSql.toString()+ " from " + calcExprStr ;
 			}
 		} else if (listInfoIds.size() > 1) {
 			sql =sqlPaser.parseExprToSql(calcExpr.toString(), labelRuleToSql);
@@ -148,6 +156,7 @@ public class LabelExploreServiceImpl implements ILabelExploreService {
 		// 根据纵表标签获得其子规则
 		List<LabelRuleVo> labelRuleList = verticalLabelRule.getChildLabelRuleList();
 		String dayTableName = "";
+		String dataTabelAlias = null;//表的别名（拼接where中的cityId，用于权限）
 		// 拼接where条件语句
 		StringBuffer wherelabel = new StringBuffer(" (");
 		for (int i = 0; i < labelRuleList.size(); i++) {
@@ -162,6 +171,7 @@ public class LabelExploreServiceImpl implements ILabelExploreService {
 				MdaSysTable table = column.getMdaSysTable();
 				String tableName = table.getTableName();
 				String alias = "t_" + table.getTableId(); // 表的别名:tabelName_tabelId
+				dataTabelAlias= "t_" + table.getTableId();
 				/** 1、日表、月表表名提取拼接   纵表对应只有一个元数据表 */
 				if(StringUtil.isEmpty(dayTableName)){
 					tableName = getTableName(queryParam, labelInfo, tableName);
@@ -182,6 +192,8 @@ public class LabelExploreServiceImpl implements ILabelExploreService {
 		}else{
 			whereSb.append("where 1=1 and ");
 		}
+		//设置权限过滤
+		getWhereForCity(queryParam, dataTabelAlias, whereSb);
 		whereSb.append(wherelabel);
 		StringBuffer fromSqlSb = new StringBuffer("");
 		fromSqlSb.append(" from ").append(dayTableName).append(" ").append(whereSb.toString());;
