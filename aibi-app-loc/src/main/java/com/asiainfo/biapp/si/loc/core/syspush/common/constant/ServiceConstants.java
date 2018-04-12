@@ -37,7 +37,7 @@ public class ServiceConstants {
 	    /** 是否显示在页面上：1：页面显示 */
 	    public static final Integer SHOW_IN_PAGE_YES = 1;
 	    /** 是否显示在页面上：0:不再页面显示 */
-	    public static final Integer SHOW_IN_PAGE_NO = 1;
+	    public static final Integer SHOW_IN_PAGE_NO = 0;
 	    
 	    /**
 	     * 协议类型：默认是1。 1：ftp,2:sftp

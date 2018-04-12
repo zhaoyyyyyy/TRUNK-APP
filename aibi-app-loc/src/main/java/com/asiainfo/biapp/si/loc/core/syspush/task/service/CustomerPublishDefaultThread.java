@@ -391,7 +391,7 @@ public class CustomerPublishDefaultThread implements ICustomerPublishThread {
             }
             if (!hasExists) {//如果因为记录数为0而没有产生文件，那么就创建一个空文件
                 try {
-                    FileUtil.createFile(fileName, "");
+                    FileUtil.createFile(desFile, "");
                 } catch (Exception e) {
                     LogUtil.error("导出清单文件错误" + customListSql + fileTmp + zipFile, e);
                 }

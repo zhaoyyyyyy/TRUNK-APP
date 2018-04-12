@@ -65,7 +65,7 @@ import io.swagger.annotations.ApiOperation;
 @RestController
 public class CustomDownloadRecordController extends BaseController<CustomDownloadRecord>{
 
-    private static final String FILE_PATH = "syspush" + File.separator +"groupListDownload";  //推送的文件的目录名称
+    private static final String FILE_PATH = "syspush";  //推送的文件的目录名称
     
     private static final String SYS_NAME = "coc默认的ftp服务器";
 

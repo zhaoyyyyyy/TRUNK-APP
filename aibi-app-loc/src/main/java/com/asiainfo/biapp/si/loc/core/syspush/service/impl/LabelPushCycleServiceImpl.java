@@ -320,13 +320,15 @@ public class LabelPushCycleServiceImpl extends BaseServiceImpl<LabelPushCycle, S
                 Thread.sleep((15+(num*10)*1000));
                 
                 names = dir.list();
-                for (String name : names) {
-                    if (name.contains(fileNameTmp)) {
-                        LogUtil.debug("查找文件完整名称："+name);
-                        fileNameTmp = name;
-                        isSleep = false;
-                        Thread.sleep(num*10*1000);//再睡一会儿，防止文件未写完
-                    }
+                if (null != names) {
+	                for (String name : names) {
+	                    if (name.contains(fileNameTmp)) {
+	                        LogUtil.debug("查找文件完整名称："+name);
+	                        fileNameTmp = name;
+	                        isSleep = false;
+	                        Thread.sleep(num*10*1000);//再睡一会儿，防止文件未写完
+	                    }
+	                }
                 }
                 if (num > 20) {//超时失败
                     isSleep = false;
