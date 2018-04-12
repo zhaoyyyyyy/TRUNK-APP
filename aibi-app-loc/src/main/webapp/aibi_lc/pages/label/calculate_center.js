@@ -165,6 +165,7 @@ var calculateCenter = (function (model){
 						dataModel.ruleListCount = returnObj.data.showCartRulesCount;
 					}
 					calculateDragSort.sortLabels();
+					calculateDragSort.dragParenthesis();
 				 }
 			});
     };
