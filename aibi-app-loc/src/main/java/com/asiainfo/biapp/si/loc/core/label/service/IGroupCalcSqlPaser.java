@@ -2,6 +2,8 @@ package com.asiainfo.biapp.si.loc.core.label.service;
 
 import java.util.Map;
 
+import com.asiainfo.biapp.si.loc.core.label.model.ExploreQueryParam;
+
 public interface IGroupCalcSqlPaser {
 	/**
 	 * 判断数据库类型
@@ -10,7 +12,16 @@ public interface IGroupCalcSqlPaser {
 	 * @return
 	 */
 	public boolean isDbType(String dbType);
-
+	/**
+	 * 
+	 * Description: 初始化需要参数
+	 *
+	 * @param queryParam
+	 *
+	 * @author  tianxy3
+	 * @date 2018年4月12日
+	 */
+	public void initProcessParam(ExploreQueryParam queryParam);
 	/**
 	 * 将表达式转换为sql
 	 * 

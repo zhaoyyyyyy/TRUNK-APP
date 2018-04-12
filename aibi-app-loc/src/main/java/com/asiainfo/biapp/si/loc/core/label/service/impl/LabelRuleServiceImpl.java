@@ -267,6 +267,97 @@ public class LabelRuleServiceImpl extends BaseServiceImpl<LabelRule, String> imp
 				}
 			}
 		// 增加组合标签类型，处理方式与纵表一致（已做）
+		}else if(labelRule.getLabelTypeId() == LabelInfoContants.LABEL_TYPE_VERT){
+			List<LabelRuleVo> childLabelRuleList = labelRule.getChildLabelRuleList();
+			if(childLabelRuleList != null && childLabelRuleList.size() > 0){
+				for (int i = 0; i < childLabelRuleList.size(); i++) {
+					LabelRuleVo rule = childLabelRuleList.get(i);
+					if(rule.getLabelTypeId() == LabelInfoContants.LABEL_TYPE_SIGN){//01型
+						attrValStr.append("[");
+						attrValStr.append(rule.getColumnCnName());
+						attrValStr.append("：");
+						if(labelRule.getLabelFlag() != LabelRuleContants.LABEL_RULE_FLAG_YES){
+							attrValStr.append("否");
+						}else{
+							attrValStr.append("是");
+						}
+						attrValStr.append("]");
+					}else if(rule.getLabelTypeId() == LabelInfoContants.LABEL_TYPE_KPI){
+						if("1".equals(rule.getQueryWay())){
+							attrValStr.append("[");
+							attrValStr.append(rule.getColumnCnName());
+							attrValStr.append("：");
+							if(StringUtil.isNotEmpty(rule.getContiueMinVal())){
+								if(rule.getLeftZoneSign().equals(CommonConstants.GE)){
+									attrValStr.append("大于等于");
+								}
+								if(rule.getLeftZoneSign().equals(CommonConstants.GT)){
+									attrValStr.append("大于");
+								}
+								attrValStr.append(rule.getContiueMinVal());
+							}
+							if(StringUtil.isNotEmpty(rule.getContiueMaxVal())){
+								if(rule.getRightZoneSign().equals(CommonConstants.LE)){
+									attrValStr.append("小于等于");
+								}
+								if(rule.getRightZoneSign().equals(CommonConstants.LT)){
+									attrValStr.append("小于");
+								}
+								attrValStr.append(rule.getContiueMaxVal());
+							}
+							if(StringUtil.isNotEmpty(rule.getUnit())){
+								attrValStr.append("(");
+								attrValStr.append(rule.getUnit());
+								attrValStr.append(")");
+							}
+							attrValStr.append("]");
+						}else if("2".equals(rule.getQueryWay())){
+							attrValStr.append(rule.getColumnCnName());
+							attrValStr.append("：");
+							if(StringUtil.isNotEmpty(rule.getExactValue())){
+								attrValStr.append(rule.getExactValue());
+								if(StringUtil.isNotEmpty(rule.getUnit())){
+									attrValStr.append("(");
+									attrValStr.append(rule.getUnit());
+									attrValStr.append(")");
+									attrValStr.append("]");
+								}
+							}
+						}
+					}else if(rule.getLabelTypeId() == LabelInfoContants.LABEL_TYPE_ENUM){
+						if(StringUtil.isNotEmpty(rule.getAttrVal())){
+							attrValStr.append("[");
+							attrValStr.append(rule.getColumnCnName());
+							attrValStr.append("：");
+							attrValStr.append(rule.getAttrName());
+							attrValStr.append("]");
+						}
+					}else if(rule.getLabelTypeId() == LabelInfoContants.LABEL_TYPE_DATE){
+						
+					}else if(rule.getLabelTypeId() == LabelInfoContants.LABEL_TYPE_TEXT){
+						if("1".equals(rule.getQueryWay())){
+							if(StringUtil.isNotEmpty(rule.getDarkValue())){
+								attrValStr.append("[");
+								attrValStr.append(rule.getColumnCnName());
+								attrValStr.append("：");
+								attrValStr.append(rule.getDarkValue());
+								attrValStr.append("]");
+							}
+						}else if("2".equals(rule.getQueryWay())){
+							if(StringUtil.isNotEmpty(rule.getExactValue())){
+								attrValStr.append("[");
+								attrValStr.append(rule.getColumnCnName());
+								attrValStr.append("：");
+								attrValStr.append(rule.getExactValue());
+								attrValStr.append("]");
+								
+							}
+						}
+					}
+				}
+			}
+		
+			
 		}
 		return attrValStr.toString();
 	}

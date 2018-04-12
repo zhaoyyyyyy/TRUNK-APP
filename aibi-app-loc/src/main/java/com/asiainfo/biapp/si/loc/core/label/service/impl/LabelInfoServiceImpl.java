@@ -316,7 +316,7 @@ public class LabelInfoServiceImpl extends BaseServiceImpl<LabelInfo, String> imp
 			labelRule.setCustomId(customId);
 			labelRule.setCustomType(LabelRuleContants.LABEL_RULE_FROM_COSTOMER);
 			ruleService.addLabelRule(labelRule);
-			if (LabelInfoContants.LABEL_TYPE_VERT==labelRuleVo.getLabelTypeId()  ) {
+			if (labelRuleVo.getLabelTypeId() != null&& LabelInfoContants.LABEL_TYPE_VERT == labelRuleVo.getLabelTypeId()) {
 				List<LabelRuleVo> childLabelRuleList = labelRuleVo.getChildLabelRuleList();
 				for (LabelRuleVo ruleVo : childLabelRuleList) {
 					LabelRule childRule = new LabelRule();

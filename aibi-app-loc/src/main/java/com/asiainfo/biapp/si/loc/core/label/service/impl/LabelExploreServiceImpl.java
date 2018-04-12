@@ -133,6 +133,7 @@ public class LabelExploreServiceImpl implements ILabelExploreService {
 				sql = selectSql.toString()+ " from " + calcExprStr ;
 			}
 		} else if (listInfoIds.size() > 1) {
+			sqlPaser.initProcessParam(queryParam);
 			sql =sqlPaser.parseExprToSql(calcExpr.toString(), labelRuleToSql);
 		}
 		return sql;

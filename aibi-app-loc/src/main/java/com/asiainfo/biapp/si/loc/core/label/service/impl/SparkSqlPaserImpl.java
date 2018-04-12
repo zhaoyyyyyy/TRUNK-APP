@@ -1,11 +1,14 @@
 package com.asiainfo.biapp.si.loc.core.label.service.impl;
 
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.stereotype.Service;
 
 import com.asiainfo.biapp.si.loc.base.common.CommonConstants;
 import com.asiainfo.biapp.si.loc.base.common.LabelInfoContants;
+import com.asiainfo.biapp.si.loc.cache.CocCacheProxy;
+import com.asiainfo.biapp.si.loc.core.label.model.ExploreQueryParam;
 import com.asiainfo.biapp.si.loc.core.label.service.IGroupCalcSqlPaser;
 
 @Service("sparkSqlPaser")
@@ -31,16 +34,32 @@ public class SparkSqlPaserImpl implements IGroupCalcSqlPaser {
 
 	private int index = 0;
 
-	public SparkSqlPaserImpl() {
+	/**权限字段org_level_1，org_level_2，org_level_3*/
+	private String LEVEL_FIELD = "";
+	//初始化需要参数
+	public void initProcessParam(ExploreQueryParam queryParam) {
 		String pk = LabelInfoContants.KHQ_CROSS_COLUMN;
 		// 根据不同的数据库类型进行优化
-		UNION_SQL = "select distinct tableName3.pk from (select  tableName1.pk from table1 tableName1 UNION all select pk from table2 tableName2) tableName3";
-		INTERSECT_SQL = "select tableName1.pk from table1 tableName1 inner join table2 tableName2 on tableName1.pk = tableName2.pk ";
-		EXCEPT_SQL = " select tableName1.pk from table1 tableName1 left join table2 tableName2 on tableName1.pk = tableName2.pk where tableName2.pk is null ";
+		String tableName3Level = "";
+		String tableName1Level = "";
+		String levelField = "";
+		if (queryParam.isCreateCustom()) {
+			List<String> orgColumns = CocCacheProxy.getCacheProxy().getAllOrgColumnByConfig(queryParam.getConfigId());
+			for(String s: orgColumns){
+				levelField=levelField+"," + s;
+				tableName1Level=tableName1Level+",tableName1." + s;
+				tableName3Level=tableName3Level+",tableName3." + s;
+			}
+		}
+		LEVEL_FIELD=levelField;
+		UNION_SQL = "select distinct tableName3.pk"+tableName3Level+" from (select  tableName1.pk"+tableName1Level+" from table1 tableName1 UNION all select pk"+LEVEL_FIELD+" from table2 tableName2) tableName3";
+		INTERSECT_SQL = "select tableName1.pk"+tableName1Level+" from table1 tableName1 inner join table2 tableName2 on tableName1.pk = tableName2.pk ";
+		EXCEPT_SQL = " select tableName1.pk"+tableName1Level+" from table1 tableName1 left join table2 tableName2 on tableName1.pk = tableName2.pk where tableName2.pk is null ";
 		UNION_SQL = UNION_SQL.replace("pk", pk);
 		INTERSECT_SQL = INTERSECT_SQL.replace("pk", pk);
 		EXCEPT_SQL = EXCEPT_SQL.replace("pk", pk);
 	}
+
 
 	public boolean isDbType(String dbType) {
 		return true;
@@ -97,14 +116,14 @@ public class SparkSqlPaserImpl implements IGroupCalcSqlPaser {
 	 */
 	public String handelTableName(String table) {
 		if (isVerticalLabel(table)) {
-			return String.valueOf(CommonConstants.LEFT_Q) + " select pk from " + table
+			return String.valueOf(CommonConstants.LEFT_Q) + " select pk"+LEVEL_FIELD+" from " + table
 					+ String.valueOf(CommonConstants.RIGHT_Q);
 		} else if (isInnerTable(table)) {
 			return String.valueOf(CommonConstants.LEFT_Q) + table + String.valueOf(CommonConstants.RIGHT_Q);
 		} else if (isSubquery(table)) {
 			return table;
 		} else if (isWhereSql(table)) {
-			return String.valueOf(CommonConstants.LEFT_Q) + " select pk from " + table
+			return String.valueOf(CommonConstants.LEFT_Q) + " select pk"+LEVEL_FIELD+" from " + table
 					+ String.valueOf(CommonConstants.RIGHT_Q);
 		} else {
 			return table;

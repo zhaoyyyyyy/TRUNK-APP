@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.asiainfo.biapp.si.loc.base.common.CommonConstants;
 import com.asiainfo.biapp.si.loc.base.common.LabelInfoContants;
+import com.asiainfo.biapp.si.loc.core.label.model.ExploreQueryParam;
 import com.asiainfo.biapp.si.loc.core.label.service.IGroupCalcSqlPaser;
 
 @Service
@@ -401,6 +402,12 @@ public class DefaultSqlPaserImpl implements IGroupCalcSqlPaser {
 		} else {
 			return false;
 		}
+	}
+
+	@Override
+	public void initProcessParam(ExploreQueryParam queryParam) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }
