@@ -341,7 +341,11 @@ window.loc_onload = function() {
 		    	});
 		    	$.commAjax({
 		    		url: $.ctx + "/api/syspush/sysInfo/queryList",
+		    		postData : {
+						"showInPage" :1,
+					},
 		    		onSuccess:function(data){
+		    			console.log(data.data);
 		    			model.sysName=data.data;
 		    		}
 		    	})
