@@ -86,12 +86,26 @@ window.loc_onload = function() {
 					item.isOpen=!item.isOpen;
 				}
 			},
-			updateCustom : function(labelId){
-				var wd = $.window('修改客户群', $.ctx
-						+ '/aibi_lc/pages/custom/custom_update.html?labelId='+labelId, 500, 500);
+			updateCustom : function(item){
+				if(item.updateCycle==3&&item.dataStatusId==3){
+					var wd = $.window('修改客户群', $.ctx
+							+ '/aibi_lc/pages/custom/custom_update.html?labelId='+item.labelId, 500, 500);
 			    	wd.reload = function() {
 			    		labelMarket.loadLabelInfoList();
 			    	}
+				}else{
+					$.commAjax({
+						  url: $.ctx + "/api/label/labelInfo/findCustomRuleById",
+						  postData:{
+							  customGroupId : item.labelId,
+						  },
+						  onSuccess: function(returnObj){
+							  dataModel.ruleList = returnObj.data;
+							  calculateCenter.submitRules();
+						  }
+					});
+				}
+				
 			},
 			deleteCustomById : function(labelId){
 				$.confirm("确认删除该客户群？",function(){
