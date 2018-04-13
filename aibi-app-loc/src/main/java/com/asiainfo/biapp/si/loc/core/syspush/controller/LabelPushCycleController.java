@@ -295,7 +295,7 @@ public class LabelPushCycleController extends BaseController<LabelPushCycle>{
                 localPathTmp = localPathTmp.substring(0, localPathTmp.length()-2);
             }
         }
-        sysInfo.setLocalPath(localPathTmp);
+//        sysInfo.setLocalPath(localPathTmp);
         if (StringUtil.isBlank(sysInfo.getSysId())) {
             iSysInfoService.save(sysInfo);
         } else {

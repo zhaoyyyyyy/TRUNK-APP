@@ -335,10 +335,9 @@ public class CustomerPublishDefaultThread implements ICustomerPublishThread {
         String localPathTmp = cacheProxy.getSYSConfigInfoByKey("LOC_CONFIG_SYS_TEMP_PATH");  
         if (null != sysInfo.getLocalPath()) {   //以数据库为准
             localPathTmp = sysInfo.getLocalPath();
-        } else {   //否则以缓冲目录为准
-            if (!localPathTmp.endsWith(File.separator)) {
-                localPathTmp += File.separator;
-            }
+        }
+        if (!localPathTmp.endsWith(File.separator)) {
+            localPathTmp += File.separator;
         }
         final String localFilePath = localPathTmp;
         String csvFile = localFilePath + fileName + ".csv";
