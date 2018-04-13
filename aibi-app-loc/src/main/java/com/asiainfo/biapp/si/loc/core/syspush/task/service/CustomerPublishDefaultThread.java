@@ -135,7 +135,6 @@ public class CustomerPublishDefaultThread implements ICustomerPublishThread {
     List<LabelAttrRel> attrRelList = null;	//当前的推送客户群关联的属性列
 
     private int bufferedRowSize = 10000;    //每次读取数据的条数
-    private static final String FILE_PATH = "syspush"; 		//推送的文件的目录名称
     private static final String encode = "UTF-8"; 			//当前的文件的编码
     private static final long CUSTOMER_PUBLISH_PRE_WAIT_TIME = 5000;     //客户群推送线程前置等待时间
 
@@ -340,9 +339,8 @@ public class CustomerPublishDefaultThread implements ICustomerPublishThread {
             if (!localPathTmp.endsWith(File.separator)) {
                 localPathTmp += File.separator;
             }
-            localPathTmp += FILE_PATH;
         }
-        final String localFilePath = localPathTmp + File.separator;
+        final String localFilePath = localPathTmp;
         String csvFile = localFilePath + fileName + ".csv";
         String csvFileTmp = localFilePath + fileName + "_tmp.csv";
         String zipFile = localFilePath + fileName + ".zip";

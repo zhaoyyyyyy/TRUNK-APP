@@ -65,8 +65,6 @@ import io.swagger.annotations.ApiOperation;
 @RestController
 public class CustomDownloadRecordController extends BaseController<CustomDownloadRecord>{
 
-    private static final String FILE_PATH = "syspush";  //推送的文件的目录名称
-    
     private static final String SYS_NAME = "coc默认的ftp服务器";
 
     @Autowired
@@ -112,8 +110,7 @@ public class CustomDownloadRecordController extends BaseController<CustomDownloa
                 if (!localPathFile.endsWith(File.separator)) {
                     localPathFile += File.separator;
                 }
-                localPathFile += FILE_PATH;
-                localPathFile += File.separator + customDownloadRecord.getFileName();
+                localPathFile += customDownloadRecord.getFileName();
             }
         } else {
             String[] localPathFileArr = localPathFile.split(File.separator);
@@ -136,13 +133,17 @@ public class CustomDownloadRecordController extends BaseController<CustomDownloa
         
         byte[] buffer = new byte[1024];
         try {
+        		File file = null; 
             String realPath = ResourceUtils.getURL("classpath:").getPath();//获取web项目的路径
             //在开发测试模式时，得到的地址为：{项目跟目录}/target/classes/
             //在打包成jar正式发布时，得到的地址为：{发布jar包目录}/
-            if (realPath.endsWith("target/classes/")) {    //次分支只有在dev下运行
+            if (realPath.endsWith("target/classes/")) {    //此分支只有在dev下运行
                 realPath = realPath.replace("target/classes/", "");
+                file = new File(realPath, localPathFile);
+            } else {
+	            	file = new File(localPathFile);
             }
-            File file = new File(realPath, localPathFile);
+
             boolean isDownload = false;
             if(!file.exists() || file.length()==0 || file.isDirectory()){ //本地文件不存在或者是空文件，从ftp服务器下载
                 SysInfo sysInfo = null;
