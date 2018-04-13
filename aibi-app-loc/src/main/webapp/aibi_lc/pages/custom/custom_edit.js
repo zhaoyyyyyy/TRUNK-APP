@@ -652,15 +652,8 @@ var labelInfoModel = (function (model){
 	 * 返回
 	 */
 	model.back = function(){
-		var from = $.getUrlParam("from");
-		var returnUrl ="";
-		if(from == 'labelmarket'){//跳转到客户群集市
-			returnUrl = "../label/label_market.html";
-		}
-		if(from == 'custommarket'){//跳转到客户群集市
-			returnUrl = "./custom_market.html";
-		}
-		window.location.href = returnUrl;
+		/*var from = $.getUrlParam("from");*/
+		parent.toggleMenu("#custom/custom_market");
 	};
 	/**
 	 * 展示规则
