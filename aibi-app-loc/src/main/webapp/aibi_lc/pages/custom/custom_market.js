@@ -118,7 +118,7 @@ window.loc_onload = function() {
 							  dataStatusId : 6
 						  },
 						  onSuccess: function(returnObj){
-							  $.confirm("删除成功",function(){
+							  $.success("删除成功",function(){
 								  labelMarket.loadLabelInfoList();
 							  });
 						  }
