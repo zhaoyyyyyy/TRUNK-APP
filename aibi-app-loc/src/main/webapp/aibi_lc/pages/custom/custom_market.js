@@ -35,6 +35,7 @@ var dataModel = {
 		labelInfoViewObj : {},
 		offset:"",//购物车动画偏移量
 		loginUserId:"",//当前登录用户名
+		customId:"",//客户群ID
 }
 window.loc_onload = function() {
 	$.commAjax({
@@ -87,6 +88,7 @@ window.loc_onload = function() {
 				}
 			},
 			updateCustom : function(item){
+				dataModel.customId = item.labelId;
 				if(item.updateCycle==3&&item.dataStatusId==3){
 					var wd = $.window('修改客户群', $.ctx
 							+ '/aibi_lc/pages/custom/custom_update.html?labelId='+item.labelId, 500, 500);
