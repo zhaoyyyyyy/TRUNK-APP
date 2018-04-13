@@ -666,7 +666,7 @@ var labelInfoModel = (function (model){
 	 * 展示规则
 	 */
 	model.showRules = function(){
-		var wd = $.window(name + "-条件设置", $.ctx + '/aibi_lc/pages/custom/showRules.html', 600, 500);
+		var wd = $.window("客户群规则详细", $.ctx + '/aibi_lc/pages/custom/showRules.html', 600, 500);
 	}
 	return model;
 })(window.labelInfoModel || {})
