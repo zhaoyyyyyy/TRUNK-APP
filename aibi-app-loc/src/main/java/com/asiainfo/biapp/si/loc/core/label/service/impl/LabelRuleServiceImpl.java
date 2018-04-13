@@ -35,6 +35,7 @@ import com.asiainfo.biapp.si.loc.core.label.dao.ILabelRuleDao;
 import com.asiainfo.biapp.si.loc.core.label.entity.LabelInfo;
 import com.asiainfo.biapp.si.loc.core.label.entity.LabelRule;
 import com.asiainfo.biapp.si.loc.core.label.entity.LabelVerticalColumnRel;
+import com.asiainfo.biapp.si.loc.core.label.entity.MdaSysTableColumn;
 import com.asiainfo.biapp.si.loc.core.label.service.ILabelInfoService;
 import com.asiainfo.biapp.si.loc.core.label.service.ILabelRuleService;
 import com.asiainfo.biapp.si.loc.core.label.vo.LabelRuleVo;
@@ -113,6 +114,13 @@ public class LabelRuleServiceImpl extends BaseServiceImpl<LabelRule, String> imp
 				rule.setAttrName(labelInfo.getLabelName());
 				if (LabelInfoContants.LABEL_TYPE_VERT == labelInfo.getLabelTypeId()) {
 					List<LabelRuleVo> childRuleList = new ArrayList<LabelRuleVo>();
+					// 纵表标签列关系
+					Map<String, LabelVerticalColumnRel> map = new HashMap<String, LabelVerticalColumnRel>();
+					List<LabelVerticalColumnRel> verticalColumnRels = labelInfo.getVerticalColumnRels();
+					for (LabelVerticalColumnRel rel : verticalColumnRels) {
+						String key = rel.getLabelVerticalColumnRelId().getColumnId();
+						map.put(key, rel);
+					}
 					for (LabelRule childRule : childrenRulesList) {
 						if (!rule.getRuleId().equals(childRule.getParentId()))
 							continue;
@@ -120,6 +128,10 @@ public class LabelRuleServiceImpl extends BaseServiceImpl<LabelRule, String> imp
 						try {
 							BeanUtils.copyProperties(vo, childRule);
 						} catch (Exception e) {}
+						LabelVerticalColumnRel rel = map.get(childRule.getCalcuElement());
+						MdaSysTableColumn column = rel.getMdaSysTableColumn();
+						vo.setLabelTypeId(rel.getLabelTypeId());
+						vo.setAttrName(column.getColumnCnName());
 						childRuleList.add(vo);
 					}
 					rule.setChildLabelRuleList(childRuleList);
