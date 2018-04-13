@@ -3,7 +3,7 @@ var model = {
 		sysName:"",//推送平台名称
 		descTxt:"",//推送平台描述
 		tsfszd:"",//推送方式  字典中获取
-		pushType:"",//推送方式
+		pushType:1,//推送方式
 		protocoType:"",//协议类型
 		ftpServerIp:"",//IP
 		ftpUser:"",//用户名
@@ -25,7 +25,7 @@ var model = {
 		pushClassName:"",//实现类名
 		tableNamePre:"",//推送清单表前缀
 		customTaskTable:"",//客户群调度信息表
-		curentIndex:null,//radio选中
+		curentIndex:0,//radio选中
 	//	isChecked:false,
 	//	isActive:false,
 	//  isShow:false,
