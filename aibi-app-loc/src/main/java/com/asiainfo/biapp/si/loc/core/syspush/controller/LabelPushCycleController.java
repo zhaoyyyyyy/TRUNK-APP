@@ -37,6 +37,7 @@ import com.asiainfo.biapp.si.loc.core.syspush.entity.CustomDownloadRecord;
 import com.asiainfo.biapp.si.loc.core.syspush.entity.LabelAttrRel;
 import com.asiainfo.biapp.si.loc.core.syspush.entity.LabelPushCycle;
 import com.asiainfo.biapp.si.loc.core.syspush.entity.SysInfo;
+import com.asiainfo.biapp.si.loc.core.syspush.service.ICustomDownloadRecordService;
 import com.asiainfo.biapp.si.loc.core.syspush.service.ILabelPushCycleService;
 import com.asiainfo.biapp.si.loc.core.syspush.service.ISysInfoService;
 import com.asiainfo.biapp.si.loc.core.syspush.vo.LabelPushCycleVo;
@@ -84,6 +85,9 @@ public class LabelPushCycleController extends BaseController<LabelPushCycle>{
     
     @Autowired
     private ILabelInfoService iLabelInfoService;
+    
+    @Autowired
+    private ICustomDownloadRecordService iCustomDownloadRecordService;
     
     private static final String SUCCESS = "success";
     
@@ -306,9 +310,17 @@ public class LabelPushCycleController extends BaseController<LabelPushCycle>{
         labelPushCycle.setSysIds(sysIds);
         LabelInfo customInfo = iLabelInfoService.get(labelPushCycle.getCustomGroupId());
         labelPushCycle.setPushCycle(customInfo.getUpdateCycle());
-        this.save(labelPushCycle);
+        //校验生成过没有
+        try {
+            List<CustomDownloadRecord> customDownloadRecords = iCustomDownloadRecordService.selectCustomDownloadRecordList(
+                new CustomDownloadRecord(customInfo.getLabelId(), customInfo.getDataDate()));
+            if (null==customDownloadRecords || customDownloadRecords.size() == 0) {
+                this.save(labelPushCycle);
+            }
+        } catch (BaseException e) {
+            res.fail(e);
+        }
 
-        //2.探测并等待文件生成
         //推送文件名称（无路径，无后缀）
         //格式：COC_标签创建人_YYYYMMDDHHMMSS_6位随机数,形如:【COC_admin_20180212150301_981235】
         String fileName = LabelPushReqVo.REQID_PREFIX + customInfo.getCreateUserId() + "_"

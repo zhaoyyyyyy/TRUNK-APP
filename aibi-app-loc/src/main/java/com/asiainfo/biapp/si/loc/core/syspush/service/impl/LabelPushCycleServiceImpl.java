@@ -343,7 +343,7 @@ public class LabelPushCycleServiceImpl extends BaseServiceImpl<LabelPushCycle, S
             localPath += File.separator + fileNameTmp;
             customDownloadRecord.setFileName(fileNameTmp);
             customDownloadRecord.setDataStatus(ServiceConstants.CustomDownloadRecord.DATA_STATUS_SUCCESS);
-            iCustomDownloadRecordDao.update(customDownloadRecord);
+//            iCustomDownloadRecordDao.update(customDownloadRecord);
         }
     
     }

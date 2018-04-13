@@ -100,7 +100,11 @@ public class CustomDownloadRecord extends BaseEntity{
     private String downloadNum;
     
     public CustomDownloadRecord() {}
-    
+    public CustomDownloadRecord(String customId, String dataDate) {
+        this.customId = customId;
+        this.dataDate = dataDate;
+    }
+
     /**
      * @param fileName
      * @param customId

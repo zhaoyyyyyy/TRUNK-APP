@@ -50,10 +50,12 @@ import com.asiainfo.biapp.si.loc.core.dimtable.service.IDimTableDataService;
 import com.asiainfo.biapp.si.loc.core.label.entity.LabelInfo;
 import com.asiainfo.biapp.si.loc.core.label.service.ILabelInfoService;
 import com.asiainfo.biapp.si.loc.core.syspush.common.constant.ServiceConstants;
+import com.asiainfo.biapp.si.loc.core.syspush.entity.CustomDownloadRecord;
 import com.asiainfo.biapp.si.loc.core.syspush.entity.LabelAttrRel;
 import com.asiainfo.biapp.si.loc.core.syspush.entity.LabelPushCycle;
 import com.asiainfo.biapp.si.loc.core.syspush.entity.LabelPushReq;
 import com.asiainfo.biapp.si.loc.core.syspush.entity.SysInfo;
+import com.asiainfo.biapp.si.loc.core.syspush.service.ICustomDownloadRecordService;
 import com.asiainfo.biapp.si.loc.core.syspush.service.ICustomerPublishCommService;
 import com.asiainfo.biapp.si.loc.core.syspush.service.ICustomerPublishService;
 import com.asiainfo.biapp.si.loc.core.syspush.service.ILabelAttrRelService;
@@ -117,6 +119,9 @@ public class CustomerPublishDefaultThread implements ICustomerPublishThread {
 
     @Autowired
     IDimTableDataService iDimTableDataService;
+    
+    @Autowired
+    private ICustomDownloadRecordService iCustomDownloadRecordService;
     
     
     //传入参数
@@ -486,16 +491,31 @@ public class CustomerPublishDefaultThread implements ICustomerPublishThread {
                 } else {
                     LogUtil.debug("push File ("+desFile+") success.");
                 }
-                if (isJobTask) {    //手动推送，不删除，以便下载,下载后删除
+                if (isJobTask) {    //自动推送
                     result = new File(desFile).delete();    //FTP后删除本地des文件
                     LogUtil.debug(new File(desFile).exists());
                     //FTP后删除本地csv文件
-                    if(sysInfo.getIsNeedCompress() != null && ServiceConstants.SysInfo.IS_NEED_COMPRESS_YES == sysInfo.getIsNeedCompress()){
+                    if(sysInfo.getIsNeedCompress()!=null && ServiceConstants.SysInfo.IS_NEED_COMPRESS_YES==sysInfo.getIsNeedCompress()){
                         if (result) {
                             result = new File(csvFile).delete();
                         }
                     }
-                }
+	            } else {    //手动推送，不删除，以便下载,下载后删除
+	                //更新下载时的准确的文件名
+	                List<CustomDownloadRecord> customDownloadRecords = iCustomDownloadRecordService.selectCustomDownloadRecordList(
+	                    new CustomDownloadRecord(customInfo.getLabelId(), customInfo.getDataDate()));
+	                if (null!=customDownloadRecords && customDownloadRecords.size() > 0) {
+	                    String[] desFileArr = desFile.split(File.separator);
+	                    String fileName = desFileArr[desFileArr.length-1]; 
+	                    for (CustomDownloadRecord obj : customDownloadRecords) {
+	                        if (null!=obj && StringUtil.isNoneBlank(obj.getFileName()) && !desFile.equals(obj.getFileName())) {
+	                            obj.setFileName(fileName);
+	                            obj.setDataStatus(ServiceConstants.CustomDownloadRecord.DATA_STATUS_SUCCESS);
+	                            iCustomDownloadRecordService.update(obj);
+	                        }
+	                    }
+	                }
+	            }
             } catch (Exception e) {
                 LogUtil.error(protocoTypeStr+"出错" + sysInfo + zipFile, e);
                 return false;
