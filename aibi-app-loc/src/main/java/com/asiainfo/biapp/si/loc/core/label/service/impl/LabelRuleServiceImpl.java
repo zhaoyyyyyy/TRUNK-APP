@@ -112,6 +112,9 @@ public class LabelRuleServiceImpl extends BaseServiceImpl<LabelRule, String> imp
 				LabelInfo labelInfo = CocCacheProxy.getCacheProxy().getLabelInfoById( entity.getCalcuElement());
 				rule.setLabelTypeId(labelInfo.getLabelTypeId());
 				rule.setAttrName(labelInfo.getLabelName());
+				rule.setCustomOrLabelName(labelInfo.getLabelName());
+				rule.setUpdateCycle(labelInfo.getUpdateCycle());
+				rule.setDataDate(labelInfo.getDataDate());
 				if (LabelInfoContants.LABEL_TYPE_VERT == labelInfo.getLabelTypeId()) {
 					List<LabelRuleVo> childRuleList = new ArrayList<LabelRuleVo>();
 					// 纵表标签列关系
@@ -132,6 +135,8 @@ public class LabelRuleServiceImpl extends BaseServiceImpl<LabelRule, String> imp
 						MdaSysTableColumn column = rel.getMdaSysTableColumn();
 						vo.setLabelTypeId(rel.getLabelTypeId());
 						vo.setAttrName(column.getColumnCnName());
+						vo.setColumnCnName(column.getColumnCnName());
+						vo.setQueryWay("1");
 						childRuleList.add(vo);
 					}
 					rule.setChildLabelRuleList(childRuleList);
