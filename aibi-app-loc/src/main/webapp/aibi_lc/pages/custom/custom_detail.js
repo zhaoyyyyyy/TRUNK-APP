@@ -90,123 +90,22 @@ window.loc_onload = function() {
 		onSuccess : function(data) {
 			model.customRule=data.data;
 			for (var i=0;i<model.customRule.length;i++){
-				var html="";
 				if(model.customRule[i].elementType ==5){
 					html = "<div class='ui-custom-item clearfix clearfix' ><a><span> "+model.customRule[i].attrName+"</span></a><a><span>清单:"+model.customRule[i].attrVal+"</span></div>"
+					$("#labelDetail").append(html);
 				}
         		if(model.customRule[i].elementType ==2){
-        			var leftZoneSign, rightZoneSign;
-    					if(model.customRule[i].leftZoneSign == ">="){
-    						leftZoneSign = "大于等于";
-    					}
-    					if(model.customRule[i].leftZoneSign == ">"){
-    						leftZoneSign= "大于";
-    					}
-    					if(model.customRule[i].rightZoneSign == "<="){
-    						rightZoneSign= "小于等于";
-    					}
-    					if(model.customRule[i].rightZoneSign == "<"){
-    						rightZoneSign= "小于";
-    					}
-        			if(model.customRule[i].labelTypeId ==4){
-        				if(model.customRule[i].contiueMinVal!="" &&model.customRule[i].contiueMaxVal!=""&&model.customRule[i].contiueMinVal!=null &&model.customRule[i].contiueMaxVal!=null){
-            				html = "<div class='ui-custom-item clearfix clearfix' ><a><span> "+model.customRule[i].attrName+"</span></a><a><span>数值范围:"+leftZoneSign+model.customRule[i].contiueMinVal+"且"+rightZoneSign+model.customRule[i].contiueMaxVal+"</span></div>"
-        				}
-        				if(model.customRule[i].contiueMinVal!="" &&model.customRule[i].contiueMaxVal!=""&&model.customRule[i].contiueMinVal!=null &&model.customRule[i].contiueMaxVal!=null){
-            				html = "<div class='ui-custom-item clearfix clearfix' ><a><span> "+model.customRule[i].attrName+"</span></a><a><span>数值范围:"+leftZoneSign+model.customRule[i].contiueMinVal+"且"+rightZoneSign+model.customRule[i].contiueMaxVal+"</span></div>"
-            			}
-            			if(model.customRule[i].contiueMinVal==null &&model.customRule[i].contiueMaxVal!=null){
-            				html = "<div class='ui-custom-item clearfix clearfix' ><a><span> "+model.customRule[i].attrName+"</span></a><a><span>数值范围:"+rightZoneSign+model.customRule[i].contiueMaxVal+"</span></div>"
-            			}
-            			if(model.customRule[i].contiueMinVal!=null &&model.customRule[i].contiueMaxVal==null){
-            				html = "<div class='ui-custom-item clearfix clearfix' ><a><span> "+model.customRule[i].attrName+"</span></a><a><span>数值范围:"+leftZoneSign+model.customRule[i].contiueMinVal+"</span></div>"
-            			}
-            			if(model.customRule[i].exactValue!= ""){
-            				html = "<div class='ui-custom-item clearfix clearfix' ><a><span> "+model.customRule[i].attrName+"</span></a><a><span>精确值:"+model.customRule[i].exactValue+"</span></div>"
-            			}
-        			}
-        			else if(model.customRule[i].labelTypeId== 1){//01型
-        				if(model.customRule[i].labelFlag != 1){
-        					html = "<div class='ui-custom-item clearfix clearfix' ><a><span> "+model.customRule[i].attrName+"</span></a><a><span>"+"否"+"</span></a></div>"
-        				}else{
-        					html = "<div class='ui-custom-item clearfix clearfix' ><a><span> "+model.customRule[i].attrName+"</span></a><a><span>"+"是"+"</span></a></div>"
-        				}
-        			}
-        			else if(model.customRule[i].labelTypeId== 5||model.customRule[i].labelTypeId== 9||model.customRule[i].labelTypeId== 12){//枚举
-        				html = "<div class='ui-custom-item clearfix clearfix' ><a><span> "+model.customRule[i].attrName+"</span></a><a><span>已选择条件:"
-        				if(model.customRule[i].attrVal){
-        					var attrVals = model.customRule[i].attrVal.split(",");
-        					var dimtableName;
-        					$.commAjax({			
-							    url : $.ctx+'/api/label/labelInfo/getDimtableName',
-							    dataType : 'json', 
-							    async : false,
-							    postData : {"labelId" : model.customRule[i].calcuElement},
-							    onSuccess: function(data){ 
-							    	dimtableName =data.data;
-						    	}  
-						   });
-        					for (var j=0;j<attrVals.length;j++){
-	        					$.commAjax({			
-								    url : $.ctx+'/api/dimtabledata/queryPage',
-								    dataType : 'json', 
-								    async : false,
-								    postData : {
-								    	"dimTableName" : dimtableName,
-								    	"dimKey" : attrVals[j],
-								    	},
-								    onSuccess: function(data){ 
-								    	if(j ==attrVals.length-1){
-								    		html += data.rows[0].dimValue
-								    	}else{
-								    		html += data.rows[0].dimValue+",";
-								    	}
-							    	}  
-							   });
-        					};
-        					html += "</span></a></div>"
-        				}
-        			}
-        			else if(model.customRule[i].labelTypeId == 7){//文本型
-        				if(model.customRule[i].darkValue){
-        					html = "<div class='ui-custom-item clearfix clearfix' ><a><span> "+model.customRule[i].attrName+"</span></a><a><span>模糊值:"+model.customRule[i].darkValue+"</span></div>"
-        				}
-        				if(model.customRule[i].exactValue){
-        					html = "<div class='ui-custom-item clearfix clearfix' ><a><span> "+model.customRule[i].attrName+"</span></a><a><span>精确值:"+model.customRule[i].exactValue+"</span></div>"
-        				}
-        			}
-        			else if(model.customRule[i].labelTypeId == 6){//6=日期型
-        				if(model.customRule[i].startTime || model.customRule[i].endTime){
-        					html = "<div class='ui-custom-item clearfix clearfix' ><a><span> "+model.customRule[i].attrName+"</span></a><a><span>取值范围:"+leftZoneSign+model.customRule[i].startTime
+        			if(model.customRule[i].labelTypeId==8){
+        				console.log(model.customRule[i]);
+        				if(model.customRule[i].childLabelRuleList.length>0){
+        					for(var j=0;j<model.customRule[i].childLabelRuleList.length;j++){
+        						fun_to_showRule(model.customRule[i].childLabelRuleList[j]);
         					}
-        					if(model.customRule[i].endTime){
-        						html += "且"+rightZoneSign+model.customRule[i].endTime
-        					}
-        					if(model.customRule[i].isNeedOffset == 1){
-        						html += "（动态偏移更新）"
-        					}
-        					html +="</span></div>";
-        				if(model.customRule[i].exactValue){
-        					//attrValStr += "已选择条件：";
-        					var exactStr = model.customRule[i].exactValue.split(",");
-        					html = "<div class='ui-custom-item clearfix clearfix' ><a><span> "+model.customRule[i].attrName+"</span></a><a><span>精确值:"
-        					if(exactStr && exactStr[0] != "-1"){
-        						html += exactStr[0];
-        						html += "年";
-        					}
-        					if(exactStr && exactStr[1] != "-1"){
-        						html += exactStr[1];
-        						html += "月";
-        					}
-        					if(exactStr && exactStr[2] != "-1"){
-        						html += exactStr[2];
-        						html += "日";
-        					}
-        					html+="</span></div>"
         				}
+        			}else{
+        				fun_to_showRule(model.customRule[i]);
         			}
         		}
-        		$("#labelDetail").append(html);
 			}
 		}
 	})
@@ -631,9 +530,123 @@ window.loc_onload = function() {
     	if(attrId== ""){
 			$.alert("请选择标签");
 		}
-		
     })
-}
+};
 function fun_to_del(radio){
 	$("#"+radio+"").remove();
 }
+function fun_to_showRule(rule){
+	var html="";
+	var leftZoneSign, rightZoneSign;
+	if(rule.leftZoneSign == ">="){
+		leftZoneSign = "大于等于";
+	}
+	if(rule.leftZoneSign == ">"){
+		leftZoneSign= "大于";
+	}
+	if(rule.rightZoneSign == "<="){
+		rightZoneSign= "小于等于";
+	}
+	if(rule.rightZoneSign == "<"){
+		rightZoneSign= "小于";
+	}
+	if(rule.labelTypeId ==4){
+		if(rule.contiueMinVal!="" &&rule.contiueMaxVal!=""&&rule.contiueMinVal!=null &&rule.contiueMaxVal!=null){
+			html = "<div class='ui-custom-item clearfix clearfix' ><a><span> "+rule.attrName+"</span></a><a><span>数值范围:"+leftZoneSign+rule.contiueMinVal+"且"+rightZoneSign+rule.contiueMaxVal+"</span></div>"
+		}
+		if(rule.contiueMinVal!="" &&rule.contiueMaxVal!=""&&rule.contiueMinVal!=null &&model.customRule[i].contiueMaxVal!=null){
+			html = "<div class='ui-custom-item clearfix clearfix' ><a><span> "+rule.attrName+"</span></a><a><span>数值范围:"+leftZoneSign+rule.contiueMinVal+"且"+rightZoneSign+rule.contiueMaxVal+"</span></div>"
+		}
+		if(rule.contiueMinVal==null &&rule.contiueMaxVal!=null){
+			html = "<div class='ui-custom-item clearfix clearfix' ><a><span> "+rule.attrName+"</span></a><a><span>数值范围:"+rightZoneSign+rule.contiueMaxVal+"</span></div>"
+		}
+		if(rule.contiueMinVal!=null &&rule.contiueMaxVal==null){
+			html = "<div class='ui-custom-item clearfix clearfix' ><a><span> "+rule.attrName+"</span></a><a><span>数值范围:"+leftZoneSign+rule.contiueMinVal+"</span></div>"
+		}
+		if(rule.exactValue!= ""){
+			html = "<div class='ui-custom-item clearfix clearfix' ><a><span> "+rule.attrName+"</span></a><a><span>精确值:"+rule.exactValue+"</span></div>"
+		}
+	}
+	else if(rule.labelTypeId== 1){//01型
+		if(rule.labelFlag != 1){
+			html = "<div class='ui-custom-item clearfix clearfix' ><a><span> "+rule.attrName+"</span></a><a><span>"+"否"+"</span></a></div>"
+		}else{
+			html = "<div class='ui-custom-item clearfix clearfix' ><a><span> "+rule.attrName+"</span></a><a><span>"+"是"+"</span></a></div>"
+		}
+	}
+	else if(rule.labelTypeId== 5||rule.labelTypeId== 9||rule.labelTypeId== 12){//枚举
+		html = "<div class='ui-custom-item clearfix clearfix' ><a><span> "+rule.attrName+"</span></a><a><span>已选择条件:"
+		if(rule.attrVal){
+			var attrVals = rule.attrVal.split(",");
+			var dimtableName;
+			$.commAjax({			
+			    url : $.ctx+'/api/label/labelInfo/getDimtableName',
+			    dataType : 'json', 
+			    async : false,
+			    postData : {"labelId" : rule.calcuElement},
+			    onSuccess: function(data){ 
+			    	dimtableName =data.data;
+		    	}  
+		   });
+			for (var j=0;j<attrVals.length;j++){
+				$.commAjax({			
+				    url : $.ctx+'/api/dimtabledata/queryPage',
+				    dataType : 'json', 
+				    async : false,
+				    postData : {
+				    	"dimTableName" : dimtableName,
+				    	"dimKey" : attrVals[j],
+				    	},
+				    onSuccess: function(data){ 
+				    	if(j ==attrVals.length-1){
+				    		html += data.rows[0].dimValue
+				    	}else{
+				    		html += data.rows[0].dimValue+",";
+				    	}
+			    	}  
+			   });
+			};
+			html += "</span></a></div>"
+		}
+	}
+	else if(rule.labelTypeId == 7){//文本型
+		if(rule.darkValue){
+			html = "<div class='ui-custom-item clearfix clearfix' ><a><span> "+rule.attrName+"</span></a><a><span>模糊值:"+rule.darkValue+"</span></div>"
+		}
+		if(rule.exactValue){
+			html = "<div class='ui-custom-item clearfix clearfix' ><a><span> "+rule.attrName+"</span></a><a><span>精确值:"+rule.exactValue+"</span></div>"
+		}
+	}
+	else if(rule.labelTypeId == 6){//6=日期型
+		if(rule.startTime || rule.endTime){
+			html = "<div class='ui-custom-item clearfix clearfix' ><a><span> "+rule.attrName+"</span></a><a><span>取值范围:"+leftZoneSign+rule.startTime
+		}
+		if(rule.endTime){
+			html += "且"+rightZoneSign+rule.endTime
+		}
+		if(rule.isNeedOffset == 1){
+			html += "（动态偏移更新）"
+		}
+		html +="</span></div>";
+		if(rule.exactValue){
+			//attrValStr += "已选择条件：";
+			var exactStr = rule.exactValue.split(",");
+			html = "<div class='ui-custom-item clearfix clearfix' ><a><span> "+rule.attrName+"</span></a><a><span>精确值:"
+			if(exactStr && exactStr[0] != "-1"){
+				html += exactStr[0];
+				html += "年";
+			}
+			if(exactStr && exactStr[1] != "-1"){
+				html += exactStr[1];
+				html += "月";
+			}
+			if(exactStr && exactStr[2] != "-1"){
+				html += exactStr[2];
+				html += "日";
+			}
+			html+="</span></div>"
+		}
+	}
+	$("#labelDetail").append(html);
+}
+
