@@ -228,6 +228,7 @@ public class CategoryInfoServiceImpl extends BaseServiceImpl<CategoryInfo, Strin
         CategoryInfoVo categoryInfoVo = new CategoryInfoVo();
         categoryInfoVo.setSysId(configId);
         List<CategoryInfo> categoryInfoList = iCategoryInfoDao.selectAllCategoryInfoList(categoryInfoVo);
+        int sortNum = categoryInfoList.size();//标签分类序号
         for(CategoryInfo c : categoryInfoList){
             nameList.add(c.getCategoryName());
             map.put(c.getCategoryName(), c.getCategoryId());
@@ -283,6 +284,8 @@ public class CategoryInfoServiceImpl extends BaseServiceImpl<CategoryInfo, Strin
                     categoryInfo.setParentId(map.get(nextLine[num-1]));
                 }
                 if(!nameList.contains(categoryInfo.getCategoryName())){
+                    sortNum++;
+                    categoryInfo.setSortNum(sortNum);
                     super.saveOrUpdate(categoryInfo);
                     dataCount++;
                 }else{
