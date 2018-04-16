@@ -104,6 +104,7 @@ window.loc_onload = function() {
 						  onSuccess: function(returnObj){
 							  dataModel.ruleList = returnObj.data;
 							  calculateCenter.submitRules();
+							  $(".ui-calculate-center").addClass("heightAuto");
 						  }
 					});
 				}
