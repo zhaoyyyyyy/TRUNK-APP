@@ -131,11 +131,11 @@
 	display:inline-block;
 	vertical-align:middle;
 	margin-right:10px;
-	line-height: 36px;
+	line-height: 34px;
 }
 .ui-filter-bar > div span{
     display:inline-block;
-    line-height: 36px;
+    line-height: 34px;
 }
 .ui-filter-bar > a{
 	border-right: 1px solid #dce3e4;
@@ -332,7 +332,7 @@
 	border-radius: 50%;
 }
 .ui-lable-icon > li > a.label-add{
-	background-position:-490px -18px;
+	background-position:-491px -18px;
 }
 .ui-lable-icon > li > a.label-del{
 	background-position:-535px -17px;
