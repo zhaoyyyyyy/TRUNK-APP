@@ -106,6 +106,7 @@ public class LabelRuleServiceImpl extends BaseServiceImpl<LabelRule, String> imp
 			if (LabelRuleContants.ELEMENT_TYPE_LIST_ID == entity.getElementType()) {
 				LabelInfo labelInfo = iLabelInfoService.selectLabelInfoById(entity.getCalcuElement());
 				rule.setAttrName(labelInfo.getLabelName());
+                rule.setCustomOrLabelName(labelInfo.getLabelName());
 				//TODO 设置其他参数
 			}
 			if (LabelRuleContants.ELEMENT_TYPE_LABEL_ID == entity.getElementType()) {

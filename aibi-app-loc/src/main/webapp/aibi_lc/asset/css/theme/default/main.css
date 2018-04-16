@@ -131,6 +131,11 @@
 	display:inline-block;
 	vertical-align:middle;
 	margin-right:10px;
+	line-height: 36px;
+}
+.ui-filter-bar > div span{
+    display:inline-block;
+    line-height: 36px;
 }
 .ui-filter-bar > a{
 	border-right: 1px solid #dce3e4;

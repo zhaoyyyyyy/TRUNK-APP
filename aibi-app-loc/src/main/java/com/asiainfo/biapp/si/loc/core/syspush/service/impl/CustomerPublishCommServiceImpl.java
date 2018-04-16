@@ -226,6 +226,7 @@ public class CustomerPublishCommServiceImpl implements ICustomerPublishCommServi
             		orderbyStr.delete(orderbyStr.length()-1, orderbyStr.length());
             } else {
             		orderbyStr.append(LabelInfoContants.KHQ_CROSS_COLUMN);
+                    orderbyStr.append("m.").append(LabelInfoContants.KHQ_CROSS_COLUMN);
             }
             sql.append(" order by ").append(orderbyStr);
             
