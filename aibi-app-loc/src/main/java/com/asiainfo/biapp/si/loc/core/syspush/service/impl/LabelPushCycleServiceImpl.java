@@ -302,50 +302,6 @@ public class LabelPushCycleServiceImpl extends BaseServiceImpl<LabelPushCycle, S
     @Override
     public void preDownloadGroupList(String localPathTmp, CustomDownloadRecord customDownloadRecord) throws BaseException{
         iCustomDownloadRecordDao.save(customDownloadRecord);
-
-        //探测并等待文件生成
-        String fileNameTmp = customDownloadRecord.getFileName();
-        String localPath = localPathTmp;
-        
-        int num = 1;
-        boolean isSleep = true;
-        File dir = new File(localPath);
-        /**
-         * 获取目录下的所有文件和文件夹
-         */
-        String[] names = null;
-        while (isSleep) {
-            try {
-                //等待文件生成
-                Thread.sleep((15+(num*10)*1000));
-                
-                names = dir.list();
-                if (null != names) {
-	                for (String name : names) {
-	                    if (name.contains(fileNameTmp)) {
-	                        LogUtil.debug("查找文件完整名称："+name);
-	                        fileNameTmp = name;
-	                        isSleep = false;
-	                        Thread.sleep(num*10*1000);//再睡一会儿，防止文件未写完
-	                    }
-	                }
-                }
-                if (num > 20) {//超时失败
-                    isSleep = false;
-                }
-            } catch (InterruptedException e) {
-                isSleep = false;
-                LogUtil.warn(e);
-            }
-            num++;
-        }
-        if (!isSleep) {
-            localPath += File.separator + fileNameTmp;
-            customDownloadRecord.setFileName(fileNameTmp);
-            customDownloadRecord.setDataStatus(ServiceConstants.CustomDownloadRecord.DATA_STATUS_SUCCESS);
-//            iCustomDownloadRecordDao.update(customDownloadRecord);
-        }
-    
     }
     
     
