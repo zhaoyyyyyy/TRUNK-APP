@@ -63,7 +63,6 @@ import com.asiainfo.biapp.si.loc.core.syspush.service.ILabelPushCycleService;
 import com.asiainfo.biapp.si.loc.core.syspush.service.ILabelPushReqService;
 import com.asiainfo.biapp.si.loc.core.syspush.service.ISysInfoService;
 import com.asiainfo.biapp.si.loc.core.syspush.task.ICustomerPublishThread;
-import com.asiainfo.biapp.si.loc.core.syspush.vo.LabelAttrRelVo;
 import com.asiainfo.biapp.si.loc.core.syspush.vo.LabelPushReqVo;
 import com.asiainfo.biapp.si.loc.core.syspush.vo.StandardPushXmlBean;
 import com.asiainfo.biapp.si.loc.core.syspush.vo.StandardPushXmlBean.Data;
@@ -293,16 +292,6 @@ public class CustomerPublishDefaultThread implements ICustomerPublishThread {
 	                        LogUtil.error("推送为txt，敬请期待。");
 	                    }
 	                } else {
-	                    //查询该客户群清单是否包含属性
-	                    List<LabelAttrRel> attrRelList = null;
-	                    try {
-	                        LabelAttrRelVo labelAttrRelVo = new LabelAttrRelVo();
-	                        labelAttrRelVo.setLabelId(customInfo.getLabelId());
-	                        attrRelList = iLabelAttrRelService.selectLabelAttrRelList(labelAttrRelVo);
-	                    } catch (Exception e) {
-	                        flag = false;
-	                        LogUtil.error("查询客户群属性表错误！", e);
-	                    }
 	                    //浙江新需求，无属性的清单推送，生成的表名前缀，
 	                    //eg:表名为tabel_name_a,实际表名为table_name_a+系统最新数据日期；为空时走FTP方式;
 	                    //日表每天一天表，月表一月一张表(一次性客户群表数据存在月表中)；
@@ -374,6 +363,7 @@ public class CustomerPublishDefaultThread implements ICustomerPublishThread {
 					}
                 		title += titleStr.toString();
                 }
+                LogUtil.debug("title："+title);
             }
             //2.2 是否有加密描述文件
             if (sysInfo.getIsNeedDes() != null && ServiceConstants.SysInfo.IS_NEED_DES_YES == sysInfo.getIsNeedDes()) {

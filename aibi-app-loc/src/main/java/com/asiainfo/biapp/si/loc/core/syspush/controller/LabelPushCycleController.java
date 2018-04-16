@@ -290,6 +290,7 @@ public class LabelPushCycleController extends BaseController<LabelPushCycle>{
         sysInfo.setFtpPath(sftpBasePath);
         sysInfo.setFtpServerIp(sftpIp);
         sysInfo.setPushType(ServiceConstants.SysInfo.PUSH_TYPE_FILE);
+        sysInfo.setIsNeedTitle(ServiceConstants.SysInfo.IS_NEED_TITLE_YES);//下载默认带表头
         sysInfo.setProtocoType(ServiceConstants.SysInfo.PROTOCO_TYPE_SFTP);
         sysInfo.setShowInPage(ServiceConstants.SysInfo.SHOW_IN_PAGE_NO);
         //本地缓冲目录
