@@ -593,7 +593,7 @@ var labelInfoModel = (function (model){
 			 return ;
 		 }
     	if(model.validateForm()){
-    		$.confirm('确认要保存客户群吗？', function() {
+    		$.confirm('确认保存客户群？', function() {
         		model.saveSubmit();
         	});
     	}
