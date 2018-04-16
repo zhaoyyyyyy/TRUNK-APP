@@ -639,11 +639,8 @@ var labelInfoModel = (function (model){
    			  url: url,
    			  postData:data,
    			  onSuccess: function(returnObj){
-   				  $.alert(returnObj.msg, function(){
-   					  //保存成功后跳转，标签集市和客户群集市都跳转到客户群集市页面
-   					  top.toggleMenu("#custom/custom_market");
-   				  });
-					
+   				  $.alert(returnObj.msg);
+					  model.back();
    			  },
    			  onFailure:function(returnObj){
 					  $.alert(returnObj.msg);
@@ -655,17 +652,9 @@ var labelInfoModel = (function (model){
 	 * 返回
 	 */
 	model.back = function(){
-		var from = $.getUrlParam("from");
-		var returnUrl ="";
-		if(from == 'labelmarket'){//跳转到标签集市
-			returnUrl = "../label/label_market.html";
-		}
-		if(from == 'custommarket'){//跳转到客户群集市
-			returnUrl = "./custom_market.html";
-		}
-		window.location.href = returnUrl;
+		/*var from = $.getUrlParam("from");*/
+		parent.toggleMenu("#custom/custom_market");
 	};
-	
 	/**
 	 * 展示规则
 	 */
