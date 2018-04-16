@@ -127,6 +127,11 @@
 	line-height: 34px;
 	margin: 15px 0;
 }
+.ui-filter-bar > div input{
+	display:inline-block;
+	vertical-align:middle;
+	margin-right:10px;
+}
 .ui-filter-bar > a{
 	border-right: 1px solid #dce3e4;
 	padding: 0 25px 0 10px;
@@ -285,31 +290,18 @@
 	font-size: 20px;
 	color: #FF7F3F;
 }
-/** 修改客户群集市规则和描述样式  shaosq 20180413 begin */
-.ui-business-caliber-div {
-	height: 60px;
-	margin: 10px;
-}
-
 .ui-business-caliber{
-	/* height: 34px;
-	line-height: 34px; */
+	height: 34px;
+	line-height: 34px;
 	text-align: left;
 	color: #000;
 	font-size: 14px;
 }
-/* .ui-business-caliber.ui-rule{
+.ui-business-caliber.ui-rule{
 	overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-} */
-.ui-business-caliber.ui-rule span {
-	display: -webkit-box;
-	-webkit-box-orient: vertical;
-	-webkit-line-clamp: 3;
-	overflow: hidden;
 }
-/** 修改客户群集市规则和描述样式 shaosq 20180413 end  */
 .ui-lable-icon{
 	background: #F2F7FC;
 	height: 60px;
