@@ -579,15 +579,35 @@ function fun_to_showRule(rule){
 		if(rule.attrVal){
 			var attrVals = rule.attrVal.split(",");
 			var dimtableName;
-			$.commAjax({			
-			    url : $.ctx+'/api/label/labelInfo/getDimtableName',
-			    dataType : 'json', 
-			    async : false,
-			    postData : {"labelId" : rule.calcuElement},
-			    onSuccess: function(data){ 
-			    	dimtableName =data.data;
-		    	}  
-		   });
+			if(!rule.parentId){
+				$.commAjax({			
+				    url : $.ctx+'/api/label/labelInfo/getDimtableName',
+				    dataType : 'json', 
+				    async : false,
+				    postData : {"labelId" : rule.calcuElement},
+				    onSuccess: function(data){ 
+				    	dimtableName =data.data;
+			    	}  
+			   });
+			}else{
+				$.commAjax({			
+				    url : $.ctx+'/api/label/mdaSysTableCol/get',
+				    dataType : 'json', 
+				    async : false,
+				    postData : {"columnId" : rule.calcuElement},
+				    onSuccess: function(data){ 
+				    	$.commAjax({			
+						    url : $.ctx+'/api/dimtable/dimTableInfo/get',
+						    dataType : 'json', 
+						    async : false,
+						    postData : {"dimId" : data.data.dimTransId},
+						    onSuccess: function(data1){ 
+						    	dimtableName =data1.data.dimTableName;
+					    	}  
+					   });
+			    	}  
+			   });
+			}
 			for (var j=0;j<attrVals.length;j++){
 				$.commAjax({			
 				    url : $.ctx+'/api/dimtabledata/queryPage',
