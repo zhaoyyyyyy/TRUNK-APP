@@ -182,11 +182,11 @@
 						<ul class="ui-lable-icon">
 						
 							<li v-if="item.createUserId==loginUserId&&(item.dataStatusId==3||item.dataStatusId==0)" title="修改">
-	 							<a class="label-icon4" herf="javascript:" @click="updateCustom(item)"></a>
+	 							<a class="label-add" herf="javascript:" @click="updateCustom(item)"></a>
 	 						</li>
 							
 							<li v-if="item.createUserId==loginUserId&&(item.dataStatusId==3||item.dataStatusId==0)" title="删除">
-	 							<a class="label-icon4" herf="javascript:" @click="deleteCustomById(item.labelId)"></a>
+	 							<a class="label-del" herf="javascript:" @click="deleteCustomById(item.labelId)"></a>
 	 						</li>
 							
 							<li v-bind:class="{open:item.isOpen}" title="详情" @click="toggleDropdown(item)">

@@ -326,11 +326,11 @@
 	height: 34px;
 	border-radius: 50%;
 }
-.ui-lable-icon > li > a.label-icon2{
-	background-position:-75px -16px;
+.ui-lable-icon > li > a.label-add{
+	background-position:-490px -18px;
 }
-.ui-lable-icon > li > a.label-icon3{
-	background-position:-122px -16px;
+.ui-lable-icon > li > a.label-del{
+	background-position:-535px -17px;
 }
 .ui-lable-icon > li > a.label-icon4{
 	background-position:-175px -16px;
