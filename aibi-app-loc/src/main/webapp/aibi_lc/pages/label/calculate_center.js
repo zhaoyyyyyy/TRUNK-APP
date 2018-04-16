@@ -670,7 +670,12 @@ var calculateCenter = (function (model){
 						}
 						if(existLabel){
 							if(model.validateSql(dataModel.labelMonth.replace(/-/g,""),dataModel.labelDay.replace(/-/g,""))){
-								window.location='../custom/custom_edit.html?from='+from;
+								if(dataModel.customId!=""){
+									debugger;
+									window.location='../custom/custom_edit.html?from='+from+'&customId='+dataModel.customId;
+								}else{
+									window.location='../custom/custom_edit.html?from='+from;
+								}
 							}
 						}
 						

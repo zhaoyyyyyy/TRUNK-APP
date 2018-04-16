@@ -26,6 +26,8 @@ window.loc_onload = function() {
 	dataModel.configId = $.getCurrentConfigId();
 	dataModel.nowDate = labelInfoModel.formatDate(new Date());
 	
+	dataModel.labelId = $.getUrlParam("customId");
+	
 	var dicUpdateCycles = $.getDicData("QTGXZQ");
 	for(var i =0 ; i<dicUpdateCycles.length; i++){
 		dataModel.updateCycles.push(dicUpdateCycles[i]);
