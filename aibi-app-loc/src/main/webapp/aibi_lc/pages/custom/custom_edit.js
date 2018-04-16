@@ -646,7 +646,8 @@ var labelInfoModel = (function (model){
 					
    			  },
    			  onFailure:function(returnObj){
-					  $.alert(returnObj.msg);
+				  dataModel._submitFlag = false; 
+				  $.alert(returnObj.msg);
    			  }
    		  });
     }
