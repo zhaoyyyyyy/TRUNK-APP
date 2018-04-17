@@ -568,7 +568,7 @@ var calculateCenter = (function (model){
 			  },
 			  beforeSend:function(){
 			 	$(".shop-icon").addClass("loading");
-			 	$(".shop-icon").find(".spinners").css("display","inline-block");
+			 	$(".shop-icon").find(".spinners").css("opacity",1);
 			 }
 		});
 		return flag;
@@ -641,7 +641,7 @@ var calculateCenter = (function (model){
 			  postData:param,
 			  onSuccess: function(returnObj){
 			  	$(".shop-icon").removeClass("loading");
-			  	$(".shop-icon").find(".spinners").css("display","none");
+			  	$(".shop-icon").find(".spinners").css("opacity",0);
 				dataModel.exploreCustomNum = 0;
 				dataModel.exploreCustomNum = returnObj.data;
 			 },
