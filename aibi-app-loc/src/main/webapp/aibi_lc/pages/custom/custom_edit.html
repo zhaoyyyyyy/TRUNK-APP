@@ -42,7 +42,7 @@
 			                        required="true"	class="form-control easyui-validatebox" placeholder="客户群名称" maxlength="60">
 			                    </div>
 			                </div>
-			                <div class="ui-form-group" v-if="isShowTacticsIdDiv" >
+			                <div class="ui-form-group" v-show="isShowTacticsIdDiv" >
 			                   <label class="control-label" for="tacticsId" ><span class="input-required">*</span>生成策略:</label>
 			                    <div class="control-input ml10">
 			                    	<select name="tacticsId" id="tacticsId" class="form-control easyui-validatebox" dicCode="LABELTACTICS"
@@ -54,7 +54,7 @@
 						   			<p>标签没有最新数据，系统将等待执行；如需立即执行，请选择保守策略。</p>
 								</div>
 			                </div>
-			                <div class="ui-form-group" v-if="isShowLabelMonthDiv">
+			                <div class="ui-form-group" v-show="isShowLabelMonthDiv">
 			                   <label class="control-label" for="labelMonth" ><span class="input-required">*</span>数据日期(月)</label>
 			                    <div class="control-input ml10">
 			                    	<input id="labelMonth" name="labelMonth" type="text" class="form-control input-pointer easyui-validatebox" 
@@ -65,7 +65,7 @@
 			                    	<p >所选日期早于标签生效日期，请重新选择!</p>
 			                    </div>
 			                </div>
-			                <div class="ui-form-group" v-if="isShowLabelDayDiv">
+			                <div class="ui-form-group" v-show="isShowLabelDayDiv">
 			                   <label class="control-label" for="labelDay" ><span class="input-required">*</span>数据日期(日)</label>
 			                    <div class="control-input ml10">
 			                    	<input id="labelDay" name="labelDay" type="text" class="form-control input-pointer easyui-validatebox"
