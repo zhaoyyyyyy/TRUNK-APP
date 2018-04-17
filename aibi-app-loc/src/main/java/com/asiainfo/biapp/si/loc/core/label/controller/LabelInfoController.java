@@ -308,8 +308,14 @@ public class LabelInfoController extends BaseController {
             if (StringUtil.isNoneBlank(labelInfo.getLabelName())) {
                 label = iLabelInfoService.selectOneByLabelName(labelInfo.getLabelName(),labelInfo.getConfigId());
             } 
+            String labelOrCustom;
+            if(oldLab.getGroupType()==1){
+                labelOrCustom="客户群";
+            }else{
+                labelOrCustom="标签";
+            }
             if (StringUtil.isNoneBlank(labelInfo.getLabelName())&&!oldLab.getLabelName().equals(labelInfo.getLabelName())&& null!= label) {
-                throw new ParamRequiredException("标签名称重复");
+                throw new ParamRequiredException(labelOrCustom+"名称重复");
             } 
             oldLab = fromToBean(labelInfo, oldLab);
             if (StringUtil.isNotEmpty(approveStatusId)) {
