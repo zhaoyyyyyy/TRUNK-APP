@@ -597,8 +597,16 @@ var calculateCenter = (function (model){
 						dataModel.labelDay = result.dayDate;
 						if(!dataModel.existMonthLabel && !dataModel.existDayLabel){//不含标签时直接探索
 							//验证sql
-							if(model.validateSql(dataModel.labelMonth.replace(/-/g,""),dataModel.labelDay.replace(/-/g,""))){
-								model.submitForExplore(dataModel.labelMonth.replace(/-/g,""),dataModel.labelDay.replace(/-/g,""));
+							var labelMonthTemp = "";
+							var labelDayTemp = "";
+							if(dataModel.labelMonth){
+								labelMonthTemp = dataModel.labelMonth.replace(/-/g,"")
+							}
+							if(dataModel.labelDay){
+								labelDayTemp = dataModel.labelDay.replace(/-/g,"")
+							}
+							if(model.validateSql(labelMonthTemp,labelDayTemp)){
+								model.submitForExplore(labelMonthTemp,labelDayTemp);
 							}
 							existLabel = false;
 						}
@@ -671,7 +679,15 @@ var calculateCenter = (function (model){
 							existLabel = false;
 						}
 						if(existLabel){
-							if(model.validateSql(dataModel.labelMonth.replace(/-/g,""),dataModel.labelDay.replace(/-/g,""))){
+							var labelMonthTemp = "";
+							var labelDayTemp = "";
+							if(dataModel.labelMonth){
+								labelMonthTemp = dataModel.labelMonth.replace(/-/g,"")
+							}
+							if(dataModel.labelDay){
+								labelDayTemp = dataModel.labelDay.replace(/-/g,"")
+							}
+							if(model.validateSql(labelMonthTemp,labelDayTemp)){
 								if(dataModel.customId!=""&&dataModel.customId!=undefined){
 									window.location='../custom/custom_edit.html?from='+from+'&customId='+dataModel.customId;
 								}else{
