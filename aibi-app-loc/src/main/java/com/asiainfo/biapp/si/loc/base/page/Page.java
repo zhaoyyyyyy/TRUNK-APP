@@ -46,7 +46,7 @@ public class Page<T> implements Serializable {
 	}
 	
 	/** 总条数 */
-	public static Integer MAX_PAGE_SIZE = 100000;
+	public final static Integer MAX_PAGE_SIZE = 100000;
 	
 	/** 每页条数 */
 	public static final int DEFAULT_PAGE_SIZE = 10;
@@ -59,9 +59,6 @@ public class Page<T> implements Serializable {
 	/** 开始查询的页数 */
 	@ApiParam(value = "开始查询的页数")
 	private int pageStart;
-
-	//@ApiParam(value = "开始查询的条数")
-	//private int start;
 	
 	/** 排序的列 */
 	@ApiParam(value = "排序的列")
@@ -252,6 +249,7 @@ public class Page<T> implements Serializable {
 	 * 
 	 * @return
 	 */
+	@Override
 	public String toString() {
 		return new ToStringBuilder(this).append("起始行", this.getStart()).append("每页行数", this.pageSize)
 				.append("总条数", this.totalCount).append("当前列表size", this.data.size()).toString();

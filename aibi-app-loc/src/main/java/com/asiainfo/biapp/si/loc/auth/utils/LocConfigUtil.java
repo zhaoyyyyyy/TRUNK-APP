@@ -149,10 +149,4 @@ public class LocConfigUtil {
     }
 
 
-
-	public static void main(String[] args) throws Exception {
-		System.out.println(LocConfigUtil.getInstance("http://127.0.0.1:8440/jauth").getProperties("SYSConfig_REDIS_IP"));
-		System.out.println(LocConfigUtil.getInstance("http://127.0.0.1:8440/jauth").selectAll());
-	}
-
 }

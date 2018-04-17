@@ -88,8 +88,9 @@ public class TokenAuthFilter implements Filter {
         
     }
 
-    @Override
-    public void destroy() {
-
-    }
+	@Override
+	public void destroy() {
+		// TODO Auto-generated method stub
+		
+	}
 }

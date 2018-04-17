@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Configuration;
 
 import com.alibaba.druid.pool.DruidDataSource;
 import com.asiainfo.biapp.si.loc.auth.utils.LocConfigUtil;
+import com.asiainfo.biapp.si.loc.base.utils.LogUtil;
 
 /**
  * 
@@ -56,7 +57,7 @@ public class DataSourceConfig {
 			}
 			dataSource.setConnectionProperties("druid.stat.mergeSql=false;druid.stat.slowSqlMillis=800 ");
 		} catch (Exception e) {
-			e.printStackTrace();
+			LogUtil.error(e);
 		}
 		return dataSource;
 	}
@@ -221,7 +222,7 @@ public class DataSourceConfig {
 	@Value("${spring.datasource.useGlobalDataSourceStat}")
 	private String useGlobalDataSourceStat;//boolean
 	
-	private boolean isNotSet(String propretie){
+	private static boolean isNotSet(String propretie){
 		if(propretie != null && propretie.indexOf("${") < -1){
 			return true;
 		}else{

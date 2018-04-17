@@ -16,6 +16,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 import com.asiainfo.biapp.si.loc.auth.utils.AuthUtils;
 import com.asiainfo.biapp.si.loc.auth.utils.LocConfigUtil;
+import com.asiainfo.biapp.si.loc.base.exception.BaseException;
 
 @Component
 public class LogUtil {
@@ -37,14 +38,14 @@ public class LogUtil {
 
     @Value("${jauth-url}")
     public void setJauthUrl(String jauthUrl) {
-        this.jauthUrl = jauthUrl;
+        LogUtil.jauthUrl = jauthUrl;
     }
 
     private static String nodeName;
 
     @Value("${spring.application.name}")
     public void setNodeName(String nodeName) {
-        this.nodeName = nodeName;
+        LogUtil.nodeName = nodeName;
     }
 
     private LogUtil() {
@@ -155,33 +156,29 @@ public class LogUtil {
      */
     private static void saveLog(String level, String threadName, String interfaceUrl, String method, Object msg) {
     	
+    	//是否记录DEBUG日志
+     	String saveDebugLog;
+		try {
+			saveDebugLog = LocConfigUtil.getInstance(jauthUrl).getProperties("LOC_CONFIG_APP_SAVE_ALL_DEBUG_LOG");
+			if(LEVEL_DEBUG.equals(level) && !"true".equals(saveDebugLog)){
+	     		return ;
+	     	}
+		} catch (BaseException e1) {}
+    	
+    	//默认各种标识
+    	HttpServletRequest request = null;
+    	String url = "local";
+    	String userId = "loc_sys";
+    	String token = "loc_sys";
     	
         try {
+    		request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+    		url = request.getRequestURL()+"/"+ request.getRequestURI();
+    		token = AuthUtils.getTokenByRequest(request);
+        	userId = AuthUtils.getUserByToken(token).getUserName();
+        } catch (Exception e) {}
         	
-        	//是否记录DEBUG日志
-        	String saveDebugLog = LocConfigUtil.getInstance(jauthUrl).getProperties("LOC_CONFIG_APP_SAVE_ALL_DEBUG_LOG");
-        	if(LEVEL_DEBUG.equals(level) && !"true".equals(saveDebugLog)){
-        		return ;
-        	}
-        	
-        	HttpServletRequest request = null;
-        	String url = "local";
-        	String userId = "loc_sys";
-        	String token = "loc_sys";
-        	try {
-        		request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
-        		url = request.getRequestURL()+"/"+ request.getRequestURI();
-        		token = AuthUtils.getTokenByRequest(request);
-            	userId = AuthUtils.getUserByToken(token).getUserName();
-        	} catch (Exception e) {
-//        		  StackTraceElement ste = getClassName();
-//        	      String className = ste.getClassName();
-//        	      Logger log = getLogger(className);
-//        	      log.info("系统调用无法获取用户信息",e);
-			}
-        	
-        	
-           
+       try {  
         	// 组装http远程调用
             Map<String, Object> params = new HashMap<>();
 
