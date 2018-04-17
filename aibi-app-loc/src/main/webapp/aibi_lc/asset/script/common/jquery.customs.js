@@ -151,6 +151,16 @@ $.fn.extend({
 								var e = ev||event ;
 								e.stopPropagation?e.stopPropagation():e.cancelBubble=true;
 								var $this = $(this);
+								$.commAjax({
+									  url: $.ctx + "/api/prefecture/preConfigInfo/setSession",
+									  postData:{
+										  key:CurrentConfigId,
+										  object:$this.attr("configId")
+									  },
+									  onSuccess: function(returnObj){
+										  
+									  }
+								});
 								$.kvSet("CurrentConfigId",$this.attr("configId"));
 								window.location.reload();
 							});

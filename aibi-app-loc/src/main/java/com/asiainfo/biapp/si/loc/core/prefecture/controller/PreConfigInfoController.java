@@ -6,6 +6,7 @@
 
 package com.asiainfo.biapp.si.loc.core.prefecture.controller;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -205,5 +206,21 @@ public class PreConfigInfoController extends BaseController<PreConfigInfo> {
         }
         return webResult.success("删除专区成功", SUCCESS);
     }
+    
+    @ApiOperation(value = "删除专区信息")
+    @ApiImplicitParams({
+        @ApiImplicitParam(name = "key", value = "key", required = false, paramType = "query", dataType = "string"),
+        @ApiImplicitParam(name = "object", value = "object", required = false, paramType = "query", dataType = "string") })
+    @RequestMapping(value = "/preConfigInfo/setSession", method = RequestMethod.POST)
+    public WebResult<String> setSession(String key,Serializable object) {
+        WebResult<String> webResult = new WebResult<>();
+        try {
+            this.setSessionAttribute(key, object);
+        } catch (BaseException e) {
+            return webResult.fail(e);
+        }
+        return webResult.success("删除专区成功", SUCCESS);
+    }
+    
 
 }
