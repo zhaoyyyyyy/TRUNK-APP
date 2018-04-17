@@ -35,42 +35,23 @@ window.loc_onload = function() {
 	for(var i =0 ; i<dicUpdateCycles.length; i++){
 		dataModel.updateCycles.push(dicUpdateCycles[i]);
 	}
-	
+	//初始化数据
 	labelInfoModel.getDataPrivaliege();//加载数据权限
 	labelInfoModel.findEaliestDataDate();//1同步操作
-	
+	labelInfoModel.queryCustomerGroup();//2同步操作查询数据
+	labelInfoModel.findCustomRule();//3同步操作
 	new Vue({
 		el : '#dataD',
 		data : dataModel,
 		mounted: function () {
 		    this.$nextTick(function () {
+		    	labelInfoModel.initMethod();
 			    var r = $(".easyui-validatebox");
 	   			if (r.length){
 	   				r.validatebox();
 	   			}
-	   			labelInfoModel.queryCustomerGroup();//2同步操作查询数据
-	   			labelInfoModel.findCustomRule();//3同步操作
-	   			labelInfoModel.initDimListTactics();//4同步操作
-	   			//生成周期
-	   			$("#tacticsId").change(function(){
-	   				labelInfoModel.changeTacticsId(this);
-	   			})
-	   			$("#updateCycleDiv input:radio").change(function(){
-	   				labelInfoModel.changeUpdateCycle();
-	   			})
-	   			$("#endDateByMonth").click(function(){
-   					var minDate = '#F{$dp.$D(\'effecTime\',{M:1})}';	
-   					//月周期客户群有效结束日期最大往后延长周期为6个月
-   					var maxDate = '#F{$dp.$D(\'effecTime\',{M:6})}';
-   					WdatePicker({el:this,dateFmt:'yyyy-MM', minDate:minDate,maxDate:maxDate,isShowClear:false})
-	   				
-		    	})
-		    	$("#endDateByDay").click(function(){
-   					var minDate = '#F{$dp.$D(\'effecTime\',{d:1})}';
-   					var maxDate = '#F{$dp.$D(\'effecTime\',{M:3})}';
-   					WdatePicker({el:this,dateFmt:'yyyy-MM-dd', minDate: minDate,maxDate:maxDate,isShowClear:false})
-	   				
-		    	})
+	   			
+	   			
 		    })
 		}
 	})
@@ -100,30 +81,43 @@ var labelInfoModel = (function (model){
     			  onSuccess: function(returnObj){
     				  dataModel.labelInfo = returnObj.data;
     				  dataModel.labelInfo.tacticsId = returnObj.data.labelExtInfo.tacticsId;
-    				  model.resetForm();
     			  }
     		});
-    	}else{//新增
-    		//初始化数据
-    		$('#labelMonth').val(dataModel.newMonthDate);//默认最新的数据日期
-    		$('#labelDay').val(dataModel.newDayDate);//默认最新的数据日期
-    		dataModel.labelInfo.effecTime = dataModel.nowDate ;
-    		dataModel.labelInfo.updateCycle = 3 ;
     	}
     };
     
     /**
-     * 根据查询的客户群信息，回显信息，待完善
+     * 初始化事件、方法
      * 
      */
-    model.resetForm = function(){
-    	if(dataModel.labelInfo.updateCycle == 2) {//月周期
-    		
-			
-		} else if(updateCycle == 3) {//日周期
-			
-			
-		}
+    model.initMethod = function(){
+    	//初始化数据
+		$('#labelMonth').val(dataModel.newMonthDate);//默认最新的数据日期
+		$('#labelDay').val(dataModel.newDayDate);//默认最新的数据日期
+		dataModel.labelInfo.effecTime = dataModel.nowDate ;
+		dataModel.labelInfo.updateCycle = 3 ;
+
+			labelInfoModel.initDimListTactics();//4同步操作
+			//生成周期
+			$("#tacticsId").change(function(){
+				labelInfoModel.changeTacticsId(this);
+			})
+			$("#updateCycleDiv input:radio").change(function(){
+				labelInfoModel.changeUpdateCycle();
+			})
+			$("#endDateByMonth").click(function(){
+				var minDate = '#F{$dp.$D(\'effecTime\',{M:1})}';	
+				//月周期客户群有效结束日期最大往后延长周期为6个月
+				var maxDate = '#F{$dp.$D(\'effecTime\',{M:6})}';
+				WdatePicker({el:this,dateFmt:'yyyy-MM', minDate:minDate,maxDate:maxDate,isShowClear:false})
+				
+    	})
+    	$("#endDateByDay").click(function(){
+				var minDate = '#F{$dp.$D(\'effecTime\',{d:1})}';
+				var maxDate = '#F{$dp.$D(\'effecTime\',{M:3})}';
+				WdatePicker({el:this,dateFmt:'yyyy-MM-dd', minDate: minDate,maxDate:maxDate,isShowClear:false})
+				
+    	})
     }
     
     /**
@@ -192,6 +186,7 @@ var labelInfoModel = (function (model){
 	 			$("#labelDay").attr('disabled', false);
 	 			$("#labelMonth").attr('disabled', false);
 	 		}
+	 		$("#tacticsId option[value='']").hide();
 	 		dataModel.initDimListTacticsValue = dataModel.labelInfo.tacticsId ;
 		}
 	}
