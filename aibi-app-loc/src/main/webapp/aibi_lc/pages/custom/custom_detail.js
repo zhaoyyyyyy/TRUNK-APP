@@ -554,9 +554,9 @@ function fun_to_showRule(rule){
 		if(rule.contiueMinVal!="" &&rule.contiueMaxVal!=""&&rule.contiueMinVal!=null &&rule.contiueMaxVal!=null){
 			html = "<div class='ui-custom-item clearfix clearfix' ><a><span> "+rule.attrName+"</span></a><a><span>数值范围:"+leftZoneSign+rule.contiueMinVal+"且"+rightZoneSign+rule.contiueMaxVal+"</span></div>"
 		}
-		if(rule.contiueMinVal!="" &&rule.contiueMaxVal!=""&&rule.contiueMinVal!=null &&model.customRule[i].contiueMaxVal!=null){
-			html = "<div class='ui-custom-item clearfix clearfix' ><a><span> "+rule.attrName+"</span></a><a><span>数值范围:"+leftZoneSign+rule.contiueMinVal+"且"+rightZoneSign+rule.contiueMaxVal+"</span></div>"
-		}
+//		if(rule.contiueMinVal!="" &&rule.contiueMaxVal!=""&&rule.contiueMinVal!=null &&model.customRule[i].contiueMaxVal!=null){
+//			html = "<div class='ui-custom-item clearfix clearfix' ><a><span> "+rule.attrName+"</span></a><a><span>数值范围:"+leftZoneSign+rule.contiueMinVal+"且"+rightZoneSign+rule.contiueMaxVal+"</span></div>"
+//		}
 		if(rule.contiueMinVal==null &&rule.contiueMaxVal!=null){
 			html = "<div class='ui-custom-item clearfix clearfix' ><a><span> "+rule.attrName+"</span></a><a><span>数值范围:"+rightZoneSign+rule.contiueMaxVal+"</span></div>"
 		}
