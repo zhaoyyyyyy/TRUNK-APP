@@ -25,7 +25,6 @@ var model = {
 		
 }
 window.loc_onload = function() {
-	$.initWarrentButton();//当前用户拥有的按钮权限
 	model.dataName=$.getDicData("QTGXZQ");
 	$("#dialog").dialog({
 	    autoOpen: false,
@@ -71,6 +70,7 @@ window.loc_onload = function() {
 			model.monthLabelDate = data.data.monthLabelDate;
 			model.customNum = data.data.labelExtInfo.customNum;
 			model.labelOptRuleShow = data.data.labelExtInfo.labelOptRuleShow;
+			$.initWarrentButton(data.data.createUserId);//是否显示
 			if(data.data.updateCycle == 1){//客户群更新周期为日周期，推送只能是日周期和一次性
 				model.dataName.splice(1,1);
 			}
