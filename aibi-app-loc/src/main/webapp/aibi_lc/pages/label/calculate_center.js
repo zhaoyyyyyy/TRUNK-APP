@@ -568,6 +568,7 @@ var calculateCenter = (function (model){
 			  },
 			  beforeSend:function(){
 			 	$(".shop-icon").addClass("loading");
+			 	$(".shop-icon").find(".spinners").css("display","inline-block");
 			 }
 		});
 		return flag;
@@ -632,6 +633,7 @@ var calculateCenter = (function (model){
 			  postData:param,
 			  onSuccess: function(returnObj){
 			  	$(".shop-icon").removeClass("loading");
+			  	$(".shop-icon").find(".spinners").css("display","none");
 				dataModel.exploreCustomNum = 0;
 				dataModel.exploreCustomNum = returnObj.data;
 			 },
