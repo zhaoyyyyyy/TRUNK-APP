@@ -38,13 +38,14 @@ window.loc_onload = function() {
 	//初始化数据
 	labelInfoModel.getDataPrivaliege();//加载数据权限
 	labelInfoModel.findEaliestDataDate();//1同步操作
-	labelInfoModel.queryCustomerGroup();//2同步操作查询数据
+	
 	labelInfoModel.findCustomRule();//3同步操作
 	new Vue({
 		el : '#dataD',
 		data : dataModel,
 		mounted: function () {
 		    this.$nextTick(function () {
+		    	labelInfoModel.queryCustomerGroup();//2同步操作查询数据
 		    	labelInfoModel.initMethod();
 			    var r = $(".easyui-validatebox");
 	   			if (r.length){
@@ -83,6 +84,12 @@ var labelInfoModel = (function (model){
     				  dataModel.labelInfo.tacticsId = returnObj.data.labelExtInfo.tacticsId;
     			  }
     		});
+    	}else{
+    		//初始化数据
+    		$('#labelMonth').val(dataModel.newMonthDate);//默认最新的数据日期
+    		$('#labelDay').val(dataModel.newDayDate);//默认最新的数据日期
+    		dataModel.labelInfo.effecTime = dataModel.nowDate ;
+    		dataModel.labelInfo.updateCycle = 3 ;
     	}
     };
     
@@ -91,11 +98,6 @@ var labelInfoModel = (function (model){
      * 
      */
     model.initMethod = function(){
-    	//初始化数据
-		$('#labelMonth').val(dataModel.newMonthDate);//默认最新的数据日期
-		$('#labelDay').val(dataModel.newDayDate);//默认最新的数据日期
-		dataModel.labelInfo.effecTime = dataModel.nowDate ;
-		dataModel.labelInfo.updateCycle = 3 ;
 
 			labelInfoModel.initDimListTactics();//4同步操作
 			//生成周期
