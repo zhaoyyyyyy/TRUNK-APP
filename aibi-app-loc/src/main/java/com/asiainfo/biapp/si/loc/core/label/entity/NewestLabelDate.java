@@ -74,9 +74,26 @@ public class NewestLabelDate extends BaseEntity{
     @Column(name = "MONTH_NEWEST_STATUS")
     @ApiParam(value = "是否统计过月数据")
     private Integer monthNewestStatus;
-
     
-    public String getDayNewestDate() {
+    /**
+     * 专区ID
+     */
+    @Column(name = "CONFIG_ID")
+    @ApiParam(value = "专区ID")
+    private String configId;
+    
+    
+    public String getConfigId() {
+		return configId;
+	}
+
+
+	public void setConfigId(String configId) {
+		this.configId = configId;
+	}
+
+
+	public String getDayNewestDate() {
         return dayNewestDate;
     }
 

@@ -73,6 +73,10 @@ public class NewestLabelDateDaoImpl extends BaseDaoImpl<NewestLabelDate, String>
             hql.append("and n.monthNewestStatus = :monthNewestStatus ");
             params.put("monthNewestStatus", newestLabelDateVo.getMonthNewestStatus());
         }
+        if(StringUtil.isNoneBlank(newestLabelDateVo.getConfigId())){
+        	hql.append("and n.configId = :configId ");
+            params.put("configId", newestLabelDateVo.getConfigId());
+        }
         reMap.put("hql", hql);
         reMap.put("params",params );
         return reMap;
