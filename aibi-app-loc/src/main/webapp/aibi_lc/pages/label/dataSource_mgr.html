@@ -19,7 +19,7 @@
       <div class="iframe-nest">
           <div class="ui-lc-mian">
               <h3 class="pre">指标管理</h3>
-              <div>
+              <div  class="ui-label-mes clearfix ui-data-form">
                   <button onclick="window.location = 'dataSource_add.html'" type="button" class="ui-btn ui-btn-default mr10">
                       <span class="create-white"></span>
                       	新增
@@ -27,13 +27,12 @@
                   <button onclick="fun_to_delAll()" type="button" class="ui-btn ui-btn-second">批量删除</button>
                   <form id="formSearch" class="form-inline data-form fright">
 					<div class="form-group">
-						<input name="sourceTableName" id="txt_name" type="text"
-							class="form-control input-pointer" placeholder="模糊查询" />
-						<input id="hiddeninput" type="text" style="display:none" /> 
-					</div>
-					 <div class="form-group">
-						<div class="input-group-addon input-group-icon right-child"
-							id="btn_search"></div>
+						<div class="input-group">
+							<input name="sourceTableName" id="txt_name" type="text" class="form-control input-pointer" placeholder="模糊查询" />
+							<input id="hiddeninput" type="text" style="display:none" />
+							<div class="input-group-addon input-group-icon right-child" id="btn_search"></div> 
+						</div>
+						
 					</div>
 				</form>
               </div>
