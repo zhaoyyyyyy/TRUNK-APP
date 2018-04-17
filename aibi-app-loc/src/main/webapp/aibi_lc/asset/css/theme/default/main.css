@@ -1577,10 +1577,10 @@ span.del-btn{
 	margin-left:8px;
 	opacity:0;
 }
-#preloader_1{
+.preloader{
 	position:relative;
 }
-#preloader_1 span{
+.preloader span{
 	display:block;
 	bottom:4px;
 	width: 4px;
@@ -1594,7 +1594,7 @@ span.del-btn{
 animation: preloader_1 1.5s	 infinite ease-in-out;
 
 }
-#preloader_1 span:nth-child(2){
+.preloader span:nth-child(2){
 left:6px;
 -webkit-animation-delay: .2s;
 -moz-animation-delay: .2s;
@@ -1603,7 +1603,7 @@ left:6px;
 animation-delay: .2s;
 
 }
-#preloader_1 span:nth-child(3){
+.preloader span:nth-child(3){
 left:12px;
 -webkit-animation-delay: .4s;
 -moz-animation-delay: .4s;
@@ -1611,7 +1611,7 @@ left:12px;
 -o-animation-delay: .4s;
 animation-delay: .4s;
 }
-#preloader_1 span:nth-child(4){
+.preloader span:nth-child(4){
 left:18px;
 -webkit-animation-delay: .6s;
 -moz-animation-delay: .6s;
@@ -1619,7 +1619,7 @@ left:18px;
 -o-animation-delay: .6s;
 animation-delay: .6s;
 }
-#preloader_1 span:nth-child(5){
+.preloader span:nth-child(5){
 left:24px;
 -webkit-animation-delay: .8s;
 -moz-animation-delay: .8s;
