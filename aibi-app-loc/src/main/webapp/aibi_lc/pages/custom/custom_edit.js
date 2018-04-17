@@ -99,19 +99,33 @@ var labelInfoModel = (function (model){
      */
     model.initMethod = function(){
 
-			labelInfoModel.initDimListTactics();//4同步操作
-			//生成周期
-			$("#tacticsId").change(function(){
-				labelInfoModel.changeTacticsId(this);
-			})
-			$("#updateCycleDiv input:radio").change(function(){
-				labelInfoModel.changeUpdateCycle();
-			})
-			$("#endDateByMonth").click(function(){
-				var minDate = '#F{$dp.$D(\'effecTime\',{M:1})}';	
-				//月周期客户群有效结束日期最大往后延长周期为6个月
-				var maxDate = '#F{$dp.$D(\'effecTime\',{M:6})}';
-				WdatePicker({el:this,dateFmt:'yyyy-MM', minDate:minDate,maxDate:maxDate,isShowClear:false})
+		labelInfoModel.initDimListTactics();//4同步操作
+		if(dataModel.isShowLabelMonthDiv && !dataModel.isShowLabelDayDiv){//只存在月标签，隐藏日周期
+			for(var i=0 ; i<dataModel.updateCycles.length;i++){
+				if(dataModel.updateCycles[i].code == 1){
+					dataModel.updateCycles.splice(i,1);
+				}
+			}
+		}
+		if(!dataModel.isShowLabelMonthDiv && dataModel.isShowLabelDayDiv){//只存在日标签，隐藏月周期
+			for(var i=0 ; i<dataModel.updateCycles.length;i++){
+				if(dataModel.updateCycles[i].code == 2){
+					dataModel.updateCycles.splice(i,1);
+				}
+			}
+		}
+		//生成周期
+		$("#tacticsId").change(function(){
+			labelInfoModel.changeTacticsId(this);
+		})
+		$("#updateCycleDiv input:radio").change(function(){
+			labelInfoModel.changeUpdateCycle();
+		})
+		$("#endDateByMonth").click(function(){
+			var minDate = '#F{$dp.$D(\'effecTime\',{M:1})}';	
+			//月周期客户群有效结束日期最大往后延长周期为6个月
+			var maxDate = '#F{$dp.$D(\'effecTime\',{M:6})}';
+			WdatePicker({el:this,dateFmt:'yyyy-MM', minDate:minDate,maxDate:maxDate,isShowClear:false})
 				
     	})
     	$("#endDateByDay").click(function(){
