@@ -99,7 +99,7 @@ var labelInfoModel = (function (model){
     			  },
     			  onSuccess: function(returnObj){
     				  dataModel.labelInfo = returnObj.data;
-    				  dataModel.labelInfo.tacticsId = dataModel.labelInfo.labelExtInfo.tacticsId;
+    				  dataModel.labelInfo.tacticsId = returnObj.data.labelExtInfo.tacticsId;
     				  model.resetForm();
     			  }
     		});
