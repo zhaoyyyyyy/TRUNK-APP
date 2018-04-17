@@ -26,7 +26,10 @@ window.loc_onload = function() {
 	dataModel.configId = $.getCurrentConfigId();
 	dataModel.nowDate = labelInfoModel.formatDate(new Date());
 	
-	dataModel.labelId = $.getUrlParam("customId");
+	var labelId = $.getUrlParam("customId");
+	if(labelId!=null){
+		dataModel.labelId = labelId;
+	}
 	
 	var dicUpdateCycles = $.getDicData("QTGXZQ");
 	for(var i =0 ; i<dicUpdateCycles.length; i++){
@@ -96,6 +99,7 @@ var labelInfoModel = (function (model){
     			  },
     			  onSuccess: function(returnObj){
     				  dataModel.labelInfo = returnObj.data;
+    				  dataModel.labelInfo.tacticsId = dataModel.labelInfo.labelExtInfo.tacticsId;
     				  model.resetForm();
     			  }
     		});
