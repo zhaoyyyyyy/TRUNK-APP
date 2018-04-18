@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 
 import com.asiainfo.biapp.si.loc.auth.model.User;
 import com.asiainfo.biapp.si.loc.auth.utils.AuthUtils;
+import com.asiainfo.biapp.si.loc.base.common.CommonConstants;
 import com.asiainfo.biapp.si.loc.base.exception.BaseException;
 import com.asiainfo.biapp.si.loc.base.exception.UserAuthException;
 import com.asiainfo.biapp.si.loc.cache.CocCacheProxy;
@@ -120,6 +121,14 @@ public abstract class BaseController<T extends Serializable>  {
 	 */
 	protected HttpServletResponse getResponse() {
 		return this.response;
+	}
+	/**获取当前专区最新日数据日期*/
+	protected String getNewLabelDay() throws BaseException {
+		return CocCacheProxy.getCacheProxy().getNewLabelDay((String) getSessionAttribute(CommonConstants.CURRENT_CONFIG_ID));
+	}
+	/**获取当前专区最新月数据日期*/
+	protected String getNewLabelMonth() throws BaseException {
+		return CocCacheProxy.getCacheProxy().getNewLabelMonth((String) getSessionAttribute(CommonConstants.CURRENT_CONFIG_ID));
 	}
 	
 

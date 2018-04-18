@@ -151,23 +151,19 @@ $.fn.extend({
 								var e = ev||event ;
 								e.stopPropagation?e.stopPropagation():e.cancelBubble=true;
 								var $this = $(this);
-								$.commAjax({
-									  url: $.ctx + "/api/prefecture/preConfigInfo/setSession",
-									  postData:{
-										  key:CurrentConfigId,
-										  object:$this.attr("configId")
-									  },
-									  onSuccess: function(returnObj){
-										  
-									  }
-								});
 								$.kvSet("CurrentConfigId",$this.attr("configId"));
 								window.location.reload();
 							});
 						}
 					});
-				  
-				  
+				    //更新缓存当前专区id 20180418 tianxy3
+					$.commAjax({
+						  url: $.ctx + "/api/prefecture/preConfigInfo/setSession",
+						  postData:{object: $.kvGet("CurrentConfigId")},
+						  onSuccess: function(returnObj){
+							  
+						  }
+					});
 				}
 			}
 		});

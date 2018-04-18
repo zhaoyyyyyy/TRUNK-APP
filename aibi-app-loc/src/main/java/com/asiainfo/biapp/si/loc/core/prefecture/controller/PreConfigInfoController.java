@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.asiainfo.biapp.si.loc.auth.model.User;
+import com.asiainfo.biapp.si.loc.base.common.CommonConstants;
 import com.asiainfo.biapp.si.loc.base.controller.BaseController;
 import com.asiainfo.biapp.si.loc.base.exception.BaseException;
 import com.asiainfo.biapp.si.loc.base.page.Page;
@@ -207,19 +208,18 @@ public class PreConfigInfoController extends BaseController<PreConfigInfo> {
         return webResult.success("删除专区成功", SUCCESS);
     }
     
-    @ApiOperation(value = "删除专区信息")
+    @ApiOperation(value = "更新专区信息")
     @ApiImplicitParams({
-        @ApiImplicitParam(name = "key", value = "key", required = false, paramType = "query", dataType = "string"),
         @ApiImplicitParam(name = "object", value = "object", required = false, paramType = "query", dataType = "string") })
     @RequestMapping(value = "/preConfigInfo/setSession", method = RequestMethod.POST)
-    public WebResult<String> setSession(String key,Serializable object) {
+    public WebResult<String> setSession(String object) {
         WebResult<String> webResult = new WebResult<>();
         try {
-            this.setSessionAttribute(key, object);
+            this.setSessionAttribute(CommonConstants.CURRENT_CONFIG_ID, object);
         } catch (BaseException e) {
             return webResult.fail(e);
         }
-        return webResult.success("删除专区成功", SUCCESS);
+        return webResult.success("更新专区成功", SUCCESS);
     }
     
 

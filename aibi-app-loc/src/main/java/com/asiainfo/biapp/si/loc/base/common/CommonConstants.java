@@ -28,6 +28,9 @@ public class CommonConstants {
 	 */
 	public static final String LABEL_EXACT_VALUE_TABLE_COLUMN = "VALUE_ID";
 	
+	/** 当前专区id key */
+	public static final String CURRENT_CONFIG_ID = "currentConfigId";
+	
 	/**
 	 * 数据库运算符号
 	 */

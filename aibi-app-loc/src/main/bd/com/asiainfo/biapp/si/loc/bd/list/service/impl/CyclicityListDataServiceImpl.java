@@ -40,19 +40,18 @@ public class CyclicityListDataServiceImpl implements ICyclicityListDataService{
 
 	@Override
 	public Map<String, List<String>> getAllDayListId() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public Map<String, List<String>> getAllMonthListId() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public void runAllDayListData() {
-		String newDayDate = CocCacheProxy.getCacheProxy().getNewLabelDay();
+		// TODO 获取所有专区
+		String newDayDate = CocCacheProxy.getCacheProxy().getNewLabelDay("");
 		Map<String,List<String>> allList = this.getAllListIdAndConfig(newDayDate,dayUpdateCycle,null);
 		if(null == allList || allList.isEmpty()){
 			return ;
@@ -79,7 +78,7 @@ public class CyclicityListDataServiceImpl implements ICyclicityListDataService{
 
 	@Override
 	public void runAllMonthListData() {
-		String newDayDate = CocCacheProxy.getCacheProxy().getNewLabelMonth();
+		String newDayDate = CocCacheProxy.getCacheProxy().getNewLabelMonth("");
 		Map<String,List<String>> allList = this.getAllListIdAndConfig(newDayDate,monthUpdateCycle,null);
 		
 		if(null == allList || allList.isEmpty()){
@@ -109,7 +108,7 @@ public class CyclicityListDataServiceImpl implements ICyclicityListDataService{
 
 	@Override
 	public void runDayListDataByConfigId(String configId) {
-		String newDayDate = CocCacheProxy.getCacheProxy().getNewLabelDay();
+		String newDayDate = CocCacheProxy.getCacheProxy().getNewLabelDay(configId);
 		Map<String,List<String>> allList = this.getAllListIdAndConfig(newDayDate,dayUpdateCycle,configId);
 		if(null == allList || allList.isEmpty()){
 			return ;
@@ -137,7 +136,7 @@ public class CyclicityListDataServiceImpl implements ICyclicityListDataService{
 
 	@Override
 	public void runMonthListDataByConfigId(String configId) {
-		String newDayDate = CocCacheProxy.getCacheProxy().getNewLabelMonth();
+		String newDayDate = CocCacheProxy.getCacheProxy().getNewLabelMonth(configId);
 		Map<String,List<String>> allList = this.getAllListIdAndConfig(newDayDate,monthUpdateCycle,configId);
 		
 		if(null == allList || allList.isEmpty()){

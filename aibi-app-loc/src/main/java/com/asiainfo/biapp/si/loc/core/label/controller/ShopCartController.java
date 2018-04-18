@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.asiainfo.biapp.si.loc.base.common.CommonConstants;
 import com.asiainfo.biapp.si.loc.base.common.LabelInfoContants;
 import com.asiainfo.biapp.si.loc.base.common.LabelRuleContants;
 import com.asiainfo.biapp.si.loc.base.controller.BaseController;
@@ -121,8 +122,8 @@ public class ShopCartController extends BaseController {
 		Map<String, Object> result = new HashMap<String, Object>();
 		WebResult<Map<String, Object>> webResult = new WebResult<>();
 		try {
-			String monthDate = CocCacheProxy.getCacheProxy().getNewLabelMonth();
-			String dayDate =CocCacheProxy.getCacheProxy().getNewLabelDay();
+			String monthDate =getNewLabelMonth();
+			String dayDate =getNewLabelDay();
 			boolean existMonthLabel = false;//是否存在月周期标签
 		    boolean existDayLabel = false;//是否存在日周期标签
 			boolean isAllNewDate = true;//规则中标签是否都是最新数据日期
@@ -169,8 +170,8 @@ public class ShopCartController extends BaseController {
 			result.put("monthDate", DateUtil.string2StringFormat(monthDate, DateUtil.FORMAT_YYYYMM, DateUtil.FORMAT_YYYY_MM));//规则中最早月数据日期
 			result.put("dayDate", DateUtil.string2StringFormat(dayDate, DateUtil.FORMAT_YYYYMMDD, DateUtil.FORMAT_YYYY_MM_DD));//规则中最早日数据日期
 			result.put("isAllNewDate", isAllNewDate);
-			result.put("newMonthDate", DateUtil.string2StringFormat(CocCacheProxy.getCacheProxy().getNewLabelMonth(), DateUtil.FORMAT_YYYYMM, DateUtil.FORMAT_YYYY_MM));//最新月数据日期
-			result.put("newDayDate", DateUtil.string2StringFormat(CocCacheProxy.getCacheProxy().getNewLabelDay(), DateUtil.FORMAT_YYYYMMDD, DateUtil.FORMAT_YYYY_MM_DD));//最新日数据日期
+			result.put("newMonthDate", DateUtil.string2StringFormat(getNewLabelMonth(), DateUtil.FORMAT_YYYYMM, DateUtil.FORMAT_YYYY_MM));//最新月数据日期
+			result.put("newDayDate", DateUtil.string2StringFormat(getNewLabelDay(), DateUtil.FORMAT_YYYYMMDD, DateUtil.FORMAT_YYYY_MM_DD));//最新日数据日期
 			result.put("existMonthLabel", existMonthLabel);
 			result.put("existDayLabel", existDayLabel);
 		} catch (Exception e) {

@@ -43,9 +43,9 @@ public class RunListDataByConfig implements Callable<String> {
 			return " iListId is null or is empty !!!";
 		}
 		List<String> listIds=new ArrayList<>();
-		ExploreQueryParam eqp = new ExploreQueryParam(iDataDate,CocCacheProxy.getCacheProxy().getNewLabelMonth(), CocCacheProxy.getCacheProxy().getNewLabelDay());
+		ExploreQueryParam eqp = new ExploreQueryParam(iDataDate,CocCacheProxy.getCacheProxy().getNewLabelMonth(iConfigId), CocCacheProxy.getCacheProxy().getNewLabelDay(iConfigId));
 		for(String listId : iListIds){
-			String ifRun = listMServiceImpl.validateLabelDataDate(listId, CocCacheProxy.getCacheProxy().getNewLabelMonth(), CocCacheProxy.getCacheProxy().getNewLabelDay());
+			String ifRun = listMServiceImpl.validateLabelDataDate(listId, CocCacheProxy.getCacheProxy().getNewLabelMonth(iConfigId), CocCacheProxy.getCacheProxy().getNewLabelDay(iConfigId));
 			if(StringUtils.isNoneBlank(ifRun) && ifRun.equals("2")){
 				listIds.add(listId);
 				listMServiceImpl.createCustomerList(listId, eqp);
