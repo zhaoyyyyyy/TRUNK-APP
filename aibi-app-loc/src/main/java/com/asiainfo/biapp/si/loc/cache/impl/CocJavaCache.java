@@ -62,28 +62,28 @@ public class CocJavaCache implements CocCacheAble{
 
 
 	@Override
-	public String getNewLabelDay() {
+	public String getNewLabelDay(String configId) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 
 	@Override
-	public Integer getNewLabelDayStatus() {
+	public Integer getNewLabelDayStatus(String configId) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 
 	@Override
-	public String getNewLabelMonth() {
+	public String getNewLabelMonth(String configId) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 
 	@Override
-	public Integer getNewLabelMonthStatus() {
+	public Integer getNewLabelMonthStatus(String configId) {
 		// TODO Auto-generated method stub
 		return null;
 	}

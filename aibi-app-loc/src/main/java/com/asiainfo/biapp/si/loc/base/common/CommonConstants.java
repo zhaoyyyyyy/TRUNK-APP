@@ -20,7 +20,7 @@ public class CommonConstants {
 	/**
 	 * 最新数据时间在缓存中的key
 	 */
-	public static final String NEW_DATE = "NEW_DATE";
+	public static final String NEW_DATE = "NEW_DATE_";
 	
 	/**
 	 * 精确值表中列名

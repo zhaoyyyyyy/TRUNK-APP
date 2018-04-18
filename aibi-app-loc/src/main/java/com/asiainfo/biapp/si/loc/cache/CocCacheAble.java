@@ -60,25 +60,25 @@ public interface CocCacheAble {
 	 * 获取日标签最新数据日期
 	 * @return
 	 */
-	public String getNewLabelDay();
+	public String getNewLabelDay(String configId);
 	
 	/**
 	 * 获取日标签最新数据日期是否统计过用户数
 	 * @return
 	 */
-	public Integer getNewLabelDayStatus();
+	public Integer getNewLabelDayStatus(String configId);
 	
 	/**
 	 * 获取月标签最新数据月份
 	 * @return
 	 */
-	public String getNewLabelMonth();
+	public String getNewLabelMonth(String configId);
 	
 	/**
 	 * 获取月标签最新数据月份是否统计过用户数
 	 * @return
 	 */
-	public Integer getNewLabelMonthStatus();
+	public Integer getNewLabelMonthStatus(String configId);
 	
 	/**
 	 * 根据专区id 获取该专区对应的coc权限字段名称

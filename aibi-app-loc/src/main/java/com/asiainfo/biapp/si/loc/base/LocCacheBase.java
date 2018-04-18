@@ -144,7 +144,7 @@ public class LocCacheBase extends ICacheBase implements ApplicationContextAware{
 		CopyOnWriteArrayList<NewestLabelDate> newDateList = new CopyOnWriteArrayList<NewestLabelDate>(labelDate);
 		Map<String, Object> newDateMap = new ConcurrentHashMap<String, Object>();
 		for (NewestLabelDate newDate : newDateList) {
-			newDateMap.put(CommonConstants.NEW_DATE, newDate);
+			newDateMap.put(CommonConstants.NEW_DATE+newDate.getConfigId(), newDate);
 		}
 		try {
 			this.setHashObject(Prefix.LOC+Prefix.KV+CacheKey.TABLE_CI_NEWEST_LABEL_DATE, newDateMap);
@@ -160,10 +160,10 @@ public class LocCacheBase extends ICacheBase implements ApplicationContextAware{
 	 * 获取日标签最新数据日期
 	 * @return
 	 */
-	public NewestLabelDate getNewestLabelDate() {
+	public NewestLabelDate getNewestLabelDate(String configId) {
 		NewestLabelDate labelDate = null;
 		try {
-			labelDate = (NewestLabelDate)this.getObjectMap2(CacheKey.TABLE_CI_NEWEST_LABEL_DATE, CommonConstants.NEW_DATE);
+			labelDate = (NewestLabelDate)this.getObjectMap2(CacheKey.TABLE_CI_NEWEST_LABEL_DATE, CommonConstants.NEW_DATE+configId);
 		} catch (Exception e) {
 			log.error(e.getMessage(),e);
 		}
