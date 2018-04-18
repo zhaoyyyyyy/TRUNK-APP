@@ -1,4 +1,4 @@
-package com.asiainfo.biapp.si.loc.bd.cyclist.runthread;
+package com.asiainfo.biapp.si.loc.bd.list.task;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,6 +14,12 @@ import com.asiainfo.biapp.si.loc.core.label.service.impl.CustomerManagerServiceI
 import com.asiainfo.biapp.si.loc.core.syspush.task.ICustomerPublishTaskService;
 import com.asiainfo.biapp.si.loc.core.syspush.task.service.CustomerPublishTaskServiceImpl;
 
+/**
+ * 周期性客户群运行线程类
+ * @author wanghf5
+ * @since 2018-04-18
+ *
+ */
 public class RunListDataByConfig implements Callable<String> {
 
 	private List<String> iListIds;

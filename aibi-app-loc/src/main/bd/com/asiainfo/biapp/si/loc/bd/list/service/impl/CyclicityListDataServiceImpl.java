@@ -1,4 +1,4 @@
-package com.asiainfo.biapp.si.loc.bd.cyclist.service.impl;
+package com.asiainfo.biapp.si.loc.bd.list.service.impl;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -20,10 +20,16 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import com.asiainfo.biapp.si.loc.bd.common.util.JDBCUtil;
-import com.asiainfo.biapp.si.loc.bd.cyclist.runthread.RunListDataByConfig;
-import com.asiainfo.biapp.si.loc.bd.cyclist.service.ICyclicityListDataService;
+import com.asiainfo.biapp.si.loc.bd.list.service.ICyclicityListDataService;
+import com.asiainfo.biapp.si.loc.bd.list.task.RunListDataByConfig;
 import com.asiainfo.biapp.si.loc.cache.CocCacheProxy;
 
+/**
+ * 清单周期性生成service实现类
+ * @author wanghf5
+ * @since 2018-04-18
+ *
+ */
 @Service
 @Transactional
 public class CyclicityListDataServiceImpl implements ICyclicityListDataService{

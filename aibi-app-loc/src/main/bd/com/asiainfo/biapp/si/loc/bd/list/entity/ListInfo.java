@@ -1,4 +1,4 @@
-package com.asiainfo.biapp.si.loc.bd.listinfo.entity;
+package com.asiainfo.biapp.si.loc.bd.list.entity;
 
 import java.util.Date;
 

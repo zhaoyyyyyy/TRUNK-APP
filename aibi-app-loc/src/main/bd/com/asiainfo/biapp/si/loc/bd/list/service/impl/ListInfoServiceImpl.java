@@ -14,10 +14,16 @@ import com.asiainfo.biapp.si.loc.base.page.Page;
 import com.asiainfo.biapp.si.loc.base.service.impl.BaseServiceImpl;
 import com.asiainfo.biapp.si.loc.bd.common.util.JDBCUtil;
 import com.asiainfo.biapp.si.loc.bd.list.dao.IListInfoDao;
+import com.asiainfo.biapp.si.loc.bd.list.entity.ListInfo;
+import com.asiainfo.biapp.si.loc.bd.list.entity.ListInfoId;
 import com.asiainfo.biapp.si.loc.bd.list.service.IListInfoService;
-import com.asiainfo.biapp.si.loc.bd.listinfo.entity.ListInfo;
-import com.asiainfo.biapp.si.loc.bd.listinfo.entity.ListInfoId;
 
+/**
+ * 清单生成service接口实现
+ * @author wanghf5
+ * @since 2018-04-18
+ *
+ */
 @Service
 @Transactional
 public class ListInfoServiceImpl extends BaseServiceImpl<ListInfo, String>  implements IListInfoService{

@@ -6,11 +6,16 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.asiainfo.biapp.si.loc.bd.cyclist.service.impl.CyclicityListDataServiceImpl;
+import com.asiainfo.biapp.si.loc.bd.list.service.impl.CyclicityListDataServiceImpl;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-
+/**
+ * 
+ * @author wanghf5
+ * @since 2018-04-18
+ *
+ */
 @Api(value = "客户群标签数据生成", description = "用语jauth调用，启动客户群标签生成")
 @RequestMapping("api/listData")
 @RestController

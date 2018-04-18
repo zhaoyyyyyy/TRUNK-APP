@@ -1,4 +1,4 @@
-package com.asiainfo.biapp.si.loc.bd.cyclist.service;
+package com.asiainfo.biapp.si.loc.bd.list.service;
 
 import java.util.List;
 import java.util.Map;
