@@ -129,7 +129,15 @@ $.fn.extend({
 						  }
 					  });
 				  }else{
-					  $.kvSet("CurrentConfigId",result.data[0].configId);
+					  
+					//更新缓存当前专区id 20180418 tianxy3
+						$.commAjax({
+							  url: $.ctx + "/api/prefecture/preConfigInfo/setSession",
+							  postData:{object: result.data[0].configId},
+							  onSuccess: function(returnObj){
+								  $.kvSet("CurrentConfigId",result.data[0].configId);
+							  }
+						});
 					  $("#preConfig_list > .dropdown-toggle > .pre-config-name").html(result.data[0].sourceName).attr("configId",result.data[0].configId);
 //					 
 				  }
@@ -151,19 +159,20 @@ $.fn.extend({
 								var e = ev||event ;
 								e.stopPropagation?e.stopPropagation():e.cancelBubble=true;
 								var $this = $(this);
-								$.kvSet("CurrentConfigId",$this.attr("configId"));
-								window.location.reload();
+								//更新缓存当前专区id 20180418 tianxy3
+								$.commAjax({
+									  url: $.ctx + "/api/prefecture/preConfigInfo/setSession",
+									  postData:{object: $this.attr("configId")},
+									  onSuccess: function(returnObj){
+										  $.kvSet("CurrentConfigId",$this.attr("configId"));
+											window.location.reload();
+									  }
+								});
+								
 							});
 						}
 					});
-				    //更新缓存当前专区id 20180418 tianxy3
-					$.commAjax({
-						  url: $.ctx + "/api/prefecture/preConfigInfo/setSession",
-						  postData:{object: $.kvGet("CurrentConfigId")},
-						  onSuccess: function(returnObj){
-							  
-						  }
-					});
+				    
 				}
 			}
 		});
