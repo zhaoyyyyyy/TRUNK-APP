@@ -83,14 +83,13 @@ public class SourceTableInfoServiceImpl extends BaseServiceImpl<SourceTableInfo,
     @Autowired
     private ISourceInfoService iSourceInfoService;
 
-//    @Autowired
-//    private ITargetTableStatusService iTargetTableStatusService;
-    
     @Autowired
     private IMdaSysTableService iMdaSysTableService;
     
     @Autowired
     private IBackSqlService iBackSqlService;
+    
+    static final Integer sourceType = 2;
 
     @Override
     protected BaseDao<SourceTableInfo, String> getBaseDao() {
@@ -159,16 +158,6 @@ public class SourceTableInfoServiceImpl extends BaseServiceImpl<SourceTableInfo,
         }
         super.saveOrUpdate(sourceTableInfo);
 
-        // 添加指标源表状态
-//        TargetTableStatus targetTableStatus = new TargetTableStatus();
-//        targetTableStatus.setSourceTableId(sourceTableInfo.getSourceTableId());
-//        targetTableStatus.setSourceTableName(sourceTableInfo.getSourceTableName());
-//        targetTableStatus.setSourceTableType(sourceTableInfo.getSourceTableType());
-//        targetTableStatus.setManualExecution(0);
-//        targetTableStatus.setIsDoing(0);
-//        targetTableStatus.setDataStatus(1);
-//        iTargetTableStatusService.addTargertTableStatus(targetTableStatus);
-
         // 添加指标信息列
         if (!sourceTableInfo.getSourceInfoList().isEmpty()) {
             for (SourceInfo s : sourceTableInfo.getSourceInfoList()) {
@@ -186,8 +175,7 @@ public class SourceTableInfoServiceImpl extends BaseServiceImpl<SourceTableInfo,
                 iSourceInfoService.modifySourceInfo(newS);
             }
         }
-        
-        if(2==sourceTableInfo.getSourceTableType()){
+        if(sourceType==sourceTableInfo.getSourceTableType()){
             MdaSysTable mdaSysTable = new MdaSysTable();
             mdaSysTable.setConfigId(sourceTableInfo.getConfigId());
             if(sourceTableInfo.getSourceTableName().contains(".")){
@@ -199,7 +187,8 @@ public class SourceTableInfoServiceImpl extends BaseServiceImpl<SourceTableInfo,
             }
             mdaSysTable.setTableCnName(sourceTableInfo.getSourceTableCnName());
             mdaSysTable.setTableSchema(tableSchema);
-            mdaSysTable.setTableType(3);
+            int tableType = 3;//表类型
+            mdaSysTable.setTableType(tableType);
             mdaSysTable.setUpdateCycle(sourceTableInfo.getReadCycle());
             mdaSysTable.setCreateUserId(sourceTableInfo.getCreateUserId());
             mdaSysTable.setCreateTime(createTime);
@@ -240,12 +229,6 @@ public class SourceTableInfoServiceImpl extends BaseServiceImpl<SourceTableInfo,
         }
         // 保存指标源表
         super.saveOrUpdate(fromToBean(sourceTableInfo, oldSou));
-
-        // 修改状态表
-//        TargetTableStatus targetTableStatus = iTargetTableStatusService.selectTargertTableStatusById(sourceTableInfo
-//            .getSourceTableId());
-//        targetTableStatus.setSourceTableName(sourceTableInfo.getSourceTableName());
-//        iTargetTableStatusService.modifyTargertTableStatus(targetTableStatus);
 
         // 修改指标信息列
         List<String> newIds = new ArrayList<>();
@@ -300,7 +283,7 @@ public class SourceTableInfoServiceImpl extends BaseServiceImpl<SourceTableInfo,
             iSourceInfoService.deleteSourceInfo(s.getSourceId());
         }
         //删除mdaSysTable中相关联数据
-        if(2==sourceTableInfo.getSourceTableType()){
+        if(sourceType==sourceTableInfo.getSourceTableType()){
             MdaSysTableVo mdaSysTableVo = new MdaSysTableVo();
             if(sourceTableInfo.getSourceTableName().contains(".")){
                 int charX = sourceTableInfo.getSourceTableName().lastIndexOf(".");
@@ -314,7 +297,6 @@ public class SourceTableInfoServiceImpl extends BaseServiceImpl<SourceTableInfo,
         }
         
         super.delete(sourceTableId);
-//        iTargetTableStatusService.deleteTargertTableStatus(sourceTableId);
     }
 
     /**
@@ -393,8 +375,6 @@ public class SourceTableInfoServiceImpl extends BaseServiceImpl<SourceTableInfo,
         // 解析模版文件
         List<SourceInfo> sourceInfoList = new ArrayList<SourceInfo>();
         CSVReader reader = null;
-        // 当前记录条数
-        int currentRowNum = 0;
         // 列数
         int columnSize = 4;
 
@@ -405,7 +385,6 @@ public class SourceTableInfoServiceImpl extends BaseServiceImpl<SourceTableInfo,
 
         try {
             while ((nextLine = reader.readNext()) != null) {
-                currentRowNum++;
                 // 跳过注释行
                 if (nextLine[0].startsWith("#")) {
                     continue;
@@ -422,7 +401,6 @@ public class SourceTableInfoServiceImpl extends BaseServiceImpl<SourceTableInfo,
                 sourceInfoList.add(sourceInfo);
             }
         } catch (Exception e) {
-            currentRowNum = -1;
             throw new Exception("导入报错" + e.getMessage(), e);
         } finally {
             if (in != null) {

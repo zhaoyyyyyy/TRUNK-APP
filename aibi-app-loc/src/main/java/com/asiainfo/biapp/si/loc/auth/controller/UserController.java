@@ -92,7 +92,7 @@ public class UserController extends BaseController<User>{
         } catch (BaseException e) {
             return webResult.fail(e);
         }
-        return webResult.success("获取用户组织访问权限跟同专区权限成功",user);
+        return webResult.success("获取用户组织访问权限与同专区权限成功",user);
 	}
 	
 	@ApiOperation(value = "通过token拿到当前登录用户的用户名")

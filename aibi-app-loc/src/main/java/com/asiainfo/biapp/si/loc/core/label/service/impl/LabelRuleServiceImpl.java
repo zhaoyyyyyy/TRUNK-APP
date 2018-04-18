@@ -8,7 +8,6 @@ package com.asiainfo.biapp.si.loc.core.label.service.impl;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -25,7 +24,6 @@ import com.asiainfo.biapp.si.loc.base.common.LabelRuleContants;
 import com.asiainfo.biapp.si.loc.base.dao.BaseDao;
 import com.asiainfo.biapp.si.loc.base.exception.BaseException;
 import com.asiainfo.biapp.si.loc.base.exception.ParamRequiredException;
-import com.asiainfo.biapp.si.loc.base.page.Page;
 import com.asiainfo.biapp.si.loc.base.service.impl.BaseServiceImpl;
 import com.asiainfo.biapp.si.loc.base.utils.ExpressionPaser;
 import com.asiainfo.biapp.si.loc.base.utils.LogUtil;
@@ -102,12 +100,11 @@ public class LabelRuleServiceImpl extends BaseServiceImpl<LabelRule, String> imp
 			LabelRuleVo rule=new LabelRuleVo();
 			try {
 				BeanUtils.copyProperties(rule, entity);
-			} catch (Exception e) {}
+			} catch (Exception e) {LogUtil.info("将值复制给规则失败");}
 			if (LabelRuleContants.ELEMENT_TYPE_LIST_ID == entity.getElementType()) {
 				LabelInfo labelInfo = iLabelInfoService.selectLabelInfoById(entity.getCalcuElement());
 				rule.setAttrName(labelInfo.getLabelName());
                 rule.setCustomOrLabelName(labelInfo.getLabelName());
-				//TODO 设置其他参数
 			}
 			if (LabelRuleContants.ELEMENT_TYPE_LABEL_ID == entity.getElementType()) {
 				LabelInfo labelInfo = CocCacheProxy.getCacheProxy().getLabelInfoById( entity.getCalcuElement());
@@ -131,7 +128,7 @@ public class LabelRuleServiceImpl extends BaseServiceImpl<LabelRule, String> imp
 						LabelRuleVo vo=new LabelRuleVo();
 						try {
 							BeanUtils.copyProperties(vo, childRule);
-						} catch (Exception e) {}
+						} catch (Exception e) {LogUtil.info("将值复制给规失败");}
 						LabelVerticalColumnRel rel = map.get(childRule.getCalcuElement());
 						MdaSysTableColumn column = rel.getMdaSysTableColumn();
 						vo.setLabelTypeId(rel.getLabelTypeId());
@@ -172,7 +169,7 @@ public class LabelRuleServiceImpl extends BaseServiceImpl<LabelRule, String> imp
 	@Override
 	public String shopCartRule(List<LabelRuleVo> ciLabelRuleListTemp) {
 		StringBuffer rule=new StringBuffer();
-		if (ciLabelRuleListTemp != null && ciLabelRuleListTemp.size() > 0) {
+		if (ciLabelRuleListTemp != null && !ciLabelRuleListTemp.isEmpty()) {
 			for (int i = 0; i < ciLabelRuleListTemp.size(); i++) {
 				LabelRuleVo labelRule = ciLabelRuleListTemp.get(i);
 				int elementType = labelRule.getElementType();
@@ -287,7 +284,7 @@ public class LabelRuleServiceImpl extends BaseServiceImpl<LabelRule, String> imp
 		// 增加组合标签类型，处理方式与纵表一致（已做）
 		}else if(labelRule.getLabelTypeId() == LabelInfoContants.LABEL_TYPE_VERT){
 			List<LabelRuleVo> childLabelRuleList = labelRule.getChildLabelRuleList();
-			if(childLabelRuleList != null && childLabelRuleList.size() > 0){
+			if(childLabelRuleList != null && !childLabelRuleList.isEmpty()){
 				for (int i = 0; i < childLabelRuleList.size(); i++) {
 					LabelRuleVo rule = childLabelRuleList.get(i);
 					if(rule.getLabelTypeId() == LabelInfoContants.LABEL_TYPE_SIGN){//01型
@@ -351,7 +348,7 @@ public class LabelRuleServiceImpl extends BaseServiceImpl<LabelRule, String> imp
 							attrValStr.append("]");
 						}
 					}else if(rule.getLabelTypeId() == LabelInfoContants.LABEL_TYPE_DATE){
-						
+						LogUtil.info("进来了日期型");
 					}else if(rule.getLabelTypeId() == LabelInfoContants.LABEL_TYPE_TEXT){
 						if("1".equals(rule.getQueryWay())){
 							if(StringUtil.isNotEmpty(rule.getDarkValue())){
@@ -389,7 +386,7 @@ public class LabelRuleServiceImpl extends BaseServiceImpl<LabelRule, String> imp
 			for (LabelRuleVo c : originalList) {
 				sb.append(c.getCalcuElement()).append(" ");
 			}
-			String oldStr = sb.substring(0, sb.lastIndexOf(" ")).toString();
+			String oldStr = sb.substring(0, sb.lastIndexOf(" "));
 			// 检查str中是否有"-"来判断是否有“剔除”的情况，如果有返回剔除位置
 			int firstExceptPos = oldStr.indexOf("-");
 			String resultStr = "";
@@ -409,14 +406,18 @@ public class LabelRuleServiceImpl extends BaseServiceImpl<LabelRule, String> imp
 				if (resultArr[i].startsWith("_")) {
 					rule.setCalcuElement(resultArr[i].replace("_", ""));
 					if (rule.getLabelFlag() != null) {
-						if (rule.getLabelFlag() == 0) {
-							rule.setLabelFlag(1);
-						} else if (rule.getLabelFlag() == 1) {
-							rule.setLabelFlag(0);
-						} else if (rule.getLabelFlag() == 2) {
-							rule.setLabelFlag(3);
-						} else if (rule.getLabelFlag() == 3) {
-							rule.setLabelFlag(2);
+					    int labelFlag0=0;
+					    int labelFlag1=1;
+					    int labelFlag2=2;
+					    int labelFlag3=3;
+						if (rule.getLabelFlag() == labelFlag0) {
+							rule.setLabelFlag(labelFlag1);
+						} else if (rule.getLabelFlag() == labelFlag1) {
+							rule.setLabelFlag(labelFlag0);
+						} else if (rule.getLabelFlag() == labelFlag2) {
+							rule.setLabelFlag(labelFlag3);
+						} else if (rule.getLabelFlag() == labelFlag3) {
+							rule.setLabelFlag(labelFlag2);
 						}
 					} else {
 						rule.setLabelFlag(0);

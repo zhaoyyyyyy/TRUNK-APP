@@ -98,7 +98,7 @@ public class CategoryInfoServiceImpl extends BaseServiceImpl<CategoryInfo, Strin
     	CategoryInfo categoryInfo = categoryInfoService.selectCategoryInfoById(categoryId);
     	if(categoryInfo != null){
     		categoryInfo.getChildren();
-    		if(categoryInfo != null && categoryInfo.getParentId() != null){
+    		if(categoryInfo.getParentId() != null){
         		String parentId = categoryInfo.getParentId();
         		return getParentName(parentId,categoryInfo.getCategoryName()+"/"+lastPath);
         	}else{
@@ -138,10 +138,11 @@ public class CategoryInfoServiceImpl extends BaseServiceImpl<CategoryInfo, Strin
         if(categoryInfo != null && StringUtil.isEmpty(categoryInfo.getParentId())){
             categoryInfo.setParentId(null);
         }
-        if(StringUtils.isBlank(categoryInfo.getCategoryName())){
+        if(categoryInfo != null && StringUtils.isBlank(categoryInfo.getCategoryName())){
             throw new ParamRequiredException("分类名称不能为空");
         }
-        if(categoryInfo.getCategoryName().length()>10){
+        int num = 10;
+        if(categoryInfo.getCategoryName().length()>num){
             throw new ParamRequiredException("分类名称过长");
         }
         CategoryInfoVo categoryInfoVo = new CategoryInfoVo();
@@ -155,9 +156,6 @@ public class CategoryInfoServiceImpl extends BaseServiceImpl<CategoryInfo, Strin
         if(StringUtils.isBlank(categoryInfo.getCategoryName())){
             throw new ParamRequiredException("分类名称不能为空");
         }
-       /* if(categoryInfo.getCategoryName().length()>8){
-            throw new ParamRequiredException("分类名称过长");
-        }*/
         CategoryInfo categoryInfo2 = iCategoryInfoDao.get(categoryInfo.getCategoryId());
         categoryInfo2.setCategoryName(categoryInfo.getCategoryName());
         categoryInfo2.setSortNum(categoryInfo.getSortNum());
@@ -177,11 +175,6 @@ public class CategoryInfoServiceImpl extends BaseServiceImpl<CategoryInfo, Strin
         if(selectCategoryInfoById(categoryId).getChildren().size() != 0){
             throw new ParamRequiredException("该分类下存在有效标签或者分类，不能删除");
         }
-//        LabelInfoVo labelInfoVo = new LabelInfoVo();
-//        labelInfoVo.setCategoryId(categoryId);
-//        if(iLabelInfoDao.selectLabelAllEffectiveInfoList(labelInfoVo).size() != 0){
-//            throw new ParamRequiredException("该分类下存在有效标签或者分类，不能删除");
-//        }
         ICategoryInfoService categoryInfoService = (ICategoryInfoService)SpringContextHolder.getBean("categoryInfoServiceImpl");
         if(null !=categoryInfoService.selectCategoryInfoById(categoryId).getSortNum()){
         	String sysId =categoryInfoService.selectCategoryInfoById(categoryId).getSysId();
@@ -189,7 +182,7 @@ public class CategoryInfoServiceImpl extends BaseServiceImpl<CategoryInfo, Strin
             CategoryInfoVo categoryInfoVo = new CategoryInfoVo();
             categoryInfoVo.setSysId(sysId);
             List<CategoryInfo> categoryInfoList =iCategoryInfoDao.selectAllCategoryInfoList(categoryInfoVo);
-            if(categoryInfoList.size()>0){
+            if(!categoryInfoList.isEmpty()){
             	for(int i=0;i<categoryInfoList.size();i++){
                 	if(categoryInfoList.get(i).getSortNum() > sortNum){
                 		CategoryInfo categoryInfoLists = categoryInfoList.get(i);
@@ -266,8 +259,8 @@ public class CategoryInfoServiceImpl extends BaseServiceImpl<CategoryInfo, Strin
                     result.append("第["+currentRowNum+"]行数据错误存在空的单元格;");
                     continue;
                 }
-                
-                if(nextLine[num].length()>10){
+                int numLength = 10;
+                if(nextLine[num].length()>numLength){
                     result.append("第["+currentRowNum+"]行["+(num+1)+"]级分类名称过长;");
                     continue;
                 }
