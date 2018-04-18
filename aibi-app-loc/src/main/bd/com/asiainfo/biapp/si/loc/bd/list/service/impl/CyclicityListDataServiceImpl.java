@@ -51,7 +51,7 @@ public class CyclicityListDataServiceImpl implements ICyclicityListDataService{
 	@Override
 	public void runAllDayListData() {
 		// TODO 获取所有专区
-		String newDayDate = CocCacheProxy.getCacheProxy().getNewLabelDay("");
+		String newDayDate = "";
 		Map<String,List<String>> allList = this.getAllListIdAndConfig(newDayDate,dayUpdateCycle,null);
 		if(null == allList || allList.isEmpty()){
 			return ;
@@ -60,6 +60,7 @@ public class CyclicityListDataServiceImpl implements ICyclicityListDataService{
 		ExecutorService executorService = Executors.newFixedThreadPool(keySet.size());
 		List<Future<String>> resultList = new ArrayList<Future<String>>();
 		for (String key : keySet) {
+			newDayDate = CocCacheProxy.getCacheProxy().getNewLabelDay(key);
 			List<String> listList = allList.get(key);
 			// 使用ExecutorService执行Callable类型的任务，并将结果保存在future变量中  
             Future<String> future = executorService.submit(new RunListDataByConfig(listList,key,newDayDate));  
