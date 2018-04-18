@@ -127,6 +127,9 @@ public class CustomDownloadRecordController extends BaseController<CustomDownloa
         
         //返回文件生成
         BufferedInputStream bis = null;
+        FileInputStream fis = null;
+        OutputStream os = null;
+        
         response.setContentType("application/force-download");//强制设置浏览器不打开下载
         response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
         response.setHeader("Content-Disposition", String.format("attachment; filename=\"%s\"", fileName));  
@@ -160,9 +163,10 @@ public class CustomDownloadRecordController extends BaseController<CustomDownloa
                 isDownload = true;
             }
             if (isDownload) {
-                bis = new BufferedInputStream(new FileInputStream(file));
+            		fis = new FileInputStream(file);
+				bis = new BufferedInputStream(fis);
                 //输出流
-                OutputStream os = response.getOutputStream();
+                os = response.getOutputStream();
                 int i = bis.read(buffer);
                 while(i != -1){
                     os.write(buffer, 0, i);
@@ -175,9 +179,23 @@ public class CustomDownloadRecordController extends BaseController<CustomDownloa
         } catch (Exception e) {
             LogUtil.error("Download Exception!", e);
         } finally {
+            if (fis != null) {
+                try {
+                		fis.close();
+                } catch (IOException e) {
+                    LogUtil.error("IO Exception!", e);
+                }
+            }
             if (bis != null) {
                 try {
-                  bis.close();
+                		bis.close();
+                } catch (IOException e) {
+                    LogUtil.error("IO Exception!", e);
+                }
+            }
+            if (os != null) {
+                try {
+                		os.close();
                 } catch (IOException e) {
                     LogUtil.error("IO Exception!", e);
                 }
