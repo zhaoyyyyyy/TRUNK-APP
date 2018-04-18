@@ -6,7 +6,6 @@
 
 package com.asiainfo.biapp.si.loc.core.prefecture.controller;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
