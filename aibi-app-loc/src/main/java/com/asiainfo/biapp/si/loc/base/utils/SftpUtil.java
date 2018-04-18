@@ -8,7 +8,6 @@ package com.asiainfo.biapp.si.loc.base.utils;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.ConcurrentHashMap;
@@ -458,7 +457,7 @@ public class SftpUtil {
      * 获得一个sftp进程监控器实例
      * @return
      */
-    public SftpProgressMonitor getSftpProgressMonitor(String threadName) {
+    public SftpProgressMonitor getSftpProgressMonitor(final String threadName) {
         
         return new SftpProgressMonitor(){
             private long count=0;     //当前接收的总字节数
