@@ -11,7 +11,7 @@ import com.asiainfo.biapp.si.loc.bd.list.service.impl.CyclicityListDataServiceIm
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 /**
- * 
+ * 清单数据生成jauth调度接口
  * @author wanghf5
  * @since 2018-04-18
  *

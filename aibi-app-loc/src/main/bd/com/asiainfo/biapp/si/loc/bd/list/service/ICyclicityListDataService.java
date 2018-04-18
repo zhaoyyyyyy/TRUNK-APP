@@ -3,6 +3,12 @@ package com.asiainfo.biapp.si.loc.bd.list.service;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * 清单生成接口
+ * @author wanghf5
+ * @since 2018-04-18
+ *
+ */
 public interface ICyclicityListDataService {
 	
 	/**
