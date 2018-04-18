@@ -205,8 +205,8 @@ public class LabelInfoServiceImpl extends BaseServiceImpl<LabelInfo, String> imp
 
     public void modifyLabelInfo(LabelInfo labelInfo) throws BaseException{
         if (labelInfo.getDataStatusId()==2) {
-            String LabelDay = DateUtil.dateFormat(CocCacheProxy.getCacheProxy().getNewLabelDay());
-            String LabelMonth = DateUtil.dateFormat(CocCacheProxy.getCacheProxy().getNewLabelMonth());
+            String LabelDay = DateUtil.dateFormat(CocCacheProxy.getCacheProxy().getNewLabelDay(labelInfo.getConfigId()));
+            String LabelMonth = DateUtil.dateFormat(CocCacheProxy.getCacheProxy().getNewLabelMonth(labelInfo.getConfigId()));
             if (labelInfo.getUpdateCycle()==1) {
                    labelInfo.setEffecTime(DateUtil.string2Date(LabelDay, "yyyy-MM-ddd"));
                }else {
