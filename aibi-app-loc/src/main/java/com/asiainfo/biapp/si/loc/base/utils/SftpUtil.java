@@ -8,7 +8,10 @@ package com.asiainfo.biapp.si.loc.base.utils;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -48,7 +51,7 @@ public class SftpUtil {
     
     private ChannelSftp sftp = null;
     
-    private static boolean isCompleted = false;    //false:未完成；true：已完成
+    private static Map<String, String> isCompletedMap = new ConcurrentHashMap<>();    //false:未完成；true：已完成
     
     
     /**
@@ -114,13 +117,13 @@ public class SftpUtil {
      * @date 2016-7-28
      * @version 1.0.0.2016-7-28
      * */
-    public void download(String directory, String downloadFile,String saveFile,boolean isHasMonitor) {
+    public void download(String directory, String downloadFile,String saveFile,boolean isHasMonitor, String threadName) {
         try {
             sftp.cd(directory);
             File file=new File(saveFile);
             SftpProgressMonitor monitor = null;
             if (isHasMonitor) {
-                monitor = getSftpProgressMonitor();
+                monitor = getSftpProgressMonitor(threadName);
             }
             sftp.get(downloadFile, new FileOutputStream(file), monitor);
         } catch (Exception e) {
@@ -182,15 +185,18 @@ public class SftpUtil {
 
             String[] localPathArr = localpath.split(localpath.contains("/") ? "/" : "\\");
             String filename = localPathArr[localPathArr.length - 1];
-            sftpUtil.download(remotepath, filename, localpath, isHasMonitor);
-            //等待文件传输完成
-            int waitNO= 1;
-            while (!isCompleted) {
-                Thread.sleep((waitNO+25)*1000);
-                ++ waitNO;
-                if (waitNO > 60) break; //超时失败
+            String threadName = "ThreadName" + String.valueOf((int)Math.floor(Math.random() * 10000));
+            sftpUtil.download(remotepath, filename, localpath, isHasMonitor,threadName);
+            if (isHasMonitor) {
+	            	//等待文件传输完成
+	            	int waitNO= 1;
+	            	while (!Boolean.valueOf(SftpUtil.isCompletedMap.get(threadName))) {
+	            		Thread.sleep((waitNO+25)*1000);
+	            		++ waitNO;
+	            		if (waitNO > 60) break; //超时失败
+	            	}
+	            	flag = Boolean.valueOf(SftpUtil.isCompletedMap.get(threadName));
             }
-            flag = isCompleted;
             if (isDel) {
                 //下载完毕后 删除ftp上的文件
                 sftpUtil.delete(remotepath, listTableName, cSftp);
@@ -250,6 +256,7 @@ public class SftpUtil {
             String remotefile = remotepath;
             File locfile = new File(localpath);
             if (locfile.exists()) {
+	            	String threadName = "ThreadName" + String.valueOf((int)Math.floor(Math.random() * 10000));
                 if (locfile.isFile()) {
                     //如果远端是目录，则默认远端的文件名与本地相同
                     if (remotefile.endsWith("/")) {
@@ -257,21 +264,22 @@ public class SftpUtil {
                     } else if (!remotefile.contains(".") && !remotefile.endsWith("/")) {
                         remotefile = remotefile + "/" + locfile.getName();
                     }
-                    remotefile = new String(remotefile.getBytes("UTF-8"),
-                            "iso-8859-1");
-                    sftpUtil.upload(cSftp, localpath, remotefile + UN_UPLOADED, isHasMonitor);
-                    //等待文件传输完成
-                    int waitNO= 1;
-                    while (!isCompleted) {
-                        Thread.sleep((waitNO+25)*1000);
-                        ++ waitNO;
-                        if (waitNO > 60) break; //超时失败
+                    remotefile = new String(remotefile.getBytes("UTF-8"), "iso-8859-1");
+
+                    sftpUtil.upload(cSftp, localpath, remotefile + UN_UPLOADED, isHasMonitor,threadName);
+                    if (isHasMonitor) {
+	                    	//等待文件传输完成
+	                    	int waitNO= 1;
+	                    	while (!Boolean.valueOf(SftpUtil.isCompletedMap.get(threadName))) {
+	                    		Thread.sleep((waitNO+25)*1000);
+	                    		++ waitNO;
+	                    		if (waitNO > 60) break; //超时失败
+	                    	}
+	                    	flag = Boolean.valueOf(SftpUtil.isCompletedMap.get(threadName));
                     }
-                    flag = isCompleted;
                 } else {
-                    remotefile = new String(remotefile.getBytes("UTF-8"),
-                            "iso-8859-1");
-                    flag = sftpUtil.uploadAll(cSftp, localpath, remotefile + UN_UPLOADED, isHasMonitor);
+                    remotefile = new String(remotefile.getBytes("UTF-8"), "iso-8859-1");
+                    flag = sftpUtil.uploadAll(cSftp, localpath, remotefile + UN_UPLOADED, isHasMonitor,threadName);
                 }
                 LogUtil.debug("sftp rename [" + remotefile + UN_UPLOADED + "] to [" + remotefile + "]");
                 cSftp.rename(new File(remotefile + UN_UPLOADED).getName(), new File(remotefile).getName());//上传完改名
@@ -306,7 +314,7 @@ public class SftpUtil {
      * @date 2016-7-8
      * @version Hongfb
      */
-    private boolean upload(ChannelSftp client, String local, String remote, boolean isHasMonitor) throws Exception {
+    private boolean upload(ChannelSftp client, String local, String remote, boolean isHasMonitor,String threadName) throws Exception {
         LogUtil.debug("SFTP from:" + local + " to : " + remote);
         // 设置PassiveMode传输
 //        client.enterLocalPassiveMode();
@@ -324,10 +332,10 @@ public class SftpUtil {
                         + ") fail!please check FTP user's permission!");
             }
         }
-        return uploadFile(client, remoteFileName, local, isHasMonitor);
+        return uploadFile(client, remoteFileName, local, isHasMonitor,threadName);
     }
 
-    private boolean uploadFile(ChannelSftp client, String remoteFile, String localFile, boolean isHasMonitor) throws IOException {
+    private boolean uploadFile(ChannelSftp client, String remoteFile, String localFile, boolean isHasMonitor, String threadName) throws IOException {
         LogUtil.debug("upload file: " + localFile);
         boolean res = true;
         
@@ -338,7 +346,7 @@ public class SftpUtil {
             if (!isHasMonitor) {
                 client.put(new File(localFile).getAbsolutePath(), remoteFile, ChannelSftp.OVERWRITE);
             } else {
-                client.put(new File(localFile).getAbsolutePath(), remoteFile, getSftpProgressMonitor());
+                client.put(new File(localFile).getAbsolutePath(), remoteFile, getSftpProgressMonitor(threadName));
             }
         } catch (SftpException e) {
             res = false;
@@ -359,7 +367,7 @@ public class SftpUtil {
      * @date 2016-7-8
      * @version Hongfb
      */
-    private boolean uploadAll(ChannelSftp client, String filename, String uploadpath, boolean isHasMonitor) throws Exception {
+    private boolean uploadAll(ChannelSftp client, String filename, String uploadpath, boolean isHasMonitor,String threadName) throws Exception {
         boolean success = false;
 
         File file = new File(filename);
@@ -375,12 +383,12 @@ public class SftpUtil {
         for (File f : files) {
             if (f.exists()) {
                 if (f.isDirectory()) {
-                    uploadAll(client, f.getAbsoluteFile().toString(), uploadpath, isHasMonitor);
+                    uploadAll(client, f.getAbsoluteFile().toString(), uploadpath, isHasMonitor,threadName);
                 } else {
                     String local = f.getCanonicalPath().replaceAll("\\\\", "/");
                     String remote = uploadpath.endsWith("/") ? uploadpath + local.substring(local.lastIndexOf("/") + 1)
                             : uploadpath + "/" + local.substring(local.lastIndexOf("/") + 1);
-                    upload(client, local, remote, isHasMonitor);
+                    upload(client, local, remote, isHasMonitor, threadName);
                     client.cd("/");
                 }
             }
@@ -450,7 +458,7 @@ public class SftpUtil {
      * 获得一个sftp进程监控器实例
      * @return
      */
-    public SftpProgressMonitor getSftpProgressMonitor() {
+    public SftpProgressMonitor getSftpProgressMonitor(String threadName) {
         
         return new SftpProgressMonitor(){
             private long count=0;     //当前接收的总字节数
@@ -464,8 +472,9 @@ public class SftpUtil {
             @Override
             public void init(int op,String src,String dest,long max){
                 LogUtil.debug("【Sftp Monitor】Transferring begin.");
- 
-                isCompleted = false;    //false:未完成；true：已完成
+                
+                Thread.currentThread().setName(threadName);
+                SftpUtil.isCompletedMap.put(threadName, "false");    //false:未完成；true：已完成
                 
                 this.cost = System.currentTimeMillis();
                 this.max=max;
@@ -495,7 +504,7 @@ public class SftpUtil {
             */
             @Override
             public void end(){
-                isCompleted = true;    //false:未完成；true：已完成
+                SftpUtil.isCompletedMap.put(threadName, "true");    //false:未完成；true：已完成
                 
                 LogUtil.debug("传输已完成"); 
                 LogUtil.debug("【Sftp Monitor】Transferring done.cost:"+(System.currentTimeMillis()-cost)+"ms.");
