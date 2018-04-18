@@ -19,6 +19,7 @@ import com.asiainfo.biapp.si.loc.base.extend.SpringContextHolder;
 import com.asiainfo.biapp.si.loc.base.utils.DateUtil;
 import com.asiainfo.biapp.si.loc.base.utils.LogUtil;
 import com.asiainfo.biapp.si.loc.base.utils.StringUtil;
+import com.asiainfo.biapp.si.loc.base.utils.ThreadPool;
 import com.asiainfo.biapp.si.loc.cache.CocCacheAble;
 import com.asiainfo.biapp.si.loc.cache.CocCacheProxy;
 import com.asiainfo.biapp.si.loc.core.label.entity.LabelInfo;
@@ -200,7 +201,8 @@ public class CustomerPublishTaskServiceImpl implements ICustomerPublishTaskServi
                     //启动推送线程
                     ICustomerPublishThread curCustomerPublishThread = this.getICustomerPublishThreadBean();
                     curCustomerPublishThread.initParamter(labelPushCycles, isJobTask, new ArrayList<Map<String, Object>>());
-                    Executors.newFixedThreadPool(10).execute(curCustomerPublishThread);
+//                    Executors.newFixedThreadPool(10).execute(curCustomerPublishThread);
+    					ThreadPool.getInstance().execute(curCustomerPublishThread);
                 }    
             } else {
                 LogUtil.info("周期性客户群(" + customId + ")没有设置推送平台，本周期不推送。");

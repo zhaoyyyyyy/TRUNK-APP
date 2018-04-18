@@ -28,6 +28,7 @@ import com.asiainfo.biapp.si.loc.base.page.Page;
 import com.asiainfo.biapp.si.loc.base.service.impl.BaseServiceImpl;
 import com.asiainfo.biapp.si.loc.base.utils.LogUtil;
 import com.asiainfo.biapp.si.loc.base.utils.StringUtil;
+import com.asiainfo.biapp.si.loc.base.utils.ThreadPool;
 import com.asiainfo.biapp.si.loc.bd.common.service.IBackSqlService;
 import com.asiainfo.biapp.si.loc.cache.CocCacheProxy;
 import com.asiainfo.biapp.si.loc.core.label.entity.LabelInfo;
@@ -184,7 +185,8 @@ public class LabelPushCycleServiceImpl extends BaseServiceImpl<LabelPushCycle, S
         //推送
         ICustomerPublishThread curCustomerPublishThread = (ICustomerPublishThread) SpringContextHolder.getBean("customerPublishDefaultThread");
         curCustomerPublishThread.initParamter(lPCycles, false, new ArrayList<Map<String, Object>>());
-        Executors.newFixedThreadPool(10).execute(curCustomerPublishThread);
+//        Executors.newFixedThreadPool(10).execute(curCustomerPublishThread);
+		ThreadPool.getInstance().execute(curCustomerPublishThread);
     
     }
 
