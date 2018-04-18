@@ -82,6 +82,19 @@ var labelInfoModel = (function (model){
     			  onSuccess: function(returnObj){
     				  dataModel.labelInfo = returnObj.data;
     				  dataModel.labelInfo.tacticsId = returnObj.data.labelExtInfo.tacticsId;
+    				  var time = new Date(returnObj.data.failTime);
+    				  var y = time.getFullYear();//年
+    				  var m = (time.getMonth()+1<10 ? '0'+(time.getMonth()+1):time.getMonth()+1);//月
+    				  if(dataModel.labelInfo.updateCycle == 1){
+    					  var d = (time.getDate()+1<10 ? '0' +(time.getDate()):time.getDate());//日
+    					  dataModel.isShowFailTimeMonthDiv = false;
+    					  dataModel.isShowFailTimeDayDiv = true;
+    					  $("#endDateByDay").val(y+"-"+m+"-"+d);
+    				  }else if(dataModel.labelInfo.updateCycle == 2){
+    					  dataModel.isShowFailTimeMonthDiv = true;
+    					  dataModel.isShowFailTimeDayDiv = false;
+    					  $("#endDateByMonth").val(y+"-"+m);
+    				  }
     			  }
     		});
     	}else{
@@ -620,8 +633,8 @@ var labelInfoModel = (function (model){
      */
     model.saveSubmit = function(){
 	   	 var url = $.ctx + "/api/label/labelInfo/saveCustomerLabelInfo";
-	   	 if(dataModel.customGroupId){
-	   		 url = $.ctx + "/labelInfo/updateCustomerLabelInfo";
+	   	if(dataModel.labelId){
+	   		 url = $.ctx + "/api/label/labelInfo/updateCustomerLabelInfo";
 	   	 }
 	   	 
    		 var data = dataModel.labelInfo;

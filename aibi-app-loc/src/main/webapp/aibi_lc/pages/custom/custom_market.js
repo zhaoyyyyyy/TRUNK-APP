@@ -38,6 +38,11 @@ var dataModel = {
 		customId:"",//客户群ID
 }
 window.loc_onload = function() {
+	var ssg = window.sessionStorage;
+	var customId = ssg.getItem("customId");
+	if(customId!=null){
+		dataModel.customId = customId;
+	}
 	$.commAjax({
 		  url: $.ctx + "/api/user/getUserId",
 		  onSuccess: function(returnObj){
@@ -89,6 +94,8 @@ window.loc_onload = function() {
 			},
 			updateCustom : function(item){
 				dataModel.customId = item.labelId;
+				var ssg = window.sessionStorage;
+				ssg.setItem("customId",item.labelId);
 				if(item.updateCycle==3&&item.dataStatusId==3){
 					var wd = $.window('修改客户群', $.ctx
 							+ '/aibi_lc/pages/custom/custom_update.html?labelId='+item.labelId, 500, 500);

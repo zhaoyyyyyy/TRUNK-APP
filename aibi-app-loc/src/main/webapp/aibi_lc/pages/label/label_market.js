@@ -34,9 +34,15 @@ var dataModel = {
 		categoryPath1 : "",  //一级目录
 		categoryPath2 : "",  //二级目录
 		categoryPath3 : "",  //三级目录
-		offset:""//购物车动画偏移量
+		offset:"",//购物车动画偏移量
+		customId:""//客户群ID
 }
 window.loc_onload = function() {
+	var ssg = window.sessionStorage;
+	var customId = ssg.getItem("customId");
+	if(customId!=null){
+		dataModel.customId = customId;
+	}
 	//初始化参数
 	dataModel.configId = $.getCurrentConfigId();
 	var ulListId;
