@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import com.asiainfo.biapp.si.loc.base.common.LabelInfoContants;
 import com.asiainfo.biapp.si.loc.base.exception.BaseException;
 import com.asiainfo.biapp.si.loc.base.utils.LogUtil;
+import com.asiainfo.biapp.si.loc.core.ServiceConstants;
 import com.asiainfo.biapp.si.loc.core.label.entity.LabelInfo;
 import com.asiainfo.biapp.si.loc.core.label.model.ExploreQueryParam;
 import com.asiainfo.biapp.si.loc.core.label.service.ICustomerManagerService;
@@ -63,7 +64,7 @@ public class CustomerListCreaterThread extends Thread {
 		}
 		try {
 			LabelInfo customGroup = labelInfoService.get(customId);
-		    customGroup.setDataStatusId(LabelInfoContants.CUSTOM_DATA_STATUS_CREATING);
+		    customGroup.setDataStatusId(ServiceConstants.LabelInfo.DATA_STATUS_ID_G_CREATING);
 		    labelInfoService.syncUpdateCustomGroupInfo(customGroup, null);
 			customerManagerService.createCustomerList(customId, model);
 		} catch (BaseException e) {

@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.asiainfo.biapp.si.loc.base.utils.LogUtil;
-import com.asiainfo.biapp.si.loc.core.syspush.common.constant.ServiceConstants;
+import com.asiainfo.biapp.si.loc.core.ServiceConstants;
 import com.asiainfo.biapp.si.loc.core.syspush.task.ISeasonalCustomerPublishTask;
 
 import io.swagger.annotations.Api;

@@ -17,7 +17,7 @@ import com.asiainfo.biapp.si.loc.base.exception.BaseException;
 import com.asiainfo.biapp.si.loc.base.page.Page;
 import com.asiainfo.biapp.si.loc.base.utils.LogUtil;
 import com.asiainfo.biapp.si.loc.base.utils.StringUtil;
-import com.asiainfo.biapp.si.loc.core.syspush.common.constant.ServiceConstants;
+import com.asiainfo.biapp.si.loc.core.ServiceConstants;
 import com.asiainfo.biapp.si.loc.core.syspush.dao.ILabelPushCycleDao;
 import com.asiainfo.biapp.si.loc.core.syspush.entity.LabelPushCycle;
 import com.asiainfo.biapp.si.loc.core.syspush.vo.LabelPushCycleVo;

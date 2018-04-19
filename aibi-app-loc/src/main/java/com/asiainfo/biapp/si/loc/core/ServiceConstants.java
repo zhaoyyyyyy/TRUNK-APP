@@ -4,10 +4,10 @@
  * CopyRight (c) 2017 北京亚信智慧数据科技有限公司 保留所有权利。
  */
 
-package com.asiainfo.biapp.si.loc.core.syspush.common.constant;
+package com.asiainfo.biapp.si.loc.core;
 
 /**
- * Title : LocLabelPushCycleDaoImpl
+ * Title : ServiceConstants
  * <p/>
  * Description : 业务常量类,定义业务相关的常量类信息<br>
  * <p/>
@@ -151,20 +151,35 @@ public class ServiceConstants {
         
         
         /**
-         * 数据状态ID: 未生效,已生效,已失效，冷冻期，已下线
+         * 标签数据状态ID: 未生效,已生效,已失效，冷冻期，已下线
          */
-        /** 数据状态: 1、未生效 */
-        public static final int DATA_STATUS_ID_NOT_EFFECT = 1;
-        /** 数据状态: 2、已生效 */
-        public static final int DATA_STATUS_ID_EFFECT = 2;
-        /** 数据状态: 3、已失效 */
-        public static final int DATA_STATUS_ID_FAILURE = 3;
-        /** 数据状态: 4、冷冻期 */
-        public static final int DATA_STATUS_ID_FREEZED = 4;
-        /** 数据状态: 5、已下线 */
-        public static final int DATA_STATUS_ID_UNDER = 5;
-        /** 数据状态: 6、已删除 */
-        public static final int DATA_STATUS_ID_DELETED = 6;
+        /** 标签数据状态: 1、未生效 */
+        public static final int DATA_STATUS_ID_L_NOT_EFFECT = 1;
+        /** 标签数据状态: 2、已生效 */
+        public static final int DATA_STATUS_ID_L_EFFECT = 2;
+        /** 标签数据状态: 3、已失效 */
+        public static final int DATA_STATUS_ID_L_FAILURE = 3;
+        /** 标签数据状态: 4、冷冻期 */
+        public static final int DATA_STATUS_ID_L_FREEZED = 4;
+        /** 标签数据状态: 5、已下线 */
+        public static final int DATA_STATUS_ID_L_UNDER = 5;
+        /** 标签数据状态: 6、已删除 */
+        public static final int DATA_STATUS_ID_L_DELETED = 6;
+        
+        /**
+         * 客户群数据状态
+         */
+        /** 客户群数据状态：0、 创建失败 */
+        public static final int DATA_STATUS_ID_G_FAILED = 0;
+        /** 客户群数据状态：1、待 创建 */
+        public static final int DATA_STATUS_ID_G_WAIT = 1;
+        /** 客户群数据状态：2、 创建中 */
+        public static final int DATA_STATUS_ID_G_CREATING = 2;
+        /** 客户群数据状态：3、 创建成功 */
+        public static final int DATA_STATUS_ID_G_SUCCESS = 3;
+        /** 客户群数据状态：4、 预约状态 */
+        public static final int DATA_STATUS_ID_G_ORDER = 4;
+        
 	}
 	
 	/** 标签推送设置信息表 */

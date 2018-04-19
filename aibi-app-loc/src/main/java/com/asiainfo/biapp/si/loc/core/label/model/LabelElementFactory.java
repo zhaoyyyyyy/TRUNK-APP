@@ -5,7 +5,7 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 
-import com.asiainfo.biapp.si.loc.base.common.LabelInfoContants;
+import com.asiainfo.biapp.si.loc.core.ServiceConstants;
 
 /**
  * 根据标签类型id生成标签对应子类实例的工厂类
@@ -23,11 +23,11 @@ public class LabelElementFactory {
 	public final static Map<Integer, String> labelTypeMap = new HashMap<Integer, String>() {
 		private static final long serialVersionUID = 1L;
 		{
-			put(LabelInfoContants.LABEL_TYPE_SIGN, "com.asiainfo.biapp.si.loc.core.label.model.sub.SignLabel");
-			put(LabelInfoContants.LABEL_TYPE_KPI, "com.asiainfo.biapp.si.loc.core.label.model.sub.KpiLabel");
-			put(LabelInfoContants.LABEL_TYPE_ENUM, "com.asiainfo.biapp.si.loc.core.label.model.sub.EnumLabel");
-			put(LabelInfoContants.LABEL_TYPE_DATE, "com.asiainfo.biapp.si.loc.core.label.model.sub.DateLabel");
-			put(LabelInfoContants.LABEL_TYPE_TEXT, "com.asiainfo.biapp.si.loc.core.label.model.sub.TextLabel");
+			put(ServiceConstants.LabelInfo.LABEL_TYPE_ID_SIGN, "com.asiainfo.biapp.si.loc.core.label.model.sub.SignLabel");
+			put(ServiceConstants.LabelInfo.LABEL_TYPE_ID_KPI, "com.asiainfo.biapp.si.loc.core.label.model.sub.KpiLabel");
+			put(ServiceConstants.LabelInfo.LABEL_TYPE_ID_ENUM, "com.asiainfo.biapp.si.loc.core.label.model.sub.EnumLabel");
+			put(ServiceConstants.LabelInfo.LABEL_TYPE_ID_DATE, "com.asiainfo.biapp.si.loc.core.label.model.sub.DateLabel");
+			put(ServiceConstants.LabelInfo.LABEL_TYPE_ID_TEXT, "com.asiainfo.biapp.si.loc.core.label.model.sub.TextLabel");
 		}
 	};
 

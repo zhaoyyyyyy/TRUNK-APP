@@ -19,6 +19,7 @@ import com.asiainfo.biapp.si.loc.bd.list.entity.ListInfo;
 import com.asiainfo.biapp.si.loc.bd.list.entity.ListInfoId;
 import com.asiainfo.biapp.si.loc.bd.list.service.IListInfoService;
 import com.asiainfo.biapp.si.loc.cache.CocCacheProxy;
+import com.asiainfo.biapp.si.loc.core.ServiceConstants;
 import com.asiainfo.biapp.si.loc.core.label.entity.LabelExtInfo;
 import com.asiainfo.biapp.si.loc.core.label.entity.LabelInfo;
 import com.asiainfo.biapp.si.loc.core.label.model.ExploreQueryParam;
@@ -67,7 +68,7 @@ public class CustomerManagerServiceImpl implements ICustomerManagerService {
 			}
 			// 2.生成表插入数据
 			String tableName = "no table";
-			if (LabelInfoContants.CUSTOM_CYCLE_TYPE_ONE == customGroup.getUpdateCycle()) {
+			if (ServiceConstants.LabelInfo.UPDATE_CYCLE_O == customGroup.getUpdateCycle()) {
 				tableName = LabelInfoContants.KHQ_CROSS_ONCE_TABLE + customGroup.getConfigId() + "_"+ model.getDataDate();
 			} else {
 				tableName = LabelInfoContants.KHQ_CROSS_TABLE + customGroup.getConfigId() + "_"+ model.getDataDate();
@@ -79,18 +80,18 @@ public class CustomerManagerServiceImpl implements ICustomerManagerService {
 			labelExtInfo = customGroup.getLabelExtInfo();
 			labelExtInfo.setCustomNum(customNum);
 			customGroup.setDataDate(model.getDataDate());
-			customGroup.setDataStatusId(LabelInfoContants.CUSTOM_DATA_STATUS_SUCCESS);
+			customGroup.setDataStatusId(ServiceConstants.LabelInfo.DATA_STATUS_ID_G_SUCCESS);
 			//4、处理清单表LOC_LIST_INFO  区分第一次
 			ListInfoId id=new ListInfoId();
 			id.setCustomGroupId(customId);
 			id.setDataDate(model.getDataDate());
 			listInfo.setListInfoId(id);
 			listInfo.setCustomNum(customNum);
-			listInfo.setDataStatus(LabelInfoContants.CUSTOM_DATA_STATUS_SUCCESS);
+			listInfo.setDataStatus(ServiceConstants.LabelInfo.DATA_STATUS_ID_G_SUCCESS);
 			listInfo.setDataTime(new Date());
 			listInfoService.modifyListInfo(listInfo);
 		} catch (Exception e) {
-			customGroup.setDataStatusId(LabelInfoContants.CUSTOM_DATA_STATUS_FAILED);
+			customGroup.setDataStatusId(ServiceConstants.LabelInfo.DATA_STATUS_ID_G_FAILED);
 			LogUtil.error("生成客户群的清单过程异常---customId:"+customId, e);
 		} finally {
 			labelInfoService.syncUpdateCustomGroupInfo(customGroup, labelExtInfo);
@@ -123,13 +124,13 @@ public class CustomerManagerServiceImpl implements ICustomerManagerService {
 					return LabelInfoContants.VALIDATE_RESULT_INVALID;
 				}
 				String dataDate = ciLabelInfo.getDataDate();
-				if (LabelInfoContants.LABEL_CYCLE_TYPE_D == ciLabelInfo.getUpdateCycle()
+				if (ServiceConstants.LabelInfo.UPDATE_CYCLE_D == ciLabelInfo.getUpdateCycle()
 						&& StringUtil.isNotEmpty(dataDate) && dayNum != 0) {
 					int tempNum = Integer.valueOf(dataDate);
 					if (tempNum < dayNum) {
 						satisfyDay = false;
 					}
-				} else if (LabelInfoContants.LABEL_CYCLE_TYPE_M == ciLabelInfo.getUpdateCycle()
+				} else if (ServiceConstants.LabelInfo.UPDATE_CYCLE_M == ciLabelInfo.getUpdateCycle()
 						&& StringUtil.isNotEmpty(dataDate) && monthNum != 0) {
 					int tempNum = Integer.valueOf(dataDate);
 					if (tempNum < monthNum) {
@@ -147,7 +148,7 @@ public class CustomerManagerServiceImpl implements ICustomerManagerService {
 		int updateCycle = customGroup.getUpdateCycle();
 		LogUtil.info("周期：" + updateCycle + "  策略：" + tactics + "    ciCustomGroupInfo：" + customGroup.getLabelId()
 				+ "     satisfyDay:=============" + satisfyDay + "     satisfyMonth:=============" + satisfyMonth);
-		if (LabelInfoContants.CUSTOM_CYCLE_TYPE_ONE == updateCycle) { // 一次性
+		if (ServiceConstants.LabelInfo.UPDATE_CYCLE_O == updateCycle) { // 一次性
 			if (LabelInfoContants.LIST_TABLE_TACTICS_ID_ONE.equals(tactics)) {
 				if (!satisfyDay) { // 日不满足
 					result = LabelInfoContants.VALIDATE_RESULT_NEW;
@@ -157,7 +158,7 @@ public class CustomerManagerServiceImpl implements ICustomerManagerService {
 			} else if (LabelInfoContants.LIST_TABLE_TACTICS_ID_THREE.equals(tactics)) {
 				result = LabelInfoContants.VALIDATE_RESULT_GO;
 			}
-		} else if (LabelInfoContants.CUSTOM_CYCLE_TYPE_M == updateCycle) { // 月周期
+		} else if (ServiceConstants.LabelInfo.UPDATE_CYCLE_M == updateCycle) { // 月周期
 			if (!satisfyMonth) { // 月不满足
 				result = LabelInfoContants.VALIDATE_RESULT_WAIT;
 			} else if (satisfyMonth && !satisfyDay) { // 月满足，日不满足
@@ -165,7 +166,7 @@ public class CustomerManagerServiceImpl implements ICustomerManagerService {
 			} else if (satisfyMonth && satisfyDay) { // 日、月都满足
 				result = LabelInfoContants.VALIDATE_RESULT_GO;
 			}
-		} else if (LabelInfoContants.CUSTOM_CYCLE_TYPE_D == updateCycle) { // 日周期
+		} else if (ServiceConstants.LabelInfo.UPDATE_CYCLE_D == updateCycle) { // 日周期
 			if (!satisfyDay) {
 				result = LabelInfoContants.VALIDATE_RESULT_WAIT;
 			} else {
@@ -189,7 +190,7 @@ public class CustomerManagerServiceImpl implements ICustomerManagerService {
 					result = true;
 					break;
 				} else if (rule.getElementType() == LabelRuleContants.ELEMENT_TYPE_LABEL_ID) {
-					if (rule.getLabelTypeId() == LabelInfoContants.LABEL_TYPE_VERT) {
+					if (rule.getLabelTypeId() == ServiceConstants.LabelInfo.LABEL_TYPE_ID_VERT) {
 						result = true;
 						break;
 					}
