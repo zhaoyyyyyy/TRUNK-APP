@@ -220,10 +220,14 @@ public class YwDevUserServiceImpl extends DevUserServiceImpl implements IUserSer
 			List<Resource> menuResource = new ArrayList<Resource>();
 			List<Resource> apiResource = new ArrayList<Resource>();
 			params.put("id","LOC_MENU");
-			String resourceJson = HttpUtil.sendPost(jauthUrl+"/api/resource/get", params);
-			Resource resAll = (Resource) JsonUtil.json2CollectionBean(resourceJson, Resource.class);
+			String menu = HttpUtil.sendPost(jauthUrl+"/api/resource/get", params);
+			Resource resMenu = (Resource) JsonUtil.json2CollectionBean(menu, Resource.class);
+			params.put("id","LOC_DOM");
+			String dom = HttpUtil.sendPost(jauthUrl+"/api/resource/get", params);
+			Resource resDom = (Resource) JsonUtil.json2CollectionBean(dom, Resource.class);
 			Set<Resource> resourcePrivaliege = new HashSet<Resource>();
-			resourcePrivaliege.addAll(resAll.getChildren());
+			resourcePrivaliege.addAll(resMenu.getChildren());
+			resourcePrivaliege.addAll(resDom.getChildren());
 			if(resourcePrivaliege != null && resourcePrivaliege.size() > 0){
 				for(Resource resource : resourcePrivaliege){
 					if(Resource.API.equals(resource.getParentId()) ){
