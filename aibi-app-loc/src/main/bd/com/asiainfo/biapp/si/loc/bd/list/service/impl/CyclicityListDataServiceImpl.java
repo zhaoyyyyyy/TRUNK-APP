@@ -287,6 +287,8 @@ public class CyclicityListDataServiceImpl implements ICyclicityListDataService{
 			System.out.println("--------------------------- res = " + res.toString());
 		} catch (Exception e) {
 			e.printStackTrace();
+		}finally{
+			JDBCUtil.getInstance().free(conn, st, rs);
 		}
 		return res;
 	}
