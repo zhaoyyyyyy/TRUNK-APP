@@ -10,7 +10,7 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
-import com.asiainfo.biapp.si.loc.base.common.LabelInfoContants;
+import com.asiainfo.biapp.si.loc.core.ServiceConstants;
 
 public class DateUtil {
 
@@ -228,10 +228,10 @@ public class DateUtil {
 		String dateStr = "";
 		String formatStr = "";
 		int dateType = -1;
-		if(LabelInfoContants.LABEL_CYCLE_TYPE_M == updateCycle) {
+	    if(ServiceConstants.LabelInfo.UPDATE_CYCLE_M == updateCycle) {
 			formatStr = FORMAT_YYYYMM;
 			dateType = Calendar.MONTH;
-		} else if(LabelInfoContants.LABEL_CYCLE_TYPE_D == updateCycle) {
+		} else if(ServiceConstants.LabelInfo.UPDATE_CYCLE_D == updateCycle) {
 			formatStr = FORMAT_YYYYMMDD;
 			dateType = Calendar.DAY_OF_YEAR;
 		}
@@ -264,10 +264,10 @@ public class DateUtil {
 		String dateStr = "";
 		String formatStr = "";
 		int dateType = -1;
-		if(LabelInfoContants.LABEL_CYCLE_TYPE_M == updateCycle) {
+		if(ServiceConstants.LabelInfo.UPDATE_CYCLE_M == updateCycle) {
 			formatStr = FORMAT_YYYYMM;
 			dateType = Calendar.MONTH;
-		} else if(LabelInfoContants.LABEL_CYCLE_TYPE_D == updateCycle) {
+		} else if(ServiceConstants.LabelInfo.UPDATE_CYCLE_D == updateCycle) {
 			formatStr = FORMAT_YYYYMMDD;
 			dateType = Calendar.DAY_OF_YEAR;
 		}
@@ -355,10 +355,10 @@ public class DateUtil {
 		String dateStr = "";
 		String formatStr = "";
 		int dateType = -1;
-		if(LabelInfoContants.LABEL_CYCLE_TYPE_M == updateCycle) {
+		if(ServiceConstants.LabelInfo.UPDATE_CYCLE_M == updateCycle) {
 			formatStr = FORMAT_YYYYMM;
 			dateType = Calendar.MONTH;
-		} else if(LabelInfoContants.LABEL_CYCLE_TYPE_D == updateCycle) {
+		} else if(ServiceConstants.LabelInfo.UPDATE_CYCLE_D == updateCycle) {
 			formatStr = FORMAT_YYYYMMDD;
 			dateType = Calendar.DAY_OF_YEAR;
 		}
@@ -388,13 +388,14 @@ public class DateUtil {
 		String dateStr = "";
 		String formatStr = "";
 		int dateType = -1;
-		if(LabelInfoContants.CUSTOM_CYCLE_TYPE_M == updateCycle) {
+		
+		if(ServiceConstants.LabelInfo.UPDATE_CYCLE_M == updateCycle) {
 			formatStr = FORMAT_YYYYMM;
 			dateType = Calendar.MONTH;
-		} else if(LabelInfoContants.CUSTOM_CYCLE_TYPE_D == updateCycle) {
+		} else if(ServiceConstants.LabelInfo.UPDATE_CYCLE_D == updateCycle) {
 			formatStr = FORMAT_YYYYMMDD;
 			dateType = Calendar.DAY_OF_YEAR;
-		} else if(LabelInfoContants.CUSTOM_CYCLE_TYPE_ONE == updateCycle){
+		} else if(ServiceConstants.LabelInfo.UPDATE_CYCLE_O == updateCycle){
 			return dataDate;
 		}
 		SimpleDateFormat format = new SimpleDateFormat(formatStr);
@@ -695,12 +696,12 @@ public class DateUtil {
 	 * @return
 	 */
 	public static int getUpdateCycleByDate(String dataDate) {
-		int updateCycle = LabelInfoContants.LABEL_CYCLE_TYPE_M;
+		int updateCycle = ServiceConstants.LabelInfo.UPDATE_CYCLE_M;
 		if(!StringUtil.isEmpty(dataDate)) {
 			if(dataDate.length() == 6) {
-				updateCycle = LabelInfoContants.LABEL_CYCLE_TYPE_M;
+				updateCycle = ServiceConstants.LabelInfo.UPDATE_CYCLE_M;
 			} else if(dataDate.length() > 6) {
-				updateCycle = LabelInfoContants.LABEL_CYCLE_TYPE_D;
+				updateCycle = ServiceConstants.LabelInfo.UPDATE_CYCLE_D;
 			}
 		}
 		
@@ -809,7 +810,7 @@ public class DateUtil {
     			Date end=format.parse(endDate);
     			
     			//如果是日周期则计算间隔天数，如果是月则计算间隔月数
-    			if (updateCycle == LabelInfoContants.CUSTOM_CYCLE_TYPE_M) {
+    			if (updateCycle == ServiceConstants.LabelInfo.UPDATE_CYCLE_M) {
     				Calendar calendarBeigin = Calendar.getInstance();
     				calendarBeigin.setTime(begin);
     				int year1 = calendarBeigin.get(Calendar.YEAR);
@@ -826,7 +827,7 @@ public class DateUtil {
     					interval = 12 * (year2 - year1) + month2 - month1;
     				}
     				
-    			} else if (updateCycle == LabelInfoContants.CUSTOM_CYCLE_TYPE_D) {
+    			} else if (updateCycle == ServiceConstants.LabelInfo.UPDATE_CYCLE_D) {
     				long beginTime = begin.getTime();
     				long endTime = end.getTime();
     				long between = (endTime - beginTime) / 1000;// 除以1000是为了转换成秒
@@ -858,10 +859,10 @@ public class DateUtil {
 				Calendar calendar = Calendar.getInstance();
 				calendar.setTime(date);
 
-				if (updateCycle == LabelInfoContants.CUSTOM_CYCLE_TYPE_M) {
+				if (updateCycle == ServiceConstants.LabelInfo.UPDATE_CYCLE_M) {
 					calendar.add(Calendar.MONTH, interval);
 					resultDate = format.format(calendar.getTime());
-				} else if (updateCycle == LabelInfoContants.CUSTOM_CYCLE_TYPE_D) {
+				} else if (updateCycle == ServiceConstants.LabelInfo.UPDATE_CYCLE_D) {
 					calendar.add(Calendar.DATE, interval);
 					resultDate = format.format(calendar.getTime());
 				}

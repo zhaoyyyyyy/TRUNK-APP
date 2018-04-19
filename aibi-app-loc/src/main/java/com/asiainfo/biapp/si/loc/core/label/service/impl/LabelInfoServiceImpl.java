@@ -35,6 +35,7 @@ import com.asiainfo.biapp.si.loc.bd.list.entity.ListInfo;
 import com.asiainfo.biapp.si.loc.bd.list.entity.ListInfoId;
 import com.asiainfo.biapp.si.loc.bd.list.service.IListInfoService;
 import com.asiainfo.biapp.si.loc.cache.CocCacheProxy;
+import com.asiainfo.biapp.si.loc.core.ServiceConstants;
 import com.asiainfo.biapp.si.loc.core.dimtable.dao.IDimTableInfoDao;
 import com.asiainfo.biapp.si.loc.core.dimtable.entity.DimTableInfo;
 import com.asiainfo.biapp.si.loc.core.dimtable.service.IDimTableInfoService;
@@ -293,14 +294,14 @@ public class LabelInfoServiceImpl extends BaseServiceImpl<LabelInfo, String> imp
 
 	@Override
 	public void saveCustomerLabelInfo(LabelExtInfo labelExtInfo, LabelInfo customInfo, List<LabelRuleVo> labelRuleList) throws BaseException {
-		customInfo.setLabelTypeId(LabelInfoContants.LABEL_TYPE_CUST);
+		customInfo.setLabelTypeId(ServiceConstants.LabelInfo.GROUP_TYPE_G);
 		if (LabelInfoContants.LIST_TABLE_TACTICS_ID_THREE.equals(labelExtInfo.getTacticsId())) {
-			customInfo.setDataStatusId(LabelInfoContants.CUSTOM_DATA_STATUS_WAIT);
+			customInfo.setDataStatusId(ServiceConstants.LabelInfo.DATA_STATUS_ID_G_WAIT);
 		}else{
-			customInfo.setDataStatusId(LabelInfoContants.CUSTOM_DATA_STATUS_ORDER);
+			customInfo.setDataStatusId(ServiceConstants.LabelInfo.DATA_STATUS_ID_G_ORDER);
 		}
 		customInfo.setCreateTime(new Date());
-		customInfo.setGroupType(LabelInfoContants.LABEL_GROUP_TYPE_CUST);
+		customInfo.setGroupType(ServiceConstants.LabelInfo.GROUP_TYPE_G);
 		super.saveOrUpdate(customInfo);
 		String customId = customInfo.getLabelId();
 		labelExtInfo.setLabelId(customId);
@@ -316,7 +317,7 @@ public class LabelInfoServiceImpl extends BaseServiceImpl<LabelInfo, String> imp
 			labelRule.setCustomId(customId);
 			labelRule.setCustomType(LabelRuleContants.LABEL_RULE_FROM_COSTOMER);
 			ruleService.addLabelRule(labelRule);
-			if (labelRuleVo.getLabelTypeId() != null&& LabelInfoContants.LABEL_TYPE_VERT == labelRuleVo.getLabelTypeId()) {
+			if (labelRuleVo.getLabelTypeId()!=null&&ServiceConstants.LabelInfo.LABEL_TYPE_ID_VERT==labelRuleVo.getLabelTypeId()) {
 				List<LabelRuleVo> childLabelRuleList = labelRuleVo.getChildLabelRuleList();
 				for (LabelRuleVo ruleVo : childLabelRuleList) {
 					LabelRule childRule = new LabelRule();
@@ -337,7 +338,7 @@ public class LabelInfoServiceImpl extends BaseServiceImpl<LabelInfo, String> imp
 		ListInfo listInfo=new ListInfo();
 		listInfo.setListInfoId(id);
 		listInfo.setCustomNum(0);
-		listInfo.setDataStatus(LabelInfoContants.CUSTOM_DATA_STATUS_CREATING);
+		listInfo.setDataStatus(ServiceConstants.LabelInfo.DATA_STATUS_ID_G_CREATING);
 		listInfo.setDataTime(new Date());
 		listInfoService.addListInfo(listInfo);
 		//生成清单
@@ -357,11 +358,11 @@ public class LabelInfoServiceImpl extends BaseServiceImpl<LabelInfo, String> imp
 	
 	@Override
 	public void updateCustomerLabelInfo(LabelExtInfo labelExtInfo, LabelInfo customInfo, List<LabelRuleVo> labelRuleList) throws BaseException{
-	    customInfo.setLabelTypeId(LabelInfoContants.LABEL_TYPE_CUST);
+	    customInfo.setLabelTypeId(ServiceConstants.LabelInfo.GROUP_TYPE_G);
         if (LabelInfoContants.LIST_TABLE_TACTICS_ID_THREE.equals(labelExtInfo.getTacticsId())) {
-            customInfo.setDataStatusId(LabelInfoContants.CUSTOM_DATA_STATUS_WAIT);
+            customInfo.setDataStatusId(ServiceConstants.LabelInfo.DATA_STATUS_ID_G_WAIT);
         }else{
-            customInfo.setDataStatusId(LabelInfoContants.CUSTOM_DATA_STATUS_ORDER);
+            customInfo.setDataStatusId(ServiceConstants.LabelInfo.DATA_STATUS_ID_G_ORDER);
         }
         super.update(customInfo);
         String customId = customInfo.getLabelId();
@@ -383,7 +384,7 @@ public class LabelInfoServiceImpl extends BaseServiceImpl<LabelInfo, String> imp
             labelRule.setCustomId(customId);
             labelRule.setCustomType(LabelRuleContants.LABEL_RULE_FROM_COSTOMER);
             ruleService.addLabelRule(labelRule);
-            if (labelRuleVo.getLabelTypeId() != null&& LabelInfoContants.LABEL_TYPE_VERT == labelRuleVo.getLabelTypeId()) {
+            if (labelRuleVo.getLabelTypeId() != null&&ServiceConstants.LabelInfo.LABEL_TYPE_ID_VERT == labelRuleVo.getLabelTypeId()) {
                 List<LabelRuleVo> childLabelRuleList = labelRuleVo.getChildLabelRuleList();
                 for (LabelRuleVo ruleVo : childLabelRuleList) {
                     LabelRule childRule = new LabelRule();
@@ -409,7 +410,7 @@ public class LabelInfoServiceImpl extends BaseServiceImpl<LabelInfo, String> imp
         ListInfo listInfo=new ListInfo();
         listInfo.setListInfoId(id);
         listInfo.setCustomNum(0);
-        listInfo.setDataStatus(LabelInfoContants.CUSTOM_DATA_STATUS_CREATING);
+        listInfo.setDataStatus(ServiceConstants.LabelInfo.DATA_STATUS_ID_G_CREATING);
         listInfo.setDataTime(new Date());
         listInfoService.update(listInfo);
 	}

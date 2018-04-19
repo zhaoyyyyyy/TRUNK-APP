@@ -28,6 +28,7 @@ import com.asiainfo.biapp.si.loc.base.utils.LogUtil;
 import com.asiainfo.biapp.si.loc.base.utils.StringUtil;
 import com.asiainfo.biapp.si.loc.bd.common.service.IBackSqlService;
 import com.asiainfo.biapp.si.loc.cache.CocCacheProxy;
+import com.asiainfo.biapp.si.loc.core.ServiceConstants;
 import com.asiainfo.biapp.si.loc.core.label.entity.LabelInfo;
 import com.asiainfo.biapp.si.loc.core.label.entity.LabelVerticalColumnRel;
 import com.asiainfo.biapp.si.loc.core.label.entity.MdaSysTable;
@@ -84,7 +85,7 @@ public class LabelExploreServiceImpl implements ILabelExploreService {
 				String labelIdStr = rule.getCalcuElement();
 				LabelInfo labelInfo = CocCacheProxy.getCacheProxy().getLabelInfoById(labelIdStr);
 				String singleLabelSql = "";
-				if (labelInfo.getLabelTypeId() == LabelInfoContants.LABEL_TYPE_VERT) {
+				if (labelInfo.getLabelTypeId() == ServiceConstants.LabelInfo.LABEL_TYPE_ID_VERT) {
 					singleLabelSql = this.getVerticalLabelSql(rule, queryParam);
 				}else{
 					List<LabelRuleVo> singleCiLabelRuleList = new ArrayList<LabelRuleVo>();
@@ -335,10 +336,10 @@ public class LabelExploreServiceImpl implements ILabelExploreService {
 	 */
 	private String getTableName(ExploreQueryParam queryParam, LabelInfo ciLabelInfo, String tableName) {
 		// 日表、月表表名提取
-		if (LabelInfoContants.LABEL_CYCLE_TYPE_D == ciLabelInfo.getUpdateCycle()) {
+		if (ServiceConstants.LabelInfo.UPDATE_CYCLE_D == ciLabelInfo.getUpdateCycle()) {
 			String dayDate = queryParam.getDayDate();
 			tableName += dayDate;
-		} else if (LabelInfoContants.LABEL_CYCLE_TYPE_M == ciLabelInfo.getUpdateCycle()) {
+		} else if (ServiceConstants.LabelInfo.UPDATE_CYCLE_M == ciLabelInfo.getUpdateCycle()) {
 			String monthDate = queryParam.getMonthDate();
 			tableName += monthDate;
 		}
@@ -452,7 +453,7 @@ public class LabelExploreServiceImpl implements ILabelExploreService {
 			throw new RuntimeException("客户群不存在！---customId:"+customId);
 		}
 		String tableName = "no table";
-		if (LabelInfoContants.CUSTOM_CYCLE_TYPE_ONE == customGroup.getUpdateCycle()) {
+		if (ServiceConstants.LabelInfo.UPDATE_CYCLE_O == customGroup.getUpdateCycle()) {
 			tableName = LabelInfoContants.KHQ_CROSS_ONCE_TABLE + customGroup.getConfigId() + "_"+ dataDate;
 		} else {
 			tableName = LabelInfoContants.KHQ_CROSS_TABLE + customGroup.getConfigId() + "_"+ dataDate;

@@ -6,15 +6,12 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.asiainfo.biapp.si.loc.base.common.CommonConstants;
-import com.asiainfo.biapp.si.loc.base.common.LabelInfoContants;
 import com.asiainfo.biapp.si.loc.base.common.LabelRuleContants;
 import com.asiainfo.biapp.si.loc.base.controller.BaseController;
 import com.asiainfo.biapp.si.loc.base.exception.BaseException;
@@ -25,6 +22,7 @@ import com.asiainfo.biapp.si.loc.base.utils.StringUtil;
 import com.asiainfo.biapp.si.loc.base.utils.WebResult;
 import com.asiainfo.biapp.si.loc.bd.common.service.IBackSqlService;
 import com.asiainfo.biapp.si.loc.cache.CocCacheProxy;
+import com.asiainfo.biapp.si.loc.core.ServiceConstants;
 import com.asiainfo.biapp.si.loc.core.label.entity.LabelInfo;
 import com.asiainfo.biapp.si.loc.core.label.entity.LabelVerticalColumnRel;
 import com.asiainfo.biapp.si.loc.core.label.model.ExploreQueryParam;
@@ -92,7 +90,7 @@ public class ShopCartController extends BaseController {
 		for (LabelRuleVo rule : rules) {
 			if (LabelRuleContants.ELEMENT_TYPE_LABEL_ID == rule.getElementType()) {
 				String effectDate = rule.getEffectDate();
-				if (LabelInfoContants.LABEL_CYCLE_TYPE_M == rule.getUpdateCycle()) {
+				if (ServiceConstants.LabelInfo.UPDATE_CYCLE_M == rule.getUpdateCycle()) {
 					if (Integer.valueOf(newLabelMonthFormat) < Integer.valueOf(effectDate)) {
 						flag = true;
 						break;
@@ -131,7 +129,7 @@ public class ShopCartController extends BaseController {
 			for (LabelRuleVo rule : rules) {
 				if (LabelRuleContants.ELEMENT_TYPE_LABEL_ID == rule.getElementType()) {
 					String dataDate = rule.getDataDate();
-					if (LabelInfoContants.LABEL_CYCLE_TYPE_M == rule.getUpdateCycle()) {
+					if (ServiceConstants.LabelInfo.UPDATE_CYCLE_M == rule.getUpdateCycle()) {
 						existMonthLabel = true;
 						if (Integer.valueOf(dataDate) < Integer.valueOf(monthDate)) {
 							monthDate = dataDate;// 最新日数据日期
@@ -150,7 +148,7 @@ public class ShopCartController extends BaseController {
 						LabelRuleVo child = children.get(j);
 						if (LabelRuleContants.ELEMENT_TYPE_LABEL_ID == child.getElementType()) {
 							String dataDate = child.getDataDate();
-							if (LabelInfoContants.LABEL_CYCLE_TYPE_M == child.getUpdateCycle()) {
+							if (ServiceConstants.LabelInfo.UPDATE_CYCLE_M == child.getUpdateCycle()) {
 								existMonthLabel = true;
 								if (Integer.valueOf(dataDate) < Integer.valueOf(monthDate)) {
 									monthDate = dataDate;
@@ -245,7 +243,8 @@ public class ShopCartController extends BaseController {
 		//msg = "客户群已经被删除，无法加入到购物车！";
 		try {
 			LabelInfo customGroup = labelInfoService.selectLabelInfoById(labelId);
-			if (LabelInfoContants.CUSTOM_DATA_STATUS_SUCCESS != customGroup.getDataStatusId()) {
+			
+			if (ServiceConstants.LabelInfo.DATA_STATUS_ID_G_SUCCESS != customGroup.getDataStatusId()) {
 				success=false;
 			}
 		}catch (BaseException baseException) {
@@ -514,7 +513,7 @@ public class ShopCartController extends BaseController {
 					result = true;
 					break;
 				} else if (rule.getElementType() == LabelRuleContants.ELEMENT_TYPE_LABEL_ID) {
-					if (rule.getLabelTypeId() == LabelInfoContants.LABEL_TYPE_VERT) {
+				    if (rule.getLabelTypeId() == ServiceConstants.LabelInfo.LABEL_TYPE_ID_VERT) {
 						result = true;
 						break;
 					}
@@ -599,11 +598,11 @@ public class ShopCartController extends BaseController {
 		}
 		Date effectTime = ciLabelInfo.getEffecTime();
 		int updateCycle = ciLabelInfo.getUpdateCycle();
-		if(updateCycle == LabelInfoContants.LABEL_CYCLE_TYPE_D){
+		if(updateCycle == ServiceConstants.LabelInfo.UPDATE_CYCLE_D){
 			//获得标签可以使用的最早日期
 			String effectDate =DateUtil.date2String(effectTime, DateUtil.FORMAT_YYYYMMDD);
 			rule.setEffectDate(DateUtil.getOffsetDateByDate(effectDate, -1, 1));
-		} else if(updateCycle == LabelInfoContants.LABEL_CYCLE_TYPE_M){
+		} else if(updateCycle == ServiceConstants.LabelInfo.UPDATE_CYCLE_M){
 			//获得标签可以使用的最早月份
 			String effectDate =DateUtil.date2String(effectTime, DateUtil.FORMAT_YYYYMM);
 			rule.setEffectDate(DateUtil.getOffsetDateByDate(effectDate, -1, 0));

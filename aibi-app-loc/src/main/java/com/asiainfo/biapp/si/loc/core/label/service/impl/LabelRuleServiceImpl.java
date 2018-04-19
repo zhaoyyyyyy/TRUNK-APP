@@ -19,7 +19,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.asiainfo.biapp.si.loc.base.common.CommonConstants;
-import com.asiainfo.biapp.si.loc.base.common.LabelInfoContants;
 import com.asiainfo.biapp.si.loc.base.common.LabelRuleContants;
 import com.asiainfo.biapp.si.loc.base.dao.BaseDao;
 import com.asiainfo.biapp.si.loc.base.exception.BaseException;
@@ -29,6 +28,7 @@ import com.asiainfo.biapp.si.loc.base.utils.ExpressionPaser;
 import com.asiainfo.biapp.si.loc.base.utils.LogUtil;
 import com.asiainfo.biapp.si.loc.base.utils.StringUtil;
 import com.asiainfo.biapp.si.loc.cache.CocCacheProxy;
+import com.asiainfo.biapp.si.loc.core.ServiceConstants;
 import com.asiainfo.biapp.si.loc.core.label.dao.ILabelRuleDao;
 import com.asiainfo.biapp.si.loc.core.label.entity.LabelInfo;
 import com.asiainfo.biapp.si.loc.core.label.entity.LabelRule;
@@ -113,7 +113,7 @@ public class LabelRuleServiceImpl extends BaseServiceImpl<LabelRule, String> imp
 				rule.setCustomOrLabelName(labelInfo.getLabelName());
 				rule.setUpdateCycle(labelInfo.getUpdateCycle());
 				rule.setDataDate(labelInfo.getDataDate());
-				if (LabelInfoContants.LABEL_TYPE_VERT == labelInfo.getLabelTypeId()) {
+				if (ServiceConstants.LabelInfo.LABEL_TYPE_ID_VERT == labelInfo.getLabelTypeId()) {
 					List<LabelRuleVo> childRuleList = new ArrayList<LabelRuleVo>();
 					// 纵表标签列关系
 					Map<String, LabelVerticalColumnRel> map = new HashMap<String, LabelVerticalColumnRel>();
@@ -186,7 +186,7 @@ public class LabelRuleServiceImpl extends BaseServiceImpl<LabelRule, String> imp
 					}
 					rule.append(operE);
 				}else if(elementType == LabelRuleContants.ELEMENT_TYPE_LABEL_ID){
-					if(labelRule.getLabelFlag() != LabelRuleContants.LABEL_RULE_FLAG_YES && labelRule.getLabelTypeId() != LabelInfoContants.LABEL_TYPE_SIGN){
+					if(labelRule.getLabelFlag() != LabelRuleContants.LABEL_RULE_FLAG_YES && labelRule.getLabelTypeId() !=ServiceConstants.LabelInfo.LABEL_TYPE_ID_SIGN){
 						rule.append("(非)");
 					}
 					rule.append(labelRule.getCustomOrLabelName());
@@ -218,13 +218,13 @@ public class LabelRuleServiceImpl extends BaseServiceImpl<LabelRule, String> imp
 	 */
 	public String ruleAttrVal(LabelRuleVo labelRule){
 		StringBuffer attrValStr = new StringBuffer();
-		if(labelRule.getLabelTypeId() == LabelInfoContants.LABEL_TYPE_SIGN){//01型
+		if(labelRule.getLabelTypeId() == ServiceConstants.LabelInfo.LABEL_TYPE_ID_SIGN){//01型
 			if(labelRule.getLabelFlag() != LabelRuleContants.LABEL_RULE_FLAG_YES){
 				attrValStr.append("否");
 			}else{
 				attrValStr.append("是");
 			}
-		}else if(labelRule.getLabelTypeId() == LabelInfoContants.LABEL_TYPE_KPI){
+		}else if(labelRule.getLabelTypeId() == ServiceConstants.LabelInfo.LABEL_TYPE_ID_KPI){
 			if("1".equals(labelRule.getQueryWay())){
 				attrValStr.append("数值范围：");
 				if(StringUtil.isNotEmpty(labelRule.getContiueMinVal())){
@@ -261,15 +261,15 @@ public class LabelRuleServiceImpl extends BaseServiceImpl<LabelRule, String> imp
 					}
 				}
 			}
-		}else if(labelRule.getLabelTypeId() == LabelInfoContants.LABEL_TYPE_ENUM ){
+		}else if(labelRule.getLabelTypeId() == ServiceConstants.LabelInfo.LABEL_TYPE_ID_ENUM ){
 			if(StringUtil.isNotEmpty(labelRule.getAttrVal())){
 				attrValStr.append("已选择条件：");
 				attrValStr.append(labelRule.getAttrName());
 			}
-		}else if(labelRule.getLabelTypeId() == LabelInfoContants.LABEL_TYPE_DATE){
+		}else if(labelRule.getLabelTypeId() == ServiceConstants.LabelInfo.LABEL_TYPE_ID_DATE){
 			//
 			
-		}else if(labelRule.getLabelTypeId() == LabelInfoContants.LABEL_TYPE_TEXT){
+		}else if(labelRule.getLabelTypeId() == ServiceConstants.LabelInfo.LABEL_TYPE_ID_TEXT){
 			if("1".equals(labelRule.getQueryWay())){
 				if(StringUtil.isNotEmpty(labelRule.getDarkValue())){
 					attrValStr.append("模糊值：");
@@ -282,12 +282,12 @@ public class LabelRuleServiceImpl extends BaseServiceImpl<LabelRule, String> imp
 				}
 			}
 		// 增加组合标签类型，处理方式与纵表一致（已做）
-		}else if(labelRule.getLabelTypeId() == LabelInfoContants.LABEL_TYPE_VERT){
+		}else if(labelRule.getLabelTypeId() == ServiceConstants.LabelInfo.LABEL_TYPE_ID_VERT){
 			List<LabelRuleVo> childLabelRuleList = labelRule.getChildLabelRuleList();
 			if(childLabelRuleList != null && !childLabelRuleList.isEmpty()){
 				for (int i = 0; i < childLabelRuleList.size(); i++) {
 					LabelRuleVo rule = childLabelRuleList.get(i);
-					if(rule.getLabelTypeId() == LabelInfoContants.LABEL_TYPE_SIGN){//01型
+					if(rule.getLabelTypeId() == ServiceConstants.LabelInfo.LABEL_TYPE_ID_SIGN){//01型
 						attrValStr.append("[");
 						attrValStr.append(rule.getColumnCnName());
 						attrValStr.append("：");
@@ -297,7 +297,7 @@ public class LabelRuleServiceImpl extends BaseServiceImpl<LabelRule, String> imp
 							attrValStr.append("是");
 						}
 						attrValStr.append("]");
-					}else if(rule.getLabelTypeId() == LabelInfoContants.LABEL_TYPE_KPI){
+					}else if(rule.getLabelTypeId() == ServiceConstants.LabelInfo.LABEL_TYPE_ID_KPI){
 						if("1".equals(rule.getQueryWay())){
 							attrValStr.append("[");
 							attrValStr.append(rule.getColumnCnName());
@@ -339,7 +339,7 @@ public class LabelRuleServiceImpl extends BaseServiceImpl<LabelRule, String> imp
 								}
 							}
 						}
-					}else if(rule.getLabelTypeId() == LabelInfoContants.LABEL_TYPE_ENUM){
+					}else if(rule.getLabelTypeId() == ServiceConstants.LabelInfo.LABEL_TYPE_ID_ENUM){
 						if(StringUtil.isNotEmpty(rule.getAttrVal())){
 							attrValStr.append("[");
 							attrValStr.append(rule.getColumnCnName());
@@ -347,9 +347,9 @@ public class LabelRuleServiceImpl extends BaseServiceImpl<LabelRule, String> imp
 							attrValStr.append(rule.getAttrName());
 							attrValStr.append("]");
 						}
-					}else if(rule.getLabelTypeId() == LabelInfoContants.LABEL_TYPE_DATE){
+					}else if(rule.getLabelTypeId() == ServiceConstants.LabelInfo.LABEL_TYPE_ID_DATE){
 						LogUtil.info("进来了日期型");
-					}else if(rule.getLabelTypeId() == LabelInfoContants.LABEL_TYPE_TEXT){
+					}else if(rule.getLabelTypeId() == ServiceConstants.LabelInfo.LABEL_TYPE_ID_TEXT){
 						if("1".equals(rule.getQueryWay())){
 							if(StringUtil.isNotEmpty(rule.getDarkValue())){
 								attrValStr.append("[");

@@ -9,7 +9,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -23,13 +22,13 @@ import com.asiainfo.biapp.si.loc.auth.model.DicData;
 import com.asiainfo.biapp.si.loc.auth.service.IDicDataService;
 import com.asiainfo.biapp.si.loc.auth.utils.LocConfigUtil;
 import com.asiainfo.biapp.si.loc.base.common.CommonConstants;
-import com.asiainfo.biapp.si.loc.base.common.LabelInfoContants;
 import com.asiainfo.biapp.si.loc.base.exception.BaseException;
 import com.asiainfo.biapp.si.loc.base.extend.SpringContextHolder;
 import com.asiainfo.biapp.si.loc.base.utils.JsonUtil;
 import com.asiainfo.biapp.si.loc.base.utils.LogUtil;
 import com.asiainfo.biapp.si.loc.base.utils.RedisUtils;
 import com.asiainfo.biapp.si.loc.bd.common.util.JDBCUtil;
+import com.asiainfo.biapp.si.loc.core.ServiceConstants;
 import com.asiainfo.biapp.si.loc.core.label.dao.ILabelInfoDao;
 import com.asiainfo.biapp.si.loc.core.label.dao.INewestLabelDateDao;
 import com.asiainfo.biapp.si.loc.core.label.entity.LabelExtInfo;
@@ -118,7 +117,7 @@ public class LocCacheBase extends ICacheBase implements ApplicationContextAware{
 			MdaSysTableColumn col = c.getMdaSysTableColumn();
 			if (null != col) {
 				columnMap.put(CacheKey.EFFECTIVE_LABEL_COLUMN_PREFIX + col.getColumnId(), col);
-				if (LabelInfoContants.LABEL_TYPE_VERT == labelType) {
+			    if (ServiceConstants.LabelInfo.LABEL_TYPE_ID_VERT == labelType) {
 					List<LabelVerticalColumnRel> relSet = c.getVerticalColumnRels();
 					for (LabelVerticalColumnRel rel : relSet) {
 						MdaSysTableColumn child = rel.getMdaSysTableColumn();

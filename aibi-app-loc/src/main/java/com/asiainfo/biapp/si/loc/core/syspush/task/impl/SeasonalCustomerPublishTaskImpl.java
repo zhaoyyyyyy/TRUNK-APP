@@ -21,10 +21,10 @@ import com.asiainfo.biapp.si.loc.base.utils.StringUtil;
 import com.asiainfo.biapp.si.loc.base.utils.ThreadPool;
 import com.asiainfo.biapp.si.loc.cache.CocCacheAble;
 import com.asiainfo.biapp.si.loc.cache.CocCacheProxy;
+import com.asiainfo.biapp.si.loc.core.ServiceConstants;
 import com.asiainfo.biapp.si.loc.core.label.entity.LabelInfo;
 import com.asiainfo.biapp.si.loc.core.label.service.ILabelInfoService;
 import com.asiainfo.biapp.si.loc.core.label.vo.LabelInfoVo;
-import com.asiainfo.biapp.si.loc.core.syspush.common.constant.ServiceConstants;
 import com.asiainfo.biapp.si.loc.core.syspush.entity.LabelPushCycle;
 import com.asiainfo.biapp.si.loc.core.syspush.service.ILabelPushCycleService;
 import com.asiainfo.biapp.si.loc.core.syspush.task.ICustomerPublishTask;
@@ -137,7 +137,7 @@ public class SeasonalCustomerPublishTaskImpl implements ISeasonalCustomerPublish
 //            AND o.LABEL_ID not in (select DISTINCT pc.CUSTOM_GROUP_ID from loc_label_push_cycle pc where pc.STATUS=1);
         LabelInfoVo labelInfoVo = new LabelInfoVo();
         labelInfoVo.setGroupType(ServiceConstants.LabelInfo.GROUP_TYPE_G);
-        labelInfoVo.setDataStatusId(ServiceConstants.LabelInfo.DATA_STATUS_ID_EFFECT);
+        labelInfoVo.setDataStatusId(ServiceConstants.LabelInfo.DATA_STATUS_ID_L_EFFECT);
         labelInfoVo.setUpdateCycle(updateCycle);
         String labelTypeIds = new StringBuilder(String.valueOf(ServiceConstants.LabelInfo.LABEL_TYPE_ID_SIGN)).append(",")
                 .append(ServiceConstants.LabelInfo.LABEL_TYPE_ID_SCORE).append(",")

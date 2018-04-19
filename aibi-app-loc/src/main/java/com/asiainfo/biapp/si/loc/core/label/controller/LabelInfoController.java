@@ -29,6 +29,7 @@ import com.asiainfo.biapp.si.loc.base.utils.JsonUtil;
 import com.asiainfo.biapp.si.loc.base.utils.LogUtil;
 import com.asiainfo.biapp.si.loc.base.utils.StringUtil;
 import com.asiainfo.biapp.si.loc.base.utils.WebResult;
+import com.asiainfo.biapp.si.loc.core.ServiceConstants;
 import com.asiainfo.biapp.si.loc.core.label.entity.CategoryInfo;
 import com.asiainfo.biapp.si.loc.core.label.entity.LabelExtInfo;
 import com.asiainfo.biapp.si.loc.core.label.entity.LabelInfo;
@@ -134,7 +135,7 @@ public class LabelInfoController extends BaseController {
 				return webResult.fail("客户群名称重复!");
 			}
 			if (LabelInfoContants.LIST_TABLE_TACTICS_ID_THREE.equals(tacticsId)) {
-				if (LabelInfoContants.CUSTOM_CYCLE_TYPE_M == updateCycle) { // 月周期
+				if (ServiceConstants.LabelInfo.UPDATE_CYCLE_M == updateCycle) { // 月周期
 					int tempNum = Integer.valueOf(dataDate);
 					if (StringUtil.isNotEmpty(monthLabelDate) && tempNum > Integer.valueOf(monthLabelDate)) {
 						dataDate = monthLabelDate;
