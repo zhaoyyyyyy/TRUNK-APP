@@ -55,6 +55,8 @@ public interface ILabelInfoService extends BaseService<LabelInfo, String> {
 	 */
 	public void saveCustomerLabelInfo(LabelExtInfo labelExtInfo,LabelInfo labelInfo,List<LabelRuleVo> labelRuleList) throws BaseException;
 
+	public void updateCustomerLabelInfo(LabelExtInfo labelExtInfo,LabelInfo labelInfo,List<LabelRuleVo> labelRuleList) throws BaseException;
+
 	
     /**
      * Description:分页查询标签信息

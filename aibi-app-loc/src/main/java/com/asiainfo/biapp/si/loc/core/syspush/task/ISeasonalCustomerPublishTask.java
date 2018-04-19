@@ -1,5 +1,5 @@
 /*
- * @(#)ICustomerPublishService.java
+ * @(#)ISeasonalCustomerPublishTask.java
  *
  * CopyRight (c) 2018 北京亚信智慧数据科技有限公司 保留所有权利。
  */
@@ -7,7 +7,7 @@
 package com.asiainfo.biapp.si.loc.core.syspush.task;
 
 /**
- * Title : ICustomerPublishService
+ * Title : ISeasonalCustomerPublishTask
  * <p/>
  * Description : 客户群推送接口
  * <p/>
@@ -27,7 +27,7 @@ package com.asiainfo.biapp.si.loc.core.syspush.task;
  * @version 1.0.0.2018年3月8日
  */
 
-public interface ICustomerPublishTaskService {
+public interface ISeasonalCustomerPublishTask {
 
     /**
      * 周期性客户群推送接口(后台自己查找需要推送的客户群)

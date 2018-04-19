@@ -155,7 +155,7 @@ public class LogUtil {
      * @param msg
      */
     private static void saveLog(String level, String threadName, String interfaceUrl, String method, Object msg) {
-    	
+		System.out.println(msg);
     	//是否记录DEBUG日志
      	String saveDebugLog;
 		try {

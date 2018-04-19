@@ -1,15 +1,14 @@
 /*
- * @(#)DaliyCustomerPublishService.java
+ * @(#)SeasonalCustomerPublishTaskImpl.java
  *
  * CopyRight (c) 2018 北京亚信智慧数据科技有限公司 保留所有权利。
  */
-package com.asiainfo.biapp.si.loc.core.syspush.task.service;
+package com.asiainfo.biapp.si.loc.core.syspush.task.impl;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.Executors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,12 +27,12 @@ import com.asiainfo.biapp.si.loc.core.label.vo.LabelInfoVo;
 import com.asiainfo.biapp.si.loc.core.syspush.common.constant.ServiceConstants;
 import com.asiainfo.biapp.si.loc.core.syspush.entity.LabelPushCycle;
 import com.asiainfo.biapp.si.loc.core.syspush.service.ILabelPushCycleService;
-import com.asiainfo.biapp.si.loc.core.syspush.task.ICustomerPublishTaskService;
-import com.asiainfo.biapp.si.loc.core.syspush.task.ICustomerPublishThread;
+import com.asiainfo.biapp.si.loc.core.syspush.task.ICustomerPublishTask;
+import com.asiainfo.biapp.si.loc.core.syspush.task.ISeasonalCustomerPublishTask;
 import com.asiainfo.biapp.si.loc.core.syspush.vo.LabelPushCycleVo;
 
 /**
- * Title : CustomerPublishDefaultThread
+ * Title : SeasonalCustomerPublishTaskImpl
  * <p/>
  * Description : 客户群推送默认实现线程类
  * <p/>
@@ -54,7 +53,7 @@ import com.asiainfo.biapp.si.loc.core.syspush.vo.LabelPushCycleVo;
  */
 
 @Service
-public class CustomerPublishTaskServiceImpl implements ICustomerPublishTaskService{
+public class SeasonalCustomerPublishTaskImpl implements ISeasonalCustomerPublishTask{
     
     
     @Autowired
@@ -67,18 +66,19 @@ public class CustomerPublishTaskServiceImpl implements ICustomerPublishTaskServi
      * 通过配置拿到适配的客户群推送的beanId
      * @return
      */
-    private ICustomerPublishThread getICustomerPublishThreadBean() {
+    private ICustomerPublishTask getICustomerPublishThreadBean() throws RuntimeException {
+        String customerPublishThreadBeanId = "";
         String customerPublishThreadType = "Default";
         
         CocCacheAble cacheProxy = CocCacheProxy.getCacheProxy();
         String curCustomerPublishThreadType = cacheProxy.getSYSConfigInfoByKey("CUSTOMER_PUBLISH_THREAD_NAME");
         if (StringUtil.isEmpty(curCustomerPublishThreadType)) {
-            curCustomerPublishThreadType = customerPublishThreadType;
+            customerPublishThreadBeanId = "customerPublish"+customerPublishThreadType+"TaskImpl";
+        } else {
+            customerPublishThreadBeanId = curCustomerPublishThreadType;
         }
-        String customerPublishThreadBeanId = "customerPublish"+curCustomerPublishThreadType+"Thread";
-        ICustomerPublishThread customerPublishThread = (ICustomerPublishThread)SpringContextHolder.getBean(customerPublishThreadBeanId);
         
-        return customerPublishThread;
+        return (ICustomerPublishTask)SpringContextHolder.getBean(customerPublishThreadBeanId);
     }
     
     @Override
@@ -199,7 +199,7 @@ public class CustomerPublishTaskServiceImpl implements ICustomerPublishTaskServi
                     selSysIds.deleteCharAt(selSysIds.length() - 1);
 
                     //启动推送线程
-                    ICustomerPublishThread curCustomerPublishThread = this.getICustomerPublishThreadBean();
+                    ICustomerPublishTask curCustomerPublishThread = this.getICustomerPublishThreadBean();
                     curCustomerPublishThread.initParamter(labelPushCycles, isJobTask, new ArrayList<Map<String, Object>>());
 //                    Executors.newFixedThreadPool(10).execute(curCustomerPublishThread);
     					ThreadPool.getInstance().execute(curCustomerPublishThread);

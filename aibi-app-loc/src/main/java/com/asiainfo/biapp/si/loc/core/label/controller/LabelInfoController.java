@@ -34,6 +34,7 @@ import com.asiainfo.biapp.si.loc.core.label.entity.LabelExtInfo;
 import com.asiainfo.biapp.si.loc.core.label.entity.LabelInfo;
 import com.asiainfo.biapp.si.loc.core.label.service.IApproveInfoService;
 import com.asiainfo.biapp.si.loc.core.label.service.ICategoryInfoService;
+import com.asiainfo.biapp.si.loc.core.label.service.ILabelExtInfoService;
 import com.asiainfo.biapp.si.loc.core.label.service.ILabelInfoService;
 import com.asiainfo.biapp.si.loc.core.label.service.ILabelRuleService;
 import com.asiainfo.biapp.si.loc.core.label.vo.LabelInfoVo;
@@ -88,6 +89,9 @@ public class LabelInfoController extends BaseController {
 
     @Autowired
 	private ILabelRuleService ruleService;
+    
+    @Autowired
+    private ILabelExtInfoService iLabelExtInfoService;
     
     private static final String SUCCESS = "success";
     
@@ -174,6 +178,57 @@ public class LabelInfoController extends BaseController {
 		}
 		return webResult.success("保存客户群型标签信息成功", SUCCESS);
 	}
+	
+	@ApiOperation(value = "修改客户群型标签")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "labelId", value = "客户群ID", required = true, paramType = "query", dataType = "string"),
+            @ApiImplicitParam(name = "labelName", value = "客户群名称", required = true, paramType = "query", dataType = "string"),
+            @ApiImplicitParam(name = "updateCycle", value = "更新周期", required = true, paramType = "query", dataType = "int"),
+            @ApiImplicitParam(name = "orgId", value = "数据范围", required = true, paramType = "query", dataType = "string"),
+            @ApiImplicitParam(name = "busiLegend", value = "客户群描述", required = true, paramType = "query", dataType = "string"),
+            @ApiImplicitParam(name = "configId", value = "专区ID", required = false, paramType = "query", dataType = "string"),
+            @ApiImplicitParam(name = "effecTime", value = "生效时间", required = false, paramType = "query", dataType = "date"),
+            @ApiImplicitParam(name = "failTime", value = "失效时间", required = false, paramType = "query", dataType = "date"),
+            @ApiImplicitParam(name = "dataDate", value = "日期", required = true, paramType = "query", dataType = "string") })
+    @RequestMapping(value = "/labelInfo/updateCustomerLabelInfo", method = RequestMethod.POST)
+    public WebResult<String> updateCustomerLabelInfo(String labelId,String labelName,Integer updateCycle,String orgId,String busiLegend,String dataDate,String configId, Date effecTime,Date failTime) {
+        WebResult<String> webResult = new WebResult<>();
+        try {
+            //基本信息
+            LabelInfo labelInfo =iLabelInfoService.selectLabelInfoById(labelId);
+            
+            LabelInfo label = iLabelInfoService.selectOneByLabelName(labelName, configId);
+            if (label != null && !labelInfo.getLabelName().equals(labelName)) {
+                return webResult.fail("客户群名称重复!");
+            }
+            
+            labelInfo.setLabelName(labelName);
+            labelInfo.setUpdateCycle(updateCycle);
+            labelInfo.setOrgId(orgId);
+            labelInfo.setBusiLegend(busiLegend);
+            labelInfo.setConfigId(configId);
+            labelInfo.setEffecTime(effecTime);
+            labelInfo.setFailTime(failTime);
+            labelInfo.setDataDate(dataDate);
+            labelInfo.setCreateUserId(getLoginUser().getUserName());
+            // 拓展信息
+            LabelExtInfo labelExtInfo = iLabelExtInfoService.selectLabelExtInfoById(labelId);
+            //标签规则
+            List<LabelRuleVo> labelRules =getSessionLabelRuleList();
+            iLabelInfoService.updateCustomerLabelInfo(labelExtInfo, labelInfo, labelRules);
+        } catch (Exception e) {
+            LogUtil.error("保存客户群型标签异常", e);
+            return webResult.fail("保存客户群型标签异常");
+        }finally {
+            //清除缓存
+            try {
+                setSessionAttribute(LabelRuleContants.SHOP_CART_RULE, "");
+            } catch (BaseException e) {
+                LogUtil.error("清除购物车的对象异常", e);
+            }
+        }
+        return webResult.success("保存客户群型标签信息成功", SUCCESS);
+    }
     
     @ApiOperation(value = "分页查询标签信息")
     @RequestMapping(value = "/labelInfo/queryPage", method = RequestMethod.POST)
