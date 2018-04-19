@@ -15,8 +15,7 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import com.asiainfo.biapp.si.loc.auth.utils.AuthUtils;
-import com.asiainfo.biapp.si.loc.auth.utils.LocConfigUtil;
-import com.asiainfo.biapp.si.loc.base.exception.BaseException;
+import com.asiainfo.biapp.si.loc.base.LocCacheBase;
 
 @Component
 public class LogUtil {
@@ -155,15 +154,12 @@ public class LogUtil {
      * @param msg
      */
     private static void saveLog(String level, String threadName, String interfaceUrl, String method, Object msg) {
-		System.out.println(msg);
     	//是否记录DEBUG日志
-     	String saveDebugLog;
-		try {
-			saveDebugLog = LocConfigUtil.getInstance(jauthUrl).getProperties("LOC_CONFIG_APP_SAVE_ALL_DEBUG_LOG");
-			if(LEVEL_DEBUG.equals(level) && !"true".equals(saveDebugLog)){
-	     		return ;
-	     	}
-		} catch (BaseException e1) {}
+     	String saveDebugLog = LocCacheBase.getInstance().getSysConfigInfoByKey("LOC_CONFIG_APP_SAVE_ALL_DEBUG_LOG");
+		//saveDebugLog = LocConfigUtil.getInstance(jauthUrl).getProperties("LOC_CONFIG_APP_SAVE_ALL_DEBUG_LOG");
+		if(LEVEL_DEBUG.equals(level) && !"true".equals(saveDebugLog)){
+     		return ;
+     	}
     	
     	//默认各种标识
     	HttpServletRequest request = null;
