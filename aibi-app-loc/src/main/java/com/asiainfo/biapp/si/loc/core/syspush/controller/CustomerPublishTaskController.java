@@ -4,7 +4,7 @@
  * CopyRight (c) 2016 北京亚信智慧数据科技有限公司 保留所有权利。
  */
 
-package com.asiainfo.biapp.si.loc.core.syspush.task.controller;
+package com.asiainfo.biapp.si.loc.core.syspush.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;

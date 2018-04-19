@@ -6,12 +6,10 @@
 
 package com.asiainfo.biapp.si.loc.core.syspush.service.impl;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.Executors;
 
 import javax.transaction.Transactional;
 
