@@ -1,5 +1,5 @@
 /*
- * @(#)CustomerPublishDefaultThread.java
+ * @(#)FtpUtil.java
  *
  * CopyRight (c) 2017 北京亚信智慧数据科技有限公司 保留所有权利。
  */
@@ -25,7 +25,7 @@ import org.apache.commons.net.ftp.FTPReply;
 import org.apache.log4j.Logger;
 
 /**
- * Title : LocLabelPushCycleDaoImpl
+ * Title : FtpUtil
  * <p/>
  * Description : FTP操作工具类
  * <p/>

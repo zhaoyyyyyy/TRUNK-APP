@@ -41,7 +41,7 @@ import com.asiainfo.biapp.si.loc.core.syspush.entity.LabelPushCycle;
 import com.asiainfo.biapp.si.loc.core.syspush.service.ICustomerPublishCommService;
 import com.asiainfo.biapp.si.loc.core.syspush.service.ILabelAttrRelService;
 import com.asiainfo.biapp.si.loc.core.syspush.service.ILabelPushCycleService;
-import com.asiainfo.biapp.si.loc.core.syspush.task.ICustomerPublishThread;
+import com.asiainfo.biapp.si.loc.core.syspush.task.ICustomerPublishTask;
 import com.asiainfo.biapp.si.loc.core.syspush.vo.LabelAttrRelVo;
 import com.asiainfo.biapp.si.loc.core.syspush.vo.LabelPushCycleVo;
 
@@ -181,7 +181,7 @@ public class LabelPushCycleServiceImpl extends BaseServiceImpl<LabelPushCycle, S
       	}
       	
         //推送
-        ICustomerPublishThread curCustomerPublishThread = (ICustomerPublishThread) SpringContextHolder.getBean("customerPublishDefaultThread");
+      	ICustomerPublishTask curCustomerPublishThread = (ICustomerPublishTask) SpringContextHolder.getBean("customerPublishDefaultTaskImpl");
         curCustomerPublishThread.initParamter(lPCycles, false, new ArrayList<Map<String, Object>>());
 //        Executors.newFixedThreadPool(10).execute(curCustomerPublishThread);
 		ThreadPool.getInstance().execute(curCustomerPublishThread);

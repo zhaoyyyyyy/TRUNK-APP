@@ -1,5 +1,5 @@
 /*
- * @(#)CustomerPublishDefaultThread.java
+ * @(#)ZipUtil.java
  *
  * CopyRight (c) 2017 北京亚信智慧数据科技有限公司 保留所有权利。
  */
@@ -20,7 +20,7 @@ import com.asiainfo.biapp.si.loc.base.utils.model.EncryptZipInput;
 import com.asiainfo.biapp.si.loc.base.utils.model.EncryptZipOutput;
 
 /**
- * Title : LocLabelPushCycleDaoImpl
+ * Title : ZipUtil
  * <p/>
  * Description : zip工具类
  * <p/>

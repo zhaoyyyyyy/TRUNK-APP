@@ -33,7 +33,7 @@ import com.asiainfo.biapp.si.loc.core.syspush.entity.LabelPushCycle;
  * @version 1.0.0.2018年2月26日
  */
 
-public interface ICustomerPublishThread extends Runnable{
+public interface ICustomerPublishTask extends Runnable{
 	
 	
     /**

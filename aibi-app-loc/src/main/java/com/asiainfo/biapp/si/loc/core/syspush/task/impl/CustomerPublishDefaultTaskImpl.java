@@ -1,10 +1,10 @@
 /*
- * @(#)CustomerPublishDefaultThread.java
+ * @(#)CustomerPublishDefaultTaskImpl.java
  *
  * CopyRight (c) 2017 北京亚信智慧数据科技有限公司 保留所有权利。
  */
 
-package com.asiainfo.biapp.si.loc.core.syspush.task.service;
+package com.asiainfo.biapp.si.loc.core.syspush.task.impl;
 
 import java.beans.IntrospectionException;
 import java.io.BufferedWriter;
@@ -58,11 +58,10 @@ import com.asiainfo.biapp.si.loc.core.syspush.entity.SysInfo;
 import com.asiainfo.biapp.si.loc.core.syspush.service.ICustomDownloadRecordService;
 import com.asiainfo.biapp.si.loc.core.syspush.service.ICustomerPublishCommService;
 import com.asiainfo.biapp.si.loc.core.syspush.service.ICustomerPublishService;
-import com.asiainfo.biapp.si.loc.core.syspush.service.ILabelAttrRelService;
 import com.asiainfo.biapp.si.loc.core.syspush.service.ILabelPushCycleService;
 import com.asiainfo.biapp.si.loc.core.syspush.service.ILabelPushReqService;
 import com.asiainfo.biapp.si.loc.core.syspush.service.ISysInfoService;
-import com.asiainfo.biapp.si.loc.core.syspush.task.ICustomerPublishThread;
+import com.asiainfo.biapp.si.loc.core.syspush.task.ICustomerPublishTask;
 import com.asiainfo.biapp.si.loc.core.syspush.vo.LabelPushReqVo;
 import com.asiainfo.biapp.si.loc.core.syspush.vo.StandardPushXmlBean;
 import com.asiainfo.biapp.si.loc.core.syspush.vo.StandardPushXmlBean.Data;
@@ -71,7 +70,7 @@ import com.asiainfo.biapp.si.loc.core.syspush.vo.StandardPushXmlBean.Title;
 import au.com.bytecode.opencsv.CSVWriter;
 
 /**
- * Title : CustomerPublishDefaultThread
+ * Title : CustomerPublishDefaultTaskImpl
  * <p/>
  * Description : 客户群推送默认实现线程类
  * <p/>
@@ -93,7 +92,7 @@ import au.com.bytecode.opencsv.CSVWriter;
 
 @Service
 @Scope("prototype")
-public class CustomerPublishDefaultThread implements ICustomerPublishThread {
+public class CustomerPublishDefaultTaskImpl implements ICustomerPublishTask {
     
     @Autowired
     private IBackSqlService backSqlService;
@@ -106,9 +105,6 @@ public class CustomerPublishDefaultThread implements ICustomerPublishThread {
     
     @Autowired
     private ICustomerPublishCommService iCustomerPublishCommService;
-    
-    @Autowired
-    private ILabelAttrRelService iLabelAttrRelService;
     
     @Autowired
     ILabelPushCycleService iLabelPushCycleService;

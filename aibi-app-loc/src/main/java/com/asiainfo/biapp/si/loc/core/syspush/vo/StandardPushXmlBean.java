@@ -1,5 +1,5 @@
 /*
- * @(#)CustomerPublishDefaultThread.java
+ * @(#)StandardPushXmlBean.java
  *
  * CopyRight (c) 2017 北京亚信智慧数据科技有限公司 保留所有权利。
  */
@@ -17,7 +17,7 @@ import com.asiainfo.biapp.si.loc.base.utils.LogUtil;
 
 
 /**
- * Title : LocLabelPushCycleDaoImpl
+ * Title : StandardPushXmlBean
  * <p/>
  * Description : 推送其他系统的xml的bean
  * <p/>

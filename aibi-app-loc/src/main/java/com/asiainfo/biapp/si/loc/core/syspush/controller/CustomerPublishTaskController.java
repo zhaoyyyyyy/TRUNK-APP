@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.asiainfo.biapp.si.loc.base.utils.LogUtil;
 import com.asiainfo.biapp.si.loc.core.syspush.common.constant.ServiceConstants;
-import com.asiainfo.biapp.si.loc.core.syspush.task.ICustomerPublishTaskService;
+import com.asiainfo.biapp.si.loc.core.syspush.task.ISeasonalCustomerPublishTask;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -46,7 +46,7 @@ import io.swagger.annotations.ApiOperation;
 public class CustomerPublishTaskController {
     
     @Autowired
-    private ICustomerPublishTaskService iCustomerPublishTaskService;
+    private ISeasonalCustomerPublishTask iSeasonalCustomerPublishTask;
     
     @ApiOperation(value = "日周期推送")
     @RequestMapping(value = "/daliyCustomerPublish", method = RequestMethod.POST)
@@ -54,7 +54,7 @@ public class CustomerPublishTaskController {
         LogUtil.info(this.getClass().getSimpleName()+".taskExecute() begin");
         long s = System.currentTimeMillis();
         
-        boolean res = iCustomerPublishTaskService.excutor(ServiceConstants.LabelInfo.UPDATE_CYCLE_D);
+        boolean res = iSeasonalCustomerPublishTask.excutor(ServiceConstants.LabelInfo.UPDATE_CYCLE_D);
         
         LogUtil.info(this.getClass().getSimpleName()+".taskExecute() end.cost:"+((System.currentTimeMillis()-s)/1000L)+" s.");
         
@@ -68,7 +68,7 @@ public class CustomerPublishTaskController {
         LogUtil.info(this.getClass().getSimpleName()+".taskExecute() begin");
         long s = System.currentTimeMillis();
         
-        boolean res = iCustomerPublishTaskService.excutor(ServiceConstants.LabelInfo.UPDATE_CYCLE_M);
+        boolean res = iSeasonalCustomerPublishTask.excutor(ServiceConstants.LabelInfo.UPDATE_CYCLE_M);
         
         LogUtil.info(this.getClass().getSimpleName()+".taskExecute() end.cost:"+((System.currentTimeMillis()-s)/1000L)+" s.");
         

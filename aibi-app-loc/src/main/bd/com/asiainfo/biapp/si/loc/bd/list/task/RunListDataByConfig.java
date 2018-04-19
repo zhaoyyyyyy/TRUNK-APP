@@ -11,8 +11,7 @@ import com.asiainfo.biapp.si.loc.cache.CocCacheProxy;
 import com.asiainfo.biapp.si.loc.core.label.model.ExploreQueryParam;
 import com.asiainfo.biapp.si.loc.core.label.service.ICustomerManagerService;
 import com.asiainfo.biapp.si.loc.core.label.service.impl.CustomerManagerServiceImpl;
-import com.asiainfo.biapp.si.loc.core.syspush.task.ICustomerPublishTaskService;
-import com.asiainfo.biapp.si.loc.core.syspush.task.service.CustomerPublishTaskServiceImpl;
+import com.asiainfo.biapp.si.loc.core.syspush.task.ISeasonalCustomerPublishTask;
 
 /**
  * 周期性客户群运行线程类
@@ -26,7 +25,7 @@ public class RunListDataByConfig implements Callable<String> {
 	private String iConfigId;
 	private String iDataDate;
 	private ICustomerManagerService listMServiceImpl;
-	private ICustomerPublishTaskService customerPublishTaskService;
+	private ISeasonalCustomerPublishTask customerPublishTaskService;
 	
 	public RunListDataByConfig(List<String> listId,String configId,String dataDate){
 		this.iListIds = listId;
@@ -38,7 +37,7 @@ public class RunListDataByConfig implements Callable<String> {
 	public String call() throws Exception {
 		System.out.println("call()方法被自动调用,干活！！！             " + Thread.currentThread().getName());
 		listMServiceImpl = (CustomerManagerServiceImpl)SpringContextHolder.getBean("customerManagerServiceImpl");
-		customerPublishTaskService = (CustomerPublishTaskServiceImpl)SpringContextHolder.getBean("customerPublishTaskServiceImpl");
+		customerPublishTaskService = (ISeasonalCustomerPublishTask)SpringContextHolder.getBean("seasonalCustomerPublishTaskImpl");
 		if(iListIds == null || iListIds.isEmpty()){
 			return " iListId is null or is empty !!!";
 		}

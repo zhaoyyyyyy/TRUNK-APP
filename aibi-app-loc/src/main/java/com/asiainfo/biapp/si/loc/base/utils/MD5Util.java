@@ -1,5 +1,5 @@
 /*
- * @(#)CustomerPublishDefaultThread.java
+ * @(#)MD5Util.java
  *
  * CopyRight (c) 2017 北京亚信智慧数据科技有限公司 保留所有权利。
  */
@@ -18,7 +18,7 @@ import java.security.NoSuchAlgorithmException;
 import org.apache.log4j.Logger;
 
 /**
- * Title : LocLabelPushCycleDaoImpl
+ * Title : MD5Util
  * <p/>
  * Description : 
  * 用于生成文件的MD5校验码
