@@ -1662,3 +1662,229 @@ animation-delay: .8s;
     line-height: 30px;
     vertical-align: middle;
 }
+/*运行监控总览*/
+.ui-lc-mian > h3 > span.ui-monitor-notice{
+	font-weight: 700;
+    font-size: 13px;
+    color: #CC3300;
+    display:inline-block;
+    margin:0 0 0 50px;
+}
+.ui-label-list > li.ui-monitor-item {
+	width:14.28571%;
+	height:36px;
+	line-height:36px;
+}
+.ui-label-list > li.ui-monitor-item > span{
+	background-color: #f7f7f7;
+	display:block;
+	border-radius: 5px;
+	font-size: 14px;
+	text-align:center;
+	cursor: pointer;
+}
+.ui-prefecture > div > h3{
+	font-size: 18px;
+    font-weight: 400;
+    color: #000;
+    padding: 0 10px;
+    margin:10px 0;
+    display:inline-block;
+}
+.ui-prefecture > div .dropdown{
+	display:inline-block;
+	margin:0 0 0 20px;
+}
+.ui-morior-border:hover{
+	border:1px solid #3D9CEB;
+}
+.dropdown.pre-dropdown > .dropdown-menu{
+	background-color: #f2f2f2;
+	border:1px solid #dce2e4;
+	border-radius:0;
+	padding:5px 5px;
+	min-width: 60px;
+}
+.dropdown.pre-dropdown > .dropdown-menu > li:hover{
+	background:transparent;
+}
+.dropdown.pre-dropdown > .dropdown-menu > li span{
+	cursor: pointer;
+}
+.ui-prefecture > div > em{
+	display: inline-block;
+    width: 1px;
+    height: 20px;
+    background: #565252;
+    line-height: 20px;
+    vertical-align: middle;
+    margin:0 10px;
+}
+.prefectrue-span{
+	cursor: pointer;
+	display:inline-block;
+	line-height: 24px;
+}
+.prefectrue-span > em{
+	display:inline-block;
+	border: 6px solid transparent;
+    height: 0;
+    width: 0;
+    border-top: 6px solid #797979;
+    position: relative;
+    top: 6px;
+    border-radius: 3px;
+}
+.ui-label-list > li.ui-prerecture-item {
+	width:25%;
+}
+.ui-label-list > li.ui-prerecture-item > div{
+	background:#f7f7f7;
+	height:211px;
+	padding: 10px;
+}
+.per-header > span{
+	display:inline-block;
+	font-weight: 700;
+    font-size: 14px;
+}
+.per-header > span > em{
+	display:inline-block;
+	width:16px;
+	height:16px;
+	background:url(./images/lc-icon.png) no-repeat;
+	vertical-align:middle;
+	margin: 0 5px 0 0;
+}
+.per-header > span > em.data-ready{
+	background-position: -508px -259px;
+}
+.per-header > span > em.label-build{
+	background-position: -508px -274px;
+}
+.per-header > span > em.label-custom{
+	background-position: -508px -293px;
+}
+.per-header > p > span > strong{
+	font-weight: 700;
+}
+.per-status.ui-label-list > li{
+	width:33.33333%;
+}
+.per-status > li > p{
+	background:#fff;
+	font-weight: 700;
+    font-size: 18px;
+    color: #4F5E74;
+    height:30px;
+    line-height:30px;
+    padding:0 10px;
+    margin:10px 0;
+}
+/*运行监控明细*/
+.ui-prefecture.ui-lc-mian{
+	padding:0 10px;
+}
+.ui-prefecture > div.ui-pre-detail > p{
+	border-right:1px solid #DCE2E4;
+	height:60px;
+	line-height:60px;
+	padding:0 10px;
+	display:inline-block;
+}
+.ui-pre-detail > p > span{
+	display:inline-block;
+	margin:0 0 0 20px;
+	background:#f2f2f2;
+	line-height:30px;
+	width:66px;
+	text-align:center;
+}
+.ui-pre-refresh{
+	cursor: pointer;
+}
+.ui-pre-refresh > em{
+	display:inline-block;
+	background:url(./images/lc-icon.png) no-repeat -508px -330px;
+	width:16px;
+	height:16px;
+	vertical-align:middle;
+	margin:0 0 0 10px;
+}
+.ui-pre-progress.ui-lc-mian{
+	background:#dce2e4;
+}
+.ui-pre-progress > span em{
+	width:20px;
+	height:20px;
+	background-position:-508px -345px;
+}
+.ui-status{
+	display:inline-block;
+	border:1px solid #dce2e4;
+	margin:0 0 0 50px;
+	border-radius:4px;
+	padding:0 10px 0 0;
+}
+.ui-status > span,.ui-status > .dropdown > span,.ui-status > .dropdown{
+	font-size:12px;
+	line-height:30px;
+	padding:0 10px;
+	display:inline-block;
+}
+.ui-status > .dropdown,.ui-status > span:first-child{
+	border-right:1px solid #dce2e4;
+}
+.ui-status > .dropdown{
+	padding:0;
+}
+.ui-status > .dropdown > .dropdown-menu{
+	border-radius:4px 0 0;
+	top:30px;
+	margin:0;
+	min-width:100%;
+}
+.ui-status > .dropdown > .dropdown-menu>li>a{
+	padding:2px 0 2px 12px;
+	font-size:12px;
+}
+.ui-status > span > em{
+	display:inline-block;
+	width:8px;
+	height:8px;
+	margin:0 5px 0 0;
+}
+.ui-status > span:nth-child(2) > em{
+	background:#009933;
+}
+.ui-status > span:nth-child(3) > em{
+	background:#ff9900;
+}
+.ui-status > span:nth-child(4) > em{
+	background:#ff0000;
+}
+.pre-jqgrid > .form-group{
+	width:210px;
+}
+.catch-error{
+	background:#f7f7f7;
+	padding:5px 10px;
+	min-height:140px;
+}
+.catch-error > h3{
+	font-size:16px;
+	display:inline-block;
+}
+.catch-error > span{
+	color:#FF0000;
+	margin:0 0 0 10px;
+}
+.state-finish{
+	color:#009933;
+}
+.state-unStart{
+	color:#FF9900;
+}
+.state-fail{
+	color:#FF0000;
+}
