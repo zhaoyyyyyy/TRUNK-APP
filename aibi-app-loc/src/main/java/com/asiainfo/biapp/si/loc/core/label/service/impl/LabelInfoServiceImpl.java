@@ -354,6 +354,66 @@ public class LabelInfoServiceImpl extends BaseServiceImpl<LabelInfo, String> imp
 			LogUtil.error("线程池异常", e);
 		}
 	}
+	
+	@Override
+	public void updateCustomerLabelInfo(LabelExtInfo labelExtInfo, LabelInfo customInfo, List<LabelRuleVo> labelRuleList) throws BaseException{
+	    customInfo.setLabelTypeId(LabelInfoContants.LABEL_TYPE_CUST);
+        if (LabelInfoContants.LIST_TABLE_TACTICS_ID_THREE.equals(labelExtInfo.getTacticsId())) {
+            customInfo.setDataStatusId(LabelInfoContants.CUSTOM_DATA_STATUS_WAIT);
+        }else{
+            customInfo.setDataStatusId(LabelInfoContants.CUSTOM_DATA_STATUS_ORDER);
+        }
+        super.update(customInfo);
+        String customId = customInfo.getLabelId();
+        labelExtInfo.setLabelOptRuleShow(ruleService.shopCartRule(labelRuleList));
+        iLabelExtInfoService.update(labelExtInfo);
+        List<LabelRuleVo> delLabelRuleVo = ruleService.queryCiLabelRuleList(customId, LabelRuleContants.LABEL_RULE_FROM_COSTOMER);
+        for(LabelRuleVo lr : delLabelRuleVo){
+//            ruleService.deleteLabelRule(lr.getRuleId());
+            ruleService.delete(lr.getRuleId());
+        }
+        // 保存标签规则
+        for (LabelRuleVo labelRuleVo : labelRuleList) {
+            LabelRule labelRule = new LabelRule();
+            labelRuleVo.setRuleId(null);
+            try {
+                BeanUtils.copyProperties(labelRule, labelRuleVo);
+            } catch (Exception e) {
+            }
+            labelRule.setCustomId(customId);
+            labelRule.setCustomType(LabelRuleContants.LABEL_RULE_FROM_COSTOMER);
+            ruleService.addLabelRule(labelRule);
+            if (labelRuleVo.getLabelTypeId() != null&& LabelInfoContants.LABEL_TYPE_VERT == labelRuleVo.getLabelTypeId()) {
+                List<LabelRuleVo> childLabelRuleList = labelRuleVo.getChildLabelRuleList();
+                for (LabelRuleVo ruleVo : childLabelRuleList) {
+                    LabelRule childRule = new LabelRule();
+                    if(StringUtil.isNotBlank(ruleVo.getRuleId())){
+//                        ruleService.deleteLabelRule(ruleVo.getRuleId());
+                        ruleService.delete(ruleVo.getRuleId());
+                    }
+                    ruleVo.setRuleId(null);
+                    try {
+                        BeanUtils.copyProperties(childRule, ruleVo);
+                    } catch (Exception e) {}
+                    childRule.setParentId(labelRule.getRuleId());
+                    childRule.setCustomId(customId);
+                    childRule.setCustomType(LabelRuleContants.LABEL_RULE_FROM_COSTOMER);
+                    ruleService.addLabelRule(childRule);
+                }
+            }
+            
+        }
+        ListInfoId id=new ListInfoId();
+        id.setCustomGroupId(customId);
+        id.setDataDate(customInfo.getDataDate());
+        ListInfo listInfo=new ListInfo();
+        listInfo.setListInfoId(id);
+        listInfo.setCustomNum(0);
+        listInfo.setDataStatus(LabelInfoContants.CUSTOM_DATA_STATUS_CREATING);
+        listInfo.setDataTime(new Date());
+        listInfoService.update(listInfo);
+	}
+
 
 	@Override
 	public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
