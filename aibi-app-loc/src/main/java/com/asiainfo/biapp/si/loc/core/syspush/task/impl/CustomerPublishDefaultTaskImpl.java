@@ -43,6 +43,7 @@ import com.asiainfo.biapp.si.loc.base.utils.SftpUtil;
 import com.asiainfo.biapp.si.loc.base.utils.StringUtil;
 import com.asiainfo.biapp.si.loc.base.utils.model.DES;
 import com.asiainfo.biapp.si.loc.base.utils.model.OtherSysXmlBean;
+import com.asiainfo.biapp.si.loc.base.utils.model.SftpUser;
 import com.asiainfo.biapp.si.loc.bd.common.service.IBackSqlService;
 import com.asiainfo.biapp.si.loc.cache.CocCacheAble;
 import com.asiainfo.biapp.si.loc.cache.CocCacheProxy;
@@ -469,8 +470,8 @@ public class CustomerPublishDefaultTaskImpl implements ICustomerPublishTask {
                     result = FtpUtil.ftp(sysInfo.getFtpServerIp(), sysInfo.getFtpPort(), sysInfo.getFtpUser(),
                         DES.decrypt(sysInfo.getFtpPwd()), desFile, sysInfo.getFtpPath() + "/");
                 } else if (ServiceConstants.SysInfo.PROTOCO_TYPE_SFTP == protocoType) {  //sftp
-                    result = SftpUtil.sftp(sysInfo.getFtpServerIp(), sysInfo.getFtpPort(), sysInfo.getFtpUser(),
-                        DES.decrypt(sysInfo.getFtpPwd()), desFile, sysInfo.getFtpPath() + "/", true);
+                    result = SftpUtil.sftp(new SftpUser(sysInfo.getFtpServerIp(), sysInfo.getFtpPort(), sysInfo.getFtpUser(),
+                        DES.decrypt(sysInfo.getFtpPwd())), desFile, sysInfo.getFtpPath() + "/", true);
                 }
                 if (!result) {
                     LogUtil.error(protocoTypeStr+" error");
@@ -516,8 +517,8 @@ public class CustomerPublishDefaultTaskImpl implements ICustomerPublishTask {
                         result = FtpUtil.ftp(sysInfo.getFtpServerIp(), sysInfo.getFtpPort(), sysInfo.getFtpUser(),
                             DES.decrypt(sysInfo.getFtpPwd()), xmlFile, sysInfo.getFtpPath() + "/");
                     } else if (ServiceConstants.SysInfo.PROTOCO_TYPE_SFTP == protocoType) {  //sftp
-                        result = SftpUtil.sftp(sysInfo.getFtpServerIp(), sysInfo.getFtpPort(), sysInfo.getFtpUser(),
-                            DES.decrypt(sysInfo.getFtpPwd()), xmlFile, sysInfo.getFtpPath() + "/", true);
+                        result = SftpUtil.sftp(new SftpUser(sysInfo.getFtpServerIp(), sysInfo.getFtpPort(), sysInfo.getFtpUser(),
+                            DES.decrypt(sysInfo.getFtpPwd())), xmlFile, sysInfo.getFtpPath() + "/", true);
                     }
                     
                     if (!result) {

@@ -29,6 +29,7 @@ import com.asiainfo.biapp.si.loc.base.utils.SftpUtil;
 import com.asiainfo.biapp.si.loc.base.utils.StringUtil;
 import com.asiainfo.biapp.si.loc.base.utils.WebResult;
 import com.asiainfo.biapp.si.loc.base.utils.model.DES;
+import com.asiainfo.biapp.si.loc.base.utils.model.SftpUser;
 import com.asiainfo.biapp.si.loc.cache.CocCacheAble;
 import com.asiainfo.biapp.si.loc.cache.CocCacheProxy;
 import com.asiainfo.biapp.si.loc.core.syspush.entity.CustomDownloadRecord;
@@ -156,8 +157,8 @@ public class CustomDownloadRecordController extends BaseController<CustomDownloa
                     LogUtil.error("根据名称查询平台出错！", e);
                 }
                 if (null != sysInfo) {
-                    isDownload = SftpUtil.sftpDownload(sysInfo.getFtpServerIp(), sysInfo.getFtpPort(), sysInfo.getFtpUser(), 
-                        DES.decrypt(sysInfo.getFtpPwd()), localPathFile, sysInfo.getFtpPath(), fileName,false,true);
+                    isDownload = SftpUtil.sftpDownload(new SftpUser(sysInfo.getFtpServerIp(), sysInfo.getFtpPort(), sysInfo.getFtpUser(), 
+                        DES.decrypt(sysInfo.getFtpPwd())), localPathFile, sysInfo.getFtpPath(), fileName,false,true);
                 }
             } else {
                 isDownload = true;
