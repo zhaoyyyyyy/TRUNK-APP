@@ -68,8 +68,9 @@ public class CategoryInfoServiceImpl extends BaseServiceImpl<CategoryInfo, Strin
     @Autowired
     private ICategoryInfoDao iCategoryInfoDao;
     
-    @Autowired
-    private ILabelInfoDao iLabelInfoDao;
+    
+    
+    private static final int LENGTH = 10;
 
     @Override
     protected BaseDao<CategoryInfo, String> getBaseDao() {
@@ -141,8 +142,7 @@ public class CategoryInfoServiceImpl extends BaseServiceImpl<CategoryInfo, Strin
         if(categoryInfo != null && StringUtils.isBlank(categoryInfo.getCategoryName())){
             throw new ParamRequiredException("分类名称不能为空");
         }
-        int num = 10;
-        if(categoryInfo.getCategoryName().length()>num){
+        if(categoryInfo.getCategoryName().length()>LENGTH){
             throw new ParamRequiredException("分类名称过长");
         }
         CategoryInfoVo categoryInfoVo = new CategoryInfoVo();
@@ -259,8 +259,8 @@ public class CategoryInfoServiceImpl extends BaseServiceImpl<CategoryInfo, Strin
                     result.append("第["+currentRowNum+"]行数据错误存在空的单元格;");
                     continue;
                 }
-                int numLength = 10;
-                if(nextLine[num].length()>numLength){
+                
+                if(nextLine[num].length()>LENGTH){
                     result.append("第["+currentRowNum+"]行["+(num+1)+"]级分类名称过长;");
                     continue;
                 }

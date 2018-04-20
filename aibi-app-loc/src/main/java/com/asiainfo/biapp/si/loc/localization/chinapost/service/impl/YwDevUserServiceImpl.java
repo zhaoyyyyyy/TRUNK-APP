@@ -27,6 +27,7 @@ import com.asiainfo.biapp.si.loc.base.exception.BaseException;
 import com.asiainfo.biapp.si.loc.base.exception.UserAuthException;
 import com.asiainfo.biapp.si.loc.base.utils.HttpUtil;
 import com.asiainfo.biapp.si.loc.base.utils.JsonUtil;
+import com.asiainfo.biapp.si.loc.base.utils.LogUtil;
 
 import net.sf.json.JSONObject;
 
@@ -89,8 +90,7 @@ public class YwDevUserServiceImpl extends DevUserServiceImpl implements IUserSer
             String tokenStr1 = HttpUtil.sendPost(acrmUrl+"/api/auth/userdata", params);
             System.out.println(tokenStr1);
         } catch (Exception e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            LogUtil.debug(e.getMessage());
         }
     }
 	@Override
