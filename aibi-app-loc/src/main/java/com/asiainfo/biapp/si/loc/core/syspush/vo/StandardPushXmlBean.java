@@ -11,9 +11,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import com.asiainfo.biapp.si.loc.base.common.LabelInfoContants;
 import com.asiainfo.biapp.si.loc.base.utils.Bean2XMLUtils;
 import com.asiainfo.biapp.si.loc.base.utils.LogUtil;
+import com.asiainfo.biapp.si.loc.core.ServiceConstants;
 
 
 /**
@@ -401,7 +401,7 @@ public class StandardPushXmlBean implements Serializable {
 		bean.getData().setDataDate("201408"); //统计周期：如果是月周期就是yyyyMM，如果是日周期就是yyyyMMdd
 		//获取配置文件中手机号列名称 20160615 add (spark中是phone_no)
 //		String product_no = Configure.getInstance().getProperty("RELATED_COLUMN");
-		String product_no = LabelInfoContants.KHQ_CROSS_COLUMN;
+		String product_no = ServiceConstants.KHQ_CROSS_COLUMN;
 		
 		
 		List<StandardPushXmlBean.Data.Column> columns = new ArrayList<StandardPushXmlBean.Data.Column>();

@@ -17,7 +17,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.asiainfo.biapp.si.loc.base.BaseConstants;
-import com.asiainfo.biapp.si.loc.base.common.LabelInfoContants;
 import com.asiainfo.biapp.si.loc.base.dao.BaseDao;
 import com.asiainfo.biapp.si.loc.base.exception.BaseException;
 import com.asiainfo.biapp.si.loc.base.exception.ParamRequiredException;
@@ -217,7 +216,7 @@ public class LabelPushCycleServiceImpl extends BaseServiceImpl<LabelPushCycle, S
 
         //默认列
         LabelAttrRel col0 = new LabelAttrRel();
-        col0.setAttrCol(LabelInfoContants.KHQ_CROSS_COLUMN);
+        col0.setAttrCol(ServiceConstants.KHQ_CROSS_COLUMN);
         String title = CocCacheProxy.getCacheProxy().getSYSConfigInfoByKey("LOC_CONFIG_APP_RELATED_COLUMN_CN_NAME");
         if (StringUtil.isEmpty(title)) {
             title = "手机号码";
@@ -256,7 +255,7 @@ public class LabelPushCycleServiceImpl extends BaseServiceImpl<LabelPushCycle, S
         if (null != pageMap) {
             for (Map<String, String> map : pageMap) {
                 //对手机号做保密处理
-                String productNo = map.get(LabelInfoContants.KHQ_CROSS_COLUMN);
+                String productNo = map.get(ServiceConstants.KHQ_CROSS_COLUMN);
                 if (StringUtil.isNotBlank(productNo)) {
                     if (isPrivate) {
                         if (productNo.length() > 3) {
@@ -269,7 +268,7 @@ public class LabelPushCycleServiceImpl extends BaseServiceImpl<LabelPushCycle, S
                             }
                             productNo = start + end;
                         }
-                        map.put(LabelInfoContants.KHQ_CROSS_COLUMN, productNo);
+                        map.put(ServiceConstants.KHQ_CROSS_COLUMN, productNo);
                     }
                 }
             }

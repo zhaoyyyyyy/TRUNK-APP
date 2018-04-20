@@ -19,7 +19,6 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Service;
 
-import com.asiainfo.biapp.si.loc.base.common.LabelInfoContants;
 import com.asiainfo.biapp.si.loc.base.common.LabelRuleContants;
 import com.asiainfo.biapp.si.loc.base.dao.BaseDao;
 import com.asiainfo.biapp.si.loc.base.exception.BaseException;
@@ -295,7 +294,7 @@ public class LabelInfoServiceImpl extends BaseServiceImpl<LabelInfo, String> imp
 	@Override
 	public void saveCustomerLabelInfo(LabelExtInfo labelExtInfo, LabelInfo customInfo, List<LabelRuleVo> labelRuleList) throws BaseException {
 		customInfo.setLabelTypeId(ServiceConstants.LabelInfo.GROUP_TYPE_G);
-		if (LabelInfoContants.LIST_TABLE_TACTICS_ID_THREE.equals(labelExtInfo.getTacticsId())) {
+		if (ServiceConstants.LIST_TABLE_TACTICS_ID_THREE.equals(labelExtInfo.getTacticsId())) {
 			customInfo.setDataStatusId(ServiceConstants.LabelInfo.DATA_STATUS_ID_G_WAIT);
 		}else{
 			customInfo.setDataStatusId(ServiceConstants.LabelInfo.DATA_STATUS_ID_G_ORDER);
@@ -348,7 +347,7 @@ public class LabelInfoServiceImpl extends BaseServiceImpl<LabelInfo, String> imp
 			ExploreQueryParam model=new ExploreQueryParam(customInfo.getDataDate(), labelExtInfo.getMonthLabelDate(), labelExtInfo.getDayLabelDate());
 			creator.setModel(model);
 			creator.setCustomId(customId);
-			if (LabelInfoContants.LIST_TABLE_TACTICS_ID_THREE.equals(labelExtInfo.getTacticsId())) {
+			if (ServiceConstants.LIST_TABLE_TACTICS_ID_THREE.equals(labelExtInfo.getTacticsId())) {
 				ThreadPool.getInstance().execute(creator, false);
 			}
 		} catch (Exception e) {
@@ -359,7 +358,7 @@ public class LabelInfoServiceImpl extends BaseServiceImpl<LabelInfo, String> imp
 	@Override
 	public void updateCustomerLabelInfo(LabelExtInfo labelExtInfo, LabelInfo customInfo, List<LabelRuleVo> labelRuleList) throws BaseException{
 	    customInfo.setLabelTypeId(ServiceConstants.LabelInfo.GROUP_TYPE_G);
-        if (LabelInfoContants.LIST_TABLE_TACTICS_ID_THREE.equals(labelExtInfo.getTacticsId())) {
+        if (ServiceConstants.LIST_TABLE_TACTICS_ID_THREE.equals(labelExtInfo.getTacticsId())) {
             customInfo.setDataStatusId(ServiceConstants.LabelInfo.DATA_STATUS_ID_G_WAIT);
         }else{
             customInfo.setDataStatusId(ServiceConstants.LabelInfo.DATA_STATUS_ID_G_ORDER);

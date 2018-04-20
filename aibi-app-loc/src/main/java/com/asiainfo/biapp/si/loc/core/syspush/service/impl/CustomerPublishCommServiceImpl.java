@@ -14,7 +14,6 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.asiainfo.biapp.si.loc.base.common.LabelInfoContants;
 import com.asiainfo.biapp.si.loc.base.exception.BaseException;
 import com.asiainfo.biapp.si.loc.base.exception.SqlRunException;
 import com.asiainfo.biapp.si.loc.base.utils.LogUtil;
@@ -101,7 +100,7 @@ public class CustomerPublishCommServiceImpl implements ICustomerPublishCommServi
         MdaSysTableColumn mainMdaSysTableColumn = customInfo.getMdaSysTableColumn();
 		MdaSysTable mainMdaSysTable = null!=mainMdaSysTableColumn ? mainMdaSysTableColumn.getMdaSysTable() : null;
         //拼装sql
-        StringBuilder sql = new StringBuilder("SELECT m.").append(LabelInfoContants.KHQ_CROSS_COLUMN).append(" ");
+        StringBuilder sql = new StringBuilder("SELECT m.").append(ServiceConstants.KHQ_CROSS_COLUMN).append(" ");
 
         if (null == customInfo || null == customInfo.getDataDate()) {
             customInfo = iLabelInfoService.get(customInfo.getLabelId());
@@ -162,14 +161,14 @@ public class CustomerPublishCommServiceImpl implements ICustomerPublishCommServi
             sql.append(" from (");
             
             //拼接主表
-            sql.append("SELECT t.").append(LabelInfoContants.KHQ_CROSS_COLUMN).append(" from ");
+            sql.append("SELECT t.").append(ServiceConstants.KHQ_CROSS_COLUMN).append(" from ");
             if (null != mainMdaSysTableColumn) {
                 if (StringUtil.isNotEmpty(mainMdaSysTable.getTableSchema())) {
                     //拼接Schema
                     sql.append(mainMdaSysTable.getTableSchema()).append(".");
                 }
                 sql.append(mainMdaSysTable.getTableName()).append(customInfo.getDataDate()).append(" t ")
-                   .append("where t.").append(LabelInfoContants.KHQ_CROSS_ID_PARTION).append("='")
+                   .append("where t.").append(ServiceConstants.KHQ_CROSS_ID_PARTION).append("='")
                    .append(customInfo.getLabelId()).append("'");
             } else {
                 String fromSql = "";
@@ -225,8 +224,8 @@ public class CustomerPublishCommServiceImpl implements ICustomerPublishCommServi
             if (StringUtil.isNotEmpty(orderbyStr)) {
             		orderbyStr.delete(orderbyStr.length()-1, orderbyStr.length());
             } else {
-            		orderbyStr.append(LabelInfoContants.KHQ_CROSS_COLUMN);
-                    orderbyStr.append("m.").append(LabelInfoContants.KHQ_CROSS_COLUMN);
+            		orderbyStr.append(ServiceConstants.KHQ_CROSS_COLUMN);
+                    orderbyStr.append("m.").append(ServiceConstants.KHQ_CROSS_COLUMN);
             }
             sql.append(" order by ").append(orderbyStr);
             
@@ -252,7 +251,7 @@ public class CustomerPublishCommServiceImpl implements ICustomerPublishCommServi
                     sql.append(mainMdaSysTable.getTableSchema()).append(".");
                 }
                 sql.append(mainMdaSysTable.getTableName()).append(customInfo.getDataDate()).append(" m ")
-                   .append("where m.").append(LabelInfoContants.KHQ_CROSS_ID_PARTION).append("='")
+                   .append("where m.").append(ServiceConstants.KHQ_CROSS_ID_PARTION).append("='")
                    .append(customInfo.getLabelId()).append("'");
             } else {
                 String fromSql = "";
@@ -305,8 +304,8 @@ public class CustomerPublishCommServiceImpl implements ICustomerPublishCommServi
                     sql.append(mdaSysTable.getTableSchema()).append(".");
                 }
                 sql.append(mdaSysTable.getTableName()).append(label.getDataDate()).append(" ").append(attrCol)
-                   .append("_t on ").append("m.").append(LabelInfoContants.KHQ_CROSS_COLUMN).append("=")
-                   .append(attrCol).append("_t.").append(LabelInfoContants.KHQ_CROSS_COLUMN).append(" ");
+                   .append("_t on ").append("m.").append(ServiceConstants.KHQ_CROSS_COLUMN).append("=")
+                   .append(attrCol).append("_t.").append(ServiceConstants.KHQ_CROSS_COLUMN).append(" ");
                 tabelName.put(mdaSysTable.getTableName(), attrCol+"_t");
             } else {
             		String[] leftJoinArr = mSql.toString().split("LEFT JOIN ");

@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.asiainfo.biapp.si.loc.auth.model.User;
-import com.asiainfo.biapp.si.loc.base.common.LabelInfoContants;
 import com.asiainfo.biapp.si.loc.base.common.LabelRuleContants;
 import com.asiainfo.biapp.si.loc.base.controller.BaseController;
 import com.asiainfo.biapp.si.loc.base.exception.BaseException;
@@ -33,7 +32,6 @@ import com.asiainfo.biapp.si.loc.core.ServiceConstants;
 import com.asiainfo.biapp.si.loc.core.label.entity.CategoryInfo;
 import com.asiainfo.biapp.si.loc.core.label.entity.LabelExtInfo;
 import com.asiainfo.biapp.si.loc.core.label.entity.LabelInfo;
-import com.asiainfo.biapp.si.loc.core.label.service.IApproveInfoService;
 import com.asiainfo.biapp.si.loc.core.label.service.ICategoryInfoService;
 import com.asiainfo.biapp.si.loc.core.label.service.ILabelExtInfoService;
 import com.asiainfo.biapp.si.loc.core.label.service.ILabelInfoService;
@@ -81,9 +79,6 @@ public class LabelInfoController extends BaseController {
 
     @Autowired
     private ILabelInfoService iLabelInfoService;
-    
-    @Autowired 
-    private IApproveInfoService iApproveInfoService;
     
     @Autowired 
     private ICategoryInfoService iCategoryInfoService;
@@ -134,7 +129,7 @@ public class LabelInfoController extends BaseController {
 			if (label != null) {
 				return webResult.fail("客户群名称重复!");
 			}
-			if (LabelInfoContants.LIST_TABLE_TACTICS_ID_THREE.equals(tacticsId)) {
+			if (ServiceConstants.LIST_TABLE_TACTICS_ID_THREE.equals(tacticsId)) {
 				if (ServiceConstants.LabelInfo.UPDATE_CYCLE_M == updateCycle) { // 月周期
 					int tempNum = Integer.valueOf(dataDate);
 					if (StringUtil.isNotEmpty(monthLabelDate) && tempNum > Integer.valueOf(monthLabelDate)) {

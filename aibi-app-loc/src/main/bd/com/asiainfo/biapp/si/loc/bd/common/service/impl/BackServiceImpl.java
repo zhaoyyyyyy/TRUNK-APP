@@ -18,13 +18,13 @@ import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
 
 import com.asiainfo.biapp.si.loc.base.BaseConstants;
-import com.asiainfo.biapp.si.loc.base.common.LabelInfoContants;
 import com.asiainfo.biapp.si.loc.base.exception.SqlRunException;
 import com.asiainfo.biapp.si.loc.base.extend.SpringContextHolder;
 import com.asiainfo.biapp.si.loc.base.utils.LogUtil;
 import com.asiainfo.biapp.si.loc.bd.common.dao.IBackSqlDao;
 import com.asiainfo.biapp.si.loc.bd.common.service.IBackSqlService;
 import com.asiainfo.biapp.si.loc.cache.CocCacheProxy;
+import com.asiainfo.biapp.si.loc.core.ServiceConstants;
 
 /**
  * 后台库操作接口(业务层)
@@ -168,9 +168,9 @@ public class BackServiceImpl implements IBackSqlService{
 		Map<String,String> columnName = new LinkedHashMap<String,String>();
 		String insertcolumn = "";
 		insertcolumn= customerId;
-		primaryKey.add(LabelInfoContants.KHQ_CROSS_ID_PARTION);
-		columnName.put(LabelInfoContants.KHQ_CROSS_ID_PARTION, "string");
-		columnName.put(LabelInfoContants.KHQ_CROSS_COLUMN, "string");
+		primaryKey.add(ServiceConstants.KHQ_CROSS_ID_PARTION);
+		columnName.put(ServiceConstants.KHQ_CROSS_ID_PARTION, "string");
+		columnName.put(ServiceConstants.KHQ_CROSS_COLUMN, "string");
 		List<String> orgColumns = CocCacheProxy.getCacheProxy().getAllOrgColumnByConfig(configId);
 		if(null != orgColumns && !orgColumns.isEmpty()){
 			for(String org: orgColumns){
@@ -207,16 +207,16 @@ public class BackServiceImpl implements IBackSqlService{
 		Map<String,String> columnName = new HashMap<String,String>();
 		StringBuffer sqlBuffer = new StringBuffer();
 		String insertcolumn = "";
-		primaryKey.add(LabelInfoContants.KHQ_CROSS_COLUMN);
+		primaryKey.add(ServiceConstants.KHQ_CROSS_COLUMN);
 			
-		sqlBuffer.append("SELECT ").append(LabelInfoContants.KHQ_CROSS_COLUMN);
+		sqlBuffer.append("SELECT ").append(ServiceConstants.KHQ_CROSS_COLUMN);
 		sqlBuffer.append(",'").append(customerId).append("' ");
 		sqlBuffer.append(sql);
 			
-		insertcolumn = LabelInfoContants.KHQ_CROSS_COLUMN+","+LabelInfoContants.KHQ_CROSS_ID_PARTION;
-		primaryKey.add(LabelInfoContants.KHQ_CROSS_ID_PARTION);
-		columnName.put(LabelInfoContants.KHQ_CROSS_ID_PARTION, "varchar(32)");
-		columnName.put(LabelInfoContants.KHQ_CROSS_COLUMN, "varchar(32)");
+		insertcolumn = ServiceConstants.KHQ_CROSS_COLUMN+","+ServiceConstants.KHQ_CROSS_ID_PARTION;
+		primaryKey.add(ServiceConstants.KHQ_CROSS_ID_PARTION);
+		columnName.put(ServiceConstants.KHQ_CROSS_ID_PARTION, "varchar(32)");
+		columnName.put(ServiceConstants.KHQ_CROSS_COLUMN, "varchar(32)");
 		if(!isExistsTable){
 			isCreateTable = getBackDaoBean().createTableByName(tableName, columnName, primaryKey);
 			log.debug("-------------------- BackServiceImpl.insertCustomDataAds isCreateTable = " + isCreateTable);

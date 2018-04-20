@@ -6,8 +6,8 @@ import java.util.Map;
 import org.springframework.stereotype.Service;
 
 import com.asiainfo.biapp.si.loc.base.common.CommonConstants;
-import com.asiainfo.biapp.si.loc.base.common.LabelInfoContants;
 import com.asiainfo.biapp.si.loc.cache.CocCacheProxy;
+import com.asiainfo.biapp.si.loc.core.ServiceConstants;
 import com.asiainfo.biapp.si.loc.core.label.model.ExploreQueryParam;
 import com.asiainfo.biapp.si.loc.core.label.service.IGroupCalcSqlPaser;
 
@@ -38,7 +38,7 @@ public class SparkSqlPaserImpl implements IGroupCalcSqlPaser {
 	private String LEVEL_FIELD = "";
 	//初始化需要参数
 	public void initProcessParam(ExploreQueryParam queryParam) {
-		String pk = LabelInfoContants.KHQ_CROSS_COLUMN;
+		String pk = ServiceConstants.KHQ_CROSS_COLUMN;
 		// 根据不同的数据库类型进行优化
 		String tableName3Level = "";
 		String tableName1Level = "";
@@ -303,7 +303,7 @@ public class SparkSqlPaserImpl implements IGroupCalcSqlPaser {
 		} else {
 			throw new RuntimeException("not well format[" + v1 + v2 + v3 + "]");
 		}
-		String pk = LabelInfoContants.KHQ_CROSS_COLUMN;
+		String pk = ServiceConstants.KHQ_CROSS_COLUMN;
 		resultSql = resultSql.replace("pk", pk);
 		return resultSql;
 	}

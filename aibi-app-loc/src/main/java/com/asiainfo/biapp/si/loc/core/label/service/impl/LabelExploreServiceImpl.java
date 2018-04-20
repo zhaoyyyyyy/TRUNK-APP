@@ -20,7 +20,6 @@ import org.springframework.stereotype.Service;
 import com.asiainfo.biapp.si.loc.auth.model.Organization;
 import com.asiainfo.biapp.si.loc.auth.service.IOrganizationService;
 import com.asiainfo.biapp.si.loc.base.common.CommonConstants;
-import com.asiainfo.biapp.si.loc.base.common.LabelInfoContants;
 import com.asiainfo.biapp.si.loc.base.common.LabelRuleContants;
 import com.asiainfo.biapp.si.loc.base.exception.BaseException;
 import com.asiainfo.biapp.si.loc.base.exception.SqlRunException;
@@ -121,7 +120,7 @@ public class LabelExploreServiceImpl implements ILabelExploreService {
 			calcExprStr = calcExprStr.replace(String.valueOf(CommonConstants.LEFT_Q), "")
 					.replace(String.valueOf(CommonConstants.RIGHT_Q), "");
 			StringBuffer selectSql = new StringBuffer("");
-			selectSql.append("select " +LabelInfoContants.KHQ_CROSS_COLUMN);
+			selectSql.append("select " +ServiceConstants.KHQ_CROSS_COLUMN);
 			if (queryParam.isCreateCustom()) {
 				List<String> orgColumns = CocCacheProxy.getCacheProxy().getAllOrgColumnByConfig(queryParam.getConfigId());
 				for(String s: orgColumns){
@@ -274,7 +273,7 @@ public class LabelExploreServiceImpl implements ILabelExploreService {
 		if (queryParam.isCreateCustom()) {
 			String sqlStr = getLeftJoinSqlStr(tableNameSet);
 			StringBuffer selectSql = new StringBuffer("");
-			String columnName = LabelInfoContants.KHQ_CROSS_COLUMN;
+			String columnName = ServiceConstants.KHQ_CROSS_COLUMN;
 			selectSql.append("select " + dataTabelAlias + "." + columnName);
 			List<String> orgColumns = CocCacheProxy.getCacheProxy().getAllOrgColumnByConfig(queryParam.getConfigId());
 			for(String s: orgColumns){
@@ -374,7 +373,7 @@ public class LabelExploreServiceImpl implements ILabelExploreService {
 			throw new RuntimeException("没有需要的表");
 		}
 		StringBuffer joinSb = new StringBuffer("");
-		String relatedColumn = LabelInfoContants.KHQ_CROSS_COLUMN;
+		String relatedColumn = ServiceConstants.KHQ_CROSS_COLUMN;
 		int i = 0;
 		String firstAlias = "";
 		for (String table : tableAlias.keySet()) {
@@ -424,7 +423,7 @@ public class LabelExploreServiceImpl implements ILabelExploreService {
 			throw new RuntimeException("没有需要的表");
 		}
 		StringBuffer joinSb = new StringBuffer("");
-		String relatedColumn = LabelInfoContants.KHQ_CROSS_COLUMN;
+		String relatedColumn = ServiceConstants.KHQ_CROSS_COLUMN;
 		int i = 0;
 		String lastAlias = "";
 		for (String tableNames : tableNameSet) {
@@ -454,11 +453,11 @@ public class LabelExploreServiceImpl implements ILabelExploreService {
 		}
 		String tableName = "no table";
 		if (ServiceConstants.LabelInfo.UPDATE_CYCLE_O == customGroup.getUpdateCycle()) {
-			tableName = LabelInfoContants.KHQ_CROSS_ONCE_TABLE + customGroup.getConfigId() + "_"+ dataDate;
+			tableName = ServiceConstants.KHQ_CROSS_ONCE_TABLE + customGroup.getConfigId() + "_"+ dataDate;
 		} else {
-			tableName = LabelInfoContants.KHQ_CROSS_TABLE + customGroup.getConfigId() + "_"+ dataDate;
+			tableName = ServiceConstants.KHQ_CROSS_TABLE + customGroup.getConfigId() + "_"+ dataDate;
 		}
-		String singleLabelSql = backServiceImpl.getCurBackDbSchema()+"."+tableName+" where "+LabelInfoContants.KHQ_CROSS_ID_PARTION+" = '"+customId+"' ";
+		String singleLabelSql = backServiceImpl.getCurBackDbSchema()+"."+tableName+" where "+ServiceConstants.KHQ_CROSS_ID_PARTION+" = '"+customId+"' ";
 		return singleLabelSql;
 	}
 }

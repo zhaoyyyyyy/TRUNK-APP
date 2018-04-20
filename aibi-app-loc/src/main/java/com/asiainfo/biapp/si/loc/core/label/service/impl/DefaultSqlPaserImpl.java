@@ -7,7 +7,7 @@ import javax.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import com.asiainfo.biapp.si.loc.base.common.CommonConstants;
-import com.asiainfo.biapp.si.loc.base.common.LabelInfoContants;
+import com.asiainfo.biapp.si.loc.core.ServiceConstants;
 import com.asiainfo.biapp.si.loc.core.label.model.ExploreQueryParam;
 import com.asiainfo.biapp.si.loc.core.label.service.IGroupCalcSqlPaser;
 
@@ -35,7 +35,7 @@ public class DefaultSqlPaserImpl implements IGroupCalcSqlPaser {
 	private int index = 0;
 	
 	public DefaultSqlPaserImpl() {
-		String pk = LabelInfoContants.KHQ_CROSS_COLUMN;
+		String pk = ServiceConstants.KHQ_CROSS_COLUMN;
 		UNION_SQL = UNION_SQL.replace("pk", pk);
 		INTERSECT_SQL = INTERSECT_SQL.replace("pk", pk);
 		EXCEPT_SQL = EXCEPT_SQL.replace("pk", pk);

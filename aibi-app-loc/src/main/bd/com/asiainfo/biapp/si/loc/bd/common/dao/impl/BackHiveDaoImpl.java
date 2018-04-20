@@ -19,12 +19,12 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Repository;
 
-import com.asiainfo.biapp.si.loc.base.common.LabelInfoContants;
 import com.asiainfo.biapp.si.loc.base.exception.SqlRunException;
 import com.asiainfo.biapp.si.loc.base.utils.LogUtil;
 import com.asiainfo.biapp.si.loc.base.utils.StringUtil;
 import com.asiainfo.biapp.si.loc.bd.common.dao.IBackSqlDao;
 import com.asiainfo.biapp.si.loc.bd.common.util.JDBCUtil;
+import com.asiainfo.biapp.si.loc.core.ServiceConstants;
 
 /**
  * Title : BackHiveDaoImpl
@@ -360,9 +360,9 @@ public class BackHiveDaoImpl extends BaseBackDaoImpl implements IBackSqlDao{
 	public boolean createVerticalTable(String tableName,String columnName) throws SqlRunException{
 		StringBuffer sql = new StringBuffer();
 		sql.append("CREATE TABLE IF NOT EXISTS ").append(tableName).append(" (").append(columnName).append(" string )  PARTITIONED BY (");
-		sql.append(LabelInfoContants.KHQ_CROSS_ID_PARTION).append(" string) stored as ").append(this.Tab_Format);
+		sql.append(ServiceConstants.KHQ_CROSS_ID_PARTION).append(" string) stored as ").append(this.Tab_Format);
 //		String sql ="CREATE TABLE IF NOT EXISTS "+tableName+" ("+
-//					columnName+" string )  PARTITIONED BY ("+LabelInfoContants.KHQ_CROSS_ID_PARTION+" string) stored as " + this.Tab_Format;
+//					columnName+" string )  PARTITIONED BY ("+ServiceConstants.KHQ_CROSS_ID_PARTION+" string) stored as " + this.Tab_Format;
 		log.debug(" ----------------------  BackHiveDaoImpl.createVerticalTable  sql=" + sql);
 		return this.executeResBoolean(sql.toString());
 	}
@@ -372,7 +372,7 @@ public class BackHiveDaoImpl extends BaseBackDaoImpl implements IBackSqlDao{
 		StringBuffer sqlstr = new StringBuffer();
 		sqlstr.append("load data local inpath ").append(fileName);
 		sqlstr.append(" OVERWRITE into table ").append(tableName);
-		sqlstr.append(" PARTITION (").append(LabelInfoContants.KHQ_CROSS_ID_PARTION);
+		sqlstr.append(" PARTITION (").append(ServiceConstants.KHQ_CROSS_ID_PARTION);
 		sqlstr.append(" = ").append(partionID).append(") ");
 		log.debug(" ----------------------  BackHiveDaoImpl.loadDataToTabByPartion  sql=" + sqlstr.toString());
 		return this.executeResBoolean(sqlstr.toString());
@@ -382,7 +382,7 @@ public class BackHiveDaoImpl extends BaseBackDaoImpl implements IBackSqlDao{
 	public boolean insertDataToTabByPartion(String sql,String tableName,String partionID) throws SqlRunException{
 		StringBuffer sqlstr = new StringBuffer();
 		sqlstr.append("insert overwrite TABLE ").append(super.getCurBackDbSchema()).append(".").append(tableName);
-		sqlstr.append(" PARTITION (").append(LabelInfoContants.KHQ_CROSS_ID_PARTION);
+		sqlstr.append(" PARTITION (").append(ServiceConstants.KHQ_CROSS_ID_PARTION);
 		sqlstr.append(" = '").append(partionID).append("') ").append(sql);
 		log.debug(" ----------------------  BackHiveDaoImpl.insertDataToTabByPartion  sql=" + sqlstr.toString());
 		return this.executeResBoolean(sqlstr.toString());

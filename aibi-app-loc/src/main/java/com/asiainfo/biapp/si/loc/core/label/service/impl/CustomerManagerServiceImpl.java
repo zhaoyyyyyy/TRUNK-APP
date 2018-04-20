@@ -9,7 +9,6 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.asiainfo.biapp.si.loc.base.common.LabelInfoContants;
 import com.asiainfo.biapp.si.loc.base.common.LabelRuleContants;
 import com.asiainfo.biapp.si.loc.base.exception.BaseException;
 import com.asiainfo.biapp.si.loc.base.utils.LogUtil;
@@ -69,9 +68,9 @@ public class CustomerManagerServiceImpl implements ICustomerManagerService {
 			// 2.生成表插入数据
 			String tableName = "no table";
 			if (ServiceConstants.LabelInfo.UPDATE_CYCLE_O == customGroup.getUpdateCycle()) {
-				tableName = LabelInfoContants.KHQ_CROSS_ONCE_TABLE + customGroup.getConfigId() + "_"+ model.getDataDate();
+				tableName = ServiceConstants.KHQ_CROSS_ONCE_TABLE + customGroup.getConfigId() + "_"+ model.getDataDate();
 			} else {
-				tableName = LabelInfoContants.KHQ_CROSS_TABLE + customGroup.getConfigId() + "_"+ model.getDataDate();
+				tableName = ServiceConstants.KHQ_CROSS_TABLE + customGroup.getConfigId() + "_"+ model.getDataDate();
 			}
 			backServiceImpl.insertCustomerData(countSqlStr, tableName, customId,customGroup.getConfigId());
 			// 3.发通知 setCustomNum
@@ -121,7 +120,7 @@ public class CustomerManagerServiceImpl implements ICustomerManagerService {
 				LabelInfo ciLabelInfo = CocCacheProxy.getCacheProxy().getLabelInfoById(labelIdStr);
 				if(ciLabelInfo == null){
 					LogUtil.error("标签失效 ciCustomGroupInfo："+ customId + ",labelId="+labelIdStr);
-					return LabelInfoContants.VALIDATE_RESULT_INVALID;
+					return ServiceConstants.VALIDATE_RESULT_INVALID;
 				}
 				String dataDate = ciLabelInfo.getDataDate();
 				if (ServiceConstants.LabelInfo.UPDATE_CYCLE_D == ciLabelInfo.getUpdateCycle()
@@ -149,28 +148,28 @@ public class CustomerManagerServiceImpl implements ICustomerManagerService {
 		LogUtil.info("周期：" + updateCycle + "  策略：" + tactics + "    ciCustomGroupInfo：" + customGroup.getLabelId()
 				+ "     satisfyDay:=============" + satisfyDay + "     satisfyMonth:=============" + satisfyMonth);
 		if (ServiceConstants.LabelInfo.UPDATE_CYCLE_O == updateCycle) { // 一次性
-			if (LabelInfoContants.LIST_TABLE_TACTICS_ID_ONE.equals(tactics)) {
+			if (ServiceConstants.LIST_TABLE_TACTICS_ID_ONE.equals(tactics)) {
 				if (!satisfyDay) { // 日不满足
-					result = LabelInfoContants.VALIDATE_RESULT_NEW;
+					result = ServiceConstants.VALIDATE_RESULT_NEW;
 				} else {
-					result = LabelInfoContants.VALIDATE_RESULT_GO;
+					result = ServiceConstants.VALIDATE_RESULT_GO;
 				}
-			} else if (LabelInfoContants.LIST_TABLE_TACTICS_ID_THREE.equals(tactics)) {
-				result = LabelInfoContants.VALIDATE_RESULT_GO;
+			} else if (ServiceConstants.LIST_TABLE_TACTICS_ID_THREE.equals(tactics)) {
+				result = ServiceConstants.VALIDATE_RESULT_GO;
 			}
 		} else if (ServiceConstants.LabelInfo.UPDATE_CYCLE_M == updateCycle) { // 月周期
 			if (!satisfyMonth) { // 月不满足
-				result = LabelInfoContants.VALIDATE_RESULT_WAIT;
+				result = ServiceConstants.VALIDATE_RESULT_WAIT;
 			} else if (satisfyMonth && !satisfyDay) { // 月满足，日不满足
-				result = LabelInfoContants.VALIDATE_RESULT_NEW;
+				result = ServiceConstants.VALIDATE_RESULT_NEW;
 			} else if (satisfyMonth && satisfyDay) { // 日、月都满足
-				result = LabelInfoContants.VALIDATE_RESULT_GO;
+				result = ServiceConstants.VALIDATE_RESULT_GO;
 			}
 		} else if (ServiceConstants.LabelInfo.UPDATE_CYCLE_D == updateCycle) { // 日周期
 			if (!satisfyDay) {
-				result = LabelInfoContants.VALIDATE_RESULT_WAIT;
+				result = ServiceConstants.VALIDATE_RESULT_WAIT;
 			} else {
-				result = LabelInfoContants.VALIDATE_RESULT_GO;
+				result = ServiceConstants.VALIDATE_RESULT_GO;
 			}
 		}
 		return result;
