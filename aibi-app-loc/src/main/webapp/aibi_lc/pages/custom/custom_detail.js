@@ -68,7 +68,7 @@ window.loc_onload = function() {
 			model.dataDate = data.data.dataDate;
 			model.dayLabelDate = data.data.dayLabelDate;
 			model.monthLabelDate = data.data.monthLabelDate;
-			model.customNum = data.data.labelExtInfo.customNum;
+			model.customNum = data.data.labelExtInfo.customNum+"人";
 			model.labelOptRuleShow = data.data.labelExtInfo.labelOptRuleShow;
 			$.initWarrentButton(data.data.createUserId);//是否显示
 			if(data.data.updateCycle == 1){//客户群更新周期为日周期，推送只能是日周期和一次性
