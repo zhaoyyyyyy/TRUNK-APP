@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.asiainfo.biapp.si.loc.auth.model.User;
-import com.asiainfo.biapp.si.loc.base.common.LabelRuleContants;
 import com.asiainfo.biapp.si.loc.base.controller.BaseController;
 import com.asiainfo.biapp.si.loc.base.exception.BaseException;
 import com.asiainfo.biapp.si.loc.base.exception.ParamRequiredException;
@@ -100,7 +99,7 @@ public class LabelInfoController extends BaseController {
         List<LabelRuleVo> ruleList = new ArrayList<>();
         String msg="查询客户群规则失败！";
         try {
-        	 ruleList = ruleService.queryCiLabelRuleList(customGroupId, LabelRuleContants.LABEL_RULE_FROM_COSTOMER);
+        	 ruleList = ruleService.queryCiLabelRuleList(customGroupId, ServiceConstants.LabelRule.CUSTOM_TYPE_COSTOMER);
         } catch (Exception e) {
             return webResult.fail(msg);
         }
@@ -167,7 +166,7 @@ public class LabelInfoController extends BaseController {
 		}finally {
 			//清除缓存
 			try {
-				setSessionAttribute(LabelRuleContants.SHOP_CART_RULE, "");
+				setSessionAttribute(ServiceConstants.SHOP_CART_RULE, "");
 			} catch (BaseException e) {
 				LogUtil.error("清除购物车的对象异常", e);
 			}
@@ -218,7 +217,7 @@ public class LabelInfoController extends BaseController {
         }finally {
             //清除缓存
             try {
-                setSessionAttribute(LabelRuleContants.SHOP_CART_RULE, "");
+                setSessionAttribute(ServiceConstants.SHOP_CART_RULE, "");
             } catch (BaseException e) {
                 LogUtil.error("清除购物车的对象异常", e);
             }
@@ -527,7 +526,7 @@ public class LabelInfoController extends BaseController {
 	private List<LabelRuleVo> getSessionLabelRuleList() {
 		List<LabelRuleVo> rules = null;
 		try {
-			String ruleStrs = (String) getSessionAttribute(LabelRuleContants.SHOP_CART_RULE);
+			String ruleStrs = (String) getSessionAttribute(ServiceConstants.SHOP_CART_RULE);
 			if (StringUtil.isEmpty(ruleStrs)) {
 				rules = new ArrayList<LabelRuleVo>();
 			} else {

@@ -1,8 +1,8 @@
 package com.asiainfo.biapp.si.loc.core.label.model.sub;
 
 import com.asiainfo.biapp.si.loc.base.common.CommonConstants;
-import com.asiainfo.biapp.si.loc.base.common.LabelRuleContants;
 import com.asiainfo.biapp.si.loc.base.utils.StringUtil;
+import com.asiainfo.biapp.si.loc.core.ServiceConstants;
 import com.asiainfo.biapp.si.loc.core.label.entity.LabelRule;
 import com.asiainfo.biapp.si.loc.core.label.entity.MdaSysTableColumn;
 import com.asiainfo.biapp.si.loc.core.label.model.LabelElement;
@@ -27,7 +27,7 @@ public class KpiLabel extends LabelElement {
 		String maxVal = ciLabelRule.getContiueMaxVal();
 		String leftZoneSign = ciLabelRule.getLeftZoneSign();
 		String rightZoneSign = ciLabelRule.getRightZoneSign();
-		if (LabelRuleContants.LABEL_RULE_FLAG_NO == flag) {
+		if (ServiceConstants.LABEL_RULE_FLAG_NO == flag) {
 			if (StringUtil.isNotEmpty(minVal) && StringUtil.isEmpty(maxVal)) {
 				if (leftZoneSign.equals(CommonConstants.GE)) {
 					wherelabel.append(" ").append(asName).append(" ")
@@ -78,7 +78,7 @@ public class KpiLabel extends LabelElement {
 					wherelabel.append(" )");
 				}
 			}
-		} else if (LabelRuleContants.LABEL_RULE_FLAG_YES == flag) {
+		} else if (ServiceConstants.LABEL_RULE_FLAG_YES == flag) {
 			if (StringUtil.isNotEmpty(minVal) && StringUtil.isEmpty(maxVal)) {
 				wherelabel.append(" ").append(asName).append(" ")
 				.append(leftZoneSign).append(" ").append(minVal);

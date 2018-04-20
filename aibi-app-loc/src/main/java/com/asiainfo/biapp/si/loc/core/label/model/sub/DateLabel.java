@@ -5,10 +5,10 @@ import java.util.Date;
 import org.apache.log4j.Logger;
 
 import com.asiainfo.biapp.si.loc.base.common.CommonConstants;
-import com.asiainfo.biapp.si.loc.base.common.LabelRuleContants;
 import com.asiainfo.biapp.si.loc.base.utils.DataBaseAdapter;
 import com.asiainfo.biapp.si.loc.base.utils.DateUtil;
 import com.asiainfo.biapp.si.loc.base.utils.StringUtil;
+import com.asiainfo.biapp.si.loc.core.ServiceConstants;
 import com.asiainfo.biapp.si.loc.core.label.entity.LabelRule;
 import com.asiainfo.biapp.si.loc.core.label.entity.MdaSysTableColumn;
 import com.asiainfo.biapp.si.loc.core.label.model.LabelElement;
@@ -55,7 +55,7 @@ public class DateLabel extends LabelElement {
 		}
         
         if (StringUtil.isNotEmpty(startTime)) {
-            if (LabelRuleContants.IS_NEED_OFFSET_YES == isNeedOffset && interval != 0) {
+            if (ServiceConstants.IS_NEED_OFFSET_YES == isNeedOffset && interval != 0) {
                 startTime = DateUtil.calculateOffsetDate(startTime, interval, dateFormat,
                     updateCycle);
             } else {
@@ -74,7 +74,7 @@ public class DateLabel extends LabelElement {
         }
 
         if (StringUtil.isNotEmpty(endTime)) {
-            if (LabelRuleContants.IS_NEED_OFFSET_YES == isNeedOffset && interval != 0) {
+            if (ServiceConstants.IS_NEED_OFFSET_YES == isNeedOffset && interval != 0) {
                 endTime = DateUtil.calculateOffsetDate(endTime, interval, dateFormat, updateCycle);
             } else {
                 Date endDate = DateUtil.string2Date(endTime, dateFormat);
@@ -90,7 +90,7 @@ public class DateLabel extends LabelElement {
             	}
             }
         }
-		if (LabelRuleContants.LABEL_RULE_FLAG_NO == flag) {
+		if (ServiceConstants.LABEL_RULE_FLAG_NO == flag) {
 			if (StringUtil.isNotEmpty(startTime)
 					&& StringUtil.isEmpty(endTime)) {
 				if (leftZoneSign.equals(CommonConstants.GE)) {
@@ -187,7 +187,7 @@ public class DateLabel extends LabelElement {
 					}
 				}
 			}
-		} else if (LabelRuleContants.LABEL_RULE_FLAG_YES == flag) {
+		} else if (ServiceConstants.LABEL_RULE_FLAG_YES == flag) {
 			if (StringUtil.isNotEmpty(startTime) && StringUtil.isEmpty(endTime)) {
 				wherelabel.append(" ").append(asName).append(" ").append(leftZoneSign)
 				.append(" '").append(startTime).append("'");

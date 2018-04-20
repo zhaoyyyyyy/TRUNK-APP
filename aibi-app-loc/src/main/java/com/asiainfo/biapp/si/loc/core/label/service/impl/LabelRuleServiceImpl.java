@@ -19,7 +19,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.asiainfo.biapp.si.loc.base.common.CommonConstants;
-import com.asiainfo.biapp.si.loc.base.common.LabelRuleContants;
 import com.asiainfo.biapp.si.loc.base.dao.BaseDao;
 import com.asiainfo.biapp.si.loc.base.exception.BaseException;
 import com.asiainfo.biapp.si.loc.base.exception.ParamRequiredException;
@@ -101,12 +100,12 @@ public class LabelRuleServiceImpl extends BaseServiceImpl<LabelRule, String> imp
 			try {
 				BeanUtils.copyProperties(rule, entity);
 			} catch (Exception e) {LogUtil.info("将值复制给规则失败");}
-			if (LabelRuleContants.ELEMENT_TYPE_LIST_ID == entity.getElementType()) {
+			if (ServiceConstants.LabelRule.ELEMENT_TYPE_LIST_ID == entity.getElementType()) {
 				LabelInfo labelInfo = iLabelInfoService.selectLabelInfoById(entity.getCalcuElement());
 				rule.setAttrName(labelInfo.getLabelName());
                 rule.setCustomOrLabelName(labelInfo.getLabelName());
 			}
-			if (LabelRuleContants.ELEMENT_TYPE_LABEL_ID == entity.getElementType()) {
+			if (ServiceConstants.LabelRule.ELEMENT_TYPE_LABEL_ID == entity.getElementType()) {
 				LabelInfo labelInfo = CocCacheProxy.getCacheProxy().getLabelInfoById( entity.getCalcuElement());
 				rule.setLabelTypeId(labelInfo.getLabelTypeId());
 				rule.setAttrName(labelInfo.getLabelName());
@@ -173,20 +172,20 @@ public class LabelRuleServiceImpl extends BaseServiceImpl<LabelRule, String> imp
 			for (int i = 0; i < ciLabelRuleListTemp.size(); i++) {
 				LabelRuleVo labelRule = ciLabelRuleListTemp.get(i);
 				int elementType = labelRule.getElementType();
-				if(elementType == LabelRuleContants.ELEMENT_TYPE_BRACKET){
+				if(elementType == ServiceConstants.LabelRule.ELEMENT_TYPE_BRACKET){
 					rule.append(labelRule.getCalcuElement());
-				}else if(elementType == LabelRuleContants.ELEMENT_TYPE_OPERATOR){
+				}else if(elementType == ServiceConstants.LabelRule.ELEMENT_TYPE_OPERATOR){
 					String operE = "";
-					if(LabelRuleContants.CALCULATE_ELEMENT_TYPE_OPT_AND.equals(labelRule.getCalcuElement())){
+					if(ServiceConstants.LabelRule.CALCU_ELEMENT_AND.equals(labelRule.getCalcuElement())){
 						operE = "且";
-					}else if(LabelRuleContants.CALCULATE_ELEMENT_TYPE_OPT_OR.equals(labelRule.getCalcuElement())){
+					}else if(ServiceConstants.LabelRule.CALCU_ELEMENT_OR.equals(labelRule.getCalcuElement())){
 						operE = "或";
 					}else{
 						operE = "剔除";
 					}
 					rule.append(operE);
-				}else if(elementType == LabelRuleContants.ELEMENT_TYPE_LABEL_ID){
-					if(labelRule.getLabelFlag() != LabelRuleContants.LABEL_RULE_FLAG_YES && labelRule.getLabelTypeId() !=ServiceConstants.LabelInfo.LABEL_TYPE_ID_SIGN){
+				}else if(elementType == ServiceConstants.LabelRule.ELEMENT_TYPE_LABEL_ID){
+					if(labelRule.getLabelFlag() != ServiceConstants.LABEL_RULE_FLAG_YES && labelRule.getLabelTypeId() !=ServiceConstants.LabelInfo.LABEL_TYPE_ID_SIGN){
 						rule.append("(非)");
 					}
 					rule.append(labelRule.getCustomOrLabelName());
@@ -196,7 +195,7 @@ public class LabelRuleServiceImpl extends BaseServiceImpl<LabelRule, String> imp
 						rule.append(attrVal);
 						rule.append("]");
 					}
-				}else if(elementType == LabelRuleContants.ELEMENT_TYPE_LIST_ID){
+				}else if(elementType == ServiceConstants.LabelRule.ELEMENT_TYPE_LIST_ID){
 					rule.append("客户群：");
 					rule.append(labelRule.getCustomOrLabelName());
 					if(StringUtil.isNotEmpty(labelRule.getAttrVal())){
@@ -219,7 +218,7 @@ public class LabelRuleServiceImpl extends BaseServiceImpl<LabelRule, String> imp
 	public String ruleAttrVal(LabelRuleVo labelRule){
 		StringBuffer attrValStr = new StringBuffer();
 		if(labelRule.getLabelTypeId() == ServiceConstants.LabelInfo.LABEL_TYPE_ID_SIGN){//01型
-			if(labelRule.getLabelFlag() != LabelRuleContants.LABEL_RULE_FLAG_YES){
+			if(labelRule.getLabelFlag() != ServiceConstants.LABEL_RULE_FLAG_YES){
 				attrValStr.append("否");
 			}else{
 				attrValStr.append("是");
@@ -291,7 +290,7 @@ public class LabelRuleServiceImpl extends BaseServiceImpl<LabelRule, String> imp
 						attrValStr.append("[");
 						attrValStr.append(rule.getColumnCnName());
 						attrValStr.append("：");
-						if(labelRule.getLabelFlag() != LabelRuleContants.LABEL_RULE_FLAG_YES){
+						if(labelRule.getLabelFlag() != ServiceConstants.LABEL_RULE_FLAG_YES){
 							attrValStr.append("否");
 						}else{
 							attrValStr.append("是");

@@ -20,7 +20,6 @@ import org.springframework.stereotype.Service;
 import com.asiainfo.biapp.si.loc.auth.model.Organization;
 import com.asiainfo.biapp.si.loc.auth.service.IOrganizationService;
 import com.asiainfo.biapp.si.loc.base.common.CommonConstants;
-import com.asiainfo.biapp.si.loc.base.common.LabelRuleContants;
 import com.asiainfo.biapp.si.loc.base.exception.BaseException;
 import com.asiainfo.biapp.si.loc.base.exception.SqlRunException;
 import com.asiainfo.biapp.si.loc.base.utils.LogUtil;
@@ -67,20 +66,20 @@ public class LabelExploreServiceImpl implements ILabelExploreService {
 		Integer duplicateLabelIdCount = 1;
 		/***/
 		for (LabelRuleVo rule : labelRuleList) {
-			if (LabelRuleContants.ELEMENT_TYPE_OPERATOR==rule.getElementType()) {
-				if (LabelRuleContants.CALCULATE_ELEMENT_TYPE_OPT_OR
+			if (ServiceConstants.LabelRule.ELEMENT_TYPE_OPERATOR==rule.getElementType()) {
+				if (ServiceConstants.LabelRule.CALCU_ELEMENT_OR
 						.equalsIgnoreCase(rule.getCalcuElement())) {
 					calcExpr.append(CommonConstants.UNION);// 并
-				} else if (LabelRuleContants.CALCULATE_ELEMENT_TYPE_OPT_AND
+				} else if (ServiceConstants.LabelRule.CALCU_ELEMENT_AND
 						.equalsIgnoreCase(rule.getCalcuElement())) {
 					calcExpr.append(CommonConstants.INTERSECT);// 交
-				} else if (LabelRuleContants.CALCULATE_ELEMENT_TYPE_OPT_EXCEPT
+				} else if (ServiceConstants.LabelRule.CALCU_ELEMENT_EXCEPT
 						.equalsIgnoreCase(rule.getCalcuElement())) {
 					calcExpr.append(CommonConstants.EXCEPT);// 差
 				}
-			} else if (LabelRuleContants.ELEMENT_TYPE_BRACKET==rule.getElementType()) {
+			} else if (ServiceConstants.LabelRule.ELEMENT_TYPE_BRACKET==rule.getElementType()) {
 				calcExpr.append(rule.getCalcuElement());// 括号
-			} else if (LabelRuleContants.ELEMENT_TYPE_LABEL_ID == rule.getElementType()) {
+			} else if (ServiceConstants.LabelRule.ELEMENT_TYPE_LABEL_ID == rule.getElementType()) {
 				String labelIdStr = rule.getCalcuElement();
 				LabelInfo labelInfo = CocCacheProxy.getCacheProxy().getLabelInfoById(labelIdStr);
 				String singleLabelSql = "";
@@ -105,7 +104,7 @@ public class LabelExploreServiceImpl implements ILabelExploreService {
 					labelRuleToSql.put(rule.getCalcuElement(),singleLabelSql);
 					calcExpr.append(rule.getCalcuElement());
 				}
-			} else if (LabelRuleContants.ELEMENT_TYPE_LIST_ID == rule.getElementType()) {
+			} else if (ServiceConstants.LabelRule.ELEMENT_TYPE_LIST_ID == rule.getElementType()) {
 				String listTableId = rule.getCalcuElement();
 				String singleLabelSql = this.getListTableSql(listTableId,rule.getAttrVal());
 				listInfoIds.add(listTableId);
@@ -166,7 +165,7 @@ public class LabelExploreServiceImpl implements ILabelExploreService {
 			}
 			LabelRuleVo ciLabelRule = labelRuleList.get(i);
 			int elementType = ciLabelRule.getElementType();
-			if (elementType == LabelRuleContants.ELEMENT_TYPE_LABEL_ID) {
+			if (elementType == ServiceConstants.LabelRule.ELEMENT_TYPE_LABEL_ID) {
 				LabelVerticalColumnRel rel = map.get(ciLabelRule.getCalcuElement());
 				MdaSysTableColumn column = rel.getMdaSysTableColumn();
 				MdaSysTable table = column.getMdaSysTable();
@@ -220,7 +219,7 @@ public class LabelExploreServiceImpl implements ILabelExploreService {
 		for (int i = 0; i < ciLabelRuleList.size(); i++) {
 			LabelRuleVo ciLabelRule = ciLabelRuleList.get(i);
 			int elementType = ciLabelRule.getElementType();
-			if (elementType == LabelRuleContants.ELEMENT_TYPE_LABEL_ID) {
+			if (elementType == ServiceConstants.LabelRule.ELEMENT_TYPE_LABEL_ID) {
 				String labelIdStr = ciLabelRule.getCalcuElement();
 				LabelInfo ciLabelInfo = CocCacheProxy.getCacheProxy().getLabelInfoById(labelIdStr);
 				MdaSysTableColumn column = ciLabelInfo.getMdaSysTableColumn();

@@ -9,7 +9,6 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.asiainfo.biapp.si.loc.base.common.LabelRuleContants;
 import com.asiainfo.biapp.si.loc.base.exception.BaseException;
 import com.asiainfo.biapp.si.loc.base.utils.LogUtil;
 import com.asiainfo.biapp.si.loc.base.utils.StringUtil;
@@ -58,7 +57,7 @@ public class CustomerManagerServiceImpl implements ICustomerManagerService {
 		    model.setOrgId(customGroup.getOrgId());// 权限
 		    model.setCreateCustom(true);
 		    model.setConfigId(customGroup.getConfigId());
-			List<LabelRuleVo> labelRuleList = ruleService.queryCiLabelRuleList(customId,LabelRuleContants.LABEL_RULE_FROM_COSTOMER);
+			List<LabelRuleVo> labelRuleList = ruleService.queryCiLabelRuleList(customId,ServiceConstants.LabelRule.CUSTOM_TYPE_COSTOMER);
 			String countSqlStr = "";
 			if (haveCustomOrVerticalLabel(labelRuleList)) {
 				countSqlStr = exploreServiceImpl.getFromSqlForMultiLabel(labelRuleList, model);
@@ -112,10 +111,10 @@ public class CustomerManagerServiceImpl implements ICustomerManagerService {
 			dayNum = Integer.valueOf(day);
 		}
 		List<LabelRuleVo> labelRuleList = ruleService.queryCiLabelRuleList(customId,
-				LabelRuleContants.LABEL_RULE_FROM_COSTOMER);
+		    ServiceConstants.LabelRule.CUSTOM_TYPE_COSTOMER);
 		for (LabelRuleVo rule : labelRuleList) {
 			int elementType = rule.getElementType();
-			if (elementType == LabelRuleContants.ELEMENT_TYPE_LABEL_ID) {
+			if (elementType == ServiceConstants.LabelRule.ELEMENT_TYPE_LABEL_ID) {
 				String labelIdStr = rule.getCalcuElement();
 				LabelInfo ciLabelInfo = CocCacheProxy.getCacheProxy().getLabelInfoById(labelIdStr);
 				if(ciLabelInfo == null){
@@ -184,11 +183,11 @@ public class CustomerManagerServiceImpl implements ICustomerManagerService {
 		boolean result = false;
 		if(rules != null) {
 			for (LabelRuleVo rule : rules) {
-				if (rule.getElementType() == LabelRuleContants.ELEMENT_TYPE_CUSTOM_RULES 
-						|| rule.getElementType() == LabelRuleContants.ELEMENT_TYPE_LIST_ID) {
+				if (rule.getElementType() == ServiceConstants.LabelRule.ELEMENT_TYPE_CUSTOM_RULES 
+						|| rule.getElementType() == ServiceConstants.LabelRule.ELEMENT_TYPE_LIST_ID) {
 					result = true;
 					break;
-				} else if (rule.getElementType() == LabelRuleContants.ELEMENT_TYPE_LABEL_ID) {
+				} else if (rule.getElementType() == ServiceConstants.LabelRule.ELEMENT_TYPE_LABEL_ID) {
 					if (rule.getLabelTypeId() == ServiceConstants.LabelInfo.LABEL_TYPE_ID_VERT) {
 						result = true;
 						break;

@@ -72,7 +72,37 @@ public class ServiceConstants {
     /** 等待周期job执行 **/
     public static final String VALIDATE_RESULT_NEW = "3";
     
+    /**
+     * 标签规则是否取“非” 0：取非，1：不取非
+     */
+    /** 标签规则“非”的值 */
+    public static final int LABEL_RULE_FLAG_NO = 0;
+    /** 标签规则“是”的值 */
+    public static final int LABEL_RULE_FLAG_YES = 1;
+    
+    /**日期类标签是否偏移量**/
+    /** 1:需要 **/
+    public static int IS_NEED_OFFSET_YES = 1;
+    /** 0：不需要 **/
+    public static int IS_NEED_OFFSET_NO = 0;
 
+
+    /**
+     * 购物车在session中存放的名称
+     */
+    /** 具体规则存放的名称 */
+    public static final String SHOP_CART_RULE = "sessionModelList";
+    /** 标签和客户群规则的数量名称 */
+    public static final String SHOP_CART_RULE_NUM = "calcElementNum";
+    
+    /**
+     * 购物车session使用
+     */
+    /** 标签 **/
+    public static String LABEL_INFO_CALCULATIONS_TYPEID = "1";
+    /** 客户群 **/
+    public static String CUSTOM_GROUP_INFO_CALCULATIONS_TYPEID = "2";
+    
     
     
     //只与业务相关，不与表相关的常量 end
@@ -230,6 +260,53 @@ public class ServiceConstants {
         /** 客户群数据状态：4、 预约状态 */
         public static final int DATA_STATUS_ID_G_ORDER = 4;
         
+	}
+	/** 标签规则表*/
+	public interface LabelRule{
+	    /** 
+	     * 计算元素:CALCU_ELEMENT
+	     */
+	    /** 运算符 and */
+	    public static final String CALCU_ELEMENT_AND = "and";
+	    /** 运算符 or */
+	    public static final String CALCU_ELEMENT_OR = "or";
+	    /** 运算符 剔除 */
+	    public static final String CALCU_ELEMENT_EXCEPT = "-";
+	    /** 运算符 剔除 */
+	    public static final String CALCU_ELEMENT_REMOVE = "REMOVE";
+	    
+	    /**
+	     * 计算元素类型: 1,运算符，2,标签(指标)ID，3,括号，4,产品ID，5清单表名，6.客户群
+	     */
+	    /** 计算元素类型:1-运算符 */
+	    public static final int ELEMENT_TYPE_OPERATOR = 1;
+	    /** 计算元素类型:2-标签(指标)ID */
+	    public static final int ELEMENT_TYPE_LABEL_ID = 2;
+	    /** 计算元素类型: 3-括号 */
+	    public static final int ELEMENT_TYPE_BRACKET = 3;
+	    /** 计算元素类型: 4-产品ID */
+	    public static final int ELEMENT_TYPE_PRODUCT_ID = 4;
+	    /** 计算元素类型: 5-清单表名 */
+	    public static final int ELEMENT_TYPE_LIST_ID = 5;
+	    /** 计算元素类型: 6-客户群 */
+	    public static final int ELEMENT_TYPE_CUSTOM_RULES = 6;
+	    
+	    /**
+	     * 是否标识 一、是否取反 1是；2否 二、标识清单数据周期1，日；2，月
+	     */
+	    /** 是否标识 一、是否取反 1是；2否 二、标识清单数据周期1，日；2，月 */
+	    public static final int LABEL_FLAG_YES = 1;
+	    /** 是否标识 一、是否取反 1是；2否 二、标识清单数据周期1，日；2，月 */
+	    public static final int LABEL_FLAG_NO = 2;
+
+	    /**
+	     * 类型：1-客户群，2-模板
+	     */
+	    /** 类型：1-客户群 */
+	    public static final int CUSTOM_TYPE_COSTOMER = 1;
+	    /** 类型：2-模板 */
+	    public static final int CUSTOM_TYPE_TEMPLATE = 2;
+	    
 	}
 	
 	/** 元数据表列表 */

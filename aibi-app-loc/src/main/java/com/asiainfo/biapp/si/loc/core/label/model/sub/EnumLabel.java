@@ -1,7 +1,6 @@
 package com.asiainfo.biapp.si.loc.core.label.model.sub;
 
 import com.asiainfo.biapp.si.loc.base.common.CommonConstants;
-import com.asiainfo.biapp.si.loc.base.common.LabelRuleContants;
 import com.asiainfo.biapp.si.loc.base.utils.DataBaseAdapter;
 import com.asiainfo.biapp.si.loc.base.utils.StringUtil;
 import com.asiainfo.biapp.si.loc.core.ServiceConstants;
@@ -31,12 +30,12 @@ public class EnumLabel extends LabelElement {
 			String columnName = CommonConstants.LABEL_EXACT_VALUE_TABLE_COLUMN;
 			//TODO 查询枚举值
 			String tableSql = dataBaseAdapter.getEnumFromTabel(valueTabName, columnName, column.getColumnDataTypeId());
-			if (LabelRuleContants.LABEL_RULE_FLAG_NO == flag) {
+			if (ServiceConstants.LABEL_RULE_FLAG_NO == flag) {
 				if (ServiceConstants.MdaSysTableColumn.COLUMN_DATA_TYPE_ID_NUM == column.getColumnDataTypeId()) {
 					asName = dataBaseAdapter.getColumnToChar(asName);
 				}
 				wherelabel.append(" ").append(asName).append(" not in (").append(tableSql).append(")");
-			} else if (LabelRuleContants.LABEL_RULE_FLAG_YES == flag) {
+			} else if (ServiceConstants.LABEL_RULE_FLAG_YES == flag) {
 				if (ServiceConstants.MdaSysTableColumn.COLUMN_DATA_TYPE_ID_NUM == column.getColumnDataTypeId()) {
 					 asName = dataBaseAdapter.getColumnToChar(asName);
 				}
@@ -45,7 +44,7 @@ public class EnumLabel extends LabelElement {
 		} else {
 			String attrValsStr = ciLabelRule.getAttrVal();
 			String[] vals = attrValsStr.split(",");
-			if (LabelRuleContants.LABEL_RULE_FLAG_NO == flag) {
+			if (ServiceConstants.LABEL_RULE_FLAG_NO == flag) {
 				if (vals.length == 1 || isValidate) {
 					if (ServiceConstants.MdaSysTableColumn.COLUMN_DATA_TYPE_ID_VARCHAR == column.getColumnDataTypeId()) {
 						wherelabel.append(" ").append(asName).append(" ")
@@ -71,7 +70,7 @@ public class EnumLabel extends LabelElement {
 						wherelabel.append(" ").append(asName).append(" not in (").append(attrValsStr).append(")");
 					}
 				}
-			} else if (LabelRuleContants.LABEL_RULE_FLAG_YES == flag) {
+			} else if (ServiceConstants.LABEL_RULE_FLAG_YES == flag) {
 				if (vals.length == 1 || isValidate) {
 					if (ServiceConstants.MdaSysTableColumn.COLUMN_DATA_TYPE_ID_VARCHAR == column.getColumnDataTypeId()) {
 						wherelabel.append(" ").append(asName).append(" = '").append(vals[0]).append("'");

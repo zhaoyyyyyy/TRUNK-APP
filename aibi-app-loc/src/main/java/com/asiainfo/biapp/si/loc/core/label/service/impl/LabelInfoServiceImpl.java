@@ -19,7 +19,6 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Service;
 
-import com.asiainfo.biapp.si.loc.base.common.LabelRuleContants;
 import com.asiainfo.biapp.si.loc.base.dao.BaseDao;
 import com.asiainfo.biapp.si.loc.base.exception.BaseException;
 import com.asiainfo.biapp.si.loc.base.exception.ParamRequiredException;
@@ -84,6 +83,7 @@ import com.asiainfo.biapp.si.loc.core.syspush.vo.LabelPushCycleVo;
  * @author zhangnan7
  * @version 1.0.0.2017年11月16日
  */
+
 @Service
 @Transactional
 public class LabelInfoServiceImpl extends BaseServiceImpl<LabelInfo, String> implements ILabelInfoService,ApplicationContextAware {
@@ -314,7 +314,7 @@ public class LabelInfoServiceImpl extends BaseServiceImpl<LabelInfo, String> imp
 			} catch (Exception e) {
 			}
 			labelRule.setCustomId(customId);
-			labelRule.setCustomType(LabelRuleContants.LABEL_RULE_FROM_COSTOMER);
+			labelRule.setCustomType(ServiceConstants.LabelRule.CUSTOM_TYPE_COSTOMER);
 			ruleService.addLabelRule(labelRule);
 			if (labelRuleVo.getLabelTypeId()!=null&&ServiceConstants.LabelInfo.LABEL_TYPE_ID_VERT==labelRuleVo.getLabelTypeId()) {
 				List<LabelRuleVo> childLabelRuleList = labelRuleVo.getChildLabelRuleList();
@@ -325,7 +325,7 @@ public class LabelInfoServiceImpl extends BaseServiceImpl<LabelInfo, String> imp
 					} catch (Exception e) {}
 					childRule.setParentId(labelRule.getRuleId());
 					childRule.setCustomId(customId);
-					childRule.setCustomType(LabelRuleContants.LABEL_RULE_FROM_COSTOMER);
+					childRule.setCustomType(ServiceConstants.LabelRule.CUSTOM_TYPE_COSTOMER);
 					ruleService.addLabelRule(childRule);
 				}
 			}
@@ -367,7 +367,7 @@ public class LabelInfoServiceImpl extends BaseServiceImpl<LabelInfo, String> imp
         String customId = customInfo.getLabelId();
         labelExtInfo.setLabelOptRuleShow(ruleService.shopCartRule(labelRuleList));
         iLabelExtInfoService.update(labelExtInfo);
-        List<LabelRuleVo> delLabelRuleVo = ruleService.queryCiLabelRuleList(customId, LabelRuleContants.LABEL_RULE_FROM_COSTOMER);
+        List<LabelRuleVo> delLabelRuleVo = ruleService.queryCiLabelRuleList(customId, ServiceConstants.LabelRule.CUSTOM_TYPE_COSTOMER);
         for(LabelRuleVo lr : delLabelRuleVo){
 //            ruleService.deleteLabelRule(lr.getRuleId());
             ruleService.delete(lr.getRuleId());
@@ -381,7 +381,7 @@ public class LabelInfoServiceImpl extends BaseServiceImpl<LabelInfo, String> imp
             } catch (Exception e) {
             }
             labelRule.setCustomId(customId);
-            labelRule.setCustomType(LabelRuleContants.LABEL_RULE_FROM_COSTOMER);
+            labelRule.setCustomType(ServiceConstants.LabelRule.CUSTOM_TYPE_COSTOMER);
             ruleService.addLabelRule(labelRule);
             if (labelRuleVo.getLabelTypeId() != null&&ServiceConstants.LabelInfo.LABEL_TYPE_ID_VERT == labelRuleVo.getLabelTypeId()) {
                 List<LabelRuleVo> childLabelRuleList = labelRuleVo.getChildLabelRuleList();
@@ -397,7 +397,7 @@ public class LabelInfoServiceImpl extends BaseServiceImpl<LabelInfo, String> imp
                     } catch (Exception e) {}
                     childRule.setParentId(labelRule.getRuleId());
                     childRule.setCustomId(customId);
-                    childRule.setCustomType(LabelRuleContants.LABEL_RULE_FROM_COSTOMER);
+                    childRule.setCustomType(ServiceConstants.LabelRule.CUSTOM_TYPE_COSTOMER);
                     ruleService.addLabelRule(childRule);
                 }
             }

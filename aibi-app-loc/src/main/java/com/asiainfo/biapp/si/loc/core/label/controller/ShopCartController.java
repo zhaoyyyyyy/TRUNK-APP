@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.asiainfo.biapp.si.loc.base.common.LabelRuleContants;
 import com.asiainfo.biapp.si.loc.base.controller.BaseController;
 import com.asiainfo.biapp.si.loc.base.exception.BaseException;
 import com.asiainfo.biapp.si.loc.base.utils.DateUtil;
@@ -88,7 +87,7 @@ public class ShopCartController extends BaseController {
 		boolean flag = false;
 		List<LabelRuleVo> rules = getSessionLabelRuleList();
 		for (LabelRuleVo rule : rules) {
-			if (LabelRuleContants.ELEMENT_TYPE_LABEL_ID == rule.getElementType()) {
+			if (ServiceConstants.LabelRule.ELEMENT_TYPE_LABEL_ID == rule.getElementType()) {
 				String effectDate = rule.getEffectDate();
 				if (ServiceConstants.LabelInfo.UPDATE_CYCLE_M == rule.getUpdateCycle()) {
 					if (Integer.valueOf(newLabelMonthFormat) < Integer.valueOf(effectDate)) {
@@ -127,7 +126,7 @@ public class ShopCartController extends BaseController {
 			boolean isAllNewDate = true;//规则中标签是否都是最新数据日期
 			List<LabelRuleVo> rules = getSessionLabelRuleList();
 			for (LabelRuleVo rule : rules) {
-				if (LabelRuleContants.ELEMENT_TYPE_LABEL_ID == rule.getElementType()) {
+				if (ServiceConstants.LabelRule.ELEMENT_TYPE_LABEL_ID == rule.getElementType()) {
 					String dataDate = rule.getDataDate();
 					if (ServiceConstants.LabelInfo.UPDATE_CYCLE_M == rule.getUpdateCycle()) {
 						existMonthLabel = true;
@@ -142,11 +141,11 @@ public class ShopCartController extends BaseController {
 							isAllNewDate = false;
 						}
 					}
-				} else if (LabelRuleContants.ELEMENT_TYPE_CUSTOM_RULES == rule.getElementType()) {
+				} else if (ServiceConstants.LabelRule.ELEMENT_TYPE_CUSTOM_RULES == rule.getElementType()) {
 					List<LabelRuleVo> children = rule.getChildLabelRuleList();
 					for (int j = 0; j < children.size(); j++) {
 						LabelRuleVo child = children.get(j);
-						if (LabelRuleContants.ELEMENT_TYPE_LABEL_ID == child.getElementType()) {
+						if (ServiceConstants.LabelRule.ELEMENT_TYPE_LABEL_ID == child.getElementType()) {
 							String dataDate = child.getDataDate();
 							if (ServiceConstants.LabelInfo.UPDATE_CYCLE_M == child.getUpdateCycle()) {
 								existMonthLabel = true;
@@ -283,10 +282,10 @@ public class ShopCartController extends BaseController {
 			if (rules.size() > 0) {
 				sort = rules.get(rules.size() - 1).getSortNum();
 				sort = sort + 1;// 排序标号 ,默认规则为"and"
-				rules.add(generateRule("and", LabelRuleContants.ELEMENT_TYPE_OPERATOR, sort));
+				rules.add(generateRule("and", ServiceConstants.LabelRule.ELEMENT_TYPE_OPERATOR, sort));
 			}
 			sort = sort + 1;
-			if (LabelRuleContants.LABEL_INFO_CALCULATIONS_TYPEID.equals(typeId)) {
+			if (ServiceConstants.LABEL_INFO_CALCULATIONS_TYPEID.equals(typeId)) {
 				LabelInfo ciLabelInfo = CocCacheProxy.getCacheProxy().getLabelInfoById(calculationsId);
 				if (StringUtil.isEmpty(ciLabelInfo.getDataDate())) {
 					success = false;
@@ -297,21 +296,21 @@ public class ShopCartController extends BaseController {
 					LabelRuleVo rule = initLabelRule(ciLabelInfo, sort);
 					rules.add(rule);// 初始化标签规则
 				}
-			}else if (LabelRuleContants.CUSTOM_GROUP_INFO_CALCULATIONS_TYPEID.equals(typeId)) {
+			}else if (ServiceConstants.CUSTOM_GROUP_INFO_CALCULATIONS_TYPEID.equals(typeId)) {
 				LabelInfo ciCustomGroupInfo = labelInfoService.selectLabelInfoById(calculationsId);
 				LabelRuleVo rule = new LabelRuleVo();
 				rule.setCalcuElement(ciCustomGroupInfo.getLabelId());
 				rule.setCustomId(ciCustomGroupInfo.getLabelId());
 				rule.setLabelTypeId(ciCustomGroupInfo.getLabelTypeId());
-				rule.setElementType(LabelRuleContants.ELEMENT_TYPE_LIST_ID);
+				rule.setElementType(ServiceConstants.LabelRule.ELEMENT_TYPE_LIST_ID);
 				rule.setCustomOrLabelName(ciCustomGroupInfo.getLabelName());
 				rule.setSortNum(sort);
 				rule.setLabelFlag(1);// 取反标识，默认不取反
 				rule.setAttrVal(ciCustomGroupInfo.getDataDate());
 				rules.add(rule);
 			}
-			setSessionAttribute(LabelRuleContants.SHOP_CART_RULE, JsonUtil.toJsonString(rules));
-			setSessionAttribute(LabelRuleContants.SHOP_CART_RULE_NUM,
+			setSessionAttribute(ServiceConstants.SHOP_CART_RULE, JsonUtil.toJsonString(rules));
+			setSessionAttribute(ServiceConstants.SHOP_CART_RULE_NUM,
 					String.valueOf(findLabelOrCustomNum(rules)));
 
 		} catch (BaseException baseException) {
@@ -340,11 +339,11 @@ public class ShopCartController extends BaseController {
 			int numValue = 0;
 			numValue = findLabelOrCustomNum(rules);
 			if (numValue == 0) {
-				setSessionAttribute(LabelRuleContants.SHOP_CART_RULE, "");
+				setSessionAttribute(ServiceConstants.SHOP_CART_RULE, "");
 			}else{
-				setSessionAttribute(LabelRuleContants.SHOP_CART_RULE, JsonUtil.toJsonString(rules));
+				setSessionAttribute(ServiceConstants.SHOP_CART_RULE, JsonUtil.toJsonString(rules));
 			}
-			setSessionAttribute(LabelRuleContants.SHOP_CART_RULE_NUM, String.valueOf(numValue));
+			setSessionAttribute(ServiceConstants.SHOP_CART_RULE_NUM, String.valueOf(numValue));
 		} catch (BaseException baseException) {
 			return webResult.fail(baseException);
 		}catch (Exception e) {
@@ -465,7 +464,7 @@ public class ShopCartController extends BaseController {
 	public WebResult<String> delShopSession() {
 		WebResult<String> webResult = new WebResult<>();
 		try {
-			setSessionAttribute(LabelRuleContants.SHOP_CART_RULE, "");
+			setSessionAttribute(ServiceConstants.SHOP_CART_RULE, "");
 		} catch (Exception e) {
 			LogUtil.error("删除购物车的对象异常", e);
 			return webResult.fail(e.getMessage());
@@ -489,7 +488,7 @@ public class ShopCartController extends BaseController {
 				}
 				updateRules.add(rule);
 			}
-			setSessionAttribute(LabelRuleContants.SHOP_CART_RULE, JsonUtil.toJsonString(updateRules));
+			setSessionAttribute(ServiceConstants.SHOP_CART_RULE, JsonUtil.toJsonString(updateRules));
 		} catch (Exception e) {
 			LogUtil.error("设置属性更新session异常", e);
 			return webResult.fail("设置属性更新session异常");
@@ -508,11 +507,11 @@ public class ShopCartController extends BaseController {
 		boolean result = false;
 		if(rules != null) {
 			for (LabelRuleVo rule : rules) {
-				if (rule.getElementType() == LabelRuleContants.ELEMENT_TYPE_CUSTOM_RULES 
-						|| rule.getElementType() == LabelRuleContants.ELEMENT_TYPE_LIST_ID) {
+				if (rule.getElementType() == ServiceConstants.LabelRule.ELEMENT_TYPE_CUSTOM_RULES 
+						|| rule.getElementType() == ServiceConstants.LabelRule.ELEMENT_TYPE_LIST_ID) {
 					result = true;
 					break;
-				} else if (rule.getElementType() == LabelRuleContants.ELEMENT_TYPE_LABEL_ID) {
+				} else if (rule.getElementType() == ServiceConstants.LabelRule.ELEMENT_TYPE_LABEL_ID) {
 				    if (rule.getLabelTypeId() == ServiceConstants.LabelInfo.LABEL_TYPE_ID_VERT) {
 						result = true;
 						break;
@@ -534,9 +533,9 @@ public class ShopCartController extends BaseController {
 		if (rules != null) {
 			for (LabelRuleVo item : rules) {
 				if (item != null) {
-					if (item.getElementType() == LabelRuleContants.ELEMENT_TYPE_LABEL_ID
-							|| item.getElementType() == LabelRuleContants.ELEMENT_TYPE_LIST_ID
-							|| item.getElementType() == LabelRuleContants.ELEMENT_TYPE_CUSTOM_RULES) {
+					if (item.getElementType() == ServiceConstants.LabelRule.ELEMENT_TYPE_LABEL_ID
+							|| item.getElementType() == ServiceConstants.LabelRule.ELEMENT_TYPE_LIST_ID
+							|| item.getElementType() == ServiceConstants.LabelRule.ELEMENT_TYPE_CUSTOM_RULES) {
 						numValue = numValue + 1;
 						item.setLabelOrCustomSort(numValue);
 					}
@@ -558,7 +557,7 @@ public class ShopCartController extends BaseController {
 	private List<LabelRuleVo> getSessionLabelRuleList() {
 		List<LabelRuleVo> rules = null;
 		try {
-			String ruleStrs = (String) getSessionAttribute(LabelRuleContants.SHOP_CART_RULE);
+			String ruleStrs = (String) getSessionAttribute(ServiceConstants.SHOP_CART_RULE);
 			if (StringUtil.isEmpty(ruleStrs)) {
 				rules = new ArrayList<LabelRuleVo>();
 			} else {
@@ -590,7 +589,7 @@ public class ShopCartController extends BaseController {
 		rule.setLabelFlag(1);// 取反标识，默认不取反
 		rule.setSortNum(sort);
 		rule.setLabelTypeId(ciLabelInfo.getLabelTypeId());
-		rule.setElementType(LabelRuleContants.ELEMENT_TYPE_LABEL_ID);
+		rule.setElementType(ServiceConstants.LabelRule.ELEMENT_TYPE_LABEL_ID);
 		rule.setDataDate(ciLabelInfo.getDataDate());// 设置最新数据日期
 		rule.setUpdateCycle(ciLabelInfo.getUpdateCycle());// 设置标签周期性
 		if(ciLabelInfo.getMdaSysTableColumn()!=null){
