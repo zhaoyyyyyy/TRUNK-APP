@@ -1,10 +1,10 @@
 package com.asiainfo.biapp.si.loc.core.label.model.sub;
 
 import com.asiainfo.biapp.si.loc.base.common.CommonConstants;
-import com.asiainfo.biapp.si.loc.base.common.LabelInfoContants;
 import com.asiainfo.biapp.si.loc.base.common.LabelRuleContants;
 import com.asiainfo.biapp.si.loc.base.utils.DataBaseAdapter;
 import com.asiainfo.biapp.si.loc.base.utils.StringUtil;
+import com.asiainfo.biapp.si.loc.core.ServiceConstants;
 import com.asiainfo.biapp.si.loc.core.label.entity.LabelRule;
 import com.asiainfo.biapp.si.loc.core.label.entity.MdaSysTableColumn;
 import com.asiainfo.biapp.si.loc.core.label.model.LabelElement;
@@ -32,12 +32,12 @@ public class EnumLabel extends LabelElement {
 			//TODO 查询枚举值
 			String tableSql = dataBaseAdapter.getEnumFromTabel(valueTabName, columnName, column.getColumnDataTypeId());
 			if (LabelRuleContants.LABEL_RULE_FLAG_NO == flag) {
-				if (LabelInfoContants.COLUMN_DATA_TYPE_NUM == column.getColumnDataTypeId()) {
+				if (ServiceConstants.MdaSysTableColumn.COLUMN_DATA_TYPE_ID_NUM == column.getColumnDataTypeId()) {
 					asName = dataBaseAdapter.getColumnToChar(asName);
 				}
 				wherelabel.append(" ").append(asName).append(" not in (").append(tableSql).append(")");
 			} else if (LabelRuleContants.LABEL_RULE_FLAG_YES == flag) {
-				if (LabelInfoContants.COLUMN_DATA_TYPE_NUM == column.getColumnDataTypeId()) {
+				if (ServiceConstants.MdaSysTableColumn.COLUMN_DATA_TYPE_ID_NUM == column.getColumnDataTypeId()) {
 					 asName = dataBaseAdapter.getColumnToChar(asName);
 				}
 				wherelabel.append(" ").append(asName).append("  in (").append(tableSql).append(")");
@@ -47,10 +47,10 @@ public class EnumLabel extends LabelElement {
 			String[] vals = attrValsStr.split(",");
 			if (LabelRuleContants.LABEL_RULE_FLAG_NO == flag) {
 				if (vals.length == 1 || isValidate) {
-					if (LabelInfoContants.COLUMN_DATA_TYPE_VARCHAR == column.getColumnDataTypeId()) {
+					if (ServiceConstants.MdaSysTableColumn.COLUMN_DATA_TYPE_ID_VARCHAR == column.getColumnDataTypeId()) {
 						wherelabel.append(" ").append(asName).append(" ")
 						.append(CommonConstants.NE).append(" '").append(vals[0]).append("'");
-					} else if (LabelInfoContants.COLUMN_DATA_TYPE_NUM == column.getColumnDataTypeId()) {
+					} else if (ServiceConstants.MdaSysTableColumn.COLUMN_DATA_TYPE_ID_NUM == column.getColumnDataTypeId()) {
 						wherelabel.append(" ").append(asName).append(" ")
 						.append(CommonConstants.NE).append(" ").append(vals[0]);
 					}
@@ -58,7 +58,7 @@ public class EnumLabel extends LabelElement {
 					if (attrValsStr.length() == attrValsStr.lastIndexOf(",")) {
 						attrValsStr = attrValsStr.substring(0, attrValsStr.length() - 1);
 					}
-					if (LabelInfoContants.COLUMN_DATA_TYPE_VARCHAR == column.getColumnDataTypeId()) {
+					if (ServiceConstants.MdaSysTableColumn.COLUMN_DATA_TYPE_ID_VARCHAR == column.getColumnDataTypeId()) {
 						wherelabel.append(" ").append(asName).append(" not in ( ");
 						for (int k = 0; k < vals.length; k++) {
 							wherelabel.append("'").append(vals[k]).append("'");
@@ -67,22 +67,22 @@ public class EnumLabel extends LabelElement {
 							}
 						}
 						wherelabel.append(" )");
-					} else if (LabelInfoContants.COLUMN_DATA_TYPE_NUM == column.getColumnDataTypeId()) {
+					} else if (ServiceConstants.MdaSysTableColumn.COLUMN_DATA_TYPE_ID_NUM == column.getColumnDataTypeId()) {
 						wherelabel.append(" ").append(asName).append(" not in (").append(attrValsStr).append(")");
 					}
 				}
 			} else if (LabelRuleContants.LABEL_RULE_FLAG_YES == flag) {
 				if (vals.length == 1 || isValidate) {
-					if (LabelInfoContants.COLUMN_DATA_TYPE_VARCHAR == column.getColumnDataTypeId()) {
+					if (ServiceConstants.MdaSysTableColumn.COLUMN_DATA_TYPE_ID_VARCHAR == column.getColumnDataTypeId()) {
 						wherelabel.append(" ").append(asName).append(" = '").append(vals[0]).append("'");
-					} else if (LabelInfoContants.COLUMN_DATA_TYPE_NUM == column.getColumnDataTypeId()) {
+					} else if (ServiceConstants.MdaSysTableColumn.COLUMN_DATA_TYPE_ID_NUM == column.getColumnDataTypeId()) {
 						wherelabel.append(" ").append(asName).append(" = ").append(vals[0]);
 					}
 				} else {
 					if (attrValsStr.length() == attrValsStr.lastIndexOf(",")) {
 						attrValsStr = attrValsStr.substring(0, attrValsStr.length() - 1);
 					}
-					if (LabelInfoContants.COLUMN_DATA_TYPE_VARCHAR == column.getColumnDataTypeId()) {
+					if (ServiceConstants.MdaSysTableColumn.COLUMN_DATA_TYPE_ID_VARCHAR == column.getColumnDataTypeId()) {
 						wherelabel.append(" ").append(asName).append(" in ( ");
 						for (int k = 0; k < vals.length; k++) {
 							wherelabel.append("'").append(vals[k]).append("'");
@@ -91,7 +91,7 @@ public class EnumLabel extends LabelElement {
 							}
 						}
 						wherelabel.append(" )");
-					} else if (LabelInfoContants.COLUMN_DATA_TYPE_NUM == column.getColumnDataTypeId()) {
+					} else if (ServiceConstants.MdaSysTableColumn.COLUMN_DATA_TYPE_ID_NUM == column.getColumnDataTypeId()) {
 						wherelabel.append(" ").append(asName).append(" in (").append(attrValsStr).append(")");
 					}
 				}

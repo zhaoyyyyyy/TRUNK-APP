@@ -43,27 +43,6 @@ public interface LabelInfoContants {
 	 * 客群群当天写入数据的纵表的分区字段名
 	 */
 	public static final String KHQ_CROSS_DATE_PARTION = "STAT_DATE";
-    
-    /** 
-     * 标签对应的元数据列类型:column_data_type_id
-	 */
-	/** 元数据列类型，数字类型:1 */
-	public static final int COLUMN_DATA_TYPE_NUM = 1;
-	/** 元数据列类型，字符串类型:2 */
-	public static final int COLUMN_DATA_TYPE_VARCHAR = 2;
-	/** 元数据列类型，数字类型:number */
-	public static final String COLUMN_TYPE_NUMBER = "number";
-	/** 元数据列类型，字符串类型:2 */
-	public static final String COLUMN_TYPE_CHAR = "char";
-	/** 元数据列类型，小数类型:decimal */
-	public static final String COLUMN_TYPE_DECIMAL = "decimal";
-	/** 元数据列类型，数字类型:integer */
-	public static final String COLUMN_TYPE_INTEGER = "integer";
-	/** 元数据列默认类型，字符串类型:varchar */
-	public static final String COLUMN_TYPE_VARCHAR = "VARCHAR";
-	/** 元数据列默认长度，字符串类型:varchar */
-	public static final String COLUMN_TYPE_LENGTH = "32";
-
 
 	
 	
