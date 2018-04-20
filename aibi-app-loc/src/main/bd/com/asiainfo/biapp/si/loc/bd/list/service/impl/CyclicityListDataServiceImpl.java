@@ -19,6 +19,7 @@ import javax.transaction.Transactional;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
+import com.asiainfo.biapp.si.loc.base.utils.LogUtil;
 import com.asiainfo.biapp.si.loc.bd.common.util.JDBCUtil;
 import com.asiainfo.biapp.si.loc.bd.list.service.ICyclicityListDataService;
 import com.asiainfo.biapp.si.loc.bd.list.task.RunListDataByConfig;
@@ -72,7 +73,7 @@ public class CyclicityListDataServiceImpl implements ICyclicityListDataService{
         	try {
 				System.out.println("#######  -----  " + fs.get());
 			} catch (InterruptedException | ExecutionException e) {
-				e.printStackTrace();
+				LogUtil.error(e);
 			}
         }
 	}
@@ -102,7 +103,7 @@ public class CyclicityListDataServiceImpl implements ICyclicityListDataService{
         	try {
 				System.out.println("#######  -----  " + fs.get());
 			} catch (InterruptedException | ExecutionException e) {
-				e.printStackTrace();
+				LogUtil.error(e);
 			}
         }
 	}
@@ -130,7 +131,7 @@ public class CyclicityListDataServiceImpl implements ICyclicityListDataService{
         	try {
 				System.out.println("#######  -----  " + fs.get());
 			} catch (InterruptedException | ExecutionException e) {
-				e.printStackTrace();
+				LogUtil.error(e);
 			}
         }
 	}
@@ -160,7 +161,7 @@ public class CyclicityListDataServiceImpl implements ICyclicityListDataService{
         	try {
 				System.out.println("#######  -----  " + fs.get());
 			} catch (InterruptedException | ExecutionException e) {
-				e.printStackTrace();
+				LogUtil.error(e);
 			}
         }
 	}
@@ -196,7 +197,7 @@ public class CyclicityListDataServiceImpl implements ICyclicityListDataService{
         	try {
 				System.out.println("#######  -----  " + fs.get());
 			} catch (InterruptedException | ExecutionException e) {
-				e.printStackTrace();
+				LogUtil.error(e);
 			}
         }
 	}
@@ -233,7 +234,7 @@ public class CyclicityListDataServiceImpl implements ICyclicityListDataService{
         	try {
 				System.out.println("#######  -----  " + fs.get());
 			} catch (InterruptedException | ExecutionException e) {
-				e.printStackTrace();
+				LogUtil.error(e);
 			}
         }
 	}
@@ -286,7 +287,7 @@ public class CyclicityListDataServiceImpl implements ICyclicityListDataService{
 			}
 			System.out.println("--------------------------- res = " + res.toString());
 		} catch (Exception e) {
-			e.printStackTrace();
+			LogUtil.error(e);
 		}finally{
 			JDBCUtil.getInstance().free(conn, st, rs);
 		}

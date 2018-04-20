@@ -126,11 +126,24 @@ public class MD5Util {
 	 * @throws IOException
 	 */
 	public static String getFileMD5String_old(File file) throws IOException {
-		FileInputStream in = new FileInputStream(file);
-		FileChannel ch = in.getChannel();
-		MappedByteBuffer byteBuffer = ch.map(FileChannel.MapMode.READ_ONLY, 0,
-				file.length());
-		messagedigest.update(byteBuffer);
+		FileInputStream fis = null;
+		try {
+			fis = new FileInputStream(file);
+			FileChannel ch = fis.getChannel();
+			MappedByteBuffer byteBuffer = ch.map(FileChannel.MapMode.READ_ONLY, 0,
+					file.length());
+			messagedigest.update(byteBuffer);
+		} catch (Exception e) {
+			log.error("获取文件MD5校验码失败", e);
+		} finally {
+			if (fis != null) {
+				try {
+					fis.close();
+				} catch (IOException e) {
+					log.error("关闭文件流异常", e);
+				}
+			}
+		}
 		return bufferToHex(messagedigest.digest());
 	}
 
