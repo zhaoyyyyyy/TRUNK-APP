@@ -1,7 +1,5 @@
 package com.asiainfo.biapp.si.loc.bd.datadeal.service;
 
-import org.springframework.stereotype.Service;
-
 import com.asiainfo.biapp.si.loc.bd.datadeal.vo.BackParamVo;
 
 /**

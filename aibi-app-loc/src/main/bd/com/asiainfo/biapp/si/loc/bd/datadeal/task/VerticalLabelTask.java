@@ -10,6 +10,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import com.asiainfo.biapp.si.loc.bd.datadeal.util.TimeUtil;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -25,17 +26,6 @@ import com.asiainfo.biapp.si.loc.bd.datadeal.util.JdbcManager;
  */
 @Component
 public class VerticalLabelTask implements Runnable {
-	
-	@Autowired
-    private LabelDealComponent labelDealComponent;
-	
-	@Autowired
-    private BackJdbcManager backJdbcManager;
-	
-	@Autowired
-    private JdbcManager jdbcManager;
-	
-	
     private String threadNumber;
     private String data_date = "";
     private String config_id = "";
@@ -60,6 +50,7 @@ public class VerticalLabelTask implements Runnable {
 
     public void run() {
         threadNumber = Thread.currentThread().getName() + "————" + config_id + "：\n";
+       JdbcManager jdbcManager=new JdbcManager();
         ALL_USER_MAP = jdbcManager.getAllUserTable(config_id);
         if (ALL_USER_MAP.size() > 0) {
             //生成纵表标签
@@ -153,6 +144,7 @@ public class VerticalLabelTask implements Runnable {
      * @return
      */
     private Map<String, String> existsTable(Map<String, String> source_table_id2source_table_nameMap) {
+        LabelDealComponent labelDealComponent=new LabelDealComponent();
         List<String> notExistsSourceTableIdList = new ArrayList<String>();
         Map<String, String> new_source_table_id2source_table_nameMap = new HashMap<String, String>();
         Iterator<Map.Entry<String, String>> entryIterator = source_table_id2source_table_nameMap.entrySet().iterator();
@@ -190,15 +182,18 @@ public class VerticalLabelTask implements Runnable {
     }
 
     private boolean createLabelTable(Map<String, String> source_table_id2source_table_nameMap, Map<String, List<String>> source_table_id2column_nameMap) {
+      BackJdbcManager backJdbcManager=new BackJdbcManager();
         boolean isOk = true;
         String preTargetTableName = DataDealConstants.LV + config_id.toUpperCase() + "_";
+
+        LabelDealComponent labelDealComponent=new LabelDealComponent();
         labelDealComponent.setThreadNumber(threadNumber);
         labelDealComponent.setData_date(data_date);
         labelDealComponent.setDate_cycle(data_cycle);
         List<String> sourceTableIdList = new ArrayList<String>();
         //更新源表状态为：1,1
         LogUtil.info(threadNumber + "更新即将抽取的表对应的数据状态");
-        labelDealComponent.updateDimTargetTableStatus(1, 1, sourceTableIdList);
+        labelDealComponent.updateDimTargetTableStatus(1, 1, sourceTableIdList,null);
         String where = "";
         String SOURCE_TABLES_HAS_DATE_SUFFIX = ALL_USER_MAP.get("SOURCE_TABLES_HAS_DATE_SUFFIX");
         if (data_cycle == DataDealConstants.LABEL_CYCLE_TYPE_D) {
@@ -332,14 +327,15 @@ public class VerticalLabelTask implements Runnable {
             if (tableIfExists) {
                 //成功更改指标源表状态：0,0
                 LogUtil.info(threadNumber + "更新抽取完成的表对应的数据状态");
-                labelDealComponent.updateDimTargetTableStatus(0, 0, list);
+                labelDealComponent.updateDimTargetTableStatus(0, 0, list, TimeUtil.getCurrentTime());
                 //更新标签状态：
                 List<String> list1 = getLabelIdByTargetName(targetTableName + "_");
                 //todo 更新标签状态
                 if (list1.size() > 0) {
-                    labelDealComponent.updateLoc_label_info(list1);
-                    labelDealComponent.updateDIM_LABEL_STATUS(list1);
-                    labelDealComponent.insertIntoDIM_LABEL_STATUS(list1);
+                    labelDealComponent.updateLocLabelInfo(list1);
+                    labelDealComponent.updateDimLabelStatus(list1);
+                    labelDealComponent.insertIntoDimLabelStatus(list1);
+                    labelDealComponent.updateLocNewestLabelDate(config_id);
                     LogUtil.info(threadNumber + "专区" + config_id + "标签生成结束");
                 } else {
                     LogUtil.info("没有标签需要更新");
@@ -347,7 +343,7 @@ public class VerticalLabelTask implements Runnable {
             } else {
                 //成功更改指标源表状态：1,0
                 LogUtil.info(threadNumber + "更新未进行抽取的表对应的数据状态");
-                labelDealComponent.updateDimTargetTableStatus(1, 0, list);
+                labelDealComponent.updateDimTargetTableStatus(1, 0, list,null);
             }
         }
         return isOk;

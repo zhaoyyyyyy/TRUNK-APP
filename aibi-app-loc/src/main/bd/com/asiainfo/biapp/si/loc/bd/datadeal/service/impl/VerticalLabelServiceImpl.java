@@ -19,8 +19,8 @@ import com.asiainfo.biapp.si.loc.bd.datadeal.vo.BackParamVo;
  */
 @Service
 public class VerticalLabelServiceImpl implements IVerticalLabelService {
-    private static String data_date = "";
-    private static Integer data_cycle = 0;
+    private String data_date = "";
+    private Integer data_cycle = 0;
 
     @Autowired
     private LabelDealComponent labelDealComponent;
@@ -65,11 +65,7 @@ public class VerticalLabelServiceImpl implements IVerticalLabelService {
         List<String> configId = new ArrayList<String>();
         boolean initDate = labelDealComponent.initDate(data_date);
         if (initDate) {
-            configId = labelDealComponent.existsConfig_id(backParamVo);
-            if (configId.size() == 0) {
-                //未传入专区
-                configId = labelDealComponent.getConfigId(backParamVo);
-            }
+            configId = labelDealComponent.getConfigId01(backParamVo);
         }
         //传入专区
         if (configId.size() > 0) {

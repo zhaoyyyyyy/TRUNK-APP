@@ -16,7 +16,7 @@ import io.swagger.annotations.ApiOperation;
 
 
 @Api(value = "010.01->-标签数据处理", description = "彭文杰")
-@RequestMapping("api/datadeal")
+@RequestMapping("api/dataDeal")
 @RestController
 public class DataDealController {
     @Autowired
@@ -26,7 +26,7 @@ public class DataDealController {
     private IWideLabelService iwideLabelService;
 
     @ApiOperation(value = "执行标签宽表处理标签流程")
-    @RequestMapping(value = "/wideTableDeal/excute", method = RequestMethod.POST)
+    @RequestMapping(value = "/wideTableDeal/execute", method = RequestMethod.POST)
     public WebResult<String> runWideTable(@ModelAttribute BackParamVo backParamVo) {
         WebResult<String> webResult = new WebResult<>();
         iwideLabelService.exeRun(backParamVo);
@@ -35,7 +35,7 @@ public class DataDealController {
     
 
     @ApiOperation(value = "执行标签纵表处理标签流程")
-    @RequestMapping(value = "/verticalTableDeal/excute", method = RequestMethod.POST)
+    @RequestMapping(value = "/verticalTableDeal/execute", method = RequestMethod.POST)
     public WebResult<String> runVerticalTable(@ModelAttribute BackParamVo backParamVo) {
         WebResult<String> webResult = new WebResult<>();
         iverticalLabelService.exeRun(backParamVo);

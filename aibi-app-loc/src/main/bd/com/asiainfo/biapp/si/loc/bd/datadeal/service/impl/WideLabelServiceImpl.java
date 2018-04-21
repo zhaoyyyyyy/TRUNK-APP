@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import com.asiainfo.biapp.si.loc.base.utils.LogUtil;
@@ -14,22 +15,19 @@ import com.asiainfo.biapp.si.loc.bd.datadeal.service.IWideLabelService;
 import com.asiainfo.biapp.si.loc.bd.datadeal.task.VerticalLabelTask;
 import com.asiainfo.biapp.si.loc.bd.datadeal.task.WideLabelTask;
 import com.asiainfo.biapp.si.loc.bd.datadeal.vo.BackParamVo;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Created by pwj on 2018/1/7.
  */
 @Service
 public class WideLabelServiceImpl implements IWideLabelService {
-    private static String data_date = "";
-    private static Integer data_cycle = 0;
+    private String data_date = "";
+    private Integer data_cycle = 0;
     
     @Autowired
     private LabelDealComponent labelDealComponent;
-    
-    
-    @Autowired
-    private VerticalLabelTask verticalLabelTask;
-    
+
     /**
      * 
      * {@inheritDoc}
@@ -70,11 +68,7 @@ public class WideLabelServiceImpl implements IWideLabelService {
         List<String> configId = new ArrayList<String>();
         boolean initDate = labelDealComponent.initDate(data_date);
         if (initDate) {
-            configId = labelDealComponent.existsConfig_id(backParamVo);
-            if (configId.size() == 0) {
-                //未传入专区
-                configId = labelDealComponent.getConfigId(backParamVo);
-            }
+            configId = labelDealComponent.getConfigId01(backParamVo);
         }
         //传入专区
         if (configId.size() > 0) {

@@ -10,6 +10,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import com.asiainfo.biapp.si.loc.bd.datadeal.util.TimeUtil;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -25,17 +26,7 @@ import com.asiainfo.biapp.si.loc.bd.datadeal.util.JdbcManager;
  */
 @Component
 public class WideLabelTask implements Runnable {
-	
-	@Autowired
-    private LabelDealComponent labelDealComponent;
-	
-	@Autowired
-    private BackJdbcManager backJdbcManager;
-	
-	@Autowired
-    private JdbcManager jdbcManager;
-	
-	
+
     private String threadNumber;
     private String data_date = "";
     private String config_id = "";
@@ -53,7 +44,6 @@ public class WideLabelTask implements Runnable {
     private String ALL_USER_JOIN_COLUMN_NAME = "";
     private List<String> sourceTableIdList = new ArrayList<String>();
     private String indexTable = "";
-    //[cp_all_user_yyyymmdd, cp_all_user_yyyymm, cust_id, cust_id, 0, stat_date, stat_month, provicen_id,city_id,county_id]
     private Map<String, String> ALL_USER_MAP = null;
 
     public void setConfig_id(String config_id) {
@@ -72,7 +62,9 @@ public class WideLabelTask implements Runnable {
 
     public void run() {
         threadNumber = Thread.currentThread().getName() + "————" + config_id + "：\n";
+        JdbcManager jdbcManager = new JdbcManager();
         ALL_USER_MAP = jdbcManager.getAllUserTable(config_id);
+        LabelDealComponent labelDealComponent=new LabelDealComponent();
         filterLabelList = labelDealComponent.filterLabelId(data_date, config_id);
         System.out.println("根据源表初步过滤标签"+filterLabelList);
         if (filterLabelList.size() < 0) {
@@ -93,6 +85,7 @@ public class WideLabelTask implements Runnable {
     }
 
     private void handleLabel(String data_date, String config_id, Integer data_cycle) {
+        LabelDealComponent labelDealComponent = new LabelDealComponent();
         labelDealComponent.setDate_cycle(data_cycle);
         labelDealComponent.setData_date(data_date);
         labelDealComponent.setThreadNumber(threadNumber);
@@ -196,17 +189,17 @@ public class WideLabelTask implements Runnable {
             //todo 更新源表状态表
             if (sourceTableIdList.size() > 0) {
                 LogUtil.info(threadNumber + "更新数据抽取完成的表对应的数据状态");
-                labelDealComponent.updateDimTargetTableStatus(0, 0, sourceTableIdList);
+                labelDealComponent.updateDimTargetTableStatus(0, 0, sourceTableIdList,TimeUtil.getCurrentTime());
             }
             LogUtil.info(threadNumber + "指标表生成完成，开始更新状态");
-            labelDealComponent.updateLoc_label_info(labelIdList);
-            labelDealComponent.updateLOC_NEWEST_LABEL_DATE(config_id);
-            labelDealComponent.updateDIM_LABEL_STATUS(labelIdList);
-            labelDealComponent.insertIntoDIM_LABEL_STATUS(labelIdList);
+            labelDealComponent.updateLocLabelInfo(labelIdList);
+            labelDealComponent.updateLocNewestLabelDate(config_id);
+            labelDealComponent.updateDimLabelStatus(labelIdList);
+            labelDealComponent.insertIntoDimLabelStatus(labelIdList);
             LogUtil.info(threadNumber + "专区" + config_id + "标签生成结束");
         } else {
             if (sourceTableIdList.size() > 0) {
-                labelDealComponent.updateDimTargetTableStatus(1, 0, sourceTableIdList);
+                labelDealComponent.updateDimTargetTableStatus(1, 0, sourceTableIdList,null);
             }
             LogUtil.info(threadNumber + "抽取的标签数量为：" + 0);
             LogUtil.info(threadNumber + "不进行标准标签相关状态的更新");
@@ -223,6 +216,7 @@ public class WideLabelTask implements Runnable {
 
     private Map<String, String> getIndexMap() {
         Map<String, String> indexMap = new HashMap<String, String>();
+        BackJdbcManager backJdbcManager = new BackJdbcManager();
         indexTable = DataDealConstants.KPI_L_PREF_ + config_id + "_" + data_date;
         List<String> indexList = backJdbcManager.getColumnNameByName(indexTable);
         String key = "";
@@ -245,6 +239,8 @@ public class WideLabelTask implements Runnable {
     }
 
     private List<String> createLabelTable(Map<String, List<String>> createTableMap, Map<String, List<String>> sourceIdMap, List<String> labelIdList) {
+        LabelDealComponent labelDealComponent = new LabelDealComponent();
+
         labelDealComponent.setDate_cycle(data_cycle);
         labelDealComponent.setData_date(data_date);
         labelDealComponent.setThreadNumber(threadNumber);
@@ -281,6 +277,8 @@ public class WideLabelTask implements Runnable {
     }
 
     private Boolean createIndexTable(String data_date, String config_id, Integer data_cycle) {
+        BackJdbcManager backJdbcManager = new BackJdbcManager();
+        LabelDealComponent labelDealComponent = new LabelDealComponent();
         labelDealComponent.setDate_cycle(data_cycle);
         labelDealComponent.setData_date(data_date);
         labelDealComponent.setThreadNumber(threadNumber);
@@ -501,7 +499,7 @@ public class WideLabelTask implements Runnable {
             createIndexSql += from;
             if (sourceTableIdList.size() > 0) {
                 LogUtil.info(threadNumber + "更新即将抽取的表对应的数据状态");
-                labelDealComponent.updateDimTargetTableStatus(1, 1, sourceTableIdList);
+                labelDealComponent.updateDimTargetTableStatus(1, 1, sourceTableIdList,null);
             }
             if (notExistsTableList.size() > 0) {
                 LogUtil.info(threadNumber + "更新数据不存在的表对应的数据状态");
@@ -510,7 +508,7 @@ public class WideLabelTask implements Runnable {
             final boolean isOk = labelDealComponent.createTableIfExists(1, indexTable, createIndexSql, columnsList);
             if (!isOk && sourceTableIdList.size() > 0) {
                 LogUtil.info(threadNumber + "更新数据未正常抽取的表对应的数据状态");
-                labelDealComponent.updateDimTargetTableStatus(1, 0, sourceTableIdList);
+                labelDealComponent.updateDimTargetTableStatus(1, 0, sourceTableIdList, TimeUtil.getCurrentTime());
             }
 
             return isOk;

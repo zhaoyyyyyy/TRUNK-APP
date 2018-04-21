@@ -11,20 +11,22 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.asiainfo.biapp.si.loc.bd.datadeal.component.LabelDealComponent;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
 
 import com.asiainfo.biapp.si.loc.base.utils.LogUtil;
 import com.asiainfo.biapp.si.loc.bd.common.util.JDBCUtil;
 import com.asiainfo.biapp.si.loc.bd.datadeal.DataDealConstants;
 
-@Component
+@Configuration
 public class BackJdbcManager {
     public Connection getConnection() {
         Connection conn = null;
         try {
             conn = JDBCUtil.getInstance().getBackConnection();
         } catch (Exception e) {
-            e.printStackTrace();
+            LogUtil.debug("获取后台库连接失败" + e);
         }
         return conn;
     }
@@ -93,7 +95,7 @@ public class BackJdbcManager {
         } catch (SQLException e) {
             LogUtil.debug("获取表" + tableName + "列信息失败" + e);
         } finally {
-            closeAll(conn, null, rs);
+            closeAll(conn, stm, rs);
         }
         return list;
     }
@@ -121,7 +123,7 @@ public class BackJdbcManager {
         } catch (SQLException e) {
             LogUtil.debug("获取表" + tableName + "列信息失败" + e);
         } finally {
-            closeAll(conn, null, rs);
+            closeAll(conn, stm, rs);
         }
         return columnsMap;
     }
@@ -130,14 +132,16 @@ public class BackJdbcManager {
         Boolean boo = true;
         Connection conn = new BackJdbcManager().getConnection();
         ResultSet rs = null;
+        PreparedStatement pst = null;
         try {
             LogUtil.info("根据sql建表：" + sql);
-            conn.prepareStatement(sql).execute();
+            pst = conn.prepareStatement(sql);
+            pst.execute();
         } catch (SQLException e) {
             LogUtil.debug("创建表失败：" + e);
             boo = false;
         } finally {
-            closeAll(conn, null, rs);
+            closeAll(conn, pst, rs);
         }
         return boo;
     }
@@ -157,17 +161,18 @@ public class BackJdbcManager {
         boolean boo = true;
         Connection connection = null;
         ResultSet res = null;
-        PreparedStatement pstm = null;
+        PreparedStatement pst = null;
         connection = new BackJdbcManager().getConnection();
         String sql = "ALTER TABLE " + oldName + " RENAME TO " + newName;
         LogUtil.info("将" + oldName + "重命名为" + newName + "SQL为：" + sql);
         try {
-            int i = connection.prepareStatement(sql).executeUpdate();
+            pst = connection.prepareStatement(sql);
+            int i = pst.executeUpdate();
         } catch (SQLException e) {
             LogUtil.debug("重命名失败：" + e);
             boo = false;
         } finally {
-            closeAll(connection, pstm, res);
+            closeAll(connection, pst, res);
         }
         return boo;
     }
@@ -176,14 +181,16 @@ public class BackJdbcManager {
         Boolean boo = true;
         Connection conn = new BackJdbcManager().getConnection();
         ResultSet rs = null;
+        PreparedStatement pst = null;
         try {
             LogUtil.info("插入数据：" + sql);
-            conn.prepareStatement(sql).execute();
+            pst = conn.prepareStatement(sql);
+            pst.execute();
         } catch (SQLException e) {
             LogUtil.debug("插入数据：" + e);
             boo = false;
         } finally {
-            closeAll(conn, null, rs);
+            closeAll(conn, pst, rs);
         }
         return boo;
     }
@@ -194,7 +201,7 @@ public class BackJdbcManager {
         PreparedStatement pstm = null;
         try {
             conn = new BackJdbcManager().getConnection();
-            String sql = "show partitions " + tableName;
+            String sql = new StringBuffer("show partitions ").append(tableName).toString();
             LogUtil.info("查询分区数据是否准备好：" + sql);
             LogUtil.info("分区字段为:" + partition);
             pstm = conn.prepareStatement(sql);
