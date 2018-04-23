@@ -112,6 +112,7 @@ public class LabelRuleServiceImpl extends BaseServiceImpl<LabelRule, String> imp
 				rule.setCustomOrLabelName(labelInfo.getLabelName());
 				rule.setUpdateCycle(labelInfo.getUpdateCycle());
 				rule.setDataDate(labelInfo.getDataDate());
+				rule.setQueryWay("1");
 				if (ServiceConstants.LabelInfo.LABEL_TYPE_ID_VERT == labelInfo.getLabelTypeId()) {
 					List<LabelRuleVo> childRuleList = new ArrayList<LabelRuleVo>();
 					// 纵表标签列关系
