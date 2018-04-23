@@ -6,6 +6,8 @@
 
 package com.asiainfo.biapp.si.loc.core.prefecture.service.impl;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -22,8 +24,11 @@ import com.asiainfo.biapp.si.loc.base.exception.ParamRequiredException;
 import com.asiainfo.biapp.si.loc.base.exception.UserAuthException;
 import com.asiainfo.biapp.si.loc.base.page.Page;
 import com.asiainfo.biapp.si.loc.base.service.impl.BaseServiceImpl;
+import com.asiainfo.biapp.si.loc.base.utils.DateUtil;
 import com.asiainfo.biapp.si.loc.base.utils.StringUtil;
+import com.asiainfo.biapp.si.loc.core.label.entity.NewestLabelDate;
 import com.asiainfo.biapp.si.loc.core.label.service.IMdaSysTableService;
+import com.asiainfo.biapp.si.loc.core.label.service.INewestLabelDateService;
 import com.asiainfo.biapp.si.loc.core.prefecture.dao.IPreConfigInfoDao;
 import com.asiainfo.biapp.si.loc.core.prefecture.entity.PreConfigInfo;
 import com.asiainfo.biapp.si.loc.core.prefecture.service.IPreConfigInfoService;
@@ -65,6 +70,8 @@ public class PreConfigInfoServiceImpl extends BaseServiceImpl<PreConfigInfo, Str
     @Autowired
     private IMdaSysTableService iMdaSysTableService;
     
+    @Autowired
+    private INewestLabelDateService iNewestLabelDateService;
 
     @Override
     protected BaseDao<PreConfigInfo, String> getBaseDao() {
@@ -108,6 +115,24 @@ public class PreConfigInfoServiceImpl extends BaseServiceImpl<PreConfigInfo, Str
         preConfigInfo.setCreateTime(new Date());
         preConfigInfo.setConfigStatus(0);
         super.saveOrUpdate(preConfigInfo);
+        //最新数据日期
+        NewestLabelDate newestLabelDate = new NewestLabelDate();
+        Calendar calendar = Calendar.getInstance();
+        SimpleDateFormat sft;
+        String monthDate;
+        String dayDate;
+        calendar.add(Calendar.MONTH, -1);
+        sft = new SimpleDateFormat("yyyyMM");
+        monthDate = sft.format(calendar.getTime());
+        calendar = Calendar.getInstance();;
+        sft = new SimpleDateFormat("yyyyMMdd");
+        calendar.add(Calendar.DATE,-1);
+        dayDate = sft.format(calendar.getTime());
+        newestLabelDate.setMonthNewestDate(monthDate);
+        newestLabelDate.setDayNewestDate(dayDate);
+        newestLabelDate.setConfigId(preConfigInfo.getConfigId());
+        iNewestLabelDateService.addNewestLabelDate(newestLabelDate);
+        
         iMdaSysTableService.addDWTable(preConfigInfo);
     }
 

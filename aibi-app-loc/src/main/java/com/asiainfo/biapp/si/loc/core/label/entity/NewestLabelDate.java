@@ -47,10 +47,7 @@ public class NewestLabelDate extends BaseEntity{
     /**
      * 最新日数据日期
      */
-    @Id
     @Column(name = "DAY_NEWEST_DATE")
-    @GenericGenerator(name = "idGenerator", strategy = "uuid")
-    @GeneratedValue(generator = "idGenerator")
     @ApiParam(value = "最新日数据日期")
     private String dayNewestDate;
     
@@ -78,6 +75,7 @@ public class NewestLabelDate extends BaseEntity{
     /**
      * 专区ID
      */
+    @Id
     @Column(name = "CONFIG_ID")
     @ApiParam(value = "专区ID")
     private String configId;
