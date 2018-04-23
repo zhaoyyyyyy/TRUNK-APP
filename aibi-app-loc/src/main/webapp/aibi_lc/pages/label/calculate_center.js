@@ -328,8 +328,17 @@ var calculateCenter = (function (model){
 		index = model.deleteCurlyBraces(index);
 		//删除关联的连接符
 		index = model.deleteConnectFlags(index);
-		dataModel.ruleList.splice(index,1);
-		model.submitRules();
+		if(dataModel.ruleList.length == 1 && this.isEditCustom()){
+			$.confirm("确定取消修改客户群？",function(){
+				var ssg = window.sessionStorage;
+				delete ssg.customId;
+				dataModel.ruleList.splice(index,1);
+				model.submitRules();
+			})
+		}else{
+			dataModel.ruleList.splice(index,1);
+			model.submitRules();
+		}
 	};
 	
 	/**
@@ -455,7 +464,14 @@ var calculateCenter = (function (model){
 	 * 清空规则
 	 */
 	model.clearShopRules = function(){
-		$.confirm('确定要清空？', function() {
+		var msg = '确定要清空？';
+		var isEdit = this.isEditCustom();
+		if(isEdit){
+			msg = '确定要取消修改客户群同时清空规则？';
+		}
+		$.confirm(msg, function() {
+			var ssg = window.sessionStorage;
+			delete ssg.customId;
 			$.commAjax({
 				url : $.ctx + "/api/shopCart/delShopSession",
 				onSuccess:function(returnObj){
@@ -822,6 +838,18 @@ var calculateCenter = (function (model){
 			value = value.substring(1,80)+"...";
 		}
 		return value ;
+	}
+	/* 
+	 * 当前是否为修改客户群状态 
+	*/
+	model.isEditCustom = function(){
+		var ssg = window.sessionStorage;
+		var customId = ssg.getItem("customId");
+		if(customId!=null){
+			return true;
+		}else{
+			return false;
+		}
 	}
 	return model ;
 })(window.calculateCenter || {});
