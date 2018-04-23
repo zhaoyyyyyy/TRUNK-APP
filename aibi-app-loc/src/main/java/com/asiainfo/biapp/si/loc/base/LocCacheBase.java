@@ -213,7 +213,7 @@ public class LocCacheBase extends ICacheBase implements ApplicationContextAware{
 		try {
 			return this.getStringByKey(CacheKey.CI_CONFIG_INFO_MAP, key);
 		} catch (Exception e) {
-			e.printStackTrace();
+			log.error(e.getMessage(),e);
 		}
 		return null;
 	}
@@ -307,7 +307,7 @@ public class LocCacheBase extends ICacheBase implements ApplicationContextAware{
 			System.out.println(configOrg.toString());
 			this.setHashMap(Prefix.LOC+Prefix.CONFIG+CacheKey.ALL_CONFIG_ORG_MAP, configOrg);
 		} catch (Exception e) {
-			e.printStackTrace();
+			log.error(e.getMessage(),e);
 		}finally{
 			JDBCUtil.getInstance().free(conn, ps, rs);
 		}
@@ -322,7 +322,7 @@ public class LocCacheBase extends ICacheBase implements ApplicationContextAware{
 				list = Arrays.asList(ss.split(","));
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			log.error(e.getMessage(),e);
 		}
 		return list;
 	}

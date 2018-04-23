@@ -32,7 +32,7 @@ public class CocRedisCache implements CocCacheAble{
 		try {
 			return LocCacheBase.getInstance().getEffectiveLabel(labelid);
 		} catch (Exception e) {
-			e.printStackTrace();
+			log.error(e.getMessage(), e);
 		}
 		return null;
 

@@ -51,7 +51,6 @@ public class CyclicityListDataServiceImpl implements ICyclicityListDataService{
 
 	@Override
 	public void runAllDayListData() {
-		// TODO 获取所有专区
 		String newDayDate = "";
 		Map<String,List<String>> allList = this.getAllListIdAndConfig(newDayDate,dayUpdateCycle,null);
 		if(null == allList || allList.isEmpty()){
