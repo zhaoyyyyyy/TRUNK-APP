@@ -127,21 +127,29 @@ public class MD5Util {
 	 */
 	public static String getFileMD5String_old(File file) throws IOException {
 		FileInputStream fis = null;
+		FileChannel ch = null;
 		try {
 			fis = new FileInputStream(file);
-			FileChannel ch = fis.getChannel();
+			ch = fis.getChannel();
 			MappedByteBuffer byteBuffer = ch.map(FileChannel.MapMode.READ_ONLY, 0,
 					file.length());
 			messagedigest.update(byteBuffer);
 		} catch (Exception e) {
 			log.error("获取文件MD5校验码失败", e);
 		} finally {
-			if (fis != null) {
+			if (ch != null) {
 				try {
-					fis.close();
+					ch.close();
 				} catch (IOException e) {
 					log.error("关闭文件流异常", e);
 				}
+			}
+			if (fis != null) {
+			    try {
+			        fis.close();
+			    } catch (IOException e) {
+			        log.error("关闭文件流异常", e);
+			    }
 			}
 		}
 		return bufferToHex(messagedigest.digest());

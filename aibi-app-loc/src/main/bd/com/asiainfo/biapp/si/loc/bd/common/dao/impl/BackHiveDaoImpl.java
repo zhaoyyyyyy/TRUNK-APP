@@ -9,6 +9,7 @@ package com.asiainfo.biapp.si.loc.bd.common.dao.impl;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -305,13 +306,15 @@ public class BackHiveDaoImpl extends BaseBackDaoImpl implements IBackSqlDao{
         Boolean res = true;
         long s = System.currentTimeMillis();
         Connection conn = null;
-        PreparedStatement st = null;
+//        PreparedStatement st = null;
+        Statement st = null;
         ResultSet rs = null;
         try{
             conn = this.getBackConnection();
             //st = conn.prepareStatement(sql);
             //rs =  st.executeQuery();
-            boolean execute = conn.createStatement().execute(sql);
+            st = conn.createStatement();
+            boolean execute = st.execute(sql);
             LogUtil.debug(new StringBuffer(sql).append(" cost:").append(System.currentTimeMillis()-s).append("ms."));
             
         }catch (Exception e){
