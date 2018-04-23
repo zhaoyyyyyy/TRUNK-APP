@@ -36,14 +36,14 @@ public class LogUtil {
     private static String jauthUrl;
 
     @Value("${jauth-url}")
-    public void setJauthUrl(String jauthUrl) {
+    public void setJauthUrlValue(String jauthUrl) {
         LogUtil.jauthUrl = jauthUrl;
     }
 
     private static String nodeName;
 
     @Value("${spring.application.name}")
-    public void setNodeName(String nodeName) {
+    public void setNodeNameValue(String nodeName) {
         LogUtil.nodeName = nodeName;
     }
 
