@@ -80,7 +80,7 @@ public class BaseBackDaoImpl {
             schema = SYS_BGDB_SCHEMA;
         }
             
-        return "cocdev";
+        return schema;
     }
 	
 	
