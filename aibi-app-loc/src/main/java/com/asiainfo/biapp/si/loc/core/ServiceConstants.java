@@ -202,14 +202,14 @@ public class ServiceConstants {
 	    
 
 	    /**
-	     * 客户群生成周期:UPDATE_CYCLE：1,一次性;2,月周期;3,日周期;4,无周期
+	     * 客户群生成周期:UPDATE_CYCLE：3,一次性;2,月周期;1,日周期;4,无周期
 	     */
 	    /** 客户群生成周期:1,一次性; */
-	    public static final int UPDATE_CYCLE_O = 1;
+	    public static final int UPDATE_CYCLE_O = 3;
 	    /** 客户群生成周期:2,月周期; */
 	    public static final int UPDATE_CYCLE_M = 2;
 	    /** 客户群生成周期:3,日周期 */
-	    public static final int UPDATE_CYCLE_D = 3;
+	    public static final int UPDATE_CYCLE_D = 1;
 	    /** 客户群生成周期:4,无周期 */
 	    public static final int UPDATE_CYCLE_N = 4;
 	    
