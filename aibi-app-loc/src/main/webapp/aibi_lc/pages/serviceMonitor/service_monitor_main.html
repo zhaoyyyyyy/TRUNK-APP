@@ -20,9 +20,9 @@
 		<h3>运行监控总览<span class="ui-monitor-notice">超级管理员才会看到此页面，非超级管理员不显示这个页面，权限匹配</span></h3>
 	</div>
 	<!--动态生成每个专区信息 -->
-	<div class="ui-lc-mian mt10" v-for="(item,index) in configData" v-cloak>
+	<div class="ui-lc-mian mt10">
 		<ul class="ui-label-list">
-			 <li >
+			 <li class="ui-monitor-item" v-for="(item,index) in configData" v-cloak>
 				<span :value="item.sourceName" :id="item.configId" @click="changeMonitorByDate" :class="{padding0 : (index+1)%3 ==0 }" class=" clearfix" >{{item.sourceName}}</span>
 			</li> 
 		</ul>
@@ -35,14 +35,21 @@
 				<div>
 					<h3>{{item.sourceName}}</h3>
 					<input type="hidden" id="configId"  v-bind:value="item.configId" />
-					<div class="dropdown pre-dropdown" :data-cycleId="item.configId">
-						 <a class="dropdown-toggle"  @click="showDate" >
-						        <span class="pre-cycle-name">日周期</span>
-						    	<span class="caret"></span>
+					<div class="dropdown pre-dropdown" v-bind:class="{open:item.isOpen}" :data-cycleId="item.configId">
+						 <a class="prefectrue-span"  @click="showDate(item)" >
+						        <span class="pre-cycle-name">
+						        	日周期&nbsp;
+						        </span>
+						        <em></em>
+						    	<!--<span class="caret"></span>-->
 						 </a>
 						<ul class="dropdown-menu">
-							   <a @click="initDateByCycle">日周期 </a>
-							   <a @click="initDateByCycle">月周期</a>  
+							<li>
+								<span @click="initDateByCycle">日周期 </span>
+							</li>
+							<li>
+								<span @click="initDateByCycle">月周期</span>  
+							</li>   
 						</ul>
 					</div>
 				    

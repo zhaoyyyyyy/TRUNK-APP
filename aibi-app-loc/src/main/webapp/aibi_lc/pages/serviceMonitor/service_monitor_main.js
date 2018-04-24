@@ -50,7 +50,12 @@ window.loc_onload = function() {
             	 //数据日期日周期显示范围是前三天
             	//数据日期月周期显示范围是一年
             },
-            showDate:function(e){
+            showDate:function(item){
+            	if(typeof item.isOpen=='undefined'){
+            		this.$set(item,"isOpen",true)
+            	}else{
+            		item.isOpen=!item.isOpen;
+            	}
             },
             changeMonitorByDate:function(e){
             	var $el=$(e.target);
