@@ -57,6 +57,13 @@ window.loc_onload = function() {
             		item.isOpen=!item.isOpen;
             	}
             },
+             dateToggle:function(item){
+            	if(typeof item.isActive=='undefined'){
+            		this.$set(item,"isActive",true)
+            	}else{
+            		item.isActive=!item.isActive;
+            	}
+            },
             changeMonitorByDate:function(e){
             	var $el=$(e.target);
 				var configId = $el.attr("data-configId");

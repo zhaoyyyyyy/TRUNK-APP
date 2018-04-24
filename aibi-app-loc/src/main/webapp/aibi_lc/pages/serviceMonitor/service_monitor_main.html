@@ -17,7 +17,9 @@
 <body>
 <div class="iframe-nest" id="monitorMain" >
 	<div class="ui-lc-mian">
-		<h3>运行监控总览<span class="ui-monitor-notice">超级管理员才会看到此页面，非超级管理员不显示这个页面，权限匹配</span></h3>
+		<h3>运行监控总览
+			<!--<span class="ui-monitor-notice">超级管理员才会看到此页面，非超级管理员不显示这个页面，权限匹配</span>-->
+		</h3>
 	</div>
 	<!--动态生成每个专区信息 -->
 	<div class="ui-lc-mian mt10">
@@ -54,6 +56,13 @@
 					</div>
 				    
 					<em></em>
+					<div class="dropdown pre-dropdown" v-bind:class="{open:item.isActive}" :data-cycleId="item.configId">
+						<a class="prefectrue-span" @click="dateToggle(item)">2018-02-12<em class="ml20"></em></a>
+						<ul class="dropdown-menu">
+							
+						</ul>
+					</div>
+					
 					<!-- <div class="dropdown pre-dropdown" id="dateTime">
 						   <a href="javascript:;" class="dropdown-toggle">
 						        <span class="pre-date-name"></span>
@@ -114,7 +123,7 @@
 									<span>失败</span>
 									<p>{{item.genFailCount}}</p>
 								</li>
-								<li>
+								<li class="padding0">
 									<span>客户群暂存数量</span>
 									<p>{{item.curSaveCount}}</p>
 								</li>
