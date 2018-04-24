@@ -366,7 +366,8 @@ public class LabelInfoServiceImpl extends BaseServiceImpl<LabelInfo, String> imp
         super.update(customInfo);
         String customId = customInfo.getLabelId();
         labelExtInfo.setLabelOptRuleShow(ruleService.shopCartRule(labelRuleList));
-        iLabelExtInfoService.update(labelExtInfo);
+        labelExtInfo.setCustomNum(null);
+        iLabelExtInfoService.updateLabelExtInfo(labelExtInfo);
         List<LabelRuleVo> delLabelRuleVo = ruleService.queryCiLabelRuleList(customId, ServiceConstants.LabelRule.CUSTOM_TYPE_COSTOMER);
         for(LabelRuleVo lr : delLabelRuleVo){
 //            ruleService.deleteLabelRule(lr.getRuleId());
