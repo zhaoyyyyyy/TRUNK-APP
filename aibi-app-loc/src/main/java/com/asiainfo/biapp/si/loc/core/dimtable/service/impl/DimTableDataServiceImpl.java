@@ -93,7 +93,7 @@ public class DimTableDataServiceImpl extends BaseServiceImpl<DimTableData, DimTa
      * @param String tableName 维表表名
      */
     public void dimTableInfo2Data(String ...tableNames) throws BaseException {
-        LogUtil.info("dimTableInfo2Data--------->>>>>>>begin");
+        LogUtil.info(this.getClass().getSimpleName()+".dimTableInfo2Data() start");
         long s = System.currentTimeMillis();
 
         String schema = backServiceImpl.getCurBackDbSchema();
@@ -161,7 +161,7 @@ public class DimTableDataServiceImpl extends BaseServiceImpl<DimTableData, DimTa
             }
         }
         
-        LogUtil.info("dimTableInfo2Data end.cost:"+((System.currentTimeMillis()-s)/1000L)+"s.");
+        LogUtil.info(this.getClass().getSimpleName()+".dimTableInfo2Data() end.cost:"+((System.currentTimeMillis()-s)/1000L)+"s.");
     }
     
     /**

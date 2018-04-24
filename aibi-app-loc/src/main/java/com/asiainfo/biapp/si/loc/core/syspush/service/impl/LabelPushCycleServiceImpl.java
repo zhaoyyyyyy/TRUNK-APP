@@ -278,7 +278,7 @@ public class LabelPushCycleServiceImpl extends BaseServiceImpl<LabelPushCycle, S
 //			page.getTotalPageCount();
         }
         
-        LogUtil.debug("find customListData cost:"+((System.currentTimeMillis()-s)/1000.0)+" s.");
+        LogUtil.debug("find customListData cost:"+(System.currentTimeMillis()-s)+" ms.");
         
         return page;
     }

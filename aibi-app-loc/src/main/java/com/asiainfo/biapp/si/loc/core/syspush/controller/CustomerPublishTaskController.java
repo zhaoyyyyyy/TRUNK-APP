@@ -56,7 +56,7 @@ public class CustomerPublishTaskController {
         
         boolean res = iSeasonalCustomerPublishTask.excutor(ServiceConstants.LabelInfo.UPDATE_CYCLE_D);
         
-        LogUtil.info(this.getClass().getSimpleName()+".taskExecute() end.cost:"+((System.currentTimeMillis()-s)/1000L)+" s.");
+        LogUtil.info(this.getClass().getSimpleName()+".taskExecute() end.cost:"+(System.currentTimeMillis()-s)+" ms.");
         
         return String.valueOf(res);
     }
@@ -70,7 +70,7 @@ public class CustomerPublishTaskController {
         
         boolean res = iSeasonalCustomerPublishTask.excutor(ServiceConstants.LabelInfo.UPDATE_CYCLE_M);
         
-        LogUtil.info(this.getClass().getSimpleName()+".taskExecute() end.cost:"+((System.currentTimeMillis()-s)/1000L)+" s.");
+        LogUtil.info(this.getClass().getSimpleName()+".taskExecute() end.cost:"+(System.currentTimeMillis()-s)+" ms.");
         
         return String.valueOf(res);
     }

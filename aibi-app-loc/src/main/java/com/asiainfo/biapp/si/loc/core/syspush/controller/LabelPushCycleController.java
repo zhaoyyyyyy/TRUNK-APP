@@ -323,7 +323,6 @@ public class LabelPushCycleController extends BaseController<LabelPushCycle>{
         //格式：COC_标签创建人_YYYYMMDDHHMMSS_6位随机数,形如:【COC_admin_20180212150301_981235】
         String fileName = LabelPushReqVo.REQID_PREFIX + customInfo.getCreateUserId() + "_"
                 + DateUtil.date2String(new Date(),DateUtil.FORMAT_YYYYMMDD);
-        LogUtil.debug("查找文件前缀："+fileName);
         
         try {
             iLabelPushCycleService.preDownloadGroupList(localPathTmp, new CustomDownloadRecord(fileName, 

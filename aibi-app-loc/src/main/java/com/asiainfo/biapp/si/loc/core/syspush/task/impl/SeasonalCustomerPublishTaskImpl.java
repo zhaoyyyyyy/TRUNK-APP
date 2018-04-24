@@ -100,7 +100,7 @@ public class SeasonalCustomerPublishTaskImpl implements ISeasonalCustomerPublish
             LogUtil.info("没有周期性是 " + (updateCycle==3?"日":(updateCycle==2?"月":""))+ " 的客户群，本周期不推送。");
         }
 
-        LogUtil.info(this.getClass().getSimpleName()+".excutor() end.cost:"+((System.currentTimeMillis()-s)/1000L)+" s.");
+        LogUtil.info(this.getClass().getSimpleName()+".excutor() end.cost:"+(System.currentTimeMillis()-s)+" ms.");
         
         return res;
     }
@@ -120,7 +120,7 @@ public class SeasonalCustomerPublishTaskImpl implements ISeasonalCustomerPublish
             LogUtil.info("周期性客户群ID为空！本周期不推送。");
         }
 
-        LogUtil.info(this.getClass().getSimpleName()+".excutor() end.cost:"+((System.currentTimeMillis()-s)/1000L)+" s.");
+        LogUtil.info(this.getClass().getSimpleName()+".excutor() end.cost:"+(System.currentTimeMillis()-s)+" ms.");
         
         return res;
     }

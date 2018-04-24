@@ -292,7 +292,7 @@ public class BackHiveDaoImpl extends BaseBackDaoImpl implements IBackSqlDao{
         	st = conn.prepareStatement(sql);
             rs = st.executeQuery();
 
-            LogUtil.debug(new StringBuffer(sql).append(" cost:").append((System.currentTimeMillis()-s)/1000.0).append(" s."));
+            LogUtil.debug(new StringBuffer(sql).append(" cost:").append(System.currentTimeMillis()-s).append(" ms."));
             
             return this.resultSetToList(rs);
         }catch (Exception e){

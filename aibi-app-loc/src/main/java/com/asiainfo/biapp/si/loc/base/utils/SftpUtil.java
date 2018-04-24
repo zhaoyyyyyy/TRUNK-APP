@@ -530,7 +530,6 @@ public class SftpUtil {
             public void end(){
                 SftpUtil.isCompletedMap.put(threadName, "true");    //false:未完成；true：已完成
                 
-                LogUtil.debug("传输已完成"); 
                 LogUtil.debug("【Sftp Monitor】Transferring done.cost:"+(System.currentTimeMillis()-cost)+"ms.");
             }
         };

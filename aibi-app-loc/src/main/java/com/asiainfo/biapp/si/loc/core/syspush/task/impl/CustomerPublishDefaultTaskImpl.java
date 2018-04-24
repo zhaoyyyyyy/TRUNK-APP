@@ -439,7 +439,6 @@ public class CustomerPublishDefaultTaskImpl implements ICustomerPublishTask {
                 // create XML File
                 try {
                     LogUtil.debug(">>create xml " + xmlFile + " start");
-                    LogUtil.info("desFile>>>>>>>>>>>>>>>>>>>"+desFile);
                     this.createOtherSysXmlFile(xmlFile, desFile);
                     LogUtil.debug(">>create xml " + xmlFile + " end");
                 } catch (Exception e) {
@@ -873,7 +872,7 @@ public class CustomerPublishDefaultTaskImpl implements ICustomerPublishTask {
                 flag = false;
                 LogUtil.error("createFile(" + fileName + ") error:", e);
             } finally {
-                LogUtil.info("The cost of sql2File2 is :  " + (System.currentTimeMillis() - t1) + "ms");
+                LogUtil.info("The cost of sql2File2 is :  " + (System.currentTimeMillis() - t1) + " ms");
             }
             
             return flag;
