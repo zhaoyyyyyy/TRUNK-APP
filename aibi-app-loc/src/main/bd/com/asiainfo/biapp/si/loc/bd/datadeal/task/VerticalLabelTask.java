@@ -9,14 +9,11 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-
 import com.asiainfo.biapp.si.loc.bd.datadeal.util.TimeUtil;
+import com.asiainfo.biapp.si.loc.core.ServiceConstants;
 import org.apache.commons.lang.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
 import com.asiainfo.biapp.si.loc.base.utils.LogUtil;
-import com.asiainfo.biapp.si.loc.bd.datadeal.DataDealConstants;
 import com.asiainfo.biapp.si.loc.bd.datadeal.component.LabelDealComponent;
 import com.asiainfo.biapp.si.loc.bd.datadeal.util.BackJdbcManager;
 import com.asiainfo.biapp.si.loc.bd.datadeal.util.JdbcManager;
@@ -49,6 +46,7 @@ public class VerticalLabelTask implements Runnable {
     }
 
     public void run() {
+        Long startTime=System.currentTimeMillis();
         threadNumber = Thread.currentThread().getName() + "————" + config_id + "：\n";
        JdbcManager jdbcManager=new JdbcManager();
         ALL_USER_MAP = jdbcManager.getAllUserTable(config_id);
@@ -56,8 +54,9 @@ public class VerticalLabelTask implements Runnable {
             //生成纵表标签
             Label();
         } else {
-            LogUtil.info("加载用户全量表失败,专区ID为：" + config_id);
+            LogUtil.error(threadNumber+"加载用户全量表失败,专区ID为：" + config_id);
         }
+        LogUtil.info(new StringBuffer(threadNumber+"专区生成数据耗时").append(" cost:").append((System.currentTimeMillis()-startTime)/1000).append("s."));
     }
 
     private void Label() {
@@ -122,7 +121,7 @@ public class VerticalLabelTask implements Runnable {
                 //004表对应源表
             }
         } catch (SQLException e) {
-            LogUtil.info(threadNumber + "通过Sql获取指标信息：" + getLabel);
+            LogUtil.error(threadNumber + "通过Sql获取指标信息：" + getLabel);
             return;
         } finally {
             JdbcManager.closeAll(connection, preparedStatement, resultSet);
@@ -145,6 +144,7 @@ public class VerticalLabelTask implements Runnable {
      */
     private Map<String, String> existsTable(Map<String, String> source_table_id2source_table_nameMap) {
         LabelDealComponent labelDealComponent=new LabelDealComponent();
+        labelDealComponent.setThreadNumber(threadNumber);
         List<String> notExistsSourceTableIdList = new ArrayList<String>();
         Map<String, String> new_source_table_id2source_table_nameMap = new HashMap<String, String>();
         Iterator<Map.Entry<String, String>> entryIterator = source_table_id2source_table_nameMap.entrySet().iterator();
@@ -156,6 +156,7 @@ public class VerticalLabelTask implements Runnable {
         String data_store = "";
         String date_column_name = "";
         BackJdbcManager backJdbcManager = new BackJdbcManager();
+        backJdbcManager.setThreadNumber(threadNumber);
         while (entryIterator.hasNext()) {
             entry = entryIterator.next();
             value = entry.getValue();
@@ -184,8 +185,7 @@ public class VerticalLabelTask implements Runnable {
     private boolean createLabelTable(Map<String, String> source_table_id2source_table_nameMap, Map<String, List<String>> source_table_id2column_nameMap) {
       BackJdbcManager backJdbcManager=new BackJdbcManager();
         boolean isOk = true;
-        String preTargetTableName = DataDealConstants.LV + config_id.toUpperCase() + "_";
-
+        String preTargetTableName = ServiceConstants.LV + config_id.toUpperCase() + "_";
         LabelDealComponent labelDealComponent=new LabelDealComponent();
         labelDealComponent.setThreadNumber(threadNumber);
         labelDealComponent.setData_date(data_date);
@@ -196,19 +196,19 @@ public class VerticalLabelTask implements Runnable {
         labelDealComponent.updateDimTargetTableStatus(1, 1, sourceTableIdList,null);
         String where = "";
         String SOURCE_TABLES_HAS_DATE_SUFFIX = ALL_USER_MAP.get("SOURCE_TABLES_HAS_DATE_SUFFIX");
-        if (data_cycle == DataDealConstants.LABEL_CYCLE_TYPE_D) {
+        if (data_cycle == ServiceConstants.LABEL_CYCLE_TYPE_D) {
             ALL_USERS_TABLE_NAME = ALL_USER_MAP.get("ALL_USERS_TABLE_NAME_DM");
             ALL_USER_JOIN_COLUMN_NAME = ALL_USER_MAP.get("ALL_USER_JOIN_COLUMN_NAME_DM");
-        } else if (data_cycle == DataDealConstants.LABEL_CYCLE_TYPE_M) {
+        } else if (data_cycle == ServiceConstants.LABEL_CYCLE_TYPE_M) {
             ALL_USERS_TABLE_NAME = ALL_USER_MAP.get("ALL_USERS_TABLE_NAME_MM");
             ALL_USER_JOIN_COLUMN_NAME = ALL_USER_MAP.get("ALL_USER_JOIN_COLUMN_NAME_MM");
         }
         LogUtil.info(threadNumber + "判断用户全量表是否分区");
         if (SOURCE_TABLES_HAS_DATE_SUFFIX != null && SOURCE_TABLES_HAS_DATE_SUFFIX.trim().length() > 0 && "0".equals(SOURCE_TABLES_HAS_DATE_SUFFIX)) {
             LogUtil.info(threadNumber + "用户全量表为分区表");
-            if (data_cycle == DataDealConstants.LABEL_CYCLE_TYPE_D) {
+            if (data_cycle == ServiceConstants.LABEL_CYCLE_TYPE_D) {
                 ALL_USERS_TABLE_SELECT_COLUMN = ALL_USER_MAP.get("ALL_USERS_TABLE_DM_SELECT_COLUMN");
-            } else if (data_cycle == DataDealConstants.LABEL_CYCLE_TYPE_M) {
+            } else if (data_cycle == ServiceConstants.LABEL_CYCLE_TYPE_M) {
                 ALL_USERS_TABLE_SELECT_COLUMN = ALL_USER_MAP.get("ALL_USERS_TABLE_MM_SELECT_COLUMN");
             }
             if (!backJdbcManager.tableExists(ALL_USERS_TABLE_NAME, ALL_USERS_TABLE_SELECT_COLUMN + "=" + data_date)) {
@@ -233,7 +233,7 @@ public class VerticalLabelTask implements Runnable {
         Map<String, String> columnNameAndTypeByName = null;
         columnNameAndTypeByName = backJdbcManager.getColumnNameAndTypeByName(ALL_USERS_TABLE_NAME);
         List<String> allUserColumnList = new ArrayList<String>();
-        allUserColumnList.add(DataDealConstants.PRODUCT_NO + " " + columnNameAndTypeByName.get(ALL_USER_JOIN_COLUMN_NAME.toUpperCase()));
+        allUserColumnList.add(ServiceConstants.LABEL_PRODUCT_NO + " " + columnNameAndTypeByName.get(ALL_USER_JOIN_COLUMN_NAME.toUpperCase()));
         for (int i = 0; i < splitColumnName.length; i++) {
             otherColumn += ", t." + splitColumnName[i];
             if (!lis.contains(splitColumnName[i].split(" ")[0])) {
@@ -266,7 +266,7 @@ public class VerticalLabelTask implements Runnable {
         List<String> columnsList = new ArrayList<String>();
         while (targetEntry.hasNext()) {
             allColumns.clear();
-            targetTableSql = "select " + "t." + ALL_USER_JOIN_COLUMN_NAME + " " + DataDealConstants.PRODUCT_NO + otherColumn;
+            targetTableSql = "select " + "t." + ALL_USER_JOIN_COLUMN_NAME + " " + ServiceConstants.LABEL_PRODUCT_NO + otherColumn;
             from = " from  " + "( select " + ALL_USER_JOIN_COLUMN_NAME + others + " from " + ALL_USERS_TABLE_NAME + where + " ) t";
             Map.Entry<String, String> entry = targetEntry.next();
             value = entry.getValue();
@@ -338,7 +338,7 @@ public class VerticalLabelTask implements Runnable {
                     labelDealComponent.updateLocNewestLabelDate(config_id);
                     LogUtil.info(threadNumber + "专区" + config_id + "标签生成结束");
                 } else {
-                    LogUtil.info("没有标签需要更新");
+                    LogUtil.info(threadNumber+"没有标签需要更新");
                 }
             } else {
                 //成功更改指标源表状态：1,0
@@ -388,7 +388,7 @@ public class VerticalLabelTask implements Runnable {
                 labelList.add(label_id);
             }
         } catch (SQLException e) {
-            LogUtil.info(threadNumber + "通过Sql获取指标信息：" + "失败" + e);
+            LogUtil.error(threadNumber + "通过Sql获取指标信息：" + "失败" + e);
             return null;
         } finally {
             JdbcManager.closeAll(connection, preparedStatement, resultSet);
