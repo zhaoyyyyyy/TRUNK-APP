@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>运行监控总览</title>
+    <link rel="stylesheet" theme="default" href="../../asset/css/common/reset.css"/> 
+    <link rel="stylesheet" theme="default" href="../../asset/css/theme/default/coc_frame.css"/> 
+	<link rel="stylesheet" theme="default" href="../../asset/css/theme/default/main.css"/> 
+   	<script type="text/javascript" src="../../asset/script/common/include.js"></script>
+   	<script type="text/javascript" src="service_monitor_detail.js"></script>
+   	<style type="text/css">
+	[v-cloak] {
+		display: none;
+	}
+	</style>
+</head>
+<body>
+    <div class="iframe-nest" id="monitorDetail" v-cloak>
+      	<div class="ui-lc-mian">
+      		<h3 class="pre">运行监控明细</h3>
+      	</div>
+      	<div class="ui-lc-mian mt10 ui-prefecture">
+      		<div class="ui-pre-detail clearfix">
+      		<!-- 	<p>数据日期<span class="ui-pre-refresh">1s<em></em></span></p> -->
+	      		<div class="page-refresh-wrapper">
+	      			数据日期
+	                <div class="refresh-inner" >
+	                <!-- <div  v-for="d in khqtsList">
+    					<span><em></em>&nbsp;{{d.dataName}}</span>
+    				</div> -->
+	                    <div class="refresh-key">数据刷新频率:</div>
+	                    
+	                    <select  @change="refresh" id="refreshId" >
+	                        <option v-for="d in sjsxplList">次/{{d.code}}秒</option>
+	                    </select>
+	                    
+	                </div>
+	                <p class="tips">提示 : 当网络环境不理想时，设置过高的频率，可能不会呈现相应效果。</p>
+               </div>
+				<div class="dropdown open pre-dropdown">
+					<span class="prefectrue-span">日周期&nbsp;<em></em></span>
+					<ul class="dropdown-menu">
+						<li>
+							<span>日周期</span>
+						</li>
+						<li>
+							<span>月周期</span>
+						</li>
+					</ul>
+				</div>
+				<em></em>
+				<span class="prefectrue-span" @click="changeMonitorByDate" >{{dataDate}}<em class="ml20"></em></span>
+	      	</div>
+      	</div>
+		<div class="ui-lc-mian mt10 ui-morior-border" >
+			<div class="ui-prefecture">
+				<ul class="ui-label-list clearfix mt10">
+					<li class="ui-prerecture-item">
+						<div>
+							<div class="per-header clearfix">
+								<span class="fleft"><em class="data-ready"></em>数据准备</span>
+								<p class="fright">
+									<span>共<strong>30</strong>张源表  ，成功<strong>9</strong>个</span>
+								</p>
+							</div>
+							<ul class="per-status ui-label-list mt30">
+								<li>
+									<span>未准备</span> 
+									<p>{{serviceMonitorObj.notPrepareCount}}</p>
+								</li>
+								<li>
+									<span>准备完成</span>
+									<p>{{serviceMonitorObj.preparedCount}}</p>
+								</li>
+								<li class="padding0">
+									<span>抽取中</span>
+									<p>{{serviceMonitorObj.extractingCount}}</p>
+								</li>
+								<li>
+									<span>抽取完成</span>
+									<p>{{serviceMonitorObj.extractSuccessCount}}</p>
+								</li>
+								<li>
+									<span>抽取失败</span>
+									<p>{{serviceMonitorObj.extractFailCount}}</p>
+								</li>
+							</ul>
+						</div>
+					</li>
+					<li class="ui-prerecture-item">
+						<div>
+							<div class="per-header clearfix">
+								<span class="fleft"><em class="label-build"></em>标签生成</span>
+								<p class="fright">
+									<span>共<strong>781</strong>个日标签 ，成功<strong>382</strong>个</span>
+								</p>
+							</div>
+							<ul class="per-status ui-label-list mt30">
+								<li>
+									<span>成功</span>
+									<p>{{serviceMonitorObj.genSuccessCount}}</p>
+								</li>
+								<li>
+									<span>失败</span>
+									<p>{{serviceMonitorObj.genFailCount}}</p>
+								</li>
+							</ul>
+						</div>
+					</li>
+					<li class="ui-prerecture-item">
+						<div>
+							<div class="per-header clearfix">
+								<span class="fleft"><em class="label-custom"></em>客户群生成</span>
+								<p class="fright">
+									<span>共<strong>30</strong>个日周期客户群 ，成功<strong>11</strong>个</span>
+								</p>
+							</div>
+							<ul class="per-status ui-label-list mt30">
+								<li>
+									<span>待创建</span>
+									<p>{{serviceMonitorObj.customPrepareCount}}</p>
+								</li>
+								<li>
+									<span>创建中</span>
+									<p>{{serviceMonitorObj.customCreatingCount}}</p>
+								</li>
+								<li class="padding0">
+									<span>创建成功</span>
+									<p>{{serviceMonitorObj.customSuccessCount}}</p>
+								</li>
+								<li>
+									<span>预约</span>
+									<p>{{serviceMonitorObj.customAppointCount}}</p>
+								</li>
+								<li>
+									<span>失败</span>
+									<p>{{serviceMonitorObj.customFailCount}}</p>
+								</li>
+							</ul>
+						</div>
+					</li>
+					<li class="ui-prerecture-item padding0">
+						<div>
+							<div class="per-header clearfix">
+								<span class="fleft"><em class="label-custom"></em>客户群推送</span>
+								<p class="fright">
+									<span>共<strong>25</strong>个待推送的客户群 ，成功<strong>11</strong>个</span>
+								</p>
+							</div>
+							<ul class="per-status ui-label-list mt30">
+								<li>
+									<span>推送成功</span>
+									<p>{{serviceMonitorObj.pushSuccessCount}}</p>
+								</li>
+								<li>
+									<span>推送中</span>
+									<p>{{serviceMonitorObj.pushingCount}}</p>
+								</li>
+								<li class="padding0">
+									<span>推送失败</span>
+									<p>{{serviceMonitorObj.pushFailCount}}</p>
+								</li>
+							</ul>
+						</div>
+					</li>
+				</ul>
+			</div>
+		</div>
+    	<div class="ui-lc-mian mt10 ui-pre-progress"  v-for="d in yyjkList" >
+			<span class="ui-pre-refresh ml20" id="dataPrepare">{{d.dataName}}<em></em></span>
+    	</div>
+    	<div class="ui-lc-mian mt10">
+    		<h3 class="clearfix pre-jqgrid">
+    			数据准备
+    			<div class="ui-status">
+    				<div class="dropdown open">
+    					<span class="prefectrue-span">准备状态&nbsp;<em></em></span>
+	    				<ul class="dropdown-menu" id="chooseStatus">
+					       <li><a @click="initDataPrepareTable(true)">准备状态</a></li>
+					       <li><a @click="initDataPrepareTable(false)">抽取状态</a></li>
+					    </ul>
+    				</div>
+    				<div  v-for="d in sjzbList" id="sjzbList" v-if="zbFlag">
+    					<span><em></em>&nbsp;{{d.dataName}}</span>
+    				</div>
+    				<div  v-for="d in sjcqList" id="sjcqList" v-else>
+    					<span><em></em>&nbsp;{{d.dataName}}</span>
+    				</div>
+    			</div>
+    		    <form id="formSearch-dataPrepare" class="form-inline data-form fright">
+	    			<div class="form-group fright">
+						<div class="input-group">
+							<input name="dataPrepareName" id="dataPrepareName" type="text" class="form-control input-pointer" placeholder="模糊查询" />
+							<div class="input-group-addon input-group-icon right-child" id="btn_search_data" data-tableId="dataPrepareTable" data-formSearchId="formSearch-dataPrepare" @keyup.enter="qryTableByCond($event)" @click="qryTableByCond($event)"></div>			
+						</div>						
+					</div>
+				</form>
+    		</h3>
+    		<div class="ui-table-static mt10">
+                <table id="dataPrepareTable"  class="table"></table>
+                <div id="dataPreparePager"></div>
+            </div>
+    	</div>
+    	<div class="ui-lc-mian mt30">
+    		<h3 class="clearfix pre-jqgrid">
+    			标签生成
+    			<div class="ui-status">
+    				<span>生成状态</span>
+    				<div  v-for="d in bqscList">
+    					<span><em></em>&nbsp;{{d.dataName}}</span>
+    				</div>
+    			</div>
+    			<form id="formSearch-labelGenerate" class="form-inline data-form fright">
+	    			<div class="form-group fright">
+						<div class="input-group">
+							<input name="labelGenerateName" id="labelGenerateName" type="text" class="form-control input-pointer" placeholder="模糊查询" />
+							<div class="input-group-addon input-group-icon right-child" id="btn_search_label" data-tableId="labelGenerateTable" data-formSearchId="formSearch-labelGenerate" @keyup.enter="qryTableByCond($event)" @click="qryTableByCond($event)"></div>			
+						</div>						
+					</div>
+				</form>	
+    		</h3>
+    		<div class="ui-table-static mt10">
+                <table id="labelGenerateTable"  class="table"></table>
+                <div id="labelGeneratePager"></div>
+            </div>
+    		<div class="catch-error" id="catchError">
+    			<h3>异常信息</h3>
+    			<span>点击上面的失败，展开显示异常的详情 ，不点击收起状态 </span>
+    		</div>
+    	</div>
+    	<div class="ui-lc-mian mt10">
+    		<h3 class="clearfix pre-jqgrid">
+    			客户群生成
+    			<div class="ui-status">
+    				<span>生成状态</span>
+    				<div  v-for="d in khqscList">
+    					<span><em></em>&nbsp;{{d.dataName}}</span>
+    				</div>
+    			</div>
+    		    <form id="formSearch-customGenerate" class="form-inline data-form fright">
+	    			<div class="form-group fright">
+						<div class="input-group">
+							<input name="customGenerateName" id="customGenerateName" type="text" class="form-control input-pointer" placeholder="模糊查询" />
+							<div class="input-group-addon input-group-icon right-child" id="btn_search_custom" data-tableId="customGenerateTable" data-formSearchId="formSearch-customGenerate" @keyup.enter="qryTableByCond($event)" @click="qryTableByCond($event)"></div>			
+						</div>						
+					</div>
+				</form>
+    		</h3>
+    		<div class="ui-table-static mt10">
+                <table id="customGenerateTable"  class="table"></table>
+                <div id="customGeneratePager"></div>
+            </div>
+    	</div>
+    	<div class="ui-lc-mian mt30">
+    		<h3 class="clearfix pre-jqgrid">
+    			客户群推送
+    			<div class="ui-status">
+    				<span>推送状态</span>
+    				<div  v-for="d in khqtsList">
+    					<span><em></em>&nbsp;{{d.dataName}}</span>
+    				</div>
+    			</div>
+    			 <form id="formSearch-customPush" class="form-inline data-form fright">
+	    			<div class="form-group fright">
+						<div class="input-group">
+							<input name="customPushName" id="customPushName" type="text" class="form-control input-pointer" placeholder="模糊查询" />
+							<div class="input-group-addon input-group-icon right-child" id="btn_search_push" data-tableId="customPushTable" data-formSearchId="formSearch-customPush" @keyup.enter="qryTableByCond($event)" @click="qryTableByCond($event)"></div>			
+						</div>						
+					</div>
+				</form>
+    		</h3>
+    		<div class="ui-table-static mt10">
+                <table id="customPushTable"  class="table"></table>
+                <div id="customPushPager"></div>
+            </div>
+    	</div>
+    </div>      
+</body>
+</html>

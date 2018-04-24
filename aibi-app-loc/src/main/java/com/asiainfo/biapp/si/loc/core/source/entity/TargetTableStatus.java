@@ -103,6 +103,20 @@ public class TargetTableStatus extends BaseEntity {
     @Column(name = "DATA_BATCH")
     @ApiParam(value = "批次")
     private Integer dataBatch;
+    
+    /**
+     * 开始时间
+     */
+    @Column(name = "START_TIME")
+    @ApiParam(value = "开始时间")
+    private String startTime;
+    
+    /**
+     * 结束时间
+     */
+    @Column(name = "END_TIME")
+    @ApiParam(value = "结束时间")
+    private String endTime;
 
     /**
      * 错误信息描述
