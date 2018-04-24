@@ -13,8 +13,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -31,6 +29,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 import org.xml.sax.SAXException;
 
+import com.asiainfo.biapp.si.loc.base.exception.BaseException;
 import com.asiainfo.biapp.si.loc.base.extend.SpringContextHolder;
 import com.asiainfo.biapp.si.loc.base.utils.Bean2XMLUtils;
 import com.asiainfo.biapp.si.loc.base.utils.DESUtil;
@@ -137,6 +136,12 @@ public class CustomerPublishDefaultTaskImpl implements ICustomerPublishTask {
 
     private int bufferedRowSize = 10000;    //每次读取数据的条数
     private static final String encode = "UTF-8"; 			//当前的文件的编码
+    private static final int RANDOM_START = 1;  //随机数开始数字
+    private static final int RANDOM_END = 6;    //随机数结束数字
+    private static final int BINARY = 1024;     //二进制
+    private static final int BINARY_2G = 2048;  //二进制_2G
+    private static final int DECIMALISM = 10;   //十进制
+    private static final int THOUSAND = 1000;   //千进制
     private static final long CUSTOMER_PUBLISH_PRE_WAIT_TIME = 5000;     //客户群推送线程前置等待时间
 
     
@@ -161,7 +166,7 @@ public class CustomerPublishDefaultTaskImpl implements ICustomerPublishTask {
 
 	public void run() {
 	    LogUtil.info("Enter CustomerPublishDefaultThread.run()");
-        LogUtil.debug("客户群推送 "+CUSTOMER_PUBLISH_PRE_WAIT_TIME/1000+" 秒后开始执行。。。");
+        LogUtil.debug("客户群推送 "+CUSTOMER_PUBLISH_PRE_WAIT_TIME/THOUSAND+" 秒后开始执行。。。");
 		
         try {
 			Thread.sleep(CUSTOMER_PUBLISH_PRE_WAIT_TIME);//之前的事务提交需要一定时间
@@ -231,7 +236,7 @@ public class CustomerPublishDefaultTaskImpl implements ICustomerPublishTask {
             this.updateLabelPushReq(ServiceConstants.LabelPushReq.PUSH_STATUS_SUCCESS, null);
         }
         
-        LogUtil.debug("Customer("+customInfo.getLabelId()+")Publish end,cost:" + (System.currentTimeMillis() - start)/1000.0 + " s.");
+        LogUtil.debug("Customer("+customInfo.getLabelId()+")Publish end,cost:" + (System.currentTimeMillis() - start)/new Long(THOUSAND) + " s.");
 		LogUtil.info("Exist CustomerPublishDefaultThread.run()");
 	}
     
@@ -269,11 +274,11 @@ public class CustomerPublishDefaultTaskImpl implements ICustomerPublishTask {
 								flag = myPush.push(labelPushCycleList, isJobTask, reservedParameters);
 							} else {
 								msg = new StringBuffer().append("没有找到个性化推送接口实现类，").append(msg).toString();
-								throw new RuntimeException(msg);
+								throw new BaseException(msg);
 							} 
 						} else {
 							msg = new StringBuffer().append("SysInfo表没有配置个性化推送接口实现类，").append(msg).toString();
-							throw new RuntimeException(msg);
+							throw new BaseException(msg);
 						} 
 	                } catch (Exception e) {
 	                    flag = false;
@@ -284,14 +289,14 @@ public class CustomerPublishDefaultTaskImpl implements ICustomerPublishTask {
 	                if (StringUtil.isNotEmpty(needTxtIds)) {    //是否要推送txt
 	                    String[] sysIdsArray = needTxtIds.split(",");
 	                    List<String> ids = Arrays.asList(sysIdsArray);
-	                    if (ids != null && ids.size() > 0 && ids.contains(sysInfo.getSysId())) {
+	                    if (!ids.isEmpty() && ids.size() > 0 && ids.contains(sysInfo.getSysId())) {
 	                        flag = false;
 	                        LogUtil.error("推送为txt，敬请期待。");
 	                    }
 	                } else {
-	                    //浙江新需求，无属性的清单推送，生成的表名前缀，
-	                    //eg:表名为tabel_name_a,实际表名为table_name_a+系统最新数据日期；为空时走FTP方式;
-	                    //日表每天一天表，月表一月一张表(一次性客户群表数据存在月表中)；
+	                    /* 浙江新需求，无属性的清单推送，生成的表名前缀，
+	                     * eg:表名为tabel_name_a,实际表名为table_name_a+系统最新数据日期；为空时走FTP方式;
+	                     * 日表每天一天表，月表一月一张表(一次性客户群表数据存在月表中)；*/
 	                    if(StringUtil.isNotEmpty(sysInfo.getTableNamePre()) && (attrRelList==null || attrRelList.size() <=1 )){
 	                        LogUtil.error("浙江新个性化推送，无属性的清单推送，生成的表名前缀，敬请期待。");
 	                        flag = false;
@@ -413,12 +418,11 @@ public class CustomerPublishDefaultTaskImpl implements ICustomerPublishTask {
             if (sysInfo.getIsNeedDes() != null && ServiceConstants.SysInfo.IS_NEED_DES_YES == sysInfo.getIsNeedDes()) {
                 try {
                     String key = sysInfo.getDesKey(); //加密密钥
-                    LogUtil.debug(key);
+                    LogUtil.debug("key : " + key);
                     if (StringUtil.isEmpty(key)) {
                         String errorMsg = "数据库中未定义密钥";
                         LogUtil.error(errorMsg);
                     }
-                    LogUtil.debug("key : " + key);
                     DESUtil des = new DESUtil(key);
                     // DES 加密文件
                     des.encryptFile(fileTmp, desFile);
@@ -435,7 +439,6 @@ public class CustomerPublishDefaultTaskImpl implements ICustomerPublishTask {
                 // create XML File
                 try {
                     LogUtil.debug(">>create xml " + xmlFile + " start");
-                    LogUtil.info("xmlFile>>>>>>>>>>>>>>>>>>>"+xmlFile);
                     LogUtil.info("desFile>>>>>>>>>>>>>>>>>>>"+desFile);
                     this.createOtherSysXmlFile(xmlFile, desFile);
                     LogUtil.debug(">>create xml " + xmlFile + " end");
@@ -459,7 +462,7 @@ public class CustomerPublishDefaultTaskImpl implements ICustomerPublishTask {
                     protocoTypeStr = "表 SYS_INFO 的 PROTOCOTYPE 字段配置错误！";
                     LogUtil.error(protocoTypeStr);
                     result = false;
-                    throw new RuntimeException(protocoTypeStr);
+                    throw new BaseException(protocoTypeStr);
                 }
                 
                 LogUtil.debug("推送方式：------"+protocoTypeStr+"------");
@@ -482,10 +485,9 @@ public class CustomerPublishDefaultTaskImpl implements ICustomerPublishTask {
                     result = new File(desFile).delete();    //FTP后删除本地des文件
                     LogUtil.debug(new File(desFile).exists());
                     //FTP后删除本地csv文件
-                    if(sysInfo.getIsNeedCompress()!=null && ServiceConstants.SysInfo.IS_NEED_COMPRESS_YES==sysInfo.getIsNeedCompress()){
-                        if (result) {
-                            result = new File(csvFile).delete();
-                        }
+                    if(sysInfo.getIsNeedCompress()!=null && ServiceConstants.SysInfo.IS_NEED_COMPRESS_YES==sysInfo.getIsNeedCompress()
+                            && result){
+                        result = new File(csvFile).delete();
                     }
 	            } else {    //手动推送，不删除，以便下载,下载后删除
 	                //更新下载时的准确的文件名
@@ -551,8 +553,8 @@ public class CustomerPublishDefaultTaskImpl implements ICustomerPublishTask {
         labelPushReq.setPushStatus(pushStatus);
         if (null != e) {
             String emsg = e.getMessage();
-            if (StringUtil.isNoneBlank(emsg) && emsg.length() > 2048) {
-                emsg = emsg.substring(0, 1024);
+            if (StringUtil.isNoneBlank(emsg) && emsg.length() > BINARY_2G) {
+                emsg = emsg.substring(0, BINARY);
             }
 
             labelPushReq.setExceInfo(emsg);
@@ -624,14 +626,7 @@ public class CustomerPublishDefaultTaskImpl implements ICustomerPublishTask {
         data.setCrtPersnName(crtPersnName == null ? "" : crtPersnName);
         if (StringUtil.isNoneBlank(customInfo.getCreateTime())) {
             //创建时间
-            Date crtTime = null;
-            try {
-                crtTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(customInfo.getCreateTime());
-            } catch (ParseException e) {
-                //跟新实时更新推送状态
-                this.updateLabelPushReq(ServiceConstants.LabelPushReq.PUSH_STATUS_FAILED, e);
-                LogUtil.warn("客户群创建时间（"+customInfo.getCreateTime()+"）格式化异常");
-            } 
+            Date crtTime = DateUtil.string2Date(customInfo.getCreateTime(), DateUtil.FORMAT_YYYYMMDDHHMMSS);
             data.setCrtTime(crtTime);
         }
         //生效时间
@@ -665,10 +660,6 @@ public class CustomerPublishDefaultTaskImpl implements ICustomerPublishTask {
         data.setDataDate(dataDateStr); //统计周期：如果是月周期就是yyyyMM，如果是日周期就是yyyyMMdd
         
         //查询推送的清单的所有列
-        /*
-        String keyColumn = PropertiesUtils.getProperties("RELATED_COLUMN");
-        String keyTitle = PropertiesUtils.getProperties("RELATED_COLUMN_CN_NAME");
-        */
         List<StandardPushXmlBean.Data.Column> columns = new ArrayList<StandardPushXmlBean.Data.Column>();
         StandardPushXmlBean.Data.Column col = data.newColumn();
         col.setIsPrimaryKey(1);
@@ -739,11 +730,11 @@ public class CustomerPublishDefaultTaskImpl implements ICustomerPublishTask {
 	 */
 	private String findRandom() {
 		String guid = ""; 
-		for (int i = 1; i <= 6; i++){ 
-			if(i == 1) {
+		for (int i = RANDOM_START; i <= RANDOM_END; i++){ 
+			if(i == RANDOM_START) {
 				guid += "_"; 
 			}
-			String n = String.valueOf((int)Math.floor(Math.random() * 10));
+			String n = String.valueOf((int)Math.floor(Math.random() * DECIMALISM));
 			guid += n; 
 			
 		} 
@@ -863,7 +854,6 @@ public class CustomerPublishDefaultTaskImpl implements ICustomerPublishTask {
                 final String file = fileName;
                 
                 int start = 1;
-                IBackSqlService backSqlService = (IBackSqlService) SpringContextHolder.getBean("backServiceImpl");
                 while (true) {
                     dataList = backSqlService.queryForPage(sql, start, bufferedRowSize);
                     if (dataList.size() >= bufferSize){
@@ -904,16 +894,13 @@ public class CustomerPublishDefaultTaskImpl implements ICustomerPublishTask {
             boolean flag = true;
             CSVWriter cw = null;
             Writer osw = null;
-            int bufferdsize = 2048;
             try {
                 FileUtil.createLocDir(fileName);//创建目录
                 boolean hasExists = new File(fileName).exists();
-                osw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(fileName, true), encode), bufferdsize);
+                osw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(fileName, true), encode), BINARY_2G);
                 cw = new CSVWriter(osw);
-                if (!hasExists) {
-                    if (StringUtil.isNotEmpty(title)) {
-                        cw.writeNext(title.replace("\"", "").split(","));
-                    }
+                if (!hasExists && StringUtil.isNotEmpty(title)) {
+                    cw.writeNext(title.replace("\"", "").split(","));
                 }
                 List<String> data = new ArrayList<String>();
                 for (Map<String, String> m : datas) {
@@ -923,7 +910,7 @@ public class CustomerPublishDefaultTaskImpl implements ICustomerPublishTask {
                     for (String col : m.keySet()) {
                         data.add(String.valueOf(m.get(col)).replace("\"", ""));
                     }
-                    if (data.size() > 0) {
+                    if (!data.isEmpty() && data.size()>0) {
                         cw.writeNext(data.toArray(new String[] {}));
                         data.clear();
                     }
@@ -933,12 +920,12 @@ public class CustomerPublishDefaultTaskImpl implements ICustomerPublishTask {
                 flag = false;
                 LogUtil.error("createFile(" + fileName + ") error:", e);
             } finally {
-                try {
-                    if (cw != null) {
-                        cw.close();
+                if (cw != null) {
+                    try {
+                            cw.close();
+                    } catch (Exception e) {
+                        LogUtil.warn("IO关闭异常："+e.getMessage());
                     }
-                } catch (Exception e) {
-                    LogUtil.warn("IO关闭异常："+e.getMessage());
                 }
             }
             return flag;

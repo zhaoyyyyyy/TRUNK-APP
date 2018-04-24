@@ -54,7 +54,7 @@ public class SftpUtil {
     
     private static final String UN_UPLOADED = "_unUploaded";//未完成的后缀;
     private static final int THOUSAND = 1000;    //千进制
-    private static final int MYRIAD = 1000;      //万进制
+    private static final int MYRIAD = 10000;     //万进制
     private static final int WAIT_INCREMENT = 25;   //等待时间的增量;
     private static final int WAIT_MAX_TIME = 60;    //等待超时的最大值;
     private static final int SFTP_DEFAULT_PORT = 22;    //等待超时的最大值;
@@ -79,7 +79,7 @@ public class SftpUtil {
     public ChannelSftp  getconnect(String host, String username, String password,int port) {
         try {
             if (sftp != null) {
-                LogUtil.info("sftp不为空！");
+                LogUtil.debug("sftp不能为空！");
             }
             JSch jsch = new JSch();
             jsch.getSession(username, host, port);

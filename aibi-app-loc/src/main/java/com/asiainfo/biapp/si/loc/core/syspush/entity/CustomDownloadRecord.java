@@ -99,7 +99,10 @@ public class CustomDownloadRecord extends BaseEntity{
     @ApiParam(value = "下载次数")
     private String downloadNum;
     
-    public CustomDownloadRecord() {}
+    public CustomDownloadRecord() {
+        super();
+    }
+    
     public CustomDownloadRecord(String customId, String dataDate) {
         this.customId = customId;
         this.dataDate = dataDate;

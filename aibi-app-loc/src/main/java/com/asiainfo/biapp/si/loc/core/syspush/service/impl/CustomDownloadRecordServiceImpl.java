@@ -57,10 +57,6 @@ public class CustomDownloadRecordServiceImpl extends BaseServiceImpl<CustomDownl
     
     public Page<CustomDownloadRecord> selectCustomDownloadRecordPageList(Page<CustomDownloadRecord> page, CustomDownloadRecord customDownloadRecord) throws BaseException {
         Page<CustomDownloadRecord> customDownloadRecords = iCustomDownloadRecordDao.selectCustomDownloadRecordPageList(page, customDownloadRecord);
-//        List<CustomDownloadRecord> data = customDownloadRecords.getData();
-//        if (null != customDownloadRecords || data.size() == 0) {
-//            customDownloadRecords.getData().add(new CustomDownloadRecord("", "", "", null, null, ""));
-//        }
         
         return customDownloadRecords;
     }

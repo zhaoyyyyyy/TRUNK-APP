@@ -161,7 +161,7 @@ public class DimTableDataServiceImpl extends BaseServiceImpl<DimTableData, DimTa
             }
         }
         
-        LogUtil.info("dimTableInfo2Data--------->>>>>>>end.cost:"+((System.currentTimeMillis()-s)/1000L)+"s.");
+        LogUtil.info("dimTableInfo2Data end.cost:"+((System.currentTimeMillis()-s)/1000L)+"s.");
     }
     
     /**

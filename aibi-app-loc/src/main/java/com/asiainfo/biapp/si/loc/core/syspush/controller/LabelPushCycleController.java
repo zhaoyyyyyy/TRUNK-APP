@@ -263,10 +263,8 @@ public class LabelPushCycleController extends BaseController<LabelPushCycle>{
         String sftpIp = cacheProxy.getSYSConfigInfoByKey("LOC_CONFIG_SYS_SFTP_IP");
         String sftpPort = cacheProxy.getSYSConfigInfoByKey("LOC_CONFIG_SYS_SFTP_PORT");
         String sftpBasePath = cacheProxy.getSYSConfigInfoByKey("LOC_CONFIG_SYS_SFTP_BASE_PATH");
-        if (StringUtil.isNotBlank(sftpBasePath)) {
-            if (sftpBasePath.endsWith(File.separator)) {
-                sftpBasePath = sftpBasePath.replace(File.separator, "");
-            } 
+        if (StringUtil.isNotBlank(sftpBasePath) && sftpBasePath.endsWith(File.separator)) {
+            sftpBasePath = sftpBasePath.replace(File.separator, "");
         }
         
         //保存sysInfo,以便走手动推送流程
@@ -300,7 +298,6 @@ public class LabelPushCycleController extends BaseController<LabelPushCycle>{
                 localPathTmp = localPathTmp.substring(0, localPathTmp.length()-2);
             }
         }
-//        sysInfo.setLocalPath(localPathTmp);
         if (StringUtil.isBlank(sysInfo.getSysId())) {
             iSysInfoService.save(sysInfo);
         } else {

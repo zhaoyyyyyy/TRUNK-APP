@@ -70,7 +70,7 @@ public class CustomDownloadRecordDaoImpl extends BaseDaoImpl<CustomDownloadRecor
     public Map<String, Object> fromBean(CustomDownloadRecord customDownloadRecord){
         Map<String, Object> reMap = new HashMap<>();
         Map<String, Object> params = new HashMap<>();
-        StringBuffer hql = new StringBuffer("from CustomDownloadRecord l where 1=1 ");
+        StringBuilder hql = new StringBuilder("from CustomDownloadRecord l where 1=1 ");
         if(StringUtil.isNoneBlank(customDownloadRecord.getRecordId())){
             hql.append("and l.recordId = :recordId ");
             params.put("recordId", customDownloadRecord.getRecordId());
