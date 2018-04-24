@@ -63,6 +63,6 @@ public class BaseConstants {
     /** 清单PRODUCT_NO是否去隐私化处理 */
     public static final String PRODUCT_NO_HAS_PRIVACY = "PRODUCT_NO_HAS_PRIVACY";
     
-    public static final String STORAGE_FORMATE = "LOC_CONFIG_SYS_STORAGE_FORMATE";
+    public static final String STORAGE_FORMATE = "LOC_CONFIG_SYS_BGDB_STORAGE_FORMATE";
 	
 }
