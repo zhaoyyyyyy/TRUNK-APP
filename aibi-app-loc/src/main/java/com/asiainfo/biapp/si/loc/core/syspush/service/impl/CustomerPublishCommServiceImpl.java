@@ -224,8 +224,7 @@ public class CustomerPublishCommServiceImpl implements ICustomerPublishCommServi
             if (StringUtil.isNotEmpty(orderbyStr)) {
             		orderbyStr.delete(orderbyStr.length()-1, orderbyStr.length());
             } else {
-            		orderbyStr.append(ServiceConstants.KHQ_CROSS_COLUMN);
-                    orderbyStr.append("m.").append(ServiceConstants.KHQ_CROSS_COLUMN);
+                orderbyStr.append("m.").append(ServiceConstants.KHQ_CROSS_COLUMN);
             }
             sql.append(" order by ").append(orderbyStr);
             

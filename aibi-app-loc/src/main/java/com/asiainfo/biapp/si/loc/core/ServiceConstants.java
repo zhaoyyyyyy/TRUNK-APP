@@ -209,6 +209,14 @@ public class ServiceConstants {
         public static final int IS_NEED_XML_NO = 0;
         /** 1:需要XML加密 */
         public static final int IS_NEED_XML_YES = 1;
+        
+        /**
+         * 是否允许推送属性：不允许：0；允许：1
+         */
+        /** 是否允许推送属性：不允许：0 */
+        public static final int IS_ALLOW_ATTR_NO = 0;
+        /** 是否允许推送属性：允许：1 */
+        public static final int IS_ALLOW_ATTR_YES = 1;
 	}
 	
     /** 标签信息表 */

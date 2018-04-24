@@ -78,9 +78,6 @@ public class SftpUtil {
      * */
     public ChannelSftp  getconnect(String host, String username, String password,int port) {
         try {
-            if (sftp != null) {
-                LogUtil.debug("sftp不能为空！");
-            }
             JSch jsch = new JSch();
             jsch.getSession(username, host, port);
             Session sshSession = jsch.getSession(username, host, port);
