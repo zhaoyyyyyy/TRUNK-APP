@@ -1,18 +1,15 @@
 /*
- * @(#)ICustomGenerateViewDao.java
- * 
+ * @(#)CustomGenerateViewVo.java
+ *
  * CopyRight (c) 2017 北京亚信智慧数据科技有限公司 保留所有权利。
  */
-package com.asiainfo.biapp.si.loc.core.serviceMonitor.dao;
+package com.asiainfo.biapp.si.loc.core.serviceMonitor.vo;
 
-import com.asiainfo.biapp.si.loc.base.dao.BaseDao;
-import com.asiainfo.biapp.si.loc.base.page.Page;
 import com.asiainfo.biapp.si.loc.core.serviceMonitor.entity.CustomGenerateView;
-import com.asiainfo.biapp.si.loc.core.serviceMonitor.vo.CustomGenerateViewVo;
 
 /**
  * 
- * Title : ICustomGenerateViewDao
+ * Title : CustomGenerateViewVo
  * <p/>
  * Description : 
  * <p/>
@@ -31,8 +28,9 @@ import com.asiainfo.biapp.si.loc.core.serviceMonitor.vo.CustomGenerateViewVo;
  * @author  shaosq
  * @version 1.0.0.2018年4月24日
  */
-public interface ICustomGenerateViewDao extends BaseDao<CustomGenerateView, String>{
+public class CustomGenerateViewVo  extends CustomGenerateView{
 
-    Page<CustomGenerateView> queryCustomGenerateViewPage(Page<CustomGenerateView> page,CustomGenerateViewVo customGenerateViewVo, String configId);
+    /**  */
+    private static final long serialVersionUID = 6550115366071978264L;
 
 }

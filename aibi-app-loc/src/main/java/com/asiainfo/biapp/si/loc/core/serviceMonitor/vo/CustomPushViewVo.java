@@ -1,18 +1,15 @@
 /*
- * @(#)ICustomPushViewDao.java
- * 
+ * @(#)CustomPushViewVo.java
+ *
  * CopyRight (c) 2017 北京亚信智慧数据科技有限公司 保留所有权利。
  */
-package com.asiainfo.biapp.si.loc.core.serviceMonitor.dao;
+package com.asiainfo.biapp.si.loc.core.serviceMonitor.vo;
 
-import com.asiainfo.biapp.si.loc.base.dao.BaseDao;
-import com.asiainfo.biapp.si.loc.base.page.Page;
 import com.asiainfo.biapp.si.loc.core.serviceMonitor.entity.CustomPushView;
-import com.asiainfo.biapp.si.loc.core.serviceMonitor.vo.CustomPushViewVo;
 
 /**
  * 
- * Title : ICustomPushViewDao
+ * Title : CustomPushViewVo
  * <p/>
  * Description : 
  * <p/>
@@ -31,8 +28,9 @@ import com.asiainfo.biapp.si.loc.core.serviceMonitor.vo.CustomPushViewVo;
  * @author  shaosq
  * @version 1.0.0.2018年4月24日
  */
-public interface ICustomPushViewDao extends BaseDao<CustomPushView, String>{
+public class CustomPushViewVo extends CustomPushView{
 
-    Page<CustomPushView> queryCustomPushViewPage(Page<CustomPushView> page,CustomPushViewVo customPushViewVo, String configId);
+    /**  */
+    private static final long serialVersionUID = 8932823894246864560L;
 
 }

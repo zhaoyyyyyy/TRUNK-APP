@@ -1,18 +1,15 @@
 /*
- * @(#)ILabelGenerateViewDao.java
- * 
+ * @(#)LabelGenerateViewVo.java
+ *
  * CopyRight (c) 2017 北京亚信智慧数据科技有限公司 保留所有权利。
  */
-package com.asiainfo.biapp.si.loc.core.serviceMonitor.dao;
+package com.asiainfo.biapp.si.loc.core.serviceMonitor.vo;
 
-import com.asiainfo.biapp.si.loc.base.dao.BaseDao;
-import com.asiainfo.biapp.si.loc.base.page.Page;
 import com.asiainfo.biapp.si.loc.core.serviceMonitor.entity.LabelGenerateView;
-import com.asiainfo.biapp.si.loc.core.serviceMonitor.vo.LabelGenerateViewVo;
 
 /**
  * 
- * Title : ILabelGenerateViewDao
+ * Title : LabelGenerateViewVo
  * <p/>
  * Description : 
  * <p/>
@@ -31,8 +28,9 @@ import com.asiainfo.biapp.si.loc.core.serviceMonitor.vo.LabelGenerateViewVo;
  * @author  shaosq
  * @version 1.0.0.2018年4月24日
  */
-public interface ILabelGenerateViewDao extends BaseDao<LabelGenerateView, String>{
+public class LabelGenerateViewVo extends LabelGenerateView {
 
-    Page<LabelGenerateView> queryLabelGenerateViewPage(Page<LabelGenerateView> page,LabelGenerateViewVo labelGenerateViewVo, String configId);
+    /**  */
+    private static final long serialVersionUID = -6988000387682157431L;
 
 }
