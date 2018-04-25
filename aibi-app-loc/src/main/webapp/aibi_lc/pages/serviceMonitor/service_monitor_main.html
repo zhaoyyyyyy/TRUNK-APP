@@ -25,19 +25,18 @@
 	<div class="ui-lc-mian mt10">
 		<ul class="ui-label-list">
 			 <li class="ui-monitor-item" v-for="(item,index) in configData" v-cloak>
-				<span :value="item.sourceName" :id="item.configId" @click="changeMonitorByDate" :class="{padding0 : (index+1)%3 ==0 }" class=" clearfix" >{{item.sourceName}}</span>
+				<span :value="item.sourceName"  @click="clickConfigData(item)" :class="{padding0 : (index+1)%3 ==0 }" class=" clearfix" >{{item.sourceName}}</span>
 			</li> 
 		</ul>
 	</div>
 	
 	<!--动态生成每个专区监控总览信息-->
-	<div  v-for="(item,index) in monitorData" v-cloak >
+	<div  v-for="(item,index) in monitorData" :id="item.configId" v-cloak >
 		<div class="ui-lc-mian mt10 ui-morior-border">
 			<div class="ui-prefecture">
 				<div>
 					<h3>{{item.sourceName}}</h3>
-					<input type="hidden" id="configId"  v-bind:value="item.configId" />
-					<div class="dropdown pre-dropdown" v-bind:class="{open:item.isOpen}" :data-cycleId="item.configId">
+					<div class="dropdown pre-dropdown" v-bind:class="{open:item.isOpen}">
 						 <a class="prefectrue-span"  @click="showDate(item)" >
 						        <span class="pre-cycle-name">
 						        	日周期&nbsp;
@@ -47,39 +46,30 @@
 						 </a>
 						<ul class="dropdown-menu">
 							<li>
-								<span @click="initDateByCycle">日周期 </span>
+								<span @click="initDateByCycle('day')">日周期 </span>
 							</li>
 							<li>
-								<span @click="initDateByCycle">月周期</span>  
+								<span @click="initDateByCycle('month')">月周期</span>  
 							</li>   
 						</ul>
 					</div>
 				    
 					<em></em>
-					<div class="dropdown pre-dropdown" v-bind:class="{open:item.isActive}" :data-cycleId="item.configId">
-						<a class="prefectrue-span" @click="dateToggle(item)">2018-02-12<em class="ml20"></em></a>
+					<div class="dropdown pre-dropdown" v-bind:class="{open:item.isActive}" >
+						<a class="prefectrue-span" :data-cycleId="item.configId"  @click="dateToggle(item)" @change="changeMonitorByDate">{{dataDate}}<em class="ml20"></em></a>
 						<ul class="dropdown-menu">
 							
 						</ul>
 					</div>
-					
-					<!-- <div class="dropdown pre-dropdown" id="dateTime">
-						   <a href="javascript:;" class="dropdown-toggle">
-						        <span class="pre-date-name"></span>
-						    	<span class="caret"></span>
-						   </a>
-					       <ul class="dropdown-menu">
-					       </ul> 
-				    </div> -->
-					<!-- <span class="prefectrue-span" @click="changeMonitorByDate" :data-configId="item.configId">{{dataDate}}<em class="ml20"></em></span> -->
 				</div>
 				<ul class="ui-label-list clearfix mt10">
 					<li class="ui-prerecture-item">
 						<div>
 							<div class="per-header clearfix">
-								<span class="fleft"><em class="data-ready"></em>数据准备</span>
+								<span class="fleft" ><em class="data-ready"></em><a href="service_monitor_detail.html#dataPrepareAnchor">数据准备</a></span>
 								<p class="fright">
-									<span>共<strong>30</strong>张源表  ，成功<strong>{{item.extractSuccessCount}}</strong>个</span>
+									<span>共<strong>{{item.notPrepareCount + item.preparedCount +item.extractingCount+item.extractSuccessCount+item.extractFailCount}}</strong>张源表  ，
+									成功<strong>{{item.extractSuccessCount}}</strong>个</span>
 								</p>
 							</div>
 							<ul class="per-status ui-label-list mt30">
@@ -109,9 +99,10 @@
 			     	<li class="ui-prerecture-item">
 						<div>
 							<div class="per-header clearfix">
-								<span class="fleft"><em class="label-build"></em>标签生成</span>
+								<span class="fleft"><em class="label-build"></em><a href="service_monitor_detail.html#labelGenerateAnchor">标签生成</a></span>
 								<p class="fright">
-									<span>共<strong>781</strong>个日标签 ，成功<strong>{{item.genSuccessCount}}</strong>个</span>
+									<span>共<strong>{{item.genSuccessCount +item.genFailCount+item.curSaveCount }}</strong>个日标签 ，
+									成功<strong>{{item.genSuccessCount}}</strong>个</span>
 								</p>
 							</div>
 							<ul class="per-status ui-label-list mt30">
@@ -133,9 +124,10 @@
 					<li class="ui-prerecture-item">
 						<div>
 							<div class="per-header clearfix">
-								<span class="fleft"><em class="label-custom"></em>客户群生成</span>
+								<span class="fleft"><em class="label-custom"></em><a href="service_monitor_detail.html#customGenerateAnchor">客户群生成</a></span>
 								<p class="fright">
-									<span>共<strong>30</strong>个日周期客户群 ，成功<strong>{{item.customSuccessCount}}</strong>个</span>
+									<span>共<strong>{{item.customPrepareCount+item.customCreatingCount+item.customSuccessCount+item.customAppointCount+item.customFailCount}}</strong>个日周期客户群 ，
+									成功<strong>{{item.customSuccessCount}}</strong>个</span>
 								</p>
 							</div>
 							<ul class="per-status ui-label-list mt30">
@@ -165,9 +157,10 @@
 					<li class="ui-prerecture-item padding0">
 						<div>
 							<div class="per-header clearfix">
-								<span class="fleft"><em class="label-custom"></em>客户群推送</span>
+								<span class="fleft"><em class="label-custom"></em><a href="service_monitor_detail.html#customPushAnchor">客户群推送</a></span>
 								<p class="fright">
-									<span>共<strong>25</strong>个待推送的客户群 ，成功<strong>{{item.pushSuccessCount}}</strong>个</span>
+									<span>共<strong>{{item.pushSuccessCount + item.pushingCount +item.pushFailCount}}</strong>个待推送的客户群 ，
+									成功<strong>{{item.pushSuccessCount}}</strong>个</span>
 								</p>
 							</div>
 							<ul class="per-status ui-label-list mt30">

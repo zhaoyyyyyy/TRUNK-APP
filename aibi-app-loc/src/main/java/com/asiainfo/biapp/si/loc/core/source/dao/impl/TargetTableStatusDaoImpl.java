@@ -51,21 +51,26 @@ public class TargetTableStatusDaoImpl extends BaseDaoImpl<TargetTableStatus, Str
     public Page<TargetTableStatus> selectTargetTableStatusPageList(Page<TargetTableStatus> page,
             TargetTableStatusVo targetTableStatusVo) {
         Map<String, Object> reMap = fromBean(targetTableStatusVo);
+        @SuppressWarnings("unchecked")
         Map<String, Object> params = (Map<String, Object>) reMap.get("params");
         return super.findPageByHql(page, reMap.get("hql").toString(), params);
     }
 
     public List<TargetTableStatus> selectTargetTableStatusList(TargetTableStatusVo targetTableStatusVo) {
         Map<String, Object> reMap = fromBean(targetTableStatusVo);
+        @SuppressWarnings("unchecked")
         Map<String, Object> params = (Map<String, Object>) reMap.get("params");
         return super.findListByHql(reMap.get("hql").toString(), params);
     }
     
     @Override
-    public Page<TargetTableStatus> selectTargetTableStatusPageListByConfigId(Page<TargetTableStatus> page,String configId) {
-        Map<String, Object> params = new HashMap<>();
-        StringBuffer hqls = new StringBuffer("from TargetTableStatus s where s.sourceTableId in(select a.sourceTableId from SourceTableInfo a where a.configId= :configId) ");
-        hqls.append("order by s.sourceTableName asc,s.dataDate desc ");
+    public Page<TargetTableStatus> selectTargetTableStatusPageListByConfigId(Page<TargetTableStatus> page,TargetTableStatusVo targetTableStatusVo,String configId) {
+        Map<String, Object> reMap = fromBean(targetTableStatusVo);
+        @SuppressWarnings("unchecked")
+        Map<String, Object> params = (Map<String, Object>) reMap.get("params");
+        String hqls =reMap.get("hql").toString();
+        hqls += "and d.sourceTableId in(select a.sourceTableId from SourceTableInfo a where a.configId= :configId) ";
+        hqls += "order by d.sourceTableName asc,d.dataDate desc ";
         params.put("configId", configId);
         return super.findPageByHql(page, hqls.toString(), params);
     }
@@ -79,12 +84,12 @@ public class TargetTableStatusDaoImpl extends BaseDaoImpl<TargetTableStatus, Str
             params.put("tableId", targetTableStatusVo.getSourceTableId());
         }
         if (StringUtils.isNotBlank(targetTableStatusVo.getSourceTableName())) {
-            hql.append("and d.cooTableName = :cooTableName ");
-            params.put("cooTableName", targetTableStatusVo.getSourceTableName());
+            hql.append("and d.sourceTableName LIKE :sourceTableName ");
+            params.put("sourceTableName", "%" + targetTableStatusVo.getSourceTableName() + "%");
         }
         if (null != targetTableStatusVo.getSourceTableType()) {
-            hql.append("and d.cooTableType = :cooTableType ");
-            params.put("cooTableType", targetTableStatusVo.getSourceTableType());
+            hql.append("and d.sourceTableType = :sourceTableType ");
+            params.put("sourceTableType", targetTableStatusVo.getSourceTableType());
         }
         if (null != targetTableStatusVo.getManualExecution()) {
             hql.append("and d.manualExecution = :manualExecution ");

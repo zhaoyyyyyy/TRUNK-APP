@@ -36,7 +36,7 @@ import com.asiainfo.biapp.si.loc.base.entity.BaseEntity;
  * @version 1.0.0.2018年4月24日
  */
 @Entity
-@Table(name = "V_LABEL_GENERATE_VIEW")
+@Table(name = "V_MONITOR_LABEL_GENERATE_VIEW")
 public class LabelGenerateView extends BaseEntity{
 
     /**  */

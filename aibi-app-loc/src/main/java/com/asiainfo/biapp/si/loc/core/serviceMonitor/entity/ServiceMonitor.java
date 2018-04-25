@@ -38,7 +38,7 @@ import com.asiainfo.biapp.si.loc.base.entity.BaseEntity;
  */
 
 @Entity
-@Table(name = "V_CONFIG_DATA_STATUS")
+@Table(name = "V_MONITOR_CONFIG_DATA_STATUS")
 public class ServiceMonitor extends BaseEntity {
 
 

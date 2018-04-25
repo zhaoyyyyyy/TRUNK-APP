@@ -65,8 +65,9 @@ public interface ITargetTableStatusDao extends BaseDao<TargetTableStatus, String
      *
      * @param page
      * @param configId
+     * @param targetTableStatusVo
      * @return
      */
-    public Page<TargetTableStatus> selectTargetTableStatusPageListByConfigId(Page<TargetTableStatus> page, String configId);
+    public Page<TargetTableStatus> selectTargetTableStatusPageListByConfigId(Page<TargetTableStatus> page, TargetTableStatusVo targetTableStatusVo,String configId);
 
 }
