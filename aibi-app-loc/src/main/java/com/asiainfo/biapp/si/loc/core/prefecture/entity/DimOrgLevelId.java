@@ -4,7 +4,7 @@
  * CopyRight (c) 2018 北京亚信智慧数据科技有限公司 保留所有权利。
  */
 
-package com.asiainfo.biapp.si.loc.core.back.entity;
+package com.asiainfo.biapp.si.loc.core.prefecture.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;

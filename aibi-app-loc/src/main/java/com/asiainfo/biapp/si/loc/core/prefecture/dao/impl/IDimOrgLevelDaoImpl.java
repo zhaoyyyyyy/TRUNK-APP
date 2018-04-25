@@ -4,7 +4,7 @@
  * CopyRight (c) 2018 北京亚信智慧数据科技有限公司 保留所有权利。
  */
 
-package com.asiainfo.biapp.si.loc.core.back.dao.impl;
+package com.asiainfo.biapp.si.loc.core.prefecture.dao.impl;
 
 import java.util.HashMap;
 import java.util.List;
@@ -15,9 +15,9 @@ import org.springframework.stereotype.Repository;
 import com.asiainfo.biapp.si.loc.base.dao.BaseDaoImpl;
 import com.asiainfo.biapp.si.loc.base.page.Page;
 import com.asiainfo.biapp.si.loc.base.utils.StringUtil;
-import com.asiainfo.biapp.si.loc.core.back.dao.IDimOrgLevelDao;
-import com.asiainfo.biapp.si.loc.core.back.entity.DimOrgLevel;
-import com.asiainfo.biapp.si.loc.core.back.vo.DimOrgLevelVo;
+import com.asiainfo.biapp.si.loc.core.prefecture.dao.IDimOrgLevelDao;
+import com.asiainfo.biapp.si.loc.core.prefecture.entity.DimOrgLevel;
+import com.asiainfo.biapp.si.loc.core.prefecture.vo.DimOrgLevelVo;
 
 /**
  * Title : IDimOrgLevelDaoImpl

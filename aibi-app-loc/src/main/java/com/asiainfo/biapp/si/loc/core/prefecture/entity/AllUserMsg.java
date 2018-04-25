@@ -4,7 +4,7 @@
  * CopyRight (c) 2018 北京亚信智慧数据科技有限公司 保留所有权利。
  */
 
-package com.asiainfo.biapp.si.loc.core.back.entity;
+package com.asiainfo.biapp.si.loc.core.prefecture.entity;
 
 import java.util.Set;
 
@@ -22,7 +22,6 @@ import javax.persistence.Transient;
 import org.hibernate.annotations.GenericGenerator;
 
 import com.asiainfo.biapp.si.loc.base.entity.BaseEntity;
-import com.asiainfo.biapp.si.loc.core.prefecture.entity.PreConfigInfo;
 
 import io.swagger.annotations.ApiParam;
 

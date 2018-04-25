@@ -4,7 +4,7 @@
  * CopyRight (c) 2018 北京亚信智慧数据科技有限公司 保留所有权利。
  */
 
-package com.asiainfo.biapp.si.loc.core.back.controller;
+package com.asiainfo.biapp.si.loc.core.prefecture.controller;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,9 +19,9 @@ import com.asiainfo.biapp.si.loc.base.controller.BaseController;
 import com.asiainfo.biapp.si.loc.base.exception.BaseException;
 import com.asiainfo.biapp.si.loc.base.page.Page;
 import com.asiainfo.biapp.si.loc.base.utils.WebResult;
-import com.asiainfo.biapp.si.loc.core.back.entity.AllUserMsg;
-import com.asiainfo.biapp.si.loc.core.back.service.IAllUserMsgService;
-import com.asiainfo.biapp.si.loc.core.back.vo.AllUserMsgVo;
+import com.asiainfo.biapp.si.loc.core.prefecture.entity.AllUserMsg;
+import com.asiainfo.biapp.si.loc.core.prefecture.service.IAllUserMsgService;
+import com.asiainfo.biapp.si.loc.core.prefecture.vo.AllUserMsgVo;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
