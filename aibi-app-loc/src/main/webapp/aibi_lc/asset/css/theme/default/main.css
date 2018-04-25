@@ -1785,14 +1785,17 @@ animation-delay: .8s;
 .ui-prefecture.ui-lc-mian{
 	padding:0 10px;
 }
-.ui-prefecture > div.ui-pre-detail > p{
+.ui-fresh-box{
 	border-right:1px solid #DCE2E4;
 	height:60px;
-	line-height:60px;
 	padding:0 10px;
 	display:inline-block;
+	line-height:60px;
 }
-.ui-pre-detail > p > span{
+.ui-fresh-box .control-input{
+	width:auto;
+}
+.ui-pre-detail > p > span.refresh-inner{
 	display:inline-block;
 	margin:0 0 0 20px;
 	background:#f2f2f2;
@@ -1843,6 +1846,7 @@ animation-delay: .8s;
 	top:30px;
 	margin:0;
 	min-width:100%;
+	z-index:999999;
 }
 .ui-status > .dropdown > .dropdown-menu>li>a{
 	padding:2px 0 2px 12px;
