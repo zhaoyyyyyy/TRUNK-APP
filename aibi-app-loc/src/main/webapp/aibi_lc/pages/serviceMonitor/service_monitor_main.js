@@ -12,7 +12,8 @@ window.loc_onload = function() {
         	dateCycle:"day",//周期默认为日周期
         	dataDate:'',//日期
         	configData:[],//专区信息
-        	monitorData:[] //运营监控总览数据
+        	monitorData:[], //运营监控总览数据
+        	isChecked:true,
         },
         methods:{
             initData:function(){
@@ -29,6 +30,9 @@ window.loc_onload = function() {
         			postData:{"configStatus":1},
         			onSuccess:function(result){
         				if(result.data && result.data.length > 0){
+        				    for(var i=0;i<result.data.length;i++){
+        				   		result.data[i].isChecked=true;
+        				    }
         				   that.configData = result.data;
         				   //默认全部专区选中状态
         				}
@@ -126,6 +130,7 @@ window.loc_onload = function() {
         },
         mounted: function() {
             this.initData();
+            
         }
     });
 };
