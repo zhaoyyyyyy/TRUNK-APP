@@ -26,7 +26,8 @@ window.loc_onload = function() {
 			postData:"",  //表格参数
 			colNames:"",  //表格表头
 			colModel:"",  //表格模型
-			pager:""   //表格分页id
+			pager:"" ,  //表格分页id
+			zbFlag:true //数据准备表格默认显示准备状态
 		},
 		methods:{
 			loadMonitorDetailData:function(){
@@ -82,10 +83,10 @@ window.loc_onload = function() {
 			},
 			qryTableByCond:function(e){
 				var $el=$(e.target);
-				var tableId = $el.attr("data-tableId");
-				var formSearchId = $el.attr("data-formSearchId");
-				$(tableId).setGridParam({
-					postData: $(formSearchId).formToJson()
+				var $tableId = $("#"+$el.attr("data-tableId"));
+				var $formSearchId = $("#"+$el.attr("data-formSearchId"));
+				$($tableId).setGridParam({
+					postData: $formSearchId.formToJson()
 				}).trigger("reloadGrid", [{
 					page: 1
 				}]);
@@ -104,7 +105,15 @@ window.loc_onload = function() {
 	        setTimer: function () {
 	            clearTimeout(this.timerId);   // 关闭定时器
 	            this.timerId = setTimeout(function(){
-	                this.loadMonitorDetailData(this.configId);
+	            	 this.loadMonitorDetailData(this.configId);
+	     		    //加载数据准备表格
+	     			this.initDataPrepareTable(true);
+	     			//加载标签生成表格
+	     			this.initLabelGenerateTable();
+	       			//加载客户群生成表格
+	     			this.initCustomGenerateTable();
+	      			//加载客户群推送表格
+	     			this.initCustomPushTable();
 	            }.bind(this),this.defaultTimes);
 	        },
 	        //获取运营监控状态字典
@@ -171,6 +180,7 @@ window.loc_onload = function() {
 		    },
 		    //初始化数据准备表格
 		    initDataPrepareTable:function(status){
+		    	this.zbFlag = status;
 		    	this.tableId = "#dataPrepareTable";
 		    	this.tableUrl = $.ctx + "/api/monitor/detail/queryDataPreparePagebyConfigId";
 		    	this.postData = {'configId' : this.configId};
@@ -403,13 +413,8 @@ window.loc_onload = function() {
 			this.initCustomGenerateTable();
  			//加载客户群推送表格
 			this.initCustomPushTable();
-//			this.setTimes($("#refreshId").val());
+			this.refresh();
 		}
-		
-	});
-	 
-	//监测v-for动态生成模板之后,获取dom
-	monitorDetail.$nextTick(function() {
 		
 	});
 };

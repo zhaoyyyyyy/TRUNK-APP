@@ -31,7 +31,7 @@
 	                    <div class="refresh-key">数据刷新频率:</div>
 	                    
 	                    <select  @change="refresh" id="refreshId" >
-	                        <option v-for="d in sjsxplList">次/{{d.code}}秒</option>
+	                        <option v-for="d in sjsxplList" v-if="d.dataName == 5" selected>次/{{d.dataName}}秒</option>
 	                    </select>
 	                    
 	                </div>
@@ -166,10 +166,10 @@
 				</ul>
 			</div>
 		</div>
-    	<div class="ui-lc-mian mt10 ui-pre-progress"  v-for="d in yyjkList" >
-			<span class="ui-pre-refresh ml20" id="dataPrepare">{{d.dataName}}<em></em></span>
-    	</div>
-    	<div class="ui-lc-mian mt10">
+        <div class="ui-lc-mian mt10 ui-pre-progress"  v-for="d in yyjkList" >
+			<span class="ui-pre-refresh ml20" id="dataPrepare+'d.dataName'" @click="jumpTable">{{d.dataName}}<em></em></span>
+    	</div> 
+    	<div class="ui-lc-mian mt10" id="dataPrepareAnchor">
     		<h3 class="clearfix pre-jqgrid">
     			数据准备
     			<div class="ui-status">
@@ -190,7 +190,7 @@
     		    <form id="formSearch-dataPrepare" class="form-inline data-form fright">
 	    			<div class="form-group fright">
 						<div class="input-group">
-							<input name="dataPrepareName" id="dataPrepareName" type="text" class="form-control input-pointer" placeholder="模糊查询" />
+							<input name="sourceTableName" id="sourceTableName" type="text" class="form-control input-pointer" placeholder="模糊查询" />
 							<div class="input-group-addon input-group-icon right-child" id="btn_search_data" data-tableId="dataPrepareTable" data-formSearchId="formSearch-dataPrepare" @keyup.enter="qryTableByCond($event)" @click="qryTableByCond($event)"></div>			
 						</div>						
 					</div>
@@ -201,7 +201,7 @@
                 <div id="dataPreparePager"></div>
             </div>
     	</div>
-    	<div class="ui-lc-mian mt30">
+    	<div class="ui-lc-mian mt30" id="labelGenerateAnchor">
     		<h3 class="clearfix pre-jqgrid">
     			标签生成
     			<div class="ui-status">
@@ -213,7 +213,7 @@
     			<form id="formSearch-labelGenerate" class="form-inline data-form fright">
 	    			<div class="form-group fright">
 						<div class="input-group">
-							<input name="labelGenerateName" id="labelGenerateName" type="text" class="form-control input-pointer" placeholder="模糊查询" />
+							<input name="labelName" id="labelName" type="text" class="form-control input-pointer" placeholder="模糊查询" />
 							<div class="input-group-addon input-group-icon right-child" id="btn_search_label" data-tableId="labelGenerateTable" data-formSearchId="formSearch-labelGenerate" @keyup.enter="qryTableByCond($event)" @click="qryTableByCond($event)"></div>			
 						</div>						
 					</div>
@@ -228,7 +228,7 @@
     			<span>点击上面的失败，展开显示异常的详情 ，不点击收起状态 </span>
     		</div>
     	</div>
-    	<div class="ui-lc-mian mt10">
+    	<div class="ui-lc-mian mt10" id="customGenerateAnchor">
     		<h3 class="clearfix pre-jqgrid">
     			客户群生成
     			<div class="ui-status">
@@ -240,7 +240,7 @@
     		    <form id="formSearch-customGenerate" class="form-inline data-form fright">
 	    			<div class="form-group fright">
 						<div class="input-group">
-							<input name="customGenerateName" id="customGenerateName" type="text" class="form-control input-pointer" placeholder="模糊查询" />
+							<input name="labelName" id="labelName" type="text" class="form-control input-pointer" placeholder="模糊查询" />
 							<div class="input-group-addon input-group-icon right-child" id="btn_search_custom" data-tableId="customGenerateTable" data-formSearchId="formSearch-customGenerate" @keyup.enter="qryTableByCond($event)" @click="qryTableByCond($event)"></div>			
 						</div>						
 					</div>
@@ -251,7 +251,7 @@
                 <div id="customGeneratePager"></div>
             </div>
     	</div>
-    	<div class="ui-lc-mian mt30">
+    	<div class="ui-lc-mian mt30" id="customPushAnchor">
     		<h3 class="clearfix pre-jqgrid">
     			客户群推送
     			<div class="ui-status">
@@ -263,7 +263,7 @@
     			 <form id="formSearch-customPush" class="form-inline data-form fright">
 	    			<div class="form-group fright">
 						<div class="input-group">
-							<input name="customPushName" id="customPushName" type="text" class="form-control input-pointer" placeholder="模糊查询" />
+							<input name="labelName" id="labelName" type="text" class="form-control input-pointer" placeholder="模糊查询" />
 							<div class="input-group-addon input-group-icon right-child" id="btn_search_push" data-tableId="customPushTable" data-formSearchId="formSearch-customPush" @keyup.enter="qryTableByCond($event)" @click="qryTableByCond($event)"></div>			
 						</div>						
 					</div>
