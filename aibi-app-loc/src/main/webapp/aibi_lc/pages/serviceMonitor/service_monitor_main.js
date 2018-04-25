@@ -16,12 +16,14 @@ window.loc_onload = function() {
         	isChecked:true,
         },
         methods:{
+        	//页面初始化函数
             initData:function(){
             	var now = new Date();
             	this.dataDate = $.dateFormat(new Date(now.getTime() - 3*24*60*60*1000),"yyyy-MM-dd");
             	this.initConfigData();
             	this.initMonitorMain();
             },
+            //加载专区
             initConfigData:function(){
             	var that = this;
             	$.commAjax({
@@ -39,7 +41,8 @@ window.loc_onload = function() {
         			}
         		});
             },
-            clickConfigData:function(item){//点击专区，动态刷新监控数据
+            //点击专区，动态刷新监控数据
+            clickConfigData:function(item){
 				var configId = item.configId;
 				if(typeof item.isChecked=='undefined'){
 					this.$set(item,"isChecked",true);
@@ -52,6 +55,7 @@ window.loc_onload = function() {
 					$("#"+configId+"monitor").show();
 				}
             },
+            //加载监控数据
             initMonitorMain:function(){
             	var that = this;
             	$.commAjax({
@@ -64,6 +68,7 @@ window.loc_onload = function() {
                     }
                 });
             },
+            //点击周期，初始化日期
             initDateByCycle:function(dateCycle,item,event){
             	item.isOpen=false;
             	var dateCycle=$(event.currentTarget).text();
@@ -85,7 +90,7 @@ window.loc_onload = function() {
             		item.isOpen=!item.isOpen;
             	}
             },
-             dateToggle:function(item){
+            dateToggle:function(item){
             	/*if(typeof item.isActive=='undefined'){
             		this.$set(item,"isActive",true);
             	}else{
@@ -117,6 +122,7 @@ window.loc_onload = function() {
             	}
             	
             },
+            //点击日期，刷新监控数据
             changeMonitorByDate:function(e){
             	var $el=$(e.target);
 				var configId = $el.attr("data-configId");
@@ -142,6 +148,11 @@ window.loc_onload = function() {
         		    	that.monitorData.push(data);
         		    },
         	   });
+            },
+            //跳转到监控明细页面锚点位置
+            jumpPageToDetail:function(detailAnchor){
+            	parent.toggleMenu("#serviceMonitor/service_monitor_detail");
+            	window.location='service_monitor_detail.html?detailAnchor='+detailAnchor;
             }
         },
         mounted: function() {

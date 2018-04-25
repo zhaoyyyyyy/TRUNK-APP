@@ -183,13 +183,14 @@
 	    		<h3 class="clearfix pre-jqgrid">
 	    			数据准备
 	    			<div class="ui-status">
-	    				<div class="dropdown" v-bind:class="{open:isDown}">
+	    	     	   <div class="dropdown" v-bind:class="{open:isDown}">
 	    					<span class="prefectrue-span" @click="toggleStatus()">准备状态&nbsp;<em></em></span>
 		    				<ul class="dropdown-menu" id="chooseStatus">
-						       <li><a @click="initDataPrepareTable(true,this)">准备状态</a></li>
-						       <li><a @click="initDataPrepareTable(false,this)">抽取状态</a></li>
+						       <li><a @click="initDataPrepareTable(true)">准备状态</a></li>
+						       <li><a @click="initDataPrepareTable(false)">抽取状态</a></li>
 						    </ul>
-	    				</div>
+	    				</div> 
+	    				 
 						<span  v-for="d in sjzbList" id="sjzbList" v-if="zbFlag">
 							<em></em>&nbsp;{{d.dataName}}
 						</span>
@@ -230,9 +231,9 @@
 	                <table id="labelGenerateTable"  class="table"></table>
 	                <div id="labelGeneratePager"></div>
 	            </div>
-	    		<div class="catch-error" id="catchError">
+	    		<div class="catch-error" id="catchError"  style="display: none;">
 	    			<h3>异常信息</h3>
-	    			<span>点击上面的失败，展开显示异常的详情 ，不点击收起状态 </span>
+	    			<span></span>
 	    		</div>
 	    		<!--<a name="customBuild">&nbsp;</a>-->
 	    	</div>

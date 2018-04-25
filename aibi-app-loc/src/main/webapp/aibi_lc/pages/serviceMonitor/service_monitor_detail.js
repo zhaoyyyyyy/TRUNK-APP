@@ -33,6 +33,7 @@ window.loc_onload = function() {
 			isDown:false//状态下拉
 		},
 		methods:{
+			//加载监控数据
 			loadMonitorDetailData:function(){
 				var now = new Date();
 				this.dataDate = $.dateFormat(new Date(now.getTime() - 3*24*60*60*1000),"yyyy-MM-dd");
@@ -52,6 +53,7 @@ window.loc_onload = function() {
 			toggleStatus:function(){
 				this.isDown=!this.isDown;
 			},
+			//点击周期初始化时间
 			initDateByCycle:function(e){
 				this.dateCycle = dateCycle;
             	var now = new Date();
@@ -63,8 +65,9 @@ window.loc_onload = function() {
             		$(this).parents("div.dropdown").siblings("div").children("a").html(dataMonth);
             	}
             },
+            //切换日期刷新监控数据
             changeMonitorByDate:function(e){
-            /*	var $el=$(e.target);
+            	var $el=$(e.target);
 				var configId = $el.attr("data-configId");
 				var dataDate = e.target.innerText;
             	var that = this;
@@ -83,8 +86,9 @@ window.loc_onload = function() {
         		    		that.serviceMonitorObj = data;
         		    	}
         		    },
-        	   });*/
+        	   });
             },
+            //加载监控数据
 			loadCountData:function(){
 				var that = this;
 				$.commAjax({
@@ -98,6 +102,7 @@ window.loc_onload = function() {
 					}
 				});
 			},
+			//表格查询方法
 			qryTableByCond:function(e){
 				var $el=$(e.target);
 				var $tableId = $("#"+$el.attr("data-tableId"));
@@ -124,7 +129,7 @@ window.loc_onload = function() {
 	            this.timerId = setTimeout(function(){
 	            	 this.loadMonitorDetailData(this.configId);
 	     		    //加载数据准备表格
-	     			this.initDataPrepareTable(true);
+	     			this.initDataPrepareTable(this.zbFlag);
 	     			//加载标签生成表格
 	     			this.initLabelGenerateTable();
 	       			//加载客户群生成表格
@@ -187,6 +192,7 @@ window.loc_onload = function() {
 		    	}
 		    	this.khqtsList = khqtsList;
 		    },
+		    //获取刷新频率字典
 		    loadDicSjsxpl:function(){
 		    	var sjsxplList = [];
 		    	var dicSjsxpl = $.getDicData("SJSXPL");
@@ -197,7 +203,7 @@ window.loc_onload = function() {
 		    	this.defaultPl = sjsxplList[0].code;
 		    },
 		    //初始化数据准备表格
-		    initDataPrepareTable:function(status,event){
+		    initDataPrepareTable:function(status){
 		    	//console.log(event)
 		    	this.isDown=false;
 		    	this.zbFlag = status;
@@ -293,9 +299,10 @@ window.loc_onload = function() {
 		    		width : 50,
 		    		align : "center",
 		    		sortable : false,
-		    		formatter : function(value, opts, data) {
-		        		return $.getCodeDesc("BQSCZT",value);
-		        	}
+			        formatter: function(cellvalue, options, rowObject) {
+			            var action ="showErrorInfo(" +  "'" + options.rowId + "','#labelGenerateTable')";
+			            return "<a style='color: #89B9FF;font-size: 14px;text-decoration: underline;' onclick=" + action + " >"+$.getCodeDesc("BQSCZT",cellvalue)+"</a>";
+			        }
 		    	}, {
 		    		name : 'columnName',
 		    		index : 'columnName',
@@ -425,15 +432,27 @@ window.loc_onload = function() {
 		    }
 		    // 加载初始化数据
 		    this.loadMonitorDetailData(this.configId);
+		    
 		    //加载数据准备表格
 			this.initDataPrepareTable(true);
+			
 			//加载标签生成表格
 			this.initLabelGenerateTable();
+			
   			//加载客户群生成表格
 			this.initCustomGenerateTable();
+			
  			//加载客户群推送表格
 			this.initCustomPushTable();
+			
+			//默认刷新频率
 			this.refresh(this.defaultPl);
+			
+			//从监控总览页面跳转到指定锚点位置
+			var detailAnchor = $.getUrlParam("detailAnchor");
+			if(detailAnchor){
+				location.href="#"+detailAnchor;
+			}
 		}
 		
 	});
@@ -446,4 +465,13 @@ window.loc_onload = function() {
 	})
 };
 
+/**
+ * 显示异常信息
+ * @param rowId
+ */
+function showErrorInfo(rowId,tableId){
+	$("#catchError").css("display","");
+	var rowData = $(tableId).jqGrid("getRowData", rowId);
+	$("#catchError span").text(rowData.exceptionDesc);
+}
  

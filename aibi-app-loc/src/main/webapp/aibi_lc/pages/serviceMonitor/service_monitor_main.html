@@ -73,7 +73,7 @@
 					<li class="ui-prerecture-item">
 						<div>
 							<div class="per-header clearfix">
-								<span class="fleft" ><em class="data-ready"></em><a href="service_monitor_detail.html#dataPrepareAnchor">数据准备</a></span>
+								<span class="fleft" ><em class="data-ready"></em><a @click="jumpPageToDetail('dataPrepareAnchor')">数据准备</a></span>
 								<p class="fright">
 									<span>共<strong>{{item.notPrepareCount + item.preparedCount +item.extractingCount+item.extractSuccessCount+item.extractFailCount}}</strong>张源表  ，
 									成功<strong>{{item.extractSuccessCount}}</strong>个</span>
@@ -106,7 +106,7 @@
 			     	<li class="ui-prerecture-item">
 						<div>
 							<div class="per-header clearfix">
-								<span class="fleft"><em class="label-build"></em><a href="service_monitor_detail.html#labelGenerateAnchor">标签生成</a></span>
+								<span class="fleft"><em class="label-build"></em><a @click="jumpPageToDetail('labelGenerateAnchor')">标签生成</a></span>
 								<p class="fright">
 									<span>共<strong>{{item.genSuccessCount +item.genFailCount+item.curSaveCount }}</strong>个日标签 ，
 									成功<strong>{{item.genSuccessCount}}</strong>个</span>
@@ -131,7 +131,7 @@
 					<li class="ui-prerecture-item">
 						<div>
 							<div class="per-header clearfix">
-								<span class="fleft"><em class="label-custom"></em><a href="service_monitor_detail.html#customGenerateAnchor">客户群生成</a></span>
+								<span class="fleft"><em class="label-custom"></em><a @click="jumpPageToDetail('customGenerateAnchor')">客户群生成</a></span>
 								<p class="fright">
 									<span>共<strong>{{item.customPrepareCount+item.customCreatingCount+item.customSuccessCount+item.customAppointCount+item.customFailCount}}</strong>个日周期客户群 ，
 									成功<strong>{{item.customSuccessCount}}</strong>个</span>
@@ -164,7 +164,7 @@
 					<li class="ui-prerecture-item padding0">
 						<div>
 							<div class="per-header clearfix">
-								<span class="fleft"><em class="label-custom"></em><a href="service_monitor_detail.html#customPushAnchor">客户群推送</a></span>
+								<span class="fleft"><em class="label-custom"></em><a @click="jumpPageToDetail('customPushAnchor')">客户群推送</a></span>
 								<p class="fright">
 									<span>共<strong>{{item.pushSuccessCount + item.pushingCount +item.pushFailCount}}</strong>个待推送的客户群 ，
 									成功<strong>{{item.pushSuccessCount}}</strong>个</span>
