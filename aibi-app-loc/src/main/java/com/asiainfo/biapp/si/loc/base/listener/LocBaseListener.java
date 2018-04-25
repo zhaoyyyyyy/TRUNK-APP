@@ -7,6 +7,7 @@ import com.asiainfo.biapp.si.loc.auth.utils.LocConfigUtil;
 import com.asiainfo.biapp.si.loc.base.BaseConstants;
 import com.asiainfo.biapp.si.loc.base.LocCacheBase;
 import com.asiainfo.biapp.si.loc.base.config.RedisConfig;
+import com.asiainfo.biapp.si.loc.base.utils.LogUtil;
 
 
 public class LocBaseListener implements ApplicationListener<ContextRefreshedEvent>{
@@ -14,7 +15,7 @@ public class LocBaseListener implements ApplicationListener<ContextRefreshedEven
 	@Override
 	public void onApplicationEvent(ContextRefreshedEvent event) {
 		
-		System.out.println("-------------------------------------LocBaseListener--------------------------------------");
+		LogUtil.info("-------------------------------------LocBaseListener--------------------------------------");
 		BaseConstants.JAUTH_URL = event.getApplicationContext().getEnvironment().getProperty("jauth-url");
 		LocCacheBase.getInstance().init();
 		

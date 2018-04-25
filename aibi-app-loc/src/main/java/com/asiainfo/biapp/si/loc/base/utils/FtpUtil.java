@@ -500,7 +500,7 @@ public class FtpUtil {
 		ftp.changeWorkingDirectory(remotePath);
 		boolean result = ftp.deleteFile(remotePath);
 		if (result) {
-			System.out.print("删除成功！");
+			LogUtil.info("删除成功！");
 		}
 		ftp.logout();
 		if (ftp.isConnected()) {
@@ -532,7 +532,7 @@ public class FtpUtil {
 			// 遍历所有文件，找到指定的文件
 			for (FTPFile ff : fs) {
 				if (!fileNames.containsKey(ff.getName())) {
-					System.out.println(System.getProperty("file.separator"));
+					LogUtil.info(System.getProperty("file.separator"));
 					// 根据绝对路径初始化文件
 					File localFile = new File(localPath + "/" + ff.getName());
 					// 输出流

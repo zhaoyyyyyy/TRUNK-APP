@@ -162,8 +162,6 @@ public class ExpressionPaser {
 		} else {
 			resultStr = oldStr;
 		}
-		System.out.println("1=============" + sb.toString());
-		System.out.println("2=============" + resultStr);
 	}
 
 }

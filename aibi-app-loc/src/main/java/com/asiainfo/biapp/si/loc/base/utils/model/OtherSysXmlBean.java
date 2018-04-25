@@ -302,6 +302,5 @@ public class OtherSysXmlBean implements Serializable {
 //		} catch (Exception e) {
 //		    LogUtil.error("InputStream is error:", e);
 //		}
-//		System.out.println(xmlStr);
 //	}
 }

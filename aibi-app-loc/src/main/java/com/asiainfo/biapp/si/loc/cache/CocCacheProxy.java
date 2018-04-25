@@ -1,5 +1,6 @@
 package com.asiainfo.biapp.si.loc.cache;
 
+import com.asiainfo.biapp.si.loc.base.utils.LogUtil;
 import com.asiainfo.biapp.si.loc.cache.impl.CocJavaCache;
 import com.asiainfo.biapp.si.loc.cache.impl.CocRedisCache;
 
@@ -25,15 +26,15 @@ public class CocCacheProxy {
 		int cacheCode = 1;
 		switch (cacheCode) { 
 			case  1:
-				System.out.println("cache is redisCache");
+				LogUtil.info("cache is redisCache");
 				instance = new CocRedisCache();
 				break;
 			case  2:
-				System.out.println("cache is javaCache");
+				LogUtil.info("cache is javaCache");
 				instance = new CocJavaCache();
 				break;
 			case 888:
-				System.out.println("sorry , unfitting otherCache now !");
+				LogUtil.info("sorry , unfitting otherCache now !");
 				break;
 		}
 			

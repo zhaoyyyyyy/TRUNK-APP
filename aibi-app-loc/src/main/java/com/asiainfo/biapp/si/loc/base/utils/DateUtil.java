@@ -1018,20 +1018,7 @@ public class DateUtil {
     }
 	
 	public static void main(String[] args) {
-//		String beginDate1 = "20140728";
-//		String endDate1 = "20140729";
-//		String formatStr1 = "yyyyMMdd";
-//		
-//		String beginDate = "201407";
-//		String endDate = "201408";
-//		String formatStr = "yyyyMM";
-//		int days = dateInterval(beginDate1, endDate1, formatStr1, 1);
-//		int months = dateInterval(beginDate, endDate, formatStr, 2);
-//		System.out.println(days);
-//		System.out.println(months);
-//		String startDateStr = "20140625";
-//		String resultDatestr = calculateOffsetDate(startDateStr, 1, formatStr1, 3);
-//		System.out.println(resultDatestr);
+
 		System.out.println(getEarlierDate("20150201","20150202","yyyyMMdd"));
 	}
 }

@@ -88,7 +88,7 @@ public class YwDevUserServiceImpl extends DevUserServiceImpl implements IUserSer
 	    String acrmUrl = "http://127.0.0.1:8442/acrm";
         try {
             String tokenStr1 = HttpUtil.sendPost(acrmUrl+"/api/auth/userdata", params);
-            System.out.println(tokenStr1);
+            LogUtil.info(tokenStr1);
         } catch (Exception e) {
             LogUtil.debug(e.getMessage());
         }

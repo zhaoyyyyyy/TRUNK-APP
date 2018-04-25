@@ -13,6 +13,8 @@ import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 
+import com.asiainfo.biapp.si.loc.base.utils.LogUtil;
+
 /**
  * Title : DES
  * <p/>
@@ -123,7 +125,7 @@ public class DES {
 
 	private byte[] hex2byte(String hex) throws IllegalArgumentException {
 		if (hex.length() % 2 != 0) {
-			System.out.println("hex:" + hex + "\nlength:" + hex.length());
+			LogUtil.info("hex:" + hex + "\nlength:" + hex.length());
 			throw new IllegalArgumentException();
 		}
 		char[] arr = hex.toCharArray();
@@ -180,11 +182,11 @@ public class DES {
 
 	public static void main(String[] args) throws Exception {
 	    String mingwen = "banana";
-	    System.out.println(DES.encrypt(mingwen));
-	    System.out.println(DES.decrypt(DES.encrypt(mingwen)));
+	    LogUtil.info(DES.encrypt(mingwen));
+	    LogUtil.info(DES.decrypt(DES.encrypt(mingwen)));
 	    
 		String pwd = "ED2705F227C3C80B";
-		System.out.println(DES.decrypt(pwd));
+		LogUtil.info(DES.decrypt(pwd));
 		
 	}
 }

@@ -319,7 +319,7 @@ public class VerticalLabelTask implements Runnable {
             targetTableSql = targetTableSql + from;
             targetTable2SQL.put(targetTableName, targetTableSql);
             target_table_name2source_table_idMap.put(targetTableName, key);
-            System.out.println(columnsList);
+            LogUtil.debug(columnsList);
             boolean tableIfExists = labelDealComponent.createTableIfExists(3, targetTableName + "_" + data_date, targetTableSql, columnsList);
             String source_table_id = target_table_name2source_table_idMap.get(targetTableName);
             List<String> list = new ArrayList<String>();

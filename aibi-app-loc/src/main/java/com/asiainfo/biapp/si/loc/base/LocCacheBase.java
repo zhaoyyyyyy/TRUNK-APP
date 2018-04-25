@@ -304,7 +304,7 @@ public class LocCacheBase extends ICacheBase implements ApplicationContextAware{
 					configOrg.put(rs.getString("config_id"), "org_level_"+rs.getString("level_id"));
 				}
 			}
-			System.out.println(configOrg.toString());
+			LogUtil.info(configOrg.toString());
 			this.setHashMap(Prefix.LOC+Prefix.CONFIG+CacheKey.ALL_CONFIG_ORG_MAP, configOrg);
 		} catch (Exception e) {
 			log.error(e.getMessage(),e);

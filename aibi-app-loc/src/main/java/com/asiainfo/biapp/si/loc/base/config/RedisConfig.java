@@ -50,7 +50,7 @@ public class RedisConfig extends CachingConfigurerSupport{
     public RedisConnectionFactory redisConnectionFactory() {
 
     	
-    	System.out.println("-------------------------------------LocBaseListener--------------------------------------");
+    	LogUtil.info("-------------------------------------LocBaseListener--------------------------------------");
 		BaseConstants.JAUTH_URL = jauthUrl;
 	
 		try {

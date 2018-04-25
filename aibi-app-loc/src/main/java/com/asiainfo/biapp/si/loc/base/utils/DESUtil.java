@@ -263,7 +263,6 @@ public class DESUtil {
 	public static void main(String[] args) throws Exception {
 //		String key = CiIdentifierGenerator.randomUUID();
 		String key = "1RmnGiuzp1iomKP1ZPOJE8";
-		System.out.println("key : " + key);
 		long s = System.currentTimeMillis();
 		DESUtil des = new DESUtil(key);
 		// DES 加密文件
@@ -271,14 +270,10 @@ public class DESUtil {
 		// DES 解密文件
 		des.decryptFile("D:/phone.zip", "E:/phone.zip");
 		long e = System.currentTimeMillis();
-		System.out.println("共使用 " + (e-s) + "ms");
 		String str1 = "COC向广告平台推送test";
 		// DES 加密字符串
 		String str2 = des.encryptStr(str1);
 		// DES 解密字符串
 		String deStr = des.decryptStr(str2);
-		System.out.println(" 加密前： " + str1);
-		System.out.println(" 加密后： " + str2);
-		System.out.println(" 解密后： " + deStr);
 	}
 }

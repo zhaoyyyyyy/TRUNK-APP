@@ -24,6 +24,8 @@ import org.apache.hadoop.io.IOUtils;
 import org.apache.hadoop.security.UserGroupInformation;
 import org.apache.log4j.Logger;
 
+import com.asiainfo.biapp.si.loc.base.utils.LogUtil;
+
 /**
  * hdfs java操作工具类HdfsUtil
  * 
@@ -79,7 +81,7 @@ public class HdfsUtil {
 
 		File file = new File(src);
 		if (!file.exists()) {
-			System.out.println(src + " does not exists");
+			LogUtil.info(src + " does not exists");
 			return;
 		}
 		fs.copyFromLocalFile(new Path(src), new Path(dst));
@@ -95,10 +97,10 @@ public class HdfsUtil {
 	 */
 	public static void getFile(String src, String dst)
 			throws IllegalArgumentException, IOException {
-		log.debug(" ----------------------------  hdfsUtil   getFile begining------------");
+		LogUtil.debug("hdfsUtil   getFile begining------------");
 		
-		log.debug(" ----------------------------  hdfsUtil   src =" + src);
-		log.debug(" ----------------------------  hdfsUtil   src =" + dst);
+		LogUtil.debug(" hdfsUtil   src =" + src);
+		LogUtil.debug(" hdfsUtil   src =" + dst);
 		Path path = new Path(src);
 		if (checkPath(path))
 			return;
@@ -143,7 +145,7 @@ public class HdfsUtil {
 		}
 		// 释放资源
 		fs.close();
-		log.debug(" ----------------------------  hdfsUtil   getFile OVER ------------");
+		LogUtil.debug(" hdfsUtil   getFile OVER ------------");
 	}
 
 	public static void fileLocation(String fPath) throws FileNotFoundException,
@@ -158,12 +160,12 @@ public class HdfsUtil {
 			String name = status.getPath().getName();
 			if (status.isDir()) {
 
-				System.out.println(createPrintStr(name, fileLevel, true));
+				LogUtil.info(createPrintStr(name, fileLevel, true));
 				fileLevel++;
 				fileLocation(status.getPath().toString());
 				fileLevel--;
 			} else {
-				System.out.println(createPrintStr(name, fileLevel, false));
+				LogUtil.info(createPrintStr(name, fileLevel, false));
 			}
 		}
 	}
@@ -197,7 +199,7 @@ public class HdfsUtil {
 	public static boolean checkfPath(Path Path) throws IOException {
 
 		if (!fs.exists(Path) || fs.getFileStatus(Path).isDir()) {
-			System.out.println("File " + Path + " does not exists");
+			LogUtil.info("File " + Path + " does not exists");
 			return true;
 		}
 		return false;
@@ -207,7 +209,7 @@ public class HdfsUtil {
 	public static boolean checkPath(Path Path) throws IOException {
 
 		if (!fs.exists(Path)) {
-			System.out.println("File " + Path + " does not exists");
+			LogUtil.info("File " + Path + " does not exists");
 			return true;
 		}
 		return false;
@@ -217,7 +219,7 @@ public class HdfsUtil {
 	public static void readFile(String fPath) throws IOException {
 		Path path = new Path(fPath);
 		if (!fs.exists(path)) {
-			System.out.println("File " + fPath + " does not exists");
+			LogUtil.info("File " + fPath + " does not exists");
 			return;
 		}
 
@@ -247,7 +249,7 @@ public class HdfsUtil {
 			return;
 
 		FSDataInputStream fsdis = null;
-		System.out.println("cat: " + remoteFile);
+		LogUtil.info("cat: " + remoteFile);
 		try {
 			fsdis = fs.open(path);
 			IOUtils.copyBytes(fsdis, System.out, 4096, false);
@@ -261,9 +263,7 @@ public class HdfsUtil {
 			InterruptedException, URISyntaxException {
 
 		HdfsUtil.initEnvi("hdfs://10.19.58.79:8020/", "hdfs");
-		System.out.println("---------------------------------------------------------------------------");
 		HdfsUtil.fileLocation("/apps/hive/warehouse/coc.db/coc_ems1");
-		System.out.println("---------------------------------------------------------------------------");
 		// HdfsUtil.catFile("/chengdu/md_user_ip_20160111/data/md_user_ip_20160111.csv");
 		HdfsUtil.getFile("/apps/hive/warehouse/coc.db/coc_ems1/","F:\\hadoop\\gaga.csv");
 //		HdfsUtil.readFile("/user/hive/warehouse/ci_cuser_20150116104533694_484750/part-00000");

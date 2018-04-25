@@ -84,9 +84,7 @@ public class ThreadPool {
 		try {
 			service.execute(r);
 		} catch (Exception ex) {
-			//        	System.out.println("------KMV-----内部线程池异常-----------");
-			ex.printStackTrace();
-			//        	service.shutdown();
+			LogUtil.error(ex.getMessage(),ex);
 		}
 		log.info("add task [" + r.toString() + "] ThreadPool status:" + showStatus());
 	}
@@ -103,9 +101,7 @@ public class ThreadPool {
 			try {
 				singleThreadService.execute(r);
 			} catch (Exception ex) {
-				//        	System.out.println("------KMV-----内部线程池异常-----------");
-				ex.printStackTrace();
-				//        	service.shutdown();
+				LogUtil.error(ex.getMessage(),ex);
 			}
 		}
 		log.info("add task [" + r.toString() + "] to SingleThread ,ThreadPool status:" + showStatus());
@@ -131,17 +127,13 @@ public class ThreadPool {
 					execute(r,true);
 				}
 			} catch (Exception ex) {
-				//        	System.out.println("------KMV-----内部线程池异常-----------");
-				ex.printStackTrace();
-				//        	service.shutdown();
+				LogUtil.error(ex.getMessage(),ex);
 			}
 		} else {
 			try {
 				singleThreadService.execute(r);
 			} catch (Exception ex) {
-				//        	System.out.println("------KMV-----内部线程池异常-----------");
-				ex.printStackTrace();
-				//        	service.shutdown();
+				LogUtil.error(ex.getMessage(),ex);
 			}
 		}
 		log.info("add task [" + r.toString() + "] to SingleThread ,ThreadPool status:" + showStatus());
@@ -205,10 +197,8 @@ public class ThreadPool {
 		try {
 			service.submit(r);
 		} catch (Exception ex) {
-			//        	System.out.println("------KMV-----内部线程池异常-----------");
-			ex.printStackTrace();
+			LogUtil.error(ex.getMessage(),ex);
 			throw ex;
-			//        	service.shutdown();
 		}
 		log.info("add task [" + r.toString() + "] to ThreadPool status:" + showStatus());
 	}
@@ -227,10 +217,8 @@ public class ThreadPool {
 			try {
 				singleThreadService.submit(r);
 			} catch (Exception ex) {
-				//        	System.out.println("------KMV-----内部线程池异常-----------");
-				ex.printStackTrace();
+				LogUtil.error(ex.getMessage(),ex);
 				throw ex;
-				//        	service.shutdown();
 			}
 			log.info("add task [" + r.toString() + "] to SingleThread ,ThreadPool status:" + showStatus());
 		}
@@ -259,10 +247,8 @@ public class ThreadPool {
 			try {
 				singleThreadService.submit(r);
 			} catch (Exception ex) {
-				//        	System.out.println("------KMV-----内部线程池异常-----------");
-				ex.printStackTrace();
+				LogUtil.error(ex.getMessage(),ex);
 				throw ex;
-				//        	service.shutdown();
 			}
 			log.info("add task [" + r.toString() + "] to SingleThread ,ThreadPool status:" + showStatus());
 		}

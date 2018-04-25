@@ -402,7 +402,6 @@ public class ShopCartController extends BaseController {
 				String querySql = exploreServiceImpl.getCountSqlStr(labelRules, queryParam);
 				sql.append("select count(1) ").append(querySql);
 			}
-			System.out.println("querySql SQL : " + sql.toString());
 			LogUtil.info("querySql SQL : " + sql.toString());
 			backServiceImpl.queryCount(sql.toString());	
 		} catch (BaseException baseException) {

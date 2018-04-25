@@ -193,7 +193,7 @@ public class LogAspectAdvice {
     // 异常通知
     @AfterThrowing(value = "execution(* com.asiainfo.biapp.si.loc.*.controller.*.*(..))", throwing = "e")
     public void doThrow(JoinPoint jp, Throwable e) {
-        System.out.println("删除出错啦");
+    	LogUtil.info("删除出错啦");
     }
 
 }

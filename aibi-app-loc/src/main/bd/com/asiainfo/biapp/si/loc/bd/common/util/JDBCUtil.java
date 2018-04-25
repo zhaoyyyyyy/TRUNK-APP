@@ -12,6 +12,7 @@ import org.apache.log4j.Logger;
 import com.asiainfo.biapp.si.loc.base.BaseConstants;
 import com.asiainfo.biapp.si.loc.base.config.DataSourceConfig;
 import com.asiainfo.biapp.si.loc.base.extend.SpringContextHolder;
+import com.asiainfo.biapp.si.loc.base.utils.LogUtil;
 import com.asiainfo.biapp.si.loc.cache.CocCacheProxy;
 
 public final class JDBCUtil {
@@ -57,10 +58,10 @@ public final class JDBCUtil {
 		web_password = dataSource.dataSource().getPassword();
 		web_driver = dataSource.dataSource().getDriverClassName();
 		
-		System.out.println("-----------------------------  web_url = " + web_url);
-		System.out.println("-----------------------------  web_user = " + web_user);
-		System.out.println("-----------------------------  web_password = " + web_password);
-		System.out.println("-----------------------------  web_driver = " + web_driver);
+		LogUtil.info("-----------------------------  web_url = " + web_url);
+		LogUtil.info("-----------------------------  web_user = " + web_user);
+		LogUtil.info("-----------------------------  web_password = " + web_password);
+		LogUtil.info("-----------------------------  web_driver = " + web_driver);
 //		log.debug("-----------------------------  web_url = " + web_url);
 //		log.debug("-----------------------------  web_user = " + web_user);
 //		log.debug("-----------------------------  web_password = " + web_password);

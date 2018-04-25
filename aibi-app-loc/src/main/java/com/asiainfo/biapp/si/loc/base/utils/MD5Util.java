@@ -191,7 +191,5 @@ public class MD5Util {
 		// String md5 = getMD5String("a");
 
 		long end = System.currentTimeMillis();
-		System.out.println("md5:" + md5 + " time:" + ((end - begin) / 1000)
-				+ "s");
 	}
 }

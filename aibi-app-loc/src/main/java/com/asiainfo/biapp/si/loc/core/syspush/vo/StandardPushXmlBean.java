@@ -427,6 +427,6 @@ public class StandardPushXmlBean implements Serializable {
 		} catch (Exception e) {
 		    LogUtil.error("bean2Xml Exception:", e);
 		}
-		System.out.println(xmlStr);
+		LogUtil.info(xmlStr);
 	}
 }

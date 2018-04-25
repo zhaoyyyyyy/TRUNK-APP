@@ -140,14 +140,14 @@ public class BackServiceImpl implements IBackSqlService{
 
 	@Override
 	public boolean insertCustomerData(String sql, String tableName, String customerId,String configId) throws SqlRunException {
-		log.debug("-------------------- BackServiceImpl.insertCustomerData sql = " + sql);
-		log.debug("-------------------- BackServiceImpl.insertCustomerData tableName = " + tableName);
-		log.debug("-------------------- BackServiceImpl.insertCustomerData customerId = " + customerId);
+		log.debug("BackServiceImpl.insertCustomerData sql = " + sql);
+		log.debug("BackServiceImpl.insertCustomerData tableName = " + tableName);
+		log.debug("BackServiceImpl.insertCustomerData customerId = " + customerId);
 		
 		boolean isInsertTable = true;
 		
 		String backType =  CocCacheProxy.getCacheProxy().getSYSConfigInfoByKey("LOC_CONFIG_SYS_BGDB_TYPE");
-		System.out.println(backType);
+		log.debug(backType);
 		if(backType.equals("Hive")||backType.equals("SparkSql")){
 			isInsertTable = this.insertCustomDataHive(sql, tableName, customerId,configId);
 		}else if(backType.equals("Ads")){
@@ -157,9 +157,9 @@ public class BackServiceImpl implements IBackSqlService{
 	}
 	
 	private boolean insertCustomDataHive(String sql, String tableName, String customerId,String configId) throws SqlRunException{
-		log.debug("-------------------- BackServiceImpl.insertCustomDataHive sql = " + sql);
-		log.debug("-------------------- BackServiceImpl.insertCustomDataHive tableName = " + tableName);
-		log.debug("-------------------- BackServiceImpl.insertCustomDataHive customerId = " + customerId);
+		log.debug("BackServiceImpl.insertCustomDataHive sql = " + sql);
+		log.debug("BackServiceImpl.insertCustomDataHive tableName = " + tableName);
+		log.debug("BackServiceImpl.insertCustomDataHive customerId = " + customerId);
 		boolean isExistsTable = getBackDaoBean().isExistsTable(tableName);
 		boolean isCreateTable = true;
 		boolean isInsertTable = true;

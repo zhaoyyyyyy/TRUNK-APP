@@ -18,6 +18,7 @@ import com.asiainfo.biapp.si.loc.base.exception.BaseException;
 import com.asiainfo.biapp.si.loc.base.exception.ParamRequiredException;
 import com.asiainfo.biapp.si.loc.base.page.Page;
 import com.asiainfo.biapp.si.loc.base.service.impl.BaseServiceImpl;
+import com.asiainfo.biapp.si.loc.base.utils.LogUtil;
 import com.asiainfo.biapp.si.loc.base.utils.StringUtil;
 import com.asiainfo.biapp.si.loc.core.label.dao.ILabelVerticalColumnRelDao;
 import com.asiainfo.biapp.si.loc.core.label.entity.LabelVerticalColumnRel;
@@ -107,7 +108,7 @@ public class LabelVerticalColumnRelServiceImpl extends BaseServiceImpl<LabelVert
         labelVerticalColumnRelId.setLabelId(labelId);
         labelVerticalColumnRelVo.setLabelVerticalColumnRelId(labelVerticalColumnRelId);
         List<LabelVerticalColumnRel> labelVerList = iLabelVerticalColumnRelDao.selectLabelVerticalColumnRelList(labelVerticalColumnRelVo);
-        System.out.println("cdcsc");
+        LogUtil.info("cdcsc");
         if (labelVerList !=null && labelVerList.size()>0) {
             return labelVerList.get(0);
         }

@@ -263,7 +263,7 @@ public class FtpClient {
                 ftp.retrieveFile(ff.getName(), is);
                 is.close();
 //                log.debug("文件["+ff.getName()+"]下载成功");
-                System.out.println("文件["+ff.getName()+"]下载成功");
+                LogUtil.info("文件["+ff.getName()+"]下载成功");
             }
         }
     }
@@ -372,7 +372,7 @@ public class FtpClient {
 		boolean connect = ftpClient.connect("/home/weblogic/qhy/testDIR", "10.1.253.232", 21,
 				"weblogic", "weblogic");
 		File file = new File("D:\\testftp\\QQ图12222222片20150313100456.png");
-		System.out.println("连接 ：" + connect);
+		LogUtil.info("连接 ：" + connect);
 //		t.upload(file, "/testDIR");P50603-075244.jpg
 //		ftpClient.download("/home/weblogic/qhy/testDIR", "12121212.png", "D:\\testftp\\download\\");
 //		ftpClient.deleteFile("/home/weblogic/qhy/attached/logoImage_20151028153851496.jpg");
@@ -383,7 +383,6 @@ public class FtpClient {
 //        PocFtpClient t = new PocFtpClient();
 //
 //        boolean connect = t.connect("/home/hadoop", "10.1.251.122", 21, "hadoop", "hadoop");
-//        System.out.println("连接 ：" + connect);
 //
 //        // 上传
 //        // File file = new File("d:\\test.txt");
@@ -396,7 +395,6 @@ public class FtpClient {
 //        
 //        t.excludeBatchDownload("/home/hadoop", m,"D:\\work", "txt");
 //        t.closeFtp();
-//        System.out.println("over");
 //        
 //        File file = new File("D:\\work\\test\\mkdir");
 //        file.mkdirs();

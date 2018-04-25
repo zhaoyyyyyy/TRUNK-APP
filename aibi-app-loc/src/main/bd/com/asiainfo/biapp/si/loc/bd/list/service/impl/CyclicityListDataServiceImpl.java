@@ -70,7 +70,7 @@ public class CyclicityListDataServiceImpl implements ICyclicityListDataService{
 		// 遍历任务的结果  
         for (Future<String> fs : resultList) { 
         	try {
-				System.out.println("#######  -----  " + fs.get());
+        		LogUtil.info("## " + fs.get());
 			} catch (InterruptedException | ExecutionException e) {
 				LogUtil.error(e);
 			}
@@ -100,7 +100,7 @@ public class CyclicityListDataServiceImpl implements ICyclicityListDataService{
 		// 遍历任务的结果  
         for (Future<String> fs : resultList) { 
         	try {
-				System.out.println("#######  -----  " + fs.get());
+        		LogUtil.info("## " + fs.get());
 			} catch (InterruptedException | ExecutionException e) {
 				LogUtil.error(e);
 			}
@@ -128,7 +128,7 @@ public class CyclicityListDataServiceImpl implements ICyclicityListDataService{
 		// 遍历任务的结果  
         for (Future<String> fs : resultList) { 
         	try {
-				System.out.println("#######  -----  " + fs.get());
+        		LogUtil.info("## " + fs.get());
 			} catch (InterruptedException | ExecutionException e) {
 				LogUtil.error(e);
 			}
@@ -158,7 +158,7 @@ public class CyclicityListDataServiceImpl implements ICyclicityListDataService{
 		// 遍历任务的结果  
         for (Future<String> fs : resultList) { 
         	try {
-				System.out.println("#######  -----  " + fs.get());
+        		LogUtil.info("## " + fs.get());
 			} catch (InterruptedException | ExecutionException e) {
 				LogUtil.error(e);
 			}
@@ -194,7 +194,7 @@ public class CyclicityListDataServiceImpl implements ICyclicityListDataService{
 		// 遍历任务的结果  
         for (Future<String> fs : resultList) { 
         	try {
-				System.out.println("#######  -----  " + fs.get());
+        		LogUtil.info("##  " + fs.get());
 			} catch (InterruptedException | ExecutionException e) {
 				LogUtil.error(e);
 			}
@@ -231,7 +231,7 @@ public class CyclicityListDataServiceImpl implements ICyclicityListDataService{
 		// 遍历任务的结果  
         for (Future<String> fs : resultList) { 
         	try {
-				System.out.println("#######  -----  " + fs.get());
+        		LogUtil.info("## " + fs.get());
 			} catch (InterruptedException | ExecutionException e) {
 				LogUtil.error(e);
 			}
@@ -255,7 +255,7 @@ public class CyclicityListDataServiceImpl implements ICyclicityListDataService{
 			sb.append(" and t.UPDATE_CYCLE=").append(Integer.toString(updateCycle)).append(" and t.label_id not in ");
 			sb.append("( select group_id from loc_list_info l where l.DATA_STATUS=3 and l.data_date='"+ dataDate + "' )");
 			
-			System.out.println("--------------------------- getAllDayListIdAndConfig = " + sb.toString());
+			LogUtil.info("-- getAllDayListIdAndConfig = " + sb.toString());
 			
 			st = conn.prepareStatement(sb.toString());
 			rs = st.executeQuery();
@@ -284,7 +284,7 @@ public class CyclicityListDataServiceImpl implements ICyclicityListDataService{
 				}
 				
 			}
-			System.out.println("--------------------------- res = " + res.toString());
+			LogUtil.info(" res = " + res.toString());
 		} catch (Exception e) {
 			LogUtil.error(e);
 		}finally{
