@@ -113,7 +113,10 @@ public class YwDevUserServiceImpl extends DevUserServiceImpl implements IUserSer
 		}catch(Exception e){
 			throw new UserAuthException("无效的token");
 		}
-		
+		//如果是系统
+		if(userId.contains("sys_")){
+		    return user;
+		}
 		//拿到用户名称
 		try{
 		    params.put("operatorId",userId);
