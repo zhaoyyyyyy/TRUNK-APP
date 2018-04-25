@@ -19,6 +19,7 @@ window.loc_onload = function() {
 			khqscList:[],  //客户群生成生成状态
 			khqtsList:[],  //客户群推送生成状态
 			sjsxplList:[], //数据刷新频率
+			defaultPl:"",//默认刷新频率
 			defaultTimes:5000, // 默认刷新频率
 			timerId:"",   // 页面刷新定时器
 			tableId:"",  //表格Id
@@ -33,7 +34,8 @@ window.loc_onload = function() {
 		},
 		methods:{
 			loadMonitorDetailData:function(){
-				this.dataDate = "2018-03-27";
+				var now = new Date();
+				this.dataDate = $.dateFormat(new Date(now.getTime() - 3*24*60*60*1000),"yyyy-MM-dd");
 				//数据字典赋值
 				this.loadDicSjzb();
 				this.loadDicSjcq();
@@ -51,8 +53,15 @@ window.loc_onload = function() {
 				this.isDown=!this.isDown;
 			},
 			initDateByCycle:function(e){
-            	 //数据日期日周期显示范围是前三天
-            	//数据日期月周期显示范围是一年
+				this.dateCycle = dateCycle;
+            	var now = new Date();
+            	var dataDay = $.dateFormat(new Date(now.getTime() - 3*24*60*60*1000),"yyyy-MM-dd");
+            	var dataMonth = $.dateFormat(new Date(now.getTime() - 3*24*60*60*1000),"yyyy-MM");
+            	if("day" === this.dateCycle){
+            		$(this).parents("div.dropdown").siblings("div").children("a").html(dataDay);
+            	}else{
+            		$(this).parents("div.dropdown").siblings("div").children("a").html(dataMonth);
+            	}
             },
             changeMonitorByDate:function(e){
             /*	var $el=$(e.target);
@@ -100,13 +109,13 @@ window.loc_onload = function() {
 				}]);
 			},
 			// 设置页面刷新频率
-	        refresh:function(e){
-	            this.setTimes(e.target.value);
+	        refresh:function(value){
+	            this.setTimes(value);
 	            this.setTimer();
 	        },
 	        // 设置页面频率
 	        setTimes:function (value) {
-	            var val = Number(value.substring(1,value.length-1));
+	            var val = Number(value);
 	            this.defaultTimes = val*1000;
 	        },
 	        // 设置定时器
@@ -185,6 +194,7 @@ window.loc_onload = function() {
 		    		sjsxplList.push(dicSjsxpl[i]);
 		    	}
 		    	this.sjsxplList = sjsxplList;
+		    	this.defaultPl = sjsxplList[0].code;
 		    },
 		    //初始化数据准备表格
 		    initDataPrepareTable:function(status){
@@ -421,7 +431,7 @@ window.loc_onload = function() {
 			this.initCustomGenerateTable();
  			//加载客户群推送表格
 			this.initCustomPushTable();
-			this.refresh();
+			this.refresh(this.defaultPl);
 		}
 		
 	});
