@@ -30,14 +30,13 @@
 				    <label role="checkbox" :for="item.configId" class="checkbix">
 				    	<span class="large"></span>{{item.sourceName}}
 				    </label>
-				    <!--<span :value="item.sourceName"  @click="clickConfigData(item)" :class="{padding0 : (index+1)%3 ==0 }" class=" clearfix" >{{item.sourceName}}</span>-->
 			 	</div>
 			</li> 
 		</ul>
 	</div>
 	
 	<!--动态生成每个专区监控总览信息-->
-	<div  v-for="(item,index) in monitorData" :id="item.configId" v-cloak >
+	<div  v-for="(item,index) in monitorData" :id="item.configId + 'monitor'" v-cloak >
 		<div class="ui-lc-mian mt10 ui-morior-border">
 			<div class="ui-prefecture">
 				<div>

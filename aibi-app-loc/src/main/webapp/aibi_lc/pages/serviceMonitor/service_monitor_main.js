@@ -12,10 +12,7 @@ window.loc_onload = function() {
         	dateCycle:"day",//周期默认为日周期
         	dataDate:'',//日期
         	configData:[],//专区信息
-        	monitorData:[], //运营监控总览数据
-        	showConfigIds:[],//页面选中要显示的专区数据
-        	isChecked:false//check选中
-        	
+        	monitorData:[] //运营监控总览数据
         },
         methods:{
             initData:function(){
@@ -34,10 +31,6 @@ window.loc_onload = function() {
         				if(result.data && result.data.length > 0){
         				   that.configData = result.data;
         				   //默认全部专区选中状态
-        				   $.each(result.data,function(key,value){
-        					   that.showConfigIds.push(value.configId);
-        				   });
-        				   console.log(that.showConfigIds);
         				}
         			}
         		});
@@ -46,13 +39,13 @@ window.loc_onload = function() {
 				var configId = item.configId;
 				if(typeof item.isChecked=='undefined'){
 					this.$set(item,"isChecked",true);
-					if(item.isChecked){
-	            		$("#"+configId).hide();
-	            	}else{
-	            		$("#"+configId).show();
-	            	}
 				}else{
 					item.isChecked=!item.isChecked;
+				}
+				if(!item.isChecked){
+					$("#"+configId+"monitor").hide();
+				}else{
+					$("#"+configId+"monitor").show();
 				}
             },
             initMonitorMain:function(){
@@ -73,9 +66,9 @@ window.loc_onload = function() {
             	var dataDay = $.dateFormat(new Date(now.getTime() - 3*24*60*60*1000),"yyyy-MM-dd");
             	var dataMonth = $.dateFormat(new Date(now.getTime() - 3*24*60*60*1000),"yyyy-MM");
             	if("day" === this.dateCycle){
-            		$(this).parents("div.dropdown").siblings("div").children("a").html(dataDay);
+            		$(this).parents("div.dropdown").siblings("div.control-input").children("input").html(dataDay);
             	}else{
-            		$(this).parents("div.dropdown").siblings("div").children("a").html(dataMonth);
+            		$(this).parents("div.dropdown").siblings("div.control-input").children("input").html(dataMonth);
             	}
             },
             showDate:function(item){
