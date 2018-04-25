@@ -53,11 +53,13 @@ import com.jcraft.jsch.SftpProgressMonitor;
 public class SftpUtil {
     
     private static final String UN_UPLOADED = "_unUploaded";//未完成的后缀;
+    private static final String ENCODE_UTF_8 = "UTF-8";     //UTF-8;
+    private static final String ENCODE_ISO_8859_1 = "iso-8859-1";     //iso-8859-1;
     private static final int THOUSAND = 1000;    //千进制
     private static final int MYRIAD = 10000;     //万进制
     private static final int WAIT_INCREMENT = 25;   //等待时间的增量;
     private static final int WAIT_MAX_TIME = 60;    //等待超时的最大值;
-    private static final int SFTP_DEFAULT_PORT = 22;    //等待超时的最大值;
+    private static final int SFTP_DEFAULT_PORT = 22;    //sftp默认端口;
     
     private ChannelSftp sftp = null;
     
@@ -283,10 +285,10 @@ public class SftpUtil {
                     } else if (!remotefile.contains(".") && !remotefile.endsWith("/")) {
                         remotefile = remotefile + "/" + locfile.getName();
                     }
-                    remotefile = new String(remotefile.getBytes("UTF-8"), "iso-8859-1");
+                    remotefile = new String(remotefile.getBytes(ENCODE_UTF_8), ENCODE_ISO_8859_1);
                     sftpUtil.upload(cSftp, localpath, remotefile + UN_UPLOADED, isHasMonitor,threadName);
                 } else {
-                    remotefile = new String(remotefile.getBytes("UTF-8"), "iso-8859-1");
+                    remotefile = new String(remotefile.getBytes(ENCODE_UTF_8), ENCODE_ISO_8859_1);
                     flag = sftpUtil.uploadAll(cSftp, localpath, remotefile + UN_UPLOADED, isHasMonitor,threadName);
                 }
                 if (isHasMonitor) {
