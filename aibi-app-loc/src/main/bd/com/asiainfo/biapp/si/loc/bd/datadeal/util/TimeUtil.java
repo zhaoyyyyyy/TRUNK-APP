@@ -942,8 +942,8 @@ public class TimeUtil {
      * @return yyyy-MM-dd型的日期
      * @throws Exception
      */
-    public static String getFronOneDate() {
-        DateFormat df = new SimpleDateFormat(FORMAT_YYYY_MM_DD);
+    public static String getFrontOneDate() {
+        DateFormat df = new SimpleDateFormat(FORMAT_YYYYMMDD);
         Date date = new Date();
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);

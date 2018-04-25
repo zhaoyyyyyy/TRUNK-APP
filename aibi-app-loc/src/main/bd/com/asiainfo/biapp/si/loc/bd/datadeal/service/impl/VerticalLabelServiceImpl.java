@@ -55,10 +55,9 @@ public class VerticalLabelServiceImpl implements IVerticalLabelService {
         if (initDate) {
             configId = labelDealComponent.getConfigId01(backParamVo);
         }
-        //传入专区
+        configId = labelDealComponent.configIsOk(configId);
         if (configId.size() > 0) {
             //判断专区状态
-            configId = labelDealComponent.configIsOk(configId);
             LogUtil.info("可跑的专区为：" + configId);
             for (int i = 0; i < configId.size(); i++) {
                 VerticalLabelTask myThread = new VerticalLabelTask();
@@ -69,7 +68,7 @@ public class VerticalLabelServiceImpl implements IVerticalLabelService {
                 thread.start();
             }
         } else {
-            LogUtil.error("获取专区id失败，任务结束");
+            LogUtil.error("没有可跑的专区，任务结束");
         }
     }
 }
