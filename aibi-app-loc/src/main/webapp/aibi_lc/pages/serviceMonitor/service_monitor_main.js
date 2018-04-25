@@ -13,7 +13,8 @@ window.loc_onload = function() {
         	dataDate:'',//日期
         	configData:[],//专区信息
         	monitorData:[], //运营监控总览数据
-        	showConfigIds:[]//页面选中要显示的专区数据
+        	showConfigIds:[],//页面选中要显示的专区数据
+        	isChecked:false//check选中
         	
         },
         methods:{
@@ -43,11 +44,16 @@ window.loc_onload = function() {
             },
             clickConfigData:function(item){//点击专区，动态刷新监控数据
 				var configId = item.configId;
-            	if($(this).is(":checked")){
-            		$("#"+configId).hide();
-            	}else{
-            		$("#"+configId).show();
-            	}
+				if(typeof item.isChecked=='undefined'){
+					this.$set(item,"isChecked",true);
+					if(item.isChecked){
+	            		$("#"+configId).hide();
+	            	}else{
+	            		$("#"+configId).show();
+	            	}
+				}else{
+					item.isChecked=!item.isChecked;
+				}
             },
             initMonitorMain:function(){
             	var that = this;

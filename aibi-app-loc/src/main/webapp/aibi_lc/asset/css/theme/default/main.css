@@ -1675,13 +1675,17 @@ animation-delay: .8s;
 	height:36px;
 	line-height:36px;
 }
-.ui-label-list > li.ui-monitor-item > span{
+.ui-label-list > li.ui-monitor-item > div{
 	background-color: #f7f7f7;
-	display:block;
 	border-radius: 5px;
-	font-size: 14px;
 	text-align:center;
 	cursor: pointer;
+	height:36px;
+	line-height:36px;
+}
+.ui-label-list > li.ui-monitor-item > div >span{
+	display:inline-block;
+	font-size: 14px;
 }
 .ui-prefecture > div > h3{
 	font-size: 18px;
@@ -1747,6 +1751,9 @@ animation-delay: .8s;
 	display:inline-block;
 	font-weight: 700;
     font-size: 14px;
+}
+.per-header > span > a {
+	color:#666;
 }
 .per-header > span > em{
 	display:inline-block;
