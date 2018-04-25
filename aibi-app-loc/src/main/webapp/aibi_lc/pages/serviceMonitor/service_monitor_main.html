@@ -43,29 +43,31 @@
 					<h3>{{item.sourceName}}</h3>
 					<div class="dropdown pre-dropdown" v-bind:class="{open:item.isOpen}">
 						 <a class="prefectrue-span"  @click="showDate(item)" >
-						        <span class="pre-cycle-name">
-						        	日周期&nbsp;
-						        </span>
+						        <span class="pre-cycle-name">日周期</span>
 						        <em></em>
 						    	<!--<span class="caret"></span>-->
 						 </a>
 						<ul class="dropdown-menu">
-							<li>
-								<span @click="initDateByCycle('day')">日周期 </span>
+							<li data-id="date">
+								<span @click="initDateByCycle('day',item,$event)">日周期 </span>
 							</li>
-							<li>
-								<span @click="initDateByCycle('month')">月周期</span>  
+							<li data-id="month">
+								<span @click="initDateByCycle('month',item,$event)">月周期</span>  
 							</li>   
 						</ul>
 					</div>
-				    
 					<em></em>
-					<div class="dropdown pre-dropdown" v-bind:class="{open:item.isActive}" >
+					<div class="control-input has-icon">
+			           <input :data-cycleId="item.configId" type="text"  @mousedown="getData($event)" readonly="readonly"
+			           	class="form-control input-pointer" id="inputEmail4" v-model="dataDate">
+			           <span class="glyphicon-select form-control-feedback"></span>
+			        </div>
+					<!--<div class="dropdown pre-dropdown" v-bind:class="{open:item.isActive}" >
 						<a class="prefectrue-span" :data-cycleId="item.configId"  @click="dateToggle(item)" @change="changeMonitorByDate">{{dataDate}}<em class="ml20"></em></a>
 						<ul class="dropdown-menu">
 							
 						</ul>
-					</div>
+					</div>-->
 				</div>
 				<ul class="ui-label-list clearfix mt10">
 					<li class="ui-prerecture-item">

@@ -4,7 +4,7 @@
  * ------------------------------------------------------------------
  */
 var monitorMain;////运营监控总览Vue实例
-window.loc_onload = function() {	
+window.loc_onload = function() {
     monitorMain = new Vue({
         el:"#monitorMain",
         data:{
@@ -64,7 +64,10 @@ window.loc_onload = function() {
                     }
                 });
             },
-            initDateByCycle:function(dateCycle){
+            initDateByCycle:function(dateCycle,item,event){
+            	item.isOpen=false;
+            	var dateCycle=$(event.currentTarget).text();
+            	$(event.currentTarget).parents(".dropdown").find("span.pre-cycle-name").text(dateCycle);
             	this.dateCycle = dateCycle;
             	var now = new Date();
             	var dataDay = $.dateFormat(new Date(now.getTime() - 3*24*60*60*1000),"yyyy-MM-dd");
@@ -101,6 +104,19 @@ window.loc_onload = function() {
     	    			maxDate:nowMonth,minDate:'#F{$dp.$DV(\''+nowMonth+'\',{y:-12});}'});
             	}
             },
+            getData:function(event,item){
+            	var cycle=$(event.currentTarget).parents(".ui-prefecture").find("span.pre-cycle-name").text();
+            	if(cycle=="日周期"){
+            		$(event.currentTarget).datepicker({
+				  		changeMonth: true,
+				  		changeYear: true,
+				  		dateFormat:"yy-mm-dd",
+				  		dayNamesMin: [ "日", "一", "二", "三", "四", "五", "六" ],
+				  		monthNamesShort: [ "一月", "二月", "三月", "四月", "五月", "六月", "七月", "八月", "九月", "十月", "十一月", "十二月" ]
+				  	});
+            	}
+            	
+            },
             changeMonitorByDate:function(e){
             	var $el=$(e.target);
 				var configId = $el.attr("data-configId");
@@ -130,7 +146,9 @@ window.loc_onload = function() {
         },
         mounted: function() {
             this.initData();
-            
+        
+  	
         }
     });
+	
 };
