@@ -42,6 +42,14 @@
                 <port-loc>8441</port-loc>
             </properties>
         </profile>
+        <profile>
+            <id>as-show</id>    <!-- 亚信-测试 -->
+            <properties>
+                <env>as-show</env>
+                <ctx-loc>/</ctx-loc>
+                <port-loc>8441</port-loc>
+            </properties>
+        </profile>
     </profiles>
     
     

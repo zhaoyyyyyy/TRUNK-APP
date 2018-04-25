@@ -3,15 +3,25 @@ var auto_Login = (function (model){
         
 		model.active  = "jauth"; //jauth  cpyw
         
-        /***************默认开发版本的实现(基于jauth的) ****************/
+        /***************默认开发版本的实现（不能自动登录）****************/
         model.jauth = {
         		failLoginUrl: "./aibi_lc/pages/common/login.html",
-        		autoLoginFun:function(callback){
-        			var guid = model._util.getUrlParam("username");
-        			return callback(username);
+        		autoLoginFun:function(){
+        			return false;
         		}
         }
         
+        /***************公司演示环境（直接用sfadmin，进入监控总览）****************/
+        model.asshow = {
+        		failLoginUrl: "./aibi_lc/pages/common/login.html",
+        		autoLoginFun:function(applyToken){
+        			var applySuccess = applyToken("sfadmin");
+        			if(applySuccess){
+        				return './aibi_lc/pages/common/frame.html#serviceMonitor/service_monitor_main';
+        			}
+        			return false;
+        		}
+        }
         /***************中邮-邮务-开发 ****************/
         model.cpywdev = {
         		failLoginUrl: "http://crm.chinapost.com:18880/",
@@ -26,7 +36,7 @@ var auto_Login = (function (model){
 					
 					return flag;
         		},
-        		autoLoginFun:function(callback){
+        		autoLoginFun:function(applyToken){
         			var flag = false;
         			
         			//必须与OCRM同域获取spring的acrmUrl
@@ -40,7 +50,7 @@ var auto_Login = (function (model){
      					 async: false,
         				 success: function(data){
         					 if(data && data.cnpost && data.cnpost.id){
-        						 flag = callback(data.cnpost.id);
+        						 flag = applyToken(data.cnpost.id);
         					 }
         				 }
         			 })
@@ -61,7 +71,7 @@ var auto_Login = (function (model){
 					
 					return flag;
         		},
-        		autoLoginFun:function(callback){
+        		autoLoginFun:function(applyToken){
         			alert("请求改生产环境的acrm地址，以便能进行单点登录")
         			var flag = false;
         			var acrmUrl = "http://crm.chinapost.com:18080/acrm";
@@ -72,7 +82,7 @@ var auto_Login = (function (model){
      					 async: false,
         				 success: function(data){
         					 if(data && data.cnpost && data.cnpost.id){
-        						 flag = callback(data.cnpost.id);
+        						 flag = applyToken(data.cnpost.id);
         					 }
         				 }
         			 })
@@ -112,11 +122,6 @@ var auto_Login = (function (model){
   						  if(returnObj && returnObj.status == '200'){
   							  var data = returnObj.data;
   							  $.setCurrentToken(data.token,data.refreshToken);
-//  							  var ssg = window.sessionStorage;
-//  							  if(ssg){
-//  								  ssg.setItem("token",data.token);
-//  								  ssg.setItem("refreshToken",data.refreshToken);
-//  							  }
   						  }else{
   							  flag = false;
   							  alert(returnObj.msg);
@@ -162,10 +167,11 @@ $(function(){
 			auto_Login.active = springActive.replace(/\-/g,"");
 		}
 		var href = hash.split("#")[1];
-//		var ssg = window.sessionStorage;
-//		if(ssg){
-//			var token = ssg.getItem("token");
+		
+		
 		var isExistsToken = $.isExistsToken();
+		
+		//中邮的校验，是否存在
 		var cnpost = $.getCookie("cnpost");
 		if(cnpost && cnpost != ""){
 			var checkLogin = auto_Login[auto_Login.active].checkLogin();
@@ -180,8 +186,13 @@ $(function(){
 			}
 		}else{
 			if(!isExistsToken){
-				if(auto_Login[auto_Login.active].autoLoginFun(auto_Login._util.applyToken)){
-					window.location.href = "./aibi_lc/pages/"+ href+ ".html"
+				if(auto_Login[auto_Login.active]){
+					var isAutoLogin = auto_Login[auto_Login.active].autoLoginFun(auto_Login._util.applyToken);
+					if(typeof isAutoLogin != 'boolean'){
+						window.location.href = isAutoLogin;
+					}else{
+						window.location.href = "./aibi_lc/pages/"+ href+ ".html";
+					}
 				}else{
 					window.location.href = auto_Login[auto_Login.active].failLoginUrl
 				}
@@ -189,7 +200,6 @@ $(function(){
 				window.location.href = "./aibi_lc/pages/"+ href+ ".html"
 			}
 		}
-//		}
 	}else{
 		window.location.href = auto_Login[auto_Login.active].failLoginUrl
 	}
