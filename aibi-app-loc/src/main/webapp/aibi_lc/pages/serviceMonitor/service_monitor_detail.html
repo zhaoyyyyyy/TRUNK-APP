@@ -15,7 +15,7 @@
 	</style>
 </head>
 <body>
-    <div class="iframe-nest" >
+    <div class="iframe-nest">
       	<div class="ui-lc-mian">
       		<h3 class="pre">
       			<span>运行监控明细</span>
@@ -169,18 +169,25 @@
 					</ul>
 				</div>
 			</div>
-	        <div class="ui-lc-mian mt10 ui-pre-progress"  v-for="d in yyjkList" >
+	        <!--<div class="ui-lc-mian mt10 ui-pre-progress"  v-for="d in yyjkList" >
 				<span class="ui-pre-refresh ml20" id="dataPrepare+'d.dataName'" @click="jumpTable">{{d.dataName}}<em></em></span>
-	    	</div> 
-	    	<div class="ui-lc-mian mt10" id="dataPrepareAnchor">
+	    	</div> -->
+	    	<div class="ui-lc-mian mt10 ui-pre-progress">
+				<a class="ui-pre-refresh ml20" href="#dataReady">数据准备<em></em></a>
+				<a class="ui-pre-refresh ml10" href="#labelBuild">标签生成<em></em></a>
+				<a class="ui-pre-refresh ml10" href="#customBuild">客户群生成<em></em></a>
+				<a class="ui-pre-refresh ml10" href="#customPush">客户群推送</a>
+				<!--<a name="dataReady">&nbsp;</a>-->
+	    	</div>
+	    	<div class="ui-lc-mian mt10 scrollBox" id="dataPrepareAnchor">
 	    		<h3 class="clearfix pre-jqgrid">
 	    			数据准备
 	    			<div class="ui-status">
 	    				<div class="dropdown" v-bind:class="{open:isDown}">
 	    					<span class="prefectrue-span" @click="toggleStatus()">准备状态&nbsp;<em></em></span>
 		    				<ul class="dropdown-menu" id="chooseStatus">
-						       <li><a @click="initDataPrepareTable(true)">准备状态</a></li>
-						       <li><a @click="initDataPrepareTable(false)">抽取状态</a></li>
+						       <li><a @click="initDataPrepareTable(true,this)">准备状态</a></li>
+						       <li><a @click="initDataPrepareTable(false,this)">抽取状态</a></li>
 						    </ul>
 	    				</div>
 						<span  v-for="d in sjzbList" id="sjzbList" v-if="zbFlag">
@@ -201,8 +208,9 @@
 	                <table id="dataPrepareTable"  class="table"></table>
 	                <div id="dataPreparePager"></div>
 	            </div>
+	           <!-- <a name="labelBuild">&nbsp;</a>-->
 	    	</div>
-	    	<div class="ui-lc-mian mt30" id="labelGenerateAnchor">
+	    	<div class="ui-lc-mian mt20 scrollBox" id="labelGenerateAnchor">
 	    		<h3 class="clearfix pre-jqgrid">
 	    			标签生成
 	    			<div class="ui-status">
@@ -226,8 +234,9 @@
 	    			<h3>异常信息</h3>
 	    			<span>点击上面的失败，展开显示异常的详情 ，不点击收起状态 </span>
 	    		</div>
+	    		<!--<a name="customBuild">&nbsp;</a>-->
 	    	</div>
-	    	<div class="ui-lc-mian mt10" id="customGenerateAnchor">
+	    	<div class="ui-lc-mian mt20 scrollBox" id="customGenerateAnchor">
 	    		<h3 class="clearfix pre-jqgrid">
 	    			客户群生成
 	    			<div class="ui-status">
@@ -247,9 +256,10 @@
 	                <table id="customGenerateTable"  class="table"></table>
 	                <div id="customGeneratePager"></div>
 	            </div>
+	            <!--<a name="customPush">&nbsp;</a>-->
 	    	</div>
-	    	<div class="ui-lc-mian mt30" id="customPushAnchor">
-    		<h3 class="clearfix pre-jqgrid">
+			<div class="ui-lc-mian mt20 scrollBox" id="customPushAnchor">
+     			<h3 class="clearfix pre-jqgrid">
     			客户群推送
     			<div class="ui-status">
     				<span>推送状态</span>
