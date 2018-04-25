@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.asiainfo.biapp.si.loc.base.utils.LogUtil;
 import com.asiainfo.biapp.si.loc.bd.list.service.impl.CyclicityListDataServiceImpl;
 
 import io.swagger.annotations.Api;
@@ -30,6 +31,7 @@ public class RunListDataController {
 	@ApiOperation(value="刷新loc所有缓存数据")
     @PostMapping(value = "/runDayListData")
 	public synchronized void runDayListData(String configId,String dataDate){
+		LogUtil.info(" RunListDataController  -- >  start run Day List Data configid="+ configId +";dataDate=" + dataDate);
 		if(StringUtils.isNotBlank(configId) && StringUtils.isNotBlank(dataDate)){
 			cyclicityListDataService.runDayListDataByConfigId(configId, dataDate);
 		}else if(StringUtils.isNotBlank(configId) && StringUtils.isBlank(dataDate)){
@@ -44,6 +46,7 @@ public class RunListDataController {
 	@ApiOperation(value="刷新loc所有缓存数据")
     @PostMapping(value = "/runMonthListData")
 	public synchronized void runMonthListData(String configId,String dataDate){
+		LogUtil.info(" RunListDataController  -- >  start run Month List Data configid="+ configId +";dataDate=" + dataDate);
 		if(StringUtils.isNotBlank(configId) && StringUtils.isNotBlank(dataDate)){
 			cyclicityListDataService.runMonthListDataByConfigId(configId, dataDate);
 		}else if(StringUtils.isNotBlank(configId) && StringUtils.isBlank(dataDate)){

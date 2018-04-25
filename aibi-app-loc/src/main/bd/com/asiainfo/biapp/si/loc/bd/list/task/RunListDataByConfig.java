@@ -7,6 +7,7 @@ import java.util.concurrent.Callable;
 import org.apache.commons.lang3.StringUtils;
 
 import com.asiainfo.biapp.si.loc.base.extend.SpringContextHolder;
+import com.asiainfo.biapp.si.loc.base.utils.LogUtil;
 import com.asiainfo.biapp.si.loc.cache.CocCacheProxy;
 import com.asiainfo.biapp.si.loc.core.label.model.ExploreQueryParam;
 import com.asiainfo.biapp.si.loc.core.label.service.ICustomerManagerService;
@@ -35,7 +36,7 @@ public class RunListDataByConfig implements Callable<String> {
 
 	@Override
 	public String call() throws Exception {
-		System.out.println("call()方法被自动调用,干活！！！             " + Thread.currentThread().getName());
+		LogUtil.info("call()方法被自动调用,干活！！！             " + Thread.currentThread().getName());
 		listMServiceImpl = (CustomerManagerServiceImpl)SpringContextHolder.getBean("customerManagerServiceImpl");
 		customerPublishTaskService = (ISeasonalCustomerPublishTask)SpringContextHolder.getBean("seasonalCustomerPublishTaskImpl");
 		if(iListIds == null || iListIds.isEmpty()){
