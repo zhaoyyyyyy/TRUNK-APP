@@ -318,6 +318,13 @@ var labelInfoModel = (function (model){
 				  dataModel.dataPrivaliegeList = returnObj.data.dataPrivaliege[3];
 				  if(dataModel.dataPrivaliegeList && dataModel.dataPrivaliegeList.length > 1){
 					  dataModel.isShowPrivaliegeDiv = true;
+					  for(var i=0;i<dataModel.dataPrivaliegeList.length;i++){
+						  var orgs = dataModel.labelInfo.orgId;
+						  var org = dataModel.dataPrivaliegeList[i].id;
+						  if(orgs.indexOf(org) != -1){
+							  dataModel.checkedModelList.push(org);
+						  }
+					  }
 				  }else if(dataModel.dataPrivaliegeList && dataModel.dataPrivaliegeList.length == 1){
 					  dataModel.checkedModelList[0] = dataModel.dataPrivaliegeList[0].id;
 				  }
@@ -670,6 +677,8 @@ var labelInfoModel = (function (model){
    			  postData:data,
    			  onSuccess: function(returnObj){
    				  $.alert(returnObj.msg, function(){
+					  var ssg = window.sessionStorage;
+					  delete ssg.customId;
    					  //保存成功后跳转，标签集市和客户群集市都跳转到客户群集市页面
    					  top.toggleMenu("#custom/custom_market");
    				  });

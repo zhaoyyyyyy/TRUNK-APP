@@ -8,27 +8,25 @@ import java.sql.Statement;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.asiainfo.biapp.si.loc.bd.common.service.IBackSqlService;
+import com.asiainfo.biapp.si.loc.core.ServiceConstants;
 import org.apache.commons.lang.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.stereotype.Component;
-
 import com.asiainfo.biapp.si.loc.base.utils.LogUtil;
 import com.asiainfo.biapp.si.loc.bd.common.util.JDBCUtil;
-import com.asiainfo.biapp.si.loc.bd.datadeal.DataDealConstants;
 import com.asiainfo.biapp.si.loc.bd.datadeal.component.LabelDealComponent;
-import org.springframework.transaction.annotation.Transactional;
 
 @Configuration
 public class JdbcManager {
-
+    private String threadNumber = "主线程：";
+    public void setThreadNumber(String threadNumber) {
+        this.threadNumber = threadNumber;
+    }
     public Connection getConnection() {
         Connection conn = null;
         try {
             conn = JDBCUtil.getInstance().getWebConnection();
         } catch (Exception e) {
-            LogUtil.debug("获取前台连接失败" + e);
+            LogUtil.error(threadNumber + "获取前台连接失败" + e);
         }
         return conn;
     }
@@ -50,7 +48,7 @@ public class JdbcManager {
         LabelDealComponent labelDealComponent = new LabelDealComponent();
         String schema = labelDealComponent.getSchema();
         try {
-            LogUtil.info("获取用户全量表信息：" + sql);
+            LogUtil.debug("获取用户全量表信息：" + sql);
             stm = conn.prepareStatement(sql);
             rs = stm.executeQuery();
             int i = 0;
@@ -89,12 +87,12 @@ public class JdbcManager {
                     otehrColumnName = map.get("OTHER_NEED_COLUMNS");
                 }
                 String oldColumn = rs.getString("ORG_COLUMN_NAME");
-                String newColumn = DataDealConstants.ORG_LEVEL_ + rs.getInt("LEVEL_ID");
+                String newColumn = ServiceConstants.ALL_USER_ORG_LEVEL_ + rs.getInt("LEVEL_ID");
                 otehrColumnName += oldColumn + " " + newColumn + ",";
                 map.put("OTHER_NEED_COLUMNS", otehrColumnName);
             }
         } catch (SQLException e) {
-            LogUtil.debug("加载用户全量表失败" + e);
+            LogUtil.error("加载用户全量表失败" + e);
         } finally {
             JdbcManager.closeAll(conn, stm, rs);
         }
@@ -115,11 +113,11 @@ public class JdbcManager {
         ResultSet rs = null;
         PreparedStatement pst = null;
         try {
-            LogUtil.info("插入数据：" + sql);
+            LogUtil.debug("插入数据：" + sql);
             pst = conn.prepareStatement(sql);
             pst.execute();
         } catch (SQLException e) {
-            LogUtil.debug("插入数据：" + e);
+            LogUtil.error("插入数据：" + e);
             boo = false;
         } finally {
             closeAll(conn, pst, rs);

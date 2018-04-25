@@ -78,9 +78,6 @@ public class SftpUtil {
      * */
     public ChannelSftp  getconnect(String host, String username, String password,int port) {
         try {
-            if (sftp != null) {
-                LogUtil.debug("sftp不能为空！");
-            }
             JSch jsch = new JSch();
             jsch.getSession(username, host, port);
             Session sshSession = jsch.getSession(username, host, port);
@@ -530,7 +527,6 @@ public class SftpUtil {
             public void end(){
                 SftpUtil.isCompletedMap.put(threadName, "true");    //false:未完成；true：已完成
                 
-                LogUtil.debug("传输已完成"); 
                 LogUtil.debug("【Sftp Monitor】Transferring done.cost:"+(System.currentTimeMillis()-cost)+"ms.");
             }
         };

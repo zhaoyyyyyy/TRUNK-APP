@@ -24,7 +24,6 @@ import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
 
 import com.asiainfo.biapp.si.loc.base.entity.BaseEntity;
-import com.asiainfo.biapp.si.loc.core.back.entity.AllUserMsg;
 
 import io.swagger.annotations.ApiParam;
 

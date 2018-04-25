@@ -705,8 +705,10 @@ J.dialog = function( opts, elem )
 		{
 		    if( self.opt.parent && self.opt.parent.opt.cover )
 			{
-			    var Index = self.opt.parent.dg.style.zIndex;
-				cover.style.zIndex = parseInt(Index,10) - 1;
+		    		if(self.opt.parent.dg.style){
+				    var Index = self.opt.parent.dg.style.zIndex;
+					cover.style.zIndex = parseInt(Index,10) - 1;
+		    		}
 			}
 			else
 			    cover.style.display = 'none';

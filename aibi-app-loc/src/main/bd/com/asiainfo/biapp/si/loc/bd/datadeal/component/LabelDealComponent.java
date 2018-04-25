@@ -11,13 +11,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
 import com.asiainfo.biapp.si.loc.base.exception.SqlRunException;
 import com.asiainfo.biapp.si.loc.bd.common.service.impl.BackServiceImpl;
+import com.asiainfo.biapp.si.loc.core.ServiceConstants;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.context.annotation.Configuration;
 import com.asiainfo.biapp.si.loc.base.utils.LogUtil;
-import com.asiainfo.biapp.si.loc.bd.datadeal.DataDealConstants;
 import com.asiainfo.biapp.si.loc.bd.datadeal.util.BackJdbcManager;
 import com.asiainfo.biapp.si.loc.bd.datadeal.util.JdbcManager;
 import com.asiainfo.biapp.si.loc.bd.datadeal.util.TimeUtil;
@@ -31,9 +30,13 @@ public class LabelDealComponent {
     private String threadNumber = "主线程：";
     private String data_date = "";
     private Integer data_cycle = 0;
-    private static String LOC_SOURCE_TABLE_INFO = DataDealConstants.LOC_SOURCE_TABLE_INFO;
-    private static String DIM_TARGET_TABLE_STATUS = DataDealConstants.DIM_TARGET_TABLE_STATUS;
-    private static String LOC_PRE_CONFIG_INFO = DataDealConstants.LOC_PRE_CONFIG_INFO;
+    Long startTime=0L;
+    private static String LOC_SOURCE_TABLE_INFO = "LOC_SOURCE_TABLE_INFO";
+    private static String DIM_TARGET_TABLE_STATUS = "DIM_TARGET_TABLE_STATUS";
+    private static String LOC_PRE_CONFIG_INFO = "LOC_PRE_CONFIG_INFO";
+    private static String LOC_LABEL_INFO="LOC_LABEL_INFO";
+    private static String DIM_LABEL_STATUS="DIM_LABEL_STATUS";
+    private static String LOC_NEWEST_LABEL_DATE="LOC_NEWEST_LABEL_DATE";
 
     public void setData_date(String data_date) {
         this.data_date = data_date;
@@ -48,18 +51,18 @@ public class LabelDealComponent {
     }
 
     public Boolean isnumber(String str) {
-        LogUtil.info("判断传入是日期是否满足要求");
+        LogUtil.info(threadNumber+"判断传入是日期是否满足要求");
         Pattern pattern = Pattern.compile("[0-9]*");
         Matcher isNum = pattern.matcher(str);
         if (!isNum.matches()) {
-            LogUtil.info("请传入日期为纯数字类型");
-            LogUtil.info("月周期：YYYYMM；日周期：YYYYMMDD");
+            LogUtil.error(threadNumber+"请传入日期为纯数字类型:月周期：YYYYMM；日周期：YYYYMMDD");
             return false;
         }
         return true;
     }
 
     public Boolean updateDimTargetTableStatusBySourceTableId(Integer num, List<String> sourceTableIdList) {
+        startTime=System.currentTimeMillis();
         Boolean isOk = true;
         LogUtil.info(threadNumber + "更新指标状态表");
         String sql = "update " + DIM_TARGET_TABLE_STATUS + " set DATA_STATUS = " + num + ",IS_DOING=0,exception_desc='0' where data_date='" + data_date + "'";
@@ -76,11 +79,11 @@ public class LabelDealComponent {
             LogUtil.info(threadNumber + "更新" + DIM_TARGET_TABLE_STATUS + "sql:" + sql);
             pstm = connection.prepareStatement(sql);
             pstm.executeUpdate();
-            LogUtil.info(threadNumber + "更新" + DIM_TARGET_TABLE_STATUS + "成功！");
         } catch (SQLException e) {
             isOk = false;
-            LogUtil.debug(threadNumber + "更新 " + DIM_TARGET_TABLE_STATUS + "失败！" + e);
+            LogUtil.error(threadNumber + "更新 " + DIM_TARGET_TABLE_STATUS + "失败！" + e);
         } finally {
+            LogUtil.debug(threadNumber+new StringBuffer(sql).append(" cost:").append(System.currentTimeMillis()-startTime).append("ms."));
             JdbcManager.closeAll(connection, pstm, res);
         }
         return isOk;
@@ -92,16 +95,17 @@ public class LabelDealComponent {
             BackServiceImpl iBackSqlService = new BackServiceImpl();
             schema = iBackSqlService.getCurBackDbSchema();
         } catch (SqlRunException e) {
-            LogUtil.debug("获取后台schema失败" + e);
+            LogUtil.error(threadNumber+"获取后台schema失败" + e);
         }
         return schema;
 
     }
 
     public boolean initDate(String data_date) {
-        String addDateSQL = "insert into " + DataDealConstants.DIM_TARGET_TABLE_STATUS + "(source_table_id,table_schema,source_table_name,data_date,data_status,is_doing) " +
+        startTime=System.currentTimeMillis();
+        String addDateSQL = "insert into " + DIM_TARGET_TABLE_STATUS + "(source_table_id,table_schema,source_table_name,data_date,data_status,is_doing) " +
                 "select t1.source_table_id,t2.table_schema,t2.source_table_name,t2.data_date,1,0 from loc_source_table_info t1 " +
-                "left join " + DataDealConstants.DIM_TARGET_TABLE_STATUS + " t2  on t1.table_schema=t2.table_schema and t1.source_table_name=t2.source_table_name " +
+                "left join " + DIM_TARGET_TABLE_STATUS + " t2  on t1.table_schema=t2.table_schema and t1.source_table_name=t2.source_table_name " +
                 "where t2.source_table_id='0' and t2.data_status=1 and t2.data_date='" + data_date + "'" +
                 " and t1.source_table_id  not in (select source_table_id from DIM_TARGET_TABLE_STATUS where data_date='" + data_date + "' and source_table_id<>'0')";
         Connection connection = null;
@@ -109,33 +113,35 @@ public class LabelDealComponent {
         PreparedStatement pstm = null;
         connection = new JdbcManager().getConnection();
         try {
-            LogUtil.info("初始化数据" + DIM_TARGET_TABLE_STATUS + "sql：" + addDateSQL);
+            LogUtil.info(threadNumber+"初始化数据" + DIM_TARGET_TABLE_STATUS + "sql：" + addDateSQL);
             pstm = connection.prepareStatement(addDateSQL);
             pstm.execute();
-            LogUtil.info("初始化数据" + DIM_TARGET_TABLE_STATUS + "成功！");
         } catch (SQLException e) {
-            LogUtil.debug("初始化数据 " + DIM_TARGET_TABLE_STATUS + "失败！" + e);
+            LogUtil.error(threadNumber+"初始化数据 " + DIM_TARGET_TABLE_STATUS + "失败！" + e);
             return false;
         } finally {
             JdbcManager.closeAll(connection, pstm, res);
+            LogUtil.debug(threadNumber+new StringBuffer(addDateSQL).append(" cost:").append(System.currentTimeMillis()-startTime).append("ms."));
         }
-        String updateSql = "update " + DataDealConstants.DIM_TARGET_TABLE_STATUS + " set data_status=0 where source_table_id='0' and data_date='" + data_date + "'";
+        String updateSql = "update " + DIM_TARGET_TABLE_STATUS + " set data_status=0 where source_table_id='0' and data_date='" + data_date + "'";
         connection = new JdbcManager().getConnection();
+         startTime=System.currentTimeMillis();
         try {
-            LogUtil.info("还原状态" + DIM_TARGET_TABLE_STATUS + "sql：" + updateSql);
+            LogUtil.info(threadNumber+"还原状态" + DIM_TARGET_TABLE_STATUS + "sql：" + updateSql);
             pstm = connection.prepareStatement(updateSql);
             int i = pstm.executeUpdate();
-            LogUtil.info("还原状态" + DIM_TARGET_TABLE_STATUS + "成功！");
         } catch (SQLException e) {
-            LogUtil.debug("还原状态 " + DIM_TARGET_TABLE_STATUS + "失败！" + e);
+            LogUtil.error(threadNumber+"还原状态 " + DIM_TARGET_TABLE_STATUS + "失败！" + e);
             return false;
         } finally {
             JdbcManager.closeAll(connection, pstm, res);
+            LogUtil.debug(threadNumber+new StringBuffer(updateSql).append(" cost:").append(System.currentTimeMillis()-startTime).append("ms."));
         }
         return true;
     }
 
     public List<String> configIsOk(List<String> configId) {
+        startTime=System.currentTimeMillis();
         List<String> configIds = new ArrayList<String>();
         String findConfig_id = " select config_id from LOC_PRE_CONFIG_INFO where config_status=1 and config_id in(";
         for (int i = 0; i < configId.size(); i++) {
@@ -157,17 +163,17 @@ public class LabelDealComponent {
                 configIds.add(config_id);
             }
         } catch (SQLException e) {
-            LogUtil.debug(threadNumber + "获取config_id失败：" + e);
+            LogUtil.error(threadNumber + "获取config_id失败：" + e);
             return null;
         } finally {
             JdbcManager.closeAll(connection, pstm, res);
+            LogUtil.debug(threadNumber+new StringBuffer(findConfig_id).append(" cost:").append(System.currentTimeMillis()-startTime).append("ms."));
         }
-
         return configIds;
     }
 
     public boolean updateDimTargetTableStatusNotExistsTable(List<String> notExistsTableList) {
-        LogUtil.info(threadNumber + "更新指标状态表中为准备好的状态");
+        startTime=System.currentTimeMillis();
         String sql = "update " + DIM_TARGET_TABLE_STATUS + " set DATA_STATUS =0,IS_DOING=0,exception_desc = 'table not exists' where data_date='" + data_date + "'and (1 = 0 ";
         for (int i = 0; i < notExistsTableList.size(); i++) {
             sql += " or source_table_id='" + notExistsTableList.get(i) + "' ";
@@ -181,24 +187,19 @@ public class LabelDealComponent {
             LogUtil.info(threadNumber + "更新指标状态表的SQL为：" + sql);
             pstm = connection.prepareStatement(sql);
             int i = pstm.executeUpdate();
-            if (i > 0) {
-                LogUtil.info(threadNumber + "更新" + DIM_TARGET_TABLE_STATUS + "成功！");
-                LogUtil.info(threadNumber + sql);
-            }
         } catch (SQLException e) {
-            LogUtil.debug(threadNumber + "更新 " + DIM_TARGET_TABLE_STATUS + "失败！" + e);
-            LogUtil.debug(threadNumber + sql);
+            LogUtil.error(threadNumber + "更新 " + DIM_TARGET_TABLE_STATUS + "失败！" + e);
             return false;
         } finally {
             JdbcManager.closeAll(connection, pstm, res);
+            LogUtil.debug(threadNumber+new StringBuffer(sql).append(" cost:").append(System.currentTimeMillis()-startTime).append("ms."));
         }
         return true;
     }
 
     public boolean updateLocLabelInfo(List<String> labelIdList) {
-        LogUtil.info(threadNumber + "更新指标信息表" + DataDealConstants.LOC_LABEL_INFO);
-        LogUtil.info(threadNumber + "根据的标签为：" + labelIdList);
-        String updateSql = "update " + DataDealConstants.LOC_LABEL_INFO + " set data_date = " + data_date + " where " +
+         startTime=System.currentTimeMillis();
+        String updateSql = "update " + LOC_LABEL_INFO + " set data_date = " + data_date + " where " +
                 "(data_date<" + data_date + " or data_date is null )" +
                 " and (1 = 0 ";
         Connection connection = null;
@@ -214,22 +215,21 @@ public class LabelDealComponent {
             pstm = connection.prepareStatement(updateSql);
             boolean execute = pstm.execute();
         } catch (SQLException e) {
-            LogUtil.info(threadNumber + "更新" + DataDealConstants.LOC_LABEL_INFO + "失败" + e);
-            LogUtil.info(threadNumber + updateSql);
+            LogUtil.error(threadNumber + "更新" + LOC_LABEL_INFO + "失败" + e);
             return false;
         } finally {
             JdbcManager.closeAll(connection, pstm, res);
+            LogUtil.debug(threadNumber+new StringBuffer(updateSql).append(" cost:").append(System.currentTimeMillis()-startTime).append("ms."));
         }
         return true;
     }
 
     public boolean insertIntoDimLabelStatus(List<String> labelIdList) {
+         startTime=System.currentTimeMillis();
         List<String> labelIdLists = labelIdList;
-        LogUtil.info("");
         LogUtil.info(threadNumber + "插入指标状态表");
-        LogUtil.info(threadNumber + "获取" + DataDealConstants.DIM_LABEL_STATUS + "中不存在的标签");
-        String sql = "select label_id from " + DataDealConstants.DIM_LABEL_STATUS;
-        LogUtil.info(threadNumber + sql);
+        String sql = "select label_id from " + DIM_LABEL_STATUS;
+        LogUtil.info(threadNumber + "获取" + DIM_LABEL_STATUS + "中不存在的标签"+sql);
         Connection connection = null;
         ResultSet res = null;
         PreparedStatement pstm = null;
@@ -244,16 +244,18 @@ public class LabelDealComponent {
                 }
             }
         } catch (SQLException e) {
-            LogUtil.debug(threadNumber + "获取" + DataDealConstants.DIM_LABEL_STATUS + "中已经存在的标签失败" + e);
+            LogUtil.error(threadNumber + "获取" + DIM_LABEL_STATUS + "中已经存在的标签失败" + e);
             return false;
         } finally {
             JdbcManager.closeAll(connection, pstm, res);
+            LogUtil.debug(threadNumber+new StringBuffer(sql).append(" cost:").append(System.currentTimeMillis()-startTime).append("ms."));
         }
-        LogUtil.info(threadNumber + DataDealConstants.DIM_LABEL_STATUS + "中不存在的标签为：" + labelIdLists);
+        startTime=System.currentTimeMillis();
         connection = new JdbcManager().getConnection();
-        String insertSql = "insert into " + DataDealConstants.DIM_LABEL_STATUS + " values(?," + data_date + "," + 0 + ",'" + TimeUtil.getCurrentDayYYYYMMDD() + "',0)";
+        String insertSql = "insert into " + DIM_LABEL_STATUS + " values(?," + data_date + "," + 0 + ",'" + TimeUtil.getCurrentDayYYYYMMDD() + "',0)";
         try {
             connection.setAutoCommit(false);
+            LogUtil.info(threadNumber + DIM_LABEL_STATUS + "中不存在的标签为：" + labelIdLists);
             pstm = connection.prepareStatement(insertSql);
             for (int i = 0; i < labelIdLists.size(); i++) {
                 pstm.setString(1, labelIdLists.get(i));
@@ -261,20 +263,22 @@ public class LabelDealComponent {
             }
             connection.commit();
         } catch (SQLException e) {
-            LogUtil.debug(threadNumber + "批量插入" + DataDealConstants.DIM_LABEL_STATUS + "异常");
+            LogUtil.error(threadNumber + "插入" + DIM_LABEL_STATUS + "异常"+e);
             return false;
         } finally {
             JdbcManager.closeAll(connection, pstm, res);
+            LogUtil.debug(threadNumber+new StringBuffer(insertSql).append(" cost:").append(System.currentTimeMillis()-startTime).append("ms."));
         }
         return true;
     }
 
     public boolean updateDimLabelStatus(List<String> labelIdList) {
-        LogUtil.info(threadNumber + "更新" + DataDealConstants.DIM_LABEL_STATUS);
+         startTime=System.currentTimeMillis();
+        LogUtil.debug(threadNumber + "更新" + DIM_LABEL_STATUS);
         Connection connection = null;
         ResultSet res = null;
         PreparedStatement pstm = null;
-        String updateSql = "update " + DataDealConstants.DIM_LABEL_STATUS + " set data_date='" + data_date + "',data_status=1 where " +
+        String updateSql = "update " + DIM_LABEL_STATUS + " set data_date='" + data_date + "',data_status=1 where " +
                 "(data_date<'" + data_date + "' or data_date is null )" +
                 " and ( 1=2";
         connection = new JdbcManager().getConnection();
@@ -283,17 +287,15 @@ public class LabelDealComponent {
                 updateSql += " or label_id='" + labelIdList.get(i) + "'";
             }
             updateSql += ")";
-            LogUtil.info(threadNumber + "更新" + DataDealConstants.DIM_LABEL_STATUS + "的sql为：" + updateSql);
+            LogUtil.info(threadNumber + "更新" + DIM_LABEL_STATUS + "的sql为：" + updateSql);
             pstm = connection.prepareStatement(updateSql);
             int i = pstm.executeUpdate();
-            if (i > 0) {
-                LogUtil.info(threadNumber + "更新" + DataDealConstants.DIM_LABEL_STATUS + "成功");
-            }
         } catch (SQLException e) {
-            LogUtil.debug(threadNumber + "批量更新" + DataDealConstants.DIM_LABEL_STATUS + "异常：" + e);
+            LogUtil.error(threadNumber + "批量更新" + DIM_LABEL_STATUS + "异常：" + e);
             return false;
         } finally {
             JdbcManager.closeAll(connection, pstm, res);
+            LogUtil.debug(threadNumber+new StringBuffer(updateSql).append(" cost:").append(System.currentTimeMillis()-startTime).append("ms."));
         }
         return true;
     }
@@ -304,28 +306,28 @@ public class LabelDealComponent {
         String indexDate = "";
         String dwDate = "";
         if (data_cycle == 1) {
-            MAX_STAT_HISTORY_INDEX = DataDealConstants.MAX_STAT_HISTORY_DAY_INDEX;
-            MAX_STAT_HISTORY_DW = DataDealConstants.MAX_STAT_HISTORY_DAY_DW;
+            MAX_STAT_HISTORY_INDEX = ServiceConstants.MAX_STAT_HISTORY_DAY_INDEX;
+            MAX_STAT_HISTORY_DW = ServiceConstants.MAX_STAT_HISTORY_DAY_DW;
             indexDate = TimeUtil.getFrontDay(MAX_STAT_HISTORY_INDEX, data_date);
             dwDate = TimeUtil.getFrontDay(MAX_STAT_HISTORY_DW, data_date);
         } else {
-            MAX_STAT_HISTORY_INDEX = DataDealConstants.MAX_STAT_HISTORY_MONTH_INDEX;
-            MAX_STAT_HISTORY_DW = DataDealConstants.MAX_STAT_HISTORY_MONTH_DW;
+            MAX_STAT_HISTORY_INDEX = ServiceConstants.MAX_STAT_HISTORY_MONTH_INDEX;
+            MAX_STAT_HISTORY_DW = ServiceConstants.MAX_STAT_HISTORY_MONTH_DW;
             indexDate = TimeUtil.getFrontMonth(MAX_STAT_HISTORY_INDEX, data_date);
             dwDate = TimeUtil.getFrontMonth(MAX_STAT_HISTORY_DW, data_date);
         }
         String indexTable = "kpi_l_pref_" + config_id + "_" + indexDate;
         String dwTable = "dw_l_pref_" + config_id + "_" + dwDate;
-        LogUtil.info("清除历史数据：" + indexTable + "," + dwTable);
+        LogUtil.info(threadNumber+"清除历史数据：" + indexTable + "," + dwTable);
         if (new BackJdbcManager().dropTable(indexTable)) {
-            LogUtil.info("清除历史数据：" + indexTable + "成功");
+            LogUtil.debug(threadNumber+"清除历史数据：" + indexTable + "成功");
         } else {
-            LogUtil.info("清除历史数据：" + indexTable + "失败，请手动删除表：" + indexTable);
+            LogUtil.error(threadNumber+"清除历史数据：" + indexTable + "失败，请手动删除表：" + indexTable);
         }
         if (new BackJdbcManager().dropTable(dwTable)) {
-            LogUtil.info("清除历史数据：" + dwTable + "成功");
+            LogUtil.debug(threadNumber+"清除历史数据：" + dwTable + "成功");
         } else {
-            LogUtil.info("清除历史数据：" + dwTable + "失败，请手动删除表：" + dwTable);
+            LogUtil.error(threadNumber+"清除历史数据：" + dwTable + "失败，请手动删除表：" + dwTable);
         }
     }
 
@@ -353,8 +355,9 @@ public class LabelDealComponent {
         List<String> columnList = new ArrayList<String>();
         if (num == 1 || num == 3) {
             if (b) {
+                LogUtil.info(threadNumber + tableName+"已经存在，创建临时表" + tableName_02);
                 if (backJdbcManager.createTableByColumns(tableName_02, columnNameAndTypeList, sql)) {
-                    LogUtil.info(threadNumber + "创建临时表：" + tableName_02 + " 成功");
+                    LogUtil.debug(threadNumber + "创建临时表：" + tableName_02 + " 成功");
                     if (num == 3) {
                         if (backJdbcManager.renameTableName(tableName, tableName_01)) {
                             if (backJdbcManager.renameTableName(tableName_02, tableName)) {
@@ -374,17 +377,15 @@ public class LabelDealComponent {
                     List<String> columnNameList = backJdbcManager.getColumnNameByName(tableName);
                     Map<String, String> oldColumnNameAndTypeByName = backJdbcManager.getColumnNameAndTypeByName(tableName);
                     if (columnNameList.size() > 0) {
-                        LogUtil.info(threadNumber + "根据目标表表名获取列：" + tableName);
-                        LogUtil.info(threadNumber + "已存在的目标表列：" + columnNameList);
+                        LogUtil.debug(threadNumber + "根据目标表表名获取列：" + tableName+"\n"+ "已存在的目标表列：" + columnNameList);
                     }
                     List<String> columnNameList_02 = backJdbcManager.getColumnNameByName(tableName_02);
                     Map<String, String> newColumnNameAndTypeByName = backJdbcManager.getColumnNameAndTypeByName(tableName_02);
                     if (columnNameList_02.size() > 0) {
-                        LogUtil.info(threadNumber + "根据目标表表名获取列：" + tableName_02);
-                        LogUtil.info(threadNumber + "已存在的目标表列：" + columnNameList_02);
+                        LogUtil.debug(threadNumber + "根据目标表表名获取列：" + tableName_02+"\n"+"已存在的目标表列：" + columnNameList_02);
                     }
                     //新表、源表关联字段
-                    String joinName = DataDealConstants.PRODUCT_NO;
+                    String joinName = ServiceConstants.LABEL_PRODUCT_NO;
                     LogUtil.info(threadNumber + "关联字段为：" + joinName);
                     List<String> allColumnName = new ArrayList<String>();
                     //sql t1,tableNmae t2
@@ -417,26 +418,19 @@ public class LabelDealComponent {
                             backJdbcManager.renameTableName(tableName_01, tableName);
                         }
                         LogUtil.info(threadNumber + "删除临时表：" + tableName_03 + "," + tableName_02);
-                        if (!backJdbcManager.dropTable(tableName_02)) {
-                            LogUtil.info(threadNumber + "删除表：" + tableName_02 + "失败,请手动删除");
-                        }
-                        if (!backJdbcManager.dropTable(tableName_03)) {
-                            LogUtil.info(threadNumber + "删除表：" + tableName_03 + "失败,请手动删除");
-                        }
+                        backJdbcManager.dropTable(tableName_02);
+                        backJdbcManager.dropTable(tableName_03);
                     } else {
-                        LogUtil.info(threadNumber + "创建目标表：" + tableName + " 失败");
+                        LogUtil.error(threadNumber + "创建目标表：" + tableName + " 失败");
                         LogUtil.info(threadNumber + "将临时表" + tableName_03 + "重命名为" + tableName);
                         final Boolean boo = backJdbcManager.renameTableName(tableName_03, tableName);
                         if (boo) {
                             LogUtil.info(threadNumber + "将临时表" + tableName_03 + "重命名为" + tableName + "成功");
-                        } else {
-                            LogUtil.info(threadNumber + "将临时表" + tableName_03 + "重命名为" + tableName + "失败");
-                            LogUtil.info(threadNumber + "请手动执行SQL:" + "ALTER TABLE " + tableName_03 + " RENAME TO " + tableName);
                         }
                         isOk = false;
                     }
                 } else {
-                    LogUtil.info(threadNumber + "创建临时表：" + tableName_02 + " 失败");
+                    LogUtil.error(threadNumber + "创建临时表：" + tableName_02 + " 失败");
                     isOk = false;
                 }
             } else {
@@ -468,7 +462,7 @@ public class LabelDealComponent {
                         LogUtil.info(threadNumber + "已存在的目标表列：" + columnNameList_02);
                     }
                     //新表、源表关联字段
-                    String joinName = DataDealConstants.PRODUCT_NO;
+                    String joinName = ServiceConstants.LABEL_PRODUCT_NO;
                     LogUtil.info(threadNumber + "关联字段为：" + joinName);
                     List<String> allColumnName = new ArrayList<String>();
                     //sql t1,tableNmae t2
@@ -508,14 +502,10 @@ public class LabelDealComponent {
                             LogUtil.info(threadNumber + "删除表：" + tableName_03 + "失败,请手动删除");
                         }
                     } else {
-                        LogUtil.info(threadNumber + "创建目标表：" + tableName + " 失败");
                         LogUtil.info(threadNumber + "将临时表" + tableName_03 + "重命名为" + tableName);
                         final Boolean boo = backJdbcManager.renameTableName(tableName_03, tableName);
                         if (boo) {
                             LogUtil.info(threadNumber + "将临时表" + tableName_03 + "重命名为" + tableName + "成功");
-                        } else {
-                            LogUtil.info(threadNumber + "将临时表" + tableName_03 + "重命名为" + tableName + "失败");
-                            LogUtil.info(threadNumber + "请手动执行SQL:" + "ALTER TABLE " + tableName_03 + " RENAME TO " + tableName);
                         }
                         isOk = false;
                     }
@@ -549,6 +539,7 @@ public class LabelDealComponent {
     }
 
     public Map<String, String> getLabelId(String config_id) {
+         startTime=System.currentTimeMillis();
         Map<String, String> map = new HashMap<String, String>();
         String getLabelIdSQL = "select t1.label_id,depend_index from loc_label_info t1 " +
                 "left join  LOC_MDA_SYS_TABLE_COLUMN t2 on t1.label_id=t2.label_id " +
@@ -565,14 +556,16 @@ public class LabelDealComponent {
                 map.put(rs.getString("label_id"), rs.getString("depend_index").toUpperCase());
             }
         } catch (SQLException e) {
-            LogUtil.debug(threadNumber + "初步获取标签信息失败" + e);
+            LogUtil.error(threadNumber + "初步获取标签信息失败" + e);
         } finally {
             JdbcManager.closeAll(conn, preparedStatement, rs);
+            LogUtil.debug(threadNumber+new StringBuffer(getLabelIdSQL).append(" cost:").append(System.currentTimeMillis()-startTime).append("ms."));
         }
         return map;
     }
 
     public List<String> getSourceId(String data_date, String config_id) {
+         startTime=System.currentTimeMillis();
         List<String> sourceIdList = new ArrayList<String>();
         String getSourceIdSQL = "select source_id from loc_source_info t1 " +
                 "left join LOC_SOURCE_TABLE_INFO t2 on t1.source_table_id=t2.source_table_id " +
@@ -589,70 +582,71 @@ public class LabelDealComponent {
                 sourceIdList.add(rs.getString("source_id").toUpperCase());
             }
         } catch (SQLException e) {
-            LogUtil.debug(threadNumber + "初步获取指标信息失败" + e);
+            LogUtil.error(threadNumber + "初步获取指标信息失败" + e);
         } finally {
             JdbcManager.closeAll(conn, preparedStatement, rs);
+            LogUtil.debug(threadNumber+new StringBuffer(getSourceIdSQL).append(" cost:").append(System.currentTimeMillis()-startTime).append("ms."));
         }
         return sourceIdList;
     }
 
     public boolean updateLocNewestLabelDate(String config_id) {
+         startTime=System.currentTimeMillis();
         Connection connection = null;
         ResultSet res = null;
         PreparedStatement pstm = null;
         String insertSql = "";
-        String getConfig_id = "select config_id from " + DataDealConstants.LOC_NEWEST_LABEL_DATE + " where config_id='" + config_id + "'";
+        String getConfig_id = "select config_id from " + LOC_NEWEST_LABEL_DATE + " where config_id='" + config_id + "'";
         boolean boo = false;
         connection = new JdbcManager().getConnection();
         try {
-            LogUtil.info(threadNumber + "判断" + DataDealConstants.LOC_NEWEST_LABEL_DATE + "中是否存在专区：" + config_id);
-            LogUtil.info(threadNumber + getConfig_id);
+            LogUtil.info(threadNumber + "判断" + LOC_NEWEST_LABEL_DATE + "中是否存在专区：" + config_id+" SQL:"+getConfig_id);
             pstm = connection.prepareStatement(getConfig_id);
             res = pstm.executeQuery();
             while (res.next()) {
                 boo = true;
             }
         } catch (SQLException e) {
-            LogUtil.debug("更新" + DataDealConstants.LOC_NEWEST_LABEL_DATE + "失败：" + e);
+            LogUtil.error(threadNumber+"更新" + LOC_NEWEST_LABEL_DATE + "失败：" + e);
             return false;
         } finally {
             JdbcManager.closeAll(connection, pstm, res);
+            LogUtil.debug(threadNumber+new StringBuffer(getConfig_id).append(" cost:").append(System.currentTimeMillis()-startTime).append("ms."));
         }
+        startTime=System.currentTimeMillis();
         String updateSql = "";
         if (boo) {
-            LogUtil.info(threadNumber + "更新最新数据时间表：" + DataDealConstants.LOC_NEWEST_LABEL_DATE);
+            LogUtil.info(threadNumber + "更新最新数据时间表：" + LOC_NEWEST_LABEL_DATE);
             if (data_date.length() == 8) {
-                updateSql = " UPDATE " + DataDealConstants.LOC_NEWEST_LABEL_DATE + " set day_newest_date = '" + data_date + "', day_newest_status = 0   WHERE '" + data_date + "' >=" + "day_newest_date and config_id='" + config_id + "'";
+                updateSql = " UPDATE " + LOC_NEWEST_LABEL_DATE + " set day_newest_date = '" + data_date + "', day_newest_status = 0   WHERE '" + data_date + "' >=" + "day_newest_date and config_id='" + config_id + "'";
             } else if (data_date.length() == 6) {
-                updateSql = " UPDATE " + DataDealConstants.LOC_NEWEST_LABEL_DATE + " set month_newest_date = '" + data_date + "', month_newest_status = 0   WHERE '" + data_date + "' >=" + "month_newest_date and config_id='" + config_id + "'";
+                updateSql = " UPDATE " + LOC_NEWEST_LABEL_DATE + " set month_newest_date = '" + data_date + "', month_newest_status = 0   WHERE '" + data_date + "' >=" + "month_newest_date and config_id='" + config_id + "'";
             }
         } else {
-            LogUtil.info(threadNumber + "插入最新数据时间表：" + DataDealConstants.LOC_NEWEST_LABEL_DATE);
+            LogUtil.info(threadNumber + "插入最新数据时间表：" + LOC_NEWEST_LABEL_DATE);
             if (data_date.length() == 8) {
-                updateSql = "insert into " + DataDealConstants.LOC_NEWEST_LABEL_DATE + "(day_newest_date,day_newest_status,config_id) values('" + data_date + "'," + 0 + ",'" + config_id + "')";
+                updateSql = "insert into " + LOC_NEWEST_LABEL_DATE + "(day_newest_date,day_newest_status,config_id) values('" + data_date + "'," + 0 + ",'" + config_id + "')";
             } else if (data_date.length() == 6) {
-                updateSql = "insert into " + DataDealConstants.LOC_NEWEST_LABEL_DATE + "(month_newest_date,month_newest_status,config_id) values('" + data_date + "'," + 0 + ",'" + config_id + "')";
+                updateSql = "insert into " + LOC_NEWEST_LABEL_DATE + "(month_newest_date,month_newest_status,config_id) values('" + data_date + "'," + 0 + ",'" + config_id + "')";
             }
         }
         connection = new JdbcManager().getConnection();
         try {
-            LogUtil.info(threadNumber + "更新最新数据时间表：" + DataDealConstants.LOC_NEWEST_LABEL_DATE + "的SQL为：" + updateSql);
-            LogUtil.info(threadNumber + updateSql);
+            LogUtil.info(threadNumber + "更新最新数据时间表：" + LOC_NEWEST_LABEL_DATE + "的SQL为：" + updateSql);
             pstm = connection.prepareStatement(updateSql);
             boolean execute = pstm.execute();
-            if (execute) {
-                LogUtil.info(threadNumber + "更新" + DataDealConstants.LOC_NEWEST_LABEL_DATE + "成功");
-            }
         } catch (SQLException e) {
-            LogUtil.debug("更新" + DataDealConstants.LOC_NEWEST_LABEL_DATE + "失败：" + e);
+            LogUtil.error(threadNumber+"更新" + LOC_NEWEST_LABEL_DATE + "失败：" + e);
             return false;
         } finally {
             JdbcManager.closeAll(connection, pstm, res);
+            LogUtil.debug(threadNumber+new StringBuffer(updateSql).append(" cost:").append(System.currentTimeMillis()-startTime).append("ms."));
         }
         return true;
     }
 
     public List<String> getConfigId01(BackParamVo backParamVo) {
+         startTime=System.currentTimeMillis();
         Connection connection = null;
         ResultSet res = null;
         PreparedStatement pstm = null;
@@ -666,7 +660,6 @@ public class LabelDealComponent {
                 configIdList.add(split[i]);
             }
         }
-        String schema = getSchema();
         if (StringUtils.isNotEmpty(backParamVo.getTableName())) {
             String tableName = backParamVo.getTableName();
             String[] split = tableName.split(",");
@@ -705,8 +698,7 @@ public class LabelDealComponent {
         String source_table_id;
         String config_id;
         try {
-            LogUtil.info("获取config_id，source_table_id");
-            LogUtil.info(getConfigIdSql);
+            LogUtil.info(threadNumber+"获取config_id，source_table_id:"+getConfigIdSql);
             pstm = connection.prepareStatement(getConfigIdSql);
             res = pstm.executeQuery();
             while (res.next()) {
@@ -718,13 +710,14 @@ public class LabelDealComponent {
                 sourceTableIdList.add(source_table_id);
             }
         } catch (SQLException e) {
-            LogUtil.debug("获取config_id、source_table_id 失败：" + e);
+            LogUtil.error(threadNumber+"获取config_id、source_table_id 失败：" + e);
             return null;
         } finally {
             JdbcManager.closeAll(connection, pstm, res);
+            LogUtil.debug(threadNumber+new StringBuffer(getConfigIdSql).append(" cost:").append(System.currentTimeMillis()-startTime).append("ms."));
         }
-        LogUtil.info("本次源表所属于的批次为：" + configIdList);
-        LogUtil.info("本次源表所属于的source_table_id为：" + sourceTableIdList);
+        LogUtil.info(threadNumber+"本次源表所属于的专区为：" + configIdList);
+        LogUtil.info(threadNumber+"本次源表所属于的source_table_id为：" + sourceTableIdList);
         //TODO 去更新数据源表状态表
         if (!(getConfigIdList.size() == 0 && sourceTableList.size() == 0)) {
             Boolean isOk = updateDimTargetTableStatusBySourceTableId(1, sourceTableIdList);
@@ -736,11 +729,12 @@ public class LabelDealComponent {
     }
 
     public boolean updateDimTargetTableStatus(Integer DATA_STATUS, Integer IS_DOING, List<String> sourceTableIdList,String endTime) {
+         startTime=System.currentTimeMillis();
         String sql = "";
         if (StringUtils.isBlank(endTime)) {
-            sql = "update " + DataDealConstants.DIM_TARGET_TABLE_STATUS + " set DATA_STATUS = " + DATA_STATUS + ",IS_DOING=" + IS_DOING + ",exception_desc = '0',end_time=" + null + " where data_date='" + data_date + "' and (1 = 0 ";
+            sql = "update " + DIM_TARGET_TABLE_STATUS + " set DATA_STATUS = " + DATA_STATUS + ",IS_DOING=" + IS_DOING + ",exception_desc = '0',end_time=" + null + " where data_date='" + data_date + "' and (1 = 0 ";
         } else {
-            sql = "update " + DataDealConstants.DIM_TARGET_TABLE_STATUS + " set DATA_STATUS = " + DATA_STATUS + ",IS_DOING=" + IS_DOING + ",exception_desc = '0',end_time='" + endTime + "' where data_date='" + data_date + "' and (1 = 0 ";
+            sql = "update " + DIM_TARGET_TABLE_STATUS + " set DATA_STATUS = " + DATA_STATUS + ",IS_DOING=" + IS_DOING + ",exception_desc = '0',end_time='" + endTime + "' where data_date='" + data_date + "' and (1 = 0 ";
         }        for (int i = 0; i < sourceTableIdList.size(); i++) {
             sql += " or source_table_id='" + sourceTableIdList.get(i) + "' ";
         }
@@ -755,12 +749,12 @@ public class LabelDealComponent {
             pstm.executeUpdate();
             LogUtil.info(threadNumber + "更新" + DIM_TARGET_TABLE_STATUS + "成功！");
         } catch (SQLException e) {
-            LogUtil.debug(threadNumber + "更新 " + DIM_TARGET_TABLE_STATUS + "失败！" + e);
+            LogUtil.error(threadNumber + "更新 " + DIM_TARGET_TABLE_STATUS + "失败！" + e);
             return false;
         } finally {
             JdbcManager.closeAll(connection, pstm, res);
+            LogUtil.debug(threadNumber+new StringBuffer(sql).append(" cost:").append(System.currentTimeMillis()-startTime).append("ms."));
         }
         return true;
     }
-
 }

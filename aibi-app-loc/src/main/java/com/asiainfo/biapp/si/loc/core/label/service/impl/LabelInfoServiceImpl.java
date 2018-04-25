@@ -263,6 +263,7 @@ public class LabelInfoServiceImpl extends BaseServiceImpl<LabelInfo, String> imp
         LabelInfoVo label = new LabelInfoVo();
         label.setLabelName(labelName);
         label.setConfigId(configId);
+        label.setLabelId("updateCustom");
         List<LabelInfo> labelList = iLabelInfoService.selectLabelInfoList(label);
         if (labelList !=null && labelList.size()>0) {
             return labelList.get(0);
@@ -366,7 +367,6 @@ public class LabelInfoServiceImpl extends BaseServiceImpl<LabelInfo, String> imp
         super.update(customInfo);
         String customId = customInfo.getLabelId();
         labelExtInfo.setLabelOptRuleShow(ruleService.shopCartRule(labelRuleList));
-        labelExtInfo.setCustomNum(null);
         iLabelExtInfoService.updateLabelExtInfo(labelExtInfo);
         List<LabelRuleVo> delLabelRuleVo = ruleService.queryCiLabelRuleList(customId, ServiceConstants.LabelRule.CUSTOM_TYPE_COSTOMER);
         for(LabelRuleVo lr : delLabelRuleVo){

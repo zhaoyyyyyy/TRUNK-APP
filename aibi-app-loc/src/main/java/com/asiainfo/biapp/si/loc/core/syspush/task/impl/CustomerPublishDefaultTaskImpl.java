@@ -18,6 +18,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.xml.namespace.QName;
 
@@ -165,7 +166,7 @@ public class CustomerPublishDefaultTaskImpl implements ICustomerPublishTask {
 	}
 
 	public void run() {
-	    LogUtil.info("Enter CustomerPublishDefaultThread.run()");
+	    LogUtil.info("Enter "+this.getClass().getSimpleName()+".run()");
         LogUtil.debug("客户群推送 "+CUSTOMER_PUBLISH_PRE_WAIT_TIME/THOUSAND+" 秒后开始执行。。。");
 		
         try {
@@ -181,30 +182,37 @@ public class CustomerPublishDefaultTaskImpl implements ICustomerPublishTask {
             if (null == customInfo || (null!=customInfo && null==customInfo.getDataDate())) {
                 customInfo = iLabelInfoService.get(labelPushCycle.getCustomGroupId());
             }
-
-            //获取属性列
-            int attrType = ServiceConstants.LabelAttrRel.ATTR_SETTING_TYPE_PUSH;
-            try {
-                attrRelList = iCustomerPublishCommService.getLabelAttrRelsByCustom(customInfo, attrType);
-            } catch (Exception e) {
-                LogUtil.error("查询客户群关联的属性错误！", e);
-            }
             
-            //在back库里确认一下清单数据是否存在,并查询有多少数据
-			String customId = customInfo.getLabelId();
-            String customListSql = iCustomerPublishCommService.getCustomListSql(customInfo, attrRelList,true);
-			String sql = new StringBuffer("SELECT COUNT(1) FROM (").append(customListSql).append(") tab ").toString();
-            LogUtil.debug("客户群("+customId+")的清单数据是否存在sql："+sql);
-	        try {
-                int no = backSqlService.queryCount(sql);
-                LogUtil.debug("客户群("+customId+")的清单数据量："+no);
-            } catch (Exception e) {
-                LogUtil.warn("查询客户群("+customId+")的清单数据出错，不推送。");
+            String sysId = labelPushCycle.getSysId();
+            sysInfo = iSysInfoService.get(sysId);
+            if (null == sysInfo) {
+                LogUtil.info("推送平台("+sysId+")不存在，不推送。");
                 continue;
+            } else {
+                //获取属性列
+                int attrType = ServiceConstants.LabelAttrRel.ATTR_SETTING_TYPE_PUSH;
+                try {
+                    attrRelList = iCustomerPublishCommService.getLabelAttrRelsByCustom(customInfo, attrType);
+                } catch (Exception e) {
+                    LogUtil.error("查询客户群关联的属性错误！", e);
+                    continue;
+                }
+                
+                //在back库里确认一下清单数据是否存在,并查询有多少数据
+                String customId = customInfo.getLabelId();
+                String customListSql = iCustomerPublishCommService.getCustomListSql(customInfo, attrRelList,true);
+                String sql = new StringBuffer("SELECT COUNT(1) FROM (").append(customListSql).append(") tab ").toString();
+                LogUtil.debug("客户群("+customId+")的清单数据是否存在sql："+sql);
+                try {
+                    int no = backSqlService.queryCount(sql);
+                    LogUtil.debug("客户群("+customId+")的清单数据量："+no);
+                } catch (Exception e) {
+                    LogUtil.warn("查询客户群("+customId+")的清单数据出错，不推送。");
+                    continue;
+                }
             }
 	        
 	        //保存推送详情
-	        String sysId = labelPushCycle.getSysId();
 	        labelPushReq = new LabelPushReq();
 //			if (isJobTask) {    //自启动推送
 //			    labelPushReq = new LabelPushReq();
@@ -219,15 +227,14 @@ public class CustomerPublishDefaultTaskImpl implements ICustomerPublishTask {
             fileName = LabelPushReqVo.REQID_PREFIX + customInfo.getCreateUserId() + "_"
                     + DateUtil.date2String(new Date(),DateUtil.FORMAT_YYYYMMDDHHMMSS) 
                     + this.findRandom();
-            
+            //推送过程
             try {
                 this.customPublish(sysId, customInfo.getCreateUserId());
             } catch (Exception e) {
                 //跟新实时更新推送状态
                 this.updateLabelPushReq(ServiceConstants.LabelPushReq.PUSH_STATUS_FAILED, e);
                 LogUtil.error("推送失败", e);
-                
-                return;
+                continue;
             }
 		}
 		
@@ -237,7 +244,7 @@ public class CustomerPublishDefaultTaskImpl implements ICustomerPublishTask {
         }
         
         LogUtil.debug("Customer("+customInfo.getLabelId()+")Publish end,cost:" + (System.currentTimeMillis() - start)/new Long(THOUSAND) + " s.");
-		LogUtil.info("Exist CustomerPublishDefaultThread.run()");
+		LogUtil.info("Exist "+this.getClass().getSimpleName()+".run()");
 	}
     
     /**
@@ -249,65 +256,59 @@ public class CustomerPublishDefaultTaskImpl implements ICustomerPublishTask {
 	private boolean customPublish(String sysId, String pushUserId){
 	    boolean flag = true;
 	    
-		sysInfo = iSysInfoService.get(sysId);
-		if (sysInfo == null) {
-            LogUtil.info("推送平台("+sysId+")不存在，不推送。");
-			flag = false;
-		} else {
-	        //系统支持重复客户群推送 或者 客户群不包含重复记录时 进行推送
-	        if (sysInfo.getSysId().equals(cacheProxy.getSYSConfigInfoByKey("MCD_SYS_ID"))) {
-	            //发布到MCD，北京移动的要求，到其他地方可能要改动
-	            flag = false;
-	            LogUtil.error("发布到MCD，北京移动的个性化要求，敬请期待。");
-	        } else if (sysInfo.getSysId().equals(cacheProxy.getSYSConfigInfoByKey("OLD_CI_SYS_ID"))) {
-	            //发布到老的CI
-	            flag = false;
-	            LogUtil.error("发布到老的CI，敬请期待。");
-	        } else {
-	            if (StringUtil.isNotEmpty(sysInfo.getPushClassName())) {    //个性化推送
-	                String msg = "个性化推送失败：";
-	                try {
-	                    LogUtil.debug("个性化推送...");
-	                    ICustomerPublishService myPush = (ICustomerPublishService) SpringContextHolder.getBean(sysInfo.getPushClassName());
-	                    if (null != sysInfo.getPushClassName()) {
-							if (null != myPush) {
-								flag = myPush.push(labelPushCycleList, isJobTask, reservedParameters);
-							} else {
-								msg = new StringBuffer().append("没有找到个性化推送接口实现类，").append(msg).toString();
-								throw new BaseException(msg);
-							} 
+        //系统支持重复客户群推送 或者 客户群不包含重复记录时 进行推送
+        if (sysInfo.getSysId().equals(cacheProxy.getSYSConfigInfoByKey("MCD_SYS_ID"))) {
+            //发布到MCD，北京移动的要求，到其他地方可能要改动
+            flag = false;
+            LogUtil.error("发布到MCD，北京移动的个性化要求，敬请期待。");
+        } else if (sysInfo.getSysId().equals(cacheProxy.getSYSConfigInfoByKey("OLD_CI_SYS_ID"))) {
+            //发布到老的CI
+            flag = false;
+            LogUtil.error("发布到老的CI，敬请期待。");
+        } else {
+            if (StringUtil.isNotEmpty(sysInfo.getPushClassName())) {    //个性化推送
+                String msg = "个性化推送失败：";
+                try {
+                    LogUtil.debug("个性化推送...");
+                    ICustomerPublishService myPush = (ICustomerPublishService) SpringContextHolder.getBean(sysInfo.getPushClassName());
+                    if (null != sysInfo.getPushClassName()) {
+						if (null != myPush) {
+							flag = myPush.push(labelPushCycleList, isJobTask, reservedParameters);
 						} else {
-							msg = new StringBuffer().append("SysInfo表没有配置个性化推送接口实现类，").append(msg).toString();
+							msg = new StringBuffer().append("没有找到个性化推送接口实现类，").append(msg).toString();
 							throw new BaseException(msg);
 						} 
-	                } catch (Exception e) {
-	                    flag = false;
-	                    LogUtil.error(msg, e);
-	                }
-	            } else {
-	                String needTxtIds = cacheProxy.getSYSConfigInfoByKey("FTP_NEED_TXT_SYS_IDS");
-	                if (StringUtil.isNotEmpty(needTxtIds)) {    //是否要推送txt
-	                    String[] sysIdsArray = needTxtIds.split(",");
-	                    List<String> ids = Arrays.asList(sysIdsArray);
-	                    if (!ids.isEmpty() && ids.size() > 0 && ids.contains(sysInfo.getSysId())) {
-	                        flag = false;
-	                        LogUtil.error("推送为txt，敬请期待。");
-	                    }
-	                } else {
-	                    /* 浙江新需求，无属性的清单推送，生成的表名前缀，
-	                     * eg:表名为tabel_name_a,实际表名为table_name_a+系统最新数据日期；为空时走FTP方式;
-	                     * 日表每天一天表，月表一月一张表(一次性客户群表数据存在月表中)；*/
-	                    if(StringUtil.isNotEmpty(sysInfo.getTableNamePre()) && (attrRelList==null || attrRelList.size() <=1 )){
-	                        LogUtil.error("浙江新个性化推送，无属性的清单推送，生成的表名前缀，敬请期待。");
-	                        flag = false;
-	                    }else{
-	                        //标准化推送
-                            flag = standardPublish(pushUserId);
-	                    }
-	                }
-	            }
-	        }
-		}
+					} else {
+						msg = new StringBuffer().append("SysInfo表没有配置个性化推送接口实现类，").append(msg).toString();
+						throw new BaseException(msg);
+					} 
+                } catch (Exception e) {
+                    flag = false;
+                    LogUtil.error(msg, e);
+                }
+            } else {
+                String needTxtIds = cacheProxy.getSYSConfigInfoByKey("FTP_NEED_TXT_SYS_IDS");
+                if (StringUtil.isNotEmpty(needTxtIds)) {    //是否要推送txt
+                    String[] sysIdsArray = needTxtIds.split(",");
+                    List<String> ids = Arrays.asList(sysIdsArray);
+                    if (!ids.isEmpty() && ids.size() > 0 && ids.contains(sysInfo.getSysId())) {
+                        flag = false;
+                        LogUtil.error("推送为txt，敬请期待。");
+                    }
+                } else {
+                    /* 浙江新需求，无属性的清单推送，生成的表名前缀，
+                     * eg:表名为tabel_name_a,实际表名为table_name_a+系统最新数据日期；为空时走FTP方式;
+                     * 日表每天一天表，月表一月一张表(一次性客户群表数据存在月表中)；*/
+                    if(StringUtil.isNotEmpty(sysInfo.getTableNamePre()) && (null==attrRelList || attrRelList.size() <=1 )){
+                        LogUtil.error("浙江新个性化推送，无属性的清单推送，生成的表名前缀，敬请期待。");
+                        flag = false;
+                    }else{
+                        //标准化推送
+                        flag = standardPublish(pushUserId);
+                    }
+                }
+            }
+        }
 		
         return flag;
 	}
@@ -322,9 +323,6 @@ public class CustomerPublishDefaultTaskImpl implements ICustomerPublishTask {
         LogUtil.debug("标准化推送...");
 	    
         boolean result = true;
-	    
-		List<LabelAttrRel> resultAttrs = new ArrayList<LabelAttrRel>();
-	    
 	    
 	    //1.data2file
 		//本地缓冲目录
@@ -347,17 +345,18 @@ public class CustomerPublishDefaultTaskImpl implements ICustomerPublishTask {
         String customListSql = iCustomerPublishCommService.getCustomListSql(customInfo, attrRelList,true);
         LogUtil.info("查询清单数据："+customListSql);
         //1.2 创建清单文件
-        result = this.getSql2FileUtils().sql2File(customListSql, null, fileName, encode, bufferedRowSize);
+        result = this.getSql2FileUtils().sql2File(customListSql, null, fileName);
         
         
 	    //2.determine push file type
         if (result) {
             //2.1 是否有表头
             String title = cacheProxy.getSYSConfigInfoByKey("LOC_CONFIG_APP_RELATED_COLUMN_CN_NAME");
-            if(sysInfo.getIsNeedTitle() != null && ServiceConstants.SysInfo.IS_NEED_TITLE_YES == sysInfo.getIsNeedTitle()){
+            if(null!=sysInfo.getIsNeedTitle() && ServiceConstants.SysInfo.IS_NEED_TITLE_YES==sysInfo.getIsNeedTitle()){
                 if (StringUtil.isEmpty(title)) {
                     title = "手机号码";
                 }
+
                 if (null != attrRelList && !attrRelList.isEmpty()) {    //有属性列
                 		StringBuffer titleStr = new StringBuffer();
                 		for (LabelAttrRel labelAttrRel : attrRelList) {
@@ -368,17 +367,17 @@ public class CustomerPublishDefaultTaskImpl implements ICustomerPublishTask {
                 LogUtil.debug("title："+title);
             }
             //2.2 是否有加密描述文件
-            if (sysInfo.getIsNeedDes() != null && ServiceConstants.SysInfo.IS_NEED_DES_YES == sysInfo.getIsNeedDes()) {
-                result = this.getSql2FileUtils().sql2File(customListSql, title, csvFileTmp, encode, bufferedRowSize);
+            if (null!=sysInfo.getIsNeedDes() && ServiceConstants.SysInfo.IS_NEED_DES_YES==sysInfo.getIsNeedDes()) {
+                result = this.getSql2FileUtils().sql2File(customListSql, title, csvFileTmp);
                 fileTmp = csvFileTmp;
                 desFile = csvFile;
             }else{
-                result = this.getSql2FileUtils().sql2File(customListSql, title, csvFile, encode, bufferedRowSize);
+                result = this.getSql2FileUtils().sql2File(customListSql, title, csvFile);
                 desFile = csvFile;
             }
             
             boolean hasExists = false;
-            if (sysInfo.getIsNeedDes() != null && ServiceConstants.SysInfo.IS_NEED_DES_YES == sysInfo.getIsNeedDes()) {
+            if (null!=sysInfo.getIsNeedDes() && ServiceConstants.SysInfo.IS_NEED_DES_YES==sysInfo.getIsNeedDes()) {
                 hasExists = new File(fileTmp).exists();
             }else{
                 hasExists = new File(desFile).exists();
@@ -392,10 +391,10 @@ public class CustomerPublishDefaultTaskImpl implements ICustomerPublishTask {
             }
           
             //2.3 ZIP file
-            if(sysInfo.getIsNeedCompress() != null && ServiceConstants.SysInfo.IS_NEED_COMPRESS_YES == sysInfo.getIsNeedCompress()){
+            if(null!=sysInfo.getIsNeedCompress() && ServiceConstants.SysInfo.IS_NEED_COMPRESS_YES==sysInfo.getIsNeedCompress()){
                 try {
                     LogUtil.debug("zipfile:" + zipFile);
-                    if (sysInfo.getIsNeedDes() != null && 1 == sysInfo.getIsNeedDes()) {
+                    if (null!=sysInfo.getIsNeedDes() && ServiceConstants.SysInfo.IS_NEED_DES_YES==sysInfo.getIsNeedDes()) {
                         FileUtil.zipFileUnPassword(csvFile, zipFileTmp, "UTF-8");
                         fileTmp = zipFileTmp;
                         desFile = zipFile;
@@ -405,7 +404,7 @@ public class CustomerPublishDefaultTaskImpl implements ICustomerPublishTask {
                     }
                 } catch (Exception e) {
                     String allFileName = null;
-                    if (sysInfo.getIsNeedDes() != null && ServiceConstants.SysInfo.IS_NEED_DES_YES == sysInfo.getIsNeedDes()) {
+                    if (null!=sysInfo.getIsNeedDes() && ServiceConstants.SysInfo.IS_NEED_DES_YES==sysInfo.getIsNeedDes()) {
                         allFileName = csvFile + " " + zipFileTmp;
                     } else {
                         allFileName = csvFile + " " + zipFile;
@@ -415,7 +414,7 @@ public class CustomerPublishDefaultTaskImpl implements ICustomerPublishTask {
                 }
             }
             //2.4 加密文件
-            if (sysInfo.getIsNeedDes() != null && ServiceConstants.SysInfo.IS_NEED_DES_YES == sysInfo.getIsNeedDes()) {
+            if (null!=sysInfo.getIsNeedDes() && ServiceConstants.SysInfo.IS_NEED_DES_YES==sysInfo.getIsNeedDes()) {
                 try {
                     String key = sysInfo.getDesKey(); //加密密钥
                     LogUtil.debug("key : " + key);
@@ -434,12 +433,10 @@ public class CustomerPublishDefaultTaskImpl implements ICustomerPublishTask {
             }
             //2.5 是否需要XML
             String xmlFile = localFilePath + fileName + ".xml";
-            if (sysInfo.getIsNeedXml() != null && 
-                  ServiceConstants.SysInfo.IS_NEED_XML_YES == sysInfo.getIsNeedXml()) {
+            if (null!=sysInfo.getIsNeedXml() && ServiceConstants.SysInfo.IS_NEED_XML_YES==sysInfo.getIsNeedXml()) {
                 // create XML File
                 try {
                     LogUtil.debug(">>create xml " + xmlFile + " start");
-                    LogUtil.info("desFile>>>>>>>>>>>>>>>>>>>"+desFile);
                     this.createOtherSysXmlFile(xmlFile, desFile);
                     LogUtil.debug(">>create xml " + xmlFile + " end");
                 } catch (Exception e) {
@@ -454,9 +451,9 @@ public class CustomerPublishDefaultTaskImpl implements ICustomerPublishTask {
             Integer protocoType = sysInfo.getProtocoType();//协议类型
             String protocoTypeStr = null;
             try {
-                if (null == protocoType || ServiceConstants.SysInfo.PROTOCO_TYPE_FTP == protocoType) {   //默认 ftp
+                if (null==protocoType || ServiceConstants.SysInfo.PROTOCO_TYPE_FTP==protocoType) {   //默认 ftp
                     protocoTypeStr = "ftp";
-                } else if (ServiceConstants.SysInfo.PROTOCO_TYPE_SFTP == protocoType) {  //sftp
+                } else if (ServiceConstants.SysInfo.PROTOCO_TYPE_SFTP==protocoType) {  //sftp
                     protocoTypeStr = "sftp";
                 } else {
                     protocoTypeStr = "表 SYS_INFO 的 PROTOCOTYPE 字段配置错误！";
@@ -465,7 +462,7 @@ public class CustomerPublishDefaultTaskImpl implements ICustomerPublishTask {
                     throw new BaseException(protocoTypeStr);
                 }
                 
-                LogUtil.debug("推送方式：------"+protocoTypeStr+"------");
+                LogUtil.debug("推送方式："+protocoTypeStr);
                 LogUtil.info(protocoTypeStr+" :" + sysInfo.toString());
                 LogUtil.debug("push File :" + desFile);
 
@@ -485,7 +482,7 @@ public class CustomerPublishDefaultTaskImpl implements ICustomerPublishTask {
                     result = new File(desFile).delete();    //FTP后删除本地des文件
                     LogUtil.debug(new File(desFile).exists());
                     //FTP后删除本地csv文件
-                    if(sysInfo.getIsNeedCompress()!=null && ServiceConstants.SysInfo.IS_NEED_COMPRESS_YES==sysInfo.getIsNeedCompress()
+                    if(null!=sysInfo.getIsNeedCompress() && ServiceConstants.SysInfo.IS_NEED_COMPRESS_YES==sysInfo.getIsNeedCompress()
                             && result){
                         result = new File(csvFile).delete();
                     }
@@ -493,7 +490,7 @@ public class CustomerPublishDefaultTaskImpl implements ICustomerPublishTask {
 	                //更新下载时的准确的文件名
 	                List<CustomDownloadRecord> customDownloadRecords = iCustomDownloadRecordService.selectCustomDownloadRecordList(
 	                    new CustomDownloadRecord(customInfo.getLabelId(), customInfo.getDataDate()));
-	                if (null!=customDownloadRecords && customDownloadRecords.size() > 0) {
+	                if (null!=customDownloadRecords && !customDownloadRecords.isEmpty()) {
 	                    String[] desFileArr = desFile.split(File.separator);
 	                    String fileName = desFileArr[desFileArr.length-1]; 
 	                    for (CustomDownloadRecord obj : customDownloadRecords) {
@@ -510,7 +507,7 @@ public class CustomerPublishDefaultTaskImpl implements ICustomerPublishTask {
                 return false;
             }
             //3.2 下载xml
-            if (sysInfo.getIsNeedXml() != null && 1 == sysInfo.getIsNeedXml()) {
+            if (null!=sysInfo.getIsNeedXml() && ServiceConstants.SysInfo.IS_NEED_XML_YES==sysInfo.getIsNeedXml()) {
                 //FTP xml file
                 try {
                     LogUtil.debug(protocoTypeStr+" :" + sysInfo.getFtpServerIp() + ":" + sysInfo.getFtpPort() + sysInfo.getFtpPath());
@@ -538,7 +535,7 @@ public class CustomerPublishDefaultTaskImpl implements ICustomerPublishTask {
             String isCallWebService = this.cacheProxy.getSYSConfigInfoByKey("TRANSFER_WEBSERVICE_BEFORE_PUBLISH");
             if (!Boolean.valueOf(isCallWebService) && StringUtil.isNotEmpty(sysInfo.getWebserviceWsdl())
                 && StringUtil.isNotEmpty(sysInfo.getWebserviceMethod())) {
-                result = this.getCustomPushWebServiceResult(pushUserId, labelPushReq, resultAttrs);
+                result = this.getCustomPushWebServiceResult(pushUserId);
             }
         }
 	    
@@ -571,8 +568,7 @@ public class CustomerPublishDefaultTaskImpl implements ICustomerPublishTask {
      * @param resultAttrs
      * @return
      */
-    private boolean getCustomPushWebServiceResult(String pushUserId, LabelPushReq ciCustomPushReq,
-            List<LabelAttrRel> resultAttrs) {
+    private boolean getCustomPushWebServiceResult(String pushUserId) {
         boolean result = true;
         try {
             Object[] args = null;
@@ -582,8 +578,7 @@ public class CustomerPublishDefaultTaskImpl implements ICustomerPublishTask {
                 args = getArgs(argNames);
             } else {
                 //组装webservice请求参数的xml
-                StandardPushXmlBean bean = this.createStandardPushXmlBean(pushUserId, 
-                        labelPushReq, resultAttrs);
+                StandardPushXmlBean bean = this.createStandardPushXmlBean(pushUserId);
                 String pushXmlBody = Bean2XMLUtils.bean2XmlString(bean);
                 LogUtil.debug("StandardPushXml : \n\r" + pushXmlBody);
                 args = new Object[1];
@@ -610,15 +605,14 @@ public class CustomerPublishDefaultTaskImpl implements ICustomerPublishTask {
      * @return
      * @version ZJ
      */
-    private StandardPushXmlBean createStandardPushXmlBean(String userId, 
-            LabelPushReq ciCustomPushReq, List<LabelAttrRel> resultAttrs) {
+    private StandardPushXmlBean createStandardPushXmlBean(String userId) {
         StandardPushXmlBean bean = new StandardPushXmlBean();
         Title title = bean.getTitle();
         title.setTaskDesc(sysInfo.getSysName() + "推送任务");
         title.setSendTime(new Date());
 
         Data data = bean.getData();
-        data.setReqId(ciCustomPushReq.getReqId());
+        data.setReqId(labelPushReq.getReqId());
         data.setPlatformCode("COC");
         data.setUserId(userId);
         //创建人名称
@@ -640,8 +634,7 @@ public class CustomerPublishDefaultTaskImpl implements ICustomerPublishTask {
         data.setRowNumber(rowNumber);
         data.setUploadFileName(fileName + ".zip");//文件名
         data.setUploadFileType("zip"); //上传文件类型
-        if(sysInfo.getIsNeedCompress() != null && 
-                ServiceConstants.SysInfo.IS_NEED_COMPRESS_YES == sysInfo.getIsNeedCompress()){
+        if(null!=sysInfo.getIsNeedCompress() && ServiceConstants.SysInfo.IS_NEED_COMPRESS_YES==sysInfo.getIsNeedCompress()){
             data.setUploadFileName(fileName + ".zip");//文件名
             data.setUploadFileType("zip"); //上传文件类型
         }else{
@@ -665,7 +658,7 @@ public class CustomerPublishDefaultTaskImpl implements ICustomerPublishTask {
         col.setIsPrimaryKey(1);
         columns.add(col);
         
-        for (LabelAttrRel rel : resultAttrs) {
+        for (LabelAttrRel rel : attrRelList) {
             StandardPushXmlBean.Data.Column column = data.newColumn();
             column.setColumnCnName(rel.getAttrColName());
             column.setIsPrimaryKey(0);
@@ -759,8 +752,7 @@ public class CustomerPublishDefaultTaskImpl implements ICustomerPublishTask {
         bean.getData().setReqId(labelPushReq.getRecodeId());
         bean.getData().setPlatformCode("COC");
         File zip = new File(zipFile);
-        String fileName = zip.getName();
-        bean.getData().setUploadFileName(fileName);
+        bean.getData().setUploadFileName(zip.getName());
 
         bean.getData().setRowNumber(String.valueOf(customInfo.getLabelExtInfo().getCustomNum()));
         bean.getData().setUserId(customInfo.getCreateUserId());
@@ -788,7 +780,7 @@ public class CustomerPublishDefaultTaskImpl implements ICustomerPublishTask {
             return false;
         }
         try {
-            FileUtil.writeByteFile(xmlStr.getBytes("UTF-8"), new File(xmlFile));
+            FileUtil.writeByteFile(xmlStr.getBytes(encode), new File(xmlFile));
         } catch (Exception e) {
             LogUtil.error("生成xml文件，uploadXmlFile", e);
             return false;
@@ -841,8 +833,7 @@ public class CustomerPublishDefaultTaskImpl implements ICustomerPublishTask {
          * @return
          * @version ZJ
          */
-        public boolean sql2File(String sql, final String title, String fileName,
-                final String encode, int bufferedRowSize) {
+        public boolean sql2File(String sql, final String title, String fileName) {
             
             LogUtil.info("sql2File2:sql= " + sql + ";titles=" + title + ";fileName=" + fileName + ";encode=" + encode);
 
@@ -858,13 +849,13 @@ public class CustomerPublishDefaultTaskImpl implements ICustomerPublishTask {
                     dataList = backSqlService.queryForPage(sql, start, bufferedRowSize);
                     if (dataList.size() >= bufferSize){
                         if (fileName.toLowerCase().endsWith("csv") || fileName.toLowerCase().endsWith("txt")) {//纯文本文本格式
-                            flag = this.writeToTextFile1(dataList, title, file, encode);
+                            flag = this.writeToTextFile(dataList, title, file);
                         }
                         dataList.clear();
                         start++;
                     }else{
                         if (fileName.toLowerCase().endsWith("csv") || fileName.toLowerCase().endsWith("txt")) {//纯文本文本格式
-                            flag = this.writeToTextFile1(dataList, title, file, encode);
+                            flag = this.writeToTextFile(dataList, title, file);
                         }
                         break;
                     }
@@ -873,7 +864,7 @@ public class CustomerPublishDefaultTaskImpl implements ICustomerPublishTask {
                 flag = false;
                 LogUtil.error("createFile(" + fileName + ") error:", e);
             } finally {
-                LogUtil.info("The cost of sql2File2 is :  " + (System.currentTimeMillis() - t1) + "ms");
+                LogUtil.info("The cost of sql2File2 is :  " + (System.currentTimeMillis() - t1) + " ms");
             }
             
             return flag;
@@ -890,7 +881,7 @@ public class CustomerPublishDefaultTaskImpl implements ICustomerPublishTask {
          * @param quote
          * @return
          */
-        public boolean writeToTextFile1(List<Map<String, String>> datas, String title, String fileName, String encode) {
+        public boolean writeToTextFile(List<Map<String, String>> datas, String title, String fileName) {
             boolean flag = true;
             CSVWriter cw = null;
             Writer osw = null;
@@ -907,8 +898,8 @@ public class CustomerPublishDefaultTaskImpl implements ICustomerPublishTask {
                     if (m.containsKey("rownum")) {  //不把序号写入文件
                         m.remove("rownum");
                     }
-                    for (String col : m.keySet()) {
-                        data.add(String.valueOf(m.get(col)).replace("\"", ""));
+                    for (Entry<String, String> entry : m.entrySet()) {
+                        data.add(String.valueOf(entry.getValue()).replace("\"", ""));
                     }
                     if (!data.isEmpty() && data.size()>0) {
                         cw.writeNext(data.toArray(new String[] {}));
@@ -920,9 +911,9 @@ public class CustomerPublishDefaultTaskImpl implements ICustomerPublishTask {
                 flag = false;
                 LogUtil.error("createFile(" + fileName + ") error:", e);
             } finally {
-                if (cw != null) {
+                if (null != cw) {
                     try {
-                            cw.close();
+                        cw.close();
                     } catch (Exception e) {
                         LogUtil.warn("IO关闭异常："+e.getMessage());
                     }

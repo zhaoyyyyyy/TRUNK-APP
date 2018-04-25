@@ -11,12 +11,11 @@ import java.util.List;
 import java.util.Map;
 
 import com.asiainfo.biapp.si.loc.bd.datadeal.util.TimeUtil;
+import com.asiainfo.biapp.si.loc.core.ServiceConstants;
 import org.apache.commons.lang.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.asiainfo.biapp.si.loc.base.utils.LogUtil;
-import com.asiainfo.biapp.si.loc.bd.datadeal.DataDealConstants;
 import com.asiainfo.biapp.si.loc.bd.datadeal.component.LabelDealComponent;
 import com.asiainfo.biapp.si.loc.bd.datadeal.util.BackJdbcManager;
 import com.asiainfo.biapp.si.loc.bd.datadeal.util.JdbcManager;
@@ -26,18 +25,17 @@ import com.asiainfo.biapp.si.loc.bd.datadeal.util.JdbcManager;
  */
 @Component
 public class WideLabelTask implements Runnable {
-
     private String threadNumber;
     private String data_date = "";
     private String config_id = "";
     private Integer data_cycle = 0;
-    private String LOC_LABEL_INFO = DataDealConstants.LOC_LABEL_INFO;
-    private String DIM_LABEL_COUNT_RULES = DataDealConstants.DIM_LABEL_COUNT_RULES;
-    private String LOC_MDA_SYS_TABLE = DataDealConstants.LOC_MDA_SYS_TABLE;
-    private String LOC_MDA_SYS_TABLE_COLUMN = DataDealConstants.LOC_MDA_SYS_TABLE_COLUMN;
-    private String LOC_SOURCE_INFO = DataDealConstants.LOC_SOURCE_INFO;
-    private String LOC_SOURCE_TABLE_INFO = DataDealConstants.LOC_SOURCE_TABLE_INFO;
-    private String DIM_TARGET_TABLE_STATUS = DataDealConstants.DIM_TARGET_TABLE_STATUS;
+    private String LOC_LABEL_INFO = "LOC_LABEL_INFO";
+    private String DIM_LABEL_COUNT_RULES = "DIM_LABEL_COUNT_RULES";
+    private String LOC_MDA_SYS_TABLE = "LOC_MDA_SYS_TABLE";
+    private String LOC_MDA_SYS_TABLE_COLUMN = "LOC_MDA_SYS_TABLE_COLUMN";
+    private String LOC_SOURCE_INFO = "LOC_SOURCE_INFO";
+    private String LOC_SOURCE_TABLE_INFO = "LOC_SOURCE_TABLE_INFO";
+    private String DIM_TARGET_TABLE_STATUS = "DIM_TARGET_TABLE_STATUS";
     private String otherColumnName = "";
     private String ALL_USERS_TABLE_NAME = "";
     private String ALL_USERS_TABLE_SELECT_COLUMN = "";
@@ -61,12 +59,15 @@ public class WideLabelTask implements Runnable {
     List<String> filterLabelList = new ArrayList<String>();
 
     public void run() {
+        Long startTime=System.currentTimeMillis();
         threadNumber = Thread.currentThread().getName() + "————" + config_id + "：\n";
         JdbcManager jdbcManager = new JdbcManager();
+        jdbcManager.setThreadNumber(threadNumber);
         ALL_USER_MAP = jdbcManager.getAllUserTable(config_id);
         LabelDealComponent labelDealComponent=new LabelDealComponent();
+        labelDealComponent.setThreadNumber(threadNumber);
         filterLabelList = labelDealComponent.filterLabelId(data_date, config_id);
-        System.out.println("根据源表初步过滤标签"+filterLabelList);
+        LogUtil.info(threadNumber+"根据源表初步过滤标签"+filterLabelList);
         if (filterLabelList.size() < 0) {
             LogUtil.info(threadNumber+"没有可跑的标签，专区结束");
             return;
@@ -82,6 +83,7 @@ public class WideLabelTask implements Runnable {
         } else {
             LogUtil.info(threadNumber+"加载用户全量表失败,专区ID为：" + config_id);
         }
+        LogUtil.info(new StringBuffer(threadNumber+"专区生成数据耗时").append(" cost:").append((System.currentTimeMillis()-startTime)/1000).append("ms."));
     }
 
     private void handleLabel(String data_date, String config_id, Integer data_cycle) {
@@ -91,7 +93,7 @@ public class WideLabelTask implements Runnable {
         labelDealComponent.setThreadNumber(threadNumber);
         LogUtil.info(threadNumber + "Step002——————————————————开始创建标签汇总表——————————————————");
         Map indexMap = getIndexMap();
-        LogUtil.info("指标信息："+indexMap);
+        LogUtil.info(threadNumber + "指标信息："+indexMap);
         Connection connection = null;
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
@@ -101,9 +103,9 @@ public class WideLabelTask implements Runnable {
         //表名、label_id集合
         Map<String, List<String>> sourceIdMap = new HashMap<String, List<String>>();
         String dataTime = "";
-        if (data_cycle == DataDealConstants.LABEL_CYCLE_TYPE_D) {
+        if (data_cycle == ServiceConstants.LABEL_CYCLE_TYPE_D) {
             dataTime = data_date;
-        } else if (data_cycle == DataDealConstants.LABEL_CYCLE_TYPE_M) {
+        } else if (data_cycle == ServiceConstants.LABEL_CYCLE_TYPE_M) {
             dataTime = data_date + "01";
         }
         String getLabelSql = "select t1.label_id,t2.COLUMN_NAME,t3.table_schema,t3.table_name,t4.DEPEND_INDEX" +
@@ -180,10 +182,8 @@ public class WideLabelTask implements Runnable {
         } finally {
             JdbcManager.closeAll(connection, preparedStatement, resultSet);
         }
-        LogUtil.info(threadNumber + "本次预抽取的标签数量为：" + labelIdList.size());
         LogUtil.info(threadNumber + "预抽取的标签为：" + labelIdList);
         labelIdList = createLabelTable(createTableMap, sourceIdMap, labelIdList);
-        LogUtil.info(threadNumber + "本次实际完成的标签数量为：" + labelIdList.size());
         LogUtil.info(threadNumber + "本次实际完成的标签为：" + labelIdList);
         if (labelIdList.size() > 0) {
             //todo 更新源表状态表
@@ -201,8 +201,7 @@ public class WideLabelTask implements Runnable {
             if (sourceTableIdList.size() > 0) {
                 labelDealComponent.updateDimTargetTableStatus(1, 0, sourceTableIdList,null);
             }
-            LogUtil.info(threadNumber + "抽取的标签数量为：" + 0);
-            LogUtil.info(threadNumber + "不进行标准标签相关状态的更新");
+            LogUtil.info(threadNumber + "抽取的标签数量为：" + 0+"不进行标准标签相关状态的更新");
         }
     }
 
@@ -217,7 +216,8 @@ public class WideLabelTask implements Runnable {
     private Map<String, String> getIndexMap() {
         Map<String, String> indexMap = new HashMap<String, String>();
         BackJdbcManager backJdbcManager = new BackJdbcManager();
-        indexTable = DataDealConstants.KPI_L_PREF_ + config_id + "_" + data_date;
+        backJdbcManager.setThreadNumber(threadNumber);
+        indexTable = ServiceConstants.KPI_L_PREF_ + config_id + "_" + data_date;
         List<String> indexList = backJdbcManager.getColumnNameByName(indexTable);
         String key = "";
         for (int i = 0; i < indexList.size(); i++) {
@@ -258,7 +258,7 @@ public class WideLabelTask implements Runnable {
                 String[] split1 = split[i].split(" ");
                 otehrColumn += "," + split1[1] + " " + split1[1];
             }
-            String sql = "  select " + DataDealConstants.PRODUCT_NO + " " + DataDealConstants.PRODUCT_NO + otehrColumn;
+            String sql = "  select " + ServiceConstants.LABEL_PRODUCT_NO + " " + ServiceConstants.LABEL_PRODUCT_NO + otehrColumn;
             for (int i = 0; i < columnNames.size(); i++) {
                 sql += "," + columnNames.get(i);
             }
@@ -278,6 +278,7 @@ public class WideLabelTask implements Runnable {
 
     private Boolean createIndexTable(String data_date, String config_id, Integer data_cycle) {
         BackJdbcManager backJdbcManager = new BackJdbcManager();
+        backJdbcManager.setThreadNumber(threadNumber);
         LabelDealComponent labelDealComponent = new LabelDealComponent();
         labelDealComponent.setDate_cycle(data_cycle);
         labelDealComponent.setData_date(data_date);
@@ -285,19 +286,19 @@ public class WideLabelTask implements Runnable {
         LogUtil.info(threadNumber + "Step001——————————————————开始创建指标汇总表——————————————————");
         String where = "";
         String SOURCE_TABLES_HAS_DATE_SUFFIX = ALL_USER_MAP.get("SOURCE_TABLES_HAS_DATE_SUFFIX");
-        if (data_cycle == DataDealConstants.LABEL_CYCLE_TYPE_D) {
+        if (data_cycle == ServiceConstants.LABEL_CYCLE_TYPE_D) {
             ALL_USERS_TABLE_NAME = ALL_USER_MAP.get("ALL_USERS_TABLE_NAME_DM");
             ALL_USER_JOIN_COLUMN_NAME = ALL_USER_MAP.get("ALL_USER_JOIN_COLUMN_NAME_DM");
-        } else if (data_cycle == DataDealConstants.LABEL_CYCLE_TYPE_M) {
+        } else if (data_cycle == ServiceConstants.LABEL_CYCLE_TYPE_M) {
             ALL_USERS_TABLE_NAME = ALL_USER_MAP.get("ALL_USERS_TABLE_NAME_MM");
             ALL_USER_JOIN_COLUMN_NAME = ALL_USER_MAP.get("ALL_USER_JOIN_COLUMN_NAME_MM");
         }
         LogUtil.info(threadNumber + "判断用户全量表是否分区");
         if (SOURCE_TABLES_HAS_DATE_SUFFIX != null && SOURCE_TABLES_HAS_DATE_SUFFIX.trim().length() > 0 && "0".equals(SOURCE_TABLES_HAS_DATE_SUFFIX)) {
             LogUtil.info(threadNumber + "用户全量表为分区表");
-            if (data_cycle == DataDealConstants.LABEL_CYCLE_TYPE_D) {
+            if (data_cycle == ServiceConstants.LABEL_CYCLE_TYPE_D) {
                 ALL_USERS_TABLE_SELECT_COLUMN = ALL_USER_MAP.get("ALL_USERS_TABLE_DM_SELECT_COLUMN");
-            } else if (data_cycle == DataDealConstants.LABEL_CYCLE_TYPE_M) {
+            } else if (data_cycle == ServiceConstants.LABEL_CYCLE_TYPE_M) {
                 ALL_USERS_TABLE_SELECT_COLUMN = ALL_USER_MAP.get("ALL_USERS_TABLE_MM_SELECT_COLUMN");
             }
             if (!backJdbcManager.tableExists(ALL_USERS_TABLE_NAME, ALL_USERS_TABLE_SELECT_COLUMN + "=" + data_date)) {
@@ -324,8 +325,7 @@ public class WideLabelTask implements Runnable {
         //用来保存汇总表的列信息
         List<String> columnsList = new ArrayList<String>();
         columnNameAndTypeByName = backJdbcManager.getColumnNameAndTypeByName(ALL_USERS_TABLE_NAME);
-        System.out.println(columnNameAndTypeByName);
-        columnsList.add(DataDealConstants.PRODUCT_NO + " " + columnNameAndTypeByName.get(ALL_USER_JOIN_COLUMN_NAME.toUpperCase()));
+        columnsList.add(ServiceConstants.LABEL_PRODUCT_NO + " " + columnNameAndTypeByName.get(ALL_USER_JOIN_COLUMN_NAME.toUpperCase()));
         for (int i = 0; i < splitColumnName.length; i++) {
             otherColumn += ", t." + splitColumnName[i];
             if (!lis.contains(splitColumnName[i].split(" ")[0])) {
@@ -426,8 +426,7 @@ public class WideLabelTask implements Runnable {
                 sourceTableMap.put(key, values);
             }
         } catch (SQLException e) {
-            LogUtil.debug(threadNumber + "获取指标信息表：" + getIndexSql);
-            LogUtil.debug(threadNumber + "获取指标信息失败:" + e);
+            LogUtil.error(threadNumber + "获取指标信息失败:" + e);
             return false;
         } finally {
             JdbcManager.closeAll(connection, preparedStatement, resultSet);
@@ -438,7 +437,6 @@ public class WideLabelTask implements Runnable {
             Iterator<Map.Entry<String, String>> entryIterator = sourceTableMap.entrySet().iterator();
             while (entryIterator.hasNext()) {
                 Map.Entry<String, String> entry = entryIterator.next();
-                System.out.println(entry);
                 String[] split = entry.getValue().split(":");
                 // source_table_id:tableName:data_store:date_column_name;
                 if (split[2].equals("1")) {
@@ -462,9 +460,9 @@ public class WideLabelTask implements Runnable {
             }
             //拼接sql
             Iterator<Map.Entry<String, String>> createTableMaps = sourceTableIdMap.entrySet().iterator();
-            indexTable = DataDealConstants.KPI_L_PREF_ + config_id + "_" + data_date;
+            indexTable = ServiceConstants.KPI_L_PREF_ + config_id + "_" + data_date;
             LogUtil.info(threadNumber + "指标汇总表表名：" + indexTable);
-            String createIndexSql = "select " + "t." + ALL_USER_JOIN_COLUMN_NAME + " " + DataDealConstants.PRODUCT_NO + otherColumn;
+            String createIndexSql = "select " + "t." + ALL_USER_JOIN_COLUMN_NAME + " " + ServiceConstants.LABEL_PRODUCT_NO + otherColumn;
             String from = " from  " + "( select " + ALL_USER_JOIN_COLUMN_NAME + others + " from " + ALL_USERS_TABLE_NAME + where + " ) t";
             int num = 1;
             tableName = "";
@@ -488,7 +486,6 @@ public class WideLabelTask implements Runnable {
                         columnsList.add(split1[split1.length - 1] + " " + columnNameAndTypeByName.get(split1[0].toUpperCase()));
                     }
                 }
-//                nickname = " (select 列名 from  " + sourceTableName + ")";
                 if (cols.length() > 1) {
                     cols = cols.substring(0, cols.length() - 1);
                     nickname = " (select " + joinName + "," + cols + " from  " + key + ")";
@@ -510,11 +507,10 @@ public class WideLabelTask implements Runnable {
                 LogUtil.info(threadNumber + "更新数据未正常抽取的表对应的数据状态");
                 labelDealComponent.updateDimTargetTableStatus(1, 0, sourceTableIdList, TimeUtil.getCurrentTime());
             }
-
             return isOk;
         } else {
-            LogUtil.info("没有可跑的元数据，直接进行标签的抽取");
-            return true;
+            LogUtil.info(threadNumber + "没有可跑的元数据，终止标签抽取");
+            return false;
         }
     }
 }

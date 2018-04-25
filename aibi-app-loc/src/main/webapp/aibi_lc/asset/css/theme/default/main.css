@@ -1675,13 +1675,17 @@ animation-delay: .8s;
 	height:36px;
 	line-height:36px;
 }
-.ui-label-list > li.ui-monitor-item > span{
+.ui-label-list > li.ui-monitor-item > div{
 	background-color: #f7f7f7;
-	display:block;
 	border-radius: 5px;
-	font-size: 14px;
 	text-align:center;
 	cursor: pointer;
+	height:36px;
+	line-height:36px;
+}
+.ui-label-list > li.ui-monitor-item > div >span{
+	display:inline-block;
+	font-size: 14px;
 }
 .ui-prefecture > div > h3{
 	font-size: 18px;
@@ -1748,6 +1752,9 @@ animation-delay: .8s;
 	font-weight: 700;
     font-size: 14px;
 }
+.per-header > span > a {
+	color:#666;
+}
 .per-header > span > em{
 	display:inline-block;
 	width:16px;
@@ -1785,14 +1792,17 @@ animation-delay: .8s;
 .ui-prefecture.ui-lc-mian{
 	padding:0 10px;
 }
-.ui-prefecture > div.ui-pre-detail > p{
+.ui-fresh-box{
 	border-right:1px solid #DCE2E4;
 	height:60px;
-	line-height:60px;
 	padding:0 10px;
 	display:inline-block;
+	line-height:60px;
 }
-.ui-pre-detail > p > span{
+.ui-fresh-box .control-input{
+	width:auto;
+}
+.ui-pre-detail > p > span.refresh-inner{
 	display:inline-block;
 	margin:0 0 0 20px;
 	background:#f2f2f2;
@@ -1843,6 +1853,7 @@ animation-delay: .8s;
 	top:30px;
 	margin:0;
 	min-width:100%;
+	z-index:999999;
 }
 .ui-status > .dropdown > .dropdown-menu>li>a{
 	padding:2px 0 2px 12px;

@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>运行监控总览</title>
+    <link rel="stylesheet" theme="default" href="../../asset/css/common/reset.css"/> 
+    <link rel="stylesheet" theme="default" href="../../asset/css/theme/default/coc_frame.css"/> 
+	<link rel="stylesheet" theme="default" href="../../asset/css/theme/default/main.css"/> 
+   	<script type="text/javascript" src="../../asset/script/common/include.js"></script>
+   	<script type="text/javascript" src="service_monitor_main.js"></script>
+   	<style type="text/css">
+	[v-cloak] {
+		display: none;
+	}
+	</style>
+</head>
+<body>
+<div class="iframe-nest" id="monitorMain" >
+	<div class="ui-lc-mian">
+		<h3>运行监控总览
+			<!--<span class="ui-monitor-notice">超级管理员才会看到此页面，非超级管理员不显示这个页面，权限匹配</span>-->
+		</h3>
+	</div>
+	<!--动态生成每个专区信息 -->
+	<div class="ui-lc-mian mt10">
+		<ul class="ui-label-list">
+			 <li class="ui-monitor-item" v-for="(item,index) in configData" v-cloak>
+			 	<div :value="item.sourceName" class="checkbox" @click.stop.prevent="clickConfigData(item)" :class="{padding0 : (index+1)%3 ==0 }">
+			 		<input :id="item.configId" type="checkbox" class="checkbix" :checked="item.isChecked">
+				    <label role="checkbox" :for="item.configId" class="checkbix">
+				    	<span class="large"></span>{{item.sourceName}}
+				    </label>
+				    <!--<span :value="item.sourceName"  @click="clickConfigData(item)" :class="{padding0 : (index+1)%3 ==0 }" class=" clearfix" >{{item.sourceName}}</span>-->
+			 	</div>
+			</li> 
+		</ul>
+	</div>
+	
+	<!--动态生成每个专区监控总览信息-->
+	<div  v-for="(item,index) in monitorData" :id="item.configId" v-cloak >
+		<div class="ui-lc-mian mt10 ui-morior-border">
+			<div class="ui-prefecture">
+				<div>
+					<h3>{{item.sourceName}}</h3>
+					<div class="dropdown pre-dropdown" v-bind:class="{open:item.isOpen}">
+						 <a class="prefectrue-span"  @click="showDate(item)" >
+						        <span class="pre-cycle-name">
+						        	日周期&nbsp;
+						        </span>
+						        <em></em>
+						    	<!--<span class="caret"></span>-->
+						 </a>
+						<ul class="dropdown-menu">
+							<li>
+								<span @click="initDateByCycle('day')">日周期 </span>
+							</li>
+							<li>
+								<span @click="initDateByCycle('month')">月周期</span>  
+							</li>   
+						</ul>
+					</div>
+				    
+					<em></em>
+					<div class="dropdown pre-dropdown" v-bind:class="{open:item.isActive}" >
+						<a class="prefectrue-span" :data-cycleId="item.configId"  @click="dateToggle(item)" @change="changeMonitorByDate">{{dataDate}}<em class="ml20"></em></a>
+						<ul class="dropdown-menu">
+							
+						</ul>
+					</div>
+				</div>
+				<ul class="ui-label-list clearfix mt10">
+					<li class="ui-prerecture-item">
+						<div>
+							<div class="per-header clearfix">
+								<span class="fleft" ><em class="data-ready"></em><a href="service_monitor_detail.html#dataPrepareAnchor">数据准备</a></span>
+								<p class="fright">
+									<span>共<strong>{{item.notPrepareCount + item.preparedCount +item.extractingCount+item.extractSuccessCount+item.extractFailCount}}</strong>张源表  ，
+									成功<strong>{{item.extractSuccessCount}}</strong>个</span>
+								</p>
+							</div>
+							<ul class="per-status ui-label-list mt30">
+								<li>
+									<span>未准备</span>
+									<p>{{item.notPrepareCount}}</p>
+								</li>
+								<li>
+									<span>准备完成</span>
+									<p>{{item.preparedCount}}</p>
+								</li>
+								<li class="padding0">
+									<span>抽取中</span>
+									<p>{{item.extractingCount}}</p>
+								</li>
+								<li>
+									<span>抽取完成</span>
+									<p>{{item.extractSuccessCount}}</p>
+								</li>
+								<li>
+									<span>抽取失败</span>
+									<p>{{item.extractFailCount}}</p>
+								</li>
+							</ul>
+						</div>
+					</li>
+			     	<li class="ui-prerecture-item">
+						<div>
+							<div class="per-header clearfix">
+								<span class="fleft"><em class="label-build"></em><a href="service_monitor_detail.html#labelGenerateAnchor">标签生成</a></span>
+								<p class="fright">
+									<span>共<strong>{{item.genSuccessCount +item.genFailCount+item.curSaveCount }}</strong>个日标签 ，
+									成功<strong>{{item.genSuccessCount}}</strong>个</span>
+								</p>
+							</div>
+							<ul class="per-status ui-label-list mt30">
+								<li>
+									<span>成功</span>
+									<p>{{item.genSuccessCount}}</p>
+								</li>
+								<li>
+									<span>失败</span>
+									<p>{{item.genFailCount}}</p>
+								</li>
+								<li class="padding0">
+									<span>客户群暂存数量</span>
+									<p>{{item.curSaveCount}}</p>
+								</li>
+							</ul>
+						</div>
+					</li>
+					<li class="ui-prerecture-item">
+						<div>
+							<div class="per-header clearfix">
+								<span class="fleft"><em class="label-custom"></em><a href="service_monitor_detail.html#customGenerateAnchor">客户群生成</a></span>
+								<p class="fright">
+									<span>共<strong>{{item.customPrepareCount+item.customCreatingCount+item.customSuccessCount+item.customAppointCount+item.customFailCount}}</strong>个日周期客户群 ，
+									成功<strong>{{item.customSuccessCount}}</strong>个</span>
+								</p>
+							</div>
+							<ul class="per-status ui-label-list mt30">
+								<li>
+									<span>待创建</span>
+									<p>{{item.customPrepareCount}}</p>
+								</li>
+								<li>
+									<span>创建中</span>
+									<p>{{item.customCreatingCount}}</p>
+								</li>
+								<li class="padding0">
+									<span>创建成功</span>
+									<p>{{item.customSuccessCount}}</p>
+								</li>
+								<li>
+									<span>预约</span>
+									<p>{{item.customAppointCount}}</p>
+								</li>
+								<li>
+									<span>失败</span>
+									<p>{{item.customFailCount}}</p>
+								</li>
+							</ul>
+						</div>
+					</li>
+					<li class="ui-prerecture-item padding0">
+						<div>
+							<div class="per-header clearfix">
+								<span class="fleft"><em class="label-custom"></em><a href="service_monitor_detail.html#customPushAnchor">客户群推送</a></span>
+								<p class="fright">
+									<span>共<strong>{{item.pushSuccessCount + item.pushingCount +item.pushFailCount}}</strong>个待推送的客户群 ，
+									成功<strong>{{item.pushSuccessCount}}</strong>个</span>
+								</p>
+							</div>
+							<ul class="per-status ui-label-list mt30">
+								<li>
+									<span>推送成功</span>
+									<p>{{item.pushSuccessCount}}</p>
+								</li>
+								<li>
+									<span>推送中</span>
+									<p>{{item.pushingCount}}</p>
+								</li>
+								<li class="padding0">
+									<span>推送失败</span>
+									<p>{{item.pushFailCount}}</p>
+								</li>
+							</ul>
+						</div>
+					</li>
+				</ul> 
+			</div>
+		</div>
+	</div>
+</div>
+</body>
+</html>

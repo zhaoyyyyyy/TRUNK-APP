@@ -1,5 +1,7 @@
 package com.asiainfo.biapp.si.loc.bd.datadeal.controller;
 
+import com.asiainfo.biapp.si.loc.bd.datadeal.util.TimeUtil;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,6 +31,10 @@ public class DataDealController {
     @RequestMapping(value = "/wideTableDeal/execute", method = RequestMethod.POST)
     public WebResult<String> runWideTable(@ModelAttribute BackParamVo backParamVo) {
         WebResult<String> webResult = new WebResult<>();
+        if(StringUtils.isEmpty(backParamVo.getData())){
+            String frontOneDate = TimeUtil.getFrontOneDate();
+            backParamVo.setData(frontOneDate);
+        }
         iwideLabelService.exeRun(backParamVo);
         return webResult.success("获取列成功", null);
     }
@@ -38,6 +44,10 @@ public class DataDealController {
     @RequestMapping(value = "/verticalTableDeal/execute", method = RequestMethod.POST)
     public WebResult<String> runVerticalTable(@ModelAttribute BackParamVo backParamVo) {
         WebResult<String> webResult = new WebResult<>();
+        if(StringUtils.isEmpty(backParamVo.getData())){
+            String frontOneDate = TimeUtil.getFrontOneDate();
+            backParamVo.setData(frontOneDate);
+        }
         iverticalLabelService.exeRun(backParamVo);
         return webResult.success("获取列成功", null);
     }

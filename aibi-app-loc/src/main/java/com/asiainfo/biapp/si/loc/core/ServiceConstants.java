@@ -102,12 +102,55 @@ public class ServiceConstants {
     public static String LABEL_INFO_CALCULATIONS_TYPEID = "1";
     /** 客户群 **/
     public static String CUSTOM_GROUP_INFO_CALCULATIONS_TYPEID = "2";
-    
-    
-    
-    //只与业务相关，不与表相关的常量 end
-    
 
+	/**
+	 * 指标汇总表前缀
+	 */
+	public static final String KPI_L_PREF_ = "KPI_L_PREF_";
+	/**
+	 * 纵表标签目标表前缀
+	 */
+	public static final String LV = "LV_";
+
+	/**
+	 * 标签周期类型，2=月周期
+	 */
+	public static final int LABEL_CYCLE_TYPE_M = 2;
+	/**
+	 * 标签周期类型，1=日周期
+	 */
+	public static final int LABEL_CYCLE_TYPE_D = 1;
+	/**
+	 * 标签主键字段
+	 */
+	public static final String LABEL_PRODUCT_NO = "product_no";
+	/**
+	 * 用户全量表字段前缀
+	 */
+	public static final String ALL_USER_ORG_LEVEL_ = "ORG_LEVEL_";
+	/**
+	 * hive库建表的分桶数量
+	 */
+	public static final Integer LABEL_BUCKET_NUMBER = 200;
+	/**
+	 * 日周期指标汇总表的保存最大时间
+	 */
+	public static final Integer MAX_STAT_HISTORY_DAY_INDEX = 31;
+	/**
+	 * 月周期指标汇总表的保存最大时间
+	 */
+	public static final Integer MAX_STAT_HISTORY_MONTH_INDEX = 12;
+	/**
+	 * 日周期标签汇总表保存最大时间
+	 */
+	public static final Integer MAX_STAT_HISTORY_DAY_DW = 31;
+	/**
+	 * 月周期标签汇总表保存最大时间
+	 */
+	public static final Integer MAX_STAT_HISTORY_MONTH_DW = 12;
+
+
+    //只与业务相关，不与表相关的常量 end
     //只与表相关的常量 start
 	/** sysinfo */
 	public interface SysInfo{
@@ -166,6 +209,14 @@ public class ServiceConstants {
         public static final int IS_NEED_XML_NO = 0;
         /** 1:需要XML加密 */
         public static final int IS_NEED_XML_YES = 1;
+        
+        /**
+         * 是否允许推送属性：不允许：0；允许：1
+         */
+        /** 是否允许推送属性：不允许：0 */
+        public static final int IS_ALLOW_ATTR_NO = 0;
+        /** 是否允许推送属性：允许：1 */
+        public static final int IS_ALLOW_ATTR_YES = 1;
 	}
 	
     /** 标签信息表 */

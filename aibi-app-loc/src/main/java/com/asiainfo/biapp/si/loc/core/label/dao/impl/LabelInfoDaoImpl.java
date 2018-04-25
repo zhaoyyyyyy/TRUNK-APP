@@ -88,8 +88,13 @@ public class LabelInfoDaoImpl extends BaseDaoImpl<LabelInfo, String> implements 
             params.put("orgId", labelInfoVo.getOrgId());
         }
         if (StringUtil.isNotBlank(labelInfoVo.getLabelName())) {
-            hql.append("and l.labelName Like :labelName ");
-            params.put("labelName", "%"+labelInfoVo.getLabelName()+"%");
+            if(StringUtil.isNotBlank(labelInfoVo.getLabelId())&&"updateCustom".equals(labelInfoVo.getLabelId())){
+                hql.append("and l.labelName = :labelName ");
+                params.put("labelName", labelInfoVo.getLabelName());
+            }else{
+                hql.append("and l.labelName Like :labelName ");
+                params.put("labelName", "%"+labelInfoVo.getLabelName()+"%");
+            }
         }
         if (null != labelInfoVo.getUpdateCycle()) {
             hql.append("and l.updateCycle = :updateCycle ");

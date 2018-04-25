@@ -11,9 +11,8 @@ import java.util.LinkedList;
 import java.util.List;
 
 import com.asiainfo.biapp.si.loc.base.utils.LogUtil;
+import com.asiainfo.biapp.si.loc.core.ServiceConstants;
 import org.apache.commons.lang.StringUtils;
-
-import com.asiainfo.biapp.si.loc.bd.datadeal.DataDealConstants;
 
 /**
  * Created by pwj on 2017/12/25.
@@ -28,7 +27,7 @@ public class TimeUtil {
             newDate = formatter.parse(data_date);
             formatter1 = new SimpleDateFormat("yyyy-MM-dd");
         } catch (ParseException e) {
-            LogUtil.debug(e);
+            LogUtil.error(e);
         }
         return formatter1.format(newDate);
     }
@@ -75,7 +74,7 @@ public class TimeUtil {
             }
             result1 = date2String(format.parse(s), FORMAT_YYYY_MM_DD);
         } catch (Exception e) {
-            LogUtil.debug(e);
+            LogUtil.error(e);
         }
         return result1;
     }
@@ -99,7 +98,7 @@ public class TimeUtil {
 
             result = date2String(format.parse(dateStr), afterFormat);
         } catch (ParseException e) {
-            LogUtil.debug(e);
+            LogUtil.error(e);
         }
         return result;
     }
@@ -131,7 +130,7 @@ public class TimeUtil {
             }
             result = date2String(format.parse(s), DATE_FORMAT);
         } catch (Exception e) {
-            LogUtil.debug(e);
+            LogUtil.error(e);
         }
         return result;
     }
@@ -192,7 +191,7 @@ public class TimeUtil {
         try {
             date = dateFormat.parse(dateStr);
         } catch (ParseException e) {
-            LogUtil.debug(e);
+            LogUtil.error(e);
         }
         return date;
     }
@@ -224,10 +223,10 @@ public class TimeUtil {
         String dateStr = "";
         String formatStr = "";
         int dateType = -1;
-        if (DataDealConstants.LABEL_CYCLE_TYPE_M == updateCycle) {
+        if (ServiceConstants.LABEL_CYCLE_TYPE_M == updateCycle) {
             formatStr = FORMAT_YYYYMM;
             dateType = Calendar.MONTH;
-        } else if (DataDealConstants.LABEL_CYCLE_TYPE_D == updateCycle) {
+        } else if (ServiceConstants.LABEL_CYCLE_TYPE_D == updateCycle) {
             formatStr = FORMAT_YYYYMMDD;
             dateType = Calendar.DAY_OF_YEAR;
         }
@@ -244,7 +243,7 @@ public class TimeUtil {
                 }
             }
         } catch (ParseException e) {
-            LogUtil.debug(e);
+            LogUtil.error(e);
         }
         return list;
     }
@@ -262,10 +261,10 @@ public class TimeUtil {
         String dateStr = "";
         String formatStr = "";
         int dateType = -1;
-        if (DataDealConstants.LABEL_CYCLE_TYPE_M == updateCycle) {
+        if (ServiceConstants.LABEL_CYCLE_TYPE_M == updateCycle) {
             formatStr = FORMAT_YYYYMM;
             dateType = Calendar.MONTH;
-        } else if (DataDealConstants.LABEL_CYCLE_TYPE_D == updateCycle) {
+        } else if (ServiceConstants.LABEL_CYCLE_TYPE_D == updateCycle) {
             formatStr = FORMAT_YYYYMMDD;
             dateType = Calendar.DAY_OF_YEAR;
         }
@@ -285,7 +284,7 @@ public class TimeUtil {
                 }
             }
         } catch (ParseException e) {
-            LogUtil.debug(e);
+            LogUtil.error(e);
         }
         return list;
     }
@@ -313,7 +312,7 @@ public class TimeUtil {
                 dateList.add(format.format(cd.getTime()));
             }
         } catch (ParseException e) {
-            LogUtil.debug(e);
+            LogUtil.error(e);
         }
         return dateList;
     }
@@ -342,7 +341,7 @@ public class TimeUtil {
                 dateList.add(format.format(cd.getTime()));
             }
         } catch (ParseException e) {
-            LogUtil.debug(e);
+            LogUtil.error(e);
         }
         return dateList;
     }
@@ -367,7 +366,7 @@ public class TimeUtil {
                 dateStr = format.format(calendar.getTime());
             }
         } catch (ParseException e) {
-            LogUtil.debug(e);        }
+            LogUtil.error(e);        }
         return dateStr;
     }
 
@@ -383,10 +382,10 @@ public class TimeUtil {
         String dateStr = "";
         String formatStr = "";
         int dateType = -1;
-        if (DataDealConstants.LABEL_CYCLE_TYPE_M == updateCycle) {
+        if (ServiceConstants.LABEL_CYCLE_TYPE_M == updateCycle) {
             formatStr = FORMAT_YYYYMM;
             dateType = Calendar.MONTH;
-        } else if (DataDealConstants.LABEL_CYCLE_TYPE_D == updateCycle) {
+        } else if (ServiceConstants.LABEL_CYCLE_TYPE_D == updateCycle) {
             formatStr = FORMAT_YYYYMMDD;
             dateType = Calendar.DAY_OF_YEAR;
         }
@@ -400,7 +399,7 @@ public class TimeUtil {
                 dateStr = format.format(calendar.getTime());
             }
         } catch (ParseException e) {
-            LogUtil.debug(e);
+            LogUtil.error(e);
         }
         return dateStr;
     }
@@ -441,7 +440,7 @@ public class TimeUtil {
                 dateStr = format.format(calendar.getTime());
             }
         } catch (ParseException e) {
-            LogUtil.debug(e);
+            LogUtil.error(e);
         }
         return dateStr;
     }
@@ -466,7 +465,7 @@ public class TimeUtil {
                 dateStr = format.format(calendar.getTime());
             }
         } catch (ParseException e) {
-            LogUtil.debug(e);
+            LogUtil.error(e);
         }
         return dateStr;
     }
@@ -503,7 +502,7 @@ public class TimeUtil {
             calendar.set(Calendar.DAY_OF_MONTH, value);
             dayStr = day_format.format(calendar.getTime());
         } catch (ParseException e) {
-            LogUtil.debug(e);
+            LogUtil.error(e);
         }
         return dayStr;
     }
@@ -543,7 +542,7 @@ public class TimeUtil {
             Date lastDate = calendar.getTime();
             dateStr = df.format(lastDate);
         } catch (ParseException e) {
-            LogUtil.debug(e);
+            LogUtil.error(e);
         }
         return dateStr;
     }
@@ -625,7 +624,7 @@ public class TimeUtil {
                 default:
             }
         } catch (ParseException e) {
-            LogUtil.debug(e);
+            LogUtil.error(e);
         }
         return offsetDate;
     }
@@ -663,7 +662,7 @@ public class TimeUtil {
                 default:
             }
         } catch (ParseException e) {
-            LogUtil.debug(e);
+            LogUtil.error(e);
         }
         return offsetDate;
     }
@@ -692,12 +691,12 @@ public class TimeUtil {
      * @return
      */
     public static int getUpdateCycleByDate(String dataDate) {
-        int updateCycle = DataDealConstants.LABEL_CYCLE_TYPE_M;
+        int updateCycle = ServiceConstants.LABEL_CYCLE_TYPE_M;
         if (!StringUtils.isEmpty(dataDate)) {
             if (dataDate.length() == 6) {
-                updateCycle = DataDealConstants.LABEL_CYCLE_TYPE_M;
+                updateCycle = ServiceConstants.LABEL_CYCLE_TYPE_M;
             } else if (dataDate.length() > 6) {
-                updateCycle = DataDealConstants.LABEL_CYCLE_TYPE_D;
+                updateCycle = ServiceConstants.LABEL_CYCLE_TYPE_D;
             }
         }
 
@@ -733,7 +732,7 @@ public class TimeUtil {
             Date theDate = format.parse(dataDate);
             dateStr = resultFormat.format(theDate);
         } catch (ParseException e) {
-            LogUtil.debug(e);
+            LogUtil.error(e);
         }
         return dateStr;
     }
@@ -943,8 +942,8 @@ public class TimeUtil {
      * @return yyyy-MM-dd型的日期
      * @throws Exception
      */
-    public static String getFronOneDate() {
-        DateFormat df = new SimpleDateFormat(FORMAT_YYYY_MM_DD);
+    public static String getFrontOneDate() {
+        DateFormat df = new SimpleDateFormat(FORMAT_YYYYMMDD);
         Date date = new Date();
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
@@ -971,7 +970,7 @@ public class TimeUtil {
         calendar.setTime(date);
         int dateType = Calendar.DATE;
         //月周期，获取前num月
-        if (DataDealConstants.LABEL_CYCLE_TYPE_M == cycle) {
+        if (ServiceConstants.LABEL_CYCLE_TYPE_M == cycle) {
             dateType = Calendar.MONTH;
         }
         calendar.add(dateType, -num);

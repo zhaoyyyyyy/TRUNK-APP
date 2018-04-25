@@ -159,6 +159,21 @@ window.loc_onload = function() {
 				}
 				if(dataForm.isNeedDes !=1){
 					dataForm.isNeedDes = 0;
+				} else {
+					var desKeyTmp = String(dataForm.desKey).trim();
+					if(desKeyTmp){
+						if(desKeyTmp.length < 8){
+							$.alert("加密密钥最小长度是8");
+							return;
+						}else if(desKeyTmp.length > 128){
+							$.alert("加密密钥最大长度是128");
+							return;
+						}
+					} else {
+						$.alert("请输入加密密钥");
+						return;
+					}
+					dataForm.desKey = desKeyTmp;
 				}
 				if(dataForm.isNeedCompress !=1){
 					dataForm.isNeedCompress = 0;
