@@ -188,17 +188,14 @@ public class CustomerPublishDefaultTaskImpl implements ICustomerPublishTask {
                 LogUtil.info("推送平台("+sysId+")不存在，不推送。");
                 continue;
             } else {
-                //允许推送属性
-//                if (null!=sysInfo.getIsAllowAttr() && ServiceConstants.SysInfo.IS_ALLOW_ATTR_YES==sysInfo.getIsAllowAttr()) {
-                    //获取属性列
-                    int attrType = ServiceConstants.LabelAttrRel.ATTR_SETTING_TYPE_PUSH;
-                    try {
-                        attrRelList = iCustomerPublishCommService.getLabelAttrRelsByCustom(customInfo, attrType);
-                    } catch (Exception e) {
-                        LogUtil.error("查询客户群关联的属性错误！", e);
-                        continue;
-                    }
-//                }
+                //获取属性列
+                int attrType = ServiceConstants.LabelAttrRel.ATTR_SETTING_TYPE_PUSH;
+                try {
+                    attrRelList = iCustomerPublishCommService.getLabelAttrRelsByCustom(customInfo, attrType);
+                } catch (Exception e) {
+                    LogUtil.error("查询客户群关联的属性错误！", e);
+                    continue;
+                }
                 
                 //在back库里确认一下清单数据是否存在,并查询有多少数据
                 String customId = customInfo.getLabelId();
@@ -326,9 +323,6 @@ public class CustomerPublishDefaultTaskImpl implements ICustomerPublishTask {
 	    
         boolean result = true;
 	    
-		List<LabelAttrRel> resultAttrs = new ArrayList<LabelAttrRel>();
-	    
-	    
 	    //1.data2file
 		//本地缓冲目录
         String localPathTmp = cacheProxy.getSYSConfigInfoByKey("LOC_CONFIG_SYS_TEMP_PATH");  
@@ -350,7 +344,7 @@ public class CustomerPublishDefaultTaskImpl implements ICustomerPublishTask {
         String customListSql = iCustomerPublishCommService.getCustomListSql(customInfo, attrRelList,true);
         LogUtil.info("查询清单数据："+customListSql);
         //1.2 创建清单文件
-        result = this.getSql2FileUtils().sql2File(customListSql, null, fileName, encode, bufferedRowSize);
+        result = this.getSql2FileUtils().sql2File(customListSql, null, fileName);
         
         
 	    //2.determine push file type
@@ -373,11 +367,11 @@ public class CustomerPublishDefaultTaskImpl implements ICustomerPublishTask {
             }
             //2.2 是否有加密描述文件
             if (null!=sysInfo.getIsNeedDes() && ServiceConstants.SysInfo.IS_NEED_DES_YES==sysInfo.getIsNeedDes()) {
-                result = this.getSql2FileUtils().sql2File(customListSql, title, csvFileTmp, encode, bufferedRowSize);
+                result = this.getSql2FileUtils().sql2File(customListSql, title, csvFileTmp);
                 fileTmp = csvFileTmp;
                 desFile = csvFile;
             }else{
-                result = this.getSql2FileUtils().sql2File(customListSql, title, csvFile, encode, bufferedRowSize);
+                result = this.getSql2FileUtils().sql2File(customListSql, title, csvFile);
                 desFile = csvFile;
             }
             
@@ -397,8 +391,6 @@ public class CustomerPublishDefaultTaskImpl implements ICustomerPublishTask {
           
             //2.3 ZIP file
             if(null!=sysInfo.getIsNeedCompress() && ServiceConstants.SysInfo.IS_NEED_COMPRESS_YES==sysInfo.getIsNeedCompress()){
-                
-                
                 try {
                     LogUtil.debug("zipfile:" + zipFile);
                     if (null!=sysInfo.getIsNeedDes() && ServiceConstants.SysInfo.IS_NEED_DES_YES==sysInfo.getIsNeedDes()) {
@@ -542,7 +534,7 @@ public class CustomerPublishDefaultTaskImpl implements ICustomerPublishTask {
             String isCallWebService = this.cacheProxy.getSYSConfigInfoByKey("TRANSFER_WEBSERVICE_BEFORE_PUBLISH");
             if (!Boolean.valueOf(isCallWebService) && StringUtil.isNotEmpty(sysInfo.getWebserviceWsdl())
                 && StringUtil.isNotEmpty(sysInfo.getWebserviceMethod())) {
-                result = this.getCustomPushWebServiceResult(pushUserId, labelPushReq, resultAttrs);
+                result = this.getCustomPushWebServiceResult(pushUserId);
             }
         }
 	    
@@ -575,8 +567,7 @@ public class CustomerPublishDefaultTaskImpl implements ICustomerPublishTask {
      * @param resultAttrs
      * @return
      */
-    private boolean getCustomPushWebServiceResult(String pushUserId, LabelPushReq ciCustomPushReq,
-            List<LabelAttrRel> resultAttrs) {
+    private boolean getCustomPushWebServiceResult(String pushUserId) {
         boolean result = true;
         try {
             Object[] args = null;
@@ -586,8 +577,7 @@ public class CustomerPublishDefaultTaskImpl implements ICustomerPublishTask {
                 args = getArgs(argNames);
             } else {
                 //组装webservice请求参数的xml
-                StandardPushXmlBean bean = this.createStandardPushXmlBean(pushUserId, 
-                        labelPushReq, resultAttrs);
+                StandardPushXmlBean bean = this.createStandardPushXmlBean(pushUserId);
                 String pushXmlBody = Bean2XMLUtils.bean2XmlString(bean);
                 LogUtil.debug("StandardPushXml : \n\r" + pushXmlBody);
                 args = new Object[1];
@@ -614,15 +604,14 @@ public class CustomerPublishDefaultTaskImpl implements ICustomerPublishTask {
      * @return
      * @version ZJ
      */
-    private StandardPushXmlBean createStandardPushXmlBean(String userId, 
-            LabelPushReq ciCustomPushReq, List<LabelAttrRel> resultAttrs) {
+    private StandardPushXmlBean createStandardPushXmlBean(String userId) {
         StandardPushXmlBean bean = new StandardPushXmlBean();
         Title title = bean.getTitle();
         title.setTaskDesc(sysInfo.getSysName() + "推送任务");
         title.setSendTime(new Date());
 
         Data data = bean.getData();
-        data.setReqId(ciCustomPushReq.getReqId());
+        data.setReqId(labelPushReq.getReqId());
         data.setPlatformCode("COC");
         data.setUserId(userId);
         //创建人名称
@@ -668,7 +657,7 @@ public class CustomerPublishDefaultTaskImpl implements ICustomerPublishTask {
         col.setIsPrimaryKey(1);
         columns.add(col);
         
-        for (LabelAttrRel rel : resultAttrs) {
+        for (LabelAttrRel rel : attrRelList) {
             StandardPushXmlBean.Data.Column column = data.newColumn();
             column.setColumnCnName(rel.getAttrColName());
             column.setIsPrimaryKey(0);
@@ -844,8 +833,7 @@ public class CustomerPublishDefaultTaskImpl implements ICustomerPublishTask {
          * @return
          * @version ZJ
          */
-        public boolean sql2File(String sql, final String title, String fileName,
-                final String encode, int bufferedRowSize) {
+        public boolean sql2File(String sql, final String title, String fileName) {
             
             LogUtil.info("sql2File2:sql= " + sql + ";titles=" + title + ";fileName=" + fileName + ";encode=" + encode);
 
@@ -861,13 +849,13 @@ public class CustomerPublishDefaultTaskImpl implements ICustomerPublishTask {
                     dataList = backSqlService.queryForPage(sql, start, bufferedRowSize);
                     if (dataList.size() >= bufferSize){
                         if (fileName.toLowerCase().endsWith("csv") || fileName.toLowerCase().endsWith("txt")) {//纯文本文本格式
-                            flag = this.writeToTextFile1(dataList, title, file, encode);
+                            flag = this.writeToTextFile(dataList, title, file);
                         }
                         dataList.clear();
                         start++;
                     }else{
                         if (fileName.toLowerCase().endsWith("csv") || fileName.toLowerCase().endsWith("txt")) {//纯文本文本格式
-                            flag = this.writeToTextFile1(dataList, title, file, encode);
+                            flag = this.writeToTextFile(dataList, title, file);
                         }
                         break;
                     }
@@ -893,7 +881,7 @@ public class CustomerPublishDefaultTaskImpl implements ICustomerPublishTask {
          * @param quote
          * @return
          */
-        public boolean writeToTextFile1(List<Map<String, String>> datas, String title, String fileName, String encode) {
+        public boolean writeToTextFile(List<Map<String, String>> datas, String title, String fileName) {
             boolean flag = true;
             CSVWriter cw = null;
             Writer osw = null;
