@@ -27,7 +27,9 @@ window.loc_onload = function() {
 			colNames:"",  //表格表头
 			colModel:"",  //表格模型
 			pager:"" ,  //表格分页id
-			zbFlag:true //数据准备表格默认显示准备状态
+			zbFlag:true, //数据准备表格默认显示准备状态
+			isOpen:false,//日期下拉
+			isDown:false//状态下拉
 		},
 		methods:{
 			loadMonitorDetailData:function(){
@@ -41,6 +43,12 @@ window.loc_onload = function() {
 				this.loadDicSjsxpl();
 				//加载统计数据
 				this.loadCountData();
+			},
+			toggle:function(){
+				this.isOpen=!this.isOpen;
+			},
+			toggleStatus:function(){
+				this.isDown=!this.isDown;
 			},
 			initDateByCycle:function(e){
             	 //数据日期日周期显示范围是前三天
