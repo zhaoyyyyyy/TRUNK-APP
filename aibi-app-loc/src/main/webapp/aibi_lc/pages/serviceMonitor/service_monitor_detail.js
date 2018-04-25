@@ -197,7 +197,9 @@ window.loc_onload = function() {
 		    	this.defaultPl = sjsxplList[0].code;
 		    },
 		    //初始化数据准备表格
-		    initDataPrepareTable:function(status){
+		    initDataPrepareTable:function(status,event){
+		    	//console.log(event)
+		    	this.isDown=false;
 		    	this.zbFlag = status;
 		    	this.tableId = "#dataPrepareTable";
 		    	this.tableUrl = $.ctx + "/api/monitor/detail/queryDataPreparePagebyConfigId";
@@ -435,6 +437,13 @@ window.loc_onload = function() {
 		}
 		
 	});
+	$(".ui-pre-progress a").each(function(e){
+		$(this).click(function(){
+			var scrollTop=$(".scrollBox").eq(e).offset().top;
+			$("html,body").animate({"scrollTop":scrollTop})
+		})
+		
+	})
 };
 
  
