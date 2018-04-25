@@ -18,6 +18,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.xml.namespace.QName;
 
@@ -165,7 +166,7 @@ public class CustomerPublishDefaultTaskImpl implements ICustomerPublishTask {
 	}
 
 	public void run() {
-	    LogUtil.info("Enter CustomerPublishDefaultThread.run()");
+	    LogUtil.info("Enter "+this.getClass().getSimpleName()+".run()");
         LogUtil.debug("客户群推送 "+CUSTOMER_PUBLISH_PRE_WAIT_TIME/THOUSAND+" 秒后开始执行。。。");
 		
         try {
@@ -243,7 +244,7 @@ public class CustomerPublishDefaultTaskImpl implements ICustomerPublishTask {
         }
         
         LogUtil.debug("Customer("+customInfo.getLabelId()+")Publish end,cost:" + (System.currentTimeMillis() - start)/new Long(THOUSAND) + " s.");
-		LogUtil.info("Exist CustomerPublishDefaultThread.run()");
+		LogUtil.info("Exist "+this.getClass().getSimpleName()+".run()");
 	}
     
     /**
@@ -751,8 +752,7 @@ public class CustomerPublishDefaultTaskImpl implements ICustomerPublishTask {
         bean.getData().setReqId(labelPushReq.getRecodeId());
         bean.getData().setPlatformCode("COC");
         File zip = new File(zipFile);
-        String fileName = zip.getName();
-        bean.getData().setUploadFileName(fileName);
+        bean.getData().setUploadFileName(zip.getName());
 
         bean.getData().setRowNumber(String.valueOf(customInfo.getLabelExtInfo().getCustomNum()));
         bean.getData().setUserId(customInfo.getCreateUserId());
@@ -780,7 +780,7 @@ public class CustomerPublishDefaultTaskImpl implements ICustomerPublishTask {
             return false;
         }
         try {
-            FileUtil.writeByteFile(xmlStr.getBytes("UTF-8"), new File(xmlFile));
+            FileUtil.writeByteFile(xmlStr.getBytes(encode), new File(xmlFile));
         } catch (Exception e) {
             LogUtil.error("生成xml文件，uploadXmlFile", e);
             return false;
@@ -898,8 +898,8 @@ public class CustomerPublishDefaultTaskImpl implements ICustomerPublishTask {
                     if (m.containsKey("rownum")) {  //不把序号写入文件
                         m.remove("rownum");
                     }
-                    for (String col : m.keySet()) {
-                        data.add(String.valueOf(m.get(col)).replace("\"", ""));
+                    for (Entry<String, String> entry : m.entrySet()) {
+                        data.add(String.valueOf(entry.getValue()).replace("\"", ""));
                     }
                     if (!data.isEmpty() && data.size()>0) {
                         cw.writeNext(data.toArray(new String[] {}));

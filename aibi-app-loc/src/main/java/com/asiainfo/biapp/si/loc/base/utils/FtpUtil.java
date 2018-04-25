@@ -304,7 +304,7 @@ public class FtpUtil {
 					oStream = new FileOutputStream(outfile);
 					flag = client.retrieveFile(remotefile, oStream);
 					// 下载完毕后 删除ftp上的文件
-					deleteFtpFile(client, remotefile, listTableName);
+					deleteFtpFile(client, remotefile);
 				//}
 			} catch (IOException e) {
 				flag = false;
@@ -495,7 +495,7 @@ public class FtpUtil {
 	 * @param fileName
 	 * @throws Exception
 	 */
-	public static void deleteFtpFile(FTPClient ftp, String remotePath, String fileName) throws Exception {
+	public static void deleteFtpFile(FTPClient ftp, String remotePath) throws Exception {
 		// 转移到FTP服务器目录
 		ftp.changeWorkingDirectory(remotePath);
 		boolean result = ftp.deleteFile(remotePath);
