@@ -344,6 +344,11 @@ function fun_to_save(){
 		var url_fh = "";
 		var msg = "";
 		var savemda = "";
+		var sourcevalue = $("#sourceTableId").val();
+		if(sourcevalue==null){
+			$.alert("请选择指标源表");
+			return false;
+		}
 		if(model.labelId!=null && model.labelId!="" && model.labelId!=undefined){
 			url_ = $.ctx + '/api/label/labelInfo/update';
 			if(model.labelTypeId == 8){
