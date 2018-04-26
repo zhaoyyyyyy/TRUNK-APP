@@ -1700,25 +1700,8 @@ animation-delay: .8s;
 	width:auto;
 	float:none;
 }
-.ui-prefecture > div .dropdown{
-	display:inline-block;
-	margin:0 0 0 20px;
-}
 .ui-morior-border:hover{
 	border:1px solid #3D9CEB;
-}
-.dropdown.pre-dropdown > .dropdown-menu{
-	background-color: #f2f2f2;
-	border:1px solid #dce2e4;
-	border-radius:0;
-	padding:5px 5px;
-	min-width: 60px;
-}
-.dropdown.pre-dropdown > .dropdown-menu > li:hover{
-	background:transparent;
-}
-.dropdown.pre-dropdown > .dropdown-menu > li span{
-	cursor: pointer;
 }
 .ui-prefecture > div > em{
 	display: inline-block;
@@ -1728,21 +1711,6 @@ animation-delay: .8s;
     line-height: 20px;
     vertical-align: middle;
     margin:0 10px;
-}
-.prefectrue-span{
-	cursor: pointer;
-	display:inline-block;
-	line-height: 24px;
-}
-.prefectrue-span > em{
-	display:inline-block;
-	border: 6px solid transparent;
-    height: 0;
-    width: 0;
-    border-top: 6px solid #797979;
-    position: relative;
-    top: 6px;
-    border-radius: 3px;
 }
 .ui-label-list > li.ui-prerecture-item {
 	width:25%;
@@ -1815,11 +1783,11 @@ animation-delay: .8s;
 	width:66px;
 	text-align:center;
 }
-.ui-pre-detail > select{
+.ui-prefecture > div > select{
 	border:none;
 	color:#666;
 }
-.ui-pre-detail > select option{
+.ui-prefecture > div > select option{
 	background-color: #f2f2f2;
     border: 1px solid #dce2e4;
     padding:2px 0;
@@ -1851,8 +1819,11 @@ animation-delay: .8s;
 	height:20px;
 	background-position:-508px -345px;
 }
-.ui-pre-progress > a,.ui-pre-progress > a:visited,.ui-pre-progress > a:active{
+.ui-pre-progress > a{
 	color:#666;
+}
+.ui-pre-progress > a:visited,.ui-pre-progress > a:active,.ui-pre-progress > a.active{
+	color:#0099FF
 }
 .ui-status{
 	display:inline-block;
@@ -1871,28 +1842,14 @@ animation-delay: .8s;
     padding:0 5px;
     margin:0 1px;
 }
-.ui-status > span,.ui-status > .dropdown > span,.ui-status > .dropdown{
+/*.ui-status > select.active{
+	font-weight:bold;
+}*/
+.ui-status > span{
 	font-size:12px;
 	line-height:30px;
 	padding:0 10px;
 	display:inline-block;
-}
-.ui-status > .dropdown,.ui-status > span:first-child{
-	border-right:1px solid #dce2e4;
-}
-.ui-status > .dropdown{
-	padding:0;
-}
-.ui-status > .dropdown > .dropdown-menu{
-	border-radius:4px 0 0;
-	top:30px;
-	margin:0;
-	min-width:100%;
-	z-index:999999;
-}
-.ui-status > .dropdown > .dropdown-menu>li>a{
-	padding:2px 0 2px 12px;
-	font-size:12px;
 }
 .ui-status > span > em{
 	display:inline-block;
@@ -1933,4 +1890,8 @@ animation-delay: .8s;
 }
 .state-fail{
 	color:#FF0000;
+}
+.ui-hide-calendar .ui-datepicker-calendar,
+.ui-hide-calendar .ui-priority-secondary{
+	display: none;
 }

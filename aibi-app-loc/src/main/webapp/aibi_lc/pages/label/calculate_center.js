@@ -570,6 +570,8 @@ var calculateCenter = (function (model){
 		$.commAjax({
 			  url: actionUrl,
 			  async	: false,//同步
+			  isShowMask : true,
+			  maskMassage : '正在校验规则中，请稍等...',
 			  postData:{
 				  "monthLabelDate":labelMonth,
 				  "dayLabelDate":labelDay,

@@ -5,6 +5,8 @@
  */
 var monitorMain;////运营监控总览Vue实例
 window.loc_onload = function() {
+	
+	
     monitorMain = new Vue({
         el:"#monitorMain",
         data:{
@@ -69,58 +71,68 @@ window.loc_onload = function() {
                 });
             },
             //点击周期，初始化日期
-            initDateByCycle:function(dateCycle,item,event){
-            	item.isOpen=false;
-            	var dateCycle=$(event.currentTarget).text();
-            	$(event.currentTarget).parents(".dropdown").find("span.pre-cycle-name").text(dateCycle);
-            	this.dateCycle = dateCycle;
-            	var now = new Date();
-            	var dataDay = $.dateFormat(new Date(now.getTime() - 3*24*60*60*1000),"yyyy-MM-dd");
-            	var dataMonth = $.dateFormat(new Date(now.getTime() - 3*24*60*60*1000),"yyyy-MM");
-            	if("day" === this.dateCycle){
-            		$(this).parents("div.dropdown").siblings("div.control-input").children("input").html(dataDay);
-            	}else{
-            		$(this).parents("div.dropdown").siblings("div.control-input").children("input").html(dataMonth);
-            	}
-            },
-            showDate:function(item){
-            	if(typeof item.isOpen=='undefined'){
-            		this.$set(item,"isOpen",true);
-            	}else{
-            		item.isOpen=!item.isOpen;
-            	}
-            },
-            dateToggle:function(item){
-            	/*if(typeof item.isActive=='undefined'){
-            		this.$set(item,"isActive",true);
-            	}else{
-            		item.isActive=!item.isActive;
-            	}*/
-            	 
-            	var nowDate = $.dateFormat(new Date(),"yyyy-MM-dd");
-            	var nowMonth = $.dateFormat(new Date(),"yyyy-MM");
-            	if("day" === this.dateCycle){
-    	    		//数据日期日周期显示范围是前三天 	
-    	    		WdatePicker({isShowClear:false,dateFmt:'yyyy-MM-dd',
-    	    			maxDate:nowDate,minDate:'#F{$dp.$DV(\''+nowDate+'\',{d:-3});}'});
-            	}else{
-                	//数据日期月周期显示范围是一年
-    	    		WdatePicker({isShowClear:false,dateFmt:'yyyy-MM',
-    	    			maxDate:nowMonth,minDate:'#F{$dp.$DV(\''+nowMonth+'\',{y:-12});}'});
-            	}
-            },
-            getData:function(event,item){
-            	var cycle=$(event.currentTarget).parents(".ui-prefecture").find("span.pre-cycle-name").text();
-            	if(cycle=="日周期"){
-            		$(event.currentTarget).datepicker({
-				  		changeMonth: true,
-				  		changeYear: true,
-				  		dateFormat:"yy-mm-dd",
-				  		dayNamesMin: [ "日", "一", "二", "三", "四", "五", "六" ],
-				  		monthNamesShort: [ "一月", "二月", "三月", "四月", "五月", "六月", "七月", "八月", "九月", "十月", "十一月", "十二月" ]
-				  	});
-            	}
-            	
+//          initDateByCycle:function(dateCycle,item,event){
+//          	item.isOpen=false;
+//          	var dateCycle=$(event.currentTarget).text();
+//          	$(event.currentTarget).parents(".dropdown").find("span.pre-cycle-name").text(dateCycle);
+//          	this.dateCycle = dateCycle;
+//          	var now = new Date();
+//          	var dataDay = $.dateFormat(new Date(now.getTime() - 3*24*60*60*1000),"yyyy-MM-dd");
+//          	var dataMonth = $.dateFormat(new Date(now.getTime() - 3*24*60*60*1000),"yyyy-MM");
+//          	if("day" === this.dateCycle){
+//          		$(this).parents("div.dropdown").siblings("div.control-input").children("input").html(dataDay);
+//          	}else{
+//          		$(this).parents("div.dropdown").siblings("div.control-input").children("input").html(dataMonth);
+//          	}
+//          },
+//          dateToggle:function(item){
+//          	var nowDate = $.dateFormat(new Date(),"yyyy-MM-dd");
+//          	var nowMonth = $.dateFormat(new Date(),"yyyy-MM");
+//          	if("day" === this.dateCycle){
+//  	    		//数据日期日周期显示范围是前三天 	
+//  	    		WdatePicker({isShowClear:false,dateFmt:'yyyy-MM-dd',
+//  	    			maxDate:nowDate,minDate:'#F{$dp.$DV(\''+nowDate+'\',{d:-3});}'});
+//          	}else{
+//              	//数据日期月周期显示范围是一年
+//  	    		WdatePicker({isShowClear:false,dateFmt:'yyyy-MM',
+//  	    			maxDate:nowMonth,minDate:'#F{$dp.$DV(\''+nowMonth+'\',{y:-12});}'});
+//          	}
+//          },
+            getCycle:function(event){//日期切换
+            	var dateElement=$(event.currentTarget).siblings(".control-input").find("input");
+            	if($(event.currentTarget).find("option:selected").val()=="day"){
+		    		dateElement.val(DateFmt.Formate(new Date(),"yyyy-MM-dd")).datepicker( "destroy" ).datepicker({
+		    			dateFormat: "yy-mm-dd",
+						showButtonPanel: false,
+						changeMonth: false,
+      					changeYear: false,
+      					defaultDate:+1,
+      					minDate:DateFmt.DateCalc(new Date(),"d",-2),
+		    			maxDate:DateFmt.DateCalc(new Date(),"d",0),
+						beforeShow :function(){
+			    			$("#ui-datepicker-div").removeClass("ui-hide-calendar");
+			    		},
+		    		}).off("click");
+		    	}else{
+		    		dateElement.val(DateFmt.Formate(new Date(),"yyyy-MM")).datepicker( "destroy" ).datepicker({
+            			dateFormat: "yyyy-MM",
+						showButtonPanel: true,
+						closeText:"确定" ,
+						changeMonth: true,
+      					changeYear: true,
+      					minDate:DateFmt.DateCalc(new Date(),"M",-12),
+		    			maxDate:DateFmt.DateCalc(new Date(),"M",0),
+						beforeShow :function(){
+			    			$("#ui-datepicker-div").addClass("ui-hide-calendar");
+			    		},
+			    		 onClose: function(dateText, inst) {
+    			            var month = $("#ui-datepicker-div .ui-datepicker-month option:selected").val();//得到选中的月份值
+    			            var year = $("#ui-datepicker-div .ui-datepicker-year option:selected").val();//得到选中的年份值
+    			            var dateStr = DateFmt.Formate(DateFmt.parseDate(year+'-'+(parseInt(month)+1)),"yyyy-MM");
+    			            dateElement.val(dateStr);//给input赋值，其中要对月值加1才是实际的月份
+    			        }
+            		}).off("click");
+		    	}
             },
             //点击日期，刷新监控数据
             changeMonitorByDate:function(e){
@@ -157,9 +169,13 @@ window.loc_onload = function() {
         },
         mounted: function() {
             this.initData();
-        
-  	
         }
     });
-	
 };
+function getTime(element){//初始化日期
+	$(element).datepicker({
+		dateFormat: "yy-mm-dd",
+		minDate:DateFmt.DateCalc(new Date(),"d",-2),
+		maxDate:DateFmt.DateCalc(new Date(),"d",0),
+	});
+}

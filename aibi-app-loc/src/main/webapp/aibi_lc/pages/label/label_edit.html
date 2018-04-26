@@ -162,7 +162,7 @@
 							<span class="input-required">*</span>
 							请选择纵表</label> 
 							<div class="control-input has-icon">
-                                <select v-on:change="change_sourceId($event)" v-model="sourceTableId" name="sourceTableId" class="form-control ml10 input-pointer ">
+                                <select v-on:change="change_sourceId($event)" v-model="sourceTableId" id="sourceTableId" name="sourceTableId" class="form-control ml10 input-pointer ">
                                 <option disabled value="">请选择指标源表</option>
                                 <option v-for ="source in sourcetableInfoList" :value="source.sourceTableId">{{source.sourceTableName}}</option>
                                 </select>
