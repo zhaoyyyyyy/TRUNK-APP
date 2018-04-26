@@ -207,7 +207,7 @@ public class CustomerPublishDefaultTaskImpl implements ICustomerPublishTask {
                     int no = backSqlService.queryCount(sql);
                     LogUtil.debug("客户群("+customId+")的清单数据量："+no);
                 } catch (Exception e) {
-                    LogUtil.warn("查询客户群("+customId+")的清单数据出错，不推送。");
+                    LogUtil.warn("查询客户群("+customId+")的清单数据出错，不推送。sql："+sql);
                     continue;
                 }
             }
