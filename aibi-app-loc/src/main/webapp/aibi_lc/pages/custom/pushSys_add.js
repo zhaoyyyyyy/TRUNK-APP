@@ -21,7 +21,7 @@ var model = {
 		desKey:"",//加密密钥
 		isNeedCompress:false,//是否需要压缩
 		compressType:"",//压缩类型
-		isAllowAttr:"",//是否允许推送属性
+		isNeedTitle:"",//是否允许推送属性
 		pushClassName:"",//实现类名
 		tableNamePre:"",//推送清单表前缀
 		customTaskTable:"",//客户群调度信息表
@@ -35,7 +35,7 @@ var model = {
 		showDesKey:false,//展示DES加密
 		showCompressType:false,//展示压缩类型
 		pushFile:false,//上传xml文件
-		pushAttr:false,//推送属性
+		pushTitle:false,//推送属性
 		pushPage:true,//展开推送页面显示
 		
 }
@@ -94,10 +94,10 @@ window.loc_onload = function() {
 					}else{
 						model.pushFile=false;
 					}
-					if(data.data.isAllowAttr==1){
-						model.pushAttr=true;
+					if(data.data.isNeedTitle==1){
+						model.pushTitle=true;
 					}else{
-						model.pushAttr=false;
+						model.pushTitle=false;
 					}
 					if(data.data.showInPage==1){
 						model.pushPage=true;
@@ -178,8 +178,8 @@ window.loc_onload = function() {
 				if(dataForm.isNeedCompress !=1){
 					dataForm.isNeedCompress = 0;
 				}
-				if(dataForm.isAllowAttr !=1){
-					dataForm.isAllowAttr = 0;
+				if(dataForm.isNeedTitle !=1){
+					dataForm.isNeedTitle = 0;
 				}
 				$.commAjax({
 					url : url_,
