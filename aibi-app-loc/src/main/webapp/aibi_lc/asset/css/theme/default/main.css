@@ -1819,8 +1819,11 @@ animation-delay: .8s;
 	height:20px;
 	background-position:-508px -345px;
 }
-.ui-pre-progress > a,.ui-pre-progress > a:visited,.ui-pre-progress > a:active{
+.ui-pre-progress > a{
 	color:#666;
+}
+.ui-pre-progress > a:visited,.ui-pre-progress > a:active,.ui-pre-progress > a.active{
+	color:#0099FF
 }
 .ui-status{
 	display:inline-block;
@@ -1839,6 +1842,9 @@ animation-delay: .8s;
     padding:0 5px;
     margin:0 1px;
 }
+/*.ui-status > select.active{
+	font-weight:bold;
+}*/
 .ui-status > span{
 	font-size:12px;
 	line-height:30px;

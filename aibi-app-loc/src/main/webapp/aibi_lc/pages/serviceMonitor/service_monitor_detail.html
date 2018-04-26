@@ -8,6 +8,7 @@
 	<link rel="stylesheet" theme="default" href="../../asset/css/theme/default/main.css"/> 
    	<script type="text/javascript" src="../../asset/script/common/include.js"></script>
    	<script type="text/javascript" src="service_monitor_detail.js"></script>
+   	<script type="text/javascript" src="DateFmt.js"></script>
    	<style type="text/css">
 	[v-cloak] {
 		display: none;
@@ -36,23 +37,16 @@
 						</div>
 		                <span class="tips">提示 : 当网络环境不理想时，设置过高的频率，可能不会呈现相应效果。</span>
 	               </div>
-	                <select class="ml10" @change="">
-    				 	<option value="1">日周期</option>
-    				 	<option value="2">月周期</option>
+	                <select class="ml10" @change="getCycle($event)">
+    				 	<option value="day">日周期</option>
+    				 	<option value="month">月周期</option>
 	    			</select>
-					<!--<div class="dropdown pre-dropdown" v-bind:class="{open:isOpen}">
-						<span class="prefectrue-span" @click="toggle()">日周期&nbsp;<em></em></span>
-						<ul class="dropdown-menu">
-							<li>
-								<span>日周期</span>
-							</li>
-							<li>
-								<span>月周期</span>
-							</li>
-						</ul>
-					</div>-->
 					<em></em>
-					<span class="prefectrue-span" @click="changeMonitorByDate" >{{dataDate}}<em class="ml20"></em></span>
+					<div class="control-input has-icon">
+			           <input type="text"  readonly="readonly" onmousedown="getTime(this)"
+			           	class="form-control input-pointer date-input" id="inputEmail4" v-model="dataDate">
+			           <span class="glyphicon-select form-control-feedback"></span>
+			        </div>
 		      	</div>
 	      	</div>
 			<div class="ui-lc-mian mt10 ui-morior-border" >

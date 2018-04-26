@@ -98,7 +98,7 @@ window.loc_onload = function() {
 //  	    			maxDate:nowMonth,minDate:'#F{$dp.$DV(\''+nowMonth+'\',{y:-12});}'});
 //          	}
 //          },
-            getCycle:function(event){
+            getCycle:function(event){//日期切换
             	var dateElement=$(event.currentTarget).siblings(".control-input").find("input");
             	if($(event.currentTarget).find("option:selected").val()=="day"){
 		    		dateElement.val(DateFmt.Formate(new Date(),"yyyy-MM-dd")).datepicker( "destroy" ).datepicker({
@@ -172,6 +172,10 @@ window.loc_onload = function() {
         }
     });
 };
-function getTime(element){
-	$(element).datepicker();
+function getTime(element){//初始化日期
+	$(element).datepicker({
+		dateFormat: "yy-mm-dd",
+		minDate:DateFmt.DateCalc(new Date(),"d",-2),
+		maxDate:DateFmt.DateCalc(new Date(),"d",0),
+	});
 }

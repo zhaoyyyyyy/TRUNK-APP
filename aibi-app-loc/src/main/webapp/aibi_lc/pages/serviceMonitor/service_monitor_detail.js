@@ -202,8 +202,43 @@ window.loc_onload = function() {
 		    	this.sjsxplList = sjsxplList;
 		    	this.defaultPl = sjsxplList[0].code;
 		    },
-		    getStatus:function(event){
-		    	console.log($(event.currentTarget))
+		    getCycle:function(event){//日期切花
+            	var dateElement=$(event.currentTarget).siblings(".control-input").find("input");
+            	if($(event.currentTarget).find("option:selected").val()=="day"){
+		    		dateElement.val(DateFmt.Formate(new Date(),"yyyy-MM-dd")).datepicker( "destroy" ).datepicker({
+		    			dateFormat: "yy-mm-dd",
+						showButtonPanel: false,
+						changeMonth: false,
+      					changeYear: false,
+      					defaultDate:+1,
+      					minDate:DateFmt.DateCalc(new Date(),"d",-2),
+		    			maxDate:DateFmt.DateCalc(new Date(),"d",0),
+						beforeShow :function(){
+			    			$("#ui-datepicker-div").removeClass("ui-hide-calendar");
+			    		},
+		    		}).off("click");
+		    	}else{
+		    		dateElement.val(DateFmt.Formate(new Date(),"yyyy-MM")).datepicker( "destroy" ).datepicker({
+            			dateFormat: "yyyy-MM",
+						showButtonPanel: true,
+						closeText:"确定" ,
+						changeMonth: true,
+      					changeYear: true,
+      					minDate:DateFmt.DateCalc(new Date(),"M",-12),
+		    			maxDate:DateFmt.DateCalc(new Date(),"M",0),
+						beforeShow :function(){
+			    			$("#ui-datepicker-div").addClass("ui-hide-calendar");
+			    		},
+			    		 onClose: function(dateText, inst) {
+    			            var month = $("#ui-datepicker-div .ui-datepicker-month option:selected").val();//得到选中的月份值
+    			            var year = $("#ui-datepicker-div .ui-datepicker-year option:selected").val();//得到选中的年份值
+    			            var dateStr = DateFmt.Formate(DateFmt.parseDate(year+'-'+(parseInt(month)+1)),"yyyy-MM");
+    			            dateElement.val(dateStr);//给input赋值，其中要对月值加1才是实际的月份
+    			        }
+            		}).off("click");
+		    	}
+            },
+		    getStatus:function(event){//状态切换
 		    	if($(event.currentTarget).find("option:selected").val()=="1"){
 		    		this.initDataPrepareTable(true);
 		    	}else{
@@ -464,13 +499,26 @@ window.loc_onload = function() {
 		}
 		
 	});
-	$(".ui-pre-progress a").each(function(e){
+	$(".ui-pre-progress a").each(function(e){//锚点定位
+		var anchors=$(this);
 		$(this).click(function(){
-			var scrollTop=$(".scrollBox").eq(e).offset().top-50;
-			$("html,body").animate({"scrollTop":scrollTop})
+            setTimeout(function(){
+                anchors.addClass("active").siblings("a").removeClass("active");
+            },500);
+            var $index = $(this).index();
+			var scrollTop=$(".scrollBox").eq($index).offset().top-50;
+			$("html,body").stop().animate({"scrollTop":scrollTop})
 		})
-		
 	})
+	$(window).scroll(function(){
+        var $stop=$(this).scrollTop();
+        $(".scrollBox").each(function(e){
+            var $hei_v=$(this).position().top-50;
+            if($stop>=$hei_v){
+                $('.ui-pre-progress a').eq(e).addClass('active').siblings("a").removeClass("active");
+            }
+        });
+    })
 };
 
 /**
@@ -500,11 +548,18 @@ function scroll(){
         }
     }
 }
-window.onscroll =function(){
+window.onscroll =function(){//吸顶导航
     if(scroll().top>=281){
         $(".ui-pre-progress").addClass("active");
     }else{
         $(".ui-pre-progress").removeClass("active");
     }
 
-}//吸顶导航
+}
+function getTime(element){//初始化日期
+	$(element).datepicker({
+		dateFormat: "yy-mm-dd",
+		minDate:DateFmt.DateCalc(new Date(),"d",-2),
+		maxDate:DateFmt.DateCalc(new Date(),"d",0),
+	});
+}
