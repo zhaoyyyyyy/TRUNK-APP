@@ -47,6 +47,7 @@ function exitLoc(){
 	delete ssg.token;
 	delete ssg.refreshToken;
 	delete ssg.CurrentConfigId;
+	delete ssg.customId;
 	window.location = "login.html";
 }
 /**
