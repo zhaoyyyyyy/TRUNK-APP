@@ -32,14 +32,7 @@ window.loc_onload = function() {
 			$.alert("当前用户拥有多个数据权限，请选择需要使用的数据范围。");
 			return ;
 		}	
-		if(!dataDateModel.checkRuleEffectDate(labelMonthTemp,labelDayTemp)){
-			//验证sql
-			var checkedModelListStr = dataModel.checkedModelList.join(',');
-			if(wd.curWin.calculateCenter.validateSql(labelMonthTemp,labelDayTemp,checkedModelListStr)){
-				wd.curWin.calculateCenter.submitForExplore(labelMonthTemp,labelDayTemp,checkedModelListStr);
-				wd.cancel();
-			}
-		}
+		dataDateModel.checkRuleEffectDate(labelMonthTemp,labelDayTemp,wd);
 	});
 	
 	wd.addBtn("cancel", "取消", function() {
@@ -84,29 +77,27 @@ var dataDateModel = (function (model){
      * 传入参数：newLabelMonthFormat所选月数据日期；newLabelDayFormat所选日数据日期
      * {flag:true,msg:""} flag:true所选数据日期早于标签生效日期，false没有早于标签生效日期
 	 */
-	model.checkRuleEffectDate = function(labelMonthArg,labelDayArg){
-		var isNewDate = false;
-		var msgDate = "";
+	model.checkRuleEffectDate = function(labelMonthArg,labelDayArg,wd){
 		$.commAjax({
 			  url: $.ctx + "/api/shopCart/checkRuleEffectDate",
-			  async	: false,//同步
 			  postData:{
 				  "newLabelMonthFormat":labelMonthArg,
 				  "newLabelDayFormat":labelDayArg
 			  },
+			  isShowMask : true,
+			  maskMassage : '正在校验规则中，请稍等...',
 			  onSuccess: function(returnObj){
-				  isNewDate = false ;
+				    //验证sql
+					var checkedModelListStr = dataModel.checkedModelList.join(',');
+					if(wd.curWin.calculateCenter.validateSql(labelMonthArg,labelDayArg,checkedModelListStr)){
+						wd.curWin.calculateCenter.submitForExplore(labelMonthArg,labelDayArg,checkedModelListStr);
+						wd.cancel();
+					}
 			  },
 			  onFailure: function(returnObj){
-				  isNewDate = true ;
-				  msgDate = returnObj.msg;
+				  $.alert(returnObj.msg);
 			  }
 		});
-		if(isNewDate){
-			$.alert(msgDate);
-			
-		}
-		return isNewDate;
 	};
 	/**
 	 * 查询用户数据权限
