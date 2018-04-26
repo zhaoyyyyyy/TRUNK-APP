@@ -67,6 +67,16 @@ public class LabelStatausController extends BaseController<LabelStatus>{
         Page<LabelStatus> labelStatusPage = new Page <>();
         try {
             labelStatusPage=iLabelStatusService.selectLabelStatusPageList(page, labelStatusVo);
+            if(labelStatusPage.getData()!=null && labelStatusPage.getData().size() >0){
+                List<LabelStatus> labelStatusList = labelStatusPage.getData();
+                for(LabelStatus labelStatus : labelStatusList){
+                    labelStatus.getLabelInfo().setMdaSysTableColumn(labelStatus.getLabelInfo().getMdaSysTableColumn());
+                    labelStatus.setMdaSysTableColumnIds(labelStatus.getMdaSysTableColumnIds());
+                    labelStatus.setMdaSysTableColumnNames(labelStatus.getMdaSysTableColumnNames());
+                    labelStatus.setMdaSysTable(labelStatus.getMdaSysTable());
+                }
+                labelStatusPage.setData(labelStatusList);
+            }
         } catch (BaseException e) {
             labelStatusPage.fail(e);
         }

@@ -38,6 +38,7 @@ window.loc_onload = function() {
 				var now = new Date();
 				this.dataDate = $.dateFormat(new Date(now.getTime() - 3*24*60*60*1000),"yyyy-MM-dd");
 				//数据字典赋值
+				this.loadDicYyjk();
 				this.loadDicSjzb();
 				this.loadDicSjcq();
 				this.loadDicBqsc();
@@ -129,17 +130,17 @@ window.loc_onload = function() {
 	            this.timerId = setTimeout(function(){
 	            	 this.loadMonitorDetailData(this.configId);
 	     		    //加载数据准备表格
-	     			this.initDataPrepareTable(this.zbFlag);
+//	     			this.initDataPrepareTable(this.zbFlag);
 	     			//加载标签生成表格
-	     			this.initLabelGenerateTable();
-	       			//加载客户群生成表格
-	     			this.initCustomGenerateTable();
+//	     			this.initLabelGenerateTable();
+//	       			//加载客户群生成表格
+//	     			this.initCustomGenerateTable();
 	      			//加载客户群推送表格
-	     			this.initCustomPushTable();
+//	     			this.initCustomPushTable();
 	            }.bind(this),this.defaultTimes);
 	        },
 	        //获取运营监控状态字典
-		    loadDicSjzb :function(){
+		    loadDicYyjk :function(){
 		    	var yyjkList = [];
 		    	var dicYyjk = $.getDicData("YYJKZT");
 		    	for(var i=0; i<dicYyjk.length; i++){
@@ -245,13 +246,13 @@ window.loc_onload = function() {
 		    		this.initDataPrepareTable(false);
 		    	}
 		    },
-		    //初始化数据准备表格
-		    initDataPrepareTable:function(status){
+		    changeDataPrepareTable:function(status){
+
 		    	console.log(status)
 		    	this.isDown=false;
 		    	this.zbFlag = status;
 		    	this.tableId = "#dataPrepareTable";
-		    	this.tableUrl = $.ctx + "/api/monitor/detail/queryDataPreparePagebyConfigId";
+		    	this.tableUrl = $.ctx + "/api/source/TargetTableStatus/queryPage";
 		    	this.postData = {'configId' : this.configId};
 		    	this.pager = "#dataPreparePager";
 		    	if(status){
@@ -321,17 +322,96 @@ window.loc_onload = function() {
 		    			align : "center",
 		    		}];
 		    	}
+		    	this.reloadTable();
+		    },
+		    //初始化数据准备表格
+		    initDataPrepareTable:function(status){
+		    	console.log(status)
+		    	this.isDown=false;
+		    	this.zbFlag = status;
+		    	this.tableId = "#dataPrepareTable";
+		    	this.tableUrl = $.ctx + "/api/source/TargetTableStatus/queryPage";
+		    	this.postData = {'configId' : this.configId};
+		    	this.pager = "#dataPreparePager";
+		    	this.colNames = [ '表名', '准备状态', '准备完成时间','抽取完成时间' ];
+		    	this.colModel = [ {
+	    			name : 'sourceTableName',
+	    			index : 'sourceTableName',
+	    			width : 110,
+	    			sortable : false,
+	    			frozen : true,
+	    		},
+	    		{
+	    			name : 'dataStatus',
+	    			index : 'dataStatus',
+	    			width : 50,
+	    			align : "center",
+	    			sortable : false,
+	    			formatter : function(value, opts, data) {
+	            		return $.getCodeDesc("SJZBZT",value);
+	            	}
+	    		}, {
+	    			name : 'startTime',
+	    			index : 'startTime',
+	    			width : 110,
+	    			sortable : false,
+	    			align : "center",
+	    		},{
+	    			name : 'endTime',
+	    			index : 'endTime',
+	    			width : 110,
+	    			sortable : false,
+	    			align : "center",
+	    		}];
+		    	if(status){
+		    		$("#sjzbList").css("display","");
+		    		$("#sjcqList").css("display","none");
+		    		
+		    	}else{
+		    		$("#sjzbList").css("display","none");
+		    		$("#sjcqList").css("display","");
+		    		this.colNames = [ '表名', '抽取状态', '准备完成时间','抽取完成时间' ];
+//		    		this.colModel = [ {
+//		    			name : 'sourceTableName',
+//		    			index : 'sourceTableName',
+//		    			width : 110,
+//		    			sortable : false,
+//		    			frozen : true,
+//		    		}, {
+//		    			name : 'isDoing',
+//		    			index : 'isDoing',
+//		    			sortable : false,
+//		    			width : 120,
+//		    			align : "center",
+//		    			formatter : function(value, opts, data) {
+//		            		return $.getCodeDesc("SJCQZT",value);
+//		            	}
+//		    				
+//		    		}, {
+//		    			name : 'dataDate',
+//		    			index : 'dataDate',
+//		    			width : 110,
+//		    			sortable : false,
+//		    			align : "center",
+//		    		} ,{
+//		    			name : 'dataDate',
+//		    			index : 'dataDate',
+//		    			width : 110,
+//		    			sortable : false,
+//		    			align : "center",
+//		    		}];
+		    	}
 		    	this.initTable();
 		    },
 		    //初始化标签生成表格
 		    initLabelGenerateTable:function(){
 		    	this.tableId = "#labelGenerateTable";
-		    	this.tableUrl = $.ctx + "/api/monitor/detail/queryLabelGenerateViewPage";
+		    	this.tableUrl = $.ctx + "/api/label/labelStatus/queryPage";
 		    	this.postData = {'configId' : this.configId};
 		    	this.colNames = [ '标签名称', '生成状态', '目标表列名', '表名','表类型','错误信息描述' ];
 		    	this.colModel = [ {
-		    		name : 'labelName',
-		    		index : 'labelName',
+		    		name : 'labelInfo.labelName',
+		    		index : 'labelInfo.labelName',
 		    		width : 110,
 		    		sortable : false,
 		    		frozen : true,
@@ -347,21 +427,21 @@ window.loc_onload = function() {
 			            return "<a style='color: #89B9FF;font-size: 14px;text-decoration: underline;' onclick=" + action + " >"+$.getCodeDesc("BQSCZT",cellvalue)+"</a>";
 			        }
 		    	}, {
-		    		name : 'columnName',
-		    		index : 'columnName',
+		    		name : 'mdaSysTableColumnNames',
+		    		index : 'mdaSysTableColumnNames',
 		    		width : 110,
 		    		sortable : false,
 		    		align : "center",
 		    	}, {
-		    		name : 'tableName',
-		    		index : 'tableName',
+		    		name : 'mdaSysTable.tableName',
+		    		index : 'mdaSysTable.tableName',
 		    		sortable : false,
 		    		width : 120,
 		    		align : "center"
 		    			
 		    	} ,{
-		    		name : 'tableType',
-		    		index : 'tableType',
+		    		name : 'mdaSysTable.tableType',
+		    		index : 'mdaSysTable.tableType',
 		    		width : 110,
 		    		sortable : false,
 		    		align : "center",
@@ -379,12 +459,12 @@ window.loc_onload = function() {
 		    //初始化客户群生成
 		    initCustomGenerateTable:function(){
 		    	this.tableId = "#customGenerateTable";
-		    	this.tableUrl = $.ctx + "/api/monitor/detail/queryCustomGenerateViewPage";
+		    	this.tableUrl = $.ctx + "/api/label/listInfo/queryPage";
 		    	this.postData = {"configId" :this.configId};
 		    	this.colNames =[ '客户群名称', '生成状态', '生成时间' ];
 		    	this.colModel = [ {
-		    		name : 'labelName',
-		    		index : 'labelName',
+		    		name : 'label.labelName',
+		    		index : 'label.labelName',
 		    		width : 110,
 		    		sortable : false,
 		    		frozen : true,
@@ -411,12 +491,12 @@ window.loc_onload = function() {
 		    //初始化客户群推送表格
 		    initCustomPushTable:function(){
 		    	this.tableId = "#customPushTable";
-		    	this.tableUrl =  $.ctx + "/api/monitor/detail/queryCustomPushViewPage";
+		    	this.tableUrl =  $.ctx + "/api/syspush/labelPushReq/queryPage";
 		    	this.postData = {'configId' : this.configId};
 		    	this.colNames =[ '客户群名称', '推送平台', '推送时间','推送状态' ];
 		    	this.colModel = [ {
-		    		name : 'labelName',
-		    		index : 'labelName',
+		    		name : 'labelInfo.labelName',
+		    		index : 'labelInfo.labelName',
 		    		width : 110,
 		    		sortable : false,
 		    		frozen : true,
@@ -466,6 +546,15 @@ window.loc_onload = function() {
 		    	    rowList:[10,20,30],
 		            pager: this.pager  
 		    	});
+		    },
+		    reloadTable:function(tableId){
+		    	$(tableId)
+//		    	.setGridParam({
+//					postData: $('#formSearch').formToJson()
+//				})
+				.trigger("reloadGrid", [{
+					page: 1
+				}]);
 		    }
 		},
 		mounted: function(){
@@ -477,7 +566,7 @@ window.loc_onload = function() {
 		    this.loadMonitorDetailData(this.configId);
 		    
 		    //加载数据准备表格
-			this.initDataPrepareTable(true);
+			this.initDataPrepareTable();
 			
 			//加载标签生成表格
 			this.initLabelGenerateTable();
@@ -489,7 +578,7 @@ window.loc_onload = function() {
 			this.initCustomPushTable();
 			
 			//默认刷新频率
-			this.refresh(this.defaultPl);
+//			this.refresh(this.defaultPl);
 			
 			//从监控总览页面跳转到指定锚点位置
 			var detailAnchor = $.getUrlParam("detailAnchor");

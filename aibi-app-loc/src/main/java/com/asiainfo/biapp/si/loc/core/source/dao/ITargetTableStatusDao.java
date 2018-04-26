@@ -59,15 +59,4 @@ public interface ITargetTableStatusDao extends BaseDao<TargetTableStatus, String
      */
     public List<TargetTableStatus> selectTargetTableStatusList(TargetTableStatusVo targetTableStatusVo);
 
-    /**
-     * 
-     * 根据专区id获取指标原表状态表信息
-     *
-     * @param page
-     * @param configId
-     * @param targetTableStatusVo
-     * @return
-     */
-    public Page<TargetTableStatus> selectTargetTableStatusPageListByConfigId(Page<TargetTableStatus> page, TargetTableStatusVo targetTableStatusVo,String configId);
-
 }

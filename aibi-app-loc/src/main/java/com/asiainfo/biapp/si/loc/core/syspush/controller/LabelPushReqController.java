@@ -6,6 +6,11 @@
 
 package com.asiainfo.biapp.si.loc.core.syspush.controller;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,6 +20,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import springfox.documentation.annotations.ApiIgnore;
+
 import com.asiainfo.biapp.si.loc.base.controller.BaseController;
 import com.asiainfo.biapp.si.loc.base.exception.BaseException;
 import com.asiainfo.biapp.si.loc.base.page.Page;
@@ -23,12 +30,6 @@ import com.asiainfo.biapp.si.loc.base.utils.WebResult;
 import com.asiainfo.biapp.si.loc.core.syspush.entity.LabelPushReq;
 import com.asiainfo.biapp.si.loc.core.syspush.service.ILabelPushReqService;
 import com.asiainfo.biapp.si.loc.core.syspush.vo.LabelPushReqVo;
-
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
-import springfox.documentation.annotations.ApiIgnore;
 
 /**
  * Title : LabelPushReqController
@@ -66,6 +67,12 @@ public class LabelPushReqController extends BaseController<LabelPushReq>{
         Page<LabelPushReq> labelPushReqPage = new Page<>();
         try {
             labelPushReqPage = iLabelPushReqService.selectLabelPushReqPageList(page, labelPushReqVo);
+            if(labelPushReqPage.getData()!=null && labelPushReqPage.getData().size() >0){
+                List<LabelPushReq> labelPushReqList = labelPushReqPage.getData();
+                for(LabelPushReq labelPushReq : labelPushReqList){
+                    labelPushReq.setSysName(labelPushReq.getSysName());
+                }
+            }
         } catch (BaseException e) {
             labelPushReqPage.fail(e);
         }

@@ -7,16 +7,27 @@
 package com.asiainfo.biapp.si.loc.core.label.entity;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.hibernate.annotations.GenericGenerator;
 
 import com.asiainfo.biapp.si.loc.base.entity.BaseEntity;
+import com.asiainfo.biapp.si.loc.base.exception.BaseException;
+import com.asiainfo.biapp.si.loc.base.extend.SpringContextHolder;
+import com.asiainfo.biapp.si.loc.base.utils.LogUtil;
+import com.asiainfo.biapp.si.loc.base.utils.StringUtil;
+import com.asiainfo.biapp.si.loc.core.label.service.IMdaSysTableColService;
+import com.asiainfo.biapp.si.loc.core.label.service.IMdaSysTableService;
 
 import io.swagger.annotations.ApiParam;
 
@@ -84,6 +95,18 @@ public class LabelStatus extends BaseEntity{
     @ApiParam(value = "错误信息描述")
     private String exceptionDesc;
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "LABEL_ID", referencedColumnName = "LABEL_ID", insertable = false, updatable = false)
+    private LabelInfo labelInfo;
+    
+    @Transient
+    private String mdaSysTableColumnIds;
+    
+    @Transient
+    private String mdaSysTableColumnNames;
+    
+    @Transient
+    private MdaSysTable mdaSysTable;
     
     public String getLabelId() {
         return labelId;
@@ -133,7 +156,80 @@ public class LabelStatus extends BaseEntity{
     public void setExceptionDesc(String exceptionDesc) {
         this.exceptionDesc = exceptionDesc;
     }
+
+
+    public LabelInfo getLabelInfo() {
+        return labelInfo;
+    }
+
+
+    public void setLabelInfo(LabelInfo labelInfo) {
+        this.labelInfo = labelInfo;
+    }
+
+    public String getMdaSysTableColumnIds() {
+        StringBuilder columnIds = new StringBuilder();
+        try {
+            IMdaSysTableColService mdaSysTableColService = (IMdaSysTableColService) SpringContextHolder
+                .getBean("mdaSysTableColServiceImpl");
+            IMdaSysTableService mdaSysTableService = (IMdaSysTableService) SpringContextHolder
+                .getBean("mdaSysTableServiceImpl");
+            List<MdaSysTableColumn> mdaSysTableColumnList = mdaSysTableColService
+                .selectMdaSysTableColListBylabelId(labelId);
+            if (mdaSysTableColumnList.size() > 0) {
+                for (MdaSysTableColumn mdaSysTableColumn : mdaSysTableColumnList) {
+                    if (StringUtil.isNotEmpty(mdaSysTableColumn.getColumnId())) {
+                        columnIds.append(mdaSysTableColumn.getColumnId()).append(",");
+                    }
+                    if (StringUtil.isNotEmpty(mdaSysTableColumn.getTableId())) {
+                        this.setMdaSysTable(mdaSysTableService.selectMdaSysTableById(mdaSysTableColumn.getTableId()));
+                    }
+                }
+                columnIds.deleteCharAt(columnIds.length() - 1);
+            }
+        } catch (BaseException e) {
+            LogUtil.error(e);
+        }
+        return columnIds.toString();
+    }
+
     
+    public void setMdaSysTableColumnIds(String mdaSysTableColumnIds) {
+        this.mdaSysTableColumnIds = mdaSysTableColumnIds;
+    }
+
+    
+    public String getMdaSysTableColumnNames() {
+        IMdaSysTableColService mdaSysTableColService = (IMdaSysTableColService) SpringContextHolder
+            .getBean("mdaSysTableColServiceImpl");
+        List<MdaSysTableColumn> mdaSysTableColumnList = mdaSysTableColService
+            .selectMdaSysTableColListBylabelId(labelId);
+        StringBuilder columnNames = new StringBuilder();
+        if (mdaSysTableColumnList.size() > 0) {
+            for (MdaSysTableColumn mdaSysTableColumn : mdaSysTableColumnList) {
+                if (StringUtil.isNotEmpty(mdaSysTableColumn.getColumnName())) {
+                    columnNames.append(mdaSysTableColumn.getColumnName()).append(",");
+                }
+            }
+            columnNames.deleteCharAt(columnNames.length()-1);
+        }
+        return columnNames.toString();
+    }
+
+    
+    public void setMdaSysTableColumnNames(String mdaSysTableColumnNames) {
+        this.mdaSysTableColumnNames = mdaSysTableColumnNames;
+    }
+
+
+    public MdaSysTable getMdaSysTable() {
+        return mdaSysTable;
+    }
+
+
+    public void setMdaSysTable(MdaSysTable mdaSysTable) {
+        this.mdaSysTable = mdaSysTable;
+    }
     
 
 }

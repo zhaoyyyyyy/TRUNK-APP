@@ -14,7 +14,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -22,18 +21,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.asiainfo.biapp.si.loc.auth.model.User;
 import com.asiainfo.biapp.si.loc.base.controller.BaseController;
 import com.asiainfo.biapp.si.loc.base.exception.BaseException;
-import com.asiainfo.biapp.si.loc.base.page.Page;
 import com.asiainfo.biapp.si.loc.base.utils.WebResult;
-import com.asiainfo.biapp.si.loc.core.serviceMonitor.entity.CustomGenerateView;
-import com.asiainfo.biapp.si.loc.core.serviceMonitor.entity.CustomPushView;
-import com.asiainfo.biapp.si.loc.core.serviceMonitor.entity.LabelGenerateView;
 import com.asiainfo.biapp.si.loc.core.serviceMonitor.entity.ServiceMonitor;
 import com.asiainfo.biapp.si.loc.core.serviceMonitor.service.IServiceMonitorService;
-import com.asiainfo.biapp.si.loc.core.serviceMonitor.vo.CustomGenerateViewVo;
-import com.asiainfo.biapp.si.loc.core.serviceMonitor.vo.CustomPushViewVo;
-import com.asiainfo.biapp.si.loc.core.serviceMonitor.vo.LabelGenerateViewVo;
-import com.asiainfo.biapp.si.loc.core.source.entity.TargetTableStatus;
-import com.asiainfo.biapp.si.loc.core.source.vo.TargetTableStatusVo;
 
 /**
  * 
@@ -96,56 +86,4 @@ public class ServiceMonitorController  extends BaseController<ServiceMonitor>{
         return webResult.success("获取专区运行监控总览信息成功", serviceMonitorObj);
     }
     
-    @ApiOperation(value = "根据专区分页查询数据准备信息")
-    @ApiImplicitParam(name = "configId", value = "专区Id", required = true, paramType = "query", dataType = "string")
-    @RequestMapping(value = "/detail/queryDataPreparePagebyConfigId", method = RequestMethod.POST)
-    public Page<TargetTableStatus> queryDataPreparePagebyConfigId(@ModelAttribute Page<TargetTableStatus> page,@ModelAttribute TargetTableStatusVo targetTableStatusVo,String configId){
-        Page<TargetTableStatus> targetTableStatusPage = new Page<TargetTableStatus>();
-        try {
-            targetTableStatusPage = iServiceMonitorService.queryDataPreparePagebyConfigId(page,targetTableStatusVo, configId);
-        } catch (BaseException e) {
-            targetTableStatusPage.fail(e);
-        }
-        return targetTableStatusPage;
-    }
-    
-    
-    @ApiOperation(value = "根据专区分页查询标签生成信息")
-    @ApiImplicitParam(name = "configId", value = "专区Id", required = true, paramType = "query", dataType = "string")
-    @RequestMapping(value="/detail/queryLabelGenerateViewPage", method = RequestMethod.POST)
-    public Page<LabelGenerateView> queryLabelGenerateViewPage(@ModelAttribute Page<LabelGenerateView> page,@ModelAttribute LabelGenerateViewVo labelGenerateViewVo,String configId){
-        Page<LabelGenerateView> labelGeneratePage = new Page<LabelGenerateView>();
-        try {
-            labelGeneratePage = iServiceMonitorService.queryLabelGenerateViewPage(page,labelGenerateViewVo, configId);
-        } catch (BaseException e) {
-            labelGeneratePage.fail(e);
-        }
-        return labelGeneratePage;
-    }
-    
-    @ApiOperation(value = "根据专区分页查询客户群生成信息")
-    @ApiImplicitParam(name = "configId", value = "专区Id", required = true, paramType = "query", dataType = "string")
-    @RequestMapping(value="/detail/queryCustomGenerateViewPage", method = RequestMethod.POST)
-    public Page<CustomGenerateView> queryCustomGenerateViewPage(@ModelAttribute Page<CustomGenerateView> page,@ModelAttribute CustomGenerateViewVo customGenerateViewVo, String configId){
-        Page<CustomGenerateView> customGeneratePage = new Page<>();
-        try {
-            customGeneratePage = iServiceMonitorService.queryCustomGenerateViewPage(page,customGenerateViewVo,configId);
-        } catch (BaseException e) {
-            customGeneratePage.fail(e);
-        }
-        return customGeneratePage;
-    }
-    
-    @ApiOperation(value = "根据专区分页查询客户群推送信息")
-    @ApiImplicitParam(name = "configId", value = "专区Id", required = true, paramType = "query", dataType = "string")
-    @RequestMapping(value="/detail/queryCustomPushViewPage", method = RequestMethod.POST)
-    public Page<CustomPushView> queryCustomGroupPushPagebyConfigId(@ModelAttribute Page<CustomPushView> page,@ModelAttribute CustomPushViewVo customPushViewVo,String configId){
-        Page<CustomPushView> customPushPage = new Page<>();
-        try {
-            customPushPage = iServiceMonitorService.queryCustomPushViewPage(page,customPushViewVo, configId);
-        } catch (BaseException e) {
-            customPushPage.fail(e);
-        }
-        return customPushPage;
-    }
 }

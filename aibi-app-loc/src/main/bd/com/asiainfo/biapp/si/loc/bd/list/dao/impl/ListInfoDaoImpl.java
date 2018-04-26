@@ -40,7 +40,7 @@ public class ListInfoDaoImpl extends BaseDaoImpl<ListInfo, String> implements IL
 		Map<String, Object> reMap = new HashMap<>();
         Map<String, Object> params = new HashMap<>();
         StringBuffer hql = new StringBuffer("from ListInfo l where 1=1 ");
-        if (StringUtil.isNotBlank(listInfoVo.getListInfoId().getCustomGroupId())) {
+        if (null != listInfoVo.getListInfoId() && StringUtil.isNotBlank(listInfoVo.getListInfoId().getCustomGroupId())) {
             hql.append("and l.customGroupId = :customGroupId and l.dataDate = :dataDate ");
             params.put("customGroupId", listInfoVo.getListInfoId().getCustomGroupId());
             params.put("dataDate", listInfoVo.getListInfoId().getDataDate());
@@ -52,6 +52,14 @@ public class ListInfoDaoImpl extends BaseDaoImpl<ListInfo, String> implements IL
         if(null != listInfoVo.getDataStatus()){
         	hql.append("and l.dataStatus = :dataStatus ");
         	params.put("dataStatus", listInfoVo.getDataStatus());
+        }
+        if(null !=  listInfoVo.getLabelInfo() && StringUtil.isNotBlank(listInfoVo.getLabelInfo().getConfigId())){
+            hql.append("and l.labelInfo.configId = :configId ");
+            params.put("configId", listInfoVo.getLabelInfo().getConfigId());
+        }
+        if(null !=  listInfoVo.getLabelInfo() && StringUtil.isNotBlank(listInfoVo.getLabelInfo().getLabelName())){
+            hql.append("and l.labelInfo.labelName LIKE :configId ");
+            params.put("labelName", "%" +listInfoVo.getLabelInfo().getLabelName()+ "%");
         }
         reMap.put("hql", hql);
         reMap.put("params", params);

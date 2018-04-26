@@ -102,6 +102,14 @@ public interface IMdaSysTableColService extends BaseService<MdaSysTableColumn, S
      */
     public MdaSysTableColumn selectMdaSysTableColBylabelId(String labelId);
     
+    /**
+     * 
+     * Description:根据标签id获取实体 
+     *
+     * @param labelId
+     * @return
+     */
+    public List<MdaSysTableColumn> selectMdaSysTableColListBylabelId(String labelId);
     
     /**
      * 

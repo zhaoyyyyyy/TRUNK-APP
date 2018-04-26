@@ -11,7 +11,6 @@ import java.util.List;
 import com.asiainfo.biapp.si.loc.base.dao.BaseDao;
 import com.asiainfo.biapp.si.loc.base.page.Page;
 import com.asiainfo.biapp.si.loc.core.label.entity.LabelStatus;
-import com.asiainfo.biapp.si.loc.core.label.vo.LabelStatusVo;
 
 /**
  * Title : ILabelStatusDao
@@ -42,7 +41,7 @@ public interface ILabelStatusDao extends BaseDao<LabelStatus, String>{
      * @param LabelStatus
      * @return 
      */
-    public Page<LabelStatus> selectLabelStatusPageList(Page<LabelStatus> page, LabelStatusVo labelStatusVo);
+    public Page<LabelStatus> selectLabelStatusPageList(Page<LabelStatus> page, LabelStatus labelStatusVo);
     
     /**
      * 根据条件查询列表
@@ -50,6 +49,6 @@ public interface ILabelStatusDao extends BaseDao<LabelStatus, String>{
      * @param LabelStatus
      * @return
      */
-    public List<LabelStatus> selectLabelStatusList(LabelStatusVo labelStatusVo);
+    public List<LabelStatus> selectLabelStatusList(LabelStatus labelStatusVo);
 
 }

@@ -17,8 +17,6 @@ import com.asiainfo.biapp.si.loc.base.page.Page;
 import com.asiainfo.biapp.si.loc.base.utils.StringUtil;
 import com.asiainfo.biapp.si.loc.core.label.dao.ILabelStatusDao;
 import com.asiainfo.biapp.si.loc.core.label.entity.LabelStatus;
-import com.asiainfo.biapp.si.loc.core.label.vo.CategoryInfoVo;
-import com.asiainfo.biapp.si.loc.core.label.vo.LabelStatusVo;
 
 /**
  * Title : LabelStatusDaoImpl
@@ -43,19 +41,19 @@ import com.asiainfo.biapp.si.loc.core.label.vo.LabelStatusVo;
 @Repository
 public class LabelStatusDaoImpl extends BaseDaoImpl<LabelStatus, String> implements ILabelStatusDao{
 
-    public Page<LabelStatus> selectLabelStatusPageList(Page<LabelStatus> page, LabelStatusVo labelStatusVo){
+    public Page<LabelStatus> selectLabelStatusPageList(Page<LabelStatus> page, LabelStatus labelStatusVo){
         Map<String, Object> reMap = fromBean(labelStatusVo);
         Map<String, Object> params = (Map<String, Object>)reMap.get("params");
         return super.findPageByHql(page, reMap.get("hql").toString(), params);
     }
 
-    public List<LabelStatus> selectLabelStatusList(LabelStatusVo labelStatusVo){
+    public List<LabelStatus> selectLabelStatusList(LabelStatus labelStatusVo){
         Map<String, Object> reMap = fromBean(labelStatusVo);
         Map<String, Object> params = (Map<String, Object>)reMap.get("params");
         return super.findListByHql(reMap.get("hql").toString(), params);
     }
 
-    public Map<String, Object> fromBean(LabelStatusVo labelStatusVo){
+    public Map<String, Object> fromBean(LabelStatus labelStatusVo){
         Map<String, Object> reMap = new HashMap<>();
         Map<String, Object> params = new HashMap<>();
         StringBuffer hql = new StringBuffer("from LabelStatus l where 1=1 ");
@@ -75,6 +73,14 @@ public class LabelStatusDaoImpl extends BaseDaoImpl<LabelStatus, String> impleme
         if(StringUtil.isNoneBlank(labelStatusVo.getExceptionDesc())){
             hql.append("and l.exceptionDesc = :exceptionDesc ");
             params.put("exceptionDesc", labelStatusVo.getExceptionDesc());
+        }
+        if(null != labelStatusVo.getLabelInfo() && StringUtil.isNoneBlank(labelStatusVo.getLabelInfo().getConfigId())){
+            hql.append("and l.labelInfo.configId = :configId ");
+            params.put("configId", labelStatusVo.getLabelInfo().getConfigId());
+        }
+        if(null !=  labelStatusVo.getLabelInfo() && StringUtil.isNotBlank(labelStatusVo.getLabelInfo().getLabelName())){
+            hql.append("and l.labelInfo.labelName LIKE :configId ");
+            params.put("labelName", "%" +labelStatusVo.getLabelInfo().getLabelName()+ "%");
         }
         reMap.put("hql", hql);
         reMap.put("params",params );

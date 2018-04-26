@@ -62,18 +62,6 @@ public class TargetTableStatusDaoImpl extends BaseDaoImpl<TargetTableStatus, Str
         Map<String, Object> params = (Map<String, Object>) reMap.get("params");
         return super.findListByHql(reMap.get("hql").toString(), params);
     }
-    
-    @Override
-    public Page<TargetTableStatus> selectTargetTableStatusPageListByConfigId(Page<TargetTableStatus> page,TargetTableStatusVo targetTableStatusVo,String configId) {
-        Map<String, Object> reMap = fromBean(targetTableStatusVo);
-        @SuppressWarnings("unchecked")
-        Map<String, Object> params = (Map<String, Object>) reMap.get("params");
-        String hqls =reMap.get("hql").toString();
-        hqls += "and d.sourceTableId in(select a.sourceTableId from SourceTableInfo a where a.configId= :configId) ";
-        hqls += "order by d.sourceTableName asc,d.dataDate desc ";
-        params.put("configId", configId);
-        return super.findPageByHql(page, hqls.toString(), params);
-    }
 
     public Map<String, Object> fromBean(TargetTableStatus targetTableStatusVo) {
         Map<String, Object> reMap = new HashMap<>();

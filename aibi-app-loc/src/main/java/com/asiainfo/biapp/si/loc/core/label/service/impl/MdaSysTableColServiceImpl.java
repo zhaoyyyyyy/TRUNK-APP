@@ -176,6 +176,11 @@ public class MdaSysTableColServiceImpl extends BaseServiceImpl<MdaSysTableColumn
     }
     
     @Override
+    public List<MdaSysTableColumn> selectMdaSysTableColListBylabelId(String labelId) {
+        return iMdaSysTableColumnDao.selectMdaSysTableColListBylabelId(labelId);
+    }
+    
+    @Override
     public List<MdaSysTableColumn> addMdaSysTableColList(List<MdaSysTableColumn> mdaSysTableColList){
         for (MdaSysTableColumn mdaSysTableColumn : mdaSysTableColList) {
             LabelInfo labelInfo = iLabelInfoService.get(mdaSysTableColumn.getLabelId());

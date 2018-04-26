@@ -1,16 +1,22 @@
 package com.asiainfo.biapp.si.loc.bd.list.entity;
 
+import io.swagger.annotations.ApiParam;
+
 import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import com.asiainfo.biapp.si.loc.base.entity.BaseEntity;
-
-import io.swagger.annotations.ApiParam;
+import com.asiainfo.biapp.si.loc.base.extend.SpringContextHolder;
+import com.asiainfo.biapp.si.loc.core.label.entity.LabelInfo;
+import com.asiainfo.biapp.si.loc.core.label.service.ILabelInfoService;
 /**
  * Title : LOC_LIST_INFO
  * <p/>
@@ -79,9 +85,16 @@ public class ListInfo extends BaseEntity{
 	@Column(name = "LIST_TABLE_NAME")
 	@ApiParam(value = "清单临时表名")
 	private String listTableName;
+	
+	@Transient
+	private String labelName;
+	
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "GROUP_ID", referencedColumnName = "LABEL_ID", insertable = false, updatable = false)
+    private LabelInfo labelInfo;
 
-
-	public Integer getCustomNum() {
+	
+    public Integer getCustomNum() {
 		return customNum;
 	}
 
@@ -129,5 +142,23 @@ public class ListInfo extends BaseEntity{
 		this.customGroupName = customGroupName;
 	}
 
-	
+	public String getLabelName() {
+	    ILabelInfoService iLabelInfoService = (ILabelInfoService) SpringContextHolder
+                .getBean("labelInfoService");
+//	    if()
+	   return labelName;
+    }
+
+    
+    public void setLabelName(String labelName) {
+        this.labelName = labelName;
+    }
+
+    public LabelInfo getLabelInfo() {
+        return labelInfo;
+    }
+
+    public void setLabelInfo(LabelInfo labelInfo) {
+        this.labelInfo = labelInfo;
+    }
 }

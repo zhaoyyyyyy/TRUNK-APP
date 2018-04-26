@@ -16,26 +16,14 @@ import com.asiainfo.biapp.si.loc.auth.model.User;
 import com.asiainfo.biapp.si.loc.base.dao.BaseDao;
 import com.asiainfo.biapp.si.loc.base.exception.BaseException;
 import com.asiainfo.biapp.si.loc.base.exception.ParamRequiredException;
-import com.asiainfo.biapp.si.loc.base.page.Page;
 import com.asiainfo.biapp.si.loc.base.service.impl.BaseServiceImpl;
 import com.asiainfo.biapp.si.loc.core.prefecture.entity.PreConfigInfo;
 import com.asiainfo.biapp.si.loc.core.prefecture.service.IPreConfigInfoService;
 import com.asiainfo.biapp.si.loc.core.prefecture.vo.PreConfigInfoVo;
-import com.asiainfo.biapp.si.loc.core.serviceMonitor.dao.ICustomGenerateViewDao;
-import com.asiainfo.biapp.si.loc.core.serviceMonitor.dao.ICustomPushViewDao;
-import com.asiainfo.biapp.si.loc.core.serviceMonitor.dao.ILabelGenerateViewDao;
 import com.asiainfo.biapp.si.loc.core.serviceMonitor.dao.IServiceMonitorDao;
-import com.asiainfo.biapp.si.loc.core.serviceMonitor.entity.CustomGenerateView;
-import com.asiainfo.biapp.si.loc.core.serviceMonitor.entity.CustomPushView;
-import com.asiainfo.biapp.si.loc.core.serviceMonitor.entity.LabelGenerateView;
 import com.asiainfo.biapp.si.loc.core.serviceMonitor.entity.ServiceMonitor;
 import com.asiainfo.biapp.si.loc.core.serviceMonitor.service.IServiceMonitorService;
-import com.asiainfo.biapp.si.loc.core.serviceMonitor.vo.CustomGenerateViewVo;
-import com.asiainfo.biapp.si.loc.core.serviceMonitor.vo.CustomPushViewVo;
-import com.asiainfo.biapp.si.loc.core.serviceMonitor.vo.LabelGenerateViewVo;
 import com.asiainfo.biapp.si.loc.core.source.dao.ITargetTableStatusDao;
-import com.asiainfo.biapp.si.loc.core.source.entity.TargetTableStatus;
-import com.asiainfo.biapp.si.loc.core.source.vo.TargetTableStatusVo;
 
 /**
  * 
@@ -71,15 +59,6 @@ public class ServiceMonitorServiceImpl extends BaseServiceImpl<ServiceMonitor, S
     @Autowired
     private ITargetTableStatusDao iTargetTableStatusDao;
     
-    @Autowired
-    private ILabelGenerateViewDao iLabelGenerateViewDao;
-    
-    @Autowired
-    private ICustomGenerateViewDao iCustomGenerateViewDao;
-    
-    @Autowired
-    private ICustomPushViewDao iCustomPushViewDao;
-    
     @Override
     protected BaseDao<ServiceMonitor, String> getBaseDao() {
         return iServiceMonitorDao;
@@ -113,39 +92,5 @@ public class ServiceMonitorServiceImpl extends BaseServiceImpl<ServiceMonitor, S
         }
         return iServiceMonitorDao.selectServiceMonitorByConfigId(configId, dataDate);
     }
-
-
-    @Override
-    public Page<TargetTableStatus> queryDataPreparePagebyConfigId(Page<TargetTableStatus> page, TargetTableStatusVo targetTableStatusVo,String configId)  throws BaseException {
-        if (StringUtils.isBlank(configId)) {
-            throw new ParamRequiredException("专区id不能为空");
-        }
-        return iTargetTableStatusDao.selectTargetTableStatusPageListByConfigId(page,targetTableStatusVo,configId);
-    }
-
-    @Override
-    public Page<LabelGenerateView> queryLabelGenerateViewPage(Page<LabelGenerateView> page,LabelGenerateViewVo labelGenerateViewVo, String configId) throws BaseException {
-        if (StringUtils.isBlank(configId)) {
-            throw new ParamRequiredException("专区id不能为空");
-        }
-        return iLabelGenerateViewDao.queryLabelGenerateViewPage(page,labelGenerateViewVo,configId);
-    }
-
-    @Override
-    public Page<CustomGenerateView> queryCustomGenerateViewPage(Page<CustomGenerateView> page,CustomGenerateViewVo customGenerateViewVo, String configId) throws BaseException {
-        if (StringUtils.isBlank(configId)) {
-            throw new ParamRequiredException("专区id不能为空");
-        }
-        return iCustomGenerateViewDao.queryCustomGenerateViewPage(page,customGenerateViewVo,configId);
-    }
-    
-    @Override
-    public Page<CustomPushView> queryCustomPushViewPage(Page<CustomPushView> page,CustomPushViewVo customPushViewVo, String configId) throws BaseException {
-        if (StringUtils.isBlank(configId)) {
-            throw new ParamRequiredException("专区id不能为空");
-        }
-        return iCustomPushViewDao.queryCustomPushViewPage(page,customPushViewVo,configId);
-    }
-
 
 }

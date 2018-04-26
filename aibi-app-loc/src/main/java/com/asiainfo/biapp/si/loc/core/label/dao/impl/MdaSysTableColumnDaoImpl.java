@@ -6,6 +6,7 @@
 
 package com.asiainfo.biapp.si.loc.core.label.dao.impl;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -14,7 +15,9 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Repository;
 
 import com.asiainfo.biapp.si.loc.base.dao.BaseDaoImpl;
+import com.asiainfo.biapp.si.loc.base.exception.BaseException;
 import com.asiainfo.biapp.si.loc.base.page.Page;
+import com.asiainfo.biapp.si.loc.base.utils.LogUtil;
 import com.asiainfo.biapp.si.loc.base.utils.StringUtil;
 import com.asiainfo.biapp.si.loc.core.label.dao.IMdaSysTableColumnDao;
 import com.asiainfo.biapp.si.loc.core.label.entity.MdaSysTableColumn;
@@ -112,5 +115,17 @@ public class MdaSysTableColumnDaoImpl extends BaseDaoImpl<MdaSysTableColumn, Str
     @Override
     public MdaSysTableColumn selectMdaSysTableColBylabelId(String labelId) {
         return findOneByHql("from MdaSysTableColumn m where m.labelId=?0 ",labelId);
+    }
+    
+
+    @Override
+    public List<MdaSysTableColumn> selectMdaSysTableColListBylabelId(String labelId) {
+        List<MdaSysTableColumn> mdaSysTableColumnList = new ArrayList<MdaSysTableColumn>();
+        try {
+            mdaSysTableColumnList = findListByHql("from MdaSysTableColumn m where m.labelId=?0 ",labelId);
+        } catch (BaseException e) {
+            LogUtil.error(e);
+        }
+        return mdaSysTableColumnList;
     }
 }
