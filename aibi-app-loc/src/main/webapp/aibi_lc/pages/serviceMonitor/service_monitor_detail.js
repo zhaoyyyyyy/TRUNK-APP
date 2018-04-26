@@ -50,9 +50,9 @@ window.loc_onload = function() {
 			toggle:function(){
 				this.isOpen=!this.isOpen;
 			},
-			toggleStatus:function(){
-				this.isDown=!this.isDown;
-			},
+//			toggleStatus:function(){
+//				this.isDown=!this.isDown;
+//			},
 			//点击周期初始化时间
 			initDateByCycle:function(e){
 				this.dateCycle = dateCycle;
@@ -202,9 +202,17 @@ window.loc_onload = function() {
 		    	this.sjsxplList = sjsxplList;
 		    	this.defaultPl = sjsxplList[0].code;
 		    },
+		    getStatus:function(event){
+		    	console.log($(event.currentTarget))
+		    	if($(event.currentTarget).find("option:selected").val()=="1"){
+		    		this.initDataPrepareTable(true);
+		    	}else{
+		    		this.initDataPrepareTable(false);
+		    	}
+		    },
 		    //初始化数据准备表格
 		    initDataPrepareTable:function(status){
-		    	//console.log(event)
+		    	console.log(status)
 		    	this.isDown=false;
 		    	this.zbFlag = status;
 		    	this.tableId = "#dataPrepareTable";
@@ -458,7 +466,7 @@ window.loc_onload = function() {
 	});
 	$(".ui-pre-progress a").each(function(e){
 		$(this).click(function(){
-			var scrollTop=$(".scrollBox").eq(e).offset().top;
+			var scrollTop=$(".scrollBox").eq(e).offset().top-50;
 			$("html,body").animate({"scrollTop":scrollTop})
 		})
 		
@@ -474,4 +482,29 @@ function showErrorInfo(rowId,tableId){
 	var rowData = $(tableId).jqGrid("getRowData", rowId);
 	$("#catchError span").text(rowData.exceptionDesc);
 }
- 
+function scroll(){
+    if(window.pageYOffset!=null){//标准模式
+        return{
+            left:window.pageXOffset,
+            top:window.pageYOffset
+        }
+    }else if(document.compatMode=="CSS1Compat"){//不是怪异模式
+        return{
+            left:document.documentElement.scrollLeft,
+            top:document.documentElement.scrollTop
+        }
+    }else{//怪异模式
+        return{
+            left:document.body.scrollLeft,
+            top:document.body.scrollTop
+        }
+    }
+}
+window.onscroll =function(){
+    if(scroll().top>=281){
+        $(".ui-pre-progress").addClass("active");
+    }else{
+        $(".ui-pre-progress").removeClass("active");
+    }
+
+}//吸顶导航

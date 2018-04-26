@@ -1815,6 +1815,15 @@ animation-delay: .8s;
 	width:66px;
 	text-align:center;
 }
+.ui-pre-detail > select{
+	border:none;
+	color:#666;
+}
+.ui-pre-detail > select option{
+	background-color: #f2f2f2;
+    border: 1px solid #dce2e4;
+    padding:2px 0;
+}
 .ui-pre-refresh{
 	cursor: pointer;
 }
@@ -1828,6 +1837,14 @@ animation-delay: .8s;
 }
 .ui-pre-progress.ui-lc-mian{
 	background:#dce2e4;
+	position:relative;
+	width:100%;
+	z-index:999;
+}
+.ui-pre-progress.active{
+	position:fixed;
+	top:-10px;
+	border-radius:0;
 }
 .ui-pre-progress > a em{
 	width:20px;
@@ -1843,6 +1860,16 @@ animation-delay: .8s;
 	margin:0 0 0 50px;
 	border-radius:4px;
 	padding:0 10px 0 0;
+}
+.ui-status > select{
+	border:none;
+	color:#666;
+	font-size:12px;
+	border-right:1px solid #dce2e4;
+	display: inline-block;
+    height: 30px;
+    padding:0 5px;
+    margin:0 1px;
 }
 .ui-status > span,.ui-status > .dropdown > span,.ui-status > .dropdown{
 	font-size:12px;

@@ -36,7 +36,11 @@
 						</div>
 		                <span class="tips">提示 : 当网络环境不理想时，设置过高的频率，可能不会呈现相应效果。</span>
 	               </div>
-					<div class="dropdown pre-dropdown" v-bind:class="{open:isOpen}">
+	                <select class="ml10" @change="">
+    				 	<option value="1">日周期</option>
+    				 	<option value="2">月周期</option>
+	    			</select>
+					<!--<div class="dropdown pre-dropdown" v-bind:class="{open:isOpen}">
 						<span class="prefectrue-span" @click="toggle()">日周期&nbsp;<em></em></span>
 						<ul class="dropdown-menu">
 							<li>
@@ -46,7 +50,7 @@
 								<span>月周期</span>
 							</li>
 						</ul>
-					</div>
+					</div>-->
 					<em></em>
 					<span class="prefectrue-span" @click="changeMonitorByDate" >{{dataDate}}<em class="ml20"></em></span>
 		      	</div>
@@ -173,28 +177,31 @@
 				<span class="ui-pre-refresh ml20" id="dataPrepare+'d.dataName'" @click="jumpTable">{{d.dataName}}<em></em></span>
 	    	</div> -->
 	    	<div class="ui-lc-mian mt10 ui-pre-progress">
-				<a class="ui-pre-refresh ml20" href="#dataReady">数据准备<em></em></a>
-				<a class="ui-pre-refresh ml10" href="#labelBuild">标签生成<em></em></a>
-				<a class="ui-pre-refresh ml10" href="#customBuild">客户群生成<em></em></a>
-				<a class="ui-pre-refresh ml10" href="#customPush">客户群推送</a>
+				<a class="ui-pre-refresh ml20">数据准备<em></em></a>
+				<a class="ui-pre-refresh ml10">标签生成<em></em></a>
+				<a class="ui-pre-refresh ml10">客户群生成<em></em></a>
+				<a class="ui-pre-refresh ml10">客户群推送</a>
 				<!--<a name="dataReady">&nbsp;</a>-->
 	    	</div>
-	    	<div class="ui-lc-mian mt10 scrollBox" id="dataPrepareAnchor">
+	    	<div class="ui-lc-mian mt20 scrollBox" id="dataPrepareAnchor">
 	    		<h3 class="clearfix pre-jqgrid">
 	    			数据准备
 	    			<div class="ui-status">
-	    	     	   <div class="dropdown" v-bind:class="{open:isDown}">
+	    	     	   <!--<div class="dropdown" v-bind:class="{open:isDown}">
 	    					<span class="prefectrue-span" @click="toggleStatus()">准备状态&nbsp;<em></em></span>
 		    				<ul class="dropdown-menu" id="chooseStatus">
 						       <li><a @click="initDataPrepareTable(true)">准备状态</a></li>
 						       <li><a @click="initDataPrepareTable(false)">抽取状态</a></li>
 						    </ul>
-	    				</div> 
-	    				 
-						<span  v-for="d in sjzbList" id="sjzbList" v-if="zbFlag">
+	    				</div> -->
+	    				 <select @change="getStatus($event)">
+	    				 	<option value="1">准备状态</option>
+	    				 	<option value="2">抽取状态</option>
+	    				 </select>
+						<span  v-for="d in sjzbList" class="sjzbList" v-if="zbFlag">
 							<em></em>&nbsp;{{d.dataName}}
 						</span>
-						<span  v-for="d in sjcqList" id="sjcqList" v-else>
+						<span  v-for="d in sjcqList" class="sjcqList" v-else>
 							<em></em>&nbsp;{{d.dataName}}
 						</span>
 	    			</div>
