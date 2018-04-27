@@ -448,7 +448,7 @@
     left: 0px;
     right: 0px;
     top: 2500px;
-    z-index: 10;
+    z-index: 999;
     bottom: 48px;
     padding: 0;
     overflow: hidden;
@@ -1866,7 +1866,7 @@ animation-delay: .8s;
 .ui-status > span:nth-child(4) > em{
 	background:#ff0000;
 }
-.pre-jqgrid > .form-group{
+.form-group.width-210{
 	width:210px;
 }
 .catch-error{
@@ -1894,4 +1894,103 @@ animation-delay: .8s;
 .ui-hide-calendar .ui-datepicker-calendar,
 .ui-hide-calendar .ui-priority-secondary{
 	display: none;
+}
+/*首页*/
+.ui-lc-mian > .ui-tab-title{
+	margin:10px 0;
+}
+.ui-lc-mian > .ui-tab-title > a{
+	font-size:13px;
+	color:#333;
+	padding:0 10px;
+}
+.ui-lc-mian > .ui-tab-title > a.active{
+	color:#3D9CEB;
+}
+.ui-news{
+	overflow:hidden;
+}
+.ui-news > div{
+	padding:10px;
+}
+.ui-news > div.fleft{
+	width:60%;
+}
+.ui-news > div.fright{
+	width:40%;
+}
+/*.ui-news-list > li{
+	border-bottom:1px solid #DCE2E4;
+}
+.ui-news-list > li:first-child{
+	border-top:1px solid #DCE2E4;
+}
+.ui-news-list > li:hover{
+	background-color:#EDF7FF;
+}
+.ui-news-list > li > div{
+	padding:10px 0 10px 15px;
+	font-size:0;
+}
+.ui-news-list > li > div > a,.ui-news-list > li > div > span{
+	color:#666;
+	display:inline-block;
+	font-size:12px;
+	padding:2px 0;
+}
+.ui-news-list > li > div > a{
+	width:80%;
+}
+.ui-news-list > li > div > span{
+	width:20%;
+}*/
+.ui-news-detail{
+	background:#f7f7f7;
+	padding-bottom:10000px;
+	margin-bottom:-10000px;
+	padding-left:10px;
+	padding-right:10px;
+}
+.ui-news-detail > h3{
+	font-weight: 700;
+    font-size: 14px;
+    color:#333;
+    padding:10px;
+}
+.ui-news-detail > p,.ui-news-detail > span{
+	font-size:14px;
+	padding:0 10px;
+	margin:10px 0;
+	line-height: 28px;
+}
+.ui-store-box{
+	padding:0 15px;
+}
+.ui-stroe > em{
+	display:inline-block;
+	width:10px;
+	height:10px;
+	border-radius:50%;
+	background-color:#949FB3;
+	margin-right:10px;
+}
+.ui-stroe{
+	display:block;
+	font-weight: 700;
+    font-size: 14px;
+    color: #949FB3;
+    line-height: 40px;
+}
+.ui-store-box > .ui-label-list{
+	padding:0 0 0 20px;
+}
+.ui-label-list > li.ui-store-item{
+	width:20%;
+    height: 32px;
+    line-height: 32px;
+}
+.ui-label-list > li.ui-store-item > div {
+	padding:0 10px;
+	border:1px solid #dce2e4;
+	border-radius: 3px;
 }
