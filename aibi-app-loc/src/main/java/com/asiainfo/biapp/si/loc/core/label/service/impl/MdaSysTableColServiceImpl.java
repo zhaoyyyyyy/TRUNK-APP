@@ -151,6 +151,13 @@ public class MdaSysTableColServiceImpl extends BaseServiceImpl<MdaSysTableColumn
     }
 
     public void modifyMdaSysTableColumn(MdaSysTableColumn mdaSysTableColumn) throws BaseException {
+        //当改为枚举型时
+        if (StringUtil.isNotBlank(mdaSysTableColumn.getDimTransId())) {
+            mdaSysTableColumn.setDimTransId(mdaSysTableColumn.getDimTransId());
+            DimTableInfo dimTable = iDimTableInfoService.selectDimTableInfoById(mdaSysTableColumn.getDimTransId());
+            int columnDataTypeId = Integer.parseInt(dimTable.getCodeColType());
+            mdaSysTableColumn.setColumnDataTypeId(columnDataTypeId);
+        }
         super.saveOrUpdate(mdaSysTableColumn); 
         
         //修改标签与纵表列对应关系表
