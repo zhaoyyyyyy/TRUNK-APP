@@ -359,7 +359,55 @@ public class ServiceConstants {
 	    public static final int CUSTOM_TYPE_TEMPLATE = 2;
 	    
 	}
-	
+	/** 指标源表状态表  */
+    public interface TargetTableStatus{
+        /**
+         * 数据准备状态：0-未准备，1-准备完成
+         */
+        /** 数据准备状态：0-未准备 */
+        public static final int TARGET_TABLE_NOT_PREPARED= 0;
+        /** 数据准备状态：1-准备完成*/
+        public static final int TARGET_TABLE_PREPARED = 1;
+        
+        /**
+         * 数据抽取状态：0-抽取中，1-抽取完成，2-抽取失败
+         */
+        /** 类型：0-抽取中 */
+        public static final int TARGET_TABLE_EXTRACTING = 0;
+        /** 类型：1-抽取完成 */
+        public static final int TARGET_TABLE_EXTRACT_SUCCESS = 1;
+        /** 类型：2-抽取失败 */
+        public static final int TARGET_TABLE_EXTRACT_FAIL = 2;
+    }
+    /** 标签状态表    */
+    public interface LabelStatus{
+        /**
+         * 标签生成状态：0-生成失败，1-生成失败，2-客户群暂存
+         */
+        /** 标签生成状态：0-生成失败 */
+        public static final int LABEL_GENERATE_FAIL= 0;
+        /** 标签生成状态：1-生成成功*/
+        public static final int LABEL_GENERATE_SUCCESS = 1;
+        /** 标签生成状态：2-客户群暂存*/
+        public static final int CUSTOM_CUR_SAVE = 2;
+    }
+    /** 清单信息表   */
+    public interface ListInfo{
+        /**
+         * 客户群生成状态：0-创建失败，1-待创建，2-创建中,3-创建成功,4-预约
+         */
+        /** 客户群生成状态：0-创建失败 */
+        public static final int CUSTOM_GENERATE_FAIL= 0;
+        /** 客户群生成状态：1-待创建*/
+        public static final int CUSTOM_GENERATE_PREPARE = 1;
+        /** 客户群生成状态：2-创建中*/
+        public static final int CUSTOM_GENERATE_CREATING = 2;
+        /** 客户群生成状态：3-创建成功*/
+        public static final int CUSTOM_GENERATE_SUCCESS = 3;
+        /** 客户群生成状态：4-预约*/
+        public static final int CUSTOM_GENERATE_APPOINT = 4;
+    }
+    
 	/** 元数据表列表 */
 	public interface MdaSysTableColumn{
 
