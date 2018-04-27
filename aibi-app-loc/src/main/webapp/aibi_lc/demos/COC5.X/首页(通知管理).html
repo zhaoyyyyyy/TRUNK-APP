@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <title>首页(我的消息)</title>
+    <title>首页(通知管理)</title>
     <!--[if IE]>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
     <![endif]-->
@@ -86,17 +86,22 @@
 		 $("#jsonmap1").jqGrid({
             url:'../grid.json',
             datatype: "json",
-            colNames:['资源名称','申请时间'],
+            colNames:['序号','专区ID', '专区英文名称', '地市名称','创建时间','数据状态','操作'],
             colModel:[
                 {name:'id',index:'id', width:30, sortable:true,frozen : true ,align:"center",formatter:alarm},//frozen : true固定列
                 {name:'invdate',index:'invdate', width:60, jsonmap:"invdate",align:"center"},
+                {name:'name',index:'name asc, invdate',sortable:false, width:60,align:"center"},
+                {name:'amount',index:'amount', width:60,align:"center"},
+                {name:'tax',index:'tax', width:80,align:"center"	},
+                {name:'total',index:'total', width:100,align:"center"},
+                {name:'op',index:'op', width:160, sortable:false,formatter:del,align:"center"}
             ],
             rowNum:10,
             rowList:[10,20,30],
             pager: '#pjmap1',//分页的id
             sortname: '',//排序的字段名称 不需要的话可置为空  取值取自colModel中的index字段
             viewrecords: true,
-            multiselect:false,
+            multiselect:true,
             rownumbers:false,//是否展示行号
             sortorder: "desc",//排序方式
             jsonReader: {
@@ -106,12 +111,13 @@
             height: '100%',
             width:"100%",
             autowidth:true,
-             gridComplete: function () {
-                 $(this).closest('.ui-jqgrid-view').find('div.ui-jqgrid-hdiv').hide()
-             },
         });
-        function alarm(cellvalue, options, rowObject){
+		function alarm(cellvalue, options, rowObject){
             var html='<a><em class="label-store ui-news-alarm"></em>' +rowObject.id+ '</a>';
+            return html;
+        }
+        function del(){
+            var html='<button type="button" class="btn btn-default  ui-table-btn ui-table-btn"><em class="label-store ui-news-del"></em>删除</button>';
             return html;
         }
 	});
@@ -143,18 +149,18 @@
       		<div class="clearfix ui-news">
       			<div class="fleft">
       				<div class="clearfix">
-      					<button type="button" class="ui-btn ui-btn-default">系统通知</button>
+      					<button type="button" class="ui-btn">系统通知</button>
 	      				<button type="button" class="ui-btn">告警信息</button>
-	      				<button type="button" class="ui-btn">通知管理</button>
+	      				<button type="button" class="ui-btn ui-btn-default">通知管理</button>
 	      				<!--<div class="form-group fright width-210">
 							<div class="input-group">
 								<input name="configDesc" id="txt_name" type="text" class="form-control input-pointer" placeholder="" />
 								<div class="input-group-addon input-group-icon right-child" id="btn_search"></div>			
 							</div>						
 						</div>-->
-						<div class="mt20 ui-news-read">
-							<span>全部：23 </span>
-							<span>未读：<em>1 </em></span>
+						<div class="mt20">
+	      					<button type="button" class="ui-btn ui-btn-default">增加</button>
+	      					<button type="button" class="ui-btn ml20 ui-btn-del">删除</button>
 						</div>
       				</div>
       				<div class="ui-table-static mt10 ui-news-table">

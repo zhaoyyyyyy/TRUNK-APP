@@ -1922,6 +1922,13 @@ animation-delay: .8s;
 .ui-news-table{
 	border-top:1px solid #ddd;
 }
+.ui-news-read > span > em{
+	color:#FF3333;
+}
+.ui-btn-del{
+	background:#999999;
+	color:#fff;
+}
 /*.ui-news-list > li{
 	border-bottom:1px solid #DCE2E4;
 }
@@ -2015,6 +2022,14 @@ animation-delay: .8s;
 	height:18px;
 	background:url(./images/lc-icon.png) no-repeat;
 	vertical-align: middle;
+}
+.label-store.ui-news-del{
+	background-position:-94px -305px;
+}
+.label-store.ui-news-alarm{
+	background-position:-94px -292px;
+	height: 14px;
+	vertical-align: text-top;
 }
 .ui-store-icon{
 	background-position:-66px -350px;
