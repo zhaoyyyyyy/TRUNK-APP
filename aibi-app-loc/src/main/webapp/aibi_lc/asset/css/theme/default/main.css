@@ -1964,8 +1964,25 @@ animation-delay: .8s;
 	line-height: 28px;
 }
 .ui-store-box{
-	padding:0 15px;
+	padding:0 10px 0 0;
+	overflow:hidden;
+	width:100%;
+	margin:0 0 0 10px;
+	
 }
+.ui-store-line{
+	width: 15px;
+    margin: 4px -100% 4px 0;
+    position: relative;
+    z-index:8;
+    margin-bottom: -10000px;
+    padding-bottom: 10000px;
+    border-right: 1px dashed #dce2e4;
+}
+
+
+
+
 .ui-stroe > em{
 	display:inline-block;
 	width:10px;
@@ -1979,7 +1996,8 @@ animation-delay: .8s;
 	font-weight: 700;
     font-size: 14px;
     color: #949FB3;
-    line-height: 40px;
+    position:relative;
+    z-index:9;
 }
 .ui-store-box > .ui-label-list{
 	padding:0 0 0 20px;
