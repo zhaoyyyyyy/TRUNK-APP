@@ -133,7 +133,7 @@ public class CustomerPublishDefaultTaskImpl implements ICustomerPublishTask {
     private LabelPushReq labelPushReq;      //当前的推送详情
     private LabelInfo customInfo;           //当前的推送客户群
     private String fileName;                //当前的文件名称
-    List<LabelAttrRel> attrRelList = null;	//当前的推送客户群关联的属性列
+    private List<LabelAttrRel> attrRelList = null;	//当前的推送客户群关联的属性列
 
     private int bufferedRowSize = 10000;    //每次读取数据的条数
     private static final String encode = "UTF-8"; 			//当前的文件的编码
@@ -182,36 +182,6 @@ public class CustomerPublishDefaultTaskImpl implements ICustomerPublishTask {
             if (null == customInfo || (null!=customInfo && null==customInfo.getDataDate())) {
                 customInfo = iLabelInfoService.get(labelPushCycle.getCustomGroupId());
             }
-            
-            String sysId = labelPushCycle.getSysId();
-            sysInfo = iSysInfoService.get(sysId);
-            if (null == sysInfo) {
-                LogUtil.info("推送平台("+sysId+")不存在，不推送。");
-                continue;
-            } else {
-                //获取属性列
-                int attrType = ServiceConstants.LabelAttrRel.ATTR_SETTING_TYPE_PUSH;
-                try {
-                    attrRelList = iCustomerPublishCommService.getLabelAttrRelsByCustom(customInfo, attrType);
-                } catch (Exception e) {
-                    LogUtil.error("查询客户群关联的属性错误！", e);
-                    continue;
-                }
-                
-                //在back库里确认一下清单数据是否存在,并查询有多少数据
-                String customId = customInfo.getLabelId();
-                String customListSql = iCustomerPublishCommService.getCustomListSql(customInfo, attrRelList,true);
-                String sql = new StringBuffer("SELECT COUNT(1) FROM (").append(customListSql).append(") tab ").toString();
-                LogUtil.debug("客户群("+customId+")的清单数据是否存在sql："+sql);
-                try {
-                    int no = backSqlService.queryCount(sql);
-                    LogUtil.debug("客户群("+customId+")的清单数据量："+no);
-                } catch (Exception e) {
-                    LogUtil.warn("查询客户群(id:"+customId+",name:"+customInfo.getLabelName()
-                        +",dataDate:"+customInfo.getDataDate()+")的清单数据出错，不推送。sql："+sql);
-                    continue;
-                }
-            }
 	        
 	        //保存推送详情
 	        labelPushReq = new LabelPushReq();
@@ -228,20 +198,60 @@ public class CustomerPublishDefaultTaskImpl implements ICustomerPublishTask {
             fileName = LabelPushReqVo.REQID_PREFIX + customInfo.getCreateUserId() + "_"
                     + DateUtil.date2String(new Date(),DateUtil.FORMAT_YYYYMMDDHHMMSS) 
                     + this.findRandom();
+            
+            String sysId = labelPushCycle.getSysId();
+            sysInfo = iSysInfoService.get(sysId);
+            String msg = "";
+            if (null == sysInfo) {
+                msg = "推送平台("+sysId+")不存在，不推送。";
+                LogUtil.warn(msg);
+                this.updateLog(new BaseException(msg),ServiceConstants.LabelPushReq.PUSH_STATUS_FAILED, null,
+                    ServiceConstants.CustomDownloadRecord.DATA_STATUS_FAILED);
+                continue;
+            } else {
+                //获取属性列
+                int attrType = ServiceConstants.LabelAttrRel.ATTR_SETTING_TYPE_PUSH;
+                try {
+                    attrRelList = iCustomerPublishCommService.getLabelAttrRelsByCustom(customInfo, attrType);
+                } catch (Exception e) {
+                    msg = "根据标签信息获取客户群标签与属性对应关系失败";
+                    //跟新实时更新推送状态
+                    this.updateLog(new BaseException(msg),ServiceConstants.LabelPushReq.PUSH_STATUS_FAILED, null,
+                        ServiceConstants.CustomDownloadRecord.DATA_STATUS_FAILED);
+                    LogUtil.error(msg, e);
+                    continue;
+                }
+                //在back库里确认一下清单数据是否存在,并查询有多少数据
+                String customId = customInfo.getLabelId();
+                String customListSql = iCustomerPublishCommService.getCustomListSql(customInfo, attrRelList,true);
+                String sql = new StringBuffer("SELECT COUNT(1) FROM (").append(customListSql).append(") tab ").toString();
+                LogUtil.debug("客户群("+customId+")的清单数据是否存在sql："+sql);
+                try {
+                    int no = backSqlService.queryCount(sql);
+                    LogUtil.debug("客户群("+customId+")的清单数据量："+no);
+                } catch (Exception e) {
+                    msg = "查询客户群(id:"+customId+",name:"+customInfo.getLabelName()+",dataDate:"
+                            +customInfo.getDataDate()+")的清单数据出错，不推送。sql："+sql;
+                    this.updateLog(new BaseException(msg),ServiceConstants.LabelPushReq.PUSH_STATUS_FAILED, null,
+                        ServiceConstants.CustomDownloadRecord.DATA_STATUS_FAILED);
+                    LogUtil.warn(msg);
+                    continue;
+                }
+            }
+            
             //推送过程
             try {
                 this.customPublish(sysId, customInfo.getCreateUserId());
             } catch (Exception e) {
-                //跟新实时更新推送状态
-                this.updateLabelPushReq(ServiceConstants.LabelPushReq.PUSH_STATUS_FAILED, e);
+                this.updateLog(e,ServiceConstants.LabelPushReq.PUSH_STATUS_FAILED, null, ServiceConstants.CustomDownloadRecord.DATA_STATUS_FAILED);
                 LogUtil.error("推送失败", e);
                 continue;
             }
 		}
 		
         if (null!=labelPushReq && StringUtil.isNoneBlank(labelPushReq.getReqId())) {
-            //跟新实时更新推送状态
-            this.updateLabelPushReq(ServiceConstants.LabelPushReq.PUSH_STATUS_SUCCESS, null);
+            this.updateLog(null,ServiceConstants.LabelPushReq.PUSH_STATUS_SUCCESS, null,
+                ServiceConstants.CustomDownloadRecord.DATA_STATUS_SUCCESS);
         }
         
         LogUtil.debug("Customer("+customInfo.getLabelId()+")Publish end,cost:" + (System.currentTimeMillis() - start)/new Long(THOUSAND) + " s.");
@@ -489,19 +499,7 @@ public class CustomerPublishDefaultTaskImpl implements ICustomerPublishTask {
                     }
 	            } else {    //手动推送，不删除，以便下载,下载后删除
 	                //更新下载时的准确的文件名
-	                List<CustomDownloadRecord> customDownloadRecords = iCustomDownloadRecordService.selectCustomDownloadRecordList(
-	                    new CustomDownloadRecord(customInfo.getLabelId(), customInfo.getDataDate()));
-	                if (null!=customDownloadRecords && !customDownloadRecords.isEmpty()) {
-	                    String[] desFileArr = desFile.split(File.separator);
-	                    String fileName = desFileArr[desFileArr.length-1]; 
-	                    for (CustomDownloadRecord obj : customDownloadRecords) {
-	                        if (null!=obj && StringUtil.isNoneBlank(obj.getFileName()) && !desFile.equals(obj.getFileName())) {
-	                            obj.setFileName(fileName);
-	                            obj.setDataStatus(ServiceConstants.CustomDownloadRecord.DATA_STATUS_SUCCESS);
-	                            iCustomDownloadRecordService.update(obj);
-	                        }
-	                    }
-	                }
+                    this.updateCustomDownloadRecord(desFile, ServiceConstants.CustomDownloadRecord.DATA_STATUS_SUCCESS);
 	            }
             } catch (Exception e) {
                 LogUtil.error(protocoTypeStr+"出错" + sysInfo + zipFile, e);
@@ -542,8 +540,20 @@ public class CustomerPublishDefaultTaskImpl implements ICustomerPublishTask {
 	    
 		return result;
 	}
-	
-    /*
+
+
+    /**
+     * 跟新日志
+     */
+    private void updateLog(Exception e,int PUSH_STATUS, String desFile,int DATA_STATUS) {
+        //跟新实时更新推送状态
+        this.updateLabelPushReq(PUSH_STATUS, e);
+        if (!(StringUtil.isNotEmpty(desFile) && DATA_STATUS<0)) {
+            //更新下载时的准确的文件名
+            this.updateCustomDownloadRecord(desFile, DATA_STATUS);
+        }
+    }
+    /**
      * 更新推送实时状态
      */
     private void updateLabelPushReq(Integer pushStatus, Exception e) {
@@ -558,6 +568,37 @@ public class CustomerPublishDefaultTaskImpl implements ICustomerPublishTask {
             labelPushReq.setExceInfo(emsg);
         }
         iLabelPushReqService.update(labelPushReq);
+    }
+    /*
+     * 实时更新下载记录状态
+     */
+    private void updateCustomDownloadRecord(String desFile, int DataStatus) {
+        //更新下载时的准确的文件名
+        List<CustomDownloadRecord> customDownloadRecords = null;
+        try {
+            customDownloadRecords = iCustomDownloadRecordService.selectCustomDownloadRecordList(
+                new CustomDownloadRecord(customInfo.getLabelId(), customInfo.getDataDate()));
+        } catch (BaseException e) {
+            LogUtil.debug("查询下载记录出错");
+        }
+        if (null!=customDownloadRecords && !customDownloadRecords.isEmpty()) {
+            if (StringUtil.isNotEmpty(desFile)) {
+                String[] desFileArr = desFile.split(File.separator);
+                String fileName = desFileArr[desFileArr.length-1]; 
+                for (CustomDownloadRecord obj : customDownloadRecords) {
+                    if (null!=obj && StringUtil.isNoneBlank(obj.getFileName()) && !desFile.equals(obj.getFileName())) {
+                        obj.setFileName(fileName);
+                        obj.setDataStatus(DataStatus);
+                        iCustomDownloadRecordService.update(obj);
+                    }
+                }
+            } else {
+                for (CustomDownloadRecord obj : customDownloadRecords) {
+                    obj.setDataStatus(DataStatus);
+                    iCustomDownloadRecordService.update(obj);
+                }
+            }
+        }
     }
 
     /**
@@ -589,9 +630,10 @@ public class CustomerPublishDefaultTaskImpl implements ICustomerPublishTask {
                 sysInfo.getWebserviceTargetnamespace(), sysInfo.getWebserviceMethod(), args);
             result = Boolean.valueOf(String.valueOf(res[0]));
         } catch (Exception e) {
-            //跟新实时更新推送状态
-            this.updateLabelPushReq(ServiceConstants.LabelPushReq.PUSH_STATUS_FAILED, e);
-            LogUtil.error("调用webService出错" + sysInfo, e);
+            String msg = "调用webService出错。";
+            this.updateLog(e, ServiceConstants.LabelPushReq.PUSH_STATUS_FAILED, null,-1);
+            
+            LogUtil.error(msg + sysInfo, e);
             
             result = false;
         }

@@ -8,6 +8,8 @@ var VueModel ={
 	    DATA_STATUS_SUCCESS:3,
 	    DATA_STATUS_FAILED:4,
 	},
+    THOUSAND:1000,   //千进制
+	DECIMALIST:10,	//十进制
 	customGroupId:'',
 	AttrbuteId:'',
 	sortAttrAndType:'',
@@ -16,7 +18,7 @@ var VueModel ={
 	downloadColModel:[{
 		name : 'fileName',
 		index : 'fileName',
-		width : 60,
+		width : 40,
 		align : 'left'
 	},{
 		name : 'dataDate',
@@ -48,7 +50,8 @@ var VueModel ={
 			} else if (data.dataStatus == VueModel.customDownloadRecord.DATA_STATUS_SUCCESS) {//已生成
 				res = "<a href='javascript:downloadGroupList(\"" + data.recordId + "\")' class='s_export' style='color:#00f;'>下载</a>";
 			} else if (data.dataStatus == VueModel.customDownloadRecord.DATA_STATUS_FAILED) {//失败
-				res = "<span class='s_delete' >生成文件失败</span>";
+				res = "<span class='s_delete' >文件生成失败</span><br/>" +
+					"<a href='javascript:void(0);' class='s_edit' onclick='preDownloadGroupList(this);' style='color:#00f;'>生成文件</a>";
 			}
 			
 			return res;
@@ -117,8 +120,7 @@ window.loc_onload = function() {
 	
 	/* 清单生成*/
 	preDownloadGroupList = function(el){
-		$(el).parent().attr("title","生成中").append("<span>生成中</span>");
-		$(el).remove();
+		$(el).parent().attr("title","生成中").empty().append("<span>生成中</span>");
 		
 		$.commAjax({			
 		    url : $.ctx+'/api/syspush/labelPushCycle/preDownloadGroupList',
@@ -132,14 +134,15 @@ window.loc_onload = function() {
 				if (dataJson.status==200) {
 					$("#alertDialog").dialog("close");
 					if ($("#alertDialog")) $("#alertDialog").hide();
-					VueModel.localPathFile = dataJson.data;
-
-			    		//刷表格
-			    		$("#downloadGrid").setGridParam({
-			    			postData:{
-							'customId':VueModel.customGroupId
-			    			}
-			    		}).trigger("reloadGrid", [{page:1}]);
+					VueModel.localPathFile = dataJson.data.path;
+					//10秒刷表格一次
+					setInterval(function(){
+				    		$("#downloadGrid").setGridParam({
+				    			postData:{
+								'customId':VueModel.customGroupId
+				    			}
+				    		}).trigger("reloadGrid", [{page:1}]);
+					},VueModel.THOUSAND*VueModel.DECIMALIST); 
 				}
 		    }
 		});

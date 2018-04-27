@@ -276,7 +276,7 @@ window.loc_onload = function() {
 				if(model.sortAttrAndType!=null){
 					var dg = $.window('客户群清单下载', $.ctx + '/aibi_lc/pages/custom/custom_download.html?customGroupId='
 					 +labelId+'&AttrbuteId='+AttrbuteIdString+'&sortAttrAndType='+model.sortAttrAndType+'&dataDate='+model.dataDate, 
-					 560, 300, {id:'customDownloadWin'});
+					 660, 300, {id:'customDownloadWin'});
 				}
 			}
 		},

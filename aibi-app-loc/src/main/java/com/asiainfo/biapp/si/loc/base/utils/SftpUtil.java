@@ -55,6 +55,7 @@ public class SftpUtil {
     private static final String UN_UPLOADED = "_unUploaded";//未完成的后缀;
     private static final String ENCODE_UTF_8 = "UTF-8";     //UTF-8;
     private static final String ENCODE_ISO_8859_1 = "iso-8859-1";     //iso-8859-1;
+    private static final int HUNDRED = 100;    //一百
     private static final int THOUSAND = 1000;    //千进制
     private static final int MYRIAD = 10000;     //万进制
     private static final int WAIT_INCREMENT = 25;   //等待时间的增量;
@@ -511,10 +512,10 @@ public class SftpUtil {
             @Override
             public boolean count(long count){
                 this.count += count;
-                if(percent >= this.count*100/max){
+                if(percent >= this.count*HUNDRED/max){
                     return true;
                 }
-                percent = this.count*100/max;
+                percent = this.count*HUNDRED/max;
 
                 //打印当前进度
                 LogUtil.debug("【Sftp Monitor】Completed "+this.count+" byte("+percent +"％) out of "+max+" byte.");

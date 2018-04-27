@@ -9,6 +9,7 @@ package com.asiainfo.biapp.si.loc.core.syspush.controller;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -37,7 +38,6 @@ import com.asiainfo.biapp.si.loc.core.syspush.entity.CustomDownloadRecord;
 import com.asiainfo.biapp.si.loc.core.syspush.entity.LabelAttrRel;
 import com.asiainfo.biapp.si.loc.core.syspush.entity.LabelPushCycle;
 import com.asiainfo.biapp.si.loc.core.syspush.entity.SysInfo;
-import com.asiainfo.biapp.si.loc.core.syspush.service.ICustomDownloadRecordService;
 import com.asiainfo.biapp.si.loc.core.syspush.service.ILabelPushCycleService;
 import com.asiainfo.biapp.si.loc.core.syspush.service.ISysInfoService;
 import com.asiainfo.biapp.si.loc.core.syspush.vo.LabelPushCycleVo;
@@ -85,9 +85,6 @@ public class LabelPushCycleController extends BaseController<LabelPushCycle>{
     
     @Autowired
     private ILabelInfoService iLabelInfoService;
-    
-    @Autowired
-    private ICustomDownloadRecordService iCustomDownloadRecordService;
     
     private static final String SUCCESS = "success";
     
@@ -252,11 +249,10 @@ public class LabelPushCycleController extends BaseController<LabelPushCycle>{
     
     @ApiOperation(value = "生成清单")
     @RequestMapping(value = "/labelPushCycle/preDownloadGroupList", method = RequestMethod.POST)
-    public WebResult<String> preDownloadGroupList(@ModelAttribute LabelPushCycle labelPushCycle) {
-        WebResult<String> res = new WebResult<>();
+    public WebResult<Map<String, Object>> preDownloadGroupList(@ModelAttribute LabelPushCycle labelPushCycle) {
+        WebResult<Map<String, Object>> res = new WebResult<>();
         
-        //1.走手动推送流程
-        //获取属性
+        //1.走手动推送流程,获取属性
         CocCacheAble cacheProxy = CocCacheProxy.getCacheProxy();
         String sftpUsername = cacheProxy.getSYSConfigInfoByKey("LOC_CONFIG_SYS_SFTP_USERNAME");
         String sftpPwd = cacheProxy.getSYSConfigInfoByKey("LOC_CONFIG_SYS_SFTP_PASSWORD");
@@ -308,31 +304,27 @@ public class LabelPushCycleController extends BaseController<LabelPushCycle>{
         labelPushCycle.setSysIds(sysIds);
         LabelInfo customInfo = iLabelInfoService.get(labelPushCycle.getCustomGroupId());
         labelPushCycle.setPushCycle(customInfo.getUpdateCycle());
-        //校验生成过没有
-        try {
-            List<CustomDownloadRecord> customDownloadRecords = iCustomDownloadRecordService.selectCustomDownloadRecordList(
-                new CustomDownloadRecord(customInfo.getLabelId(), customInfo.getDataDate()));
-            if (null==customDownloadRecords || customDownloadRecords.size() == 0) {
-                this.save(labelPushCycle);
-            }
-        } catch (BaseException e) {
-            res.fail(e);
-        }
+        this.save(labelPushCycle);
 
         //推送文件名称（无路径，无后缀）
         //格式：COC_标签创建人_YYYYMMDDHHMMSS_6位随机数,形如:【COC_admin_20180212150301_981235】
         String fileName = LabelPushReqVo.REQID_PREFIX + customInfo.getCreateUserId() + "_"
                 + DateUtil.date2String(new Date(),DateUtil.FORMAT_YYYYMMDD);
         
+        CustomDownloadRecord customDownloadRecord = new CustomDownloadRecord(fileName, 
+            customInfo.getLabelId(), customInfo.getDataDate(), 
+            ServiceConstants.CustomDownloadRecord.DATA_STATUS_DOING, new Date(), "0");
         try {
-            iLabelPushCycleService.preDownloadGroupList(localPathTmp, new CustomDownloadRecord(fileName, 
-                customInfo.getLabelId(), customInfo.getDataDate(), 
-                ServiceConstants.CustomDownloadRecord.DATA_STATUS_DOING, new Date(), "0"));
+            iLabelPushCycleService.preDownloadGroupList(localPathTmp, customDownloadRecord);
         } catch (BaseException e) {
             res.fail("生成失败！", e);
         }
-        return res.success("生成成功！", localPathTmp);
+
+        Map<String, Object> resData = new HashMap<>();
+        resData.put("path", localPathTmp);
+        resData.put("obj", customDownloadRecord);
+        return res.success("生成成功！", resData);
     }
-    
+
     
 }

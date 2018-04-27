@@ -481,7 +481,7 @@ public class ServiceConstants {
 	    /** 数据状态:3：已生成 */
 	    public static final int DATA_STATUS_SUCCESS = 3;
 	    /** 数据状态:4：失败 */
-	    public static final int DATA_STATUS_FAILED = 0;
+	    public static final int DATA_STATUS_FAILED = 4;
 	}
 	public interface LabelAttrRel{
 	    /**
