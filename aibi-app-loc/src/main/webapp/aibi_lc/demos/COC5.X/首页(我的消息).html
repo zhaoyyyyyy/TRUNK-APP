@@ -83,10 +83,10 @@
 		$(".J-min").click(function(){
 			$(".ui-calculate-center").removeClass("heightAuto");
 		});
-		$("#jsonmap1").AIGrid({
-            url:'./grid.json',
+		 $("#jsonmap1").jqGrid({
+            url:'../grid.json',
             datatype: "json",
-            colNames:['',''],
+            colNames:['资源名称','申请时间'],
             colModel:[
                 {name:'id',index:'id', width:30, sortable:true,frozen : true ,align:"center"},//frozen : true固定列
                 {name:'invdate',index:'invdate', width:60, jsonmap:"invdate",align:"center"},
@@ -103,7 +103,12 @@
                 repeatitems : false,
                 id: "0"
             },
-            height: '100%'
+            height: '100%',
+            width:"100%",
+            autowidth:true,
+             gridComplete: function () {
+                 $(this).closest('.ui-jqgrid-view').find('div.ui-jqgrid-hdiv').hide()
+             },
         });
 	});
 </script>
@@ -144,7 +149,7 @@
 							</div>						
 						</div>
       				</div>
-      				<div class="ui-table-static mt20">
+      				<div class="ui-table-static mt20 ui-news-table">
 	                    <table id="jsonmap1"  class="table"></table>
 	                    <div id="pjmap1"></div>
 	                </div>

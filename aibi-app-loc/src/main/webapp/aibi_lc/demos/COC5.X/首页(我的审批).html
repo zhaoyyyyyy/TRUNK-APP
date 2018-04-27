@@ -8,7 +8,7 @@
     <![endif]-->
     <link href="../../asset/css/common/reset.css" rel="stylesheet"  />
     <link href="../../asset/css/jQueryUI/jquery-ui-1.12.1.min.css" rel="stylesheet"  />
-    <link href="../../asset/css/theme/default/page.css" rel="stylesheet"  theme="default"/>
+    <link href="../../asset/css/theme/default/page.css" rel="stylesheet"/>
     <link href="../../asset/script/component/jQueryUI/gird/css/ui.jqgrid.css" rel="stylesheet"  />
     <link href="../../asset/css/theme/default/ui.jqgrid.owner.css" rel="stylesheet"  />
     <link href="../../asset/css/theme/default/button.css" rel="stylesheet"  />
@@ -21,7 +21,7 @@
     <script src="../../asset/script/component/jQueryUI/gird/page/jquery.page.js"></script>
     <script src="../../asset/script/component/jQueryUI/gird/js/jquery.jqGrid.min.js"></script>
     <script src="../../asset/script/component/jQueryUI/gird/js/i18n/grid.locale-cn.js"></script>
-    <script src="./demojs/jqGrid.demo.extend.js"></script>
+<!--    <script src="./demojs/jqGrid.demo.extend.js"></script>-->
     <!--
         H5兼容js CSS3 兼容JS
     -->
@@ -82,8 +82,8 @@
 		$(".J-min").click(function(){
 			$(".ui-calculate-center").removeClass("heightAuto");
 		});
-		 $("#jsonmap1").AIGrid({
-            url:'./grid.json',
+		 $("#jsonmap1").jqGrid({
+            url:'../grid.json',
             datatype: "json",
             colNames:['资源名称','申请时间'],
             colModel:[
@@ -102,7 +102,9 @@
                 repeatitems : false,
                 id: "0"
             },
-            height: '100%'
+            height: '100%',
+            width:"100%",
+            autowidth:true,
         });
 	});
 </script>
