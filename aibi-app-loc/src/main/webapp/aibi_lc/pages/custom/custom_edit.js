@@ -676,7 +676,7 @@ var labelInfoModel = (function (model){
    			  url: url,
    			  postData:data,
    			  onSuccess: function(returnObj){
-   				  $.alert(returnObj.msg, function(){
+   				  $.success(returnObj.msg, function(){
 					  var ssg = window.sessionStorage;
 					  delete ssg.customId;
    					  //保存成功后跳转，标签集市和客户群集市都跳转到客户群集市页面

@@ -92,8 +92,8 @@ var showRulesModel = (function (model){
 				tableHtml += '</tr>';
 			}else if(labelRule.elementType == 6){//客户群规则
 				ruleHtml += '<li class="tag-item-symbol fleft">(</li>';	
-				var childCiLabelRuleList = labelRule.childCiLabelRuleList;
-				var temp = shopCartRule(childCiLabelRuleList,param);
+				var childLabelRuleList = labelRule.childLabelRuleList;
+				var temp = shopCartRule(childLabelRuleList,param);
 				ruleStr += temp;
 				ruleHtml += '<li class="tag-item-symbol fleft">)</li>';
 			}			
@@ -211,10 +211,10 @@ var showRulesModel = (function (model){
 			}
 		}else if(labelRule.labelTypeId == 13){//13=虚标签
 			var virtualRule = "";
-			if(labelRule.childCiLabelRuleList != null && labelRule.childCiLabelRuleList.length > 0){
+			if(labelRule.childLabelRuleList != null && labelRule.childLabelRuleList.length > 0){
 				virtualRule += "(";
-				for (var i = 0; i < labelRule.childCiLabelRuleList.length; i++){
-					var rule = labelRule.childCiLabelRuleList[i];
+				for (var i = 0; i < labelRule.childLabelRuleList.length; i++){
+					var rule = labelRule.childLabelRuleList[i];
 					if(rule.elementType == 2){
 						virtualRule += rule.customOrLabelName;
 					}else{
@@ -263,9 +263,9 @@ var showRulesModel = (function (model){
 				}
 			}
 		}else if(labelRule.labelTypeId == 8 || labelRule.labelTypeId == 10){//8=纵表标签 10=组合型
-			if(labelRule.childCiLabelRuleList != null && labelRule.childCiLabelRuleList.length > 0){
-				for (var i = 0; i < labelRule.childCiLabelRuleList.length; i++) {
-					var rule = labelRule.childCiLabelRuleList[i];
+			if(labelRule.childLabelRuleList != null && labelRule.childLabelRuleList.length > 0){
+				for (var i = 0; i < labelRule.childLabelRuleList.length; i++) {
+					var rule = labelRule.childLabelRuleList[i];
 					if(rule.labelTypeId == 1){//01型
 						attrValStr += "[";
 						attrValStr += rule.columnCnName;
