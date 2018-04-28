@@ -308,7 +308,7 @@ public class WideLabelTask implements Runnable {
             where = " where " + ALL_USERS_TABLE_SELECT_COLUMN + "=" + data_date;
         } else {
             ALL_USERS_TABLE_NAME += data_date;
-            if (!backJdbcManager.tableExists(ALL_USERS_TABLE_NAME)) {
+            if (!backJdbcManager.tableExists(ALL_USERS_TABLE_NAME,0)) {
                 LogUtil.info(threadNumber + "用户全量表" + ALL_USERS_TABLE_NAME + "的数据还未准备好");
                 return false;
             }
@@ -449,7 +449,7 @@ public class WideLabelTask implements Runnable {
                         sourceTableIdMap.remove(entry.getKey());
                     }
                 } else if (split[2].equals("2")) {
-                    boolean exists = backJdbcManager.tableExists(tableName);
+                    boolean exists = backJdbcManager.tableExists(tableName,0);
                     if (exists) {
                         sourceTableIdList.add(split[0]);
                     } else {
@@ -489,7 +489,7 @@ public class WideLabelTask implements Runnable {
                 if (cols.length() > 1) {
                     cols = cols.substring(0, cols.length() - 1);
                     nickname = " (select " + joinName + "," + cols + " from  " + key + ")";
-                    from += " left join " + nickname + " t" + num + " on t." + ALL_USER_JOIN_COLUMN_NAME + "=t" + num + "." + joinName + " ";
+                    from += " left outer join " + nickname + " t" + num + " on t." + ALL_USER_JOIN_COLUMN_NAME + "=t" + num + "." + joinName + " ";
                     num++;
                 }
             }

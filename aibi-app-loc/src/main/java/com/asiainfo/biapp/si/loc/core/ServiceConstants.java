@@ -82,9 +82,9 @@ public class ServiceConstants {
     
     /**日期类标签是否偏移量**/
     /** 1:需要 **/
-    public static int IS_NEED_OFFSET_YES = 1;
+    public static final int IS_NEED_OFFSET_YES = 1;
     /** 0：不需要 **/
-    public static int IS_NEED_OFFSET_NO = 0;
+    public static final int IS_NEED_OFFSET_NO = 0;
 
 
     /**
@@ -99,9 +99,9 @@ public class ServiceConstants {
      * 购物车session使用
      */
     /** 标签 **/
-    public static String LABEL_INFO_CALCULATIONS_TYPEID = "1";
+    public static final String LABEL_INFO_CALCULATIONS_TYPEID = "1";
     /** 客户群 **/
-    public static String CUSTOM_GROUP_INFO_CALCULATIONS_TYPEID = "2";
+    public static final String CUSTOM_GROUP_INFO_CALCULATIONS_TYPEID = "2";
 
 	/**
 	 * 指标汇总表前缀

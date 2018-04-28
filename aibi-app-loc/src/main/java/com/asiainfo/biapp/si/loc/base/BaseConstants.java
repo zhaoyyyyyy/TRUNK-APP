@@ -16,7 +16,7 @@ public class BaseConstants {
 	/**
 	 * JAUTH_URL 常量，系统加载时初始化该参数，由于无法在理立马初始化，所以无法用 final 修饰
 	 */
-	public static String JAUTH_URL = "";
+	public static final String JAUTH_URL = "";
 	/**
 	 * REDIS地址
 	 */

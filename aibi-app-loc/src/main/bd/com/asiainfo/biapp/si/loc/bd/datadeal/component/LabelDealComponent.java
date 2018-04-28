@@ -347,8 +347,9 @@ public class LabelDealComponent {
         boolean isOk = true;
         String createSql = "";
         BackJdbcManager backJdbcManager = new BackJdbcManager();
+        backJdbcManager.setThreadNumber(threadNumber);
         LogUtil.info(threadNumber + "判断目标表是否存在" + tableName);
-        boolean b = backJdbcManager.tableExists(tableName);
+        boolean b = backJdbcManager.tableExists(tableName,1);
         String tableName_01 = tableName + "_01";
         String tableName_02 = tableName + "_02";
         String tableName_03 = tableName + "_03";

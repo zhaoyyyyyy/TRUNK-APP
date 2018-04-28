@@ -169,7 +169,7 @@ public class VerticalLabelTask implements Runnable {
             if (data_store.equals("1")) {
                 isOk = backJdbcManager.tableExists(source_table_name, date_column_name + "=" + data_date);
             } else if (data_store.equals("2")) {
-                isOk = backJdbcManager.tableExists(source_table_name);
+                isOk = backJdbcManager.tableExists(source_table_name,0);
             }
             if (isOk) {
                 new_source_table_id2source_table_nameMap.put(entry.getKey(), value);
@@ -218,7 +218,7 @@ public class VerticalLabelTask implements Runnable {
             where = " where " + ALL_USERS_TABLE_SELECT_COLUMN + "=" + data_date;
         } else {
             ALL_USERS_TABLE_NAME += data_date;
-            if (!backJdbcManager.tableExists(ALL_USERS_TABLE_NAME)) {
+            if (!backJdbcManager.tableExists(ALL_USERS_TABLE_NAME,0)) {
                 LogUtil.info(threadNumber + "用户全量表" + ALL_USERS_TABLE_NAME + "的数据还未准备好");
                 return false;
             }
@@ -267,7 +267,8 @@ public class VerticalLabelTask implements Runnable {
         while (targetEntry.hasNext()) {
             allColumns.clear();
             targetTableSql = "select " + "t." + ALL_USER_JOIN_COLUMN_NAME + " " + ServiceConstants.LABEL_PRODUCT_NO + otherColumn;
-            from = " from  " + "( select " + ALL_USER_JOIN_COLUMN_NAME + others + " from " + ALL_USERS_TABLE_NAME + where + " ) t";
+            from = " from  ";
+            String allUserTable=" ( select " + ALL_USER_JOIN_COLUMN_NAME + others + " from " + ALL_USERS_TABLE_NAME + where + " ) t";
             Map.Entry<String, String> entry = targetEntry.next();
             value = entry.getValue();
             key = entry.getKey();
@@ -312,11 +313,15 @@ public class VerticalLabelTask implements Runnable {
                 columnsList.add(columnList.get(j) + " " + columnNameAndTypeByName.get(columnList.get(j).toUpperCase()));
             }
             select += " from " + source_table_name;
-            from += " right join (" + select + where + ") t" + num + " on t" + num + "." + ID_COLUMN + "=" + "t." + ALL_USER_JOIN_COLUMN_NAME;
+            String sourceName=" (" + select + where + ") t"+ num;
+            from += sourceName +" left outer join "+allUserTable+ " on t" + num + "." + ID_COLUMN + "=" + "t." + ALL_USER_JOIN_COLUMN_NAME;
             for (int k = 0; k < allColumns.size(); k++) {
                 targetTableSql += "," + allColumns.get(k);
             }
             targetTableSql = targetTableSql + from;
+            System.out.println("=================");
+            System.out.println(targetTableSql);
+            System.out.println("=================");
             targetTable2SQL.put(targetTableName, targetTableSql);
             target_table_name2source_table_idMap.put(targetTableName, key);
             LogUtil.debug(columnsList);

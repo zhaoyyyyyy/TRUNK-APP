@@ -39,7 +39,13 @@ public class BackJdbcManager {
         JDBCUtil.getInstance().free(conn, st, rs);
     }
 
-    public boolean tableExists(String tableName) {
+    /**
+     *
+     * @param tableName
+     * @param num 1 目标表 0源表
+     * @return
+     */
+    public boolean tableExists(String tableName,Integer num) {
         Long startTime = System.currentTimeMillis();
         boolean tableFlag = false;
         Connection conn = null;
@@ -55,7 +61,11 @@ public class BackJdbcManager {
                 break;
             }
         } catch (Exception e) {
-            LogUtil.error(threadNumber + "table " + tableName + " is not exists!");
+            if(num==1){
+                LogUtil.debug(threadNumber + "table " + tableName + " is not exists!");
+            }else {
+                LogUtil.error(threadNumber + "table " + tableName + " is not exists!");
+            }
             tableFlag = false;
         } finally {
             closeAll(conn, pstm, null);
