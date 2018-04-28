@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -58,6 +59,7 @@ import com.asiainfo.biapp.si.loc.core.syspush.vo.LabelAttrRelVo;
 @Service
 public class CustomerPublishCommServiceImpl implements ICustomerPublishCommService {
 	
+    public static final int CUSTOMLIST_PASE_SIZE = 10;
 
     @Autowired
     private ILabelInfoService iLabelInfoService;
@@ -72,6 +74,9 @@ public class CustomerPublishCommServiceImpl implements ICustomerPublishCommServi
     
     @Autowired
     private IBackSqlService iBackService;
+    
+
+    private CocCacheAble cacheProxy = CocCacheProxy.getCacheProxy();
 
 
     @Override
@@ -101,25 +106,132 @@ public class CustomerPublishCommServiceImpl implements ICustomerPublishCommServi
 		MdaSysTable mainMdaSysTable = null!=mainMdaSysTableColumn ? mainMdaSysTableColumn.getMdaSysTable() : null;
         //拼装sql
         StringBuilder sql = new StringBuilder("SELECT m.").append(ServiceConstants.KHQ_CROSS_COLUMN).append(" ");
-
+        
+        LabelInfo realyCustomInfo = null;
         if (null == customInfo || null == customInfo.getDataDate()) {
-            customInfo = iLabelInfoService.get(customInfo.getLabelId());
+            realyCustomInfo = iLabelInfoService.get(customInfo.getLabelId());
+        }else {
+            realyCustomInfo = customInfo;
         }
         if (null != attrRelList && !attrRelList.isEmpty()) {    //有属性列
-            CocCacheAble cacheProxy = CocCacheProxy.getCacheProxy();
-            //拼接列
-            MdaSysTableColumn mdaSysTableCol = null;
-            LabelAttrRel labelAttrRel = null;
-            LabelInfo label = null;
-            List<String> leftJoinEnumStrs = new ArrayList<>();
-            String curBackDbSchema = null;
+            sql = this.getHasAttrListSql(attrRelList, realyCustomInfo, mainMdaSysTable, mainMdaSysTableColumn, isPush, sql);
+        } else {    //无属性列
+            sql = this.getNotHasAttrListSql(realyCustomInfo, mainMdaSysTable, mainMdaSysTableColumn, isPush, sql);
+        }
+        
+        return sql.toString();
+    }
+
+    /** 得到有属性的清单sql
+     * @param attrRelList
+     * @param realyCustomInfo
+     * @param mainMdaSysTable
+     * @param mainMdaSysTableColumn
+     * @param isPush
+     * @param sql
+     * @return
+     */
+    private StringBuilder getHasAttrListSql(List<LabelAttrRel> attrRelList, LabelInfo realyCustomInfo,
+            MdaSysTable mainMdaSysTable, MdaSysTableColumn mainMdaSysTableColumn, boolean isPush, StringBuilder sql) {
+        //拼接列
+        List<String> leftJoinEnumStrs = new ArrayList<>();
+        String curBackDbSchema = null;
+        try {
+        	curBackDbSchema = iBackService.getCurBackDbSchema();
+        } catch (SqlRunException e1) {
+        	LogUtil.warn("获取后台库Schema错误："+ e1.getMessage());
+        }
+        //拼接sql的列
+        this.getHasAttrListCols(attrRelList, leftJoinEnumStrs, curBackDbSchema, sql);
+        
+        //拼接sql的主表
+        sql.append(" from (");
+        sql.append("SELECT t.").append(ServiceConstants.KHQ_CROSS_COLUMN).append(" from ");
+        if (null != mainMdaSysTableColumn) {
+            if (StringUtil.isNotEmpty(mainMdaSysTable.getTableSchema())) {
+                //拼接Schema
+                sql.append(mainMdaSysTable.getTableSchema()).append(".");
+            }
+            sql.append(mainMdaSysTable.getTableName()).append(realyCustomInfo.getDataDate()).append(" t ")
+               .append("where t.").append(ServiceConstants.KHQ_CROSS_ID_PARTION).append("='")
+               .append(realyCustomInfo.getLabelId()).append("'");
+        } else {
+            String fromSql = "";
             try {
-				curBackDbSchema = iBackService.getCurBackDbSchema();
-			} catch (SqlRunException e1) {
-				LogUtil.warn("获取后台库Schema错误："+ e1.getMessage());
-			}
-            for (int i = 0; i < attrRelList.size(); i++) {
-                labelAttrRel = attrRelList.get(i);
+                fromSql = iLabelExploreService.getListTableSql(realyCustomInfo.getLabelId(), realyCustomInfo.getDataDate());
+            } catch (BaseException e) {
+                LogUtil.error("获取客户群清单sq出错：", e);;
+            }
+            sql.append(fromSql.replace(" where ", " t where t."));
+        }
+        if (!isPush) {	//清单预览
+            int customListNo = CUSTOMLIST_PASE_SIZE;//尹振华说只查10条,@2018-03-13 14:39:36
+            String customListNoStr = cacheProxy.getSYSConfigInfoByKey("LOC_CONFIG_APP_CUSTOM_LIST_NUMBER");
+            if (StringUtil.isNotEmpty(customListNoStr)) {
+            		customListNo = Integer.parseInt(customListNoStr);
+            }
+            sql.append(" limit ").append(customListNo);
+        }
+        sql.append(") m ");
+
+        //拼接left join
+        Map<String, String> tabelNameReplace = this.getHasAttrListLeftjoinSql(attrRelList, leftJoinEnumStrs, sql);
+        
+        //拼接orderby sql
+        this.getHasAttrListOrderBySql(attrRelList, sql);
+        
+        //修正别名
+        String sqlTmp = sql.toString();
+        if (sqlTmp.contains("LEFT JOIN")) {
+        	int e = sqlTmp.indexOf("from");
+        	String attrsStr = sqlTmp.substring(0, e);
+        	String otherStr = sqlTmp.substring(e, sqlTmp.length());
+            for (Entry<String,String> entry : tabelNameReplace.entrySet()) {
+        		attrsStr = attrsStr.replace(entry.getKey(), entry.getValue());
+        		otherStr = otherStr.replace(entry.getKey(), entry.getValue());
+        	}
+        		sql = new StringBuilder(attrsStr).append(otherStr);
+        }
+        return sql;
+    }
+
+    /** 得到有属性的清单的链接sql
+     * @param attrRelList
+     * @param leftJoinEnumStrs
+     * @param sql
+     * @return
+     */
+    private Map<String, String> getHasAttrListLeftjoinSql(List<LabelAttrRel> attrRelList, List<String> leftJoinEnumStrs,
+            StringBuilder sql) {
+        LabelAttrRel labelAttrRel;
+        Map<String,String> tabelNameSql = new HashMap<>();	
+        Map<String,String> tabelNameReplace = new HashMap<>();//key:要替换的别名，value：真正可用的别名
+        for (int i = 0; i < attrRelList.size(); i++) {
+            labelAttrRel = attrRelList.get(i);
+            sql.append(getJoinSqlByLabelId(labelAttrRel.getLabelOrCustomId(),labelAttrRel.getAttrCol(),sql,tabelNameSql, tabelNameReplace));
+        }
+        //拼接枚举型 leftJoin
+        for (String leftJoinEnumStr : leftJoinEnumStrs) {
+        		sql.append(leftJoinEnumStr);
+        }
+        return tabelNameReplace;
+    }
+
+    /** 得到有属性的清单的排序sql
+     * @param attrRelList
+     * @param sql
+     */
+    private void getHasAttrListOrderBySql(List<LabelAttrRel> attrRelList, StringBuilder sql) {
+        MdaSysTableColumn mdaSysTableCol;
+        LabelAttrRel labelAttrRel;
+        LabelInfo label;
+        //拼接orderby
+        String sortType = "ASC";
+        StringBuilder orderbyStr = new StringBuilder();
+        for (int i = 0; i < attrRelList.size(); i++) {
+            labelAttrRel = attrRelList.get(i);
+            if (StringUtil.isNoneBlank(labelAttrRel.getSortType())) {
+                sortType = labelAttrRel.getSortType();
                 //获取列信息
                 label = cacheProxy.getLabelInfoById(labelAttrRel.getLabelOrCustomId()); //datedate is null,so it's error
                 if (null == label || (null!=label && null==label.getDataDate())) {
@@ -127,151 +239,112 @@ public class CustomerPublishCommServiceImpl implements ICustomerPublishCommServi
                 }
                 mdaSysTableCol = label.getMdaSysTableColumn();
                 if (null != mdaSysTableCol) {
-                    //翻译维表值
-					switch (label.getLabelTypeId()) {
-					case ServiceConstants.LabelInfo.LABEL_TYPE_ID_SIGN:	//1=标志型，case when
-//						case attr_col1_t.L0000031 when 1 then '是' else '否' end as attr_col1,
-						//表别名
-	                    sql.append(",case ").append(labelAttrRel.getAttrCol()).append("_t.").append(mdaSysTableCol.getColumnName())
-	                       .append(" when 1 then '是' else '否' end as ").append(labelAttrRel.getAttrCol());	//列别名
-						break;
-					case ServiceConstants.LabelInfo.LABEL_TYPE_ID_ENUM:	//5=枚举型,关联维表
-						DimTableInfo dimTableInfo = this.getDimTableInfoByLabelId(label.getLabelId());
-						if (null != dimTableInfo) {
-		                    sql.append(",").append(labelAttrRel.getAttrCol()).append("_m.").append(dimTableInfo.getDimValueCol())
-		                       .append(" as ").append(labelAttrRel.getAttrCol());	//列别名
-//		                    left join coctest.dim_loc_sex attr_col2_m on attr_col2_t.L0000034=attr_col2_m.sex_name
-		                    leftJoinEnumStrs.add(new StringBuffer().append("LEFT JOIN ")
-		                    		.append(StringUtil.isEmpty(curBackDbSchema)?"":curBackDbSchema+".").append(dimTableInfo.getDimTableName()).append(" ")
-		                    		.append(labelAttrRel.getAttrCol()).append("_m on ").append(labelAttrRel.getAttrCol()).append("_t.")
-		                    		.append(mdaSysTableCol.getColumnName()).append("=").append(labelAttrRel.getAttrCol()).append("_m.")
-		                    		.append(dimTableInfo.getDimCodeCol()).append(" ").toString());
-						}
-                       break;
-					default:
-                			//表别名
-	                    sql.append(",").append(labelAttrRel.getAttrCol()).append("_t.").append(mdaSysTableCol.getColumnName())
-	                       .append(" as ").append(labelAttrRel.getAttrCol());	//列别名
-						break;
-					}
+                		orderbyStr.append(labelAttrRel.getAttrCol()).append("_t.").append(mdaSysTableCol.getColumnName())
+                       .append(" ").append(sortType).append(",");
                 } else {
                     LogUtil.error("MdaSysTableColumn of labelinfo【"+label.getLabelId()+"】 is null!");
                 }
             }
-            sql.append(" from (");
-            
-            //拼接主表
-            sql.append("SELECT t.").append(ServiceConstants.KHQ_CROSS_COLUMN).append(" from ");
-            if (null != mainMdaSysTableColumn) {
-                if (StringUtil.isNotEmpty(mainMdaSysTable.getTableSchema())) {
-                    //拼接Schema
-                    sql.append(mainMdaSysTable.getTableSchema()).append(".");
-                }
-                sql.append(mainMdaSysTable.getTableName()).append(customInfo.getDataDate()).append(" t ")
-                   .append("where t.").append(ServiceConstants.KHQ_CROSS_ID_PARTION).append("='")
-                   .append(customInfo.getLabelId()).append("'");
-            } else {
-                String fromSql = "";
-                try {
-                    fromSql = iLabelExploreService.getListTableSql(customInfo.getLabelId(), customInfo.getDataDate());
-                } catch (BaseException e) {
-                    LogUtil.error("获取客户群清单sq出错：", e);;
-                }
-                sql.append(fromSql.replace(" where ", " t where t."));
-            }
-            if (!isPush) {	//清单预览
-                int customListNo = 10;//尹振华说只查10条,@2018-03-13 14:39:36
-                String customListNoStr = CocCacheProxy.getCacheProxy().getSYSConfigInfoByKey("LOC_CONFIG_APP_CUSTOM_LIST_NUMBER");
-                if (StringUtil.isNotEmpty(customListNoStr)) {
-                		customListNo = Integer.parseInt(customListNoStr);
-                }
-                sql.append(" limit ").append(customListNo);
-            }
-            sql.append(") m ");
+        }
+        if (StringUtil.isNotEmpty(orderbyStr)) {
+        		orderbyStr.delete(orderbyStr.length()-1, orderbyStr.length());
+        } else {
+            orderbyStr.append("m.").append(ServiceConstants.KHQ_CROSS_COLUMN);
+        }
+        sql.append(" order by ").append(orderbyStr);
+    }
 
-            //拼接left join
-            Map<String,String> tabelNameSql = new HashMap<>();	
-            Map<String,String> tabelNameReplace = new HashMap<>();//key:要替换的别名，value：真正可用的别名
-            for (int i = 0; i < attrRelList.size(); i++) {
-                labelAttrRel = attrRelList.get(i);
-                sql.append(getJoinSqlByLabelId(labelAttrRel.getLabelOrCustomId(),labelAttrRel.getAttrCol(),cacheProxy,null,null,sql,tabelNameSql, tabelNameReplace));
+    /** 得到有属性的清单的列sql
+     * @param attrRelList
+     * @param leftJoinEnumStrs
+     * @param curBackDbSchema
+     * @param sql
+     */
+    private void getHasAttrListCols(List<LabelAttrRel> attrRelList, List<String> leftJoinEnumStrs,
+            String curBackDbSchema, StringBuilder sql) {
+        MdaSysTableColumn mdaSysTableCol;
+        LabelAttrRel labelAttrRel;
+        LabelInfo label;
+        for (int i = 0; i < attrRelList.size(); i++) {
+            labelAttrRel = attrRelList.get(i);
+            //获取列信息
+            label = cacheProxy.getLabelInfoById(labelAttrRel.getLabelOrCustomId()); //datedate is null,so it's error
+            if (null == label || (null!=label && null==label.getDataDate())) {
+                label = iLabelInfoService.get(labelAttrRel.getLabelOrCustomId());
             }
-            //拼接枚举型 leftJoin
-            for (String leftJoinEnumStr : leftJoinEnumStrs) {
-            		sql.append(leftJoinEnumStr);
-			}
-            //拼接orderby
-            String sortType = "ASC";
-            StringBuffer orderbyStr = new StringBuffer();
-            for (int i = 0; i < attrRelList.size(); i++) {
-                labelAttrRel = attrRelList.get(i);
-                if (StringUtil.isNoneBlank(labelAttrRel.getSortType())) {
-                    sortType = labelAttrRel.getSortType();
-                    //获取列信息
-                    label = cacheProxy.getLabelInfoById(labelAttrRel.getLabelOrCustomId()); //datedate is null,so it's error
-                    if (null == label || (null!=label && null==label.getDataDate())) {
-                        label = iLabelInfoService.get(labelAttrRel.getLabelOrCustomId());
-                    }
-                    mdaSysTableCol = label.getMdaSysTableColumn();
-                    if (null != mdaSysTableCol) {
-                    		orderbyStr.append(labelAttrRel.getAttrCol()).append("_t.").append(mdaSysTableCol.getColumnName())
-                           .append(" ").append(sortType).append(",");
-                    } else {
-                        LogUtil.error("MdaSysTableColumn of labelinfo【"+label.getLabelId()+"】 is null!");
-                    }
-                }
-            }
-            if (StringUtil.isNotEmpty(orderbyStr)) {
-            		orderbyStr.delete(orderbyStr.length()-1, orderbyStr.length());
+            mdaSysTableCol = label.getMdaSysTableColumn();
+            if (null != mdaSysTableCol) {
+                //翻译维表值
+        		switch (label.getLabelTypeId()) {
+        		case ServiceConstants.LabelInfo.LABEL_TYPE_ID_SIGN:	//1=标志型，case when
+//						case attr_col1_t.L0000031 when 1 then '是' else '否' end as attr_col1,
+        			//表别名
+                    sql.append(",case ").append(labelAttrRel.getAttrCol()).append("_t.").append(mdaSysTableCol.getColumnName())
+                       .append(" when 1 then '是' else '否' end as ").append(labelAttrRel.getAttrCol());	//列别名
+        			break;
+        		case ServiceConstants.LabelInfo.LABEL_TYPE_ID_ENUM:	//5=枚举型,关联维表
+        			DimTableInfo dimTableInfo = this.getDimTableInfoByLabelId(label.getLabelId());
+        			if (null != dimTableInfo) {
+                        sql.append(",").append(labelAttrRel.getAttrCol()).append("_m.").append(dimTableInfo.getDimValueCol())
+                           .append(" as ").append(labelAttrRel.getAttrCol());	//列别名
+//		                    left join coctest.dim_loc_sex attr_col2_m on attr_col2_t.L0000034=attr_col2_m.sex_name
+                        leftJoinEnumStrs.add(new StringBuilder().append("LEFT JOIN ")
+                        		.append(StringUtil.isEmpty(curBackDbSchema)?"":curBackDbSchema+".").append(dimTableInfo.getDimTableName()).append(" ")
+                        		.append(labelAttrRel.getAttrCol()).append("_m on ").append(labelAttrRel.getAttrCol()).append("_t.")
+                        		.append(mdaSysTableCol.getColumnName()).append("=").append(labelAttrRel.getAttrCol()).append("_m.")
+                        		.append(dimTableInfo.getDimCodeCol()).append(" ").toString());
+        			}
+                   break;
+        		default:
+            			//表别名
+                    sql.append(",").append(labelAttrRel.getAttrCol()).append("_t.").append(mdaSysTableCol.getColumnName())
+                       .append(" as ").append(labelAttrRel.getAttrCol());	//列别名
+        			break;
+        		}
             } else {
-                orderbyStr.append("m.").append(ServiceConstants.KHQ_CROSS_COLUMN);
-            }
-            sql.append(" order by ").append(orderbyStr);
-            
-            //修正别名
-			String sqlTmp = sql.toString();
-			if (sqlTmp.contains("LEFT JOIN")) {
-				int e = sqlTmp.indexOf("from");
-				String attrsStr = sqlTmp.substring(0, e);
-				String otherStr = sqlTmp.substring(e, sqlTmp.length());
-				for (String key : tabelNameReplace.keySet()) {
-					attrsStr = attrsStr.replace(key, tabelNameReplace.get(key));
-					otherStr = otherStr.replace(key, tabelNameReplace.get(key));
-				}
-		    		sql = new StringBuilder(attrsStr).append(otherStr);
-		    }
-        } else {    //无属性列
-            //拼接主表
-	        	sql.append(" from ");
-            if (null != mainMdaSysTableColumn) {
-                //拼接主表名
-                if (StringUtil.isNotEmpty(mainMdaSysTable.getTableSchema())) {
-                    //拼接Schema
-                    sql.append(mainMdaSysTable.getTableSchema()).append(".");
-                }
-                sql.append(mainMdaSysTable.getTableName()).append(customInfo.getDataDate()).append(" m ")
-                   .append("where m.").append(ServiceConstants.KHQ_CROSS_ID_PARTION).append("='")
-                   .append(customInfo.getLabelId()).append("'");
-            } else {
-                String fromSql = "";
-                try {
-                    fromSql = iLabelExploreService.getListTableSql(customInfo.getLabelId(), customInfo.getDataDate());
-                } catch (BaseException e) {
-                    LogUtil.error("获取客户群清单sq出错：", e);;
-                }
-                sql.append(fromSql.replace(" where ", " m where m."));
-            }
-            if (!isPush) {	//清单预览
-                int customListNo = 10;//尹振华说只查10条,@2018-03-13 14:39:36
-                String customListNoStr = CocCacheProxy.getCacheProxy().getSYSConfigInfoByKey("LOC_CONFIG_APP_CUSTOM_LIST_NUMBER");
-                if (StringUtil.isNotEmpty(customListNoStr)) {
-                		customListNo = Integer.parseInt(customListNoStr);
-                }
-                sql.append(" limit ").append(customListNo);
+                LogUtil.error("MdaSysTableColumn of labelinfo【"+label.getLabelId()+"】 is null!");
             }
         }
-        
-        return sql.toString();
+    }
+
+    /** 得到没有属性的清单sql
+     * @param realyCustomInfo
+     * @param mainMdaSysTable
+     * @param mainMdaSysTableColumn
+     * @param isPush
+     * @param sql
+     */
+    private StringBuilder getNotHasAttrListSql(LabelInfo realyCustomInfo, MdaSysTable mainMdaSysTable,
+            MdaSysTableColumn mainMdaSysTableColumn, boolean isPush, StringBuilder sql) {
+        //拼接主表
+        	sql.append(" from ");
+        if (null != mainMdaSysTableColumn) {
+            //拼接主表名
+            if (StringUtil.isNotEmpty(mainMdaSysTable.getTableSchema())) {
+                //拼接Schema
+                sql.append(mainMdaSysTable.getTableSchema()).append(".");
+            }
+            sql.append(mainMdaSysTable.getTableName()).append(realyCustomInfo.getDataDate()).append(" m ")
+               .append("where m.").append(ServiceConstants.KHQ_CROSS_ID_PARTION).append("='")
+               .append(realyCustomInfo.getLabelId()).append("'");
+        } else {
+            String fromSql = "";
+            try {
+                fromSql = iLabelExploreService.getListTableSql(realyCustomInfo.getLabelId(), realyCustomInfo.getDataDate());
+            } catch (BaseException e) {
+                LogUtil.error("获取客户群清单sq出错：", e);;
+            }
+            sql.append(fromSql.replace(" where ", " m where m."));
+        }
+        if (!isPush) {	//清单预览
+            int customListNo = CUSTOMLIST_PASE_SIZE;//尹振华说只查10条,@2018-03-13 14:39:36
+            String customListNoStr = cacheProxy.getSYSConfigInfoByKey("LOC_CONFIG_APP_CUSTOM_LIST_NUMBER");
+            if (StringUtil.isNotEmpty(customListNoStr)) {
+            		customListNo = Integer.parseInt(customListNoStr);
+            }
+            sql.append(" limit ").append(customListNo);
+        }
+        return sql;
     }
 	
     /**
@@ -285,15 +358,15 @@ public class CustomerPublishCommServiceImpl implements ICustomerPublishCommServi
      * @param List<String>	MdaSysTableColumn	循环调用同一参数
      * @return
      */
-    private String getJoinSqlByLabelId(String labelId,String attrCol,CocCacheAble cacheProxy,LabelInfo label,
-    		MdaSysTableColumn mdaSysTableColumn,final StringBuilder mSql,Map<String,String> tabelName, Map<String,String> tabelNameReplace) {
-        StringBuffer sql = new StringBuffer();
+    private String getJoinSqlByLabelId(String labelId,String attrCol,
+    		final StringBuilder mSql,Map<String,String> tabelName, Map<String,String> tabelNameReplace) {
+        StringBuilder sql = new StringBuilder();
         //获取表名
-        label = cacheProxy.getLabelInfoById(labelId); //datedate is null,so it's error
-        if (null == label || (null!=label && null==label.getDataDate())) {
-            label = iLabelInfoService.get(labelId);
+        LabelInfo realyLabel = cacheProxy.getLabelInfoById(labelId); //datedate is null,so it's error
+        if (null == realyLabel || (null!=realyLabel && null==realyLabel.getDataDate())) {
+            realyLabel = iLabelInfoService.get(labelId);
         }
-        mdaSysTableColumn = label.getMdaSysTableColumn();
+        MdaSysTableColumn mdaSysTableColumn = realyLabel.getMdaSysTableColumn();
         if (null != mdaSysTableColumn) {
             MdaSysTable mdaSysTable = mdaSysTableColumn.getMdaSysTable();
             if (!tabelName.containsKey(mdaSysTable.getTableName())) {
@@ -302,7 +375,7 @@ public class CustomerPublishCommServiceImpl implements ICustomerPublishCommServi
                 if (StringUtil.isNoneBlank(mdaSysTable.getTableSchema())) {
                     sql.append(mdaSysTable.getTableSchema()).append(".");
                 }
-                sql.append(mdaSysTable.getTableName()).append(label.getDataDate()).append(" ").append(attrCol)
+                sql.append(mdaSysTable.getTableName()).append(realyLabel.getDataDate()).append(" ").append(attrCol)
                    .append("_t on ").append("m.").append(ServiceConstants.KHQ_CROSS_COLUMN).append("=")
                    .append(attrCol).append("_t.").append(ServiceConstants.KHQ_CROSS_COLUMN).append(" ");
                 tabelName.put(mdaSysTable.getTableName(), attrCol+"_t");
@@ -318,15 +391,16 @@ public class CustomerPublishCommServiceImpl implements ICustomerPublishCommServi
             		tabelNameReplace.put(attrCol+"_t", oldAlias);
             }
         } else {
-            sql = new StringBuffer("");
+            sql = new StringBuilder("");
             LogUtil.error("标签【"+labelId+"】的 mdaSysTableColumn is null！");
         }
         
         return sql.toString();
     }
     
+    @Override
     public DimTableInfo getDimTableInfoByLabelId(String LabelId) {
-		StringBuffer sql = new StringBuffer("select ");
+		StringBuilder sql = new StringBuilder("select ");
 		/**
 		 * 获取维表信息sql:
 		 * SELECT DIM_TABLENAME,DIM_CODE_COL,DIM_VALUE_COL  from coctest.loc_dimtable_info
@@ -337,8 +411,9 @@ public class CustomerPublishCommServiceImpl implements ICustomerPublishCommServi
 		sql.append("INNER JOIN LOC_DIMTABLE_INFO b on b.DIM_ID=d.DIM_TRANS_ID ");
 		sql.append("where d.LABEL_ID='"+LabelId+"'");
 		
-		LogUtil.debug(sql.toString());
+		LogUtil.info("获取维表信息sql:"+sql.toString());
 		
+        @SuppressWarnings("unchecked")
         List<Object[]> dimTableInfoList = (List<Object[]>) iDimTableInfoService.findListBySql(sql.toString(), new HashMap<>());
         if (!dimTableInfoList.isEmpty()) {
         		Object[] dimTableInfo = dimTableInfoList.get(0);

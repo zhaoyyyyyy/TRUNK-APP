@@ -453,8 +453,8 @@ public class SftpUtil {
 					//如果不存在，则创建此目录并切换到此目录
 				    if(ChannelSftp.SSH_FX_NO_SUCH_FILE == se.id){
 		                try {
-		                	client.mkdir(subDirectory);
-		                	client.cd(subDirectory);
+        		                	client.mkdir(subDirectory);
+        		                	client.cd(subDirectory);
 		                } catch (SftpException e) {
 		                    LogUtil.error("创建目录失败！");
 		                    success = false;
