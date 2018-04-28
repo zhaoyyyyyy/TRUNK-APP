@@ -16,6 +16,7 @@ import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -346,11 +347,9 @@ public class CustomerPublishDefaultTaskImpl implements ICustomerPublishTask {
         }
         final String localFilePath = localPathTmp;
         String csvFile = localFilePath + fileName + ".csv";
-        String csvFileTmp = localFilePath + fileName + "_tmp.csv";
         String zipFile = localFilePath + fileName + ".zip";
-        String zipFileTmp = localFilePath + fileName + "_tmp.zip";
-        String fileTmp = "";
         String desFile ="";
+        String xmlFile ="";
         
         //1.1 获取创建清单文件sql
         String customListSql = iCustomerPublishCommService.getCustomListSql(customInfo, attrRelList,true);
@@ -361,173 +360,15 @@ public class CustomerPublishDefaultTaskImpl implements ICustomerPublishTask {
         
 	    //2.determine push file type
         if (result) {
-            //2.1 是否有表头
-            String title = cacheProxy.getSYSConfigInfoByKey("LOC_CONFIG_APP_RELATED_COLUMN_CN_NAME");
-            if(null!=sysInfo.getIsNeedTitle() && ServiceConstants.SysInfo.IS_NEED_TITLE_YES==sysInfo.getIsNeedTitle()){
-                if (StringUtil.isEmpty(title)) {
-                    title = "手机号码";
-                }
-
-                if (null != attrRelList && !attrRelList.isEmpty()) {    //有属性列
-                		StringBuffer titleStr = new StringBuffer();
-                		for (LabelAttrRel labelAttrRel : attrRelList) {
-                			titleStr.append(",").append(labelAttrRel.getAttrColName());
-					}
-                		title += titleStr.toString();
-                }
-                LogUtil.debug("title："+title);
+            Map<String,String> fileTypeMap = determinePushFileType(csvFile, zipFile, localFilePath, customListSql, result);
+            if (!fileTypeMap.isEmpty()) {
+                result = Boolean.valueOf(fileTypeMap.get("res"));
+                desFile = fileTypeMap.get("desFile");
+                xmlFile = fileTypeMap.get("xmlFile");
             }
-            //2.2 是否有加密描述文件
-            if (null!=sysInfo.getIsNeedDes() && ServiceConstants.SysInfo.IS_NEED_DES_YES==sysInfo.getIsNeedDes()) {
-                result = this.getSql2FileUtils().sql2File(customListSql, title, csvFileTmp);
-                fileTmp = csvFileTmp;
-                desFile = csvFile;
-            }else{
-                result = this.getSql2FileUtils().sql2File(customListSql, title, csvFile);
-                desFile = csvFile;
-            }
-            
-            boolean hasExists = false;
-            if (null!=sysInfo.getIsNeedDes() && ServiceConstants.SysInfo.IS_NEED_DES_YES==sysInfo.getIsNeedDes()) {
-                hasExists = new File(fileTmp).exists();
-            }else{
-                hasExists = new File(desFile).exists();
-            }
-            if (!hasExists) {//如果因为记录数为0而没有产生文件，那么就创建一个空文件
-                try {
-                    FileUtil.createFile(desFile, "");
-                } catch (Exception e) {
-                    LogUtil.error("导出清单文件错误" + customListSql + fileTmp + zipFile, e);
-                }
-            }
-          
-            //2.3 ZIP file
-            if(null!=sysInfo.getIsNeedCompress() && ServiceConstants.SysInfo.IS_NEED_COMPRESS_YES==sysInfo.getIsNeedCompress()){
-                try {
-                    LogUtil.debug("zipfile:" + zipFile);
-                    if (null!=sysInfo.getIsNeedDes() && ServiceConstants.SysInfo.IS_NEED_DES_YES==sysInfo.getIsNeedDes()) {
-                        FileUtil.zipFileUnPassword(csvFile, zipFileTmp, "UTF-8");
-                        fileTmp = zipFileTmp;
-                        desFile = zipFile;
-                    } else {
-                        FileUtil.zipFileUnPassword(csvFile, zipFile, "UTF-8");
-                        desFile = zipFile;
-                    }
-                } catch (Exception e) {
-                    String allFileName = null;
-                    if (null!=sysInfo.getIsNeedDes() && ServiceConstants.SysInfo.IS_NEED_DES_YES==sysInfo.getIsNeedDes()) {
-                        allFileName = csvFile + " " + zipFileTmp;
-                    } else {
-                        allFileName = csvFile + " " + zipFile;
-                    }
-                    LogUtil.error("压缩文件出错：" + allFileName, e);
-                    return false;
-                }
-            }
-            //2.4 加密文件
-            if (null!=sysInfo.getIsNeedDes() && ServiceConstants.SysInfo.IS_NEED_DES_YES==sysInfo.getIsNeedDes()) {
-                try {
-                    String key = sysInfo.getDesKey(); //加密密钥
-                    LogUtil.debug("key : " + key);
-                    if (StringUtil.isEmpty(key)) {
-                        String errorMsg = "数据库中未定义密钥";
-                        LogUtil.error(errorMsg);
-                    }
-                    DESUtil des = new DESUtil(key);
-                    // DES 加密文件
-                    des.encryptFile(fileTmp, desFile);
-                } catch (Exception e) {
-                    LogUtil.error("加密文件出错：" + desFile, e);
-                    return false;
-                }
-                result = new File(fileTmp).delete();
-            }
-            //2.5 是否需要XML
-            String xmlFile = localFilePath + fileName + ".xml";
-            if (null!=sysInfo.getIsNeedXml() && ServiceConstants.SysInfo.IS_NEED_XML_YES==sysInfo.getIsNeedXml()) {
-                // create XML File
-                try {
-                    LogUtil.debug(">>create xml " + xmlFile + " start");
-                    this.createOtherSysXmlFile(xmlFile, desFile);
-                    LogUtil.debug(">>create xml " + xmlFile + " end");
-                } catch (Exception e) {
-                    LogUtil.error("创建XML出错：" + xmlFile, e);
-                    return false;
-                }
-            }
-
             
             //3 download file
-            //3.1 下载数据文件
-            Integer protocoType = sysInfo.getProtocoType();//协议类型
-            String protocoTypeStr = null;
-            try {
-                if (null==protocoType || ServiceConstants.SysInfo.PROTOCO_TYPE_FTP==protocoType) {   //默认 ftp
-                    protocoTypeStr = "ftp";
-                } else if (ServiceConstants.SysInfo.PROTOCO_TYPE_SFTP==protocoType) {  //sftp
-                    protocoTypeStr = "sftp";
-                } else {
-                    protocoTypeStr = "表 SYS_INFO 的 PROTOCOTYPE 字段配置错误！";
-                    LogUtil.error(protocoTypeStr);
-                    result = false;
-                    throw new BaseException(protocoTypeStr);
-                }
-                
-                LogUtil.debug("推送方式："+protocoTypeStr);
-                LogUtil.info(protocoTypeStr+" :" + sysInfo.toString());
-                LogUtil.debug("push File :" + desFile);
-
-                if (null == protocoType || ServiceConstants.SysInfo.PROTOCO_TYPE_FTP == protocoType) {   //默认 ftp
-                    result = FtpUtil.ftp(sysInfo.getFtpServerIp(), sysInfo.getFtpPort(), sysInfo.getFtpUser(),
-                        DES.decrypt(sysInfo.getFtpPwd()), desFile, sysInfo.getFtpPath() + "/");
-                } else if (ServiceConstants.SysInfo.PROTOCO_TYPE_SFTP == protocoType) {  //sftp
-                    result = SftpUtil.sftp(new SftpUser(sysInfo.getFtpServerIp(), sysInfo.getFtpPort(), sysInfo.getFtpUser(),
-                        DES.decrypt(sysInfo.getFtpPwd())), desFile, sysInfo.getFtpPath() + "/", true);
-                }
-                if (!result) {
-                    LogUtil.error(protocoTypeStr+" error");
-                } else {
-                    LogUtil.debug("push File ("+desFile+") success.");
-                }
-                if (isJobTask) {    //自动推送
-                    result = new File(desFile).delete();    //FTP后删除本地des文件
-                    LogUtil.debug(new File(desFile).exists());
-                    //FTP后删除本地csv文件
-                    if(null!=sysInfo.getIsNeedCompress() && ServiceConstants.SysInfo.IS_NEED_COMPRESS_YES==sysInfo.getIsNeedCompress()
-                            && result){
-                        result = new File(csvFile).delete();
-                    }
-	            } else {    //手动推送，不删除，以便下载,下载后删除
-	                //更新下载时的准确的文件名
-                    this.updateCustomDownloadRecord(desFile, ServiceConstants.CustomDownloadRecord.DATA_STATUS_SUCCESS);
-	            }
-            } catch (Exception e) {
-                LogUtil.error(protocoTypeStr+"出错" + sysInfo + zipFile, e);
-                return false;
-            }
-            //3.2 下载xml
-            if (null!=sysInfo.getIsNeedXml() && ServiceConstants.SysInfo.IS_NEED_XML_YES==sysInfo.getIsNeedXml()) {
-                //FTP xml file
-                try {
-                    LogUtil.debug(protocoTypeStr+" :" + sysInfo.getFtpServerIp() + ":" + sysInfo.getFtpPort() + sysInfo.getFtpPath());
-
-                    if (null == protocoType || ServiceConstants.SysInfo.PROTOCO_TYPE_FTP == protocoType) {   //默认 ftp
-                        result = FtpUtil.ftp(sysInfo.getFtpServerIp(), sysInfo.getFtpPort(), sysInfo.getFtpUser(),
-                            DES.decrypt(sysInfo.getFtpPwd()), xmlFile, sysInfo.getFtpPath() + "/");
-                    } else if (ServiceConstants.SysInfo.PROTOCO_TYPE_SFTP == protocoType) {  //sftp
-                        result = SftpUtil.sftp(new SftpUser(sysInfo.getFtpServerIp(), sysInfo.getFtpPort(), sysInfo.getFtpUser(),
-                            DES.decrypt(sysInfo.getFtpPwd())), xmlFile, sysInfo.getFtpPath() + "/", true);
-                    }
-                    
-                    if (!result) {
-                        LogUtil.error(protocoTypeStr+" error");
-                    }
-                    result = new File(xmlFile).delete();
-                } catch (Exception e) {
-                    LogUtil.error("XML "+protocoTypeStr+"出错" + sysInfo + xmlFile, e);
-                    return false;
-                }
-            }
+            result = downloadCustomListFile(csvFile, zipFile, desFile, xmlFile, result);
 
             
             //4 call webService,or do nothing  to ALERT
@@ -540,6 +381,201 @@ public class CustomerPublishDefaultTaskImpl implements ICustomerPublishTask {
 	    
 		return result;
 	}
+	private Map<String,String> determinePushFileType(String csvFile, String zipFile, String localFilePath,
+	        String customListSql, boolean result) {
+	    Map<String,String> resMap = new HashMap<>();
+        boolean res = result;
+
+        String csvFileTmp = localFilePath + fileName + "_tmp.csv";
+        String zipFileTmp = localFilePath + fileName + "_tmp.zip";
+        String fileTmp = "";
+        String desFile ="";
+        
+        //2.1 是否有表头
+        String title = cacheProxy.getSYSConfigInfoByKey("LOC_CONFIG_APP_RELATED_COLUMN_CN_NAME");
+        if(null!=sysInfo.getIsNeedTitle() && ServiceConstants.SysInfo.IS_NEED_TITLE_YES==sysInfo.getIsNeedTitle()){
+            if (StringUtil.isEmpty(title)) {
+                title = "手机号码";
+            }
+
+            if (null != attrRelList && !attrRelList.isEmpty()) {    //有属性列
+                    StringBuffer titleStr = new StringBuffer();
+                    for (LabelAttrRel labelAttrRel : attrRelList) {
+                        titleStr.append(",").append(labelAttrRel.getAttrColName());
+                }
+                    title += titleStr.toString();
+            }
+            LogUtil.debug("title："+title);
+        }
+        //2.2 是否有加密描述文件
+        if (null!=sysInfo.getIsNeedDes() && ServiceConstants.SysInfo.IS_NEED_DES_YES==sysInfo.getIsNeedDes()) {
+            res = this.getSql2FileUtils().sql2File(customListSql, title, csvFileTmp);
+            fileTmp = csvFileTmp;
+            desFile = csvFile;
+        }else{
+            res = this.getSql2FileUtils().sql2File(customListSql, title, csvFile);
+            desFile = csvFile;
+        }
+        
+        boolean hasExists = false;
+        if (null!=sysInfo.getIsNeedDes() && ServiceConstants.SysInfo.IS_NEED_DES_YES==sysInfo.getIsNeedDes()) {
+            hasExists = new File(fileTmp).exists();
+        }else{
+            hasExists = new File(desFile).exists();
+        }
+        if (!hasExists) {//如果因为记录数为0而没有产生文件，那么就创建一个空文件
+            try {
+                FileUtil.createFile(desFile, "");
+            } catch (Exception e) {
+                LogUtil.error("导出清单文件错误" + customListSql + fileTmp + zipFile, e);
+            }
+        }
+      
+        //2.3 ZIP file
+        if(null!=sysInfo.getIsNeedCompress() && ServiceConstants.SysInfo.IS_NEED_COMPRESS_YES==sysInfo.getIsNeedCompress()){
+            try {
+                LogUtil.debug("zipfile:" + zipFile);
+                if (null!=sysInfo.getIsNeedDes() && ServiceConstants.SysInfo.IS_NEED_DES_YES==sysInfo.getIsNeedDes()) {
+                    FileUtil.zipFileUnPassword(csvFile, zipFileTmp, "UTF-8");
+                    fileTmp = zipFileTmp;
+                    desFile = zipFile;
+                } else {
+                    FileUtil.zipFileUnPassword(csvFile, zipFile, "UTF-8");
+                    desFile = zipFile;
+                }
+            } catch (Exception e) {
+                String allFileName = null;
+                if (null!=sysInfo.getIsNeedDes() && ServiceConstants.SysInfo.IS_NEED_DES_YES==sysInfo.getIsNeedDes()) {
+                    allFileName = csvFile + " " + zipFileTmp;
+                } else {
+                    allFileName = csvFile + " " + zipFile;
+                }
+                LogUtil.error("压缩文件出错：" + allFileName, e);
+                return resMap;
+            }
+        }
+        //2.4 加密文件
+        if (null!=sysInfo.getIsNeedDes() && ServiceConstants.SysInfo.IS_NEED_DES_YES==sysInfo.getIsNeedDes()) {
+            try {
+                String key = sysInfo.getDesKey(); //加密密钥
+                LogUtil.debug("key : " + key);
+                if (StringUtil.isEmpty(key)) {
+                    String errorMsg = "数据库中未定义密钥";
+                    LogUtil.error(errorMsg);
+                }
+                DESUtil des = new DESUtil(key);
+                // DES 加密文件
+                des.encryptFile(fileTmp, desFile);
+            } catch (Exception e) {
+                LogUtil.error("加密文件出错：" + desFile, e);
+                return resMap;
+            }
+            res = new File(fileTmp).delete();
+        }
+        //2.5 是否需要XML
+        String xmlFile = localFilePath + fileName + ".xml";
+        if (null!=sysInfo.getIsNeedXml() && ServiceConstants.SysInfo.IS_NEED_XML_YES==sysInfo.getIsNeedXml()) {
+            // create XML File
+            try {
+                LogUtil.debug(">>create xml " + xmlFile + " start");
+                this.createOtherSysXmlFile(xmlFile, desFile);
+                LogUtil.debug(">>create xml " + xmlFile + " end");
+            } catch (Exception e) {
+                LogUtil.error("创建XML出错：" + xmlFile, e);
+                return resMap;
+            }
+        }
+        resMap.put("res", String.valueOf(res));
+        resMap.put("desFile", desFile);
+        resMap.put("xmlFile", xmlFile);
+        
+        return resMap;
+	}
+
+    /** 下载文件
+     * @param csvFile
+     * @param zipFile
+     * @param desFile
+     * @param xmlFile
+     * @param result
+     * @return
+     */
+    private boolean downloadCustomListFile(String csvFile, String zipFile, String desFile, String xmlFile,
+            boolean result) {
+        boolean res = result;
+        
+        //3.1 下载数据文件
+        Integer protocoType = sysInfo.getProtocoType();//协议类型
+        String protocoTypeStr = null;
+        try {
+            if (null==protocoType || ServiceConstants.SysInfo.PROTOCO_TYPE_FTP==protocoType) {   //默认 ftp
+                protocoTypeStr = "ftp";
+            } else if (ServiceConstants.SysInfo.PROTOCO_TYPE_SFTP==protocoType) {  //sftp
+                protocoTypeStr = "sftp";
+            } else {
+                protocoTypeStr = "表 SYS_INFO 的 PROTOCOTYPE 字段配置错误！";
+                LogUtil.error(protocoTypeStr);
+                res = false;
+                throw new BaseException(protocoTypeStr);
+            }
+            
+            LogUtil.debug("推送方式："+protocoTypeStr);
+            LogUtil.info(protocoTypeStr+" :" + sysInfo.toString());
+            LogUtil.debug("push File :" + desFile);
+
+            if (null == protocoType || ServiceConstants.SysInfo.PROTOCO_TYPE_FTP == protocoType) {   //默认 ftp
+                res = FtpUtil.ftp(sysInfo.getFtpServerIp(), sysInfo.getFtpPort(), sysInfo.getFtpUser(),
+                    DES.decrypt(sysInfo.getFtpPwd()), desFile, sysInfo.getFtpPath() + "/");
+            } else if (ServiceConstants.SysInfo.PROTOCO_TYPE_SFTP == protocoType) {  //sftp
+                res = SftpUtil.sftp(new SftpUser(sysInfo.getFtpServerIp(), sysInfo.getFtpPort(), sysInfo.getFtpUser(),
+                    DES.decrypt(sysInfo.getFtpPwd())), desFile, sysInfo.getFtpPath() + "/", true);
+            }
+            if (!res) {
+                LogUtil.error(protocoTypeStr+" error");
+            } else {
+                LogUtil.debug("push File ("+desFile+") success.");
+            }
+            if (isJobTask) {    //自动推送
+                res = new File(desFile).delete();    //FTP后删除本地des文件
+                LogUtil.debug(new File(desFile).exists());
+                //FTP后删除本地csv文件
+                if(null!=sysInfo.getIsNeedCompress() && ServiceConstants.SysInfo.IS_NEED_COMPRESS_YES==sysInfo.getIsNeedCompress()
+                        && res){
+                    res = new File(csvFile).delete();
+                }
+            } else {    //手动推送，不删除，以便下载,下载后删除
+                //更新下载时的准确的文件名
+                this.updateCustomDownloadRecord(desFile, ServiceConstants.CustomDownloadRecord.DATA_STATUS_SUCCESS);
+            }
+        } catch (Exception e) {
+            LogUtil.error(protocoTypeStr+"出错" + sysInfo + zipFile, e);
+            return false;
+        }
+        //3.2 下载xml
+        if (null!=sysInfo.getIsNeedXml() && ServiceConstants.SysInfo.IS_NEED_XML_YES==sysInfo.getIsNeedXml()) {
+            //FTP xml file
+            try {
+                LogUtil.debug(protocoTypeStr+" :" + sysInfo.getFtpServerIp() + ":" + sysInfo.getFtpPort() + sysInfo.getFtpPath());
+
+                if (null == protocoType || ServiceConstants.SysInfo.PROTOCO_TYPE_FTP == protocoType) {   //默认 ftp
+                    res = FtpUtil.ftp(sysInfo.getFtpServerIp(), sysInfo.getFtpPort(), sysInfo.getFtpUser(),
+                        DES.decrypt(sysInfo.getFtpPwd()), xmlFile, sysInfo.getFtpPath() + "/");
+                } else if (ServiceConstants.SysInfo.PROTOCO_TYPE_SFTP == protocoType) {  //sftp
+                    res = SftpUtil.sftp(new SftpUser(sysInfo.getFtpServerIp(), sysInfo.getFtpPort(), sysInfo.getFtpUser(),
+                        DES.decrypt(sysInfo.getFtpPwd())), xmlFile, sysInfo.getFtpPath() + "/", true);
+                }
+                
+                if (!res) {
+                    LogUtil.error(protocoTypeStr+" error");
+                }
+                res = new File(xmlFile).delete();
+            } catch (Exception e) {
+                LogUtil.error("XML "+protocoTypeStr+"出错" + sysInfo + xmlFile, e);
+                return false;
+            }
+        }
+        return res;
+    }
 
 
     /**
