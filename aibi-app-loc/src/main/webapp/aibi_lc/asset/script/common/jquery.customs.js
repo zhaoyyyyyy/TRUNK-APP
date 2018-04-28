@@ -59,6 +59,21 @@ $.extend({
 		});
 		return codes;
 	},
+	// 根据系统配置
+	getSysConfig : function(key){
+		if($.kvGet(key)){return eval($.kvGet(key));}
+		$.commAjax({
+			url: $.ctx+ '/api/config/jauthConfig',
+			postData:{'key':key},
+			onSuccess:function(data){
+				if(data.status == 200){
+					var value = data.data;
+					$.kvSet(key,value);
+					return value;
+				}    
+			}
+		})
+	},
 	/**
 	 * 页面中根据resourceId 属性，判断该用户是否有按钮的权限
 	 */
