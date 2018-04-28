@@ -361,7 +361,9 @@ public class BackHiveDaoImpl extends BaseBackDaoImpl implements IBackSqlDao{
 	public boolean createVerticalTable(String tableName,String columnName) throws SqlRunException{
 		StringBuffer sql = new StringBuffer();
 		sql.append("CREATE TABLE IF NOT EXISTS ").append(tableName).append(" (").append(columnName).append(" string )  PARTITIONED BY (");
-		sql.append(ServiceConstants.KHQ_CROSS_ID_PARTION).append(" string) stored as ").append(this.Tab_Format);
+		sql.append(ServiceConstants.KHQ_CROSS_ID_PARTION)
+		.append(" string) clustered by(").append(ServiceConstants.KHQ_CROSS_ID_PARTION)
+		.append(") into 50 buckets stored as ").append(this.Tab_Format);
 //		String sql ="CREATE TABLE IF NOT EXISTS "+tableName+" ("+
 //					columnName+" string )  PARTITIONED BY ("+ServiceConstants.KHQ_CROSS_ID_PARTION+" string) stored as " + this.Tab_Format;
 		LogUtil.debug(" ----------------------  BackHiveDaoImpl.createVerticalTable  sql=" + sql);
