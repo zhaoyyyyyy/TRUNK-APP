@@ -48,16 +48,18 @@ window.loc_onload = function() {
     	data : dataModel,
 		mounted: function () {
 		    this.$nextTick(function () {
+		    	var month = 1 - $.getSysConfig('LOC_CONFIG_APP_MAX_KEEP_MONTHS');
+		    	var day = 1 - $.getSysConfig('LOC_CONFIG_APP_MAX_KEEP_DAYS');
 		    	if(dataModel.labelMonth){
 		    		$("#labelMonth").click(function(){
 			    		WdatePicker({isShowClear:false,dateFmt:'yyyy-MM',
-			    			maxDate:dataModel.labelMonth,minDate:'#F{$dp.$DV(\''+dataModel.labelMonth+'\',{y:-1});}'});
+			    			maxDate:dataModel.labelMonth,minDate:'#F{$dp.$DV(\''+dataModel.labelMonth+'\',{M:'+month+'});}'});
 			    	})
 		    	}
 		    	if(dataModel.labelDay){
 			    	$("#labelDay").click(function(){
 			    		WdatePicker({isShowClear:false,dateFmt:'yyyy-MM-dd',
-			    			maxDate:dataModel.labelDay,minDate:'#F{$dp.$DV(\''+dataModel.labelDay+'\',{d:-2});}'});
+			    			maxDate:dataModel.labelDay,minDate:'#F{$dp.$DV(\''+dataModel.labelDay+'\',{d:'+day+'});}'});
 			    	})
 		    	}
 		    	

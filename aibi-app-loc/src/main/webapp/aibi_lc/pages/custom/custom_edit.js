@@ -351,10 +351,12 @@ var labelInfoModel = (function (model){
 	 			
 				$('#labelDay').attr('disabled', false);
 				$('#labelMonth').attr('disabled', false);
+				var month = 1 - $.getSysConfig('LOC_CONFIG_APP_MAX_KEEP_MONTHS');
+		    	var day = 1 - $.getSysConfig('LOC_CONFIG_APP_MAX_KEEP_DAYS');
 				$('#labelDay').attr('onclick', "WdatePicker({onpicked:labelInfoModel.monthOrDayDatePicked,readOnly:true, dateFmt:'yyyy-MM-dd',isShowClear:false,maxDate:'" + dataModel.labelDay 
-						+ "',minDate:'#F{$dp.$DV(\\'" + dataModel.labelDay + "\\',{d:-2});}'})");
+						+ "',minDate:'#F{$dp.$DV(\\'" + dataModel.labelDay + "\\',{d:"+day+"});}'})");
 				$('#labelMonth').attr('onclick', "WdatePicker({onpicked:labelInfoModel.monthOrDayDatePicked,readOnly:true,dateFmt:'yyyy-MM', isShowClear:false,maxDate:'" + dataModel.labelMonth 
-						+ "', minDate:'#F{$dp.$DV(\\'" + dataModel.labelMonth + "\\',{y:-1});}'})");
+						+ "', minDate:'#F{$dp.$DV(\\'" + dataModel.labelMonth + "\\',{M:"+month+"});}'})");
 				model.monthOrDayDatePicked();
 			}
 		}
@@ -501,9 +503,11 @@ var labelInfoModel = (function (model){
 	 */
 	model.changeLabelMonth = function(){
 		if(dataModel.labelMonth){
+			var month = 1 - $.getSysConfig('LOC_CONFIG_APP_MAX_KEEP_MONTHS');
+	    	
     		$("#labelMonth").click(function(){
 	    		WdatePicker({isShowClear:false,dateFmt:'yyyy-MM',
-	    			maxDate:dataModel.labelMonth,minDate:'#F{$dp.$DV(\''+dataModel.labelMonth+'\',{y:-1});}'});
+	    			maxDate:dataModel.labelMonth,minDate:'#F{$dp.$DV(\''+dataModel.labelMonth+'\',{M:'+month+'});}'});
 	    	})
     	}
 	}
@@ -513,8 +517,9 @@ var labelInfoModel = (function (model){
 	model.changeLabelDay = function(){
 		if(dataModel.labelDay){
     		$("#labelDay").click(function(){
+    			var day = 1 - $.getSysConfig('LOC_CONFIG_APP_MAX_KEEP_DAYS');
 	    		WdatePicker({isShowClear:false,dateFmt:'yyyy-MM-dd',
-	    			maxDate:dataModel.labelDay,minDate:'#F{$dp.$DV(\''+dataModel.labelDay+'\',{d:-2});}'});
+	    			maxDate:dataModel.labelDay,minDate:'#F{$dp.$DV(\''+dataModel.labelDay+'\',{d:'+day+'});}'});
 	    	})
 	    	
     	}
