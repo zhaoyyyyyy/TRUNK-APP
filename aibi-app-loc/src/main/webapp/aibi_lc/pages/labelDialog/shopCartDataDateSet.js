@@ -88,7 +88,7 @@ var dataDateModel = (function (model){
 			  },
 			  isShowMask : true,
 			  maskMassage : '正在校验规则中，请稍等...',
-			  onSuccess: function(returnObj){
+			  onSuccess: function(){
 				    //验证sql
 					var checkedModelListStr = dataModel.checkedModelList.join(',');
 					if(wd.curWin.calculateCenter.validateSql(labelMonthArg,labelDayArg,checkedModelListStr)){
@@ -111,7 +111,7 @@ var dataDateModel = (function (model){
 				  dataModel.dataPrivaliegeList = returnObj.data.dataPrivaliege[$.xzqh];
 				  if(dataModel.dataPrivaliegeList && dataModel.dataPrivaliegeList.length > 1){
 					  dataModel.isShowPrivaliegeDiv = true;
-				  }else if(dataModel.dataPrivaliegeList && dataModel.dataPrivaliegeList.length == 1){
+				  }else if(dataModel.dataPrivaliegeList && dataModel.dataPrivaliegeList.length === 1){
 					  dataModel.checkedModelList[0] = dataModel.dataPrivaliegeList[0].id;
 				  }
 			  }

@@ -10,19 +10,19 @@ var calculateCenter = (function (model){
 	model.getRuleClass = function(item){
 		var classStr = "" ;
 		if(item){
-			if(item.elementType ==1){//链接
+			if(item.elementType ===1){//链接
 				classStr += " ui-chaining";
-			}else if(item.elementType == 2 || item.elementType == 5){
+			}else if(item.elementType === 2 || item.elementType === 5){
 				classStr += " ui-conditionCT";//元素
-			}else if(item.elementType == 3){//括号
+			}else if(item.elementType === 3){//括号
 				classStr += " ui-bracket";
 			}else{
 				//
 			}
-			if(item.calcuElement == '('){
+			if(item.calcuElement === '('){
 				classStr += " left";
 			}
-			if(item.calcuElement == ')'){
+			if(item.calcuElement === ')'){
 				classStr += " right";
 			}
 			if(item.waitClose){
@@ -53,14 +53,14 @@ var calculateCenter = (function (model){
 		return valueStr ;
 	}
 	/**
-     * @description 标签添加缓存，购物车动画效果===true ,组装rule
+     * @description 标签添加缓存，购物车动画效果====true ,组装rule
      * @param  
      * @return  
      * ------------------------------------------------------------------
      */
 	model.addToShoppingCar = function(index,animatePrar){
     	var labelInfo = dataModel.labelInfoList[index];
-    	if(labelInfo.groupType == 0 ){
+    	if(labelInfo.groupType === 0 ){
     		model.addShopCart(labelInfo.labelId,1,'',0,animatePrar);//标签
     	}else{
     		model.addShopCart(labelInfo.labelId,2,'',0,animatePrar);//客户群
@@ -99,11 +99,11 @@ var calculateCenter = (function (model){
     	var flag = false;
     	var msg = "";
     	var url = "";
-		if(typeId == 1) {
+		if(typeId === 1) {
 			//校验标签有效性
 			url = $.ctx + "/api/shopCart/findLabelValidate";
 		}
-		if(typeId == 2) {
+		if(typeId === 2) {
 			url = $.ctx + "/api/shopCart/findCusotmValidate";
 		}
 		//校验标签有效性
@@ -111,7 +111,7 @@ var calculateCenter = (function (model){
 			  url: url,
 			  async	: false,//同步
 			  postData:{labelId :  $.trim(id)},
-			  onSuccess: function(returnObj){
+			  onSuccess: function(){
 			  	 model.addAnimate(animatePrar)//购物车动画
 			  },
 			  onFailure : function(returnObj){
@@ -132,7 +132,7 @@ var calculateCenter = (function (model){
 			$.commAjax({
 				  url: $.ctx + "/api/shopCart/saveShopSession",
 				  postData:para,
-				  onSuccess: function(returnObj){
+				  onSuccess: function(){
 					  model.refreshShopCart();
 				  },
 				  onFailure : function(returnObj){
@@ -149,7 +149,6 @@ var calculateCenter = (function (model){
      * ------------------------------------------------------------------
      */
     model.refreshShopCart = function(){
-    	var _this = this;
     	$.commAjax({
 				  url: $.ctx + "/api/shopCart/findShopCart",
 				  postData:{
@@ -194,11 +193,11 @@ var calculateCenter = (function (model){
 		$.commAjax({
 			  url: $.ctx + "/api/shopCart/updateShopSession",
 			  postData:{labelRuleStr : para},
-			  onSuccess: function(returnObj){
+			  onSuccess: function(){
 				  model.refreshShopCart();
 			  },
 			  onFailure : function(returnObj){
-				  $.alert("添加标签失败");
+				  $.alert(returnObj.msg);
 			  }
 		});
 	};
@@ -214,7 +213,7 @@ var calculateCenter = (function (model){
     	var rule = dataModel.ruleList[index];
     	var labelType = rule.labelTypeId;
     	var name = rule.customOrLabelName;
-		if(labelType == "4"){ // 指标型，存具体的指标值
+		if(labelType === "4"){ // 指标型，存具体的指标值
 			//样例弹出页面
 			var wd = $.window(name + "-条件设置", $.ctx
 					+ '/aibi_lc/pages/labelDialog/numberValueSet.html?index='+index, 600, 500);
@@ -222,31 +221,31 @@ var calculateCenter = (function (model){
 	    		model.refreshShopCart();
 	    	}
 			
-		}else if(labelType == "5" || labelType == "9"){  //枚举标签 条件选择
+		}else if(labelType === "5" || labelType === "9"){  //枚举标签 条件选择
 			//样例弹出页面
 			var wd = $.window(name + "-条件设置", $.ctx + '/aibi_lc/pages/labelDialog/enumItemSet.html?index='+index, 800, 500);
 	    	wd.reload = function() {
 	    		model.refreshShopCart();
 	    	}
-		}else if(labelType == "11"){  //条件选择
+		}else if(labelType === "11"){  //条件选择
 			
-        }else if(labelType == "6"){//日期类型标签
+        }else if(labelType === "6"){//日期类型标签
         	var wd = $.window(name + "-条件设置", $.ctx + '/aibi_lc/pages/labelDialog/dateValueSet.html?index='+index, 550, 420);
 	    	wd.reload = function() {
 	    		model.refreshShopCart();
 	    	}	
-		}else if(labelType == "7"){//文本类型
+		}else if(labelType === "7"){//文本类型
 			var wd = $.window(name + "-条件设置", $.ctx + '/aibi_lc/pages/labelDialog/textValueSet.html?index='+index, 600, 500);
 	    	wd.reload = function() {
 	    		model.refreshShopCart();
 	    	}
-		}else if(labelType == "8"){
+		}else if(labelType === "8"){
 			var wd = $.window(name + "-条件设置", $.ctx + '/aibi_lc/pages/labelDialog/vertValueSet.html?index='+index, 900, 500);
 	    	wd.reload = function() {
 	    		model.refreshShopCart();
 	    	}
 		}else {
-			//showAlert("计算元素类型错误！", "failed");
+			$.alert("计算元素类型错误！");
 		}
 	};
 	
@@ -276,8 +275,8 @@ var calculateCenter = (function (model){
 	model.againstLabel = function(t){
 		var index = $(t).parent().parent().attr("index");
 		var rule = dataModel.ruleList[index];
-		if(rule && rule.elementType == 2 && rule.labelTypeId != 8){
-			if(rule.labelFlag == 1){
+		if(rule && rule.elementType === 2 && rule.labelTypeId != 8){
+			if(rule.labelFlag === 1){
 				dataModel.ruleList[index].labelFlag = 0 ;
 			}else{
 				dataModel.ruleList[index].labelFlag = 1 ;
@@ -299,7 +298,7 @@ var calculateCenter = (function (model){
 		var index = $(elem).parent().parent().attr("index");
 		var rule = dataModel.ruleList[index];
 		$(document).click(function(){$(".ui-conditionBox").hide()});
-		if($(".ui-conditionBox").attr("index") == '' || $(".ui-conditionBox").attr("index") !=index || $(".ui-conditionBox").is(':hidden')){
+		if($(".ui-conditionBox").attr("index") === '' || $(".ui-conditionBox").attr("index") !=index || $(".ui-conditionBox").is(':hidden')){
 			if(rule){
 				$.commAjax({
 					url : $.ctx + "/api/label/labelInfo/get",
@@ -328,7 +327,7 @@ var calculateCenter = (function (model){
 		index = model.deleteCurlyBraces(index);
 		//删除关联的连接符
 		index = model.deleteConnectFlags(index);
-		if(dataModel.ruleList.length == 1 && this.isEditCustom()){
+		if(dataModel.ruleList.length === 1 && this.isEditCustom()){
 			$.confirm("确定取消修改客户群？",function(){
 				var ssg = window.sessionStorage;
 				delete ssg.customId;
@@ -346,12 +345,12 @@ var calculateCenter = (function (model){
 	 */
 	model.deleteConnectFlags = function(index){
 		var pre = dataModel.ruleList[index-1];
-		if(pre && pre.elementType == 1){
+		if(pre && pre.elementType === 1){
 			dataModel.ruleList.splice(index-1,1);
 			index = index -1;
 		}else{
 			var nex = dataModel.ruleList[index+1];
-			if(nex && nex.elementType == 1){
+			if(nex && nex.elementType === 1){
 				dataModel.ruleList.splice(index+1,1);
 			}
 		}
@@ -364,12 +363,12 @@ var calculateCenter = (function (model){
 	 */
 	model.deleteConnectFlag = function(start){
 		var rule = dataModel.ruleList[start-1];
-		if(rule && rule.elementType ==1){
+		if(rule && rule.elementType ===1){
 			dataModel.ruleList.splice(start-1,1);
 			start = start-1;
 		}else{
 			var nextRule = dataModel.ruleList[start+2]
-			if(nextRule && nextRule.elementType ==1){
+			if(nextRule && nextRule.elementType ===1){
 				dataModel.ruleList.splice(start+2,1);
 			}
 		}
@@ -381,7 +380,7 @@ var calculateCenter = (function (model){
 	model.deleteCurlyBraces = function(index){
 		var pre = dataModel.ruleList[index-1];
 		var nex = dataModel.ruleList[index+1];
-		if(pre && nex && pre.elementType == 3 && nex.elementType == 3){
+		if(pre && nex && pre.elementType === 3 && nex.elementType === 3){
 			dataModel.ruleList.splice(index+1,1);
 			dataModel.ruleList.splice(index-1,1);
 			index = index-1;
@@ -399,7 +398,7 @@ var calculateCenter = (function (model){
 		$(t).addClass("onDelPar");
 		var posX=$(t).offset().left+9;
 		var posY=$(t).offset().top+7;
-		if($("body > #delPar").length==0){
+		if($("body > #delPar").length===0){
 			var _ul=$('<ul class="ui-bracket-list" id="delPar"><li><a href="javascript:void(0)">删除括号</a></li><li><a href="javascript:void(0)">删除括号与内容</a></li></ul>');
 			_ul.appendTo("body");
 			$(document).click(function(){$("#delPar").hide()});
@@ -407,7 +406,9 @@ var calculateCenter = (function (model){
 			$("#delPar li").eq(1).bind("click",model.delThisParsAndCT);
 		}
 		var tar=$("#delPar"),winW=$(window).width(),tarW=tar.width();
-		if(posX+tarW>winW) posX=winW-tarW-6;
+		if(posX+tarW>winW){
+			posX=winW-tarW-6;
+		}			
 		tar.css({"left":posX+"px","top":posY+"px"}).slideDown("fast");
 	}
 	/**
@@ -452,7 +453,7 @@ var calculateCenter = (function (model){
 	model.delEmptyParsAndCF = function(start){
 		var pre = dataModel.ruleList[start];
 		var nex = dataModel.ruleList[start+1];
-		if(pre && nex && pre.elementType == 3 && nex.elementType == 3){
+		if(pre && nex && pre.elementType === 3 && nex.elementType === 3){
 			dataModel.ruleList.splice(start+1,1);
 			dataModel.ruleList.splice(start,1);
 			start = start-1;
@@ -474,7 +475,7 @@ var calculateCenter = (function (model){
 			delete ssg.customId;
 			$.commAjax({
 				url : $.ctx + "/api/shopCart/delShopSession",
-				onSuccess:function(returnObj){
+				onSuccess:function(){
 					model.refreshShopCart();
 				},
 				onFailure:function(returnObj){
@@ -489,7 +490,7 @@ var calculateCenter = (function (model){
 	model.validateEnumCount = function(){
 		var resultFlag = true;
 		for(var i=0 ; i<dataModel.ruleList.length;i++){
-			if(dataModel.ruleList[i].elementType == 2 && dataModel.ruleList[i].labelTypeId == 5){
+			if(dataModel.ruleList[i].elementType === 2 && dataModel.ruleList[i].labelTypeId === 5){
 				var str = dataModel.ruleList[i].attrVal;
 				if(str!=null&&str!=""&&str.split(",").length>dataModel._EnumCount){
 					resultFlag = false;
@@ -512,7 +513,7 @@ var calculateCenter = (function (model){
 			$.alert("没有规则无法计算！");
 			return false;
 		}
-		if(model.validateEnumCount() == false){
+		if(model.validateEnumCount() === false){
 			$.alert("配置的条件中值超过"+dataModel._EnumCount+"个，无法计算，可以保存客户群后查看客户数！");
 			return false;
 		}
@@ -543,14 +544,14 @@ var calculateCenter = (function (model){
 	model.labelsValite	= function() {
 		var resultFlag = true;
 		for(var i=0 ; i<dataModel.ruleList.length;i++){
-			if(dataModel.ruleList[i].elementType == 2 && dataModel.ruleList[i].labelTypeId != 13){
+			if(dataModel.ruleList[i].elementType === 2 && dataModel.ruleList[i].labelTypeId != 13){
 				$.commAjax({
 					  url: $.ctx + "/api/shopCart/findLabelValidate",
 					  postData:{labelId : dataModel.ruleList[i].calcuElement},
 					  async	: false,//同步
-					  onSuccess: function(returnObj){
+					  onSuccess: function(){
 					  },
-					  onFailure:function(returnObj){
+					  onFailure:function(){
 						  resultFlag = false;
 						  $.alert("购物车中存在无效标签，请删除！");
 					  }
@@ -577,7 +578,7 @@ var calculateCenter = (function (model){
 				  "dayLabelDate":labelDay,
 				  "dataPrivaliege" : dataPrivaliege
 			  },
-			  onSuccess: function(returnObj){
+			  onSuccess: function(){
 				    //删除失效的标签
 					flag = true;
 			  },
@@ -690,7 +691,7 @@ var calculateCenter = (function (model){
 				  onSuccess: function(returnObj){
 					  	var status = returnObj.status;
 					  	var result = returnObj.data;
-						if (status == '200'){
+						if (status === '200'){
 							dataModel.labelMonth = result.monthDate;
 							dataModel.labelDay = result.dayDate;
 						}else{
@@ -757,28 +758,28 @@ var calculateCenter = (function (model){
 	 */
 	model.formatCenterRule = function(itemRule,isTip){
 		var value = "";
-		if(itemRule.labelTypeId == 1){
-			if(itemRule.labelFlag == 1){
+		if(itemRule.labelTypeId === 1){
+			if(itemRule.labelFlag === 1){
 				value += "是";
 			}
-			if(itemRule.labelFlag == 0){
+			if(itemRule.labelFlag === 0){
 				value += "否";
 			}
 		}
-		if(itemRule.labelTypeId == 4 && itemRule.queryWay == 1){
+		if(itemRule.labelTypeId === 4 && itemRule.queryWay === 1){
 			if(itemRule.contiueMinVal){
-				if(itemRule.leftZoneSign == '>='){
+				if(itemRule.leftZoneSign === '>='){
 					value += "大于等于"+itemRule.contiueMinVal ;
 				}
-				if(itemRule.leftZoneSign == '>'){
+				if(itemRule.leftZoneSign === '>'){
 					value += "大于"+itemRule.contiueMinVal ;
 				}
 			}
 			if(itemRule.contiueMaxVal){
-				if(itemRule.rightZoneSign == '<='){
+				if(itemRule.rightZoneSign === '<='){
 					value += "小于等于"+itemRule.contiueMaxVal ;
 				}
-				if(itemRule.rightZoneSign == '<'){
+				if(itemRule.rightZoneSign === '<'){
 					value += "小于"+itemRule.contiueMaxVal ;
 				}
 			}
@@ -786,54 +787,46 @@ var calculateCenter = (function (model){
 				value += itemRule.unit ;
 			}
 		}
-		if(itemRule.labelTypeId == 4 && itemRule.queryWay == 2){
-			if(itemRule.exactValue){
-				value += itemRule.exactValue;
-				if(itemRule.unit){
-					value += itemRule.unit ;
-				}
+		if(itemRule.labelTypeId === 4 && itemRule.queryWay === 2 && itemRule.exactValue){
+			value += itemRule.exactValue;
+			if(itemRule.unit){
+				value += itemRule.unit ;
 			}
 		}
-		if(itemRule.labelTypeId == 5 && itemRule.attrVal){
+		if(itemRule.labelTypeId === 5 && itemRule.attrVal){
 			value += itemRule.attrName ;
 		}
-		if(itemRule.labelTypeId == 6 && itemRule.queryWay == 1){
+		if(itemRule.labelTypeId === 6 && itemRule.queryWay === 1){
 			if(itemRule.startTime){
-				if(itemRule.leftZoneSign == '>='){
+				if(itemRule.leftZoneSign === '>='){
 					value += "大于等于"+itemRule.startTime ;
 				}
-				if(itemRule.leftZoneSign == '>'){
+				if(itemRule.leftZoneSign === '>'){
 					value += "大于"+itemRule.startTime ;
 				}
 			}
 			if(itemRule.endTime){
-				if(itemRule.rightZoneSign == '<='){
+				if(itemRule.rightZoneSign === '<='){
 					value += "小于等于"+itemRule.endTime ;
 				}
-				if(itemRule.rightZoneSign == '<'){
+				if(itemRule.rightZoneSign === '<'){
 					value += "小于"+itemRule.endTime ;
 				}
 			}
-			if(itemRule.isNeedOffset == 1){
+			if(itemRule.isNeedOffset === 1){
 				value += "（动态偏移更新）" ;
 			}
 		}
-		if(itemRule.labelTypeId == 6 && itemRule.queryWay == 2){
-			if(itemRule.exactValue){
-				value += calculateCenter.formatDateExactValue(itemRule);
-			}
+		if(itemRule.labelTypeId === 6 && itemRule.queryWay === 2 && itemRule.exactValue){
+			value += calculateCenter.formatDateExactValue(itemRule);
 		}
-		if(itemRule.labelTypeId == 7 && itemRule.queryWay == 1){
-			if(itemRule.darkValue){
-				value += itemRule.darkValue ;
-			}
+		if(itemRule.labelTypeId === 7 && itemRule.queryWay === 1 && itemRule.darkValue){
+			value += itemRule.darkValue ;
 		}
-		if(itemRule.labelTypeId == 7 && itemRule.queryWay == 2){
-			if(itemRule.exactValue){
-				value += itemRule.exactValue ;
-			}
+		if(itemRule.labelTypeId === 7 && itemRule.queryWay === 2 && itemRule.exactValue){
+			value += itemRule.exactValue ;
 		}
-		if(itemRule.labelTypeId == 8){
+		if(itemRule.labelTypeId === 8){
 			value += model.getVertRule(itemRule.childLabelRuleList);
 		}
 		if(isTip && value && value.length>80){
