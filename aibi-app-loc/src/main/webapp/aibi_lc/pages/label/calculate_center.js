@@ -213,7 +213,7 @@ var calculateCenter = (function (model){
     	var rule = dataModel.ruleList[index];
     	var labelType = rule.labelTypeId;
     	var name = rule.customOrLabelName;
-		if(labelType === "4"){ // 指标型，存具体的指标值
+		if(labelType === 4){ // 指标型，存具体的指标值
 			//样例弹出页面
 			var wd = $.window(name + "-条件设置", $.ctx
 					+ '/aibi_lc/pages/labelDialog/numberValueSet.html?index='+index, 600, 500);
@@ -221,25 +221,25 @@ var calculateCenter = (function (model){
 	    		model.refreshShopCart();
 	    	}
 			
-		}else if(labelType === "5" || labelType === "9"){  //枚举标签 条件选择
+		}else if(labelType === 5 || labelType === 9){  //枚举标签 条件选择
 			//样例弹出页面
 			var wd = $.window(name + "-条件设置", $.ctx + '/aibi_lc/pages/labelDialog/enumItemSet.html?index='+index, 800, 500);
 	    	wd.reload = function() {
 	    		model.refreshShopCart();
 	    	}
-		}else if(labelType === "11"){  //条件选择
+		}else if(labelType === 11){  //条件选择
 			
-        }else if(labelType === "6"){//日期类型标签
+        }else if(labelType === 6){//日期类型标签
         	var wd = $.window(name + "-条件设置", $.ctx + '/aibi_lc/pages/labelDialog/dateValueSet.html?index='+index, 550, 420);
 	    	wd.reload = function() {
 	    		model.refreshShopCart();
 	    	}	
-		}else if(labelType === "7"){//文本类型
+		}else if(labelType === 7){//文本类型
 			var wd = $.window(name + "-条件设置", $.ctx + '/aibi_lc/pages/labelDialog/textValueSet.html?index='+index, 600, 500);
 	    	wd.reload = function() {
 	    		model.refreshShopCart();
 	    	}
-		}else if(labelType === "8"){
+		}else if(labelType === 8){
 			var wd = $.window(name + "-条件设置", $.ctx + '/aibi_lc/pages/labelDialog/vertValueSet.html?index='+index, 900, 500);
 	    	wd.reload = function() {
 	    		model.refreshShopCart();
@@ -766,7 +766,7 @@ var calculateCenter = (function (model){
 				value += "否";
 			}
 		}
-		if(itemRule.labelTypeId === 4 && itemRule.queryWay === 1){
+		if(itemRule.labelTypeId === 4 && itemRule.queryWay === "1"){
 			if(itemRule.contiueMinVal){
 				if(itemRule.leftZoneSign === '>='){
 					value += "大于等于"+itemRule.contiueMinVal ;
@@ -787,7 +787,7 @@ var calculateCenter = (function (model){
 				value += itemRule.unit ;
 			}
 		}
-		if(itemRule.labelTypeId === 4 && itemRule.queryWay === 2 && itemRule.exactValue){
+		if(itemRule.labelTypeId === 4 && itemRule.queryWay === "2" && itemRule.exactValue){
 			value += itemRule.exactValue;
 			if(itemRule.unit){
 				value += itemRule.unit ;
@@ -796,7 +796,7 @@ var calculateCenter = (function (model){
 		if(itemRule.labelTypeId === 5 && itemRule.attrVal){
 			value += itemRule.attrName ;
 		}
-		if(itemRule.labelTypeId === 6 && itemRule.queryWay === 1){
+		if(itemRule.labelTypeId === 6 && itemRule.queryWay === "1"){
 			if(itemRule.startTime){
 				if(itemRule.leftZoneSign === '>='){
 					value += "大于等于"+itemRule.startTime ;
@@ -817,13 +817,13 @@ var calculateCenter = (function (model){
 				value += "（动态偏移更新）" ;
 			}
 		}
-		if(itemRule.labelTypeId === 6 && itemRule.queryWay === 2 && itemRule.exactValue){
+		if(itemRule.labelTypeId === 6 && itemRule.queryWay === "2" && itemRule.exactValue){
 			value += calculateCenter.formatDateExactValue(itemRule);
 		}
-		if(itemRule.labelTypeId === 7 && itemRule.queryWay === 1 && itemRule.darkValue){
+		if(itemRule.labelTypeId === 7 && itemRule.queryWay === "1" && itemRule.darkValue){
 			value += itemRule.darkValue ;
 		}
-		if(itemRule.labelTypeId === 7 && itemRule.queryWay === 2 && itemRule.exactValue){
+		if(itemRule.labelTypeId === 7 && itemRule.queryWay === "2" && itemRule.exactValue){
 			value += itemRule.exactValue ;
 		}
 		if(itemRule.labelTypeId === 8){
