@@ -56,7 +56,7 @@ public class SftpUtil {
     private static final String ENCODE_UTF_8 = "UTF-8";     //UTF-8;
     private static final String ENCODE_ISO_8859_1 = "iso-8859-1";     //iso-8859-1;
     private static final int HUNDRED = 100;    //一百
-    private static final int THOUSAND = 1000;    //千进制
+    private static final long THOUSAND = 1000L;    //千进制
     private static final int MYRIAD = 10000;     //万进制
     private static final int WAIT_INCREMENT = 25;   //等待时间的增量;
     private static final int WAIT_MAX_TIME = 60;    //等待超时的最大值;
@@ -186,13 +186,13 @@ public class SftpUtil {
             String userName = sftpUser.getUserName();
             String password = sftpUser.getPassword();
             if (StringUtils.isEmpty(userName) || StringUtils.isEmpty(address) || StringUtils.isEmpty(password)) {
-                throw new SftpException(new Long(Thread.currentThread().getId()).intValue(),"address or user or password is null");
+                throw new SftpException((int) Thread.currentThread().getId(),"address or user or password is null");
             }
             //连接ftp
             String port = sftpUser.getPort();
             cSftp = sftpUtil.getconnect(address, userName, password, StringUtils.isEmpty(port) ? SFTP_DEFAULT_PORT : Integer.valueOf(port));
             if (cSftp == null) {
-                throw new SftpException(new Long(Thread.currentThread().getId()).intValue(),
+                throw new SftpException((int) Thread.currentThread().getId(),
                     "sftp login fail:[userName=" + userName + "] or password or port[port="
                     + port + "] wrong,please check it!");
             } else {
@@ -261,14 +261,14 @@ public class SftpUtil {
             String userName = sftpUser.getUserName();
             String password = sftpUser.getPassword();
             if (StringUtils.isEmpty(address) || StringUtils.isEmpty(userName) || StringUtils.isEmpty(password)) {
-                throw new SftpException(new Long(Thread.currentThread().getId()).intValue(),"address or user or password is null");
+                throw new SftpException((int) Thread.currentThread().getId(),"address or user or password is null");
             }
             //连接ftp
             String port = sftpUser.getPort();
             cSftp = sftpUtil.getconnect(address, userName, password, StringUtils.isEmpty(port) ? SFTP_DEFAULT_PORT : Integer.valueOf(port));
             if (cSftp == null) {
                 flag = false;
-                throw new SftpException(new Long(Thread.currentThread().getId()).intValue(),
+                throw new SftpException((int) Thread.currentThread().getId(),
                     "sftp login fail:[userName=" + userName + "] or password or port[port="
                     + port + "] wrong,please check it!");
             } else {
@@ -278,7 +278,7 @@ public class SftpUtil {
             String remotefile = remotepath;
             File locfile = new File(localpath);
             if (locfile.exists()) {
-                String threadName = "ThreadName" + String.valueOf(new Double(Math.floor(Math.random() * MYRIAD)).intValue());
+                String threadName = "ThreadName" + String.valueOf((int)Math.floor(Math.random() * MYRIAD));
                 if (locfile.isFile()) {
                     //如果远端是目录，则默认远端的文件名与本地相同
                     if (remotefile.endsWith("/")) {
@@ -292,17 +292,15 @@ public class SftpUtil {
                     remotefile = new String(remotefile.getBytes(ENCODE_UTF_8), ENCODE_ISO_8859_1);
                     flag = sftpUtil.uploadAll(cSftp, localpath, remotefile + UN_UPLOADED, isHasMonitor,threadName);
                 }
-                if (isHasMonitor) {
-                    //等待文件传输完成
-                    if (SftpUtil.isCompletedMap.containsKey(threadName)) {
-                        int waitNO= 1;
-                        while (!Boolean.valueOf(SftpUtil.isCompletedMap.get(threadName))) {
-                            Thread.sleep((waitNO+WAIT_INCREMENT)*THOUSAND);
-                            ++ waitNO;
-                            if (waitNO > WAIT_MAX_TIME) break; //超时失败
-                        }
-                        flag = Boolean.valueOf(SftpUtil.isCompletedMap.get(threadName));
+                //等待文件传输完成
+                if (isHasMonitor && SftpUtil.isCompletedMap.containsKey(threadName)) {
+                    int waitNO= 1;
+                    while (!Boolean.valueOf(SftpUtil.isCompletedMap.get(threadName))) {
+                        Thread.sleep((waitNO+WAIT_INCREMENT)*THOUSAND);
+                        ++ waitNO;
+                        if (waitNO > WAIT_MAX_TIME) break; //超时失败
                     }
+                    flag = Boolean.valueOf(SftpUtil.isCompletedMap.get(threadName));
                 }
                 
                 LogUtil.debug("sftp rename [" + remotefile + UN_UPLOADED + "] to [" + remotefile + "]");
@@ -310,7 +308,7 @@ public class SftpUtil {
                 flag = true;
             } else {
                 flag = false;
-                throw new SftpException(new Long(Thread.currentThread().getId()).intValue(),"localpath[" + localpath + "] not exist!");
+                throw new SftpException((int) Thread.currentThread().getId(),"localpath[" + localpath + "] not exist!");
             }
         } catch (SftpException | UnsupportedEncodingException | InterruptedException e) {
             flag = false;
@@ -336,11 +334,11 @@ public class SftpUtil {
      */
     private boolean upload(ChannelSftp client, String local, String remote, boolean isHasMonitor,String threadName) throws SftpException {
         LogUtil.debug("SFTP from:" + local + " to : " + remote);
-        // 设置PassiveMode传输
+        /*// 设置PassiveMode传输
 //        client.enterLocalPassiveMode();
         // 设置以二进制流的方式传输
 //        client.setFileType(FTP.BINARY_FILE_TYPE);
-        
+        */
         // 对远程目录的处理
         String remoteFileName = remote;
         if (remote.contains("/")) {
@@ -348,7 +346,7 @@ public class SftpUtil {
             // 创建服务器远程目录结构，创建失败直接返回
             if (!createDirecroty(client, remote)) {
                 LogUtil.warn("Create direcroty of remote(" + remote + ") fail!");
-                throw new SftpException(new Long(Thread.currentThread().getId()).intValue(),"Create direcroty of remote(" + remote
+                throw new SftpException((int) Thread.currentThread().getId(),"Create direcroty of remote(" + remote
                         + ") fail!please check FTP user's permission!");
             }
         }
@@ -412,7 +410,7 @@ public class SftpUtil {
                         upload(client, local, remote, isHasMonitor, threadName);
                         client.cd("/");
                     } catch (IOException e) {
-                        throw new SftpException(new Long(Thread.currentThread().getId()).intValue(),"创建文件或目录失败！",e);
+                        throw new SftpException((int) Thread.currentThread().getId(),"创建文件或目录失败！",e);
                     }
                 }
             }
@@ -451,7 +449,6 @@ public class SftpUtil {
                 //如果存在，则切换到此目录
 				try {
 					client.cd(directory);
-//					client.cd(subDirectory);
 				} catch (SftpException se){
 					//如果不存在，则创建此目录并切换到此目录
 				    if(ChannelSftp.SSH_FX_NO_SUCH_FILE == se.id){
