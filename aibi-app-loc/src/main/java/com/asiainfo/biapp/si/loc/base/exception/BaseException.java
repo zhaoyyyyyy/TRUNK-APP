@@ -48,7 +48,7 @@ public class BaseException extends Exception{
 		return code;
 	}
 	
-	  
+	@Override
 	public String getMessage(){
 		return msg;
 	}

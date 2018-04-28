@@ -76,6 +76,7 @@ import springfox.documentation.annotations.ApiIgnore;
 public class LabelPushCycleController extends BaseController<LabelPushCycle>{
 
     private static final String SYS_NAME = "coc默认的ftp服务器";
+    private static final int BINARY = 2;
     
     @Autowired
     private ILabelPushCycleService iLabelPushCycleService;
@@ -289,10 +290,9 @@ public class LabelPushCycleController extends BaseController<LabelPushCycle>{
         sysInfo.setShowInPage(ServiceConstants.SysInfo.SHOW_IN_PAGE_NO);
         //本地缓冲目录
         String localPathTmp = cacheProxy.getSYSConfigInfoByKey("LOC_CONFIG_SYS_TEMP_PATH");  
-        if (StringUtil.isNotBlank(localPathTmp)) {   //以缓冲目录为准
-            if (localPathTmp.endsWith(File.separator)) {
-                localPathTmp = localPathTmp.substring(0, localPathTmp.length()-2);
-            }
+        //以缓冲目录为准
+        if (StringUtil.isNotBlank(localPathTmp) && localPathTmp.endsWith(File.separator)) {
+            localPathTmp = localPathTmp.substring(0, localPathTmp.length()-BINARY);
         }
         if (StringUtil.isBlank(sysInfo.getSysId())) {
             iSysInfoService.save(sysInfo);
