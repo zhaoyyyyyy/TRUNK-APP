@@ -96,8 +96,6 @@ var calculateCenter = (function (model){
 	 * @isEditCustomFlag 是否是修改操作，1、修改操作，0、保存操作
 	 */
     model.addShopCart = function(id,typeId,isEditCustomFlag,defaultOp,animatePrar){
-    	var flag = false;
-    	var msg = "";
     	var url = "";
 		if(typeId === 1) {
 			//校验标签有效性
@@ -109,37 +107,41 @@ var calculateCenter = (function (model){
 		//校验标签有效性
 		$.commAjax({
 			  url: url,
-			  async	: false,//同步
 			  postData:{labelId :  $.trim(id)},
 			  onSuccess: function(){
 			  	 model.addAnimate(animatePrar)//购物车动画
+			  	model.addShopCartSubmit(id,typeId,isEditCustomFlag,defaultOp);
 			  },
 			  onFailure : function(returnObj){
-				  flag = true; 
-				  msg = returnObj.msg ;
+				  $.alert(returnObj.msg);
 			  }
 		});
-		if(flag){
-			$.alert(msg);
-			return;
-		}else{
-			var para={
-					"calculationsId"	: $.trim(id),
-					"typeId"			: typeId,
-					"isEditCustomFlag"	: isEditCustomFlag,
-					"defaultOp"        : defaultOp
-			};
-			$.commAjax({
-				  url: $.ctx + "/api/shopCart/saveShopSession",
-				  postData:para,
-				  onSuccess: function(){
-					  model.refreshShopCart();
-				  },
-				  onFailure : function(returnObj){
-					  $.alert(returnObj.msg);
-				  }
-			});
-		}
+		
+    };
+    /**
+	 * 加入购物车提交
+	 * @id 标签、用户群或者模板的ID
+	 * @typeId 类型：1、标签，2、用户群，3、模板
+	 * @defaultOp 操作类型:and,or,- ;没有值为为空字符串，为空时后台默认是and
+	 * @isEditCustomFlag 是否是修改操作，1、修改操作，0、保存操作
+	 */
+    model.addShopCartSubmit = function(id,typeId,isEditCustomFlag,defaultOp){
+		var para={
+				"calculationsId"	: $.trim(id),
+				"typeId"			: typeId,
+				"isEditCustomFlag"	: isEditCustomFlag,
+				"defaultOp"        : defaultOp
+		};
+		$.commAjax({
+			  url: $.ctx + "/api/shopCart/saveShopSession",
+			  postData:para,
+			  onSuccess: function(){
+				  model.refreshShopCart();
+			  },
+			  onFailure : function(returnObj){
+				  $.alert(returnObj.msg);
+			  }
+		});
 		
     };
     /**
