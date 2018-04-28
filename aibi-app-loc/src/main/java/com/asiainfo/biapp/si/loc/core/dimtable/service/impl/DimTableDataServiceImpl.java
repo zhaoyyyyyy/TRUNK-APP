@@ -68,7 +68,8 @@ public class DimTableDataServiceImpl extends BaseServiceImpl<DimTableData, DimTa
     //本类常量
     private static final String SQL_WHERE_L = "where";
     private static final String SQL_WHERE_U = "WHERE";
-    private static final int PAGE_SIZE = 10000;
+    private static final double PAGE_SIZE = 10000;
+    private static final long THOUSAND = 1000L;    //千进制
     
     @Override
     protected BaseDao<DimTableData, DimTableDataId> getBaseDao() {
@@ -100,10 +101,6 @@ public class DimTableDataServiceImpl extends BaseServiceImpl<DimTableData, DimTa
         String sql = null;
         int num = 0;
         int forNum = 1; //读取次数
-        List<Map<String, String>> datas = null;
-        DimTableData entity = null;
-        DimTableDataId id = null;
-        DimTableData dimTableData = null;
         if (null != tableNames && tableNames.length > 0) {  //指定同步表
             for (String tableName : tableNames) {
                 //1.获取DimTableInfo数据
@@ -127,9 +124,9 @@ public class DimTableDataServiceImpl extends BaseServiceImpl<DimTableData, DimTa
                             continue;
                         }
                         if (num > PAGE_SIZE) {
-                            forNum = Integer.parseInt(String.valueOf(Math.ceil(num / PAGE_SIZE)));
+                            forNum = (int) Math.ceil(num / PAGE_SIZE);
                         }
-                        this.dimTableInfo2Data(dimTableInfo, schema, sql, forNum, datas, entity, id, dimTableData);
+                        this.dimTableInfo2Data(dimTableInfo, sql, forNum);
                     }
                 } else {
                     LogUtil.info("维表("+tableName+")没有注册或没有数据。");
@@ -154,14 +151,14 @@ public class DimTableDataServiceImpl extends BaseServiceImpl<DimTableData, DimTa
                         continue;
                     }
                     if (num > PAGE_SIZE) {
-                        forNum = Integer.parseInt(String.valueOf(Math.ceil(num / PAGE_SIZE)));
+                        forNum = (int) Math.ceil(num / PAGE_SIZE);
                     }
-                    this.dimTableInfo2Data(dimTableInfo, schema, sql, forNum, datas, entity, id, dimTableData);
+                    this.dimTableInfo2Data(dimTableInfo, sql, forNum);
                 }
             }
         }
         
-        LogUtil.info(this.getClass().getSimpleName()+".dimTableInfo2Data() end.cost:"+((System.currentTimeMillis()-s)/1000L)+"s.");
+        LogUtil.info(this.getClass().getSimpleName()+".dimTableInfo2Data() end.cost:"+((System.currentTimeMillis()-s)/THOUSAND)+"s.");
     }
     
     /**
@@ -188,19 +185,21 @@ public class DimTableDataServiceImpl extends BaseServiceImpl<DimTableData, DimTa
         
         return sql.toString(); 
     }
-    private void dimTableInfo2Data(DimTableInfo dimTableInfo, String schema, String sql, int forNum,
-        List<Map<String, String>> datas,DimTableData entity,DimTableDataId id,DimTableData dimTableData) throws BaseException {
-
+    private void dimTableInfo2Data(DimTableInfo dimTableInfo, String sql, int forNum) throws BaseException {
         //循环读取，防止后台跑不动
+        List<Map<String, String>> datas = null;
         for (int i = 0; i < forNum; i++) {
             try {
-                datas = backServiceImpl.queryForPage(sql.toString(), i+1, PAGE_SIZE);
+                datas = backServiceImpl.queryForPage(sql, i+1, (int)PAGE_SIZE);
             } catch (SqlRunException e) {
                 //本维表的数据有问题，跳过
                 LogUtil.warn("查询维表("+dimTableInfo.getDimTableName()+")数据出错！");
                 continue;
             }
             if (null != datas && !datas.isEmpty()) {
+                DimTableDataId id = null;
+                DimTableData entity = null;
+                DimTableData dimTableData = null;
                 for (Map<String, String> map : datas) {
                     //入库
                     id = new DimTableDataId(dimTableInfo.getDimTableName(), map.get(dimTableInfo.getDimCodeCol()));
