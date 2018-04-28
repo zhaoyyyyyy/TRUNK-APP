@@ -379,25 +379,7 @@ var showRulesModel = (function (model){
 						}
 						
 					}else if(rule.labelTypeId == 7){
-						if(1 == rule.queryWay){
-							if(rule.darkValue){
-								attrValStr += "[";
-								attrValStr += rule.columnCnName;
-								attrValStr += "：";
-								attrValStr += rule.darkValue;
-								attrValStr += "]";
-							}
-						}else if(2 == rule.queryWay){
-							if(rule.exactValue){
-								attrValStr += "[";
-								attrValStr += rule.columnCnName;
-								attrValStr += "：";
-								attrValStr += rule.exactValue;
-								attrValStr += "]";
-								
-							}
-						}
-						if("1" == rule.queryWay){
+						if("1" === rule.queryWay){
 							if(rule.darkValue){
 								attrValStr += "[";
 								attrValStr += rule.columnCnName;
@@ -405,7 +387,7 @@ var showRulesModel = (function (model){
 								attrValStr += rule.darkValue;
 								attrValStr += "]";
 							}
-						}else if("2" == rule.queryWay){
+						}else if("2" === rule.queryWay){
 							if(rule.exactValue){
 								attrValStr += "[";
 								attrValStr += rule.columnCnName;
