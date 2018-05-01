@@ -11,12 +11,12 @@ import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.persistence.Transient;
+
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
 
 import com.asiainfo.biapp.si.loc.base.entity.BaseEntity;
-import com.asiainfo.biapp.si.loc.base.extend.SpringContextHolder;
 import com.asiainfo.biapp.si.loc.core.label.entity.LabelInfo;
-import com.asiainfo.biapp.si.loc.core.label.service.ILabelInfoService;
 /**
  * Title : LOC_LIST_INFO
  * <p/>
@@ -62,9 +62,6 @@ public class ListInfo extends BaseEntity{
 	@ApiParam(value = "清单总数")
 	private Integer customNum;
 	
-	@Transient
-	private String customGroupName;
-	
 	/**
 	 * 清单状态
 	 */
@@ -86,14 +83,11 @@ public class ListInfo extends BaseEntity{
 	@ApiParam(value = "清单临时表名")
 	private String listTableName;
 	
-	@Transient
-	private String labelName;
-	
     @ManyToOne(fetch = FetchType.EAGER)
+    @NotFound(action = NotFoundAction.IGNORE) 
     @JoinColumn(name = "GROUP_ID", referencedColumnName = "LABEL_ID", insertable = false, updatable = false)
     private LabelInfo labelInfo;
 
-	
     public Integer getCustomNum() {
 		return customNum;
 	}
@@ -133,27 +127,8 @@ public class ListInfo extends BaseEntity{
 	public void setListInfoId(ListInfoId listInfo) {
 		this.listInfo = listInfo;
 	}
-
-	public String getCustomGroupName() {
-		return customGroupName;
-	}
-
-	public void setCustomGroupName(String customGroupName) {
-		this.customGroupName = customGroupName;
-	}
-
-	public String getLabelName() {
-	    ILabelInfoService iLabelInfoService = (ILabelInfoService) SpringContextHolder
-                .getBean("labelInfoService");
-//	    if()
-	   return labelName;
-    }
-
+	
     
-    public void setLabelName(String labelName) {
-        this.labelName = labelName;
-    }
-
     public LabelInfo getLabelInfo() {
         return labelInfo;
     }

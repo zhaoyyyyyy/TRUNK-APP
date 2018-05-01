@@ -41,12 +41,14 @@ import com.asiainfo.biapp.si.loc.core.label.entity.LabelStatus;
 @Repository
 public class LabelStatusDaoImpl extends BaseDaoImpl<LabelStatus, String> implements ILabelStatusDao{
 
+    @SuppressWarnings("unchecked")
     public Page<LabelStatus> selectLabelStatusPageList(Page<LabelStatus> page, LabelStatus labelStatusVo){
         Map<String, Object> reMap = fromBean(labelStatusVo);
         Map<String, Object> params = (Map<String, Object>)reMap.get("params");
         return super.findPageByHql(page, reMap.get("hql").toString(), params);
     }
 
+    @SuppressWarnings("unchecked")
     public List<LabelStatus> selectLabelStatusList(LabelStatus labelStatusVo){
         Map<String, Object> reMap = fromBean(labelStatusVo);
         Map<String, Object> params = (Map<String, Object>)reMap.get("params");
@@ -78,10 +80,15 @@ public class LabelStatusDaoImpl extends BaseDaoImpl<LabelStatus, String> impleme
             hql.append("and l.labelInfo.configId = :configId ");
             params.put("configId", labelStatusVo.getLabelInfo().getConfigId());
         }
-        if(null !=  labelStatusVo.getLabelInfo() && StringUtil.isNotBlank(labelStatusVo.getLabelInfo().getLabelName())){
+        if(StringUtil.isNotBlank(labelStatusVo.getMdaSysTableColumnNames())){
             hql.append("and l.labelInfo.labelName LIKE :configId ");
             params.put("labelName", "%" +labelStatusVo.getLabelInfo().getLabelName()+ "%");
         }
+        if(StringUtil.isNotBlank(labelStatusVo.getConfigId())){
+            hql.append("and l.sourceTableId = (from SourceTableInfo where  :configId ");
+            params.put("labelName", "%" +labelStatusVo.getLabelInfo().getLabelName()+ "%");
+        }
+        
         reMap.put("hql", hql);
         reMap.put("params",params );
         return reMap;

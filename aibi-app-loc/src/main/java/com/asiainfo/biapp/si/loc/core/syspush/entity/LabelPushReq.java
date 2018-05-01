@@ -12,22 +12,16 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 
 import org.hibernate.annotations.GenericGenerator;
 
 import com.asiainfo.biapp.si.loc.base.entity.BaseEntity;
-import com.asiainfo.biapp.si.loc.base.exception.BaseException;
-import com.asiainfo.biapp.si.loc.base.extend.SpringContextHolder;
-import com.asiainfo.biapp.si.loc.base.utils.LogUtil;
-import com.asiainfo.biapp.si.loc.base.utils.StringUtil;
-import com.asiainfo.biapp.si.loc.core.label.entity.LabelInfo;
-import com.asiainfo.biapp.si.loc.core.label.service.ILabelInfoService;
-import com.asiainfo.biapp.si.loc.core.syspush.service.ILabelPushCycleService;
-import com.asiainfo.biapp.si.loc.core.syspush.service.ISysInfoService;
 /**
  * Title : LabelPushReq
  * <p/>
@@ -120,11 +114,9 @@ public class LabelPushReq extends BaseEntity{
     @ApiParam(value = "失败异常信息")
     private String exceInfo;
 
-    @Transient
-    private String labelName;
-    
-    @Transient
-    private String sysName;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "RECORD_ID", referencedColumnName = "RECORD_ID", insertable = false, updatable = false)
+    private LabelPushCycle labelPushCycle;
     
     public String getReqId() {
         return reqId;
@@ -215,51 +207,14 @@ public class LabelPushReq extends BaseEntity{
         this.exceInfo = exceInfo;
     }
 
-    public String getSysName() {
-        try{ 
-            ILabelPushCycleService ILabelPushCycleService = (ILabelPushCycleService) SpringContextHolder
-                    .getBean("labelPushCycleServiceImpl");
-            ISysInfoService iSysInfoService = (ISysInfoService) SpringContextHolder
-                    .getBean("sysInfoServiceImpl");
-            ILabelInfoService iLabelInfoService = (ILabelInfoService) SpringContextHolder
-                    .getBean("labelInfoServiceImpl");
-            if(StringUtil.isNotEmpty(recodeId)){
-                LabelPushCycle labelPushCycle = ILabelPushCycleService.selectLabelPushCycleById(recodeId);
-                if(labelPushCycle != null){
-                    if(StringUtil.isNotEmpty(labelPushCycle.getSysId())){
-                        SysInfo sysInfo = iSysInfoService.selectSysInfoById(labelPushCycle.getSysId());
-                        if(sysInfo!=null){
-                            this.setSysName(sysInfo.getSysName());
-                        }
-                    }
-                    if(StringUtil.isNotEmpty(labelPushCycle.getCustomGroupId())){
-                        LabelInfo  labelInfo = iLabelInfoService.selectLabelInfoById(labelPushCycle.getCustomGroupId());
-                        if(labelInfo !=null){
-                            this.setLabelName(labelInfo.getLabelName());
-                        }
-                    }
-                }
-            }
-        }catch(BaseException e){ 
-            LogUtil.error(e); 
-        }
-        return sysName;
-    }
-
-
-    public void setSysName(String sysName) {
-        this.sysName = sysName;
-    }
-
-
     
-    public String getLabelName() {
-        return labelName;
-    }
-
-    public void setLabelName(String labelName) {
-        this.labelName = labelName;
+    public LabelPushCycle getLabelPushCycle() {
+        return labelPushCycle;
     }
 
     
+    public void setLabelPushCycle(LabelPushCycle labelPushCycle) {
+        this.labelPushCycle = labelPushCycle;
+    }
+
 }

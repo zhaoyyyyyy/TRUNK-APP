@@ -31,5 +31,5 @@ import com.asiainfo.biapp.si.loc.core.label.entity.LabelStatus;
 public class LabelStatusVo extends LabelStatus{
 
     private static final long serialVersionUID = 1L;
-
+    
 }

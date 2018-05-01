@@ -22,12 +22,14 @@ window.loc_onload = function() {
 			defaultPl:"",//默认刷新频率
 			defaultTimes:5000, // 默认刷新频率
 			timerId:"",   // 页面刷新定时器
-			tableId:"",  //表格Id
 			tableUrl:"",  //表格Url
 			postData:"",  //表格参数
 			colNames:"",  //表格表头
 			colModel:"",  //表格模型
 			pager:"" ,  //表格分页id
+			readCycle:1,//日期周期
+			sysDay:"",//系统设置日周期范围
+			sysMonth:"",//系统设置月周期范围
 			zbFlag:true, //数据准备表格默认显示准备状态
 			isOpen:false,//日期下拉
 			isDown:false//状态下拉
@@ -35,42 +37,47 @@ window.loc_onload = function() {
 		methods:{
 			//加载监控数据
 			loadMonitorDetailData:function(){
-				var now = new Date();
-				this.dataDate = $.dateFormat(new Date(now.getTime() - 3*24*60*60*1000),"yyyy-MM-dd");
-				//数据字典赋值
-				this.loadDicYyjk();
-				this.loadDicSjzb();
-				this.loadDicSjcq();
-				this.loadDicBqsc();
-				this.loadDicKhqsc();
-				this.loadDicKhqts();
-				this.loadDicSjsxpl();
-				//加载统计数据
+			    // 加载初始化数据
 				this.loadCountData();
+				
+				 //加载数据准备表格
+				this.initDataPrepareTable();
+
+				//加载标签生成表格
+				this.initLabelGenerateTable();
+				
+	  			//加载客户群生成表格
+				this.initCustomGenerateTable();
+				
+	 			//加载客户群推送表格
+				this.initCustomPushTable();
 			},
 			toggle:function(){
 				this.isOpen=!this.isOpen;
 			},
-//			toggleStatus:function(){
-//				this.isDown=!this.isDown;
-//			},
-			//点击周期初始化时间
-			initDateByCycle:function(e){
-				this.dateCycle = dateCycle;
-            	var now = new Date();
-            	var dataDay = $.dateFormat(new Date(now.getTime() - 3*24*60*60*1000),"yyyy-MM-dd");
-            	var dataMonth = $.dateFormat(new Date(now.getTime() - 3*24*60*60*1000),"yyyy-MM");
-            	if("day" === this.dateCycle){
-            		$(this).parents("div.dropdown").siblings("div").children("a").html(dataDay);
-            	}else{
-            		$(this).parents("div.dropdown").siblings("div").children("a").html(dataMonth);
-            	}
+            getLastestDate:function(fn){
+            	var that = this;
+            	var iframeDataDate = $.getUrlParam("dataDate");
+    			if(iframeDataDate){
+    				this.dataDate = iframeDataDate;
+    			}else{
+    				$.commAjax({
+    					url : $.ctx + "/api/source/TargetTableStatus/selectLastestDateByCycle",
+    					postData : {
+    						readCycle : that.readCycle
+    					},
+    					onSuccess : function(returnObj) {
+    						if(returnObj.data){
+    							$("#dataTime").val(returnObj.data);
+    							that.dataDate = returnObj.data.replace(/-/g,"");
+    						}
+    						fn();
+    					}
+    				});
+    			}
             },
             //切换日期刷新监控数据
-            changeMonitorByDate:function(e){
-            	var $el=$(e.target);
-				var configId = $el.attr("data-configId");
-				var dataDate = e.target.innerText;
+            changeMonitorByDate:function(dateTime){
             	var that = this;
             	$.commAjax({			
         		    url : $.ctx+'/api/monitor/overview/queryMonitorMainByConfig',
@@ -79,27 +86,29 @@ window.loc_onload = function() {
         		    dataType : 'json', 
         		    async:true,
         		    postData : {
-        					"configId" : configId,
-        					"dataDate" : dataDate.replace(/-/g,"")
+        					"configId" : this.configId,
+        					"dataDate" : dateTime.replace(/-/g,"")
         			},
-        		    onSuccess: function(data){
-        		    	if(data){
-        		    		that.serviceMonitorObj = data;
+        		    onSuccess: function(returnOb){
+        		    	if(returnOb.data){
+        		    		that.serviceMonitorObj = returnOb.data;
         		    	}
         		    },
         	   });
             },
-            //加载监控数据
-			loadCountData:function(){
+            //加载监控明细数据
+			loadCountData:function(callback){
 				var that = this;
 				$.commAjax({
 					url : $.ctx + "/api/monitor/overview/queryMonitorMainByConfig",
 					postData : {
-						configId : this.configId,
-						dataDate : this.dataDate.replace(/-/g,""),
+						configId : that.configId,
+						dataDate : that.dataDate.replace(/-/g,""),
 					},
 					onSuccess : function(returnObj) {
-						that.serviceMonitorObj = returnObj.data;
+						if(returnObj.data){
+        		    		that.serviceMonitorObj = returnObj.data;
+        		    	}
 					}
 				});
 			},
@@ -109,7 +118,13 @@ window.loc_onload = function() {
 				var $tableId = $("#"+$el.attr("data-tableId"));
 				var $formSearchId = $("#"+$el.attr("data-formSearchId"));
 				$($tableId).setGridParam({
-					postData: $formSearchId.formToJson()
+					postData: $formSearchId.formToJson(),
+					dataType : 'json'
+					//TODO (1)根据状态查询表格
+//					  postData: {
+//			                "dataStatus": '',
+//			                "isDoing": '',
+//			          },
 				}).trigger("reloadGrid", [{
 					page: 1
 				}]);
@@ -126,17 +141,19 @@ window.loc_onload = function() {
 	        },
 	        // 设置定时器
 	        setTimer: function () {
-	            clearTimeout(this.timerId);   // 关闭定时器
-	            this.timerId = setTimeout(function(){
-	            	 this.loadMonitorDetailData(this.configId);
-	     		    //加载数据准备表格
-//	     			this.initDataPrepareTable(this.zbFlag);
-	     			//加载标签生成表格
-//	     			this.initLabelGenerateTable();
-//	       			//加载客户群生成表格
-//	     			this.initCustomGenerateTable();
-	      			//加载客户群推送表格
-//	     			this.initCustomPushTable();
+	        	var that = this;
+	            clearTimeout(that.timerId);   // 关闭定时器
+	            that.timerId = setTimeout(function(){
+	            	that.loadMonitorDetailData(that.configId);
+	     		    //TODO (2)定时刷新功能
+	            	//刷新数据准备表格
+//	     			that.reloadTable("#dataPrepareTable",that.zbFlag);
+	     			//刷新标签生成表格
+//	     			that.reloadTable("#labelGenerateTable");
+//	       			//刷新客户群生成表格
+//	     			that.reloadTable("#customGenerateTable");
+	      			//刷新客户群推送表格
+//	     			that.reloadTable("#customPushTable");
 	            }.bind(this),this.defaultTimes);
 	        },
 	        //获取运营监控状态字典
@@ -178,7 +195,7 @@ window.loc_onload = function() {
 		    //获取客户群生成状态字典
 		    loadDicKhqsc :function(){
 		    	var khqscList = [];
-		    	var dicKhqsc = $.getDicData("KHQSCZT");
+		    	var dicKhqsc = $.getDicData("QTZTZD");
 		    	for(var i=0; i<dicKhqsc.length; i++){
 		    		khqscList.push(dicKhqsc[i]);
 		    	}
@@ -203,20 +220,22 @@ window.loc_onload = function() {
 		    	this.sjsxplList = sjsxplList;
 		    	this.defaultPl = sjsxplList[0].code;
 		    },
-		    getCycle:function(event){//日期切花
+		    getCycle:function(event){//日期切换
+            	var that = this;
             	var dateElement=$(event.currentTarget).siblings(".control-input").find("input");
-            	if($(event.currentTarget).find("option:selected").val()=="day"){
+            	this.readCycle =$(event.currentTarget).find("option:selected").val();
+            	if(Number(this.readCycle) === 1){
 		    		dateElement.val(DateFmt.Formate(new Date(),"yyyy-MM-dd")).datepicker( "destroy" ).datepicker({
 		    			dateFormat: "yy-mm-dd",
 						showButtonPanel: false,
 						changeMonth: false,
       					changeYear: false,
       					defaultDate:+1,
-      					minDate:DateFmt.DateCalc(new Date(),"d",-2),
+      					minDate:DateFmt.DateCalc(new Date(),"d",this.sysDay),
 		    			maxDate:DateFmt.DateCalc(new Date(),"d",0),
 						beforeShow :function(){
 			    			$("#ui-datepicker-div").removeClass("ui-hide-calendar");
-			    		},
+			    		}
 		    		}).off("click");
 		    	}else{
 		    		dateElement.val(DateFmt.Formate(new Date(),"yyyy-MM")).datepicker( "destroy" ).datepicker({
@@ -225,7 +244,7 @@ window.loc_onload = function() {
 						closeText:"确定" ,
 						changeMonth: true,
       					changeYear: true,
-      					minDate:DateFmt.DateCalc(new Date(),"M",-12),
+      					minDate:DateFmt.DateCalc(new Date(),"M",this.sysMonth),
 		    			maxDate:DateFmt.DateCalc(new Date(),"M",0),
 						beforeShow :function(){
 			    			$("#ui-datepicker-div").addClass("ui-hide-calendar");
@@ -238,176 +257,121 @@ window.loc_onload = function() {
     			        }
             		}).off("click");
 		    	}
+        	  that.changeMonitorByDate(dateElement.val());
             },
-		    getStatus:function(event){//状态切换
-		    	if($(event.currentTarget).find("option:selected").val()=="1"){
-		    		this.initDataPrepareTable(true);
+            // 日期切换函数
+            getTime:function(e){//初始化日期
+         	   var that = this;
+ 	        	if(Number($(event.currentTarget).parents("div").siblings("select").find("option:selected").val()) === 1){
+ 	        		$(e.target).datepicker({
+ 		    			dateFormat: "yy-mm-dd",
+ 						showButtonPanel: false,
+ 						changeMonth: false,
+       					changeYear: false,
+       					defaultDate:+1,
+       					minDate:DateFmt.DateCalc(new Date(),"d",that.sysDay),
+ 		    			maxDate:DateFmt.DateCalc(new Date(),"d",0),
+ 						beforeShow :function(){
+ 			    			$("#ui-datepicker-div").removeClass("ui-hide-calendar");
+ 			    		},
+ 			    		onClose:function(dateText, inst){
+ 			    			that.changeMonitorByDate(dateText);
+ 			    		}
+ 		    		});
+ 	        	}else{
+ 	        		$(e.target).datepicker({
+ 	        			isShowClear:false,
+             			dateFormat: "yyyy-MM",
+ 						showButtonPanel: true,
+ 						closeText:"确定" ,
+ 						changeMonth: true,
+       					changeYear: true,
+       					minDate:DateFmt.DateCalc(new Date(),"M",that.sysMonth),
+ 		    			maxDate:DateFmt.DateCalc(new Date(),"M",0),
+ 						beforeShow :function(){
+ 			    			$("#ui-datepicker-div").addClass("ui-hide-calendar");
+ 			    		},
+ 			    		onClose: function(dateText, inst) {
+ 			    		    that.changeMonitorByDate(dateText);
+     			        }
+ 	        		});
+ 	        	}
+             },
+            changeDataPrepareTableByStatus:function(event){//状态切换
+            	this.isDown=false;
+		    	if(Number($(event.currentTarget).find("option:selected").val())===1){
+		    		this.zbFlag = true;
 		    	}else{
-		    		this.initDataPrepareTable(false);
+		    		this.zbFlag = false;
 		    	}
-		    },
-		    changeDataPrepareTable:function(status){
-
-		    	console.log(status)
-		    	this.isDown=false;
-		    	this.zbFlag = status;
-		    	this.tableId = "#dataPrepareTable";
-		    	this.tableUrl = $.ctx + "/api/source/TargetTableStatus/queryPage";
-		    	this.postData = {'configId' : this.configId};
-		    	this.pager = "#dataPreparePager";
-		    	if(status){
-		    		$("#sjzbList").css("display","");
-		    		$("#sjcqList").css("display","none");
-		    		this.colNames = [ '表名', '准备状态', '准备完成时间','抽取完成时间' ];
-		    		this.colModel = [ {
-		    			name : 'sourceTableName',
-		    			index : 'sourceTableName',
-		    			width : 110,
-		    			sortable : false,
-		    			frozen : true,
-		    		},
-		    		{
-		    			name : 'dataStatus',
-		    			index : 'dataStatus',
-		    			width : 50,
-		    			align : "center",
-		    			sortable : false,
-		    			formatter : function(value, opts, data) {
-		            		return $.getCodeDesc("SJZBZT",value);
-		            	}
-		    		}, {
-		    			name : 'startTime',
-		    			index : 'startTime',
-		    			width : 110,
-		    			sortable : false,
-		    			align : "center",
-		    		},{
-		    			name : 'endTime',
-		    			index : 'endTime',
-		    			width : 110,
-		    			sortable : false,
-		    			align : "center",
-		    		}];
-		    	}else{
-		    		$("#sjzbList").css("display","none");
-		    		$("#sjcqList").css("display","");
-		    		this.colNames = [ '表名', '抽取状态', '准备完成时间','抽取完成时间' ];
-		    		this.colModel = [ {
-		    			name : 'sourceTableName',
-		    			index : 'sourceTableName',
-		    			width : 110,
-		    			sortable : false,
-		    			frozen : true,
-		    		}, {
-		    			name : 'isDoing',
-		    			index : 'isDoing',
-		    			sortable : false,
-		    			width : 120,
-		    			align : "center",
-		    			formatter : function(value, opts, data) {
-		            		return $.getCodeDesc("SJCQZT",value);
-		            	}
-		    				
-		    		}, {
-		    			name : 'dataDate',
-		    			index : 'dataDate',
-		    			width : 110,
-		    			sortable : false,
-		    			align : "center",
-		    		} ,{
-		    			name : 'dataDate',
-		    			index : 'dataDate',
-		    			width : 110,
-		    			sortable : false,
-		    			align : "center",
-		    		}];
-		    	}
-		    	this.reloadTable();
+		    	this.reloadTable("#dataPrepareTable");
 		    },
 		    //初始化数据准备表格
-		    initDataPrepareTable:function(status){
-		    	console.log(status)
+		    initDataPrepareTable:function(){
 		    	this.isDown=false;
-		    	this.zbFlag = status;
-		    	this.tableId = "#dataPrepareTable";
+		    	var tableId = "#dataPrepareTable";
 		    	this.tableUrl = $.ctx + "/api/source/TargetTableStatus/queryPage";
-		    	this.postData = {'configId' : this.configId};
+		    	this.postData = {"sourceTableInfo.configId": this.configId,"dataDate":this.dataDate};
 		    	this.pager = "#dataPreparePager";
-		    	this.colNames = [ '表名', '准备状态', '准备完成时间','抽取完成时间' ];
+		    	this.colNames = [ '表名', '准备状态', '抽取状态','准备完成时间','抽取完成时间' ];
 		    	this.colModel = [ {
 	    			name : 'sourceTableName',
 	    			index : 'sourceTableName',
-	    			width : 110,
+	    			width : 150,
 	    			sortable : false,
+	    			align: "center",
 	    			frozen : true,
 	    		},
 	    		{
 	    			name : 'dataStatus',
 	    			index : 'dataStatus',
-	    			width : 50,
+	    			width : 60,
 	    			align : "center",
 	    			sortable : false,
 	    			formatter : function(value, opts, data) {
 	            		return $.getCodeDesc("SJZBZT",value);
 	            	}
-	    		}, {
+	    		},{
+	    			name : 'isDoing',
+	    			index : 'isDoing',
+	    			sortable : false,
+	    			width : 60,
+	    			align : "center",
+	    			formatter : function(value, opts, data) {
+	            		return $.getCodeDesc("SJCQZT",value);
+	            	}
+	    		},{
 	    			name : 'startTime',
 	    			index : 'startTime',
-	    			width : 110,
+	    			width : 120,
 	    			sortable : false,
 	    			align : "center",
+	    			formatter : function(cellvalue) { 
+	    				if(cellvalue){
+	   					    return cellvalue.substr(0,19);
+	    				}
+	    				return "";
+					}
 	    		},{
 	    			name : 'endTime',
 	    			index : 'endTime',
-	    			width : 110,
+	    			width : 120,
 	    			sortable : false,
 	    			align : "center",
+	    			formatter : function(cellvalue) {  
+	    				if(cellvalue){
+	   					    return cellvalue.substr(0,19);
+	    				}
+	    				return "";
+					}
 	    		}];
-		    	if(status){
-		    		$("#sjzbList").css("display","");
-		    		$("#sjcqList").css("display","none");
-		    		
-		    	}else{
-		    		$("#sjzbList").css("display","none");
-		    		$("#sjcqList").css("display","");
-		    		this.colNames = [ '表名', '抽取状态', '准备完成时间','抽取完成时间' ];
-//		    		this.colModel = [ {
-//		    			name : 'sourceTableName',
-//		    			index : 'sourceTableName',
-//		    			width : 110,
-//		    			sortable : false,
-//		    			frozen : true,
-//		    		}, {
-//		    			name : 'isDoing',
-//		    			index : 'isDoing',
-//		    			sortable : false,
-//		    			width : 120,
-//		    			align : "center",
-//		    			formatter : function(value, opts, data) {
-//		            		return $.getCodeDesc("SJCQZT",value);
-//		            	}
-//		    				
-//		    		}, {
-//		    			name : 'dataDate',
-//		    			index : 'dataDate',
-//		    			width : 110,
-//		    			sortable : false,
-//		    			align : "center",
-//		    		} ,{
-//		    			name : 'dataDate',
-//		    			index : 'dataDate',
-//		    			width : 110,
-//		    			sortable : false,
-//		    			align : "center",
-//		    		}];
-		    	}
-		    	this.initTable();
+		    	this.initTable(tableId);
 		    },
 		    //初始化标签生成表格
 		    initLabelGenerateTable:function(){
-		    	this.tableId = "#labelGenerateTable";
+		    	var tableId = "#labelGenerateTable";
 		    	this.tableUrl = $.ctx + "/api/label/labelStatus/queryPage";
-		    	this.postData = {'configId' : this.configId};
+		    	this.postData = {'labelInfo.configId' : this.configId,"dataDate":this.dataDate};
 		    	this.colNames = [ '标签名称', '生成状态', '目标表列名', '表名','表类型','错误信息描述' ];
 		    	this.colModel = [ {
 		    		name : 'labelInfo.labelName',
@@ -454,17 +418,17 @@ window.loc_onload = function() {
 		    		hidden:true
 		    	}];
 		    	this.pager = "#labelGeneratePager";
-		    	this.initTable();
+		    	this.initTable(tableId);
 		    },
 		    //初始化客户群生成
 		    initCustomGenerateTable:function(){
-		    	this.tableId = "#customGenerateTable";
+		    	var tableId = "#customGenerateTable";
 		    	this.tableUrl = $.ctx + "/api/label/listInfo/queryPage";
-		    	this.postData = {"configId" :this.configId};
+		    	this.postData = {"labelInfo.configId" :this.configId,"listInfo.dataDate":this.dataDate };
 		    	this.colNames =[ '客户群名称', '生成状态', '生成时间' ];
 		    	this.colModel = [ {
-		    		name : 'label.labelName',
-		    		index : 'label.labelName',
+		    		name : 'labelInfo.labelName',
+		    		index : 'labelInfo.labelName',
 		    		width : 110,
 		    		sortable : false,
 		    		frozen : true,
@@ -479,31 +443,31 @@ window.loc_onload = function() {
 		        		return $.getCodeDesc("KHQSCZT",value);
 		        	}
 		    	},{
-		    		name : 'dataDate',
-		    		index : 'dataDate',
+		    		name : 'dataTime',
+		    		index : 'dataTime',
 		    		width : 110,
 		    		sortable : false,
 		    		align : "center",
 		    	}];
 		    	this.pager = "#customGeneratePager" ;
-		    	this.initTable();
+		    	this.initTable(tableId);
 		    },
 		    //初始化客户群推送表格
 		    initCustomPushTable:function(){
-		    	this.tableId = "#customPushTable";
+		    	var tableId = "#customPushTable";
 		    	this.tableUrl =  $.ctx + "/api/syspush/labelPushReq/queryPage";
-		    	this.postData = {'configId' : this.configId};
+		    	this.postData = {'labelPushCycle.labelInfo.configId' : this.configId,"dataDate":this.dataDate};
 		    	this.colNames =[ '客户群名称', '推送平台', '推送时间','推送状态' ];
 		    	this.colModel = [ {
-		    		name : 'labelInfo.labelName',
-		    		index : 'labelInfo.labelName',
+		    		name : 'labelPushCycle.labelInfo.labelName',
+		    		index : 'labelPushCycle.labelInfo.labelName',
 		    		width : 110,
 		    		sortable : false,
 		    		frozen : true,
 		    	},
 		    	 {
-		    		name : 'sysName',
-		    		index : 'sysName',
+		    		name : 'labelPushCycle.sysInfo.sysName',
+		    		index : 'labelPushCycle.sysInfo.sysName',
 		    		width : 110,
 		    		sortable : false,
 		    		frozen : true,
@@ -525,16 +489,18 @@ window.loc_onload = function() {
 		        	}
 		    	}];
 		    	this.pager= "#customPushPager"; 
-		    	this.initTable();
+		    	this.initTable(tableId);
 		    },
 		    //初始化表格公共方法
-		    initTable:function(){
-		    	$(this.tableId).jqGrid({
+		    initTable:function(tableId){
+		    	var that = this;
+		    	$(tableId).jqGrid({
 		    		url :this.tableUrl,
 		    		postData : this.postData,
 		    		datatype : "json",
 		    		colNames : this.colNames,
 		    		colModel : this.colModel,
+		    		autowidth: true,
 		    		viewrecords : true,
 		    		rowNum : 10,
 		    		rownumbers : true,
@@ -544,8 +510,20 @@ window.loc_onload = function() {
 		    		},
 		    		height : '100%',
 		    	    rowList:[10,20,30],
+		    	    loadComplete:function(){
+		    	    	if("#dataPrepareTable" === tableId ){
+		    	    		if(that.zbFlag){
+		    	    			$(tableId).jqGrid('hideCol',["isDoing"]);
+		    	    			$(tableId).jqGrid('showCol',["dataStatus"]);
+		    	    		}else{
+		    	    			$(tableId).jqGrid('hideCol',["dataStatus"]);
+		    	    			$(tableId).jqGrid('showCol',["isDoing"]);
+		    	    		}
+		    	    	}
+		    	    },
 		            pager: this.pager  
 		    	});
+		   	   $(tableId).jqGrid('setLabel',0, '序号');
 		    },
 		    reloadTable:function(tableId){
 		    	$(tableId)
@@ -558,32 +536,42 @@ window.loc_onload = function() {
 		    }
 		},
 		mounted: function(){
-			this.configId = $.getUrlParam("configId");
-		    if(!this.configId){
-		    	this.configId = configId;
-		    }
-		    // 加载初始化数据
-		    this.loadMonitorDetailData(this.configId);
-		    
-		    //加载数据准备表格
-			this.initDataPrepareTable();
+			var that = this;
+			var iframeConfigId = $.getUrlParam("configId");
+			if(iframeConfigId){
+				this.configId = iframeConfigId;
+				$("#preConfig_list").find("span").attr("configId",iframeConfigId);
+			}else{
+				this.configId = configId;
+			}
+
+			this.sysDay = 1 - $.getSysConfig('LOC_CONFIG_APP_MAX_KEEP_DAYS');
+    	    this.sysMonth = 1 - $.getSysConfig('LOC_CONFIG_APP_MAX_KEEP_MONTHS');
+			//数据字典赋值
+			this.loadDicYyjk();
+			this.loadDicSjzb();
+			this.loadDicSjcq();
+			this.loadDicBqsc();
+			this.loadDicKhqsc();
+			this.loadDicKhqts();
+			this.loadDicSjsxpl();
 			
-			//加载标签生成表格
-			this.initLabelGenerateTable();
-			
-  			//加载客户群生成表格
-			this.initCustomGenerateTable();
-			
- 			//加载客户群推送表格
-			this.initCustomPushTable();
-			
+			//获取最新数据日期：取指标源表状态表里最新数据日期
+			this.getLastestDate(function(){
+				//加载统计数据
+				that.loadMonitorDetailData();
+			});
+		
 			//默认刷新频率
 //			this.refresh(this.defaultPl);
 			
 			//从监控总览页面跳转到指定锚点位置
 			var detailAnchor = $.getUrlParam("detailAnchor");
 			if(detailAnchor){
+				//TODO (3)iframe 锚点跳转
+//				window.parent.open("#"+detailAnchor,"monitorDetail");
 				location.href="#"+detailAnchor;
+//				location.target="monitorDetail"
 			}
 		}
 		
@@ -596,9 +584,9 @@ window.loc_onload = function() {
             },500);
             var $index = $(this).index();
 			var scrollTop=$(".scrollBox").eq($index).offset().top-50;
-			$("html,body").stop().animate({"scrollTop":scrollTop})
-		})
-	})
+			$("html,body").stop().animate({"scrollTop":scrollTop});
+		});
+	});
 	$(window).scroll(function(){
         var $stop=$(this).scrollTop();
         $(".scrollBox").each(function(e){
@@ -607,7 +595,7 @@ window.loc_onload = function() {
                 $('.ui-pre-progress a').eq(e).addClass('active').siblings("a").removeClass("active");
             }
         });
-    })
+    });
 };
 
 /**
@@ -624,17 +612,17 @@ function scroll(){
         return{
             left:window.pageXOffset,
             top:window.pageYOffset
-        }
+        };
     }else if(document.compatMode=="CSS1Compat"){//不是怪异模式
         return{
             left:document.documentElement.scrollLeft,
             top:document.documentElement.scrollTop
-        }
+        };
     }else{//怪异模式
         return{
             left:document.body.scrollLeft,
             top:document.body.scrollTop
-        }
+        };
     }
 }
 window.onscroll =function(){//吸顶导航
@@ -644,11 +632,4 @@ window.onscroll =function(){//吸顶导航
         $(".ui-pre-progress").removeClass("active");
     }
 
-}
-function getTime(element){//初始化日期
-	$(element).datepicker({
-		dateFormat: "yy-mm-dd",
-		minDate:DateFmt.DateCalc(new Date(),"d",-2),
-		maxDate:DateFmt.DateCalc(new Date(),"d",0),
-	});
-}
+};

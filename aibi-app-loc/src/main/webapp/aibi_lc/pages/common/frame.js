@@ -24,17 +24,22 @@ function toggleDown(elem,event){
 /**
  *  导航切换,根据传过来的地址自动跳转
  */
-function toggleMenu(toggleUrl){
+function toggleMenu(toggleUrl,locationHref){
 	var $accordin = $('#accordion a');
-	window.location.hash = "";
 	// 标签集市和客户群集市返回到客户群集市
 	if($accordin && $accordin.length >0){
 		$.each($accordin,function(i,val){
 			var href = $(this).attr("href");
 			if(href === toggleUrl){
-				$(this).click();
+				$(this).click(function(){
+					if(locationHref){
+						window.location =locationHref;
+					}
+				});
+				$(this).trigger("click");
 				return false;
 			}
+			
 		});
 	}
 }

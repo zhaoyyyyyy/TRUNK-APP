@@ -49,6 +49,7 @@ public class LabelPushReqDaoImpl extends BaseDaoImpl<LabelPushReq, String> imple
      * @param LabelPushReq
      * @return
      */
+    @SuppressWarnings("unchecked")
     public Page<LabelPushReq> selectLabelPushReqPageList(Page<LabelPushReq> page, LabelPushReqVo labelPushReqVo) {
         Map<String, Object> reMap = fromBean(labelPushReqVo);
         Map<String, Object> params = (Map<String, Object>)reMap.get("params");
@@ -61,6 +62,7 @@ public class LabelPushReqDaoImpl extends BaseDaoImpl<LabelPushReq, String> imple
      * @param LabelPushReq
      * @return
      */
+    @SuppressWarnings("unchecked")
     public List<LabelPushReq> selectLabelPushReqList(LabelPushReqVo labelPushReqVo) {
         Map<String, Object> reMap = fromBean(labelPushReqVo);
         Map<String, Object> params = (Map<String, Object>)reMap.get("params");
@@ -106,6 +108,10 @@ public class LabelPushReqDaoImpl extends BaseDaoImpl<LabelPushReq, String> imple
         if(StringUtil.isNoneBlank(labelPushReqVo.getExceInfo())){
             hql.append("and l.exceInfo = :exceInfo ");
             params.put("exceInfo", labelPushReqVo.getExceInfo());
+        }
+        if(null != labelPushReqVo.getLabelPushCycle().getLabelInfo() && StringUtil.isNoneBlank(labelPushReqVo.getLabelPushCycle().getLabelInfo().getConfigId())){
+            hql.append("and l.labelPushCycle.labelInfo.configId = :configId ");
+            params.put("configId", labelPushReqVo.getLabelPushCycle().getLabelInfo().getConfigId());
         }
         reMap.put("hql", hql);
         reMap.put("params", params);

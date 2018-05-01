@@ -22,14 +22,16 @@ import com.asiainfo.biapp.si.loc.bd.list.entity.ListInfo;
 public class ListInfoDaoImpl extends BaseDaoImpl<ListInfo, String> implements IListInfoDao{
 
 	
-	@Override
+	@SuppressWarnings("unchecked")
+    @Override
 	public Page<ListInfo> selectListInfoPageList(Page<ListInfo> page, ListInfo listInfoVo) {
 		Map<String, Object> reMap = fromBean(listInfoVo);
         Map<String, Object> params = (Map<String, Object>) reMap.get("params");
         return super.findPageByHql(page, reMap.get("hql").toString(), params);
 	}
 
-	@Override
+	@SuppressWarnings("unchecked")
+    @Override
 	public List<ListInfo> selectListInfoList(ListInfo listInfoVo) {
 		Map<String, Object> reMap = fromBean(listInfoVo);
         Map<String, Object> params = (Map<String, Object>) reMap.get("params");
@@ -53,7 +55,7 @@ public class ListInfoDaoImpl extends BaseDaoImpl<ListInfo, String> implements IL
         	hql.append("and l.dataStatus = :dataStatus ");
         	params.put("dataStatus", listInfoVo.getDataStatus());
         }
-        if(null !=  listInfoVo.getLabelInfo() && StringUtil.isNotBlank(listInfoVo.getLabelInfo().getConfigId())){
+        if(null != listInfoVo.getLabelInfo() && StringUtil.isNotEmpty(listInfoVo.getLabelInfo().getConfigId())){
             hql.append("and l.labelInfo.configId = :configId ");
             params.put("configId", listInfoVo.getLabelInfo().getConfigId());
         }

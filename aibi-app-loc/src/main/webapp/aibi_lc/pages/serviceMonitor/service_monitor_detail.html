@@ -13,10 +13,16 @@
 	[v-cloak] {
 		display: none;
 	}
+	.eslipse,
+	table tr td{
+		overflow: hidden;
+		text-overflow:ellipsis;
+		white-space: nowrap;		
+	}
 	</style>
 </head>
 <body>
-    <div class="iframe-nest">
+    <div class="iframe-nest" name="monitorDetail">
       	<div class="ui-lc-mian">
       		<h3 class="pre">
       			<span>运行监控明细</span>
@@ -25,28 +31,30 @@
       	<div id="monitorDetail" v-cloak>
 	      	<div class="ui-lc-mian mt10 ui-prefecture">
 	      		<div class="ui-pre-detail clearfix">
+	      		 <select class="ml10" @change="getCycle($event)" v-model='readCycle'>
+    				 	<option value="1">日周期</option>
+    				 	<option value="2">月周期</option>
+	    			</select>
+					<em></em>
+		        	<div class="control-input has-icon">
+			           <input type="text"  readonly="readonly" @mousedown="getTime"
+			           	class="form-control input-pointer date-input" id="dataTime">
+			           <span class="glyphicon-select form-control-feedback"></span>
+			        </div> 
+			        
 		      		<div class="ui-fresh-box">
-		      			数据日期
+		      		
 		                <span class="refresh-key">数据刷新频率:</span>
 		                <div class="form-group">
 							<div class="control-input">
 								 <select class="form-control input-pointer" id="refreshId" >
 			                        <option v-for="d in sjsxplList" @change="refresh(d.code)" :value="d.code">{{d.dataName}}</option>
 			                    </select>
+			                   	 秒
 							</div>						
 						</div>
-		                <span class="tips">提示 : 当网络环境不理想时，设置过高的频率，可能不会呈现相应效果。</span>
 	               </div>
-	                <select class="ml10" @change="getCycle($event)">
-    				 	<option value="day">日周期</option>
-    				 	<option value="month">月周期</option>
-	    			</select>
-					<em></em>
-					<div class="control-input has-icon">
-			           <input type="text"  readonly="readonly" onmousedown="getTime(this)"
-			           	class="form-control input-pointer date-input" id="inputEmail4" v-model="dataDate">
-			           <span class="glyphicon-select form-control-feedback"></span>
-			        </div>
+	               
 		      	</div>
 	      	</div>
 			<div class="ui-lc-mian mt10 ui-morior-border" >
@@ -167,9 +175,6 @@
 					</ul>
 				</div>
 			</div>
-	        <!--<div class="ui-lc-mian mt10 ui-pre-progress"  v-for="d in yyjkList" >
-				<span class="ui-pre-refresh ml20" id="dataPrepare+'d.dataName'" @click="jumpTable">{{d.dataName}}<em></em></span>
-	    	</div> -->
 	    	<div class="ui-lc-mian mt10 ui-pre-progress">
 				<a class="ui-pre-refresh ml20">数据准备<em></em></a>
 				<a class="ui-pre-refresh ml10">标签生成<em></em></a>
@@ -181,27 +186,28 @@
 	    		<h3 class="clearfix pre-jqgrid">
 	    			数据准备
 	    			<div class="ui-status">
-	    	     	   <!--<div class="dropdown" v-bind:class="{open:isDown}">
-	    					<span class="prefectrue-span" @click="toggleStatus()">准备状态&nbsp;<em></em></span>
-		    				<ul class="dropdown-menu" id="chooseStatus">
-						       <li><a @click="initDataPrepareTable(true)">准备状态</a></li>
-						       <li><a @click="initDataPrepareTable(false)">抽取状态</a></li>
-						    </ul>
-	    				</div> -->
-	    				 <select @change="getStatus($event)">
+	    				 <select @change="changeDataPrepareTableByStatus($event)">
 	    				 	<option value="1">准备状态</option>
 	    				 	<option value="2">抽取状态</option>
 	    				 </select>
-						<span  v-for="d in sjzbList" class="sjzbList" v-if="zbFlag">
-							<em></em>&nbsp;{{d.dataName}}
+	    				<span><input type="checkbox"> 全部</span>
+	    				<span v-if="zbFlag">
+							<span  v-for="d in sjzbList" id="sjzbList">
+								<!-- <em></em>&nbsp; -->
+								<input type="checkbox">
+								{{d.dataName}}
+							</span>
 						</span>
-						<span  v-for="d in sjcqList" class="sjcqList" v-else>
-							<em></em>&nbsp;{{d.dataName}}
+						<span v-else>
+							<span  v-for="d in sjcqList" id="sjcqList">
+								<input type="checkbox">
+								{{d.dataName}}
+							</span>
 						</span>
 	    			</div>
 	    			<form id="formSearch-dataPrepare" class="form-group fright width-210">
 						<div class="input-group">
-							<input name="sourceTableName" id="sourceTableName" type="text" class="form-control input-pointer" placeholder="模糊查询" />
+							<input name="sourceTableName" id="sourceTableName" type="text" class="form-control input-pointer" placeholder="请输入表名" />
 							<div class="input-group-addon input-group-icon right-child" id="btn_search_data" data-tableId="dataPrepareTable" data-formSearchId="formSearch-dataPrepare" @keyup.enter="qryTableByCond($event)" @click="qryTableByCond($event)"></div>			
 						</div>						
 					</form>
@@ -210,20 +216,21 @@
 	                <table id="dataPrepareTable"  class="table"></table>
 	                <div id="dataPreparePager"></div>
 	            </div>
-	           <!-- <a name="labelBuild">&nbsp;</a>-->
 	    	</div>
 	    	<div class="ui-lc-mian mt20 scrollBox" id="labelGenerateAnchor">
 	    		<h3 class="clearfix pre-jqgrid">
 	    			标签生成
 	    			<div class="ui-status">
 	    				<span>生成状态</span>
+	    				<span> <input type="checkbox"> 全部</span>
 	    				<span  v-for="d in bqscList">
-	    					<em></em>&nbsp;{{d.dataName}}
+	    					<input type="checkbox">
+	    					{{d.dataName}}
 	    				</span>
 	    			</div>
 	    			<div id="formSearch-labelGenerate" class="form-group fright width-210">
 						<div class="input-group">
-							<input name="labelName" id="labelName" type="text" class="form-control input-pointer" placeholder="模糊查询" />
+							<input name="labelInfo.labelName"  type="text" class="form-control input-pointer" placeholder="请输入标签名称" />
 							<div class="input-group-addon input-group-icon right-child" id="btn_search_label" data-tableId="labelGenerateTable" data-formSearchId="formSearch-labelGenerate" @keyup.enter="qryTableByCond($event)" @click="qryTableByCond($event)"></div>			
 						</div>						
 					</div>
@@ -236,20 +243,22 @@
 	    			<h3>异常信息</h3>
 	    			<span></span>
 	    		</div>
-	    		<!--<a name="customBuild">&nbsp;</a>-->
 	    	</div>
 	    	<div class="ui-lc-mian mt20 scrollBox" id="customGenerateAnchor">
 	    		<h3 class="clearfix pre-jqgrid">
 	    			客户群生成
 	    			<div class="ui-status">
 	    				<span>生成状态</span>
+	    				<span><input type="checkbox"> 全部</span>
 	    				<span  v-for="d in khqscList">
-	    					<em></em>&nbsp;{{d.dataName}}
+	    					<!-- <em></em>&nbsp; -->
+	    					<input type="checkbox">
+	    					{{d.dataName}}
 	    				</span>
 	    			</div>
 	    			<div id="formSearch-customGenerate" class="form-group fright width-210">
 						<div class="input-group">
-							<input name="labelName" id="labelName" type="text" class="form-control input-pointer" placeholder="模糊查询" />
+							<input name="labelInfo.labelName" type="text" class="form-control input-pointer" placeholder="请输入客户群名称" />
 							<div class="input-group-addon input-group-icon right-child" id="btn_search_custom" data-tableId="customGenerateTable" data-formSearchId="formSearch-customGenerate" @keyup.enter="qryTableByCond($event)" @click="qryTableByCond($event)"></div>			
 						</div>						
 					</div>
@@ -258,20 +267,21 @@
 	                <table id="customGenerateTable"  class="table"></table>
 	                <div id="customGeneratePager"></div>
 	            </div>
-	            <!--<a name="customPush">&nbsp;</a>-->
 	    	</div>
 			<div class="ui-lc-mian mt20 scrollBox" id="customPushAnchor">
      			<h3 class="clearfix pre-jqgrid">
     			客户群推送
     			<div class="ui-status">
     				<span>推送状态</span>
+    				<span><input type="checkbox"> 全部</span>
     				<span v-for="d in khqtsList">
-    					<em></em>&nbsp;{{d.dataName}}
+    					<input type="checkbox">
+    					{{d.dataName}}
     				</span>
     			</div>
 				<div id="formSearch-customPush" class="form-group fright width-210">
 					<div class="input-group">
-						<input name="labelName" id="labelName" type="text" class="form-control input-pointer" placeholder="模糊查询" />
+						<input name="labelPushCycle.labelInfo.labelName" type="text" class="form-control input-pointer" placeholder="模糊查询" />
 						<div class="input-group-addon input-group-icon right-child" id="btn_search_push" data-tableId="customPushTable" data-formSearchId="formSearch-customPush" @keyup.enter="qryTableByCond($event)" @click="qryTableByCond($event)"></div>			
 					</div>						
 				</div>

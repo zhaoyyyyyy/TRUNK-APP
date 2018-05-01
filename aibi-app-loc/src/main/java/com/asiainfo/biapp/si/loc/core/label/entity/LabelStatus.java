@@ -108,6 +108,9 @@ public class LabelStatus extends BaseEntity{
     @Transient
     private MdaSysTable mdaSysTable;
     
+    @Transient
+    private String configId;
+
     public String getLabelId() {
         return labelId;
     }
@@ -231,5 +234,12 @@ public class LabelStatus extends BaseEntity{
         this.mdaSysTable = mdaSysTable;
     }
     
+    public String getConfigId() {
+        return configId;
+    }
+
+    public void setConfigId(String configId) {
+        this.configId = configId;
+    }
 
 }

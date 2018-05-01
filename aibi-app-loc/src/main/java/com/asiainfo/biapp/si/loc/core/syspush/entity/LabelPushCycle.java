@@ -6,21 +6,25 @@
 
 package com.asiainfo.biapp.si.loc.core.syspush.entity;
 
+import io.swagger.annotations.ApiParam;
+
 import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import org.hibernate.annotations.GenericGenerator;
 
 import com.asiainfo.biapp.si.loc.base.entity.BaseEntity;
+import com.asiainfo.biapp.si.loc.core.label.entity.LabelInfo;
 import com.asiainfo.biapp.si.loc.core.syspush.vo.LabelPushCycleVo;
-
-import io.swagger.annotations.ApiParam;
 
 /**
  * Title : LabelPushCycle
@@ -107,6 +111,15 @@ public class LabelPushCycle extends BaseEntity{
     @ApiParam(value = "状态")
     private Integer status;
 
+
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "CUSTOM_GROUP_ID", referencedColumnName = "Label_ID", insertable = false, updatable = false)
+    private LabelInfo  labelInfo;
+    
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "SYS_ID", referencedColumnName = "SYS_ID", insertable = false, updatable = false)
+    private SysInfo  sysInfo;
+    
     /**
      * 推送属性ID
      */
@@ -272,7 +285,23 @@ public class LabelPushCycle extends BaseEntity{
     public void setStatus(Integer status) {
         this.status = status;
     }
+
+    public LabelInfo getLabelInfo() {
+        return labelInfo;
+    }
     
+    public void setLabelInfo(LabelInfo labelInfo) {
+        this.labelInfo = labelInfo;
+    }
     
+    public SysInfo getSysInfo() {
+        return sysInfo;
+    }
+
+
+    
+    public void setSysInfo(SysInfo sysInfo) {
+        this.sysInfo = sysInfo;
+    }
 
 }

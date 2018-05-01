@@ -98,4 +98,23 @@ public class TargetTableStatusServiceImpl extends BaseServiceImpl<TargetTableSta
         super.delete(tableId);
     }
 
+    public String selectLastestDateByCycle(Integer readCycle) throws BaseException {
+        if (readCycle == null) {
+            throw new ParamRequiredException("读取周期不能为空");
+        }
+//        TargetTableStatus targetTableStatus = iTargetTableStatusDao.selectLastestDateByCycle(readCycle.intValue());
+//        List<TargetTableStatus> targetTableStatuses = iTargetTableStatusDao.selectTargetTableStatusList(new TargetTableStatusVo());
+//        if(targetTableStatuses.size() >0 ){
+//            
+//        }
+//        if(targetTableStatus != null && StringUtils.isNotBlank(targetTableStatus.getDataDate())){
+//            return targetTableStatus.getDataDate();
+//        }
+        if(readCycle.intValue() == 1){
+            return "2018-04-27";
+        }else{
+            return "2018-04";
+        }
+    }
+    
 }

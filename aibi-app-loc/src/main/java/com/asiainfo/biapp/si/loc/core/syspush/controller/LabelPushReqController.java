@@ -70,7 +70,9 @@ public class LabelPushReqController extends BaseController<LabelPushReq>{
             if(labelPushReqPage.getData()!=null && labelPushReqPage.getData().size() >0){
                 List<LabelPushReq> labelPushReqList = labelPushReqPage.getData();
                 for(LabelPushReq labelPushReq : labelPushReqList){
-                    labelPushReq.setSysName(labelPushReq.getSysName());
+                    labelPushReq.setLabelPushCycle(labelPushReq.getLabelPushCycle());
+                    labelPushReq.getLabelPushCycle().setLabelInfo(labelPushReq.getLabelPushCycle().getLabelInfo());
+                    labelPushReq.getLabelPushCycle().setSysInfo(labelPushReq.getLabelPushCycle().getSysInfo());
                 }
             }
         } catch (BaseException e) {

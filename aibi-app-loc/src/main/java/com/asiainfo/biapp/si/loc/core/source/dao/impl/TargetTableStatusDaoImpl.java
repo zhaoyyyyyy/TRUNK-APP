@@ -62,6 +62,16 @@ public class TargetTableStatusDaoImpl extends BaseDaoImpl<TargetTableStatus, Str
         Map<String, Object> params = (Map<String, Object>) reMap.get("params");
         return super.findListByHql(reMap.get("hql").toString(), params);
     }
+    
+    public TargetTableStatus selectLastestDateByCycle(int readCycle) {
+        String hql = "from  TargetTableStatus  where dataDate = ("
+                   +"select max(a.dataDate) from TargetTableStatus a,SourceTableInfo b "
+                   +"where a.sourceTableId = b.sourceTableId and b.readCycle = :readCycle )" ;
+        Map<String, Object> params = new HashMap<>();
+        params.put("readCycle", readCycle);
+        return super.findOneByHql(hql, params);
+    }
+    
 
     public Map<String, Object> fromBean(TargetTableStatus targetTableStatusVo) {
         Map<String, Object> reMap = new HashMap<>();
@@ -102,6 +112,10 @@ public class TargetTableStatusDaoImpl extends BaseDaoImpl<TargetTableStatus, Str
         if (StringUtils.isNotBlank(targetTableStatusVo.getExceptionDesc())) {
             hql.append("and d.exceptionDesc LIKE :exceptionDesc ");
             params.put("exceptionDesc", "%" + targetTableStatusVo.getExceptionDesc() + "%");
+        }
+        if (StringUtils.isNotBlank(targetTableStatusVo.getSourceTableInfo().getConfigId())) {
+            hql.append("and d.sourceTableInfo.configId = :configId ");
+            params.put("configId",targetTableStatusVo.getSourceTableInfo().getConfigId() );
         }
         reMap.put("hql", hql);
         reMap.put("params", params);

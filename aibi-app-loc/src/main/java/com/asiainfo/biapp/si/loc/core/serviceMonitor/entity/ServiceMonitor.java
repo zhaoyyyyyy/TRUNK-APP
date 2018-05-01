@@ -12,6 +12,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import com.asiainfo.biapp.si.loc.base.entity.BaseEntity;
 
@@ -187,6 +188,12 @@ public class ServiceMonitor extends BaseEntity {
     @ApiParam(value = "客户群预约数量")
     private Integer pushingCount;
 
+    /**
+     * 排序字段
+     */
+    @Transient
+    private Integer sortOrder;
+    
     
     public String getConfigId() {
         return configId;
@@ -373,6 +380,18 @@ public class ServiceMonitor extends BaseEntity {
     
     public void setPushingCount(Integer pushingCount) {
         this.pushingCount = pushingCount;
+    }
+
+
+    
+    public Integer getSortOrder() {
+        return sortOrder;
+    }
+
+
+    
+    public void setSortOrder(Integer sortOrder) {
+        this.sortOrder = sortOrder;
     }
   
 }

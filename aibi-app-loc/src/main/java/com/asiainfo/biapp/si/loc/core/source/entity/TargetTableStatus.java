@@ -10,7 +10,10 @@ import io.swagger.annotations.ApiParam;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import com.asiainfo.biapp.si.loc.base.entity.BaseEntity;
@@ -124,6 +127,10 @@ public class TargetTableStatus extends BaseEntity {
     @Column(name = "EXCEPTION_DESC")
     @ApiParam(value = "错误信息描述")
     private String exceptionDesc;
+    
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "SOURCE_TABLE_ID", referencedColumnName = "SOURCE_TABLE_ID", insertable = false, updatable = false)
+    private SourceTableInfo  sourceTableInfo;
 
     public String getSourceTableId() {
         return sourceTableId;
@@ -195,6 +202,36 @@ public class TargetTableStatus extends BaseEntity {
 
     public void setExceptionDesc(String exceptionDesc) {
         this.exceptionDesc = exceptionDesc;
+    }
+
+    
+    public String getStartTime() {
+        return startTime;
+    }
+
+    
+    public void setStartTime(String startTime) {
+        this.startTime = startTime;
+    }
+
+    
+    public String getEndTime() {
+        return endTime;
+    }
+
+    
+    public void setEndTime(String endTime) {
+        this.endTime = endTime;
+    }
+
+    
+    public SourceTableInfo getSourceTableInfo() {
+        return sourceTableInfo;
+    }
+
+    
+    public void setSourceTableInfo(SourceTableInfo sourceTableInfo) {
+        this.sourceTableInfo = sourceTableInfo;
     }
 
 }
