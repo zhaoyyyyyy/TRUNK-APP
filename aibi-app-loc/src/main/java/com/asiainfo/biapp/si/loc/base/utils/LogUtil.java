@@ -26,11 +26,7 @@ public class LogUtil {
     private static final String LEVEL_ERROR = "1";
     private static final String LEVEL_INFO = "2";
     private static final String LEVEL_WARN = "3";
-    
-//    private static final String LEVEL_DEBUG = "DEBUG";
-//    private static final String LEVEL_INFO = "INFO";
-//    private static final String LEVEL_WARN = "WARN";
-//    private static final String LEVEL_ERROR = "ERROR";
+    private static final String SYS_PRE = "sys_";
     
 
     private static String jauthUrl;
@@ -164,8 +160,8 @@ public class LogUtil {
     	//默认各种标识
     	HttpServletRequest request = null;
     	String url = "local";
-    	String userId = "loc_sys";
-    	String token = "loc_sys";
+    	String userId = SYS_PRE+nodeName;
+    	String token = userId;
     	
         try {
     		request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
