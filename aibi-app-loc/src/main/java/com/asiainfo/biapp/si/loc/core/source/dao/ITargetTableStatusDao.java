@@ -62,10 +62,9 @@ public interface ITargetTableStatusDao extends BaseDao<TargetTableStatus, String
     /**
      * 根据读取周期查询指标源表最新日期
      *
-     * @param readCycle
      * @return
      */
-    public TargetTableStatus selectLastestDateByCycle(int readCycle);
+    public String selectLastestDateByCycle();
     
 
 }

@@ -11,10 +11,14 @@ window.loc_onload = function() {
 		data:{
 			configId:"",  //从运营总览传入的专区id
 			serviceMonitorObj:{},  //运营总览
-			dataDate:"",//数据日期
+			qryDataDate:"",//数据日期
+		  	firstDataDay:'',//最新日周期日期
+        	firstDataMonth:'',//最新月周期日期
 			yyjkList:[],  //运营监控枚举
 			sjzbList:[],  //数据准备状态
 			sjcqList:[],  //数据抽取状态
+			dataStatusBox:[],//数据状态数组
+			isDoingBox:[],//抽取状态数组
 			bqscList:[],  //标签生成状态
 			khqscList:[],  //客户群生成生成状态
 			khqtsList:[],  //客户群推送生成状态
@@ -32,7 +36,7 @@ window.loc_onload = function() {
 			sysMonth:"",//系统设置月周期范围
 			zbFlag:true, //数据准备表格默认显示准备状态
 			isOpen:false,//日期下拉
-			isDown:false//状态下拉
+			isDown:false,//状态下拉
 		},
 		methods:{
 			//加载监控数据
@@ -59,7 +63,9 @@ window.loc_onload = function() {
             	var that = this;
             	var iframeDataDate = $.getUrlParam("dataDate");
     			if(iframeDataDate){
-    				this.dataDate = iframeDataDate;
+    				that.firstDataDay = DateFmt.Formate(new Date(iframeDataDate),"yyyy-MM-dd");
+					that.firstDataMonth = DateFmt.Formate(new Date(iframeDataDate),"yyyy-MM");
+					that.qryDataDate = that.firstDataDay;
     			}else{
     				$.commAjax({
     					url : $.ctx + "/api/source/TargetTableStatus/selectLastestDateByCycle",
@@ -68,9 +74,14 @@ window.loc_onload = function() {
     					},
     					onSuccess : function(returnObj) {
     						if(returnObj.data){
-    							$("#dataTime").val(returnObj.data);
-    							that.dataDate = returnObj.data.replace(/-/g,"");
+    							that.firstDataDay = DateFmt.Formate(new Date(returnObj.data),"yyyy-MM-dd");
+    							that.firstDataMonth = DateFmt.Formate(new Date(returnObj.data),"yyyy-MM");
+    						}else{
+    							var now = new Date();
+    							that.firstDataDay = $.dateFormat(new Date(now.getTime() - 2*24*60*60*1000),"yyyy-MM-dd");
+    							that.firstDataMonth = $.dateFormat(new Date(now.getTime() - 2*24*60*60*1000),"yyyy-MM");
     						}
+    						that.qryDataDate = that.firstDataDay;
     						fn();
     					}
     				});
@@ -103,7 +114,7 @@ window.loc_onload = function() {
 					url : $.ctx + "/api/monitor/overview/queryMonitorMainByConfig",
 					postData : {
 						configId : that.configId,
-						dataDate : that.dataDate.replace(/-/g,""),
+						dataDate : that.qryDataDate.replace(/-/g,""),
 					},
 					onSuccess : function(returnObj) {
 						if(returnObj.data){
@@ -112,7 +123,7 @@ window.loc_onload = function() {
 					}
 				});
 			},
-			//表格查询方法
+			//表格模糊查询方法
 			qryTableByCond:function(e){
 				var $el=$(e.target);
 				var $tableId = $("#"+$el.attr("data-tableId"));
@@ -120,15 +131,68 @@ window.loc_onload = function() {
 				$($tableId).setGridParam({
 					postData: $formSearchId.formToJson(),
 					dataType : 'json'
-					//TODO (1)根据状态查询表格
-//					  postData: {
-//			                "dataStatus": '',
-//			                "isDoing": '',
-//			          },
 				}).trigger("reloadGrid", [{
 					page: 1
 				}]);
 			},
+			//表格点击状态过滤 TODO
+		    qryTableByStatus:function(e){
+		    	var $el=$(e.target);
+		    	var postObj = {};
+		    	var ztListId = $el.parents("span").attr("id");
+		    	var tableId;
+		    	if("sjzbList" === ztListId){
+		    		tableId = $("#sjzbAll").attr("data-tableId");
+		    		if($el.prop('checked')){
+		    			this.dataStatusBox.push($el.val());
+		    			if(this.dataStatusBox.length === this.sjzbList.length){
+		    				$("#sjzbAll").prop("checked",true);
+		    			}else{
+		    				$("#sjzbAll").prop("checked",false);
+		    			}
+		    		}else{
+		    			for(var i=0;i<this.dataStatusBox.length;i++){
+		    				if($el.val() === this.dataStatusBox[i]){
+		    					 this.dataStatusBox.splice(i,1);
+		    				}
+		    			}
+		    			$("#sjzbAll").prop("checked",false);
+		    		}
+		    		var dataStatusCodes = [];
+		    		$.each(this.dataStatusBox,function(key,value){
+		    			dataStatusCodes.push(value);
+		    		});
+		    		postObj.dataStatus = dataStatusCodes;
+		    	}else if("sjcqList" === ztListId){
+		    		tableId = $("#sjzbAll").attr("data-tableId");
+		    		if($el.prop('checked')){
+		    			this.isDoingBox.push($el.val());
+		    			if(this.isDoingBox.length === this.sjcqList.length){
+		    				$("#sjzbAll").prop("checked",true);
+		    			}else{
+		    				$("#sjzbAll").prop("checked",false);
+		    			}
+		    		}else{
+		    			for(var i=0;i<this.isDoingBox.length;i++){
+		    				if($el.val() === this.isDoingBox[i]){
+		    					 this.isDoingBox.splice(i,1);
+		    				}
+		    			}
+		    			$("#sjzbAll").prop("checked",false)
+		    		}
+		    		var isDoingCodes = [];
+		    		$.each(this.isDoingBox,function(key,value){
+		    			isDoingCodes.push(value);
+		    		});
+		    		postObj.isDoing = isDoingCodes;
+		    	}
+				$("#"+tableId).setGridParam({
+					postData:postObj,
+					dataType : 'json'
+				}).trigger("reloadGrid", [{
+					page: 1
+				}]);
+		    },
 			// 设置页面刷新频率
 	        refresh:function(value){
 	            this.setTimes(value);
@@ -145,15 +209,14 @@ window.loc_onload = function() {
 	            clearTimeout(that.timerId);   // 关闭定时器
 	            that.timerId = setTimeout(function(){
 	            	that.loadMonitorDetailData(that.configId);
-	     		    //TODO (2)定时刷新功能
 	            	//刷新数据准备表格
-//	     			that.reloadTable("#dataPrepareTable",that.zbFlag);
+	     			that.reloadTable("#dataPrepareTable",that.zbFlag);
 	     			//刷新标签生成表格
-//	     			that.reloadTable("#labelGenerateTable");
+	     			that.reloadTable("#labelGenerateTable");
 //	       			//刷新客户群生成表格
-//	     			that.reloadTable("#customGenerateTable");
+	     			that.reloadTable("#customGenerateTable");
 	      			//刷新客户群推送表格
-//	     			that.reloadTable("#customPushTable");
+	     			that.reloadTable("#customPushTable");
 	            }.bind(this),this.defaultTimes);
 	        },
 	        //获取运营监控状态字典
@@ -170,6 +233,7 @@ window.loc_onload = function() {
 		    	var sjzbList = [];
 		    	var dicSjzb = $.getDicData("SJZBZT");
 		    	for(var i=0; i<dicSjzb.length; i++){
+		    		this.dataStatusBox.push(dicSjzb[i].code);
 		    		sjzbList.push(dicSjzb[i]);
 		    	}
 		    	this.sjzbList = sjzbList;
@@ -179,6 +243,7 @@ window.loc_onload = function() {
 		    	var sjcqList = [];
 		    	var dicSjcq = $.getDicData("SJCQZT");
 		    	for(var i=0; i<dicSjcq.length; i++){
+		    		this.isDoingBox.push(dicSjcq[i].code);
 		    		sjcqList.push(dicSjcq[i]);
 		    	}
 		    	this.sjcqList = sjcqList;
@@ -225,76 +290,39 @@ window.loc_onload = function() {
             	var dateElement=$(event.currentTarget).siblings(".control-input").find("input");
             	this.readCycle =$(event.currentTarget).find("option:selected").val();
             	if(Number(this.readCycle) === 1){
-		    		dateElement.val(DateFmt.Formate(new Date(),"yyyy-MM-dd")).datepicker( "destroy" ).datepicker({
-		    			dateFormat: "yy-mm-dd",
-						showButtonPanel: false,
-						changeMonth: false,
-      					changeYear: false,
-      					defaultDate:+1,
-      					minDate:DateFmt.DateCalc(new Date(),"d",this.sysDay),
-		    			maxDate:DateFmt.DateCalc(new Date(),"d",0),
-						beforeShow :function(){
-			    			$("#ui-datepicker-div").removeClass("ui-hide-calendar");
-			    		}
-		    		}).off("click");
+            		dateElement.val(this.firstDataDay);
+            		this.qryDataDate=this.firstDataDay;
 		    	}else{
-		    		dateElement.val(DateFmt.Formate(new Date(),"yyyy-MM")).datepicker( "destroy" ).datepicker({
-            			dateFormat: "yyyy-MM",
-						showButtonPanel: true,
-						closeText:"确定" ,
-						changeMonth: true,
-      					changeYear: true,
-      					minDate:DateFmt.DateCalc(new Date(),"M",this.sysMonth),
-		    			maxDate:DateFmt.DateCalc(new Date(),"M",0),
-						beforeShow :function(){
-			    			$("#ui-datepicker-div").addClass("ui-hide-calendar");
-			    		},
-			    		 onClose: function(dateText, inst) {
-    			            var month = $("#ui-datepicker-div .ui-datepicker-month option:selected").val();//得到选中的月份值
-    			            var year = $("#ui-datepicker-div .ui-datepicker-year option:selected").val();//得到选中的年份值
-    			            var dateStr = DateFmt.Formate(DateFmt.parseDate(year+'-'+(parseInt(month)+1)),"yyyy-MM");
-    			            dateElement.val(dateStr);//给input赋值，其中要对月值加1才是实际的月份
-    			        }
-            		}).off("click");
+		    		dateElement.val(this.firstDataMonth);
+		    		this.qryDataDate=this.firstDataMonth;
 		    	}
         	  that.changeMonitorByDate(dateElement.val());
             },
             // 日期切换函数
             getTime:function(e){//初始化日期
          	   var that = this;
- 	        	if(Number($(event.currentTarget).parents("div").siblings("select").find("option:selected").val()) === 1){
- 	        		$(e.target).datepicker({
- 		    			dateFormat: "yy-mm-dd",
- 						showButtonPanel: false,
- 						changeMonth: false,
-       					changeYear: false,
-       					defaultDate:+1,
-       					minDate:DateFmt.DateCalc(new Date(),"d",that.sysDay),
- 		    			maxDate:DateFmt.DateCalc(new Date(),"d",0),
- 						beforeShow :function(){
- 			    			$("#ui-datepicker-div").removeClass("ui-hide-calendar");
- 			    		},
- 			    		onClose:function(dateText, inst){
- 			    			that.changeMonitorByDate(dateText);
- 			    		}
- 		    		});
+ 	           if(Number($(event.currentTarget).parents("div").siblings("select").find("option:selected").val()) === 1){
+ 	        		var minDay ='#F{$dp.$DV(\''+new Date(that.qryDataDate)+'\',{M:'+that.sysDay+'});}';
+	        		WdatePicker({
+	        			isShowClear:false,
+	        			dateFmt:'yyyy-MM-dd',
+		    			maxDate:new Date(that.qryDataDate),
+		    			minDate:minDay,
+		    			onpicked: function(dq) {
+		    				that.changeMonitorByDate(dq.cal.getNewDateStr());
+		    			}
+		    		});
  	        	}else{
- 	        		$(e.target).datepicker({
- 	        			isShowClear:false,
-             			dateFormat: "yyyy-MM",
- 						showButtonPanel: true,
- 						closeText:"确定" ,
- 						changeMonth: true,
-       					changeYear: true,
-       					minDate:DateFmt.DateCalc(new Date(),"M",that.sysMonth),
- 		    			maxDate:DateFmt.DateCalc(new Date(),"M",0),
- 						beforeShow :function(){
- 			    			$("#ui-datepicker-div").addClass("ui-hide-calendar");
- 			    		},
- 			    		onClose: function(dateText, inst) {
- 			    		    that.changeMonitorByDate(dateText);
-     			        }
- 	        		});
+ 	        		var minMonth ='#F{$dp.$DV(\''+new Date(that.qryDataDate)+'\',{M:'+that.sysMonth+'});}';
+	        		WdatePicker({
+	        			isShowClear:false,
+	        			dateFmt:'yyyy-MM',
+		    			maxDate:new Date(that.qryDataDate),
+		    			minDate:minMonth,
+		    			onpicked: function(dq) {
+		    				that.changeMonitorByDate(dq.cal.getNewDateStr());
+		    			}
+		    		});
  	        	}
              },
             changeDataPrepareTableByStatus:function(event){//状态切换
@@ -304,6 +332,7 @@ window.loc_onload = function() {
 		    	}else{
 		    		this.zbFlag = false;
 		    	}
+		    	$("#sjzbAll").trigger("clicked");
 		    	this.reloadTable("#dataPrepareTable");
 		    },
 		    //初始化数据准备表格
@@ -311,7 +340,7 @@ window.loc_onload = function() {
 		    	this.isDown=false;
 		    	var tableId = "#dataPrepareTable";
 		    	this.tableUrl = $.ctx + "/api/source/TargetTableStatus/queryPage";
-		    	this.postData = {"sourceTableInfo.configId": this.configId,"dataDate":this.dataDate};
+		    	this.postData = {"sourceTableInfo.configId": this.configId,"dataDate":this.qryDataDate.replace(/-/g,"")};
 		    	this.pager = "#dataPreparePager";
 		    	this.colNames = [ '表名', '准备状态', '抽取状态','准备完成时间','抽取完成时间' ];
 		    	this.colModel = [ {
@@ -328,6 +357,7 @@ window.loc_onload = function() {
 	    			width : 60,
 	    			align : "center",
 	    			sortable : false,
+	    			cellattr: setColColor,
 	    			formatter : function(value, opts, data) {
 	            		return $.getCodeDesc("SJZBZT",value);
 	            	}
@@ -371,12 +401,13 @@ window.loc_onload = function() {
 		    initLabelGenerateTable:function(){
 		    	var tableId = "#labelGenerateTable";
 		    	this.tableUrl = $.ctx + "/api/label/labelStatus/queryPage";
-		    	this.postData = {'labelInfo.configId' : this.configId,"dataDate":this.dataDate};
+		    	this.postData = {'labelInfo.configId' : this.configId,"dataDate":this.qryDataDate.replace(/-/g,"")};
 		    	this.colNames = [ '标签名称', '生成状态', '目标表列名', '表名','表类型','错误信息描述' ];
 		    	this.colModel = [ {
 		    		name : 'labelInfo.labelName',
 		    		index : 'labelInfo.labelName',
 		    		width : 110,
+		    		align : "center",
 		    		sortable : false,
 		    		frozen : true,
 		    	},
@@ -386,6 +417,7 @@ window.loc_onload = function() {
 		    		width : 50,
 		    		align : "center",
 		    		sortable : false,
+		    		cellattr: setColColor,
 			        formatter: function(cellvalue, options, rowObject) {
 			            var action ="showErrorInfo(" +  "'" + options.rowId + "','#labelGenerateTable')";
 			            return "<a style='color: #89B9FF;font-size: 14px;text-decoration: underline;' onclick=" + action + " >"+$.getCodeDesc("BQSCZT",cellvalue)+"</a>";
@@ -424,14 +456,15 @@ window.loc_onload = function() {
 		    initCustomGenerateTable:function(){
 		    	var tableId = "#customGenerateTable";
 		    	this.tableUrl = $.ctx + "/api/label/listInfo/queryPage";
-		    	this.postData = {"labelInfo.configId" :this.configId,"listInfo.dataDate":this.dataDate };
+		    	this.postData = {"labelInfo.configId" :this.configId,"dataDate":this.qryDataDate.replace(/-/g,"") };
 		    	this.colNames =[ '客户群名称', '生成状态', '生成时间' ];
 		    	this.colModel = [ {
 		    		name : 'labelInfo.labelName',
 		    		index : 'labelInfo.labelName',
 		    		width : 110,
+		    		align : "center",
 		    		sortable : false,
-		    		frozen : true,
+		    		frozen : true
 		    	},
 		    	{
 		    		name : 'dataStatus',
@@ -439,6 +472,7 @@ window.loc_onload = function() {
 		    		width : 50,
 		    		align : "center",
 		    		sortable : false,
+		    		cellattr: setColColor,
 		    		formatter : function(value, opts, data) {
 		        		return $.getCodeDesc("KHQSCZT",value);
 		        	}
@@ -448,6 +482,9 @@ window.loc_onload = function() {
 		    		width : 110,
 		    		sortable : false,
 		    		align : "center",
+		    		formatter:function(value, opts, data){
+		    			return DateFmt.dateFormatter(value, opts, data);
+		    		}
 		    	}];
 		    	this.pager = "#customGeneratePager" ;
 		    	this.initTable(tableId);
@@ -456,14 +493,15 @@ window.loc_onload = function() {
 		    initCustomPushTable:function(){
 		    	var tableId = "#customPushTable";
 		    	this.tableUrl =  $.ctx + "/api/syspush/labelPushReq/queryPage";
-		    	this.postData = {'labelPushCycle.labelInfo.configId' : this.configId,"dataDate":this.dataDate};
+		    	this.postData = {'labelPushCycle.labelInfo.configId' : this.configId,"dataDate":this.qryDataDate.replace(/-/g,"")};
 		    	this.colNames =[ '客户群名称', '推送平台', '推送时间','推送状态' ];
 		    	this.colModel = [ {
 		    		name : 'labelPushCycle.labelInfo.labelName',
 		    		index : 'labelPushCycle.labelInfo.labelName',
 		    		width : 110,
 		    		sortable : false,
-		    		frozen : true,
+		    		align : "center",
+		    		frozen : true
 		    	},
 		    	 {
 		    		name : 'labelPushCycle.sysInfo.sysName',
@@ -471,12 +509,16 @@ window.loc_onload = function() {
 		    		width : 110,
 		    		sortable : false,
 		    		frozen : true,
+		    		align : "center"
 		    	},{
 		    		name : 'startTime',
 		    		index : 'startTime',
 		    		width : 110,
 		    		sortable : false,
 		    		align : "center",
+		    		formatter:function(value, opts, data){
+		    			return DateFmt.dateFormatter(value, opts, data);
+		    		}
 		    	},
 		    	{
 		    		name : 'pushStatus',
@@ -484,6 +526,7 @@ window.loc_onload = function() {
 		    		width : 50,
 		    		align : "center",
 		    		sortable : false,
+		    		cellattr: setColColor,
 		    		formatter : function(value, opts, data) {
 		        		return $.getCodeDesc("KHQTSZT",value);
 		        	}
@@ -527,9 +570,6 @@ window.loc_onload = function() {
 		    },
 		    reloadTable:function(tableId){
 		    	$(tableId)
-//		    	.setGridParam({
-//					postData: $('#formSearch').formToJson()
-//				})
 				.trigger("reloadGrid", [{
 					page: 1
 				}]);
@@ -545,8 +585,6 @@ window.loc_onload = function() {
 				this.configId = configId;
 			}
 
-			this.sysDay = 1 - $.getSysConfig('LOC_CONFIG_APP_MAX_KEEP_DAYS');
-    	    this.sysMonth = 1 - $.getSysConfig('LOC_CONFIG_APP_MAX_KEEP_MONTHS');
 			//数据字典赋值
 			this.loadDicYyjk();
 			this.loadDicSjzb();
@@ -563,19 +601,34 @@ window.loc_onload = function() {
 			});
 		
 			//默认刷新频率
-//			this.refresh(this.defaultPl);
+			this.refresh(this.defaultPl);
 			
 			//从监控总览页面跳转到指定锚点位置
 			var detailAnchor = $.getUrlParam("detailAnchor");
 			if(detailAnchor){
-				//TODO (3)iframe 锚点跳转
+				//TODO iframe 锚点跳转
+				$("#"+detailAnchor).trigger("click");
 //				window.parent.open("#"+detailAnchor,"monitorDetail");
-				location.href="#"+detailAnchor;
+//				location.href="#"+detailAnchor;
 //				location.target="monitorDetail"
 			}
 		}
 		
 	});
+	
+    monitorDetail.$nextTick(function () {
+    	monitorDetail.sysDay = 1 - $.getSysConfig('LOC_CONFIG_APP_MAX_KEEP_DAYS');
+    	monitorDetail.sysMonth = 1 - $.getSysConfig('LOC_CONFIG_APP_MAX_KEEP_MONTHS');
+    });
+    
+    //数据准备的全部
+    $("#sjzbAll").click(function(){
+    	if($(this).prop("checked")){
+    		$(this).siblings("span").find("input").prop("checked",true);
+    	}else{
+    		$(this).siblings("span").find("input").prop("checked",false);
+    	}
+    });
 	$(".ui-pre-progress a").each(function(e){//锚点定位
 		var anchors=$(this);
 		$(this).click(function(){
@@ -625,6 +678,21 @@ function scroll(){
         };
     }
 }
+
+
+//给列表状态设置不同的颜色
+function setColColor(rowId, val, rawObject, datatype, cm, rdata, name) {
+	if (val == '1') {
+		return "style='color:#009933;'";
+	}
+	if (val == '2') {
+		return "style='color:#FF9900;'";
+	}
+	if (val == '3') {
+		return "style='color:#FF0000;'";
+	}
+}
+
 window.onscroll =function(){//吸顶导航
     if(scroll().top>=281){
         $(".ui-pre-progress").addClass("active");

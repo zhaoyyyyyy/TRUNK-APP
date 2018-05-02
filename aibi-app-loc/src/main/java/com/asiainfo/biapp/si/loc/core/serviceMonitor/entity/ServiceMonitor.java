@@ -8,12 +8,16 @@ package com.asiainfo.biapp.si.loc.core.serviceMonitor.entity;
 
 import io.swagger.annotations.ApiParam;
 
+import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import com.asiainfo.biapp.si.loc.base.utils.DateUtil;
+import com.asiainfo.biapp.si.loc.base.utils.StringUtil;
 import com.asiainfo.biapp.si.loc.base.entity.BaseEntity;
 
 /**
@@ -214,7 +218,16 @@ public class ServiceMonitor extends BaseEntity {
     }
     
     public String getDataDate() {
-        return dataDate;
+        if(StringUtil.isNotEmpty(dataDate)){
+            if(dataDate.length()==6){
+                Date formatDate = DateUtil.string2Date(dataDate, DateUtil.FORMAT_YYYYMM);
+                dataDate = DateUtil.date2String(formatDate,DateUtil.FORMAT_YYYY_MM);
+            }else if(dataDate.length()==8){
+                Date formatDate = DateUtil.string2Date(dataDate, DateUtil.FORMAT_YYYYMMDD);
+                dataDate = DateUtil.date2String(formatDate,DateUtil.FORMAT_YYYY_MM_DD);
+            }
+        }
+       return dataDate;
     }
 
     

@@ -42,10 +42,15 @@ public class ListInfoDaoImpl extends BaseDaoImpl<ListInfo, String> implements IL
 		Map<String, Object> reMap = new HashMap<>();
         Map<String, Object> params = new HashMap<>();
         StringBuffer hql = new StringBuffer("from ListInfo l where 1=1 ");
-        if (null != listInfoVo.getListInfoId() && StringUtil.isNotBlank(listInfoVo.getListInfoId().getCustomGroupId())) {
-            hql.append("and l.customGroupId = :customGroupId and l.dataDate = :dataDate ");
-            params.put("customGroupId", listInfoVo.getListInfoId().getCustomGroupId());
-            params.put("dataDate", listInfoVo.getListInfoId().getDataDate());
+        if (null != listInfoVo.getListInfoId() ) {
+            if(StringUtil.isNotBlank(listInfoVo.getListInfoId().getCustomGroupId())){
+                hql.append("and l.listInfo.customGroupId = :customGroupId ");
+                params.put("customGroupId", listInfoVo.getListInfoId().getCustomGroupId());
+            }
+            if(StringUtil.isNotBlank(listInfoVo.getListInfoId().getDataDate())){
+                hql.append("and l.listInfo.dataDate = :dataDate ");
+                params.put("dataDate", listInfoVo.getListInfoId().getDataDate());
+            }
         }
         if(null != listInfoVo.getCustomNum()){
         	hql.append("and l.customNum = :customNum ");

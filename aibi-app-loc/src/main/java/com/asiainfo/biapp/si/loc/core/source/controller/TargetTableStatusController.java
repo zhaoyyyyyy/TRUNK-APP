@@ -211,13 +211,12 @@ public class TargetTableStatusController extends BaseController<TargetTableStatu
     }
     
     @ApiOperation(value = "根据读取周期查询指标源表最新日期")
-    @ApiImplicitParam(name = "readCycle", value = "readCycle", required = true, paramType = "query", dataType = "int")
     @RequestMapping(value = "/TargetTableStatus/selectLastestDateByCycle", method = RequestMethod.POST)
-    public WebResult<String> selectLastestDateByCycle(Integer readCycle) throws BaseException {
+    public WebResult<String> selectLastestDateByCycle() throws BaseException {
         WebResult<String> webResult = new WebResult<>();
         String lastestDate = ""; 
         try {
-            lastestDate = iTargetTableStatusService.selectLastestDateByCycle(readCycle);
+            lastestDate = iTargetTableStatusService.selectLastestDateByCycle();
         } catch (BaseException e) {
             return webResult.fail("根据读取周期查询指标源表最新日期失败:",e);
         }

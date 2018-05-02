@@ -63,13 +63,18 @@ public class TargetTableStatusDaoImpl extends BaseDaoImpl<TargetTableStatus, Str
         return super.findListByHql(reMap.get("hql").toString(), params);
     }
     
-    public TargetTableStatus selectLastestDateByCycle(int readCycle) {
+    public String selectLastestDateByCycle() {
         String hql = "from  TargetTableStatus  where dataDate = ("
-                   +"select max(a.dataDate) from TargetTableStatus a,SourceTableInfo b "
-                   +"where a.sourceTableId = b.sourceTableId and b.readCycle = :readCycle )" ;
+                +"select max(dataDate) from TargetTableStatus )";
+//                   +"select max(a.dataDate) from TargetTableStatus a,SourceTableInfo b "
+//                   +"where a.sourceTableId = b.sourceTableId and b.readCycle = :readCycle )" ;
         Map<String, Object> params = new HashMap<>();
-        params.put("readCycle", readCycle);
-        return super.findOneByHql(hql, params);
+//        params.put("readCycle", readCycle);
+        List<TargetTableStatus> targetTableStatuses = super.findListByHql(hql, params);
+        if(targetTableStatuses.size() > 0){
+            return targetTableStatuses.get(0).getDataDate();
+        }
+        return "";
     }
     
 

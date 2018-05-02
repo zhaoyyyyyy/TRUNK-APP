@@ -19,6 +19,7 @@ import com.asiainfo.biapp.si.loc.base.controller.BaseController;
 import com.asiainfo.biapp.si.loc.base.exception.BaseException;
 import com.asiainfo.biapp.si.loc.base.page.Page;
 import com.asiainfo.biapp.si.loc.bd.list.entity.ListInfo;
+import com.asiainfo.biapp.si.loc.bd.list.entity.ListInfoId;
 import com.asiainfo.biapp.si.loc.bd.list.service.IListInfoService;
 
 /**
@@ -56,9 +57,10 @@ public class ListInfoController extends BaseController<ListInfo> {
     
     @ApiOperation(value = "分页查询")
     @RequestMapping(value = "/listInfo/queryPage", method = RequestMethod.POST)
-    public Page<ListInfo> list(@ModelAttribute Page<ListInfo> page,@ModelAttribute ListInfo listInfoVo) throws BaseException{
+    public Page<ListInfo> list(@ModelAttribute Page<ListInfo> page,@ModelAttribute ListInfo listInfoVo,@ModelAttribute ListInfoId listInfoId) throws BaseException{
         Page<ListInfo> listInfoPage = new Page <>();
         try {
+            listInfoVo.setListInfoId(listInfoId);
             listInfoPage=iListInfoService.selectListInfoPageList(listInfoPage, listInfoVo);
         } catch (BaseException e) {
             listInfoPage.fail(e);

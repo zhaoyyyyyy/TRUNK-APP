@@ -10,7 +10,8 @@ window.loc_onload = function() {
         data:{
         	configId:'',//专区ID
         	readCycle:1,//周期默认为日周期
-        	firstDataDate:'',//最新日期
+        	firstDataDay:'',//最新日周期日期
+        	firstDataMonth:'',//最新月周期日期
         	sysDay:'',//系统设置日周期范围
         	sysMonth:'',//系统设置月周期范围
         	configData:[],//专区信息
@@ -21,10 +22,8 @@ window.loc_onload = function() {
         	//页面初始化函数
             initData:function(){
             	var that = this;
-            	this.sysDay = 1 - $.getSysConfig('LOC_CONFIG_APP_MAX_KEEP_DAYS');
-        	    this.sysMonth = 1 - $.getSysConfig('LOC_CONFIG_APP_MAX_KEEP_MONTHS');
             	//获取最新数据日期：取指标源表状态表里最新数据日期
-				this.getLastestDate(function(){
+            	that.getLastestDate(function(){
 					that.initConfigData();
 					that.initMonitorMain();
 				});
@@ -34,15 +33,14 @@ window.loc_onload = function() {
             	var that = this;
             	$.commAjax({
 					url : $.ctx + "/api/source/TargetTableStatus/selectLastestDateByCycle",
-					postData : {
-						readCycle : that.readCycle
-					},
 					onSuccess : function(returnObj) {
 						if(returnObj.data){
-							that.firstDataDate = returnObj.data;
+							that.firstDataDay = DateFmt.Formate(new Date(returnObj.data),"yyyy-MM-dd");
+							that.firstDataMonth = DateFmt.Formate(new Date(returnObj.data),"yyyy-MM");
 						}else{
 							var now = new Date();
-							that.firstDataDate = $.dateFormat(new Date(now.getTime() - 2*24*60*60*1000),"yyyy-MM-dd");
+							that.firstDataDay = $.dateFormat(new Date(now.getTime() - 2*24*60*60*1000),"yyyy-MM-dd");
+							that.firstDataMonth = $.dateFormat(new Date(now.getTime() - 2*24*60*60*1000),"yyyy-MM");
 						}
 						fn();
 					}
@@ -85,7 +83,7 @@ window.loc_onload = function() {
             	$.commAjax({
                     url: $.ctx + "/api/monitor/overview/queryData",
                     postData : {
-    					"dataDate" :that.firstDataDate.replace(/-/g,"")
+    					"dataDate" :that.firstDataDay.replace(/-/g,"")
                     },
                     onSuccess: function(returnObj){
                     	that.monitorData = returnObj.data;
@@ -97,38 +95,10 @@ window.loc_onload = function() {
             	var configId = $(event.target).attr("data-cycleId");
             	var that = this;
             	var dateElement=$(event.currentTarget).siblings(".control-input").find("input");
-            	if($(event.currentTarget).find("option:selected").val()=== 1){
-		    		dateElement.val(DateFmt.Formate(new Date(),"yyyy-MM-dd")).datepicker( "destroy" ).datepicker({
-		    			dateFormat: "yy-mm-dd",
-						showButtonPanel: false,
-						changeMonth: false,
-      					changeYear: false,
-      					defaultDate:+1,
-      					minDate:DateFmt.DateCalc(new Date(),"d",this.sysDay),
-		    			maxDate:DateFmt.DateCalc(new Date(),"d",0),
-						beforeShow :function(){
-			    			$("#ui-datepicker-div").removeClass("ui-hide-calendar");
-			    		}
-		    		}).off("click");
+            	if(Number($(event.currentTarget).find("option:selected").val())=== 1){
+            		dateElement.val(this.firstDataDay);
 		    	}else{
-		    		dateElement.val(DateFmt.Formate(new Date(),"yyyy-MM")).datepicker( "destroy" ).datepicker({
-            			dateFormat: "yyyy-MM",
-						showButtonPanel: true,
-						closeText:"确定" ,
-						changeMonth: true,
-      					changeYear: true,
-      					minDate:DateFmt.DateCalc(new Date(),"M",this.sysMonth),
-		    			maxDate:DateFmt.DateCalc(new Date(),"M",0),
-						beforeShow :function(){
-			    			$("#ui-datepicker-div").addClass("ui-hide-calendar");
-			    		},
-			    		 onClose: function(dateText, inst) {
-    			            var month = $("#ui-datepicker-div .ui-datepicker-month option:selected").val();//得到选中的月份值
-    			            var year = $("#ui-datepicker-div .ui-datepicker-year option:selected").val();//得到选中的年份值
-    			            var dateStr = DateFmt.Formate(DateFmt.parseDate(year+'-'+(parseInt(month)+1)),"yyyy-MM");
-    			            dateElement.val(dateStr);//给input赋值，其中要对月值加1才是实际的月份
-    			        }
-            		}).off("click");
+		    		dateElement.val(this.firstDataMonth);
 		    	}
         	  that.changeMonitorByDate(dateElement.val(),configId);
             },
@@ -137,38 +107,27 @@ window.loc_onload = function() {
         	   var that = this;
 	        	var configId = $(e.target).attr("data-cycleId");
 	        	if(Number($(event.currentTarget).parents("div").siblings("select").find("option:selected").val()) === 1){
-	        		$(e.target).datepicker({
-		    			dateFormat: "yy-mm-dd",
-						showButtonPanel: false,
-						changeMonth: false,
-      					changeYear: false,
-      					defaultDate:+1,
-      					minDate:DateFmt.DateCalc(new Date(),"d",that.sysDay),
-		    			maxDate:DateFmt.DateCalc(new Date(),"d",0),
-						beforeShow :function(){
-			    			$("#ui-datepicker-div").removeClass("ui-hide-calendar");
-			    		},
-			    		onClose:function(dateText, inst){
-			    			that.changeMonitorByDate(dateText,configId);
-			    		}
+	        		var minDay ='#F{$dp.$DV(\''+new Date(that.firstDataDay)+'\',{M:'+this.sysDay+'});}';
+	        		WdatePicker({
+	        			isShowClear:false,
+	        			dateFmt:'yyyy-MM-dd',
+		    			maxDate:new Date(that.firstDataDay),
+		    			minDate:minDay,
+		    			onpicked: function(dq) {
+		    				that.changeMonitorByDate(dq.cal.getNewDateStr(),configId);
+		    			}
 		    		});
 	        	}else{
-	        		$(e.target).datepicker({
+	        		var minMonth ='#F{$dp.$DV(\''+new Date(that.firstDataMonth)+'\',{M:'+this.sysMonth+'});}';
+	        		WdatePicker({
 	        			isShowClear:false,
-            			dateFormat: "yyyy-MM",
-						showButtonPanel: true,
-						closeText:"确定" ,
-						changeMonth: true,
-      					changeYear: true,
-      					minDate:DateFmt.DateCalc(new Date(),"M",that.sysMonth),
-		    			maxDate:DateFmt.DateCalc(new Date(),"M",0),
-						beforeShow :function(){
-			    			$("#ui-datepicker-div").addClass("ui-hide-calendar");
-			    		},
-			    		onClose: function(dateText, inst) {
-			    		    that.changeMonitorByDate(dateText,configId);
-    			        }
-	        		});
+	        			dateFmt:'yyyy-MM',
+		    			maxDate:new Date(that.firstDataMonth),
+		    			minDate:minMonth,
+		    			onpicked: function(dq) {
+		    				that.changeMonitorByDate(dq.cal.getNewDateStr(),configId);
+		    			}
+		    		});
 	        	}
             },
             //点击日期，刷新监控数据
@@ -197,7 +156,7 @@ window.loc_onload = function() {
         		    		}
         		    	}
         		    	
-        		    	if(deleteIndex){
+        		    	if(typeof(deleteIndex) != "undefined"){
         		    		that.monitorData.splice(deleteIndex, 1,deleteVal);
         		    	}
         		    },
@@ -209,6 +168,18 @@ window.loc_onload = function() {
             	var selectConfigId = $(event.target).parents("ul").siblings('div').find('select').attr("data-cycleid");
             	var locationHref='service_monitor_detail.html?detailAnchor='+detailAnchor+'&configId='+selectConfigId+'&dataDate='+dataDate;
             	parent.toggleMenu("#serviceMonitor/service_monitor_detail",locationHref);
+            },
+            //选中与取消选中全部专区
+            selectAllConfigs:function(e){
+            	if($(event.target).prop('checked')){
+            		$.each(this.configData,function(key,value){
+                		$("#"+value.configId+"monitor").show();                		
+            		});
+            	}else{
+            		$.each(this.configData,function(key,value){
+            			$("#"+value.configId+"monitor").hide();
+            		});
+            	}
             }
         },
         mounted: function() {
@@ -216,21 +187,10 @@ window.loc_onload = function() {
         }
     });
 
-    //全部选中
-	$("#selectAllConfigs").click(function(){	
-		if($(this).hasClass("active")){
-			$(this).removeClass("active");
-			$(".ui-lc-mian mt10 ul li").find("input").each(function(){
-				$(this).prop("checked", false);
-				$(this).siblings("label").removeClass("active");
-			});
-		}else{
-			$(this).addClass("active");
-			$(".ui-lc-mian mt10 ul li").find("input").each(function(){
-				$(this).prop("checked", true);
-				$(this).siblings("label").addClass("active");
-			});
-		}
-		
-	});
+    monitorMain.$nextTick(function () {
+    	monitorMain.sysDay = 1 - $.getSysConfig('LOC_CONFIG_APP_MAX_KEEP_DAYS');
+    	monitorMain.sysMonth = 1 - $.getSysConfig('LOC_CONFIG_APP_MAX_KEEP_MONTHS');
+    });
 };
+
+

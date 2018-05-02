@@ -6,6 +6,8 @@
 
 package com.asiainfo.biapp.si.loc.core.source.entity;
 
+import java.text.SimpleDateFormat;
+
 import io.swagger.annotations.ApiParam;
 
 import javax.persistence.Column;
@@ -17,6 +19,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import com.asiainfo.biapp.si.loc.base.entity.BaseEntity;
+import com.asiainfo.biapp.si.loc.base.utils.StringUtil;
 
 /**
  * Title : TargetTableStatus
@@ -206,7 +209,10 @@ public class TargetTableStatus extends BaseEntity {
 
     
     public String getStartTime() {
-        return startTime;
+        if(StringUtil.isNotEmpty(startTime)){
+            startTime.substring(0, startTime.indexOf("."));
+        }
+        return "";
     }
 
     
@@ -216,7 +222,10 @@ public class TargetTableStatus extends BaseEntity {
 
     
     public String getEndTime() {
-        return endTime;
+        if(StringUtil.isNotEmpty(endTime)){
+            return endTime.substring(0, endTime.indexOf("."));
+        }
+        return "";
     }
 
     

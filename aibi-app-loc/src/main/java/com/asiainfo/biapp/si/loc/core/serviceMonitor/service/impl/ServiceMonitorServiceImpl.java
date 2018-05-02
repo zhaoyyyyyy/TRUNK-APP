@@ -94,22 +94,22 @@ public class ServiceMonitorServiceImpl extends BaseServiceImpl<ServiceMonitor, S
                 for(String configId : configIds){
                     serviceMonitors.add(createServiceMonitor(configId, dataDate));
                 }
-                for(ServiceMonitor serviceMonitor : serviceMonitors){
-                    serviceMonitor.setSortOrder(configSortMap.get(serviceMonitor.getConfigId())); 
-                }
-                //根据专区顺序排序
-                Collections.sort(serviceMonitors, new Comparator<ServiceMonitor>(){
-                    @Override
-                    public int compare(ServiceMonitor o1, ServiceMonitor o2) {
-                        if(o1.getSortOrder() != null && o2.getSortOrder() != null ){
-                            return o1.getSortOrder() < o2.getSortOrder()? -1 :1;
-                        }else{
-                            return -1;
-                        }
-                    }
-                    
-                });
             }
+            for(ServiceMonitor serviceMonitor : serviceMonitors){
+                serviceMonitor.setSortOrder(configSortMap.get(serviceMonitor.getConfigId())); 
+            }
+            //根据专区顺序排序
+            Collections.sort(serviceMonitors, new Comparator<ServiceMonitor>(){
+                @Override
+                public int compare(ServiceMonitor o1, ServiceMonitor o2) {
+                    if(o1.getSortOrder() != null && o2.getSortOrder() != null ){
+                        return o1.getSortOrder() < o2.getSortOrder()? -1 :1;
+                    }else{
+                        return -1;
+                    }
+                }
+                
+            });
         }
         return serviceMonitors;
     }
@@ -140,7 +140,10 @@ public class ServiceMonitorServiceImpl extends BaseServiceImpl<ServiceMonitor, S
     private ServiceMonitor createServiceMonitor(String configId,String dataDate) throws BaseException{
         ServiceMonitor serviceMonitor = new ServiceMonitor();
         serviceMonitor.setConfigId(configId);
-        serviceMonitor.setSourceName(iPreConfigInfoService.selectPreConfigInfoById(configId).getSourceName());
+        PreConfigInfo preConfigInfo =  iPreConfigInfoService.selectPreConfigInfoById(configId);
+        if(preConfigInfo != null) {
+            serviceMonitor.setSourceName(preConfigInfo.getSourceName()); 
+        }
         serviceMonitor.setDataDate(dataDate);
         serviceMonitor.setNotPrepareCount(0);
         serviceMonitor.setPreparedCount(0);

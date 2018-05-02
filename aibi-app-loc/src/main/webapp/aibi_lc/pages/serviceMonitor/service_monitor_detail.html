@@ -19,6 +19,21 @@
 		text-overflow:ellipsis;
 		white-space: nowrap;		
 	}
+	.ui-fresh-box .control-input{
+		width: auto;
+	    height: 28px;
+	    position: relative;
+	
+	}
+	.ui-fresh-box .control-input>span{
+		position: absolute;
+	    right: -17px;
+	    top: -15px;	
+	}
+	.ui-fresh-box{
+		border-right:0;
+		border-left: 1px solid #DCE2E4;
+	}
 	</style>
 </head>
 <body>
@@ -38,7 +53,7 @@
 					<em></em>
 		        	<div class="control-input has-icon">
 			           <input type="text"  readonly="readonly" @mousedown="getTime"
-			           	class="form-control input-pointer date-input" id="dataTime">
+			           	class="form-control input-pointer date-input" :value="serviceMonitorObj.dataDate">
 			           <span class="glyphicon-select form-control-feedback"></span>
 			        </div> 
 			        
@@ -50,7 +65,7 @@
 								 <select class="form-control input-pointer" id="refreshId" >
 			                        <option v-for="d in sjsxplList" @change="refresh(d.code)" :value="d.code">{{d.dataName}}</option>
 			                    </select>
-			                   	 秒
+			                   	 <span>秒</span>
 							</div>						
 						</div>
 	               </div>
@@ -176,13 +191,13 @@
 				</div>
 			</div>
 	    	<div class="ui-lc-mian mt10 ui-pre-progress">
-				<a class="ui-pre-refresh ml20">数据准备<em></em></a>
-				<a class="ui-pre-refresh ml10">标签生成<em></em></a>
-				<a class="ui-pre-refresh ml10">客户群生成<em></em></a>
-				<a class="ui-pre-refresh ml10">客户群推送</a>
+				<a class="ui-pre-refresh ml20" id="dataPrepareAnchor">数据准备<em></em></a>
+				<a class="ui-pre-refresh ml10" id="labelGenerateAnchor">标签生成<em></em></a>
+				<a class="ui-pre-refresh ml10" id="customGenerateAnchor">客户群生成<em></em></a>
+				<a class="ui-pre-refresh ml10" id="customPushAnchor">客户群推送</a>
 				<!--<a name="dataReady">&nbsp;</a>-->
 	    	</div>
-	    	<div class="ui-lc-mian mt20 scrollBox" id="dataPrepareAnchor">
+	    	<div class="ui-lc-mian mt20 scrollBox" >
 	    		<h3 class="clearfix pre-jqgrid">
 	    			数据准备
 	    			<div class="ui-status">
@@ -190,17 +205,17 @@
 	    				 	<option value="1">准备状态</option>
 	    				 	<option value="2">抽取状态</option>
 	    				 </select>
-	    				<span><input type="checkbox"> 全部</span>
+	    				<span><input type="checkbox" checked="checked" data-tableId="dataPrepareTable" id="sjzbAll">全部</span>
 	    				<span v-if="zbFlag">
 							<span  v-for="d in sjzbList" id="sjzbList">
 								<!-- <em></em>&nbsp; -->
-								<input type="checkbox">
+								<input type="checkbox" checked="checked" :value="d.code" @click="qryTableByStatus">
 								{{d.dataName}}
 							</span>
 						</span>
 						<span v-else>
 							<span  v-for="d in sjcqList" id="sjcqList">
-								<input type="checkbox">
+								<input type="checkbox" checked="checked" :value="d.code" @click="qryTableByStatus">
 								{{d.dataName}}
 							</span>
 						</span>
@@ -217,14 +232,14 @@
 	                <div id="dataPreparePager"></div>
 	            </div>
 	    	</div>
-	    	<div class="ui-lc-mian mt20 scrollBox" id="labelGenerateAnchor">
+	    	<div class="ui-lc-mian mt20 scrollBox" >
 	    		<h3 class="clearfix pre-jqgrid">
 	    			标签生成
 	    			<div class="ui-status">
 	    				<span>生成状态</span>
-	    				<span> <input type="checkbox"> 全部</span>
+	    				<span> <input type="checkbox" checked="checked" > 全部</span>
 	    				<span  v-for="d in bqscList">
-	    					<input type="checkbox">
+	    					<input type="checkbox" checked="checked" :value="d.code">
 	    					{{d.dataName}}
 	    				</span>
 	    			</div>
@@ -244,15 +259,15 @@
 	    			<span></span>
 	    		</div>
 	    	</div>
-	    	<div class="ui-lc-mian mt20 scrollBox" id="customGenerateAnchor">
+	    	<div class="ui-lc-mian mt20 scrollBox" >
 	    		<h3 class="clearfix pre-jqgrid">
 	    			客户群生成
 	    			<div class="ui-status">
 	    				<span>生成状态</span>
-	    				<span><input type="checkbox"> 全部</span>
+	    				<span><input type="checkbox" checked="checked"> 全部</span>
 	    				<span  v-for="d in khqscList">
 	    					<!-- <em></em>&nbsp; -->
-	    					<input type="checkbox">
+	    					<input type="checkbox" checked="checked" :value="d.code">
 	    					{{d.dataName}}
 	    				</span>
 	    			</div>
@@ -268,20 +283,20 @@
 	                <div id="customGeneratePager"></div>
 	            </div>
 	    	</div>
-			<div class="ui-lc-mian mt20 scrollBox" id="customPushAnchor">
+			<div class="ui-lc-mian mt20 scrollBox" >
      			<h3 class="clearfix pre-jqgrid">
     			客户群推送
     			<div class="ui-status">
     				<span>推送状态</span>
-    				<span><input type="checkbox"> 全部</span>
+    				<span><input type="checkbox" checked="checked"> 全部</span>
     				<span v-for="d in khqtsList">
-    					<input type="checkbox">
+    					<input type="checkbox" checked="checked" :value="d.code">
     					{{d.dataName}}
     				</span>
     			</div>
 				<div id="formSearch-customPush" class="form-group fright width-210">
 					<div class="input-group">
-						<input name="labelPushCycle.labelInfo.labelName" type="text" class="form-control input-pointer" placeholder="模糊查询" />
+						<input name="labelPushCycle.labelInfo.labelName" type="text" class="form-control input-pointer" placeholder="请输入客户群名称" />
 						<div class="input-group-addon input-group-icon right-child" id="btn_search_push" data-tableId="customPushTable" data-formSearchId="formSearch-customPush" @keyup.enter="qryTableByCond($event)" @click="qryTableByCond($event)"></div>			
 					</div>						
 				</div>

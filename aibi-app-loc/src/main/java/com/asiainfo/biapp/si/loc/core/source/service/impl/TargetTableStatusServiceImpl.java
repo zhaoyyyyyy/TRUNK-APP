@@ -6,6 +6,7 @@
 
 package com.asiainfo.biapp.si.loc.core.source.service.impl;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.transaction.Transactional;
@@ -19,6 +20,7 @@ import com.asiainfo.biapp.si.loc.base.exception.BaseException;
 import com.asiainfo.biapp.si.loc.base.exception.ParamRequiredException;
 import com.asiainfo.biapp.si.loc.base.page.Page;
 import com.asiainfo.biapp.si.loc.base.service.impl.BaseServiceImpl;
+import com.asiainfo.biapp.si.loc.base.utils.DateUtil;
 import com.asiainfo.biapp.si.loc.core.source.dao.ITargetTableStatusDao;
 import com.asiainfo.biapp.si.loc.core.source.entity.TargetTableStatus;
 import com.asiainfo.biapp.si.loc.core.source.service.ITargetTableStatusService;
@@ -98,23 +100,9 @@ public class TargetTableStatusServiceImpl extends BaseServiceImpl<TargetTableSta
         super.delete(tableId);
     }
 
-    public String selectLastestDateByCycle(Integer readCycle) throws BaseException {
-        if (readCycle == null) {
-            throw new ParamRequiredException("读取周期不能为空");
-        }
-//        TargetTableStatus targetTableStatus = iTargetTableStatusDao.selectLastestDateByCycle(readCycle.intValue());
-//        List<TargetTableStatus> targetTableStatuses = iTargetTableStatusDao.selectTargetTableStatusList(new TargetTableStatusVo());
-//        if(targetTableStatuses.size() >0 ){
-//            
-//        }
-//        if(targetTableStatus != null && StringUtils.isNotBlank(targetTableStatus.getDataDate())){
-//            return targetTableStatus.getDataDate();
-//        }
-        if(readCycle.intValue() == 1){
-            return "2018-04-27";
-        }else{
-            return "2018-04";
-        }
+    public String selectLastestDateByCycle() throws BaseException {
+        Date firstDate = DateUtil.string2Date(iTargetTableStatusDao.selectLastestDateByCycle(), DateUtil.FORMAT_YYYYMMDD);
+        return  DateUtil.date2String(firstDate,DateUtil.FORMAT_YYYY_MM_DD);
     }
     
 }

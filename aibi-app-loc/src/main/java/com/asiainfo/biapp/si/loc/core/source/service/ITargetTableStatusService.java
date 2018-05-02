@@ -100,10 +100,9 @@ public interface ITargetTableStatusService extends BaseService<TargetTableStatus
      * 
      * Description: 根据读取周期查询指标源表最新日期
      *
-     * @param readCycle
      * @return
      * @throws BaseException
      */
-    public String selectLastestDateByCycle(Integer  readCycle)throws BaseException;
+    public String selectLastestDateByCycle()throws BaseException;
 
 }
