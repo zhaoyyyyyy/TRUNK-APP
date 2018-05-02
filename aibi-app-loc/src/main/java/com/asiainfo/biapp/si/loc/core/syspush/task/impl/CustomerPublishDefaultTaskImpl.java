@@ -96,6 +96,9 @@ import au.com.bytecode.opencsv.CSVWriter;
 @Scope("prototype")
 public class CustomerPublishDefaultTaskImpl implements ICustomerPublishTask {
     
+ // 查询每页大小
+    private static final String EXPORT_TO_FILE_PAGESIZE = "LOC_CONFIG_APP_EXPORT_TO_FILE_PAGESIZE";
+
     @Autowired
     private IBackSqlService backSqlService;
 	
@@ -134,6 +137,7 @@ public class CustomerPublishDefaultTaskImpl implements ICustomerPublishTask {
     private LabelPushReq labelPushReq;      //当前的推送详情
     private LabelInfo customInfo;           //当前的推送客户群
     private String fileName;                //当前的文件名称
+    private String desFileName;             //当前的文件名称
     private List<LabelAttrRel> attrRelList = null;	//当前的推送客户群关联的属性列
 
     private int bufferedRowSize = 10000;    //每次读取数据的条数
@@ -160,7 +164,7 @@ public class CustomerPublishDefaultTaskImpl implements ICustomerPublishTask {
         this.reservedParameters = reservedParameters;
         
         this.cacheProxy = CocCacheProxy.getCacheProxy();
-        String pageSzie = cacheProxy.getSYSConfigInfoByKey("EXPORT_TO_FILE_PAGESIZE"); // 查询每页大小
+        String pageSzie = cacheProxy.getSYSConfigInfoByKey(EXPORT_TO_FILE_PAGESIZE); // 查询每页大小
         if (StringUtil.isNotEmpty(pageSzie)) {
             bufferedRowSize = Integer.valueOf(pageSzie);
         }
@@ -206,7 +210,7 @@ public class CustomerPublishDefaultTaskImpl implements ICustomerPublishTask {
             if (null == sysInfo) {
                 msg = "推送平台("+sysId+")不存在，不推送。";
                 LogUtil.warn(msg);
-                this.updateLog(new BaseException(msg),ServiceConstants.LabelPushReq.PUSH_STATUS_FAILED, null,
+                this.updateLog(new BaseException(msg),ServiceConstants.LabelPushReq.PUSH_STATUS_FAILED,
                     ServiceConstants.CustomDownloadRecord.DATA_STATUS_FAILED);
                 continue;
             } else {
@@ -217,7 +221,7 @@ public class CustomerPublishDefaultTaskImpl implements ICustomerPublishTask {
                 } catch (Exception e) {
                     msg = "根据标签信息获取客户群标签与属性对应关系失败";
                     //跟新实时更新推送状态
-                    this.updateLog(new BaseException(msg),ServiceConstants.LabelPushReq.PUSH_STATUS_FAILED, null,
+                    this.updateLog(new BaseException(msg),ServiceConstants.LabelPushReq.PUSH_STATUS_FAILED,
                         ServiceConstants.CustomDownloadRecord.DATA_STATUS_FAILED);
                     LogUtil.error(msg, e);
                     continue;
@@ -233,7 +237,7 @@ public class CustomerPublishDefaultTaskImpl implements ICustomerPublishTask {
                 } catch (Exception e) {
                     msg = "查询客户群(id:"+customId+",name:"+customInfo.getLabelName()+",dataDate:"
                             +customInfo.getDataDate()+")的清单数据出错，不推送。sql："+sql;
-                    this.updateLog(new BaseException(msg),ServiceConstants.LabelPushReq.PUSH_STATUS_FAILED, null,
+                    this.updateLog(new BaseException(msg),ServiceConstants.LabelPushReq.PUSH_STATUS_FAILED,
                         ServiceConstants.CustomDownloadRecord.DATA_STATUS_FAILED);
                     LogUtil.warn(msg);
                     continue;
@@ -244,14 +248,14 @@ public class CustomerPublishDefaultTaskImpl implements ICustomerPublishTask {
             try {
                 this.customPublish(sysId, customInfo.getCreateUserId());
             } catch (Exception e) {
-                this.updateLog(e,ServiceConstants.LabelPushReq.PUSH_STATUS_FAILED, null, ServiceConstants.CustomDownloadRecord.DATA_STATUS_FAILED);
+                this.updateLog(e,ServiceConstants.LabelPushReq.PUSH_STATUS_FAILED, ServiceConstants.CustomDownloadRecord.DATA_STATUS_FAILED);
                 LogUtil.error("推送失败", e);
                 continue;
             }
 		}
 		
         if (null!=labelPushReq && StringUtil.isNoneBlank(labelPushReq.getReqId())) {
-            this.updateLog(null,ServiceConstants.LabelPushReq.PUSH_STATUS_SUCCESS, null,
+            this.updateLog(null,ServiceConstants.LabelPushReq.PUSH_STATUS_SUCCESS,
                 ServiceConstants.CustomDownloadRecord.DATA_STATUS_SUCCESS);
         }
         
@@ -364,11 +368,12 @@ public class CustomerPublishDefaultTaskImpl implements ICustomerPublishTask {
             if (!fileTypeMap.isEmpty()) {
                 result = Boolean.valueOf(fileTypeMap.get("res"));
                 desFile = fileTypeMap.get("desFile");
+                desFileName = desFile;
                 xmlFile = fileTypeMap.get("xmlFile");
             }
             
             //3 download file
-            result = downloadCustomListFile(csvFile, zipFile, desFile, xmlFile, result);
+            result = downloadCustomListFile(csvFile, zipFile, xmlFile, result);
 
             
             //4 call webService,or do nothing  to ALERT
@@ -377,6 +382,11 @@ public class CustomerPublishDefaultTaskImpl implements ICustomerPublishTask {
                 && StringUtil.isNotEmpty(sysInfo.getWebserviceMethod())) {
                 result = this.getCustomPushWebServiceResult(pushUserId);
             }
+        }else {
+            String msg = "创建清单文件失败，不推送。";
+            LogUtil.info(msg);
+            this.updateLog(new BaseException(msg), ServiceConstants.LabelPushReq.PUSH_STATUS_FAILED,
+                ServiceConstants.CustomDownloadRecord.DATA_STATUS_FAILED);
         }
 	    
 		return result;
@@ -500,8 +510,7 @@ public class CustomerPublishDefaultTaskImpl implements ICustomerPublishTask {
      * @param result
      * @return
      */
-    private boolean downloadCustomListFile(String csvFile, String zipFile, String desFile, String xmlFile,
-            boolean result) {
+    private boolean downloadCustomListFile(String csvFile, String zipFile, String xmlFile, boolean result) {
         boolean res = result;
         
         //3.1 下载数据文件
@@ -521,23 +530,23 @@ public class CustomerPublishDefaultTaskImpl implements ICustomerPublishTask {
             
             LogUtil.debug("推送方式："+protocoTypeStr);
             LogUtil.info(protocoTypeStr+" :" + sysInfo.toString());
-            LogUtil.debug("push File :" + desFile);
+            LogUtil.debug("push File :" + desFileName);
 
             if (null == protocoType || ServiceConstants.SysInfo.PROTOCO_TYPE_FTP == protocoType) {   //默认 ftp
                 res = FtpUtil.ftp(sysInfo.getFtpServerIp(), sysInfo.getFtpPort(), sysInfo.getFtpUser(),
-                    DES.decrypt(sysInfo.getFtpPwd()), desFile, sysInfo.getFtpPath() + "/");
+                    DES.decrypt(sysInfo.getFtpPwd()), desFileName, sysInfo.getFtpPath() + "/");
             } else if (ServiceConstants.SysInfo.PROTOCO_TYPE_SFTP == protocoType) {  //sftp
                 res = SftpUtil.sftp(new SftpUser(sysInfo.getFtpServerIp(), sysInfo.getFtpPort(), sysInfo.getFtpUser(),
-                    DES.decrypt(sysInfo.getFtpPwd())), desFile, sysInfo.getFtpPath() + "/", true);
+                    DES.decrypt(sysInfo.getFtpPwd())), desFileName, sysInfo.getFtpPath() + "/", true);
             }
             if (!res) {
                 LogUtil.error(protocoTypeStr+" error");
             } else {
-                LogUtil.debug("push File ("+desFile+") success.");
+                LogUtil.debug("push File ("+desFileName+") success.");
             }
             if (isJobTask) {    //自动推送
-                res = new File(desFile).delete();    //FTP后删除本地des文件
-                LogUtil.debug(new File(desFile).exists());
+                res = new File(desFileName).delete();    //FTP后删除本地des文件
+                LogUtil.debug(new File(desFileName).exists());
                 //FTP后删除本地csv文件
                 if(null!=sysInfo.getIsNeedCompress() && ServiceConstants.SysInfo.IS_NEED_COMPRESS_YES==sysInfo.getIsNeedCompress()
                         && res){
@@ -545,7 +554,7 @@ public class CustomerPublishDefaultTaskImpl implements ICustomerPublishTask {
                 }
             } else {    //手动推送，不删除，以便下载,下载后删除
                 //更新下载时的准确的文件名
-                this.updateCustomDownloadRecord(desFile, ServiceConstants.CustomDownloadRecord.DATA_STATUS_SUCCESS);
+                this.updateCustomDownloadRecord(desFileName, ServiceConstants.CustomDownloadRecord.DATA_STATUS_SUCCESS);
             }
         } catch (Exception e) {
             LogUtil.error(protocoTypeStr+"出错" + sysInfo + zipFile, e);
@@ -581,12 +590,12 @@ public class CustomerPublishDefaultTaskImpl implements ICustomerPublishTask {
     /**
      * 跟新日志
      */
-    private void updateLog(Exception e,int PUSH_STATUS, String desFile,int DATA_STATUS) {
+    private void updateLog(Exception e,int PUSH_STATUS,int DATA_STATUS) {
         //跟新实时更新推送状态
         this.updateLabelPushReq(PUSH_STATUS, e);
-        if (!(StringUtil.isNotEmpty(desFile) && DATA_STATUS<0)) {
+        if (DATA_STATUS > 0) {
             //更新下载时的准确的文件名
-            this.updateCustomDownloadRecord(desFile, DATA_STATUS);
+            this.updateCustomDownloadRecord(desFileName, DATA_STATUS);
         }
     }
     /**
@@ -668,7 +677,7 @@ public class CustomerPublishDefaultTaskImpl implements ICustomerPublishTask {
             result = Boolean.valueOf(String.valueOf(res[0]));
         } catch (Exception e) {
             String msg = "调用webService出错。";
-            this.updateLog(e, ServiceConstants.LabelPushReq.PUSH_STATUS_FAILED, null,-1);
+            this.updateLog(e, ServiceConstants.LabelPushReq.PUSH_STATUS_FAILED,-1);
             
             LogUtil.error(msg + sysInfo, e);
             
