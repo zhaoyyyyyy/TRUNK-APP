@@ -626,6 +626,7 @@ public class CustomerPublishDefaultTaskImpl implements ICustomerPublishTask {
                         obj.setFileName(fileName);
                         obj.setDataStatus(DataStatus);
                         iCustomDownloadRecordService.update(obj);
+                        LogUtil.info("文件("+fileName+")生成时长:"+(new Date().getTime()-obj.getDataTime().getTime())+" ms.");
                     }
                 }
             } else {

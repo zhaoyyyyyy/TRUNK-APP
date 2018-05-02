@@ -103,6 +103,7 @@ public class CustomDownloadRecordController extends BaseController<CustomDownloa
     @RequestMapping(value = "/customDownloadRecord/downloadGroupList", method = RequestMethod.POST)
     public void downloadlist(HttpServletResponse response,String localPathFile,@ModelAttribute CustomDownloadRecord customDownloadRecord) {
         customDownloadRecord = iCustomDownloadRecordService.get(customDownloadRecord.getRecordId());
+        LogUtil.info("下载请求参数：localPathFile："+localPathFile+",customDownloadRecord:"+customDownloadRecord);
         if (StringUtil.isBlank(localPathFile)) {
             //本地缓冲目录
             CocCacheAble cacheProxy = CocCacheProxy.getCacheProxy();
