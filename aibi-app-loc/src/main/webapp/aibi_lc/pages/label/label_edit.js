@@ -33,6 +33,9 @@ var model = {
 	showdim : false,
 	ismodify: false,
 	isAdd: true,
+	
+	delColumnId:[],//要删除的列信息
+	allDel:false,//旧的信息列全删
 }
 
 window.loc_onload = function() {
@@ -176,6 +179,14 @@ window.loc_onload = function() {
 					}
 				},
 				changebq : function(event){
+					if(model.labelId){
+						model.allDel = true;
+						for(var i=0;i < model.sourceInfoList.length;i++){
+							if(!isInArray(model.delColumnId,model.sourceInfoList[i].columnId)){
+								model.delColumnId.push(model.sourceInfoList[i].columnId);
+							}
+						}
+					}
 					if(event.target.value==5){
 						model.isemmu = true;
 						model.isfhbq = false;
@@ -199,6 +210,14 @@ window.loc_onload = function() {
 				},
 				//不同周期获取不同的纵表
 				change_updateCycle : function(){
+					if(model.labelId){
+						model.allDel = true;
+						for(var i=0;i < model.sourceInfoList.length;i++){
+							if(!isInArray(model.delColumnId,model.sourceInfoList[i].columnId)){
+								model.delColumnId.push(model.sourceInfoList[i].columnId);
+							}
+						}
+					}
 					model.sourceTableId = "";
 					model.sourceInfoList = [];
 					$.commAjax({
@@ -216,6 +235,14 @@ window.loc_onload = function() {
 				},		
 				//选择不同的纵表，获取对应的列信息
 				change_sourceId : function(event){
+					if(model.labelId){
+						model.allDel = true;
+						for(var i=0;i < model.sourceInfoList.length;i++){
+							if(!isInArray(model.delColumnId,model.sourceInfoList[i].columnId)){
+								model.delColumnId.push(model.sourceInfoList[i].columnId);
+							}
+						}
+					}
 					var sourceTableId = event.target.value;
 					$.commAjax({
 						url : $.ctx + '/api/source/sourceTableInfo/get?sourceTableId='+sourceTableId,
@@ -236,8 +263,11 @@ window.loc_onload = function() {
 					}*/
 				},
 				//删除列
-				del_form : function(index){
-					model.sourceInfoList.splice(index,1)
+				del_form : function(item,index){
+					model.sourceInfoList.splice(index,1);
+					if(item.columnId){
+						model.delColumnId.push(item.columnId);
+					}
 				},
 				//显示维表详情
 				showdimdetail : function(sourceInfo){
@@ -345,14 +375,20 @@ function fun_to_save(){
 		var msg = "";
 		var savemda = "";
 		var sourcevalue = $("#sourceTableId").val();
+		var isEdit = false;
 		if(sourcevalue==null){
 			$.alert("请选择指标源表");
 			return false;
 		}
 		if(model.labelId!=null && model.labelId!="" && model.labelId!=undefined){
+			isEdit=true;
 			url_ = $.ctx + '/api/label/labelInfo/update';
 			if(model.labelTypeId == 8){
-				url_fh = $.ctx + '/api/label/mdaSysTableCol/update';
+				if(model.allDel){
+					url_fh = $.ctx + '/api/label/mdaSysTableCol/save';
+				}else{
+					url_fh = $.ctx + '/api/label/mdaSysTableCol/update';
+				}
 			}
 			msg = "修改成功";
 		}else{
@@ -383,7 +419,22 @@ function fun_to_save(){
 				postData : $('#saveDataForm').formToJson(),
 				onSuccess : function(data){
 					var labelId = data.data.labelId;
+					if(!labelId){
+						labelId = model.labelId;
+					}
 					if(url_fh !="" && labelId!=""){
+						if(model.delColumnId.length>0 & isEdit){
+							for(var i=0;i<model.delColumnId.length;i++){
+								$.commAjax({
+									ansyc : false,
+									url:$.ctx+'/api/label/mdaSysTableCol/delete',
+									postData:{columnId:model.delColumnId[i]},
+									onSuccess:function(data){
+										
+									}
+								})
+							}
+						}
 						var k=0;
 						$("form[class~=create-main-col]").each(function(){
 							var mdaSysTableColumn = $(this).formToJson();

@@ -186,7 +186,7 @@
 	                <form  class="clearfix create-main-col active mt10" v-for="(sourceInfo,index) in sourceInfoList">
 	                <fieldset>
 	                    <legend>列信息</legend>
-	                    <i v-on:click="del_form(index)" class="del-btn-icon fright mr10 mt5" ></i>
+	                    <i v-on:click="del_form(sourceInfo,index)" class="del-btn-icon fright mr10 mt5" ></i>
 	                    <div class="form-horizontal fleft ui-form">
 	                        <input type="hidden" v-model="sourceInfo.sourceId" name="dependIndex"/>
 	                        <input type="hidden" v-model="sourceInfo.columnId" name="columnId" id="columnId"/>
