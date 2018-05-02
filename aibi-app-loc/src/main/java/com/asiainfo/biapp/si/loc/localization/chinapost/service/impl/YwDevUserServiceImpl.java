@@ -104,6 +104,7 @@ public class YwDevUserServiceImpl extends DevUserServiceImpl implements IUserSer
 		
 		Map<String,Object> params = new HashMap<String,Object>();
 		params.put("token", token);
+		LogUtil.info("拿到用户ID请求url"+jauthUrl+"/api/auth/me,参数:"+params);
 		//拿到用户ID
 		try{
 			String tokenStr = HttpUtil.sendGet(jauthUrl+"/api/auth/me", params);
