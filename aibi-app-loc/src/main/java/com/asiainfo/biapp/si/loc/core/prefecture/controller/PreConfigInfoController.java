@@ -207,7 +207,7 @@ public class PreConfigInfoController extends BaseController<PreConfigInfo> {
         return webResult.success("删除专区成功", SUCCESS);
     }
     
-    @ApiOperation(value = "更新专区信息")
+    @ApiOperation(value = "将专区ID放入缓存")
     @ApiImplicitParams({
         @ApiImplicitParam(name = "object", value = "object", required = false, paramType = "query", dataType = "string") })
     @RequestMapping(value = "/preConfigInfo/setSession", method = RequestMethod.POST)

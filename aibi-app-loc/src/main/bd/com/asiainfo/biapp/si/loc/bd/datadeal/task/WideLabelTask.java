@@ -10,21 +10,26 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import com.asiainfo.biapp.si.loc.base.extend.SpringContextHolder;
 import com.asiainfo.biapp.si.loc.bd.datadeal.util.TimeUtil;
+import com.asiainfo.biapp.si.loc.bd.list.service.ICyclicityListDataService;
+import com.asiainfo.biapp.si.loc.bd.list.service.impl.CyclicityListDataServiceImpl;
 import com.asiainfo.biapp.si.loc.core.ServiceConstants;
 import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
 import com.asiainfo.biapp.si.loc.base.utils.LogUtil;
 import com.asiainfo.biapp.si.loc.bd.datadeal.component.LabelDealComponent;
 import com.asiainfo.biapp.si.loc.bd.datadeal.util.BackJdbcManager;
 import com.asiainfo.biapp.si.loc.bd.datadeal.util.JdbcManager;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * Created by pwj on 2018/1/3.
  */
-@Component
 public class WideLabelTask implements Runnable {
+    private ICyclicityListDataService cyclicityListDataService;
+
     private String threadNumber;
     private String data_date = "";
     private String config_id = "";
@@ -59,6 +64,7 @@ public class WideLabelTask implements Runnable {
     List<String> filterLabelList = new ArrayList<String>();
 
     public void run() {
+        cyclicityListDataService = (ICyclicityListDataService) SpringContextHolder.getBean("cyclicityListDataServiceImpl");
         Long startTime=System.currentTimeMillis();
         threadNumber = Thread.currentThread().getName() + "————" + config_id + "：\n";
         JdbcManager jdbcManager = new JdbcManager();
@@ -197,6 +203,7 @@ public class WideLabelTask implements Runnable {
             labelDealComponent.updateDimLabelStatus(labelIdList);
             labelDealComponent.insertIntoDimLabelStatus(labelIdList);
             LogUtil.info(threadNumber + "专区" + config_id + "标签生成结束");
+            cyclicityListDataService.runDayListDataByConfigId(config_id, data_date);
         } else {
             if (sourceTableIdList.size() > 0) {
                 labelDealComponent.updateDimTargetTableStatus(1, 0, sourceTableIdList,null);

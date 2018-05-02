@@ -362,7 +362,7 @@ public class BackHiveDaoImpl extends BaseBackDaoImpl implements IBackSqlDao{
 		StringBuffer sql = new StringBuffer();
 		sql.append("CREATE TABLE IF NOT EXISTS ").append(tableName).append(" (").append(columnName).append(" string )  PARTITIONED BY (");
 		sql.append(ServiceConstants.KHQ_CROSS_ID_PARTION)
-		.append(" string) clustered by(").append(ServiceConstants.KHQ_CROSS_ID_PARTION)
+		.append(" string) clustered by(").append(ServiceConstants.KHQ_CROSS_COLUMN)
 		.append(") into 50 buckets stored as ").append(this.Tab_Format);
 //		String sql ="CREATE TABLE IF NOT EXISTS "+tableName+" ("+
 //					columnName+" string )  PARTITIONED BY ("+ServiceConstants.KHQ_CROSS_ID_PARTION+" string) stored as " + this.Tab_Format;
@@ -422,10 +422,9 @@ public class BackHiveDaoImpl extends BaseBackDaoImpl implements IBackSqlDao{
 		sb.delete(sb.length()-1, sb.length());
 		sb.append(")");
 		if(ifPartition){
-			sb.append(" PARTITIONED BY (").append(primaryKeyStr.toString().substring(0,primaryKeyStr.toString().length()-1)).append(") stored as ").append(this.Tab_Format);
+			sb.append(" PARTITIONED BY (").append(primaryKeyStr.toString().substring(0,primaryKeyStr.toString().length()-1)).append(") clustered by("+ServiceConstants.KHQ_CROSS_COLUMN+") into 50 buckets stored as ").append(this.Tab_Format);
 		}
-		
-		
+
 		try{
             return this.executeResBoolean(sb.toString());
         }catch (Exception e){
