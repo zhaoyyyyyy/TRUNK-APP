@@ -255,7 +255,7 @@ public class CustomerPublishDefaultTaskImpl implements ICustomerPublishTask {
                 ServiceConstants.CustomDownloadRecord.DATA_STATUS_SUCCESS);
         }
         
-        LogUtil.debug("Customer("+customInfo.getLabelId()+")Publish end,cost:" + (System.currentTimeMillis() - start)/new Long(THOUSAND) + " s.");
+        LogUtil.info("Customer("+customInfo.getLabelId()+")push end,cost:" + (System.currentTimeMillis() - start)/new Long(THOUSAND) + " s.");
 		LogUtil.info("Exist "+this.getClass().getSimpleName()+".run()");
 	}
     
