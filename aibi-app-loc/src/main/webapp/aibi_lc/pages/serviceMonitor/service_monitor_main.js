@@ -16,7 +16,8 @@ window.loc_onload = function() {
 //        	sysMonth:'',//系统设置月周期范围
         	configData:[],//专区信息
         	monitorData:[], //运营监控总览数据
-        	isChecked:true //专区全部默认选中
+        	isChecked:true, //专区全部默认选中
+        	count : 0,//复选框选中个数
         },
         methods:{
         	//页面初始化函数
@@ -64,7 +65,7 @@ window.loc_onload = function() {
         		});
             },
             //点击专区，动态刷新监控数据
-            clickConfigData:function(item){
+            clickConfigData:function(item,event){
 				var configId = item.configId;
 				if(typeof item.isChecked=='undefined'){
 					this.$set(item,"isChecked",true);
@@ -73,7 +74,13 @@ window.loc_onload = function() {
 				}
 				if(!item.isChecked){
 					$("#"+configId+"monitor").hide();
+					$("#allChecked").prop('checked',false)
 				}else{
+					monitorMain.count++;
+					console.log($(event.target))
+					if(monitorMain.count==monitorMain.configData.length){
+						$("#allChecked").prop('checked',true)
+					}
 					$("#"+configId+"monitor").show();
 				}
             },
