@@ -3,7 +3,7 @@
  * 
  * CopyRight (c) 2017 北京亚信智慧数据科技有限公司 保留所有权利。
  */
-package com.asiainfo.biapp.si.loc.bd.list;
+package com.asiainfo.biapp.si.loc.bd.list.vo;
 
 import com.asiainfo.biapp.si.loc.bd.list.entity.ListInfo;
 

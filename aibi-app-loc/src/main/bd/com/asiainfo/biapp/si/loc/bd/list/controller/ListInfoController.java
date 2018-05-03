@@ -18,10 +18,10 @@ import org.springframework.web.bind.annotation.RestController;
 import com.asiainfo.biapp.si.loc.base.controller.BaseController;
 import com.asiainfo.biapp.si.loc.base.exception.BaseException;
 import com.asiainfo.biapp.si.loc.base.page.Page;
-import com.asiainfo.biapp.si.loc.bd.list.ListInfoVo;
 import com.asiainfo.biapp.si.loc.bd.list.entity.ListInfo;
 import com.asiainfo.biapp.si.loc.bd.list.entity.ListInfoId;
 import com.asiainfo.biapp.si.loc.bd.list.service.IListInfoService;
+import com.asiainfo.biapp.si.loc.bd.list.vo.ListInfoVo;
 
 /**
  * Title : ListInfoController

@@ -11,9 +11,9 @@ import org.springframework.stereotype.Repository;
 import com.asiainfo.biapp.si.loc.base.dao.BaseDaoImpl;
 import com.asiainfo.biapp.si.loc.base.page.Page;
 import com.asiainfo.biapp.si.loc.base.utils.StringUtil;
-import com.asiainfo.biapp.si.loc.bd.list.ListInfoVo;
 import com.asiainfo.biapp.si.loc.bd.list.dao.IListInfoDao;
 import com.asiainfo.biapp.si.loc.bd.list.entity.ListInfo;
+import com.asiainfo.biapp.si.loc.bd.list.vo.ListInfoVo;
 
 /**
  * 清单清单操作dao实现类

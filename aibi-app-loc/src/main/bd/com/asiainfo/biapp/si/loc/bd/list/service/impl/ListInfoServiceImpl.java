@@ -12,11 +12,11 @@ import com.asiainfo.biapp.si.loc.base.exception.BaseException;
 import com.asiainfo.biapp.si.loc.base.exception.ParamRequiredException;
 import com.asiainfo.biapp.si.loc.base.page.Page;
 import com.asiainfo.biapp.si.loc.base.service.impl.BaseServiceImpl;
-import com.asiainfo.biapp.si.loc.bd.list.ListInfoVo;
 import com.asiainfo.biapp.si.loc.bd.list.dao.IListInfoDao;
 import com.asiainfo.biapp.si.loc.bd.list.entity.ListInfo;
 import com.asiainfo.biapp.si.loc.bd.list.entity.ListInfoId;
 import com.asiainfo.biapp.si.loc.bd.list.service.IListInfoService;
+import com.asiainfo.biapp.si.loc.bd.list.vo.ListInfoVo;
 
 /**
  * 清单生成service接口实现
