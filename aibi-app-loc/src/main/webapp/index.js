@@ -33,7 +33,7 @@ var auto_Login = (function (model){
 					if(cpname == cocname){
 						flag = true;
 					}
-					
+					document.cookie = "coccheck="+ encodeURIComponent(cpname)+ ";expires=" + exp.toGMTString();
 					return flag;
         		},
         		autoLoginFun:function(applyToken){
@@ -49,6 +49,11 @@ var auto_Login = (function (model){
         				 xhrFields: {withCredentials: true},
      					 async: false,
         				 success: function(data){
+        					 var name = data.cnpost.username;
+        					 var coc = $.getCookie("coccheck");
+        					 if(!coc){
+            					 document.cookie = "coccheck="+ encodeURIComponent(name)+ ";expires=" + exp.toGMTString();
+        					 }
         					 if(data && data.cnpost && data.cnpost.id){
         						 flag = applyToken(data.cnpost.id);
         					 }
@@ -58,7 +63,7 @@ var auto_Login = (function (model){
         		}
         }
         /***************中邮-邮务-生产 ****************/
-        model.cpywdevprod = {
+        model.cpywprod = {
         		failLoginUrl: "http://crm.chinapost.com:18080/",
         		checkLogin:function(){
 					var flag = false;
@@ -68,7 +73,7 @@ var auto_Login = (function (model){
 					if(cpname == cocname){
 						flag = true;
 					}
-					
+					document.cookie = "coccheck="+ encodeURIComponent(cpname)+ ";expires=" + exp.toGMTString();
 					return flag;
         		},
         		autoLoginFun:function(applyToken){
@@ -81,6 +86,11 @@ var auto_Login = (function (model){
         				 xhrFields: {withCredentials: true},
      					 async: false,
         				 success: function(data){
+        					 var name = data.cnpost.username;
+        					 var coc = $.getCookie("coccheck");
+        					 if(!coc){
+            					 document.cookie = "coccheck="+ encodeURIComponent(name)+ ";expires=" + exp.toGMTString();
+        					 }
         					 if(data && data.cnpost && data.cnpost.id){
         						 flag = applyToken(data.cnpost.id);
         					 }

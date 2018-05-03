@@ -17,40 +17,22 @@ $.extend({
 	},
 	getCookie : function(name){
 	    var arr,reg=new RegExp("(^| )"+name+"=([^;]*)(;|$)");
-	    if(arr=document.cookie.match(reg))
-	        return unescape(arr[2]); 
-	    else 
-	        return null; 
+	    if(arr=document.cookie.match(reg)){
+	    	return unescape(arr[2]);
+	    }else{
+	    	return null;
+	    } 
 	},
 	setCurrentToken : function(token,refreshToken){
-		if($.getCookie("cnpost") && $.getCookie("cnpost")!=""){
-			var Days = 30;   //cookie 将被保存30天
-			var exp  = new Date();  //获得当前时间
-			exp.setTime(exp.getTime() + Days*24*60*60*1000);  //换成毫秒
-			document.cookie = "token="+ token + ";expires=" + exp.toGMTString();
-			var name = JSON.parse($.getCookie("cnpost")).username;
-			document.cookie = "coccheck="+ encodeURIComponent(name)+ ";expires=" + exp.toGMTString();
-		}else{
-			var ssg = window.sessionStorage;
-			if(ssg){
-				ssg.setItem("token",token);
-				ssg.setItem("refreshToken",refreshToken);
-			}
-		}
-		
+		var Days = 30;   //cookie 将被保存30天
+		var exp  = new Date();  //获得当前时间
+		exp.setTime(exp.getTime() + Days*24*60*60*1000);  //换成毫秒
+		document.cookie = "token="+ token + ";expires=" + exp.toGMTString()+"path="+$.ctx;
 	},
 	isExistsToken : function(){
-		var ssg = window.sessionStorage;
-		var sstoken = ssg.getItem("token");
+		var token=$.getCookie("token");
 		
-		var cktoken=$.getCookie("token");
-		
-		var tokenStr;
-		if(sstoken){
-			tokenStr = sstoken;
-		}else if(cktoken){
-			tokenStr = cktoken;
-		}
+		var tokenStr = token;
 		if(!tokenStr){
 			return false;
 		}else{
@@ -58,18 +40,8 @@ $.extend({
 		}
 	},
 	getCurrentToken : function(){
-		var ssg = window.sessionStorage;
-		var sstoken = ssg.getItem("token");
-		
-		var cktoken=$.getCookie("token");
-		
-		var tokenStr;
-		if(sstoken){
-			tokenStr = sstoken;
-		}else if(cktoken){
-			tokenStr = cktoken;
-		}
-		return tokenStr;
+		var token=$.getCookie("token");
+		return token;
 	},
 	
 	//通用异步请求

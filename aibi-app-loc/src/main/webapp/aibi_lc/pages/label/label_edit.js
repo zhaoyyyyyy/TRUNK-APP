@@ -381,7 +381,7 @@ function fun_to_save(){
 		var savemda = "";
 		var sourcevalue = $("#sourceTableId").val();
 		var isEdit = false;
-		if(sourcevalue==null){
+		if(model.labelTypeId == 8 && sourcevalue==null){
 			$.alert("请选择指标源表");
 			return false;
 		}
