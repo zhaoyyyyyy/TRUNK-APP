@@ -31,8 +31,8 @@ public class WideLabelServiceImpl implements IWideLabelService {
      * @see com.asiainfo.biapp.si.loc.bd.datadeal.service.IVerticalLabelService#exeRun(com.asiainfo.biapp.si.loc.bd.datadeal.vo.BackParamVo)
      */
     public void exeRun(BackParamVo backParamVo) {
-        if (StringUtils.isNotEmpty(backParamVo.getData())) {
-            data_date = backParamVo.getData();
+        if (StringUtils.isNotEmpty(backParamVo.getDataDate())) {
+            data_date = backParamVo.getDataDate();
             LogUtil.info("日期解析：" + data_date);
         }
         if (labelDealComponent.isnumber(data_date)) {

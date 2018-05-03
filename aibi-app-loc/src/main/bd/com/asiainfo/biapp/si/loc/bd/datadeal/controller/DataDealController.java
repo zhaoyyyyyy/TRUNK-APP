@@ -31,9 +31,9 @@ public class DataDealController {
     @RequestMapping(value = "/wideTableDeal/execute", method = RequestMethod.POST)
     public WebResult<String> runWideTable(@ModelAttribute BackParamVo backParamVo) {
         WebResult<String> webResult = new WebResult<>();
-        if(StringUtils.isEmpty(backParamVo.getData())){
+        if(StringUtils.isEmpty(backParamVo.getDataDate())){
             String frontOneDate = TimeUtil.getFrontOneDate();
-            backParamVo.setData(frontOneDate);
+            backParamVo.setDataDate(frontOneDate);
         }
         iwideLabelService.exeRun(backParamVo);
         return webResult.success("获取列成功", null);
@@ -44,9 +44,9 @@ public class DataDealController {
     @RequestMapping(value = "/verticalTableDeal/execute", method = RequestMethod.POST)
     public WebResult<String> runVerticalTable(@ModelAttribute BackParamVo backParamVo) {
         WebResult<String> webResult = new WebResult<>();
-        if(StringUtils.isEmpty(backParamVo.getData())){
+        if(StringUtils.isEmpty(backParamVo.getDataDate())){
             String frontOneDate = TimeUtil.getFrontOneDate();
-            backParamVo.setData(frontOneDate);
+            backParamVo.setDataDate(frontOneDate);
         }
         iverticalLabelService.exeRun(backParamVo);
         return webResult.success("获取列成功", null);

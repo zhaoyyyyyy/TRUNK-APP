@@ -8,20 +8,20 @@ import io.swagger.annotations.ApiParam;
 public class BackParamVo {
 	
 	@ApiParam(value = "数据时间(YYYYMMDD / YYYYMM) ")
-    private String data ;//数据时间
+    private String dataDate ;//数据时间
 
 	@ApiParam(value = "表名(schema.tablename)")
     private String tableName;//表名
 
 	@ApiParam(value = "专区ID(PXXX)")
-    private String prefectureId;//专区id
+    private String configId;//专区id
 
-    public String getData() {
-        return data;
+    public String getDataDate() {
+        return dataDate;
     }
 
-    public void setData(String data) {
-        this.data = data;
+    public void setDataDate(String dataDate) {
+        this.dataDate = dataDate;
     }
 
     public String getTableName() {
@@ -32,13 +32,11 @@ public class BackParamVo {
         this.tableName = tableName;
     }
 
-    public String getPrefectureId() {
-        return prefectureId;
+    public String getConfigId() {
+        return configId;
     }
 
-    public void setPrefectureId(String prefectureId) {
-        this.prefectureId = prefectureId;
+    public void setConfigId(String configId) {
+        this.configId = configId;
     }
-
-
 }

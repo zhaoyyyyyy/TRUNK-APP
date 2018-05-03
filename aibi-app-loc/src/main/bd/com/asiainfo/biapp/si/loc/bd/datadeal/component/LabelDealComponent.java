@@ -655,8 +655,8 @@ public class LabelDealComponent {
         List<String> sourceTableList = new ArrayList<String>();
         List<String> sourceTableIdList = new ArrayList<String>();
         List<String> getConfigIdList = new ArrayList<String>();
-        if (StringUtils.isNotEmpty(backParamVo.getPrefectureId())) {
-            String[] split = backParamVo.getPrefectureId().split(",");
+        if (StringUtils.isNotEmpty(backParamVo.getConfigId())) {
+            String[] split = backParamVo.getConfigId().split(",");
             for (int i = 0; i < split.length; i++) {
                 configIdList.add(split[i]);
             }
