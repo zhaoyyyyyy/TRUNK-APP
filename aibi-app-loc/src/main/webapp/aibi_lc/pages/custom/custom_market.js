@@ -53,6 +53,11 @@ window.loc_onload = function() {
 	dataModel.configId = $.getCurrentConfigId();
 	var ulListId;
 	
+	var menu = $.getUrlParam("menu");
+	if(menu){
+		parent.toggleMenu("#"+menu);
+	}
+	
 	/**
      * ------------------------------------------------------------------
      * 标签集市

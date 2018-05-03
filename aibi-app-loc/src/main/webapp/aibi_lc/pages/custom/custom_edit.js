@@ -684,10 +684,9 @@ var labelInfoModel = (function (model){
    				  $.success(returnObj.msg, function(){
 					  var ssg = window.sessionStorage;
 					  delete ssg.customId;
-   					  //保存成功后跳转，标签集市和客户群集市都跳转到客户群集市页面
-   					  top.toggleMenu("#custom/custom_market");
+					  model.toggleMenu();
    				  });
-					
+   				  
    			  },
    			  onFailure:function(returnObj){
 				  dataModel._submitFlag = false; 
@@ -696,6 +695,10 @@ var labelInfoModel = (function (model){
    		  });
     }
     
+    model.toggleMenu = function(){
+    	var menu = "custom/custom_market";
+    	window.location.href = "./custom_market.html?menu="+menu;
+    }
 	/**
 	 * 返回
 	 */
