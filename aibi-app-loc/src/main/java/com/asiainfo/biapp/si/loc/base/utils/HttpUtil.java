@@ -228,7 +228,10 @@ public class HttpUtil {
 	    				paramStrSb.append("&");
 	    			}
 	    			String key = it.next();
-	    			paramStrSb.append(key).append("=").append(paramMap.get(key).toString());
+	    			Object value = paramMap.get(key);
+	    			if(value != null){
+	    				paramStrSb.append(key).append("=").append(value.toString());
+	    			}
 	    			i++;
 	    		}
 	    	}
