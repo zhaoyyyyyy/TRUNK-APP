@@ -16,12 +16,15 @@ window.loc_onload = function() {
         	firstDataMonth:'',//最新月周期日期
 			yyjkList:[],  //运营监控枚举
 			sjzbList:[],  //数据准备状态
+			sjzbBox:[],//数据状态复选框数组
 			sjcqList:[],  //数据抽取状态
-			dataStatusBox:[],//数据状态数组
-			isDoingBox:[],//抽取状态数组
+			sjcqBox:[],//抽取状态复选框数组
 			bqscList:[],  //标签生成状态
+			bqscBox:[],//数据生成复选框数组
 			khqscList:[],  //客户群生成生成状态
+			khqscBox:[],//客户群生成复选框数组
 			khqtsList:[],  //客户群推送生成状态
+			khqtsBox:[],//客户群推送复选框数组
 			sjsxplList:[], //数据刷新频率
 			defaultPl:"",//默认刷新频率
 			defaultTimes:5000, // 默认刷新频率
@@ -32,8 +35,8 @@ window.loc_onload = function() {
 			colModel:"",  //表格模型
 			pager:"" ,  //表格分页id
 			readCycle:1,//日期周期
-			sysDay:"",//系统设置日周期范围
-			sysMonth:"",//系统设置月周期范围
+//			sysDay:"",//系统设置日周期范围
+//			sysMonth:"",//系统设置月周期范围
 			zbFlag:true, //数据准备表格默认显示准备状态
 			isOpen:false,//日期下拉
 			isDown:false,//状态下拉
@@ -126,68 +129,160 @@ window.loc_onload = function() {
 			//表格模糊查询方法
 			qryTableByCond:function(e){
 				var $el=$(e.target);
-				var $tableId = $("#"+$el.attr("data-tableId"));
-				var $formSearchId = $("#"+$el.attr("data-formSearchId"));
-				$($tableId).setGridParam({
-					postData: $formSearchId.formToJson(),
+				var tableId = $el.attr("data-tableId");
+				var conds = [];
+				var formCond = $("#"+$el.attr("data-formSearchId")).formToJson;
+				if("dataPrepareTable" === tableId){
+					formCond.sourceTableInfo.configId = this.configId;
+					formCond.dataDate = that.qryDataDate.replace(/-/g,"");
+				}else if("labelGenerateTable" === tableId){
+					formCond.labelInfo.configId = this.configId;
+					formCond.dataDate = this.qryDataDate.replace(/-/g,"");
+				}else if("customGenerateTable" === tableId){
+					formCond.labelInfo.configId = this.configId;
+					formCond.dataDate = this.qryDataDate.replace(/-/g,"");
+				}else if("customPushTable" === tableId){
+					formCond.labelPushCycle.labelInfo.configId = this.configId;
+					formCond.dataDate = this.qryDataDate.replace(/-/g,"");
+				}
+				conds.push(formCond);
+				$($("#"+tableId)).setGridParam({
+					postData:JSON.stringify(conds),
 					dataType : 'json'
 				}).trigger("reloadGrid", [{
 					page: 1
 				}]);
 			},
-			//表格点击状态过滤 TODO
-		    qryTableByStatus:function(e){
+			//表格点击状态过滤 
+		    qryTableByStatus:function(e,tableId){
 		    	var $el=$(e.target);
-		    	var postObj = {};
-		    	var ztListId = $el.parents("span").attr("id");
-		    	var tableId;
+		    	var postConds = [];
+		    	var ztListId = $el.parents("div.ui-status").attr("id");
+		    	//数据准备表格
 		    	if("sjzbList" === ztListId){
-		    		tableId = $("#sjzbAll").attr("data-tableId");
 		    		if($el.prop('checked')){
-		    			this.dataStatusBox.push($el.val());
-		    			if(this.dataStatusBox.length === this.sjzbList.length){
+		    			this.sjzbBox.push($el.val());
+		    			if(this.sjzbBox.length === this.sjzbList.length){
 		    				$("#sjzbAll").prop("checked",true);
 		    			}else{
 		    				$("#sjzbAll").prop("checked",false);
 		    			}
 		    		}else{
-		    			for(var i=0;i<this.dataStatusBox.length;i++){
-		    				if($el.val() === this.dataStatusBox[i]){
-		    					 this.dataStatusBox.splice(i,1);
+		    			for(var i=0;i<this.sjzbBox.length;i++){
+		    				if($el.val() === this.sjzbBox[i]){
+		    					 this.sjzbBox.splice(i,1);
 		    				}
 		    			}
 		    			$("#sjzbAll").prop("checked",false);
 		    		}
-		    		var dataStatusCodes = [];
-		    		$.each(this.dataStatusBox,function(key,value){
-		    			dataStatusCodes.push(value);
+		    		var sjzbCodes = [];
+		    		$.each(this.sjzbBox,function(key,value){
+		    			sjzbCodes.push(value);
 		    		});
-		    		postObj.dataStatus = dataStatusCodes;
+		    		postObj = {};
+		    		postObj.qryDataStatus = sjzbCodes;
+		    		postObj.sourceTableInfo.configId = this.configId;
+		    		postObj.dataDate = this.qryDataDate.replace(/-/g,"");
 		    	}else if("sjcqList" === ztListId){
-		    		tableId = $("#sjzbAll").attr("data-tableId");
 		    		if($el.prop('checked')){
-		    			this.isDoingBox.push($el.val());
-		    			if(this.isDoingBox.length === this.sjcqList.length){
+		    			this.sjcqBox.push($el.val());
+		    			if(this.sjcqBox.length === this.sjcqList.length){
 		    				$("#sjzbAll").prop("checked",true);
 		    			}else{
 		    				$("#sjzbAll").prop("checked",false);
 		    			}
 		    		}else{
-		    			for(var i=0;i<this.isDoingBox.length;i++){
-		    				if($el.val() === this.isDoingBox[i]){
-		    					 this.isDoingBox.splice(i,1);
+		    			for(var i=0;i<this.sjcqBox.length;i++){
+		    				if($el.val() === this.sjcqBox[i]){
+		    					 this.sjcqBox.splice(i,1);
 		    				}
 		    			}
-		    			$("#sjzbAll").prop("checked",false)
+		    			$("#sjzbAll").prop("checked",false);
 		    		}
-		    		var isDoingCodes = [];
-		    		$.each(this.isDoingBox,function(key,value){
-		    			isDoingCodes.push(value);
+		    		var sjcqCodes = [];
+		    		$.each(this.sjcqBox,function(key,value){
+		    			sjcqCodes.push(value);
 		    		});
-		    		postObj.isDoing = isDoingCodes;
+		    		postObj = {};
+		    		postObj.qryIsDoing = sjcqCodes;
+		    		postObj.sourceTableInfo.configId = this.configId ;
+		    		postObj.dataDate = this.qryDataDate.replace(/-/g,"");
+		    	}else if("bqscList" === ztListId){
+		    		if($el.prop('checked')){
+		    			this.bqscBox.push($el.val());
+		    			if(this.sjcqBox.length === this.sjcqList.length){
+		    				$("#bqscAll").prop("checked",true);
+		    			}else{
+		    				$("#bqscAll").prop("checked",false);
+		    			}
+		    		}else{
+		    			for(var i=0;i<this.bqscBox.length;i++){
+		    				if($el.val() === this.bqscBox[i]){
+		    					 this.bqscBox.splice(i,1);
+		    				}
+		    			}
+		    			$("#bqscAll").prop("checked",false);
+		    		}
+		    		var bqscCodes = [];
+		    		$.each(this.sjcqBox,function(key,value){
+		    			bqscCodes.push(value);
+		    		});
+		    		postObj = {};
+		    		postObj.qryDataStatus = bqscCodes;
+		    		postObj.labelInfo.configId = this.configId;
+		    		postObj.dataDate = this.qryDataDate.replace(/-/g,"");
+		    	}else if("customGenerateTable" === tableId){
+		    		if($el.prop('checked')){
+		    			this.khqscBox.push($el.val());
+		    			if(this.khqscBox.length === this.khqscList.length){
+		    				$("#khqscAll").prop("checked",true);
+		    			}else{
+		    				$("#khqscAll").prop("checked",false);
+		    			}
+		    		}else{
+		    			for(var i=0;i<this.khqscBox.length;i++){
+		    				if($el.val() === this.khqscBox[i]){
+		    					 this.khqscBox.splice(i,1);
+		    				}
+		    			}
+		    			$("#khqscAll").prop("checked",false);
+		    		}
+		    		var khqscCodes = [];
+		    		$.each(this.khqscBox,function(key,value){
+		    			khqscCodes.push(value);
+		    		});
+		    		postObj = {};
+		    		postObj.qryDataStatus = khqscCodes;
+		    		postObj.labelInfo.configId = this.configId;
+		    		postObj.dataDate = this.qryDataDate.replace(/-/g,"");
+		    	}else if("customPushTable" === tableId){
+		    		if($el.prop('checked')){
+		    			this.khqtsBox.push($el.val());
+		    			if(this.khqtsBox.length === this.khqtsList.length){
+		    				$("#khqtsAll").prop("checked",true);
+		    			}else{
+		    				$("#khqtsAll").prop("checked",false);
+		    			}
+		    		}else{
+		    			for(var i=0;i<this.khqtsBox.length;i++){
+		    				if($el.val() === this.khqtsBox[i]){
+		    					 this.khqtsBox.splice(i,1);
+		    				}
+		    			}
+		    			$("#khqtsAll").prop("checked",false);
+		    		}
+		    		var khqtsCodes = [];
+		    		$.each(this.khqtsBox,function(key,value){
+		    			khqtsCodes.push(Number(value));
+		    		});
+		    		postObj = {};
+		    		postObj.qryPushStatus = khqtsCodes;
+		    		postObj.labelPushCycle.labelInfo.configId = this.configId;
+		    		postObj.dataDate = this.qryDataDate.replace(/-/g,"");
 		    	}
+		    	postConds.push(postObj);
 				$("#"+tableId).setGridParam({
-					postData:postObj,
+					postData: JSON.stringify(postConds),
 					dataType : 'json'
 				}).trigger("reloadGrid", [{
 					page: 1
@@ -233,7 +328,7 @@ window.loc_onload = function() {
 		    	var sjzbList = [];
 		    	var dicSjzb = $.getDicData("SJZBZT");
 		    	for(var i=0; i<dicSjzb.length; i++){
-		    		this.dataStatusBox.push(dicSjzb[i].code);
+		    		this.sjzbBox.push(dicSjzb[i].code);
 		    		sjzbList.push(dicSjzb[i]);
 		    	}
 		    	this.sjzbList = sjzbList;
@@ -243,7 +338,7 @@ window.loc_onload = function() {
 		    	var sjcqList = [];
 		    	var dicSjcq = $.getDicData("SJCQZT");
 		    	for(var i=0; i<dicSjcq.length; i++){
-		    		this.isDoingBox.push(dicSjcq[i].code);
+		    		this.sjcqBox.push(dicSjcq[i].code);
 		    		sjcqList.push(dicSjcq[i]);
 		    	}
 		    	this.sjcqList = sjcqList;
@@ -253,6 +348,7 @@ window.loc_onload = function() {
 		    	var bqscList = [];
 		    	var dicBqsc = $.getDicData("BQSCZT");
 		    	for(var i=0; i<dicBqsc.length; i++){
+		    		this.bqscBox.push(dicBqsc[i].code);
 		    		bqscList.push(dicBqsc[i]);
 		    	}
 		    	this.bqscList = bqscList;
@@ -262,6 +358,7 @@ window.loc_onload = function() {
 		    	var khqscList = [];
 		    	var dicKhqsc = $.getDicData("QTZTZD");
 		    	for(var i=0; i<dicKhqsc.length; i++){
+		    		this.khqscBox.push(dicKhqsc[i].code);
 		    		khqscList.push(dicKhqsc[i]);
 		    	}
 		    	this.khqscList = khqscList;
@@ -271,6 +368,7 @@ window.loc_onload = function() {
 		    	var khqtsList = [];
 		    	var dicKhqts = $.getDicData("KHQTSZT");
 		    	for(var i=0; i<dicKhqts.length; i++){
+		    		this.khqtsBox.push(dicKhqts[i].code);
 		    		khqtsList.push(dicKhqts[i]);
 		    	}
 		    	this.khqtsList = khqtsList;
@@ -301,23 +399,25 @@ window.loc_onload = function() {
             // 日期切换函数
             getTime:function(e){//初始化日期
          	   var that = this;
+         	   var sysMonth = 1 - $.getSysConfig('LOC_CONFIG_APP_MAX_KEEP_MONTHS');
+		       var sysDay = 1 - $.getSysConfig('LOC_CONFIG_APP_MAX_KEEP_DAYS');
  	           if(Number($(event.currentTarget).parents("div").siblings("select").find("option:selected").val()) === 1){
- 	        		var minDay ='#F{$dp.$DV(\''+new Date(that.qryDataDate)+'\',{M:'+that.sysDay+'});}';
+ 	        		var minDay ='#F{$dp.$DV(\''+that.qryDataDate+'\',{d:'+sysDay+'});}';
 	        		WdatePicker({
 	        			isShowClear:false,
 	        			dateFmt:'yyyy-MM-dd',
-		    			maxDate:new Date(that.qryDataDate),
+		    			maxDate:that.qryDataDate,
 		    			minDate:minDay,
 		    			onpicked: function(dq) {
 		    				that.changeMonitorByDate(dq.cal.getNewDateStr());
 		    			}
 		    		});
  	        	}else{
- 	        		var minMonth ='#F{$dp.$DV(\''+new Date(that.qryDataDate)+'\',{M:'+that.sysMonth+'});}';
+ 	        		var minMonth ='#F{$dp.$DV(\''+that.qryDataDate+'\',{M:'+sysMonth+'});}';
 	        		WdatePicker({
 	        			isShowClear:false,
 	        			dateFmt:'yyyy-MM',
-		    			maxDate:new Date(that.qryDataDate),
+		    			maxDate:that.qryDataDate,
 		    			minDate:minMonth,
 		    			onpicked: function(dq) {
 		    				that.changeMonitorByDate(dq.cal.getNewDateStr());
@@ -332,7 +432,6 @@ window.loc_onload = function() {
 		    	}else{
 		    		this.zbFlag = false;
 		    	}
-		    	$("#sjzbAll").trigger("clicked");
 		    	this.reloadTable("#dataPrepareTable");
 		    },
 		    //初始化数据准备表格
@@ -573,6 +672,20 @@ window.loc_onload = function() {
 				.trigger("reloadGrid", [{
 					page: 1
 				}]);
+		    },
+		    selectAllStatus:function(e){
+		    	var $el=$(e.target);
+		    	var children  =$el.parents("div.ui-status").find("input").not(this);
+		    	
+		    	if($el.prop("checked")){
+		    		$.each(children,function(key,value){
+		        		$(this).prop("checked",true);
+		        	});
+		    	}else{
+		    		$.each(children,function(key,value){
+		        		$(this).prop("checked",false);
+		        	});
+		    	}
 		    }
 		},
 		mounted: function(){
@@ -601,7 +714,7 @@ window.loc_onload = function() {
 			});
 		
 			//默认刷新频率
-			this.refresh(this.defaultPl);
+//			this.refresh(this.defaultPl);
 			
 			//从监控总览页面跳转到指定锚点位置
 			var detailAnchor = $.getUrlParam("detailAnchor");
@@ -615,20 +728,12 @@ window.loc_onload = function() {
 		}
 		
 	});
-	
-    monitorDetail.$nextTick(function () {
-    	monitorDetail.sysDay = 1 - $.getSysConfig('LOC_CONFIG_APP_MAX_KEEP_DAYS');
-    	monitorDetail.sysMonth = 1 - $.getSysConfig('LOC_CONFIG_APP_MAX_KEEP_MONTHS');
-    });
+//	
+//    monitorDetail.$nextTick(function () {
+//    	monitorDetail.sysDay = 1 - $.getSysConfig('LOC_CONFIG_APP_MAX_KEEP_DAYS');
+//    	monitorDetail.sysMonth = 1 - $.getSysConfig('LOC_CONFIG_APP_MAX_KEEP_MONTHS');
+//    });
     
-    //数据准备的全部
-    $("#sjzbAll").click(function(){
-    	if($(this).prop("checked")){
-    		$(this).siblings("span").find("input").prop("checked",true);
-    	}else{
-    		$(this).siblings("span").find("input").prop("checked",false);
-    	}
-    });
 	$(".ui-pre-progress a").each(function(e){//锚点定位
 		var anchors=$(this);
 		$(this).click(function(){

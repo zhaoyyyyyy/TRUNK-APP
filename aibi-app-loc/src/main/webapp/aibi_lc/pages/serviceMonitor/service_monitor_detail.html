@@ -200,22 +200,22 @@
 	    	<div class="ui-lc-mian mt20 scrollBox" >
 	    		<h3 class="clearfix pre-jqgrid">
 	    			数据准备
-	    			<div class="ui-status">
+	    			<div class="ui-status" id="sjzbList">
 	    				 <select @change="changeDataPrepareTableByStatus($event)">
 	    				 	<option value="1">准备状态</option>
 	    				 	<option value="2">抽取状态</option>
 	    				 </select>
-	    				<span><input type="checkbox" checked="checked" data-tableId="dataPrepareTable" id="sjzbAll">全部</span>
+	    				<span><input type="checkbox" checked="checked" @click="selectAllStatus" id="sjzbAll">全部</span>
 	    				<span v-if="zbFlag">
-							<span  v-for="d in sjzbList" id="sjzbList">
+							<span  v-for="d in sjzbList">
 								<!-- <em></em>&nbsp; -->
-								<input type="checkbox" checked="checked" :value="d.code" @click="qryTableByStatus">
+								<input type="checkbox" name="checkbox" checked="checked" :value="d.code" @click="qryTableByStatus($event,'dataPrepareTable')">
 								{{d.dataName}}
 							</span>
 						</span>
 						<span v-else>
-							<span  v-for="d in sjcqList" id="sjcqList">
-								<input type="checkbox" checked="checked" :value="d.code" @click="qryTableByStatus">
+							<span  v-for="d in sjcqList">
+								<input type="checkbox" name="checkbox" checked="checked" :value="d.code" @click="qryTableByStatus($event,'dataPrepareTable')">
 								{{d.dataName}}
 							</span>
 						</span>
@@ -235,11 +235,11 @@
 	    	<div class="ui-lc-mian mt20 scrollBox" >
 	    		<h3 class="clearfix pre-jqgrid">
 	    			标签生成
-	    			<div class="ui-status">
+	    			<div class="ui-status" id="bqscList">
 	    				<span>生成状态</span>
-	    				<span> <input type="checkbox" checked="checked" > 全部</span>
+	    				<span> <input type="checkbox" checked="checked" @click="selectAllStatus" id="bqscAll"> 全部</span>
 	    				<span  v-for="d in bqscList">
-	    					<input type="checkbox" checked="checked" :value="d.code">
+	    					<input type="checkbox" checked="checked" :value="d.code" @click="qryTableByStatus($event,'labelGenerateTable')">
 	    					{{d.dataName}}
 	    				</span>
 	    			</div>
@@ -264,7 +264,7 @@
 	    			客户群生成
 	    			<div class="ui-status">
 	    				<span>生成状态</span>
-	    				<span><input type="checkbox" checked="checked"> 全部</span>
+	    				<span><input type="checkbox" checked="checked" @click="selectAllStatus" id="khqscAll"> 全部</span>
 	    				<span  v-for="d in khqscList">
 	    					<!-- <em></em>&nbsp; -->
 	    					<input type="checkbox" checked="checked" :value="d.code">
@@ -288,7 +288,7 @@
     			客户群推送
     			<div class="ui-status">
     				<span>推送状态</span>
-    				<span><input type="checkbox" checked="checked"> 全部</span>
+    				<span><input type="checkbox" checked="checked" @click="selectAllStatus" id="khqtsAll"> 全部</span>
     				<span v-for="d in khqtsList">
     					<input type="checkbox" checked="checked" :value="d.code">
     					{{d.dataName}}
