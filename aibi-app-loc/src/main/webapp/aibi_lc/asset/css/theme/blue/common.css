@@ -384,4 +384,9 @@ input[type=checkbox].checkbix+label>span {
 	color:#3D9CEB;
 	font-weight: bold;
 }
-
+.per-header > span > em{
+	background:url(images/lc-icon.png) no-repeat;
+}
+.ui-pre-progress > a:visited,.ui-pre-progress > a:active,.ui-pre-progress > a.active{
+	color:#3D9CEB;
+}

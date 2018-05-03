@@ -12,8 +12,8 @@ window.loc_onload = function() {
         	readCycle:1,//周期默认为日周期
         	firstDataDay:'',//最新日周期日期
         	firstDataMonth:'',//最新月周期日期
-        	sysDay:'',//系统设置日周期范围
-        	sysMonth:'',//系统设置月周期范围
+//        	sysDay:'',//系统设置日周期范围
+//        	sysMonth:'',//系统设置月周期范围
         	configData:[],//专区信息
         	monitorData:[], //运营监控总览数据
         	isChecked:true //专区全部默认选中
@@ -104,25 +104,27 @@ window.loc_onload = function() {
             },
            // 日期切换函数
            getTime:function(e){//初始化日期
-        	   var that = this;
+        	    var sysMonth = 1 - $.getSysConfig('LOC_CONFIG_APP_MAX_KEEP_MONTHS');
+		        var sysDay = 1 - $.getSysConfig('LOC_CONFIG_APP_MAX_KEEP_DAYS');
+        	    var that = this;
 	        	var configId = $(e.target).attr("data-cycleId");
 	        	if(Number($(event.currentTarget).parents("div").siblings("select").find("option:selected").val()) === 1){
-	        		var minDay ='#F{$dp.$DV(\''+new Date(that.firstDataDay)+'\',{M:'+this.sysDay+'});}';
+	        		var minDay ='#F{$dp.$DV(\''+ that.firstDataDay+'\',{d:'+sysDay+'});}';
 	        		WdatePicker({
 	        			isShowClear:false,
 	        			dateFmt:'yyyy-MM-dd',
-		    			maxDate:new Date(that.firstDataDay),
+		    			maxDate:that.firstDataDay,
 		    			minDate:minDay,
 		    			onpicked: function(dq) {
 		    				that.changeMonitorByDate(dq.cal.getNewDateStr(),configId);
 		    			}
 		    		});
 	        	}else{
-	        		var minMonth ='#F{$dp.$DV(\''+new Date(that.firstDataMonth)+'\',{M:'+this.sysMonth+'});}';
+	        		var minMonth ='#F{$dp.$DV(\''+that.firstDataMonth+'\',{M:'+sysMonth+'});}';
 	        		WdatePicker({
 	        			isShowClear:false,
 	        			dateFmt:'yyyy-MM',
-		    			maxDate:new Date(that.firstDataMonth),
+		    			maxDate:that.firstDataMonth,
 		    			minDate:minMonth,
 		    			onpicked: function(dq) {
 		    				that.changeMonitorByDate(dq.cal.getNewDateStr(),configId);
@@ -173,11 +175,18 @@ window.loc_onload = function() {
             selectAllConfigs:function(e){
             	if($(event.target).prop('checked')){
             		$.each(this.configData,function(key,value){
-                		$("#"+value.configId+"monitor").show();                		
+                		$("#"+value.configId+"monitor").show();  
+                		for(var i=0;i<monitorMain.configData.length;i++){
+                			monitorMain.configData[i].isChecked=true;
+                		}
+                		
             		});
             	}else{
             		$.each(this.configData,function(key,value){
             			$("#"+value.configId+"monitor").hide();
+            			for(var i=0;i<monitorMain.configData.length;i++){
+                			monitorMain.configData[i].isChecked=false;
+                		}
             		});
             	}
             }
@@ -187,10 +196,10 @@ window.loc_onload = function() {
         }
     });
 
-    monitorMain.$nextTick(function () {
-    	monitorMain.sysDay = 1 - $.getSysConfig('LOC_CONFIG_APP_MAX_KEEP_DAYS');
-    	monitorMain.sysMonth = 1 - $.getSysConfig('LOC_CONFIG_APP_MAX_KEEP_MONTHS');
-    });
+//    monitorMain.$nextTick(function () {
+//    	monitorMain.sysDay = 1 - $.getSysConfig('LOC_CONFIG_APP_MAX_KEEP_DAYS');
+//    	monitorMain.sysMonth = 1 - $.getSysConfig('LOC_CONFIG_APP_MAX_KEEP_MONTHS');
+//    });
 };
 
 
