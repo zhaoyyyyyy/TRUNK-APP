@@ -33,7 +33,7 @@ var auto_Login = (function (model){
 					if(cpname == cocname){
 						flag = true;
 					}
-					document.cookie = "coccheck="+ encodeURIComponent(cpname)+ ";expires=" + exp.toGMTString();
+					document.cookie = "coccheck="+ encodeURIComponent(cpname);
 					return flag;
         		},
         		autoLoginFun:function(applyToken){
@@ -52,7 +52,7 @@ var auto_Login = (function (model){
         					 var name = data.cnpost.username;
         					 var coc = $.getCookie("coccheck");
         					 if(!coc){
-            					 document.cookie = "coccheck="+ encodeURIComponent(name)+ ";expires=" + exp.toGMTString();
+            					 document.cookie = "coccheck="+ encodeURIComponent(name);
         					 }
         					 if(data && data.cnpost && data.cnpost.id){
         						 flag = applyToken(data.cnpost.id);
