@@ -5,6 +5,7 @@ import java.util.List;
 import com.asiainfo.biapp.si.loc.base.exception.BaseException;
 import com.asiainfo.biapp.si.loc.base.page.Page;
 import com.asiainfo.biapp.si.loc.base.service.BaseService;
+import com.asiainfo.biapp.si.loc.bd.list.ListInfoVo;
 import com.asiainfo.biapp.si.loc.bd.list.entity.ListInfo;
 import com.asiainfo.biapp.si.loc.bd.list.entity.ListInfoId;
 
@@ -16,9 +17,9 @@ import com.asiainfo.biapp.si.loc.bd.list.entity.ListInfoId;
  */
 public interface IListInfoService  extends BaseService<ListInfo, String>{
 
-	public Page<ListInfo> selectListInfoPageList(Page<ListInfo> page, ListInfo listInfoVo) throws BaseException;
+	public Page<ListInfo> selectListInfoPageList(Page<ListInfo> page, ListInfoVo listInfoVo) throws BaseException;
 	
-	public List<ListInfo> selectListInfoList(ListInfo listInfoVo) throws BaseException;
+	public List<ListInfo> selectListInfoList(ListInfoVo listInfoVo) throws BaseException;
 	
 	public void addListInfo(ListInfo listInfoVo) throws BaseException;
 	

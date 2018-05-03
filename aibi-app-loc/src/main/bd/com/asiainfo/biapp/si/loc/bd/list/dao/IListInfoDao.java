@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.asiainfo.biapp.si.loc.base.dao.BaseDao;
 import com.asiainfo.biapp.si.loc.base.page.Page;
+import com.asiainfo.biapp.si.loc.bd.list.ListInfoVo;
 import com.asiainfo.biapp.si.loc.bd.list.entity.ListInfo;
 
 /**
@@ -14,7 +15,7 @@ import com.asiainfo.biapp.si.loc.bd.list.entity.ListInfo;
  */
 public interface IListInfoDao extends BaseDao<ListInfo, String>{
 	
-	public Page<ListInfo> selectListInfoPageList(Page<ListInfo> page, ListInfo listInfoVo);
+	public Page<ListInfo> selectListInfoPageList(Page<ListInfo> page, ListInfoVo listInfoVo);
 	
-	public List<ListInfo> selectListInfoList(ListInfo listInfoVo);
+	public List<ListInfo> selectListInfoList(ListInfoVo listInfoVo);
 }

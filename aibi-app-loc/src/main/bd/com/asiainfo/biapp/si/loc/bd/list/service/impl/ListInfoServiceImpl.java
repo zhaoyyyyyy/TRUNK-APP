@@ -12,6 +12,7 @@ import com.asiainfo.biapp.si.loc.base.exception.BaseException;
 import com.asiainfo.biapp.si.loc.base.exception.ParamRequiredException;
 import com.asiainfo.biapp.si.loc.base.page.Page;
 import com.asiainfo.biapp.si.loc.base.service.impl.BaseServiceImpl;
+import com.asiainfo.biapp.si.loc.bd.list.ListInfoVo;
 import com.asiainfo.biapp.si.loc.bd.list.dao.IListInfoDao;
 import com.asiainfo.biapp.si.loc.bd.list.entity.ListInfo;
 import com.asiainfo.biapp.si.loc.bd.list.entity.ListInfoId;
@@ -31,7 +32,7 @@ public class ListInfoServiceImpl extends BaseServiceImpl<ListInfo, String>  impl
 	private IListInfoDao listInfoDao;
 
 	@Override
-	public Page<ListInfo> selectListInfoPageList(Page<ListInfo> page, ListInfo listInfoVo) throws BaseException {
+	public Page<ListInfo> selectListInfoPageList(Page<ListInfo> page, ListInfoVo listInfoVo) throws BaseException {
 		if(null==page){
 			throw new ParamRequiredException("selectListInfoPageList :page is null!");
 		}
@@ -39,7 +40,7 @@ public class ListInfoServiceImpl extends BaseServiceImpl<ListInfo, String>  impl
 	}
 
 	@Override
-	public List<ListInfo> selectListInfoList(ListInfo listInfoVo) throws BaseException {
+	public List<ListInfo> selectListInfoList(ListInfoVo listInfoVo) throws BaseException {
 		if(null==listInfoVo){
 			throw new ParamRequiredException("selectListInfoPageList :page is null!");
 		}

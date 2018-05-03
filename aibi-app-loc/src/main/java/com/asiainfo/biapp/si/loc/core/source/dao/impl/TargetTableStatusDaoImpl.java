@@ -7,14 +7,17 @@
 package com.asiainfo.biapp.si.loc.core.source.dao.impl;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Repository;
 
 import com.asiainfo.biapp.si.loc.base.dao.BaseDaoImpl;
 import com.asiainfo.biapp.si.loc.base.page.Page;
+import com.asiainfo.biapp.si.loc.base.utils.StringUtil;
 import com.asiainfo.biapp.si.loc.core.source.dao.ITargetTableStatusDao;
 import com.asiainfo.biapp.si.loc.core.source.entity.TargetTableStatus;
 import com.asiainfo.biapp.si.loc.core.source.vo.TargetTableStatusVo;
@@ -66,10 +69,7 @@ public class TargetTableStatusDaoImpl extends BaseDaoImpl<TargetTableStatus, Str
     public String selectLastestDateByCycle() {
         String hql = "from  TargetTableStatus  where dataDate = ("
                 +"select max(dataDate) from TargetTableStatus )";
-//                   +"select max(a.dataDate) from TargetTableStatus a,SourceTableInfo b "
-//                   +"where a.sourceTableId = b.sourceTableId and b.readCycle = :readCycle )" ;
         Map<String, Object> params = new HashMap<>();
-//        params.put("readCycle", readCycle);
         List<TargetTableStatus> targetTableStatuses = super.findListByHql(hql, params);
         if(targetTableStatuses.size() > 0){
             return targetTableStatuses.get(0).getDataDate();
@@ -78,7 +78,7 @@ public class TargetTableStatusDaoImpl extends BaseDaoImpl<TargetTableStatus, Str
     }
     
 
-    public Map<String, Object> fromBean(TargetTableStatus targetTableStatusVo) {
+    public Map<String, Object> fromBean(TargetTableStatusVo targetTableStatusVo) {
         Map<String, Object> reMap = new HashMap<>();
         Map<String, Object> params = new HashMap<>();
         StringBuffer hql = new StringBuffer("from TargetTableStatus d where 1=1 ");
@@ -110,6 +110,22 @@ public class TargetTableStatusDaoImpl extends BaseDaoImpl<TargetTableStatus, Str
             hql.append("and d.dataStatus = :dataStatus ");
             params.put("dataStatus", targetTableStatusVo.getDataStatus());
         }
+        if (StringUtil.isNotEmpty(targetTableStatusVo.getDataStatuses())) {
+            Set<Integer> statusSet = new HashSet<Integer>();
+            for(String status : targetTableStatusVo.getDataStatuses().split(",")){
+                statusSet.add(Integer.parseInt(status));
+            }
+            hql.append("and d.dataStatus in (:statusSet) ");
+            params.put("statusSet", statusSet);
+        }
+        if (StringUtil.isNotEmpty(targetTableStatusVo.getIsDoings())) {
+            Set<Integer> isdoingSet = new HashSet<Integer>();
+            for(String isDoing : targetTableStatusVo.getIsDoings().split(",")){
+                isdoingSet.add(Integer.parseInt(isDoing));
+            }
+            hql.append("and d.isDoing in (:isdoingSet) "); 
+            params.put("isdoingSet", isdoingSet);
+        }
         if (null != targetTableStatusVo.getDataBatch()) {
             hql.append("and d.dataBatch = :dataBatch ");
             params.put("dataBatch", targetTableStatusVo.getDataBatch());
@@ -118,9 +134,9 @@ public class TargetTableStatusDaoImpl extends BaseDaoImpl<TargetTableStatus, Str
             hql.append("and d.exceptionDesc LIKE :exceptionDesc ");
             params.put("exceptionDesc", "%" + targetTableStatusVo.getExceptionDesc() + "%");
         }
-        if (StringUtils.isNotBlank(targetTableStatusVo.getSourceTableInfo().getConfigId())) {
+        if (StringUtils.isNotBlank(targetTableStatusVo.getConfigId())) {
             hql.append("and d.sourceTableInfo.configId = :configId ");
-            params.put("configId",targetTableStatusVo.getSourceTableInfo().getConfigId() );
+            params.put("configId",targetTableStatusVo.getConfigId() );
         }
         reMap.put("hql", hql);
         reMap.put("params", params);

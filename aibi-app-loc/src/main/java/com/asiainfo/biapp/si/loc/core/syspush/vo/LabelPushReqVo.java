@@ -6,10 +6,10 @@
 
 package com.asiainfo.biapp.si.loc.core.syspush.vo;
 
+import io.swagger.annotations.ApiParam;
+
 import com.asiainfo.biapp.si.loc.core.label.vo.LabelInfoVo;
 import com.asiainfo.biapp.si.loc.core.syspush.entity.LabelPushReq;
-
-import io.swagger.annotations.ApiParam;
 
 /**
  * Title : LabelPushReqVo
@@ -46,6 +46,21 @@ public class LabelPushReqVo extends LabelPushReq{
     @ApiParam(value="标签信息")
     private LabelInfoVo customInfoVo;
     
+    /**
+     * 专区ID
+     */
+    private String configId;
+    
+    /**
+     * 客户群名称
+     */
+    private String labelName;
+    
+    /**
+     * 推送状态（多个）
+     */
+    private String pushStatuses;
+    
     private String selSysIds;
 
     
@@ -62,8 +77,35 @@ public class LabelPushReqVo extends LabelPushReq{
         return selSysIds;
     }
     
+    
+    public String getConfigId() {
+        return configId;
+    }
+    
+    public void setConfigId(String configId) {
+        this.configId = configId;
+    }
+
+    public String getLabelName() {
+        return labelName;
+    }
+    
+    public void setLabelName(String labelName) {
+        this.labelName = labelName;
+    }
+
     public void setSelSysIds(String selSysIds) {
         this.selSysIds = selSysIds;
+    }
+
+    
+    public String getPushStatuses() {
+        return pushStatuses;
+    }
+
+    
+    public void setPushStatuses(String pushStatuses) {
+        this.pushStatuses = pushStatuses;
     }
 
 }

@@ -7,8 +7,10 @@
 package com.asiainfo.biapp.si.loc.core.syspush.dao.impl;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.springframework.stereotype.Repository;
 
@@ -89,6 +91,14 @@ public class LabelPushReqDaoImpl extends BaseDaoImpl<LabelPushReq, String> imple
             hql.append("and l.pushStatus = :pushStatus ");
             params.put("pushStatus", labelPushReqVo.getPushStatus());
         }
+        if(StringUtil.isNotEmpty(labelPushReqVo.getPushStatuses())){
+            Set<Integer> statusSet = new HashSet<Integer>();
+            for(String status : labelPushReqVo.getPushStatuses().split(",")){
+                statusSet.add(Integer.parseInt(status));
+            }
+            hql.append("and l.pushStatus in (:statusSet) ");
+            params.put("statusSet", statusSet);
+        }
         if (null != labelPushReqVo.getIsHasList()){
             hql.append("and l.isHasList = :isHasList ");
             params.put("isHasList", labelPushReqVo.getIsHasList());
@@ -109,9 +119,13 @@ public class LabelPushReqDaoImpl extends BaseDaoImpl<LabelPushReq, String> imple
             hql.append("and l.exceInfo = :exceInfo ");
             params.put("exceInfo", labelPushReqVo.getExceInfo());
         }
-        if(null != labelPushReqVo.getLabelPushCycle().getLabelInfo() && StringUtil.isNoneBlank(labelPushReqVo.getLabelPushCycle().getLabelInfo().getConfigId())){
+        if( StringUtil.isNoneEmpty(labelPushReqVo.getConfigId())){
             hql.append("and l.labelPushCycle.labelInfo.configId = :configId ");
-            params.put("configId", labelPushReqVo.getLabelPushCycle().getLabelInfo().getConfigId());
+            params.put("configId", labelPushReqVo.getConfigId());
+        }
+        if( StringUtil.isNoneEmpty(labelPushReqVo.getLabelName())){
+            hql.append("and l.labelPushCycle.labelInfo.labelName LIKE :labelName ");
+            params.put("labelName", "%" + labelPushReqVo.getLabelName() +"%");
         }
         reMap.put("hql", hql);
         reMap.put("params", params);

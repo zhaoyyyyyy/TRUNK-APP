@@ -1,19 +1,19 @@
 /*
- * @(#)LabelStatusVo.java
- *
+ * @(#)ListInfoVo.java
+ * 
  * CopyRight (c) 2017 北京亚信智慧数据科技有限公司 保留所有权利。
  */
+package com.asiainfo.biapp.si.loc.bd.list;
 
-package com.asiainfo.biapp.si.loc.core.label.vo;
-
-import com.asiainfo.biapp.si.loc.core.label.entity.LabelStatus;
+import com.asiainfo.biapp.si.loc.bd.list.entity.ListInfo;
 
 /**
- * Title : LabelStatusVo
+ * 
+ * Title : ListInfoVo
  * <p/>
  * Description : 
  * <p/>
- * CopyRight : CopyRight (c) 2017
+ * CopyRight : CopyRight (c) 2018
  * <p/>
  * Company : 北京亚信智慧数据科技有限公司
  * <p/>
@@ -22,28 +22,39 @@ import com.asiainfo.biapp.si.loc.core.label.entity.LabelStatus;
  * Modification History	:
  * <p/>
  * <pre>NO.    Date    Modified By    Why & What is modified</pre>
- * <pre>1    2017年11月20日     wangrd        Created</pre>
+ * <pre>1    2018年5月3日    admin        Created</pre>
  * <p/>
  *
- * @author   wangrd
- * @version 1.0.0.2017年11月20日
+ * @author  shaosq
+ * @version 1.0.0.2018年5月3日
  */
-public class LabelStatusVo extends LabelStatus{
+public class ListInfoVo extends ListInfo{
 
-    private static final long serialVersionUID = 1L;
-    
+    /**  */
+    private static final long serialVersionUID = -8811746237843893212L;
+    /**
+     * 专区ID
+     */
     private String configId;
-    private String labelName;
-    private String dataStatuses;
     
+    /**
+     * 客户群名称
+     */
+    private String labelName;
+    
+    /**
+     * 客户群生成状态（多个）
+     */
+    private String dataStatuses;
+
     public String getConfigId() {
         return configId;
     }
-    
+
     public void setConfigId(String configId) {
         this.configId = configId;
     }
-    
+
     
     public String getLabelName() {
         return labelName;
@@ -57,10 +68,10 @@ public class LabelStatusVo extends LabelStatus{
     public String getDataStatuses() {
         return dataStatuses;
     }
+
     
     public void setDataStatuses(String dataStatuses) {
         this.dataStatuses = dataStatuses;
     }
-
     
 }

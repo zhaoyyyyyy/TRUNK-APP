@@ -8,6 +8,10 @@
 	<link rel="stylesheet" theme="default" href="../../asset/css/theme/default/main.css"/> 
    	<script type="text/javascript" src="../../asset/script/common/include.js"></script>
    	<script type="text/javascript" src="service_monitor_detail.js"></script>
+   	<script type="text/javascript" src="monitor_table_dataprepare.js"></script>
+   	<script type="text/javascript" src="monitor_table_labelgenerate.js"></script>
+   	<script type="text/javascript" src="monitor_table_customgenerate.js"></script>
+   	<script type="text/javascript" src="monitor_table_custompush.js"></script>
    	<script type="text/javascript" src="DateFmt.js"></script>
    	<style type="text/css">
 	[v-cloak] {
@@ -201,21 +205,21 @@
 	    		<h3 class="clearfix pre-jqgrid">
 	    			数据准备
 	    			<div class="ui-status" id="sjzbList">
-	    				 <select @change="changeDataPrepareTableByStatus($event)">
+	    				 <select onchange="changeDataPrepareTableByStatus(this)">
 	    				 	<option value="1">准备状态</option>
 	    				 	<option value="2">抽取状态</option>
 	    				 </select>
-	    				<span><input type="checkbox" checked="checked" @click="selectAllStatus" id="sjzbAll">全部</span>
-	    				<span v-if="zbFlag">
+	    				<span><input type="checkbox" checked="checked" onclick="selectAllDataPrepareStatus(this);" id="sjzbAll">全部</span>
+	    				<span id="zbList">
 							<span  v-for="d in sjzbList">
 								<!-- <em></em>&nbsp; -->
-								<input type="checkbox" name="checkbox" checked="checked" :value="d.code" @click="qryTableByStatus($event,'dataPrepareTable')">
+								<input type="checkbox" name="zbbox" checked="checked" :value="d.code" onclick="qryDataPrepareTableByCond();">
 								{{d.dataName}}
 							</span>
 						</span>
-						<span v-else>
+						<span  id="cqList">
 							<span  v-for="d in sjcqList">
-								<input type="checkbox" name="checkbox" checked="checked" :value="d.code" @click="qryTableByStatus($event,'dataPrepareTable')">
+								<input type="checkbox" name="cqbox" checked="checked" :value="d.code" onclick="qryDataPrepareTableByCond();">
 								{{d.dataName}}
 							</span>
 						</span>
@@ -223,7 +227,7 @@
 	    			<form id="formSearch-dataPrepare" class="form-group fright width-210">
 						<div class="input-group">
 							<input name="sourceTableName" id="sourceTableName" type="text" class="form-control input-pointer" placeholder="请输入表名" />
-							<div class="input-group-addon input-group-icon right-child" id="btn_search_data" data-tableId="dataPrepareTable" data-formSearchId="formSearch-dataPrepare" @keyup.enter="qryTableByCond($event)" @click="qryTableByCond($event)"></div>			
+							<div class="input-group-addon input-group-icon right-child" id="btn_search_data" data-tableId="dataPrepareTable" data-formSearchId="formSearch-dataPrepare" onclick="qryDataPrepareTableByCond()"></div>			
 						</div>						
 					</form>
 	    		</h3>
@@ -235,18 +239,18 @@
 	    	<div class="ui-lc-mian mt20 scrollBox" >
 	    		<h3 class="clearfix pre-jqgrid">
 	    			标签生成
-	    			<div class="ui-status" id="bqscList">
+	    			<div class="ui-status">
 	    				<span>生成状态</span>
-	    				<span> <input type="checkbox" checked="checked" @click="selectAllStatus" id="bqscAll"> 全部</span>
+	    				<span> <input type="checkbox" checked="checked" onclick="selectAllLabelGenerateStatus(this)" id="bqscAll"> 全部</span>
 	    				<span  v-for="d in bqscList">
-	    					<input type="checkbox" checked="checked" :value="d.code" @click="qryTableByStatus($event,'labelGenerateTable')">
+	    					<input type="checkbox" checked="checked" :value="d.code" onclick="qryLabelGenerateTableByCond();">
 	    					{{d.dataName}}
 	    				</span>
 	    			</div>
 	    			<div id="formSearch-labelGenerate" class="form-group fright width-210">
 						<div class="input-group">
-							<input name="labelInfo.labelName"  type="text" class="form-control input-pointer" placeholder="请输入标签名称" />
-							<div class="input-group-addon input-group-icon right-child" id="btn_search_label" data-tableId="labelGenerateTable" data-formSearchId="formSearch-labelGenerate" @keyup.enter="qryTableByCond($event)" @click="qryTableByCond($event)"></div>			
+							<input name="labelName" id="labelGenerateName"  type="text" class="form-control input-pointer" placeholder="请输入标签名称" />
+							<div class="input-group-addon input-group-icon right-child" id="btn_search_label"  onclick="qryLabelGenerateTableByCond();"></div>			
 						</div>						
 					</div>
 	    		</h3>
@@ -264,17 +268,17 @@
 	    			客户群生成
 	    			<div class="ui-status">
 	    				<span>生成状态</span>
-	    				<span><input type="checkbox" checked="checked" @click="selectAllStatus" id="khqscAll"> 全部</span>
+	    				<span><input type="checkbox" checked="checked" onclick="selectAllCustomGenerateStatus(this)" id="khqscAll"> 全部</span>
 	    				<span  v-for="d in khqscList">
 	    					<!-- <em></em>&nbsp; -->
-	    					<input type="checkbox" checked="checked" :value="d.code">
+	    					<input type="checkbox" checked="checked" :value="d.code" onclick="qryCustomGenerateTableByCond();">
 	    					{{d.dataName}}
 	    				</span>
 	    			</div>
 	    			<div id="formSearch-customGenerate" class="form-group fright width-210">
 						<div class="input-group">
-							<input name="labelInfo.labelName" type="text" class="form-control input-pointer" placeholder="请输入客户群名称" />
-							<div class="input-group-addon input-group-icon right-child" id="btn_search_custom" data-tableId="customGenerateTable" data-formSearchId="formSearch-customGenerate" @keyup.enter="qryTableByCond($event)" @click="qryTableByCond($event)"></div>			
+							<input name="labelName" id="customGenerateName" type="text" class="form-control input-pointer" placeholder="请输入客户群名称" />
+							<div class="input-group-addon input-group-icon right-child" id="btn_search_custom" onclick="qryCustomGenerateTableByCond();"></div>			
 						</div>						
 					</div>
 	    		</h3>
@@ -288,16 +292,16 @@
     			客户群推送
     			<div class="ui-status">
     				<span>推送状态</span>
-    				<span><input type="checkbox" checked="checked" @click="selectAllStatus" id="khqtsAll"> 全部</span>
+    				<span><input type="checkbox" checked="checked" onclick="selectAllCustomPushStatus(this)" id="khqtsAll"> 全部</span>
     				<span v-for="d in khqtsList">
-    					<input type="checkbox" checked="checked" :value="d.code">
+    					<input type="checkbox" checked="checked" :value="d.code" onclick="qryCustomPushTableByCond();">
     					{{d.dataName}}
     				</span>
     			</div>
 				<div id="formSearch-customPush" class="form-group fright width-210">
 					<div class="input-group">
-						<input name="labelPushCycle.labelInfo.labelName" type="text" class="form-control input-pointer" placeholder="请输入客户群名称" />
-						<div class="input-group-addon input-group-icon right-child" id="btn_search_push" data-tableId="customPushTable" data-formSearchId="formSearch-customPush" @keyup.enter="qryTableByCond($event)" @click="qryTableByCond($event)"></div>			
+						<input name="labelName" id="customPushName" type="text" class="form-control input-pointer" placeholder="请输入客户群名称" />
+						<div class="input-group-addon input-group-icon right-child" id="btn_search_push"  onclick="qryCustomPushTableByCond();"></div>			
 					</div>						
 				</div>
     		</h3>
