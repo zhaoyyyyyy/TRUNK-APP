@@ -695,10 +695,14 @@ var labelInfoModel = (function (model){
    		  });
     }
     
+    /**
+     * 保存成功后跳转，标签集市和客户群集市都跳转到客户群集市页面
+     */
     model.toggleMenu = function(){
     	var menu = "custom/custom_market";
     	window.location.href = "./custom_market.html?menu="+menu;
     }
+    
 	/**
 	 * 返回
 	 */
