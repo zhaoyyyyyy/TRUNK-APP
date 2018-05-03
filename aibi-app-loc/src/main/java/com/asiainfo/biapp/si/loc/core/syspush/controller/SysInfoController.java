@@ -242,18 +242,6 @@ public class SysInfoController extends BaseController<SysInfo>{
         if(StringUtil.isNoneBlank(sys.getLocalPath())){
             oldSys.setLocalPath(sys.getLocalPath());
         }
-        if(StringUtil.isNoneBlank(sys.getWebserviceWsdl())){
-            oldSys.setWebserviceWsdl(sys.getWebserviceWsdl());
-        }
-        if(StringUtil.isNoneBlank(sys.getWebserviceTargetnamespace())){
-            oldSys.setWebserviceTargetnamespace(sys.getWebserviceTargetnamespace());
-        }
-        if(StringUtil.isNoneBlank(sys.getWebserviceMethod())){
-            oldSys.setWebserviceMethod(sys.getWebserviceMethod());
-        }
-        if(StringUtil.isNoneBlank(sys.getWebserviceArgs())){
-            oldSys.setWebserviceArgs(sys.getWebserviceArgs());
-        }
         if(StringUtil.isNoneBlank(sys.getDescTxt())){
             oldSys.setDescTxt(sys.getDescTxt());
         }

@@ -104,18 +104,19 @@ public class YwDevUserServiceImpl extends DevUserServiceImpl implements IUserSer
 		
 		Map<String,Object> params = new HashMap<String,Object>();
 		params.put("token", token);
-		LogUtil.info("拿到用户ID请求url"+jauthUrl+"/api/auth/me,参数:"+params);
 		//拿到用户ID
 		try{
 			String tokenStr = HttpUtil.sendGet(jauthUrl+"/api/auth/me", params);
 			JSONObject jsObject = JSONObject.fromObject(tokenStr);
 			userId = jsObject.getString("userId");
+			username = jsObject.getString("username");
+			user.setUserName(username);
 			user.setUserId(userId);
 		}catch(Exception e){
-			throw new UserAuthException("无效的token");
+			throw new UserAuthException("无效的token，该token为：：："+token);
 		}
 		//如果是系统
-		if(userId.contains("sys_")){
+		if(userId.contains("sys_")||userId.contains("_sys")){
 		    return user;
 		}
 		//拿到用户名称

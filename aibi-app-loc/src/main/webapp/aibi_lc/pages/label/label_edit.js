@@ -247,7 +247,12 @@ window.loc_onload = function() {
 					$.commAjax({
 						url : $.ctx + '/api/source/sourceTableInfo/get?sourceTableId='+sourceTableId,
 						onSuccess : function(data){			
-							model.sourceInfoList = data.data.sourceInfoList
+							model.sourceInfoList = data.data.sourceInfoList;
+							for(var i=0;i < model.sourceInfoList.length;i++){
+								if(!model.sourceInfoList[i].columnCnName){
+									model.sourceInfoList[i].columnCnName = model.sourceInfoList[i].sourceName;
+								}
+							}
 						}
 					});
 					/*if(!model.updateCycle){
