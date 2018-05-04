@@ -17,7 +17,6 @@ window.loc_onload = function() {
         	configData:[],//专区信息
         	monitorData:[], //运营监控总览数据
         	isChecked:true, //专区全部默认选中
-        	count : 0,//复选框选中个数
         },
         methods:{
         	//页面初始化函数
@@ -76,9 +75,8 @@ window.loc_onload = function() {
 					$("#"+configId+"monitor").hide();
 					$("#allChecked").prop('checked',false)
 				}else{
-					monitorMain.count++;
-					console.log($(event.target))
-					if(monitorMain.count==monitorMain.configData.length){
+					var count=$("#selectAll li").find("input:checked").size();
+					if(count===(monitorMain.configData.length-1)){
 						$("#allChecked").prop('checked',true)
 					}
 					$("#"+configId+"monitor").show();

@@ -1897,10 +1897,12 @@ animation-delay: .8s;
 .state-fail{
 	color:#FF0000;
 }
-
 .ui-hide-calendar .ui-datepicker-calendar,
 .ui-hide-calendar .ui-priority-secondary{
 	display: none;
+}
+.scrollBox .ui-table-static{
+	min-height: 400px!important;
 }
 /*首页*/
 .ui-lc-mian > .ui-tab-title{

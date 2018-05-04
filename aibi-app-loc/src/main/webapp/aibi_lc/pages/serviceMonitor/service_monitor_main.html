@@ -36,7 +36,7 @@
 		    		<span class="large"></span>全部
 		    	</label>
 		</div>
-		<ul class="ui-label-list mt10">
+		<ul class="ui-label-list mt10" id="selectAll">
 			 <li class="ui-monitor-item" v-for="(item,index) in configData" v-cloak>
 			 	<div :value="item.sourceName" class="checkbox" @click.stop.prevent="clickConfigData(item,$event)" :class="{padding0 : (index+1)%3 ==0 }">
 			 		<input :id="item.configId" type="checkbox" class="checkbix" :checked="item.isChecked">
