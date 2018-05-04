@@ -79,9 +79,9 @@ function qryCustomGenerateTableByCond(){
 			$("#customGenerateTable").clearGridData();
 			return;
 		}else if(khqscCodesTemp.length === monitorDetail.khqscList.length){
-			$("#bqscAll").prop("checked",true);
+			$("#khqscAll").prop("checked",true);
 		}else{
-			$("#bqscAll").prop("checked",false);
+			$("#khqscAll").prop("checked",false);
 		}
 	}
 	$($("#customGenerateTable")).setGridParam({

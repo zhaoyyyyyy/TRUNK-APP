@@ -104,7 +104,6 @@ function initLabelGenerateTable(){
 function qryLabelGenerateTableByCond(){
 	var labelName = $("#labelGenerateName").val();
 	var zqscCodesTemp = [];
-	//查询准备状态
 	$("#bqscAll").parents("span").siblings("span").find("input:checkbox:checked").each(function(i){
 		zqscCodesTemp.push($(this).val());
 	});
@@ -137,13 +136,13 @@ function qryLabelGenerateTableByCond(){
 function selectAllLabelGenerateStatus(e){
 	//准备状态
 	if($(e).prop("checked")){
-		$("#bqscAll").parents("span").siblings("span").find("input:checkbox").each(function(i){
-			$(this).prop("checked",true);
+		$(e).parents("span").siblings("span").each(function(i){
+			$(this).find("input:checkbox").prop("checked",true);
 		});
 		qryLabelGenerateTableByCond();
 	}else{
-		$("#bqscAll").parents("span").siblings("span").find("input:checkboxaaa").each(function(i){
-			$(this).prop("checked",false);
+		$(e).parents("span").siblings("span").each(function(i){
+			$(this).find("input:checkbox").prop("checked",false);
 		});
 		$("#labelGenerateTable").clearGridData();
 	}
