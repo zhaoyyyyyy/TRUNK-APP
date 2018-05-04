@@ -62,7 +62,7 @@ public class ListInfoController extends BaseController<ListInfo> {
         Page<ListInfo> listInfoPage = new Page <>();
         try {
             listInfoVo.setListInfoId(listInfoId);
-            listInfoPage=iListInfoService.selectListInfoPageList(listInfoPage, listInfoVo);
+            listInfoPage=iListInfoService.selectListInfoPageList(page, listInfoVo);
         } catch (BaseException e) {
             listInfoPage.fail(e);
         }

@@ -3,9 +3,9 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>运行监控总览</title>
-    <link rel="stylesheet" theme="default" href="../../asset/css/common/reset.css"/> 
     <link rel="stylesheet" theme="default" href="../../asset/css/theme/default/coc_frame.css"/> 
 	<link rel="stylesheet" theme="default" href="../../asset/css/theme/default/main.css"/> 
+    <link rel="stylesheet" theme="default" href="../../asset/css/common/reset.css"/> 
    	<script type="text/javascript" src="../../asset/script/common/include.js"></script>
    	<script type="text/javascript" src="service_monitor_detail.js"></script>
    	<script type="text/javascript" src="monitor_table_dataprepare.js"></script>
@@ -286,6 +286,10 @@
 	                <table id="customGenerateTable"  class="table"></table>
 	                <div id="customGeneratePager"></div>
 	            </div>
+	            <div class="catch-error" id="customGenerateError"  style="display: none;">
+	    			<h3>异常信息</h3>
+	    			<span></span>
+	    		</div>
 	    	</div>
 			<div class="ui-lc-mian mt20 scrollBox" >
      			<h3 class="clearfix pre-jqgrid">
@@ -309,6 +313,10 @@
                 <table id="customPushTable"  class="table"></table>
                 <div id="customPushPager"></div>
             </div>
+            <div class="catch-error" id="customPushError"  style="display: none;">
+	    			<h3>异常信息</h3>
+	    			<span></span>
+	    	</div>
     	</div>
     	</div>
     </div>      

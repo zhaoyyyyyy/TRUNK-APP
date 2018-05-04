@@ -18,8 +18,7 @@ function initCustomGenerateTable(){
 			index : 'labelInfo.labelName',
 			width : 160,
 			align : "center",
-			sortable : false,
-			frozen : true
+			sortable : false
 		},
 		{
 			name : 'dataStatus',
@@ -27,9 +26,18 @@ function initCustomGenerateTable(){
 			width : 80,
 			align : "center",
 			sortable : false,
-			cellattr: setColColor,
 			formatter : function(value, opts, data) {
-	    		return $.getCodeDesc("KHQSCZT",value);
+				if(Number(value)===0){
+        			return '<span class="state-fail">' +$.getCodeDesc("QTZTZD",value)+ '</span>';
+        		}else if(Number(value)===1){
+					return '<span class="state-ready">' +$.getCodeDesc("QTZTZD",value)+ '</span>';
+				}else if(Number(value)===2){
+					return '<span class="state-progress">' +$.getCodeDesc("QTZTZD",value)+ '</span>';
+				}else if(Number(value)===3){
+					return '<span class="state-success">' +$.getCodeDesc("QTZTZD",value)+ '</span>';
+				}else if(Number(value)===4){
+					return '<span class="state-unStart">' +$.getCodeDesc("QTZTZD",value)+ '</span>';
+				}
 	    	}
 		},{
 			name : 'dataTime',
@@ -43,12 +51,12 @@ function initCustomGenerateTable(){
 		}],
 		autowidth : true,
 		viewrecords : true,
-		rowNum : 10,
-		rownumbers : true,
-		jsonReader : {
+		/*rowNum : 10,*/
+		/*rownumbers : true,*/
+		/*jsonReader : {
 			repeatitems : false,
 			id : "0"
-		},
+		},*/
 		height : '100%',
 		rowList : [ 10, 20, 30 ],
 		pager : "#customGeneratePager"

@@ -13,7 +13,7 @@ function initCustomPushTable(){
 			"dataDate" : monitorDetail.qryDataDate.replace(/-/g, "")
 		},
 		datatype : "json",
-		colNames : [ '客户群名称', '推送平台', '推送时间','推送状态' ],
+		colNames : [ '客户群名称', '推送平台', '推送时间','推送状态','异常信息','状态编码' ],
 		colModel : [ {
     		name : 'labelPushCycle.labelInfo.labelName',
     		index : 'labelPushCycle.labelInfo.labelName',
@@ -45,24 +45,50 @@ function initCustomPushTable(){
     		width : 50,
     		align : "center",
     		sortable : false,
-//  		cellattr: setColColor,
     		formatter : function(value, opts, data) {
-        		//return $.getCodeDesc("KHQTSZT",value);
-        		console.log(value)
-        		if(value==1){
+        		if(Number(value)===1){
         			return '<span class="state-ready">' +$.getCodeDesc("KHQTSZT",value)+ '</span>';
-        		}else if(value==2){
+        		}else if(Number(value)===2){
 					return '<span class="state-progress">' +$.getCodeDesc("KHQTSZT",value)+ '</span>';
-				}else if(value==3){
+				}else if(Number(value)===3){
 					return '<span class="state-success">' +$.getCodeDesc("KHQTSZT",value)+ '</span>';
-				}else if(value==0){
+				}else if(Number(value)===0){
 					return '<span class="state-fail">' +$.getCodeDesc("KHQTSZT",value)+ '</span>';
 				}
         		
         	}
+    	},{
+    		name : 'exceInfo',
+    		index : 'exceInfo',
+    		hidden:true
+    	}
+    	,{
+    		name : 'pushStatus',
+    		index : 'pushStatus',
+    		hidden:true
     	}],
 		autowidth : true,
 		viewrecords : true,
+		rowNum : 10,
+		rownumbers : true,
+		jsonReader : {
+			repeatitems : false,
+			id : "0"
+		},
+		onSelectRow: function (id) {
+			if (window.event.button == 0) // 判断是否为鼠标左键点击
+			{
+				setThisLineChecked(id);
+                var rowData = $("#customPushTable").jqGrid("getRowData", id);
+                var pushStatus = rowData.pushStatus;
+                if(pushStatus && Number(pushStatus) === 0){
+                	$("#customPushError").css("display","");
+                	$("#customPushError span").text(rowData.exceInfo);
+                }else{
+                	$("#customPushError").css("display","none");
+                }
+			}
+		},
 		rowNum : 10,
 		rownumbers : true,
 		jsonReader : {
@@ -125,5 +151,22 @@ function selectAllCustomPushStatus(e){
 			$(this).prop("checked",false);
 		});
 		$("#customPushTable").clearGridData();
+	}
+}
+/**
+ * 设置选中行样式
+ * 
+ * @param rowId
+ */
+function setThisLineChecked(rowId) {
+	var ids = $("#customPushTable").jqGrid("getDataIDs");
+	if (ids) {
+		for (var i = 0; i < ids.length; i++) {
+			if (rowId == ids[i]) {
+				$('#customPushTable ' + '#' + ids[i]).find("td").addClass("ui-state-highlight");
+			} else {
+				$('#customPushTable ' + '#' + ids[i]).find("td").removeClass("ui-state-highlight");
+			}
+		}
 	}
 }

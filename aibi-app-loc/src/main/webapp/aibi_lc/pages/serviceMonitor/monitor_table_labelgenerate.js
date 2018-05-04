@@ -12,7 +12,7 @@ function initLabelGenerateTable(){
 			"dataDate" : monitorDetail.qryDataDate.replace(/-/g, "")
 		},
 		datatype : "json",
-		colNames : [ '标签名称', '生成状态', '目标表列名', '表名','表类型','错误信息描述' ],
+		colNames : [ '标签名称', '生成状态', '目标表列名', '表名','表类型','错误信息描述','状态编码' ],
 		colModel : [ {
     		name : 'labelInfo.labelName',
     		index : 'labelInfo.labelName',
@@ -28,8 +28,14 @@ function initLabelGenerateTable(){
     		align : "center",
     		sortable : false,
     		cellattr: setColColor,
-    		formatter: function(cellvalue, options, rowObject) {
-	            return $.getCodeDesc("BQSCZT",cellvalue);
+    		formatter: function(value, options, rowObject) {
+    			if(Number(value)===0){
+        			return '<span class="state-fail">' +$.getCodeDesc("BQSCZT",value)+ '</span>';
+        		}else if(Number(value)===1){
+					return '<span class="state-success">' +$.getCodeDesc("BQSCZT",value)+ '</span>';
+				}else if(Number(value)===2){
+					return '<span class="state-progress">' +$.getCodeDesc("BQSCZT",value)+ '</span>';
+				}
 	        }
     	}, {
     		name : 'mdaSysTableColumnNames',
@@ -57,6 +63,10 @@ function initLabelGenerateTable(){
     		name : 'exceptionDesc',
     		index : 'exceptionDesc',
     		hidden:true
+    	},{
+    		name : 'dataStatus',
+    		index : 'dataStatus',
+    		hidden:true
     	}],
 		autowidth : true,
 		viewrecords : true,
@@ -74,7 +84,6 @@ function initLabelGenerateTable(){
                 var dataStatus = rowData.dataStatus;
                 if(dataStatus && Number(dataStatus) == 0){
                 	$("#catchError").css("display","");
-                	var rowData = $(tableId).jqGrid("getRowData", rowId);
                 	$("#catchError span").text(rowData.exceptionDesc);
                 }else{
                 	$("#catchError").css("display","none");

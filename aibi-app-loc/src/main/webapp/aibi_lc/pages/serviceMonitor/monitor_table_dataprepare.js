@@ -26,21 +26,31 @@ function initDataPrepareTable(){
 		}, {
 			name : 'dataStatus',
 			index : 'dataStatus',
-			width : 60,
+			width : 80,
 			align : "center",
 			sortable : false,
 			cellattr : setColColor,
 			formatter : function(value, opts, data) {
-				return $.getCodeDesc("SJZBZT", value);
+				if(value==0){
+        			return '<span class="state-unStart">' +$.getCodeDesc("SJZBZT",value)+ '</span>';
+        		}else if(value==1){
+					return '<span class="state-success">' +$.getCodeDesc("SJZBZT",value)+ '</span>';
+				}
 			}
 		}, {
 			name : 'isDoing',
 			index : 'isDoing',
 			sortable : false,
-			width : 60,
+			width : 80,
 			align : "center",
 			formatter : function(value, opts, data) {
-				return $.getCodeDesc("SJCQZT", value);
+				if(Number(value)===0){
+        			return '<span class="state-progress">' +$.getCodeDesc("SJCQZT",value)+ '</span>';
+        		}else if(Number(value)===1){
+					return '<span class="state-success">' +$.getCodeDesc("SJCQZT",value)+ '</span>';
+				}else if(Number(value)===2){
+					return '<span class="state-fail">' +$.getCodeDesc("SJCQZT",value)+ '</span>';
+				}
 			}
 		}, {
 			name : 'startTime',
@@ -77,15 +87,6 @@ function initDataPrepareTable(){
 		},
 		height : '100%',
 		rowList : [ 10, 20, 30 ],
-		loadComplete : function() {
-			if (monitorDetail.zbFlag) {
-				$("#dataPrepareTable").jqGrid('hideCol', [ "isDoing" ]);
-				$("#dataPrepareTable").jqGrid('showCol', [ "dataStatus" ]);
-			} else {
-				$("#dataPrepareTable").jqGrid('hideCol', [ "dataStatus" ]);
-				$("#dataPrepareTable").jqGrid('showCol', [ "isDoing" ]);
-			}
-		},
 		pager : "#dataPreparePager"
 	});
 	$("#dataPrepareTable").jqGrid('setLabel', 0, '序号');
