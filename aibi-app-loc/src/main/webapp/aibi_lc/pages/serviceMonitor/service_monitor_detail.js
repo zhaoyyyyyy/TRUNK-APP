@@ -275,19 +275,19 @@ window.loc_onload = function() {
 			this.getLastestDate(function(){
 				//加载统计数据
 				that.loadMonitorDetailData();
-//			    //加载数据准备表格
-//		    	initDataPrepareTable();
+			    //加载数据准备表格
+		    	initDataPrepareTable();
 		    	//加载标签生成表格
-//		    	initLabelGenerateTable();
-//				//加载客户群生成表格
-//		    	initCustomGenerateTable();
+		    	initLabelGenerateTable();
+				//加载客户群生成表格
+		    	initCustomGenerateTable();
 
 				//加载客户群推送表格
 				initCustomPushTable();
 			});
 		
 			//默认刷新频率
-//			this.refresh(this.defaultPl);
+			this.refresh(this.defaultPl);
 			
 			//从监控总览页面跳转到指定锚点位置
 			var detailAnchor = $.getUrlParam("detailAnchor");
