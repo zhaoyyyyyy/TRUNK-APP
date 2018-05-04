@@ -45,9 +45,20 @@ function initCustomPushTable(){
     		width : 50,
     		align : "center",
     		sortable : false,
-    		cellattr: setColColor,
+//  		cellattr: setColColor,
     		formatter : function(value, opts, data) {
-        		return $.getCodeDesc("KHQTSZT",value);
+        		//return $.getCodeDesc("KHQTSZT",value);
+        		console.log(value)
+        		if(value==1){
+        			return '<span class="state-ready">' +$.getCodeDesc("KHQTSZT",value)+ '</span>';
+        		}else if(value==2){
+					return '<span class="state-progress">' +$.getCodeDesc("KHQTSZT",value)+ '</span>';
+				}else if(value==3){
+					return '<span class="state-success">' +$.getCodeDesc("KHQTSZT",value)+ '</span>';
+				}else if(value==0){
+					return '<span class="state-fail">' +$.getCodeDesc("KHQTSZT",value)+ '</span>';
+				}
+        		
         	}
     	}],
 		autowidth : true,

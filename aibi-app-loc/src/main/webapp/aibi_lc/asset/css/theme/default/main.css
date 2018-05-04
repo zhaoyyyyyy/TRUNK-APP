@@ -1882,7 +1882,13 @@ animation-delay: .8s;
 	color:#FF0000;
 	margin:0 0 0 10px;
 }
-.state-finish{
+.state-ready{
+	color:#1DB6E1;
+}
+.state-progress{
+	color:#9B7DF6;
+}
+.state-success{
 	color:#009933;
 }
 .state-unStart{
@@ -1891,6 +1897,7 @@ animation-delay: .8s;
 .state-fail{
 	color:#FF0000;
 }
+
 .ui-hide-calendar .ui-datepicker-calendar,
 .ui-hide-calendar .ui-priority-secondary{
 	display: none;
