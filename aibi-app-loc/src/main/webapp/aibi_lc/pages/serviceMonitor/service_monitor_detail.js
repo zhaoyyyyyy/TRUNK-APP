@@ -131,7 +131,7 @@ window.loc_onload = function() {
 	            that.timerId = setTimeout(function(){
 	            	that.loadMonitorDetailData(that.configId);
 	            	//刷新数据准备表格
-	            	changeDataPrepareTableByStatus();
+	            	qryDataPrepareTableByCond();
 	     			//刷新标签生成表格
 	     			qryLabelGenerateTableByCond();
 	       			//刷新客户群生成表格
