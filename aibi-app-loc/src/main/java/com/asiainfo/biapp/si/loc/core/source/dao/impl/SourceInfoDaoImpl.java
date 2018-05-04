@@ -116,7 +116,7 @@ public class SourceInfoDaoImpl extends BaseDaoImpl<SourceInfo, String> implement
     @Override
     public Page<SourceInfo> selectSourceInfoListByConfigId(Page<SourceInfo> page, String configId,int readCycle,String sourceName) {
         Map<String, Object> params = new HashMap<>();
-        StringBuffer hqls = new StringBuffer("from SourceInfo s where s.sourceTableId in(select a.sourceTableId from SourceTableInfo a where a.configId= :configId and a.readCycle= :readCycle)");
+        StringBuffer hqls = new StringBuffer("from SourceInfo s where s.sourceTableId in(select a.sourceTableId from SourceTableInfo a where a.sourceTableType = 1 and a.configId= :configId and a.readCycle= :readCycle)");
         params.put("configId", configId);
         params.put("readCycle", readCycle);
         if (StringUtil.isNoneBlank(sourceName)) {
