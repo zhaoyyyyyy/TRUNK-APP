@@ -209,20 +209,51 @@
 	    				 	<option value="1">准备状态</option>
 	    				 	<option value="2">抽取状态</option>
 	    				 </select>
-	    				<span><input type="checkbox" checked="checked" onclick="selectAllDataPrepareStatus(this);" id="sjzbAll">全部</span>
-	    				<span id="zbList">
+	    				 <span class='checkbox'>
+						    <input id="sjzbAll" type="checkbox" class="checkbix" checked="checked"  onclick="selectAllDataPrepareStatus(this)">
+						    <label role="checkbox" for="sjzbAll" class="checkbix">
+						    		<span class="large all-select"></span>全部
+						    	</label>
+						</span>
+	    				<!--<span><input type="checkbox" checked="checked" onclick="selectAllDataPrepareStatus(this);" id="sjzbAll">全部</span>-->
+	    				<div class="control-input" id="zbList">
+					       	<span class='checkbox' v-for="(d,index) in sjzbList">
+							    <input :id="'type'+d.code+index" type="checkbox" name="zbbox" class="checkbix" checked="checked" :value="d.code"  onclick="qryDataPrepareTableByCond();">
+							    <label role="checkbox"  v-if="d.code==0" :for="'type'+d.code+index" class="checkbix">
+						    		<span class="large unStart"></span>{{d.dataName}}
+						    	</label>
+						    	<label role="checkbox"  v-if="d.code==1" :for="'type'+d.code+index" class="checkbix">
+						    		<span class="large success"></span>{{d.dataName}}
+						    	</label>
+							</span>
+				   		 </div>
+	    				<!--<span id="zbList">
 							<span  v-for="d in sjzbList">
-								<!-- <em></em>&nbsp; -->
+								 <em></em>&nbsp; 
 								<input type="checkbox" name="zbbox" checked="checked" :value="d.code" onclick="qryDataPrepareTableByCond();">
 								{{d.dataName}}
 							</span>
-						</span>
-						<span  id="cqList">
+						</span>-->
+						<!--<span  id="cqList">
 							<span  v-for="d in sjcqList">
 								<input type="checkbox" name="cqbox" checked="checked" :value="d.code" onclick="qryDataPrepareTableByCond();">
 								{{d.dataName}}
 							</span>
-						</span>
+						</span>-->
+						<div class="control-input" id="cqList">
+					       	<span class='checkbox' v-for="(d,index) in sjcqList">
+							    <input :id="'typeid'+d.code+index" type="checkbox" name="cqbox" class="checkbix" checked="checked" :value="d.code"  onclick="qryDataPrepareTableByCond();">
+							    <label role="checkbox" v-if="d.code==0" :for="'typeid'+d.code+index" class="checkbix">
+						    		<span class="large ready"></span>{{d.dataName}}
+						    	</label>
+						    	<label role="checkbox" v-if="d.code==1" :for="'typeid'+d.code+index" class="checkbix">
+						    		<span class="large success"></span>{{d.dataName}}
+						    	</label>
+						    	<label role="checkbox" v-if="d.code==2" :for="'typeid'+d.code+index" class="checkbix">
+						    		<span class="large fail"></span>{{d.dataName}}
+						    	</label>
+							</span>
+				   		 </div>
 	    			</div>
 	    			<form id="formSearch-dataPrepare" class="form-group fright width-210">
 						<div class="input-group">
@@ -241,11 +272,34 @@
 	    			标签生成
 	    			<div class="ui-status">
 	    				<span>生成状态</span>
-	    				<span> <input type="checkbox" checked="checked" onclick="selectAllLabelGenerateStatus(this)" id="bqscAll"> 全部</span>
+	    				<span class='checkbox'>
+						    <input id="bqscAll" type="checkbox" class="checkbix" checked="checked"  onclick="selectAllLabelGenerateStatus(this)">
+						    <label role="checkbox" for="bqscAll" class="checkbix">
+					    		<span class="large all-select"></span>全部
+					    	</label>
+						</span>
+	    				<!--<span> <input type="checkbox" checked="checked" onclick="selectAllLabelGenerateStatus(this)" id="bqscAll"> 全部</span>-->
 	    				<span  v-for="d in bqscList">
 	    					<input type="checkbox" checked="checked" :value="d.code" onclick="qryLabelGenerateTableByCond();">
 	    					{{d.dataName}}
 	    				</span>
+	    				
+	    				<div class="control-input">
+					       	<span class='checkbox' v-for="(d,index) in bqscList">
+							    <input :id="'type'+d.code+index" type="checkbox" name="zbbox" class="checkbix" checked="checked" :value="d.code"  onclick="qryLabelGenerateTableByCond();">
+							    <label role="checkbox"  v-if="d.code==0" :for="'type'+d.code+index" class="checkbix">
+						    		<span class="large fail"></span>{{d.dataName}}
+						    	</label>
+						    	<label role="checkbox"  v-if="d.code==1" :for="'type'+d.code+index" class="checkbix">
+						    		<span class="large unStart"></span>{{d.dataName}}
+						    	</label>
+						    	<label role="checkbox"  v-if="d.code==2" :for="'type'+d.code+index" class="checkbix">
+						    		<span class="large ready"></span>{{d.dataName}}
+						    	</label>
+							</span>
+				   		 </div>
+	    				
+	    				
 	    			</div>
 	    			<div id="formSearch-labelGenerate" class="form-group fright width-210">
 						<div class="input-group">
@@ -268,12 +322,38 @@
 	    			客户群生成
 	    			<div class="ui-status">
 	    				<span>生成状态</span>
-	    				<span><input type="checkbox" checked="checked" onclick="selectAllCustomGenerateStatus(this)" id="khqscAll"> 全部</span>
-	    				<span  v-for="d in khqscList">
-	    					<!-- <em></em>&nbsp; -->
+	    				<span class='checkbox'>
+						    <input id="khqscAll" type="checkbox" class="checkbix" checked="checked"  onclick="selectAllCustomGenerateStatus(this)">
+						    <label role="checkbox" for="khqscAll" class="checkbix">
+					    		<span class="large all-select"></span>全部
+					    	</label>
+						</span>
+	    				<!--<span><input type="checkbox" checked="checked" onclick="selectAllCustomGenerateStatus(this)" id="khqscAll"> 全部</span>-->
+	    				
+	    				<div class="control-input">
+					       	<span class='checkbox' v-for="(d,index) in khqscList">
+							    <input :id="'type'+d.code+index" type="checkbox" name="zbbox" class="checkbix" checked="checked" :value="d.code"  onclick="qryCustomGenerateTableByCond();">
+							    <label role="checkbox"  v-if="d.code==0" :for="'type'+d.code+index" class="checkbix">
+						    		<span class="large fail"></span>{{d.dataName}}
+						    	</label>
+						    	<label role="checkbox"  v-if="d.code==1" :for="'type'+d.code+index" class="checkbix">
+						    		<span class="large unStart"></span>{{d.dataName}}
+						    	</label>
+						    	<label role="checkbox"  v-if="d.code==2" :for="'type'+d.code+index" class="checkbix">
+						    		<span class="large ready"></span>{{d.dataName}}
+						    	</label>
+						    	<label role="checkbox"  v-if="d.code==3" :for="'type'+d.code+index" class="checkbix">
+						    		<span class="large success"></span>{{d.dataName}}
+						    	</label>
+							</span>
+				   		 </div>
+	    				
+	    				
+	    				<!--<span  v-for="d in khqscList">
+	    					 <em></em>&nbsp; 
 	    					<input type="checkbox" checked="checked" :value="d.code" onclick="qryCustomGenerateTableByCond();">
 	    					{{d.dataName}}
-	    				</span>
+	    				</span>-->
 	    			</div>
 	    			<div id="formSearch-customGenerate" class="form-group fright width-210">
 						<div class="input-group">

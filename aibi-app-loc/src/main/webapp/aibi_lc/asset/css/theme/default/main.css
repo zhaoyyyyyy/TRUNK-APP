@@ -1845,11 +1845,37 @@ animation-delay: .8s;
 /*.ui-status > select.active{
 	font-weight:bold;
 }*/
-.ui-status > span{
+.ui-status > span,input[type=checkbox].checkbix+label{
 	font-size:12px;
 	line-height:30px;
 	padding:0 10px;
 	display:inline-block;
+}
+input[type=checkbox].checkbix:checked+label>span.all-select{
+	background:#000000;
+}
+input[type=checkbox].checkbix:checked+label>span.unStart{
+	background:#9B7DF6;
+}
+input[type=checkbox].checkbix:checked+label>span.success{
+	background:#009933;
+}
+input[type=checkbox].checkbix:checked+label>span.fail{
+	background:#FF0000;
+}
+input[type=checkbox].checkbix:checked+label>span.ready{
+	background:#1DB6E1;
+}
+input[type=checkbox].checkbix:checked+label>span.progress{
+	background:#9B7DF6;
+}
+
+
+
+.ui-status > .control-input{
+	display:inline-block;
+	float:none;
+	width:auto;
 }
 .ui-status > span > em{
 	display:inline-block;

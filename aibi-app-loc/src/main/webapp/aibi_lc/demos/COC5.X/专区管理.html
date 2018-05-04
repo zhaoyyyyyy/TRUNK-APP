@@ -8,9 +8,9 @@
     <![endif]-->
     <link href="../../asset/css/common/reset.css" rel="stylesheet"  />
     <link href="../../asset/css/jQueryUI/jquery-ui-1.12.1.min.css" rel="stylesheet"  />
-    <link href="../../asset/script/component/jQueryUI/gird/page/page.css" rel="stylesheet"  />
+    <link href="../../asset/css/theme/default/page.css" rel="stylesheet"  theme="default"/>
     <link href="../../asset/script/component/jQueryUI/gird/css/ui.jqgrid.css" rel="stylesheet"  />
-    <link href="../../asset/script/component/jQueryUI/gird/css/ui.jqgrid.owner.css" rel="stylesheet"  />
+    <link href="../../asset/css/theme/default/ui.jqgrid.owner.css" rel="stylesheet"  />
     <link href="../../asset/css/theme/default/button.css" rel="stylesheet"  />
     <link href="../../asset/css/theme/default/form.css" rel="stylesheet"  />
     <link href="../../asset/css/theme/default/tab.css" rel="stylesheet"  />
@@ -132,7 +132,7 @@
 
 <script type="text/javascript">
     $(function(){
-        $("#jsonmap1").AIGrid({
+        $("#jsonmap1").jqGrid({
             url:'../grid.json',
             datatype: "json",
             colNames:['序号','专区ID', '专区英文名称', '地市名称','创建时间','数据状态','操作'],
@@ -157,11 +157,10 @@
                 repeatitems : false,
                 id: "0"
             },
-            height: '100%'
+            height: '100%',
+            width:"100%",
+            autowidth:true,
         });
-
-
-
 
         function setColor(cellvalue, options, rowObject){
             if(rowObject.total > 700){
