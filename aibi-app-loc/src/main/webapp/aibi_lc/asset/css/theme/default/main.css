@@ -1766,7 +1766,7 @@ animation-delay: .8s;
 	padding:0 10px;
 }
 .ui-fresh-box{
-	border-right:1px solid #DCE2E4;
+	border-left:1px solid #DCE2E4;
 	height:60px;
 	padding:0 10px;
 	display:inline-block;
@@ -1930,6 +1930,11 @@ input[type=checkbox].checkbix:checked+label>span.progress{
 .scrollBox .ui-table-static{
 	min-height: 400px!important;
 }
+.scrollBox .ui-table-static table tr td{
+		overflow: hidden;
+		text-overflow:ellipsis;
+		white-space: nowrap;		
+	}
 /*首页*/
 .ui-lc-mian > .ui-tab-title{
 	margin:10px 0;

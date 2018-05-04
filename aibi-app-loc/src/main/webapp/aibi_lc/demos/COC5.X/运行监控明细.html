@@ -33,20 +33,28 @@
       	</div>
       	<div class="ui-lc-mian mt10 ui-prefecture">
       		<div class="ui-pre-detail clearfix">
-      			<p>数据日期<span class="ui-pre-refresh">1s<em></em></span></p>
-				<div class="dropdown open pre-dropdown">
-					<span class="prefectrue-span">日周期&nbsp;<em></em></span>
-					<ul class="dropdown-menu">
-						<li>
-							<span>日周期</span>
-						</li>
-						<li>
-							<span>月周期</span>
-						</li>
-					</ul>
-				</div>
+				<select class="ml10" @change="getCycle($event)" v-model='readCycle'>
+				 	<option value="1">日周期</option>
+				 	<option value="2">月周期</option>
+    			</select>
 				<em></em>
-				<span class="prefectrue-span">2018-02-12<em class="ml20"></em></span>
+	        	<div class="control-input has-icon">
+		           <input type="text"  readonly="readonly"
+		           	class="form-control input-pointer date-input" >
+		           <span class="glyphicon-select form-control-feedback"></span>
+		        </div> 
+		        
+	      		<div class="ui-fresh-box">
+	                <span class="refresh-key">数据刷新频率:</span>
+	                <div class="form-group">
+						<div class="control-input">
+							 <select class="form-control input-pointer" id="refreshId" >
+		                        <option v-for="d in sjsxplList">5s</option>
+		                    </select>
+		                   	 <!--<span>秒</span>-->
+						</div>						
+					</div>
+               </div>
 				<h3 class="pre fright">
 					<div class="dropdown open">
 				    	<a href = "javascript:;" class="dropdown-toggle">
@@ -186,18 +194,15 @@
     		<h3 class="clearfix pre-jqgrid">
     			数据准备
     			<div class="ui-status">
-    				<div class="dropdown open">
-    					<span class="prefectrue-span">准备状态&nbsp;<em></em></span>
-	    				<ul class="dropdown-menu">
-					       <li><a href="#">准备状态</a></li>
-					       <li><a href="#">抽取状态</a></li>
-					    </ul>
-    				</div>
+    				<select onchange="changeDataPrepareTableByStatus(this)">
+    				 	<option value="1">准备状态</option>
+    				 	<option value="2">抽取状态</option>
+    				 </select>
     				<span><em></em>&nbsp;准备完成</span>
     				<span><em></em>&nbsp;未准备</span>
     				<span><em></em>&nbsp;准备失败</span>
     			</div>
-    			<div class="form-group fright">
+    			<div class="form-group fright width-210">
 					<div class="input-group">
 						<input name="configDesc" id="txt_name" type="text" class="form-control input-pointer" placeholder="" />
 						<div class="input-group-addon input-group-icon right-child" id="btn_search"></div>			
@@ -219,7 +224,7 @@
     				<span><em></em>&nbsp;未开始</span>
     				<span><em></em>&nbsp;生成失败</span>
     			</div>
-    			<div class="form-group fright">
+    			<div class="form-group fright width-210">
 					<div class="input-group">
 						<input name="configDesc" id="txt_name" type="text" class="form-control input-pointer" placeholder="" />
 						<div class="input-group-addon input-group-icon right-child" id="btn_search"></div>			
@@ -245,7 +250,7 @@
     				<span><em></em>&nbsp;未开始</span>
     				<span><em></em>&nbsp;生成失败</span>
     			</div>
-    			<div class="form-group fright">
+    			<div class="form-group fright width-210">
 					<div class="input-group">
 						<input name="configDesc" id="txt_name" type="text" class="form-control input-pointer" placeholder="" />
 						<div class="input-group-addon input-group-icon right-child" id="btn_search"></div>			
@@ -267,7 +272,7 @@
     				<span><em></em>&nbsp;未开始</span>
     				<span><em></em>&nbsp;生成失败</span>
     			</div>
-    			<div class="form-group fright">
+    			<div class="form-group fright width-210">
 					<div class="input-group">
 						<input name="configDesc" id="txt_name" type="text" class="form-control input-pointer" placeholder="" />
 						<div class="input-group-addon input-group-icon right-child" id="btn_search"></div>			

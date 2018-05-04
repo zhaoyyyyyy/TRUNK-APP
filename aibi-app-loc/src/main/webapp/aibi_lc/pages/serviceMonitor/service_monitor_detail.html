@@ -17,27 +17,6 @@
 	[v-cloak] {
 		display: none;
 	}
-	.eslipse,
-	table tr td{
-		overflow: hidden;
-		text-overflow:ellipsis;
-		white-space: nowrap;		
-	}
-	.ui-fresh-box .control-input{
-		width: auto;
-	    height: 28px;
-	    position: relative;
-	
-	}
-	.ui-fresh-box .control-input>span{
-		position: absolute;
-	    right: -17px;
-	    top: -15px;	
-	}
-	.ui-fresh-box{
-		border-right:0;
-		border-left: 1px solid #DCE2E4;
-	}
 	</style>
 </head>
 <body>
@@ -50,26 +29,24 @@
       	<div id="monitorDetail" v-cloak>
 	      	<div class="ui-lc-mian mt10 ui-prefecture">
 	      		<div class="ui-pre-detail clearfix">
-	      		 <select class="ml10" @change="getCycle($event)" v-model='readCycle'>
-    				 	<option value="1">日周期</option>
-    				 	<option value="2">月周期</option>
+		      		 <select class="ml10" @change="getCycle($event)" v-model='readCycle'>
+					 	<option value="1">日周期</option>
+					 	<option value="2">月周期</option>
 	    			</select>
 					<em></em>
-		        	<div class="control-input has-icon">
+		        	<div class="control-input has-icon mr10">
 			           <input type="text"  readonly="readonly" @mousedown="getTime"
 			           	class="form-control input-pointer date-input" :value="serviceMonitorObj.dataDate">
 			           <span class="glyphicon-select form-control-feedback"></span>
 			        </div> 
 			        
-		      		<div class="ui-fresh-box">
-		      		
-		                <span class="refresh-key">数据刷新频率:</span>
+		      		<div class="ui-fresh-box ml20">
+		                <span class="refresh-key ml20">数据刷新频率:</span>
 		                <div class="form-group">
 							<div class="control-input">
 								 <select class="form-control input-pointer" id="refreshId" >
-			                        <option v-for="d in sjsxplList" @change="refresh(d.code)" :value="d.code">{{d.dataName}}</option>
+			                        <option v-for="d in sjsxplList" @change="refresh(d.code)" :value="d.code">{{d.dataName}}秒</option>
 			                    </select>
-			                   	 <span>秒</span>
 							</div>						
 						</div>
 	               </div>
@@ -283,7 +260,6 @@
 	    					<input type="checkbox" checked="checked" :value="d.code" onclick="qryLabelGenerateTableByCond();">
 	    					{{d.dataName}}
 	    				</span>-->
-	    				
 	    				<span class='checkbox' v-for="(d,index) in bqscList">
 						    <input :id="'typelabel'+d.code+index" type="checkbox" class="checkbix" checked="checked"
 						    	 :value="d.code"  onclick="qryLabelGenerateTableByCond();">
@@ -297,8 +273,6 @@
 					    		<span class="large ready"></span>{{d.dataName}}
 					    	</label>
 						</span>
-	    				
-	    				
 	    			</div>
 	    			<div id="formSearch-labelGenerate" class="form-group fright width-210">
 						<div class="input-group">
@@ -343,8 +317,6 @@
 					    		<span class="large success"></span>{{d.dataName}}
 					    	</label>
 						</span>
-	    				
-	    				
 	    				<!--<span  v-for="d in khqscList">
 	    					 <em></em>&nbsp; 
 	    					<input type="checkbox" checked="checked" :value="d.code" onclick="qryCustomGenerateTableByCond();">
@@ -383,7 +355,6 @@
     					<input type="checkbox" checked="checked" :value="d.code" onclick="qryCustomPushTableByCond();">
     					{{d.dataName}}
     				</span>-->
-    				
     				<span class='checkbox' v-for="(d,index) in khqtsList">
 					    <input :id="'typepush'+d.code+index" type="checkbox" class="checkbix" checked="checked" :value="d.code"  onclick="qryCustomPushTableByCond();">
 					    <label role="checkbox"  v-if="d.code==0" :for="'typepush'+d.code+index" class="checkbix">
@@ -399,7 +370,6 @@
 				    		<span class="large success"></span>{{d.dataName}}
 				    	</label>
 					</span>
-    				
     			</div>
 				<div id="formSearch-customPush" class="form-group fright width-210">
 					<div class="input-group">
