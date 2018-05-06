@@ -5,7 +5,7 @@
  * ------------------------------------------------------------------
  */
 
-function initCustomPushTable(){
+function initCustomPushTable(monitorDetail){
 	$("#customPushTable").jqGrid({
 		url : $.ctx + "/api/syspush/labelPushReq/queryPage",
 		postData : {
@@ -89,6 +89,11 @@ function initCustomPushTable(){
                 }
 			}
 		},
+	    loadComplete:function(){
+	    	$("#load_dataPrepareTable").hide();
+	    	$("#load_labelGenerateTable").hide();
+	    	$("#load_customGenerateTable").hide();
+	    },
 		rowNum : 10,
 		rownumbers : true,
 		jsonReader : {
@@ -97,7 +102,7 @@ function initCustomPushTable(){
 		},
 		height : '100%',
 		rowList : [ 10, 20, 30 ],
-		pager : "#customPushPager"
+		pager : "#customPushPager",
 	});
 	$("#customPushTable").jqGrid('setLabel', 0, '序号');
 }

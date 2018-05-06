@@ -4,7 +4,7 @@
  * add by shaosq 20180420
  * ------------------------------------------------------------------
  */
-function initLabelGenerateTable(){
+function initLabelGenerateTable(monitorDetail){
 	$("#labelGenerateTable").jqGrid({
 		url :$.ctx + "/api/label/labelStatus/queryPage",
 		postData : {
@@ -27,7 +27,6 @@ function initLabelGenerateTable(){
     		width : 50,
     		align : "center",
     		sortable : false,
-    		cellattr: setColColor,
     		formatter: function(value, options, rowObject) {
     			if(Number(value)===0){
         			return '<span class="state-fail">' +$.getCodeDesc("BQSCZT",value)+ '</span>';
@@ -90,9 +89,14 @@ function initLabelGenerateTable(){
                 }
 			}
 		},
+	    loadComplete:function(){
+	    	$("#load_dataPrepareTable").hide();
+	    	$("#load_customGenerateTable").hide();
+	    	$("#load_customPushTable").hide();
+	    },
 		height : '100%',
 		rowList : [ 10, 20, 30 ],
-		pager : "#labelGeneratePager"
+		pager : "#labelGeneratePager",
 	});
 	$("#labelGenerateTable").jqGrid('setLabel', 0, '序号');
 }

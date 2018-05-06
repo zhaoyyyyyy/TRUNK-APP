@@ -173,8 +173,8 @@ window.loc_onload = function() {
             jumpPageToDetail:function(detailAnchor,event){
             	var dataDate = $(event.target).parents("ul").siblings('div').find('input').val();
             	var selectConfigId = $(event.target).parents("ul").siblings('div').find('select').attr("data-cycleid");
-            	var locationHref='service_monitor_detail.html?detailAnchor='+detailAnchor+'&configId='+selectConfigId+'&dataDate='+dataDate;
-            	parent.toggleMenu("#serviceMonitor/service_monitor_detail",locationHref);
+            	var locationHref='./service_monitor_detail.html?detailAnchor='+detailAnchor+'&configId='+selectConfigId+'&dataDate='+dataDate;
+            	window.location.href=locationHref;
             },
             //选中与取消选中全部专区
             selectAllConfigs:function(e){

@@ -35,8 +35,6 @@ window.loc_onload = function() {
 			colModel:"",  //表格模型
 			pager:"" ,  //表格分页id
 			readCycle:1,//日期周期
-//			sysDay:"",//系统设置日周期范围
-//			sysMonth:"",//系统设置月周期范围
 			zbFlag:true, //数据准备表格默认显示准备状态
 			isOpen:false,//日期下拉
 			isDown:false,//状态下拉
@@ -57,6 +55,7 @@ window.loc_onload = function() {
     				that.firstDataDay = DateFmt.Formate(new Date(iframeDataDate),"yyyy-MM-dd");
 					that.firstDataMonth = DateFmt.Formate(new Date(iframeDataDate),"yyyy-MM");
 					that.qryDataDate = that.firstDataDay;
+					fn();
     			}else{
     				$.commAjax({
     					url : $.ctx + "/api/source/TargetTableStatus/selectLastestDateByCycle",
@@ -257,7 +256,7 @@ window.loc_onload = function() {
 			var iframeConfigId = $.getUrlParam("configId");
 			if(iframeConfigId){
 				this.configId = iframeConfigId;
-				$("#preConfig_list").find("span").attr("configId",iframeConfigId);
+				$("#preConfig_list").children("a").find(".pre-config-name").attr("configId",iframeConfigId);
 			}else{
 				this.configId = configId;
 			}
@@ -273,31 +272,32 @@ window.loc_onload = function() {
 			
 			//获取最新数据日期：取指标源表状态表里最新数据日期
 			this.getLastestDate(function(){
+				debugger
 				//加载统计数据
 				that.loadMonitorDetailData();
+				
 			    //加载数据准备表格
-		    	initDataPrepareTable();
+		    	initDataPrepareTable(that);
+		    	
 		    	//加载标签生成表格
-		    	initLabelGenerateTable();
+		    	initLabelGenerateTable(that);
+		    	
 				//加载客户群生成表格
-		    	initCustomGenerateTable();
+		    	initCustomGenerateTable(that);
 
 				//加载客户群推送表格
-				initCustomPushTable();
+				initCustomPushTable(that);
+				
+				//从监控总览页面跳转到指定锚点位置
+				/*var detailAnchor = $.getUrlParam("detailAnchor");
+				if(detailAnchor){
+					location.href="#"+detailAnchor;
+				}*/
 			});
 		
 			//默认刷新频率
 			this.refresh(this.defaultPl);
 			
-			//从监控总览页面跳转到指定锚点位置
-			var detailAnchor = $.getUrlParam("detailAnchor");
-			if(detailAnchor){
-				//TODO iframe 锚点跳转
-				$("#"+detailAnchor).trigger("click");
-//				window.parent.open("#"+detailAnchor,"monitorDetail");
-//				location.href="#"+detailAnchor;
-//				location.target="monitorDetail"
-			}
 		}
 		
 	});
@@ -353,19 +353,6 @@ function scroll(){
     }
 }
 
-
-//给列表状态设置不同的颜色
-function setColColor(rowId, val, rawObject, datatype, cm, rdata, name) {
-	if (val == '1') {
-		return "style='color:#009933;'";
-	}
-	if (val == '2') {
-		return "style='color:#FF9900;'";
-	}
-	if (val == '3') {
-		return "style='color:#FF0000;'";
-	}
-}
 
 window.onscroll =function(){//吸顶导航
     if(scroll().top>=281){

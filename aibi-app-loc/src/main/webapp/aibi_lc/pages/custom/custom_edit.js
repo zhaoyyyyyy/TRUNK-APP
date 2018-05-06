@@ -684,7 +684,8 @@ var labelInfoModel = (function (model){
    				  $.success(returnObj.msg, function(){
 					  var ssg = window.sessionStorage;
 					  delete ssg.customId;
-					  model.toggleMenu();
+					  // 标签集市和客户群集市保存成功跳转到客户群
+					  model.goToCustomMarket();
    				  });
    				  
    			  },
@@ -694,15 +695,7 @@ var labelInfoModel = (function (model){
    			  }
    		  });
     }
-    
-    /**
-     * 保存成功后跳转，标签集市和客户群集市都跳转到客户群集市页面
-     */
-    model.toggleMenu = function(){
-    	var menu = "custom/custom_market";
-    	window.location.href = "./custom_market.html?menu="+menu;
-    }
-    
+        
 	/**
 	 * 返回
 	 */
@@ -718,6 +711,22 @@ var labelInfoModel = (function (model){
 		window.location.href = returnUrl;
 	};
 	
+	/**
+	 * 标签集市和客户群集市保存成功跳转到客户群
+	 */
+	model.goToCustomMarket = function(){
+		debugger
+		var from = $.getUrlParam("from");
+		var returnUrl ="";
+		if(from == 'labelmarket'){//跳转到客户群集市
+			returnUrl = "../custom/custom_market.html";
+		}
+		if(from == 'custommarket'){//跳转到客户群集市
+			returnUrl = "./custom_market.html";
+		}
+		window.location.href = returnUrl;
+	};
+ 
 	/**
 	 * 展示规则
 	 */

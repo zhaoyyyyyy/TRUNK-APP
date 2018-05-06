@@ -4,7 +4,7 @@
  * add by shaosq 20180420
  * ------------------------------------------------------------------
  */
-function initCustomGenerateTable(){
+function initCustomGenerateTable(monitorDetail){
 	$("#customGenerateTable").jqGrid({
 		url : $.ctx + "/api/label/listInfo/queryPage",
 		postData : {
@@ -49,17 +49,22 @@ function initCustomGenerateTable(){
 				return DateFmt.dateFormatter(value, opts, data);
 			}
 		}],
+	   loadComplete:function(){
+	    	$("#load_dataPrepareTable").hide();
+	    	$("#load_labelGenerateTable").hide();
+	    	$("#load_customPushTable").hide();
+	    },
 		autowidth : true,
 		viewrecords : true,
-		/*rowNum : 10,*/
-		/*rownumbers : true,*/
-		/*jsonReader : {
+		rowNum : 10,
+		rownumbers : true,
+		jsonReader : {
 			repeatitems : false,
 			id : "0"
-		},*/
+		},
 		height : '100%',
 		rowList : [ 10, 20, 30 ],
-		pager : "#customGeneratePager"
+		pager : "#customGeneratePager",
 	});
 	$("#customGenerateTable").jqGrid('setLabel', 0, '序号');
 }

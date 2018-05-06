@@ -7,9 +7,10 @@
 /**
  * 初始化数据准备表格
  */
-function initDataPrepareTable(){
+function initDataPrepareTable(monitorDetail){
 	$("#dataPrepareTable").jqGrid({
 		url : $.ctx + "/api/source/TargetTableStatus/queryPage",
+		isShowMask : true,
 		postData : {
 			"configId" : monitorDetail.configId,
 			"dataDate" : monitorDetail.qryDataDate.replace(/-/g, "")
@@ -29,7 +30,6 @@ function initDataPrepareTable(){
 			width : 80,
 			align : "center",
 			sortable : false,
-			cellattr : setColColor,
 			formatter : function(value, opts, data) {
 				if(value==0){
         			return '<span class="state-unStart">' +$.getCodeDesc("SJZBZT",value)+ '</span>';
@@ -85,6 +85,11 @@ function initDataPrepareTable(){
 			repeatitems : false,
 			id : "0"
 		},
+	    loadComplete:function(){
+	    	$("#load_labelGenerateTable").hide();
+	    	$("#load_customGenerateTable").hide();
+	    	$("#load_customPushTable").hide();
+	    },
 		height : '100%',
 		rowList : [ 10, 20, 30 ],
 		pager : "#dataPreparePager"
