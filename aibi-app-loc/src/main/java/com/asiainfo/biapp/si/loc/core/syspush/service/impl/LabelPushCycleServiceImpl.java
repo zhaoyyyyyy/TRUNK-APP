@@ -311,16 +311,6 @@ public class LabelPushCycleServiceImpl extends BaseServiceImpl<LabelPushCycle, S
      */
     @Override
     public void preDownloadGroupList(String localPathTmp, CustomDownloadRecord customDownloadRecord) throws BaseException{
-        //校验生成过没有
-//        CustomDownloadRecord record = new CustomDownloadRecord();
-//        record.setDataDate(customDownloadRecord.getDataDate());
-//        record.setCustomId(customDownloadRecord.getCustomId());
-//        List<CustomDownloadRecord> selectCustomDownloadRecords = iCustomDownloadRecordDao.selectCustomDownloadRecordList(record);
-//        if (!selectCustomDownloadRecords.isEmpty()) {
-//            for (CustomDownloadRecord obj : selectCustomDownloadRecords) {
-//                iCustomDownloadRecordDao.delete(obj.getRecordId());
-//            }
-//        }
         //重新生成时，需要删除原有记录
         if (StringUtil.isNotBlank(customDownloadRecord.getRecordId())) {
             iCustomDownloadRecordDao.delete(customDownloadRecord.getRecordId());

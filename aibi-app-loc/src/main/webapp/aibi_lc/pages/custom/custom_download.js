@@ -50,8 +50,6 @@ var VueModel ={
 		sortable : false,
 		formatter : function(value, opts, data) {
 			var res = "";
-//			var rePreDownList = "<a href='javascript:void(0);' class='s_edit' onclick='preDownloadGroupList(this);' style='color:#00f;'>重新生成</a>";
-//			var rePreDownList = "<a href='javascript:void(0);' class='s_edit' onclick='preDownloadGroupList(this,id);' style='color:#00f;'>重新生成</a>";
 			var rePreDownList = "<a href='javascript:void(0);' class='s_edit' onclick='preDownloadGroupList(this,\""+data.recordId+"\");' style='color:#00f;'>重新生成</a>";
 			if (data.dataStatus == VueModel.customDownloadRecord.DATA_STATUS_WAIT) {//未生成
 				res = "<a href='javascript:void(0);' class='s_edit' onclick='preDownloadGroupList(this,null);' style='color:#00f;'>生成文件</a>";
@@ -142,7 +140,6 @@ window.loc_onload = function() {
 	
 	/* 清单生成*/
 	preDownloadGroupList = function(el,customDownloadRecordId){
-		debugger
 		var elParent = $(el).parent();
 		elParent.parent().children("td[aria-describedby='downloadGrid_fileName']").empty().append("<span>未知</span>");
 		elParent.attr("title","生成中").empty().append("<span>生成中</span>");
