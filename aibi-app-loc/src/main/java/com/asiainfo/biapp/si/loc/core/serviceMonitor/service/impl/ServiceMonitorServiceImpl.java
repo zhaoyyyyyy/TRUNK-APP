@@ -84,7 +84,12 @@ public class ServiceMonitorServiceImpl extends BaseServiceImpl<ServiceMonitor, S
             }
             //获取所有专区下监控数据
             serviceMonitors = iServiceMonitorDao.selectServiceMonitorList(configIds,dataDate);
-            if(serviceMonitors.size()>0 && serviceMonitors.size() <configIds.size()){
+            if(serviceMonitors.size() == 0){
+                //没有查到监控数据的专区赋值
+                for(String configId : configIds){
+                    serviceMonitors.add(createServiceMonitor(configId, dataDate));
+                }
+            }else if(serviceMonitors.size()>0 && serviceMonitors.size() <configIds.size()){
                 List<String> hasConfigIds = new ArrayList<String>();
                 for(ServiceMonitor serviceMonitor : serviceMonitors){
                     hasConfigIds.add(serviceMonitor.getConfigId());
@@ -95,9 +100,11 @@ public class ServiceMonitorServiceImpl extends BaseServiceImpl<ServiceMonitor, S
                     serviceMonitors.add(createServiceMonitor(configId, dataDate));
                 }
             }
+            
             for(ServiceMonitor serviceMonitor : serviceMonitors){
                 serviceMonitor.setSortOrder(configSortMap.get(serviceMonitor.getConfigId())); 
             }
+            
             //根据专区顺序排序
             Collections.sort(serviceMonitors, new Comparator<ServiceMonitor>(){
                 @Override
