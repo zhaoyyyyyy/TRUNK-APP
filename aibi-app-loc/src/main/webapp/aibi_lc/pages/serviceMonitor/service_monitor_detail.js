@@ -4,8 +4,13 @@
  * ------------------------------------------------------------------
  */
 var monitorDetail;//运营监控明细Vue实例
+var configId;//专区ID
+var sysMonth;//系统设置月周期区间
+var sysDay;//系统设置日周期区间
 window.loc_onload = function() {	
-	var configId = $("#preConfig_list").find("span").attr("configId");
+    configId = $("#preConfig_list").find("span").attr("configId");
+	sysMonth = 1 - $.getSysConfig('LOC_CONFIG_APP_MAX_KEEP_MONTHS');
+    sysDay = 1 - $.getSysConfig('LOC_CONFIG_APP_MAX_KEEP_DAYS');
 	monitorDetail = new Vue({
 		el:"#monitorDetail",
 		data:{
@@ -224,8 +229,6 @@ window.loc_onload = function() {
             // 日期切换函数
             getTime:function(){//初始化日期
          	   var that = this;
-         	   var sysMonth = 1 - $.getSysConfig('LOC_CONFIG_APP_MAX_KEEP_MONTHS');
-		       var sysDay = 1 - $.getSysConfig('LOC_CONFIG_APP_MAX_KEEP_DAYS');
  	           if(Number($(event.currentTarget).parents("div").siblings("select").find("option:selected").val()) === 1){
  	        		var minDay ='#F{$dp.$DV(\''+that.qryDataDate+'\',{d:'+sysDay+'});}';
 	        		WdatePicker({
