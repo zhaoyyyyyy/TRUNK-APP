@@ -45,7 +45,7 @@ function initCustomPushTable(monitorDetail){
     		width : 50,
     		align : "center",
     		sortable : false,
-    		formatter : function(value, opts, data) {
+    		formatter : function(value) {
         		if(Number(value)===1){
         			return '<span class="state-ready">' +$.getCodeDesc("KHQTSZT",value)+ '</span>';
         		}else if(Number(value)===2){
@@ -76,18 +76,15 @@ function initCustomPushTable(monitorDetail){
 			id : "0"
 		},
 		onSelectRow: function (id) {
-			if (window.event.button == 0) // 判断是否为鼠标左键点击
-			{
-				setThisLineChecked(id);
-                var rowData = $("#customPushTable").jqGrid("getRowData", id);
-                var pushStatus = rowData.pushStatus;
-                if(pushStatus && Number(pushStatus) === 0){
-                	$("#customPushError").css("display","");
-                	$("#customPushError span").text(rowData.exceInfo);
-                }else{
-                	$("#customPushError").css("display","none");
-                }
-			}
+			setThisLineChecked(id);
+            var rowData = $("#customPushTable").jqGrid("getRowData", id);
+            var pushStatus = rowData.pushStatus;
+            if(pushStatus && Number(pushStatus) === 0){
+            	$("#customPushError").css("display","");
+            	$("#customPushError span").text(rowData.exceInfo);
+            }else{
+            	$("#customPushError").css("display","none");
+            }
 		},
 	    loadComplete:function(){
 	    	$("#load_dataPrepareTable").hide();
@@ -96,10 +93,6 @@ function initCustomPushTable(monitorDetail){
 	    },
 		rowNum : 10,
 		rownumbers : true,
-		jsonReader : {
-			repeatitems : false,
-			id : "0"
-		},
 		height : '100%',
 		rowList : [ 10, 20, 30 ],
 		pager : "#customPushPager",
@@ -147,12 +140,12 @@ function qryCustomPushTableByCond(){
 function selectAllCustomPushStatus(e){
 	//准备状态
 	if($(e).prop("checked")){
-		$("#khqtsAll").parents("span").siblings("span").find("input:checkbox").each(function(i){
+		$("#khqtsAll").parents("span").siblings("span").find("input:checkbox").each(function(){
 			$(this).prop("checked",true);
 		});
 		qryCustomPushTableByCond();
 	}else{
-		$("#khqtsAll").parents("span").siblings("span").find("input:checkbox").each(function(i){
+		$("#khqtsAll").parents("span").siblings("span").find("input:checkbox").each(function(){
 			$(this).prop("checked",false);
 		});
 		$("#customPushTable").clearGridData();

@@ -61,7 +61,7 @@ public class LabelStatusDaoImpl extends BaseDaoImpl<LabelStatus, String> impleme
     public Map<String, Object> fromBean(LabelStatusVo labelStatusVo){
         Map<String, Object> reMap = new HashMap<>();
         Map<String, Object> params = new HashMap<>();
-        StringBuffer hql = new StringBuffer("from LabelStatus l where 1=1 ");
+        StringBuilder hql = new StringBuilder("from LabelStatus l where 1=1 ");
         if (StringUtil.isNotBlank(labelStatusVo.getLabelId())){
             hql.append("and l.labelId = :labelId ");
             params.put("labelId", labelStatusVo.getLabelId());

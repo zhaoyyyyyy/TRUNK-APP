@@ -63,7 +63,7 @@ public class ListInfoServiceImpl extends BaseServiceImpl<ListInfo, String>  impl
 
 	@Override
 	public void deleteListInfoById(ListInfoId id) throws BaseException {
-		
+		super.delete(id);
 	}
 
 	@Override

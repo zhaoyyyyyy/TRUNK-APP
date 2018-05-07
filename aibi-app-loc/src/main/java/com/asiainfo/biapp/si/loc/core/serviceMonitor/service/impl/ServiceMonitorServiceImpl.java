@@ -74,7 +74,7 @@ public class ServiceMonitorServiceImpl extends BaseServiceImpl<ServiceMonitor, S
         preConfigInfoVo.setConfigStatus(1);
         //获取用户权限下所有有效的专区
         List<PreConfigInfo> preConfigInfos = iPreConfigInfoService.selectPreConfigInfoList(preConfigInfoVo,user);
-        if(preConfigInfos != null && preConfigInfos.size() > 0){
+        if(!preConfigInfos.isEmpty()){
             List<String> configIds = new ArrayList<String>();
             Map<String,Integer> configSortMap = new HashMap<String,Integer>();
             for(int i=0;i<preConfigInfos.size();i++){
@@ -84,12 +84,12 @@ public class ServiceMonitorServiceImpl extends BaseServiceImpl<ServiceMonitor, S
             }
             //获取所有专区下监控数据
             serviceMonitors = iServiceMonitorDao.selectServiceMonitorList(configIds,dataDate);
-            if(serviceMonitors.size() == 0){
+            if(serviceMonitors.isEmpty()){
                 //没有查到监控数据的专区赋值
                 for(String configId : configIds){
                     serviceMonitors.add(createServiceMonitor(configId, dataDate));
                 }
-            }else if(serviceMonitors.size()>0 && serviceMonitors.size() <configIds.size()){
+            }else if(serviceMonitors.size() <configIds.size()){
                 List<String> hasConfigIds = new ArrayList<String>();
                 for(ServiceMonitor serviceMonitor : serviceMonitors){
                     hasConfigIds.add(serviceMonitor.getConfigId());

@@ -436,14 +436,14 @@ public class ServiceConstants {
 	/** 元数据表 */
 	public interface MdaSysTable{
 	    /** 
-         * 宽表类型:table_type:1,用户宽表;2,客户群宽表;3纵表
+         * 数据源表类型:table_type:1, 普通指标源表;2,纵表源表;3,客户群源表
          */
-	    /** 宽表类型:用户宽表 */
+	    /** 数据源表类型: 普通指标源表 */
         public static final int SYS_TABLE_TYPE_USER_WIDE = 1;
-        /** 宽表类型:客户群宽表 */
-        public static final int SYS_TABLE_TYPE_CUSTOM_WIDE= 2;
-        /** 宽表类型:纵表 */
-        public static final int SYS_TABLE_TYPE_VERTICAL = 3;
+        /** 数据源表类型: 纵表源表 */
+        public static final int SYS_TABLE_TYPE_VERTICAL = 2;
+        /** 数据源表类型: 客户群源表*/
+        public static final int SYS_TABLE_TYPE_CUSTOM_WIDE= 3;
 	}
 	
 	/** 标签推送设置信息表 */

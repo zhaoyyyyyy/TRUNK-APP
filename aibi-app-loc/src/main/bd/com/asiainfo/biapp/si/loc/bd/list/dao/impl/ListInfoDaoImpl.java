@@ -44,7 +44,7 @@ public class ListInfoDaoImpl extends BaseDaoImpl<ListInfo, String> implements IL
 	public Map<String, Object> fromBean(ListInfoVo listInfoVo){
 		Map<String, Object> reMap = new HashMap<>();
         Map<String, Object> params = new HashMap<>();
-        StringBuffer hql = new StringBuffer("from ListInfo l where 1=1 ");
+        StringBuilder hql = new StringBuilder("from ListInfo l where 1=1 ");
         if (null != listInfoVo.getListInfoId() ) {
             if(StringUtil.isNotBlank(listInfoVo.getListInfoId().getCustomGroupId())){
                 hql.append("and l.listInfo.customGroupId = :customGroupId ");

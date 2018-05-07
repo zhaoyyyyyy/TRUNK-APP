@@ -74,7 +74,7 @@ public class LabelPushReqDaoImpl extends BaseDaoImpl<LabelPushReq, String> imple
     public Map<String, Object> fromBean(LabelPushReqVo labelPushReqVo){
         Map<String, Object> reMap = new HashMap<>();
         Map<String, Object> params = new HashMap<>();
-        StringBuffer hql = new StringBuffer("from LabelPushReq l where 1=1 ");
+        StringBuilder hql = new StringBuilder("from LabelPushReq l where 1=1 ");
         if(StringUtil.isNoneBlank(labelPushReqVo.getReqId())){
             hql.append("and l.reqId = :reqId ");
             params.put("reqId", labelPushReqVo.getReqId());

@@ -71,7 +71,7 @@ public class TargetTableStatusDaoImpl extends BaseDaoImpl<TargetTableStatus, Str
                 +"select max(dataDate) from TargetTableStatus )";
         Map<String, Object> params = new HashMap<>();
         List<TargetTableStatus> targetTableStatuses = super.findListByHql(hql, params);
-        if(targetTableStatuses.size() > 0){
+        if(!targetTableStatuses.isEmpty()){
             return targetTableStatuses.get(0).getDataDate();
         }
         return "";
@@ -81,7 +81,7 @@ public class TargetTableStatusDaoImpl extends BaseDaoImpl<TargetTableStatus, Str
     public Map<String, Object> fromBean(TargetTableStatusVo targetTableStatusVo) {
         Map<String, Object> reMap = new HashMap<>();
         Map<String, Object> params = new HashMap<>();
-        StringBuffer hql = new StringBuffer("from TargetTableStatus d where 1=1 ");
+        StringBuilder hql = new StringBuilder("from TargetTableStatus d where 1=1 ");
         if (StringUtils.isNotBlank(targetTableStatusVo.getSourceTableId())) {
             hql.append("and d.tableId = :tableId ");
             params.put("tableId", targetTableStatusVo.getSourceTableId());

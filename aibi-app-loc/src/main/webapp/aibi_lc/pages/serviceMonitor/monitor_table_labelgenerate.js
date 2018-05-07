@@ -27,7 +27,7 @@ function initLabelGenerateTable(monitorDetail){
     		width : 50,
     		align : "center",
     		sortable : false,
-    		formatter: function(value, options, rowObject) {
+    		formatter: function(value) {
     			if(Number(value)===0){
         			return '<span class="state-fail">' +$.getCodeDesc("BQSCZT",value)+ '</span>';
         		}else if(Number(value)===1){
@@ -55,8 +55,8 @@ function initLabelGenerateTable(monitorDetail){
     		width : 110,
     		sortable : false,
     		align : "center",
-    		formatter : function(value, opts, data) {
-        		return $.getCodeDesc("BQKBLX",value);
+    		formatter : function(value) {
+        		return $.getCodeDesc("SJYBLX",value);
         	}
     	},{
     		name : 'exceptionDesc',
@@ -76,18 +76,15 @@ function initLabelGenerateTable(monitorDetail){
 			id : "0"
 		},
 		onSelectRow: function (id) {
-			if (window.event.button == 0) // 判断是否为鼠标左键点击
-			{
-				setThisLineColor(id);
-                var rowData = $("#labelGenerateTable").jqGrid("getRowData", id);
-                var dataStatus = rowData.dataStatus;
-                if(dataStatus && Number(dataStatus) == 0){
-                	$("#catchError").css("display","");
-                	$("#catchError span").text(rowData.exceptionDesc);
-                }else{
-                	$("#catchError").css("display","none");
-                }
-			}
+			setThisLineColor(id);
+            var rowData = $("#labelGenerateTable").jqGrid("getRowData", id);
+            var dataStatus = rowData.dataStatus;
+            if(dataStatus && Number(dataStatus) === 0){
+            	$("#catchError").css("display","");
+            	$("#catchError span").text(rowData.exceptionDesc);
+            }else{
+            	$("#catchError").css("display","none");
+            }
 		},
 	    loadComplete:function(){
 	    	$("#load_dataPrepareTable").hide();
@@ -108,7 +105,7 @@ function initLabelGenerateTable(monitorDetail){
 function qryLabelGenerateTableByCond(){
 	var labelName = $("#labelGenerateName").val();
 	var zqscCodesTemp = [];
-	$("#bqscAll").parents("span").siblings("span").find("input:checkbox:checked").each(function(i){
+	$("#bqscAll").parents("span").siblings("span").find("input:checkbox:checked").each(function(){
 		zqscCodesTemp.push($(this).val());
 	});
 	if(zqscCodesTemp){
@@ -140,12 +137,12 @@ function qryLabelGenerateTableByCond(){
 function selectAllLabelGenerateStatus(e){
 	//准备状态
 	if($(e).prop("checked")){
-		$(e).parents("span").siblings("span").each(function(i){
+		$(e).parents("span").siblings("span").each(function(){
 			$(this).find("input:checkbox").prop("checked",true);
 		});
 		qryLabelGenerateTableByCond();
 	}else{
-		$(e).parents("span").siblings("span").each(function(i){
+		$(e).parents("span").siblings("span").each(function(){
 			$(this).find("input:checkbox").prop("checked",false);
 		});
 		$("#labelGenerateTable").clearGridData();
@@ -161,7 +158,7 @@ function setThisLineColor(rowId) {
 	var ids = $("#labelGenerateTable").jqGrid("getDataIDs");
 	if (ids) {
 		for (var i = 0; i < ids.length; i++) {
-			if (rowId == ids[i]) {
+			if (rowId === ids[i]) {
 				$('#labelGenerateTable ' + '#' + ids[i]).find("td").addClass("ui-state-highlight");
 			} else {
 				$('#labelGenerateTable ' + '#' + ids[i]).find("td").removeClass("ui-state-highlight");

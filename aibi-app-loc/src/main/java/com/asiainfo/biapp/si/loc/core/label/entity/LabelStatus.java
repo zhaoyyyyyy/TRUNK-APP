@@ -179,7 +179,7 @@ public class LabelStatus extends BaseEntity{
                 .getBean("mdaSysTableServiceImpl");
             List<MdaSysTableColumn> mdaSysTableColumnList = mdaSysTableColService
                 .selectMdaSysTableColListBylabelId(labelId);
-            if (mdaSysTableColumnList.size() > 0) {
+            if(!mdaSysTableColumnList.isEmpty()){
                 for (MdaSysTableColumn mdaSysTableColumn : mdaSysTableColumnList) {
                     if (StringUtil.isNotEmpty(mdaSysTableColumn.getColumnId())) {
                         columnIds.append(mdaSysTableColumn.getColumnId()).append(",");
@@ -208,7 +208,7 @@ public class LabelStatus extends BaseEntity{
         List<MdaSysTableColumn> mdaSysTableColumnList = mdaSysTableColService
             .selectMdaSysTableColListBylabelId(labelId);
         StringBuilder columnNames = new StringBuilder();
-        if (mdaSysTableColumnList.size() > 0) {
+        if (!mdaSysTableColumnList.isEmpty()) {
             for (MdaSysTableColumn mdaSysTableColumn : mdaSysTableColumnList) {
                 if (StringUtil.isNotEmpty(mdaSysTableColumn.getColumnName())) {
                     columnNames.append(mdaSysTableColumn.getColumnName()).append(",");

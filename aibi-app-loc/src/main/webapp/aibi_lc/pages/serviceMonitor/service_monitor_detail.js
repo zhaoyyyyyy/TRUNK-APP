@@ -98,7 +98,7 @@ window.loc_onload = function() {
         	   });
             },
             //加载监控明细数据
-			loadCountData:function(callback){
+			loadCountData:function(){
 				var that = this;
 				$.commAjax({
 					url : $.ctx + "/api/monitor/overview/queryMonitorMainByConfig",
@@ -222,7 +222,7 @@ window.loc_onload = function() {
         	  that.changeMonitorByDate(dateElement.val());
             },
             // 日期切换函数
-            getTime:function(e){//初始化日期
+            getTime:function(){//初始化日期
          	   var that = this;
          	   var sysMonth = 1 - $.getSysConfig('LOC_CONFIG_APP_MAX_KEEP_MONTHS');
 		       var sysDay = 1 - $.getSysConfig('LOC_CONFIG_APP_MAX_KEEP_DAYS');
@@ -301,7 +301,7 @@ window.loc_onload = function() {
 		
 	});
     
-	$(".ui-pre-progress a").each(function(e){//锚点定位
+	$(".ui-pre-progress a").each(function(){//锚点定位
 		var anchors=$(this);
 		$(this).click(function(){
             setTimeout(function(){
@@ -312,7 +312,7 @@ window.loc_onload = function() {
 			$("html,body").stop().animate({"scrollTop":scrollTop});
 		});
 	});
-	$(".anchors-list > li.ui-prerecture-item").each(function(e){//锚点定位
+	$(".anchors-list > li.ui-prerecture-item").each(function(){//锚点定位
 		var $index = $(this).index();
 		$(this).find("span.scroll-anchors").click(function(){
 			var scrollTop=$(".scrollBox").eq($index).offset().top-80;
@@ -341,7 +341,7 @@ function showErrorInfo(rowId,tableId){
 	$("#catchError span").text(rowData.exceptionDesc);
 }
 function scroll(){
-    if(window.pageYOffset!=null){//标准模式
+    if(window.pageYOffset!==null){//标准模式
         return{
             left:window.pageXOffset,
             top:window.pageYOffset
