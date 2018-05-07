@@ -272,7 +272,6 @@ window.loc_onload = function() {
 			
 			//获取最新数据日期：取指标源表状态表里最新数据日期
 			this.getLastestDate(function(){
-				debugger
 				//加载统计数据
 				that.loadMonitorDetailData();
 				
