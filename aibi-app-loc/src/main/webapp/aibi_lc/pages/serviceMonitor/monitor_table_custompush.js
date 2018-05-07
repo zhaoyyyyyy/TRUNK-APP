@@ -86,10 +86,10 @@ function initCustomPushTable(monitorDetail){
             	$("#customPushError").css("display","none");
             }
 		},
-	    loadComplete:function(){
-	    	$("#load_dataPrepareTable").hide();
-	    	$("#load_labelGenerateTable").hide();
-	    	$("#load_customGenerateTable").hide();
+		ajaxGridOptions:{
+			beforeSend :function(){
+				$("#customPushAnchor").find(".loading").show();
+			}
 	    },
 		rowNum : 10,
 		rownumbers : true,

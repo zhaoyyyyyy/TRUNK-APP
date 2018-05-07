@@ -85,10 +85,10 @@ function initDataPrepareTable(monitorDetail){
 			repeatitems : false,
 			id : "0"
 		},
-	    loadComplete:function(){
-	    	$("#load_labelGenerateTable").hide();
-	    	$("#load_customGenerateTable").hide();
-	    	$("#load_customPushTable").hide();
+		ajaxGridOptions:{
+			beforeSend :function(){
+				$("#dataPrepareAnchor").find(".loading").show();
+			}
 	    },
 		height : '100%',
 		rowList : [ 10, 20, 30 ],
