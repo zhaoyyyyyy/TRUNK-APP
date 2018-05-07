@@ -433,6 +433,19 @@ public class ServiceConstants {
 	    public static final String COLUMN_DATA_TYPE_ID_LENGTH = "32";
 	}
 	
+	/** 元数据表 */
+	public interface MdaSysTable{
+	    /** 
+         * 宽表类型:table_type:1,用户宽表;2,客户群宽表;3纵表
+         */
+	    /** 宽表类型:用户宽表 */
+        public static final int SYS_TABLE_TYPE_USER_WIDE = 1;
+        /** 宽表类型:客户群宽表 */
+        public static final int SYS_TABLE_TYPE_CUSTOM_WIDE= 2;
+        /** 宽表类型:纵表 */
+        public static final int SYS_TABLE_TYPE_VERTICAL = 3;
+	}
+	
 	/** 标签推送设置信息表 */
 	public interface LabelPushCycle{
 	    /** 
