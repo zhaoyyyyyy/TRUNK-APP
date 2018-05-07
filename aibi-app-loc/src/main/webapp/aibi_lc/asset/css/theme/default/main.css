@@ -1845,7 +1845,7 @@ animation-delay: .8s;
 /*.ui-status > select.active{
 	font-weight:bold;
 }*/
-.ui-status > span,input[type=checkbox].checkbix+label{
+.ui-status > span,.ui-status input[type=checkbox].checkbix+label{
 	font-size:12px;
 	line-height:30px;
 	padding:0 10px;
