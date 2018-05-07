@@ -1700,9 +1700,6 @@ animation-delay: .8s;
 	width:auto;
 	float:none;
 }
-.ui-morior-border:hover{
-	border:1px solid #3D9CEB;
-}
 .ui-prefecture > div > em{
 	display: inline-block;
     width: 1px;
@@ -1732,7 +1729,6 @@ animation-delay: .8s;
 	display:inline-block;
 	width:16px;
 	height:16px;
-	background:url(images/lc-icon.png) no-repeat;
 	vertical-align:middle;
 	margin: 0 5px 0 0;
 }
@@ -1821,9 +1817,6 @@ animation-delay: .8s;
 }
 .ui-pre-progress > a{
 	color:#666;
-}
-.ui-pre-progress > a:visited,.ui-pre-progress > a:active,.ui-pre-progress > a.active{
-	color:#3DAC6E;
 }
 .ui-status{
 	display:inline-block;

@@ -390,7 +390,10 @@ input[type=checkbox].checkbix+label>span {
 .ui-pre-progress > a:visited,.ui-pre-progress > a:active,.ui-pre-progress > a.active{
 	color:#D02433;
 }
+.ui-morior-border:hover{
+	border:1px solid #d02433;
+}
 .ui-conditionBox > i{
 	border: 5px solid transparent;
-    border-bottom: 5px solid  #d02433
+    border-bottom: 5px solid  #d02433;
 }

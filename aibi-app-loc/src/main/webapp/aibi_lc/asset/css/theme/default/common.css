@@ -385,3 +385,16 @@ input[type=checkbox].checkbix+label>span {
 	color:#009241;
 	font-weight: bold;
 }
+.per-header > span > em{
+	background:url(images/lc-icon.png) no-repeat;
+}
+.ui-pre-progress > a:visited,.ui-pre-progress > a:active,.ui-pre-progress > a.active{
+	color:#009241;
+}
+.ui-morior-border:hover{
+	border:1px solid #009241;
+}
+.ui-conditionBox > i{
+	border: 5px solid transparent;
+    border-bottom: 5px solid  #009241;
+}
