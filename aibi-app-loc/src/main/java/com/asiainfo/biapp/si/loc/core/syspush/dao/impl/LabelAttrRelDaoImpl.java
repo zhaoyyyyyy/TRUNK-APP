@@ -87,10 +87,19 @@ public class LabelAttrRelDaoImpl extends BaseDaoImpl<LabelAttrRel, String> imple
             hql.append("and l.attrCol = :attrCol ");
             params.put("attrCol", labelAttrRelVo.getAttrCol());
         }
-        if(null != labelAttrRelVo.getModifyTime()){
-            hql.append("and l.modifyTime = :modifyTime ");
-            params.put("modifyTime", labelAttrRelVo.getModifyTime());
+        if(null!=labelAttrRelVo.getModifyTimeStart() && null!=labelAttrRelVo.getModifyTimeEnd()){
+            if(null != labelAttrRelVo.getModifyTimeStart()){
+                hql.append("and l.modifyTime >= "+labelAttrRelVo.getModifyTimeStart()+" ");
+            }
+            if(null != labelAttrRelVo.getModifyTimeEnd()){
+                hql.append("and l.modifyTime <= "+labelAttrRelVo.getModifyTimeEnd()+" ");
+            }
+        } else if(null!=labelAttrRelVo.getModifyTimeStart() && null==labelAttrRelVo.getModifyTimeEnd()){
+            if(null != labelAttrRelVo.getModifyTimeStart()){
+                hql.append("and l.modifyTime = "+labelAttrRelVo.getModifyTimeStart()+" ");
+            }
         }
+            
         if(StringUtil.isNoneBlank(labelAttrRelVo.getAttrColType())){
             hql.append("and l.attrColType = :attrColType ");
             params.put("attrColType", labelAttrRelVo.getAttrColType());

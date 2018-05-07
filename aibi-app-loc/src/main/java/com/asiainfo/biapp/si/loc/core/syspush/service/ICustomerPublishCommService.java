@@ -11,6 +11,7 @@ import java.util.List;
 import com.asiainfo.biapp.si.loc.core.dimtable.entity.DimTableInfo;
 import com.asiainfo.biapp.si.loc.core.label.entity.LabelInfo;
 import com.asiainfo.biapp.si.loc.core.syspush.entity.LabelAttrRel;
+import com.asiainfo.biapp.si.loc.core.syspush.vo.LabelAttrRelVo;
 
 /**
  * Title : ICustomerPublishCommService
@@ -43,7 +44,7 @@ public interface ICustomerPublishCommService {
      * 
      * @return attrRelList List<LabelAttrRel>  客户群关联的属性列List
      */
-    public List<LabelAttrRel> getLabelAttrRelsByCustom(LabelInfo customInfo, int attrSettingType);
+    public List<LabelAttrRel> getLabelAttrRelsByCustom(LabelInfo customInfo, LabelAttrRelVo labelAttrRelVo);
     
     
     /**

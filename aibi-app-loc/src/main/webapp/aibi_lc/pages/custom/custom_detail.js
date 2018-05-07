@@ -1,4 +1,15 @@
 var model = {
+		LabelAttrRel:{
+		    /**
+		     * 属性类型：1:客户群推送；2：清单下载；3：清单预览
+		     */
+		    /** 属性类型：1:客户群推送 */
+		    ATTR_SETTING_TYPE_PUSH:1,
+		    /** 属性类型：2：清单下载 */
+		    ATTR_SETTING_TYPE_DOWNLOAD:2,
+		    /** 属性类型：3：清单预览 */
+		    ATTR_SETTING_TYPE_PREVIEW:3
+		},
 		labelName : "",
 		updateCycle:"",
 		orgId : "",
@@ -229,6 +240,7 @@ window.loc_onload = function() {
 												"pushCycle" :$("#radioList label[class~=active]").siblings("input").val(),
 												"AttrbuteId" :AttrbuteIdString,
 												"sortAttrAndType" :model.sortAttrAndType,
+												"attrSettingType" :model.LabelAttrRel.ATTR_SETTING_TYPE_PUSH
 											},
 									    maskMassage : '推送中...',
 									    onSuccess: function(data){
@@ -273,10 +285,20 @@ window.loc_onload = function() {
 						}
 					}
 				});
+				if(!model.haveAttr){
+	        			model.sortAttrAndType = "";
+	        			AttrbuteIdString = "";
+	        		}
 				if(model.sortAttrAndType!=null){
 					var dg = $.window('客户群清单下载', $.ctx + '/aibi_lc/pages/custom/custom_download.html?customGroupId='
-					 +labelId+'&AttrbuteId='+AttrbuteIdString+'&sortAttrAndType='+model.sortAttrAndType+'&dataDate='+model.dataDate, 
-					 660, 300, {id:'customDownloadWin'});
+						+labelId+'&AttrbuteId='+AttrbuteIdString+'&sortAttrAndType='+model.sortAttrAndType+'&dataDate='
+						+model.dataDate+"&attrbuteNames="+model.calcuElementName, 
+						760, 360, {id:'customDownloadWin'});
+					dg.close = function(){
+						if (dg.setInterval) {
+							dg.clearInterval();
+						}
+					}
 				}
 			}
 		},

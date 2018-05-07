@@ -6,6 +6,8 @@
 
 package com.asiainfo.biapp.si.loc.core.syspush.vo;
 
+import java.util.Date;
+
 import com.asiainfo.biapp.si.loc.core.syspush.entity.LabelAttrRel;
 
 /**
@@ -33,12 +35,26 @@ public class LabelAttrRelVo extends LabelAttrRel{
     private static final long serialVersionUID = 1L;
     
     private String orderBy;
+    private String modifyTimeStart;
+    private String modifyTimeEnd;
     
     public String getOrderBy() {
         return orderBy;
     }
     public void setOrderBy(String orderBy) {
         this.orderBy = orderBy;
+    }
+    public String getModifyTimeStart() {
+        return modifyTimeStart;
+    }
+    public void setModifyTimeStart(String modifyTimeStart) {
+        this.modifyTimeStart = modifyTimeStart;
+    }
+    public String getModifyTimeEnd() {
+        return modifyTimeEnd;
+    }
+    public void setModifyTimeEnd(String modifyTimeEnd) {
+        this.modifyTimeEnd = modifyTimeEnd;
     }
 
 

@@ -43,7 +43,7 @@ public interface ICustomerPublishTask extends Runnable{
      * @param pushCycle 推送周期
      * @param isJobTask 是否是自动启动的任务
      */
-	public void initParamter(List<LabelPushCycle> customPushReqList,boolean isJobTask, List<Map<String, Object>> reservedParameters);
+	public void initParamter(List<LabelPushCycle> customPushReqList,boolean isJobTask, Map<String, Object> reservedParameters);
     
 	/**
      * Description: 线程类入口方法

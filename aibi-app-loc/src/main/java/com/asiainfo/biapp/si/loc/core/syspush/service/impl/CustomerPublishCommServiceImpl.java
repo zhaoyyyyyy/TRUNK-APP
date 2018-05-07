@@ -80,16 +80,9 @@ public class CustomerPublishCommServiceImpl implements ICustomerPublishCommServi
 
 
     @Override
-    public List<LabelAttrRel> getLabelAttrRelsByCustom(LabelInfo customInfo, int attrSettingType) {
+    public List<LabelAttrRel> getLabelAttrRelsByCustom(LabelInfo customInfo, LabelAttrRelVo labelAttrRelVo) {
         //获取属性列
         List<LabelAttrRel> attrRelList = null;
-        
-        LabelAttrRelVo labelAttrRelVo = new LabelAttrRelVo();
-        labelAttrRelVo.setLabelId(customInfo.getLabelId());
-        labelAttrRelVo.setAttrSource(ServiceConstants.LabelAttrRel.ATTR_SOURCE_LABEL);
-        labelAttrRelVo.setAttrSettingType(attrSettingType);
-        labelAttrRelVo.setStatus(ServiceConstants.LabelAttrRel.STATUS_SUCCESS);
-        labelAttrRelVo.setOrderBy("pageSortNum ASC,sortNum ASC");
         try {
             attrRelList = iLabelAttrRelService.selectLabelAttrRelList(labelAttrRelVo);
         } catch (Exception e) {

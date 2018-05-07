@@ -13,6 +13,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.hibernate.annotations.GenericGenerator;
 
@@ -98,6 +99,9 @@ public class CustomDownloadRecord extends BaseEntity{
     @Column(name = "DOWNLOAD_NUM")
     @ApiParam(value = "下载次数")
     private String downloadNum;
+    
+    @Transient
+    private String colNames;
     
     public CustomDownloadRecord() {
         super();
@@ -196,12 +200,20 @@ public class CustomDownloadRecord extends BaseEntity{
     public void setDownloadNum(String downloadNum) {
         this.downloadNum = downloadNum;
     }
+    
+    public String getColNames() {
+        return colNames;
+    }
+    
+    public void setColNames(String colNames) {
+        this.colNames = colNames;
+    }
 
     @Override
     public String toString() {
         return "CustomDownloadRecord [recordId=" + recordId + ", fileName=" + fileName + ", customId=" + customId
                 + ", dataDate=" + dataDate + ", dataStatus=" + dataStatus + ", dataTime=" + dataTime + ", downloadNum="
-                + downloadNum + "]";
+                + downloadNum +", colNames="+colNames+ "]";
     }
     
     

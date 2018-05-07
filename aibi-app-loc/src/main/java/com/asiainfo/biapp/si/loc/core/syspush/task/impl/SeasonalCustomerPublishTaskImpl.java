@@ -5,10 +5,9 @@
  */
 package com.asiainfo.biapp.si.loc.core.syspush.task.impl;
 
-import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -200,8 +199,7 @@ public class SeasonalCustomerPublishTaskImpl implements ISeasonalCustomerPublish
 
                     //启动推送线程
                     ICustomerPublishTask curCustomerPublishThread = this.getICustomerPublishThreadBean();
-                    curCustomerPublishThread.initParamter(labelPushCycles, isJobTask, new ArrayList<Map<String, Object>>());
-//                    Executors.newFixedThreadPool(10).execute(curCustomerPublishThread);
+                    curCustomerPublishThread.initParamter(labelPushCycles, isJobTask, new HashMap<String, Object>());
     					ThreadPool.getInstance().execute(curCustomerPublishThread);
                 }    
             } else {

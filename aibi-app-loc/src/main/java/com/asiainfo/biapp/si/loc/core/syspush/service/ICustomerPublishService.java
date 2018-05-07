@@ -46,7 +46,7 @@ public interface ICustomerPublishService {
      * @param isJobTask 是否是自动启动的任务
      * @param reservedParameters 预留传入参数
      */
-	public boolean push(List<LabelPushCycle> labelPushCycleList, boolean isJobTask, List<Map<String, Object>> reservedParameters);
+	public boolean push(List<LabelPushCycle> labelPushCycleList, boolean isJobTask, Map<String, Object> reservedParameters);
     
 	
 }

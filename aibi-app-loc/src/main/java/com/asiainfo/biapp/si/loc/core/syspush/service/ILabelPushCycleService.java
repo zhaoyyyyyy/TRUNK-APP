@@ -74,7 +74,7 @@ public interface ILabelPushCycleService extends BaseService<LabelPushCycle, Stri
      * @param labelPushCycle
      * @throws BaseException
      */
-    public void addLabelPushCycle(LabelPushCycle labelPushCycle,String userName) throws BaseException;
+    public void addLabelPushCycle(LabelPushCycle labelPushCycle,String userName,int attrSettingType) throws BaseException;
 
     /**
      * 修改一个实体 Description:

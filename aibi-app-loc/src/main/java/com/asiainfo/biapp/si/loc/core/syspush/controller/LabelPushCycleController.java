@@ -138,14 +138,14 @@ public class LabelPushCycleController extends BaseController<LabelPushCycle>{
         @ApiImplicitParam(name = "pushUserIds", value = "推送目标用户", required = false, paramType = "query", dataType = "string"),
         @ApiImplicitParam(name = "status", value = "状态", required = false, paramType = "query", dataType = "int") })
     @RequestMapping(value = "/labelPushCycle/save", method = RequestMethod.POST)
-    public WebResult<String> save(@ApiIgnore LabelPushCycle labelPushCycle) {
+    public WebResult<String> save(@ApiIgnore LabelPushCycle labelPushCycle,int attrSettingType) {
             WebResult<String> webResult = new WebResult<>();
             labelPushCycle.setModifyTime(new Date());
             User user = new User(); 
             try {
             	user = this.getLoginUser();
             	String userName = user.getUserName();
-                iLabelPushCycleService.addLabelPushCycle(labelPushCycle,userName);
+                iLabelPushCycleService.addLabelPushCycle(labelPushCycle,userName, attrSettingType);
             } catch (BaseException e) {
                 return webResult.fail(e);
             }
@@ -250,7 +250,7 @@ public class LabelPushCycleController extends BaseController<LabelPushCycle>{
     
     @ApiOperation(value = "生成清单")
     @RequestMapping(value = "/labelPushCycle/preDownloadGroupList", method = RequestMethod.POST)
-    public WebResult<Map<String, Object>> preDownloadGroupList(@ModelAttribute LabelPushCycle labelPushCycle) {
+    public WebResult<Map<String, Object>> preDownloadGroupList(@ModelAttribute LabelPushCycle labelPushCycle, String customDownloadRecordId) {
         WebResult<Map<String, Object>> res = new WebResult<>();
         
         //1.走手动推送流程,获取属性
@@ -304,16 +304,19 @@ public class LabelPushCycleController extends BaseController<LabelPushCycle>{
         labelPushCycle.setSysIds(sysIds);
         LabelInfo customInfo = iLabelInfoService.get(labelPushCycle.getCustomGroupId());
         labelPushCycle.setPushCycle(customInfo.getUpdateCycle());
-        this.save(labelPushCycle);
+        this.save(labelPushCycle,ServiceConstants.LabelAttrRel.ATTR_SETTING_TYPE_DOWNLOAD);
 
         //推送文件名称（无路径，无后缀）
         //格式：COC_标签创建人_YYYYMMDDHHMMSS_6位随机数,形如:【COC_admin_20180212150301_981235】
         String fileName = LabelPushReqVo.REQID_PREFIX + customInfo.getCreateUserId() + "_"
-                + DateUtil.date2String(new Date(),DateUtil.FORMAT_YYYYMMDD);
+                + DateUtil.date2String(new Date(),DateUtil.FORMAT_YYYYMMDDHHMMSS);
         
         CustomDownloadRecord customDownloadRecord = new CustomDownloadRecord(fileName, 
             customInfo.getLabelId(), customInfo.getDataDate(), 
             ServiceConstants.CustomDownloadRecord.DATA_STATUS_DOING, new Date(), "0");
+        if (StringUtil.isNotBlank(customDownloadRecordId)) {
+            customDownloadRecord.setRecordId(customDownloadRecordId);
+        }
         try {
             iLabelPushCycleService.preDownloadGroupList(localPathTmp, customDownloadRecord);
         } catch (BaseException e) {

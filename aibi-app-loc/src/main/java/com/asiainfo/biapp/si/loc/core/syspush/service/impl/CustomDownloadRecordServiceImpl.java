@@ -6,6 +6,8 @@
 
 package com.asiainfo.biapp.si.loc.core.syspush.service.impl;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.transaction.Transactional;
@@ -18,10 +20,16 @@ import com.asiainfo.biapp.si.loc.base.exception.BaseException;
 import com.asiainfo.biapp.si.loc.base.exception.ParamRequiredException;
 import com.asiainfo.biapp.si.loc.base.page.Page;
 import com.asiainfo.biapp.si.loc.base.service.impl.BaseServiceImpl;
+import com.asiainfo.biapp.si.loc.base.utils.DateUtil;
 import com.asiainfo.biapp.si.loc.base.utils.StringUtil;
+import com.asiainfo.biapp.si.loc.core.ServiceConstants;
+import com.asiainfo.biapp.si.loc.core.label.entity.LabelInfo;
 import com.asiainfo.biapp.si.loc.core.syspush.dao.ICustomDownloadRecordDao;
 import com.asiainfo.biapp.si.loc.core.syspush.entity.CustomDownloadRecord;
+import com.asiainfo.biapp.si.loc.core.syspush.entity.LabelAttrRel;
 import com.asiainfo.biapp.si.loc.core.syspush.service.ICustomDownloadRecordService;
+import com.asiainfo.biapp.si.loc.core.syspush.service.ICustomerPublishCommService;
+import com.asiainfo.biapp.si.loc.core.syspush.vo.LabelAttrRelVo;
 
 /**
  * Title : CustomDownloadRecordServiceImpl
@@ -47,6 +55,12 @@ import com.asiainfo.biapp.si.loc.core.syspush.service.ICustomDownloadRecordServi
 @Transactional
 public class CustomDownloadRecordServiceImpl extends BaseServiceImpl<CustomDownloadRecord, String> implements ICustomDownloadRecordService{
 
+    private static final int ONE = 1;
+    
+    
+    @Autowired
+    private ICustomerPublishCommService iCustomerPublishCommService;
+    
     @Autowired
     private ICustomDownloadRecordDao iCustomDownloadRecordDao;
     
@@ -57,7 +71,39 @@ public class CustomDownloadRecordServiceImpl extends BaseServiceImpl<CustomDownl
     
     public Page<CustomDownloadRecord> selectCustomDownloadRecordPageList(Page<CustomDownloadRecord> page, CustomDownloadRecord customDownloadRecord) throws BaseException {
         Page<CustomDownloadRecord> customDownloadRecords = iCustomDownloadRecordDao.selectCustomDownloadRecordPageList(page, customDownloadRecord);
-        
+        List<CustomDownloadRecord> data = customDownloadRecords.getData();
+        //获取属性列
+        if (!data.isEmpty()) {
+            LabelAttrRelVo labelAttrRelVo = new LabelAttrRelVo();
+            labelAttrRelVo.setLabelId(customDownloadRecord.getCustomId());
+            labelAttrRelVo.setAttrSource(ServiceConstants.LabelAttrRel.ATTR_SOURCE_LABEL);
+            labelAttrRelVo.setAttrSettingType(ServiceConstants.LabelAttrRel.ATTR_SETTING_TYPE_DOWNLOAD);
+//            labelAttrRelVo.setStatus(ServiceConstants.LabelAttrRel.STATUS_SUCCESS);
+            labelAttrRelVo.setOrderBy("pageSortNum ASC,sortNum ASC");
+            StringBuilder sb = new StringBuilder();
+            LabelInfo customInfo = null;
+            for (CustomDownloadRecord obj : data) {
+                List<LabelAttrRel> attrRelList = new ArrayList<>();
+                if (StringUtil.isNotBlank(obj.getCustomId()) && StringUtil.isNotBlank(obj.getDataDate())) {
+                    customInfo = new LabelInfo();
+                    customInfo.setLabelId(obj.getCustomId());
+                    customInfo.setDataDate(obj.getDataDate());
+                    String dateStr = obj.getFileName().split("_")[2];
+                    labelAttrRelVo.setModifyTimeStart(dateStr);
+                    attrRelList = iCustomerPublishCommService.getLabelAttrRelsByCustom(customInfo, labelAttrRelVo);
+                    if (!attrRelList.isEmpty()) {
+                        sb.delete(0, sb.length());
+                        for (LabelAttrRel labelAttrRel : attrRelList) {
+                            sb.append(labelAttrRel.getAttrColName()).append(",");
+                        }
+                        if (StringUtil.isNotEmpty(sb.toString())) {
+                            sb.delete(sb.length()-ONE, sb.length());
+                            obj.setColNames(sb.toString());
+                        }
+                    }
+                }
+            }
+        }
         return customDownloadRecords;
     }
 

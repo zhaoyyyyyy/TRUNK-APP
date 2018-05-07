@@ -64,6 +64,7 @@ import com.asiainfo.biapp.si.loc.core.syspush.service.ILabelPushCycleService;
 import com.asiainfo.biapp.si.loc.core.syspush.service.ILabelPushReqService;
 import com.asiainfo.biapp.si.loc.core.syspush.service.ISysInfoService;
 import com.asiainfo.biapp.si.loc.core.syspush.task.ICustomerPublishTask;
+import com.asiainfo.biapp.si.loc.core.syspush.vo.LabelAttrRelVo;
 import com.asiainfo.biapp.si.loc.core.syspush.vo.LabelPushReqVo;
 import com.asiainfo.biapp.si.loc.core.syspush.vo.StandardPushXmlBean;
 import com.asiainfo.biapp.si.loc.core.syspush.vo.StandardPushXmlBean.Data;
@@ -98,6 +99,7 @@ public class CustomerPublishDefaultTaskImpl implements ICustomerPublishTask {
     
  // 查询每页大小
     private static final String EXPORT_TO_FILE_PAGESIZE = "LOC_CONFIG_APP_EXPORT_TO_FILE_PAGESIZE";
+    private static final int ONE = 1;
 
     @Autowired
     private IBackSqlService backSqlService;
@@ -127,7 +129,7 @@ public class CustomerPublishDefaultTaskImpl implements ICustomerPublishTask {
     //传入参数
     private List<LabelPushCycle> labelPushCycleList;
 	private boolean isJobTask;
-	private List<Map<String, Object>> reservedParameters;
+	private Map<String, Object> reservedParameters;
 
     private CocCacheAble cacheProxy = null;     //缓存代理类
     
@@ -138,6 +140,7 @@ public class CustomerPublishDefaultTaskImpl implements ICustomerPublishTask {
     private LabelInfo customInfo;           //当前的推送客户群
     private String fileName;                //当前的文件名称
     private String desFileName;             //当前的文件名称
+    private int attrSettingType = ServiceConstants.LabelAttrRel.ATTR_SETTING_TYPE_PUSH; //当前的属性类型
     private List<LabelAttrRel> attrRelList = null;	//当前的推送客户群关联的属性列
 
     private int bufferedRowSize = 10000;    //每次读取数据的条数
@@ -158,10 +161,15 @@ public class CustomerPublishDefaultTaskImpl implements ICustomerPublishTask {
      * @param pushCycle 推送周期
      * @param pushCycle 推送周期
      */
-    public void initParamter(List<LabelPushCycle> labelPushCycleList, boolean isJobTask, List<Map<String, Object>> reservedParameters) {
+    public void initParamter(List<LabelPushCycle> labelPushCycleList, boolean isJobTask, Map<String, Object> reservedParameters) {
         this.labelPushCycleList = labelPushCycleList;
         this.isJobTask = isJobTask;
         this.reservedParameters = reservedParameters;
+        if (!this.reservedParameters.isEmpty()) {
+            if (reservedParameters.containsKey("attrSettingType")) {
+                this.attrSettingType = Integer.parseInt(String.valueOf(reservedParameters.get("attrSettingType")));
+            }
+        }
         
         this.cacheProxy = CocCacheProxy.getCacheProxy();
         String pageSzie = cacheProxy.getSYSConfigInfoByKey(EXPORT_TO_FILE_PAGESIZE); // 查询每页大小
@@ -198,12 +206,7 @@ public class CustomerPublishDefaultTaskImpl implements ICustomerPublishTask {
 	            labelPushReq.setRecodeId(labelPushCycle.getRecordId());
 	            iLabelPushReqService.save(labelPushReq);
 //			}
-            //推送文件名称（无路径，无后缀）
-            //格式：COC_标签创建人_YYYYMMDDHHMMSS_6位随机数,形如:【COC_admin_20180212150301_981235】
-            fileName = LabelPushReqVo.REQID_PREFIX + customInfo.getCreateUserId() + "_"
-                    + DateUtil.date2String(new Date(),DateUtil.FORMAT_YYYYMMDDHHMMSS) 
-                    + this.findRandom();
-            
+	        
             String sysId = labelPushCycle.getSysId();
             sysInfo = iSysInfoService.get(sysId);
             String msg = "";
@@ -215,9 +218,14 @@ public class CustomerPublishDefaultTaskImpl implements ICustomerPublishTask {
                 continue;
             } else {
                 //获取属性列
-                int attrType = ServiceConstants.LabelAttrRel.ATTR_SETTING_TYPE_PUSH;
+                LabelAttrRelVo labelAttrRelVo = new LabelAttrRelVo();
+                labelAttrRelVo.setLabelId(customInfo.getLabelId());
+                labelAttrRelVo.setAttrSource(ServiceConstants.LabelAttrRel.ATTR_SOURCE_LABEL);
+                labelAttrRelVo.setAttrSettingType(attrSettingType);
+                labelAttrRelVo.setStatus(ServiceConstants.LabelAttrRel.STATUS_SUCCESS);
+                labelAttrRelVo.setOrderBy("pageSortNum ASC,sortNum ASC");
                 try {
-                    attrRelList = iCustomerPublishCommService.getLabelAttrRelsByCustom(customInfo, attrType);
+                    attrRelList = iCustomerPublishCommService.getLabelAttrRelsByCustom(customInfo, labelAttrRelVo);
                 } catch (Exception e) {
                     msg = "根据标签信息获取客户群标签与属性对应关系失败";
                     //跟新实时更新推送状态
@@ -244,6 +252,15 @@ public class CustomerPublishDefaultTaskImpl implements ICustomerPublishTask {
                 }
             }
             
+
+            //推送文件名称（无路径，无后缀）
+            //格式：COC_标签创建人_YYYYMMDDHHMMSS_6位随机数,形如:【COC_admin_20180212150301_981235】
+            Date fileDate = attrRelList.isEmpty() ? new Date() : attrRelList.get(0).getModifyTime();
+            fileName = LabelPushReqVo.REQID_PREFIX + customInfo.getCreateUserId() + "_"
+                    + DateUtil.date2String(fileDate,DateUtil.FORMAT_YYYYMMDDHHMMSS) 
+                    + this.findRandom();
+            
+            
             //推送过程
             try {
                 this.customPublish(sysId, customInfo.getCreateUserId());
@@ -252,12 +269,13 @@ public class CustomerPublishDefaultTaskImpl implements ICustomerPublishTask {
                 LogUtil.error("推送失败", e);
                 continue;
             }
+            //写日志
+            if (null!=labelPushReq && StringUtil.isNoneBlank(labelPushReq.getReqId())) {
+                this.updateLog(null,ServiceConstants.LabelPushReq.PUSH_STATUS_SUCCESS,
+                    ServiceConstants.CustomDownloadRecord.DATA_STATUS_SUCCESS);
+            }
 		}
 		
-        if (null!=labelPushReq && StringUtil.isNoneBlank(labelPushReq.getReqId())) {
-            this.updateLog(null,ServiceConstants.LabelPushReq.PUSH_STATUS_SUCCESS,
-                ServiceConstants.CustomDownloadRecord.DATA_STATUS_SUCCESS);
-        }
         
         LogUtil.info("Customer("+customInfo.getLabelId()+")push end,cost:" + (System.currentTimeMillis() - start)/new Long(THOUSAND) + " s.");
 		LogUtil.info("Exist "+this.getClass().getSimpleName()+".run()");
@@ -629,13 +647,16 @@ public class CustomerPublishDefaultTaskImpl implements ICustomerPublishTask {
         if (null!=customDownloadRecords && !customDownloadRecords.isEmpty()) {
             if (StringUtil.isNotEmpty(desFile)) {
                 String[] desFileArr = desFile.split(File.separator);
-                String fileName = desFileArr[desFileArr.length-1]; 
-                for (CustomDownloadRecord obj : customDownloadRecords) {
-                    if (null!=obj && StringUtil.isNoneBlank(obj.getFileName()) && !desFile.equals(obj.getFileName())) {
-                        obj.setFileName(fileName);
-                        obj.setDataStatus(DataStatus);
-                        iCustomDownloadRecordService.update(obj);
-                        LogUtil.info("文件("+fileName+")生成时长:"+(new Date().getTime()-obj.getDataTime().getTime())+" ms.");
+                String fileName = desFileArr[desFileArr.length-1];
+                if (fileName.contains(".")) {
+                    for (CustomDownloadRecord obj : customDownloadRecords) {
+                        if (null!=obj && StringUtil.isNoneBlank(obj.getFileName())
+                                && obj.getFileName().split("_").length==fileName.split("_").length-ONE) {
+                            obj.setFileName(fileName);
+                            obj.setDataStatus(DataStatus);
+                            iCustomDownloadRecordService.update(obj);
+                            LogUtil.info("文件("+fileName+")生成时长:"+(new Date().getTime()-obj.getDataTime().getTime())+" ms.");
+                        }
                     }
                 }
             } else {

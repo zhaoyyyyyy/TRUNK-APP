@@ -8,6 +8,7 @@ package com.asiainfo.biapp.si.loc.core.syspush.service.impl;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -110,12 +111,12 @@ public class LabelPushCycleServiceImpl extends BaseServiceImpl<LabelPushCycle, S
         return super.get(recordId);
     }
 
-    public void addLabelPushCycle(LabelPushCycle labelPushCycle,String userName) throws BaseException {
+    public void addLabelPushCycle(LabelPushCycle labelPushCycle,String userName,int attrSettingType) throws BaseException {
       	 //先判断此客户群的推送历史，如果有，修改status为失效
       	LabelAttrRelVo labelAttrRelVo = new LabelAttrRelVo();
       	labelAttrRelVo.setLabelId(labelPushCycle.getCustomGroupId());
       	labelAttrRelVo.setStatus(ServiceConstants.LabelAttrRel.STATUS_SUCCESS);
-      	labelAttrRelVo.setAttrSettingType(ServiceConstants.LabelAttrRel.ATTR_SETTING_TYPE_PUSH);
+      	labelAttrRelVo.setAttrSettingType(attrSettingType);
       	if(iLabelAttrRelService.selectLabelAttrRelList(labelAttrRelVo) != null){
       		List<LabelAttrRel> labelAttrRelList=iLabelAttrRelService.selectLabelAttrRelList(labelAttrRelVo);
       		for(int i=0;i<labelAttrRelList.size();i++){
@@ -169,7 +170,7 @@ public class LabelPushCycleServiceImpl extends BaseServiceImpl<LabelPushCycle, S
                     labelAttrRel.setModifyTime(new Date());
                     labelAttrRel.setAttrColName(labelInfo.getLabelName());
                     labelAttrRel.setAttrSource(ServiceConstants.LabelAttrRel.ATTR_SOURCE_LABEL);
-                    labelAttrRel.setAttrSettingType(ServiceConstants.LabelAttrRel.ATTR_SETTING_TYPE_PUSH);
+                    labelAttrRel.setAttrSettingType(attrSettingType);
                     labelAttrRel.setLabelOrCustomId(labelInfo.getLabelId());
                     labelAttrRel.setAttrColType(labelInfo.getLabelTypeId().toString());
                     labelAttrRel.setAttrCreateUserId(userName);
@@ -181,8 +182,9 @@ public class LabelPushCycleServiceImpl extends BaseServiceImpl<LabelPushCycle, S
       	
         //推送
       	ICustomerPublishTask curCustomerPublishThread = (ICustomerPublishTask) SpringContextHolder.getBean("customerPublishDefaultTaskImpl");
-        curCustomerPublishThread.initParamter(lPCycles, false, new ArrayList<Map<String, Object>>());
-//        Executors.newFixedThreadPool(10).execute(curCustomerPublishThread);
+        Map<String, Object> parameters = new HashMap<>();
+        parameters.put("attrSettingType", attrSettingType);
+        curCustomerPublishThread.initParamter(lPCycles, false, parameters);
 		ThreadPool.getInstance().execute(curCustomerPublishThread);
     
     }
@@ -208,11 +210,15 @@ public class LabelPushCycleServiceImpl extends BaseServiceImpl<LabelPushCycle, S
             throw new ParamRequiredException("标签ID不能为空");
         }
         
-        List<LabelAttrRel> attrRelList = new ArrayList<>();
-        
         //获取属性列
-        int attrType = ServiceConstants.LabelAttrRel.ATTR_SETTING_TYPE_PREVIEW;
-        attrRelList = iCustomerPublishCommService.getLabelAttrRelsByCustom(customInfo, attrType);
+        LabelAttrRelVo labelAttrRelVo = new LabelAttrRelVo();
+        labelAttrRelVo.setLabelId(customInfo.getLabelId());
+        labelAttrRelVo.setAttrSource(ServiceConstants.LabelAttrRel.ATTR_SOURCE_LABEL);
+        labelAttrRelVo.setAttrSettingType(ServiceConstants.LabelAttrRel.ATTR_SETTING_TYPE_PREVIEW);
+        labelAttrRelVo.setStatus(ServiceConstants.LabelAttrRel.STATUS_SUCCESS);
+        labelAttrRelVo.setOrderBy("pageSortNum ASC,sortNum ASC");
+        
+        List<LabelAttrRel> attrRelList = iCustomerPublishCommService.getLabelAttrRelsByCustom(customInfo, labelAttrRelVo);
 
         //默认列
         LabelAttrRel col0 = new LabelAttrRel();
@@ -232,9 +238,14 @@ public class LabelPushCycleServiceImpl extends BaseServiceImpl<LabelPushCycle, S
         long s = System.currentTimeMillis();
     		//获取属性列
         List<LabelAttrRel> attrRelList = null;
-        int attrType = ServiceConstants.LabelAttrRel.ATTR_SETTING_TYPE_PREVIEW;
+        LabelAttrRelVo labelAttrRelVo = new LabelAttrRelVo();
+        labelAttrRelVo.setLabelId(customGroup.getLabelId());
+        labelAttrRelVo.setAttrSource(ServiceConstants.LabelAttrRel.ATTR_SOURCE_LABEL);
+        labelAttrRelVo.setAttrSettingType(ServiceConstants.LabelAttrRel.ATTR_SETTING_TYPE_PREVIEW);
+        labelAttrRelVo.setStatus(ServiceConstants.LabelAttrRel.STATUS_SUCCESS);
+        labelAttrRelVo.setOrderBy("pageSortNum ASC,sortNum ASC");
         try {
-            attrRelList = iCustomerPublishCommService.getLabelAttrRelsByCustom(customGroup, attrType);
+            attrRelList = iCustomerPublishCommService.getLabelAttrRelsByCustom(customGroup, labelAttrRelVo);
         } catch (Exception e) {
             LogUtil.error("查询客户群关联的属性错误！", e);
         }
@@ -301,14 +312,19 @@ public class LabelPushCycleServiceImpl extends BaseServiceImpl<LabelPushCycle, S
     @Override
     public void preDownloadGroupList(String localPathTmp, CustomDownloadRecord customDownloadRecord) throws BaseException{
         //校验生成过没有
-        CustomDownloadRecord record = new CustomDownloadRecord();
-        record.setDataDate(customDownloadRecord.getDataDate());
-        record.setCustomId(customDownloadRecord.getCustomId());
-        List<CustomDownloadRecord> selectCustomDownloadRecords = iCustomDownloadRecordDao.selectCustomDownloadRecordList(record);
-        if (!selectCustomDownloadRecords.isEmpty()) {
-            for (CustomDownloadRecord obj : selectCustomDownloadRecords) {
-                iCustomDownloadRecordDao.delete(obj.getRecordId());
-            }
+//        CustomDownloadRecord record = new CustomDownloadRecord();
+//        record.setDataDate(customDownloadRecord.getDataDate());
+//        record.setCustomId(customDownloadRecord.getCustomId());
+//        List<CustomDownloadRecord> selectCustomDownloadRecords = iCustomDownloadRecordDao.selectCustomDownloadRecordList(record);
+//        if (!selectCustomDownloadRecords.isEmpty()) {
+//            for (CustomDownloadRecord obj : selectCustomDownloadRecords) {
+//                iCustomDownloadRecordDao.delete(obj.getRecordId());
+//            }
+//        }
+        //重新生成时，需要删除原有记录
+        if (StringUtil.isNotBlank(customDownloadRecord.getRecordId())) {
+            iCustomDownloadRecordDao.delete(customDownloadRecord.getRecordId());
+            customDownloadRecord.setRecordId(null);
         }
         iCustomDownloadRecordDao.save(customDownloadRecord);
     }

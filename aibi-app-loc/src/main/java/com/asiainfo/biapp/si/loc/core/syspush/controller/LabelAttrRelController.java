@@ -124,7 +124,9 @@ public class LabelAttrRelController extends BaseController<LabelAttrRel>{
     @RequestMapping(value = "/labelAttrRel/save", method = RequestMethod.POST)
     public WebResult<String> save(@ApiIgnore LabelAttrRel labelAttrRel) {
             WebResult<String> webResult = new WebResult<>();
-            labelAttrRel.setModifyTime(new Date());
+            if (null == labelAttrRel.getModifyTime()) {
+                labelAttrRel.setModifyTime(new Date());
+            }
             User user = new User(); 
             try {
             	user = this.getLoginUser();
@@ -159,7 +161,9 @@ public class LabelAttrRelController extends BaseController<LabelAttrRel>{
     @RequestMapping(value = "/labelAttrRel/update", method = RequestMethod.POST)
     public WebResult<String> edit(@ApiIgnore LabelAttrRel labelAttrRel) {
         WebResult<String> webResult = new WebResult<>();
-        labelAttrRel.setModifyTime(new Date());
+        if (null == labelAttrRel.getModifyTime()) {
+            labelAttrRel.setModifyTime(new Date());
+        }
         LabelAttrRel oldLab = new LabelAttrRel();
         try {
             oldLab = iLabelAttrRelService.selectLabelAttrRelById(labelAttrRel.getPriKey());
