@@ -289,10 +289,10 @@ window.loc_onload = function() {
 				initCustomPushTable(that);
 				
 				//从监控总览页面跳转到指定锚点位置
-				/*var detailAnchor = $.getUrlParam("detailAnchor");
+				var detailAnchor = $.getUrlParam("detailAnchor");
 				if(detailAnchor){
 					location.href="#"+detailAnchor;
-				}*/
+				}
 			});
 		
 			//默认刷新频率
@@ -313,6 +313,13 @@ window.loc_onload = function() {
 			$("html,body").stop().animate({"scrollTop":scrollTop});
 		});
 	});
+	$(".anchors-list > li.ui-prerecture-item").each(function(e){//锚点定位
+		var $index = $(this).index();
+		$(this).find("span.scroll-anchors").click(function(){
+			var scrollTop=$(".scrollBox").eq($index).offset().top-80;
+			$("html,body").stop().animate({"scrollTop":scrollTop});
+		})
+	})
 	$(window).scroll(function(){
         var $stop=$(this).scrollTop();
         $(".scrollBox").each(function(e){
