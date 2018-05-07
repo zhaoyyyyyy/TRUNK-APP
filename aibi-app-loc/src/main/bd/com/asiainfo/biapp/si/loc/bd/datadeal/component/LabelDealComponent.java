@@ -174,7 +174,7 @@ public class LabelDealComponent {
 
     public boolean updateDimTargetTableStatusNotExistsTable(List<String> notExistsTableList) {
         startTime=System.currentTimeMillis();
-        String sql = "update " + DIM_TARGET_TABLE_STATUS + " set DATA_STATUS =0,IS_DOING=0,exception_desc = 'table not exists' where data_date='" + data_date + "'and (1 = 0 ";
+        String sql = "update " + DIM_TARGET_TABLE_STATUS + " set DATA_STATUS =2,IS_DOING=0,exception_desc = 'table not exists' where data_date='" + data_date + "'and (1 = 0 ";
         for (int i = 0; i < notExistsTableList.size(); i++) {
             sql += " or source_table_id='" + notExistsTableList.get(i) + "' ";
         }
