@@ -370,12 +370,12 @@ public class ServiceConstants {
         public static final int TARGET_TABLE_PREPARED = 1;
         
         /**
-         * 数据抽取状态：0-抽取中，1-抽取完成，2-抽取失败
+         * 数据抽取状态：0-抽取完成，1-抽取中，2-抽取失败
          */
-        /** 类型：0-抽取中 */
-        public static final int TARGET_TABLE_EXTRACTING = 0;
-        /** 类型：1-抽取完成 */
-        public static final int TARGET_TABLE_EXTRACT_SUCCESS = 1;
+        /** 类型：0-抽取完成 */
+        public static final int TARGET_TABLE_EXTRACT_SUCCESS = 0;
+        /** 类型：1-抽取中 */
+        public static final int TARGET_TABLE_EXTRACTING = 1;
         /** 类型：2-抽取失败 */
         public static final int TARGET_TABLE_EXTRACT_FAIL = 2;
     }
@@ -471,7 +471,7 @@ public class ServiceConstants {
     /** 标签推送设置信息表 */
     public interface LabelPushReq{
       /**
-       * 客户群推送状态：1：等待推送 2：推送中 3：推送成功 0：推送失败
+       * 客户群推送状态：1：等待推送 2：推送中 3：推送成功4：推送失败
        */
       /** 推送，1 = 等待推送  */
       public static final int PUSH_STATUS_WAIT = 1;
@@ -480,7 +480,7 @@ public class ServiceConstants {
       /** 推送，3 = 推送成功 */
       public static final int PUSH_STATUS_SUCCESS = 3;
       /** 推送，0 = 推送失败 */
-      public static final int PUSH_STATUS_FAILED = 0;
+      public static final int PUSH_STATUS_FAILED = 4;
     }
     /** 客户群下载记录表 */
     public interface CustomDownloadRecord{

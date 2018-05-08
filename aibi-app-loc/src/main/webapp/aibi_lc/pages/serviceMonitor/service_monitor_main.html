@@ -162,11 +162,15 @@
 							<div class="per-header clearfix">
 								<span class="fleft"><em class="label-custom"></em><a @click="jumpPageToDetail('customPushAnchor',$event)">客户群推送</a></span>
 								<p class="fright">
-									<span>共<strong>{{item.pushSuccessCount + item.pushingCount +item.pushFailCount}}</strong>个 ，
+									<span>共<strong>{{item.pushWaitCount + item.pushSuccessCount + item.pushingCount +item.pushFailCount + item.notPushCount}}</strong>个 ，
 									成功<strong>{{item.pushSuccessCount}}</strong>个</span>
 								</p>
 							</div>
 							<ul class="per-status ui-label-list mt30">
+								<li>
+									<span>等待推送</span>
+									<p>{{item.pushWaitCount}}</p>
+								</li>
 								<li>
 									<span>推送成功</span>
 									<p>{{item.pushSuccessCount}}</p>
@@ -175,9 +179,13 @@
 									<span>推送中</span>
 									<p>{{item.pushingCount}}</p>
 								</li>
-								<li class="padding0">
+								<li >
 									<span>推送失败</span>
 									<p>{{item.pushFailCount}}</p>
+								</li>
+								<li class="padding0">
+									<span>其他</span>
+									<p>{{item.notPushCount}}</p>
 								</li>
 							</ul>
 						</div>

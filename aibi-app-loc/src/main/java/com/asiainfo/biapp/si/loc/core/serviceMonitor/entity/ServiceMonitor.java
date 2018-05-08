@@ -171,9 +171,17 @@ public class ServiceMonitor extends BaseEntity {
     
     /**
      * 客户群推送视图：v_custom_push
-     * 客户群推送状态     0推送失败，1推送成功，2推送中
+     * 客户群推送状态     1：等待推送 2：推送中 3：推送成功 4：推送失败
      * 客户群推送失败数量
      */
+    @Column(name = "NOT_PUSH_COUNT")
+    @ApiParam(value = "客户群推送其他状态数量")
+    private Integer notPushCount;
+    
+    @Column(name = "PUSH_WAIT_COUNT")
+    @ApiParam(value = "客户群等待推送数量")
+    private Integer pushWaitCount;
+    
     @Column(name = "PUSH_FAIL_COUNT")
     @ApiParam(value = "客户群推送失败数量")
     private Integer pushFailCount;
@@ -189,7 +197,7 @@ public class ServiceMonitor extends BaseEntity {
      * 客户群推送中数量
      */
     @Column(name = "PUSHING_COUNT")
-    @ApiParam(value = "客户群预约数量")
+    @ApiParam(value = "客户群推送中数量")
     private Integer pushingCount;
 
     /**
@@ -366,6 +374,30 @@ public class ServiceMonitor extends BaseEntity {
     }
 
     
+    
+    public Integer getNotPushCount() {
+        return notPushCount;
+    }
+
+
+    
+    public void setNotPushCount(Integer notPushCount) {
+        this.notPushCount = notPushCount;
+    }
+
+
+    
+    public Integer getPushWaitCount() {
+        return pushWaitCount;
+    }
+
+
+    
+    public void setPushWaitCount(Integer pushWaitCount) {
+        this.pushWaitCount = pushWaitCount;
+    }
+
+
     public Integer getPushFailCount() {
         return pushFailCount;
     }

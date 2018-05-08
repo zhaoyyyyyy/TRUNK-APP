@@ -30,7 +30,7 @@ function initDataPrepareTable(monitorDetail){
 			width : 80,
 			align : "center",
 			sortable : false,
-			formatter : function(value, opts, data) {
+			formatter : function(value) {
 				if(value==0){
         			return '<span class="state-unStart">' +$.getCodeDesc("SJZBZT",value)+ '</span>';
         		}else if(value==1){

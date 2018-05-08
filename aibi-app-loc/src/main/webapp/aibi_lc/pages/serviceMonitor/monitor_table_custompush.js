@@ -52,8 +52,10 @@ function initCustomPushTable(monitorDetail){
 					return '<span class="state-progress">' +$.getCodeDesc("KHQTSZT",value)+ '</span>';
 				}else if(Number(value)===3){
 					return '<span class="state-success">' +$.getCodeDesc("KHQTSZT",value)+ '</span>';
-				}else if(Number(value)===0){
+				}else if(Number(value)===4){
 					return '<span class="state-fail">' +$.getCodeDesc("KHQTSZT",value)+ '</span>';
+				}else if(Number(value)===0){
+					return '—';
 				}
         		
         	}

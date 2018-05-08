@@ -83,7 +83,7 @@ window.loc_onload = function() {
     			}
             },
             //切换日期刷新监控数据
-            changeMonitorByDate:function(dateTime){
+            changeMonitorByDate:function(){
             	var that = this;
             	$.commAjax({			
         		    url : $.ctx+'/api/monitor/overview/queryMonitorMainByConfig',
@@ -93,7 +93,7 @@ window.loc_onload = function() {
         		    async:true,
         		    postData : {
         					"configId" : this.configId,
-        					"dataDate" : dateTime.replace(/-/g,"")
+        					"dataDate" : this.qryDataDate.replace(/-/g,"")
         			},
         		    onSuccess: function(returnOb){
         		    	if(returnOb.data){
@@ -141,7 +141,7 @@ window.loc_onload = function() {
 	       			//刷新客户群生成表格
 	     			qryCustomGenerateTableByCond();
 	      			//刷新客户群推送表格
-	     			qryCustomPushTableByCond()
+	     			qryCustomPushTableByCond();
 	            }.bind(this),this.defaultTimes);
 	        },
 	        //获取运营监控状态字典
@@ -224,7 +224,16 @@ window.loc_onload = function() {
 		    		dateElement.val(this.firstDataMonth);
 		    		this.qryDataDate=this.firstDataMonth;
 		    	}
-        	  that.changeMonitorByDate(dateElement.val());
+            	that.qryDataDate = dateElement.val();
+        	    that.changeMonitorByDate();
+				//刷新数据准备表格
+			  	qryDataPrepareTableByCond();
+				//刷新标签生成表格
+				qryLabelGenerateTableByCond();
+					//刷新客户群生成表格
+				qryCustomGenerateTableByCond();
+					//刷新客户群推送表格
+				qryCustomPushTableByCond();
             },
             // 日期切换函数
             getTime:function(){//初始化日期
@@ -237,7 +246,17 @@ window.loc_onload = function() {
 		    			maxDate:that.qryDataDate,
 		    			minDate:minDay,
 		    			onpicked: function(dq) {
-		    				that.changeMonitorByDate(dq.cal.getNewDateStr());
+		    				that.qryDataDate = dq.cal.getNewDateStr();
+		    				
+		    				that.changeMonitorByDate();
+		    				//刷新数据准备表格
+		    			  	qryDataPrepareTableByCond();
+		    				//刷新标签生成表格
+		    				qryLabelGenerateTableByCond();
+		    					//刷新客户群生成表格
+		    				qryCustomGenerateTableByCond();
+		    					//刷新客户群推送表格
+		    				qryCustomPushTableByCond();
 		    			}
 		    		});
  	        	}else{
@@ -248,7 +267,17 @@ window.loc_onload = function() {
 		    			maxDate:that.qryDataDate,
 		    			minDate:minMonth,
 		    			onpicked: function(dq) {
-		    				that.changeMonitorByDate(dq.cal.getNewDateStr());
+		    				that.qryDataDate = dq.cal.getNewDateStr();
+		    				
+		    				that.changeMonitorByDate();
+		    				//刷新数据准备表格
+		    			  	qryDataPrepareTableByCond();
+		    				//刷新标签生成表格
+		    				qryLabelGenerateTableByCond();
+		    				//刷新客户群生成表格
+		    				qryCustomGenerateTableByCond();
+		    				//刷新客户群推送表格
+		    				qryCustomPushTableByCond();
 		    			}
 		    		});
  	        	}
