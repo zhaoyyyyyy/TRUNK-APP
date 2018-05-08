@@ -33,6 +33,8 @@ var model = {
 	showdim : false,
 	ismodify: false,
 	isAdd: true,
+	selected:true,//全选
+	isActive:true, 
 	
 	delColumnId:[],//要删除的列信息
 	allDel:false,//旧的信息列全删
@@ -288,7 +290,16 @@ window.loc_onload = function() {
 					    			600);
 					    }
 					});
-				}
+				},
+				allSelected:function(){
+					if(model.selected==false){
+						 model.selected=true;
+						 model.isActive=true;
+					}else{
+						  model.selected=false;
+						  model.isActive=false;
+					}
+				},
 			},
 			mounted: function () {
 			    this.$nextTick(function () {
@@ -374,7 +385,7 @@ window.loc_onload = function() {
 
 
 function fun_to_save(){
-	if($("form").validateForm()){
+	if($("form[class~=active]").validateForm()){
 		var url_ = "";
 		var url_fh = "";
 		var msg = "";
@@ -407,7 +418,12 @@ function fun_to_save(){
 		var falg = true;
 		if(model.labelTypeId == 8){
 			var columnCnNameList =[];
-			$("form[class~=create-main-col]").each(function(){
+			if($("form[class~=active]").length==0){
+				$.alert("列不能为空");
+				falg =false;
+				return false;
+			}
+			$("form[class~=active]").each(function(){
 				var mdaSysTableColumn = $(this).formToJson();
 				if(!isInArray(columnCnNameList,mdaSysTableColumn.columnCnName)){
 					columnCnNameList.push(mdaSysTableColumn.columnCnName);
@@ -428,6 +444,32 @@ function fun_to_save(){
 						labelId = model.labelId;
 					}
 					if(url_fh !="" && labelId!=""){
+						var k=0;
+						$("form.create-main").each(function(){
+							if($(this).hasClass("active")){
+								var mdaSysTableColumn = $(this).formToJson();
+								/*if(mdaSysTableColumn['columnId']==""){
+									delete mdaSysTableColumn['columnId']
+								}*/
+								mdaSysTableColumn["labelId"]=labelId;
+								$.commAjax({
+									ansyc : false,
+									url : url_fh,
+									postData : mdaSysTableColumn,
+									onSuccess : function(data){
+										savemda = data.status
+										if(k==$("form[class~=active]").size() && savemda== 200){
+											$.success(msg,function(){
+												history.back(-1);
+											});
+										};
+									}
+								});
+								k++;
+							}else{
+								model.delColumnId.push($(this).formToJson().columnId);
+							}
+						})
 						if(model.delColumnId.length>0 & isEdit){
 							for(var i=0;i<model.delColumnId.length;i++){
 								$.commAjax({
@@ -440,28 +482,6 @@ function fun_to_save(){
 								})
 							}
 						}
-						var k=0;
-						$("form[class~=create-main-col]").each(function(){
-							var mdaSysTableColumn = $(this).formToJson();
-							/*if(mdaSysTableColumn['columnId']==""){
-								delete mdaSysTableColumn['columnId']
-							}*/
-							mdaSysTableColumn["labelId"]=labelId;
-							$.commAjax({
-								ansyc : false,
-								url : url_fh,
-								postData : mdaSysTableColumn,
-								onSuccess : function(data){
-									savemda = data.status
-									if(k==$("form[class~=create-main-col]").size() && savemda== 200){
-										$.success(msg,function(){
-											history.back(-1);
-										});
-									};
-								}
-							});
-							k++;
-						})
 					}else{
 						$.success(msg,function(){
 							history.back(-1);
@@ -558,4 +578,11 @@ function isInArray(arr, value) {
 	}
 	return false;
 }
-
+function getData(tag){	
+	if($(tag).parents(".create-main").hasClass("active")){
+		$(tag).parents(".create-main").removeClass("active");
+	}else{
+		formD=$(tag).parents(".create-main").addClass("active");
+	}
+		
+}

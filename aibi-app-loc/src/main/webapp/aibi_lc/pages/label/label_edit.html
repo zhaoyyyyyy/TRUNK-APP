@@ -181,11 +181,22 @@
 	                                <label class="fleft mt5" for="exampleInputEmail4">请选择复合标签列信息</label>
 	                            </div>
 	                        </div>
+	                       <div class='checkbox mt10' v-on:click.prevent="allSelected()">
+					   			 <input id="mycheckbox2" type="checkbox" class="checkbix" :checked="selected">
+					    		<label v-bind:class="{active:selected}" aria-label="" role="checkbox" for="mycheckbox2" class="checkbix">
+					    		<span class="large"></span>全选/反选
+					    	</label>
+							</div>
 	                    </div>
-		            </div>
-	                <form  class="clearfix create-main-col active mt10" v-for="(sourceInfo,index) in sourceInfoList">
+		            
+	                <form  class="clearfix create-main mt10" :class="{active:isActive}" v-for="(sourceInfo,index) in sourceInfoList">
 	                <fieldset>
 	                    <legend>列信息</legend>
+	                    <div class="progress fleft">
+	                        <span class="progress-label">
+	                            <i class="icon" onclick="getData(this)"></i>
+	                        </span>
+	                    </div>
 	                    <i v-on:click="del_form(sourceInfo,index)" class="del-btn-icon fright mr10 mt5" ></i>
 	                    <div class="form-horizontal fleft ui-form">
 	                        <input type="hidden" v-model="sourceInfo.sourceId" name="dependIndex"/>
@@ -265,6 +276,7 @@
 	                    </div>
 	                </fieldset>
 	                </form>
+	                </div>
                 </div>
 				<div class="ui-reg-grid mt40">
                     <div class="ui-grid-button clearfix mt20">
