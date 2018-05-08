@@ -20,12 +20,15 @@ public class LocBaseListener implements ApplicationListener<ContextRefreshedEven
 		LocCacheBase.getInstance().init();
 		
 		
-	
+		/**
+		 * add by zhougz3 
+		 * for redisConfig class init
+		 */
 		try {
 			RedisConfig.host = LocConfigUtil.getInstance(BaseConstants.JAUTH_URL).getProperties(BaseConstants.REDIS_IP);
 			RedisConfig.port = Integer.valueOf(LocConfigUtil.getInstance(BaseConstants.JAUTH_URL).getProperties(BaseConstants.REDIS_PORT));
 		} catch (Exception e) {
-			e.printStackTrace();
+			LogUtil.error(e.getMessage(),e);
 		}
 		
 	}
