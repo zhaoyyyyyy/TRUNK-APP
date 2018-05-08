@@ -19,18 +19,6 @@ public class LocBaseListener implements ApplicationListener<ContextRefreshedEven
 		BaseConstants.JAUTH_URL = event.getApplicationContext().getEnvironment().getProperty("jauth-url");
 		LocCacheBase.getInstance().init();
 		
-		
-		/**
-		 * add by zhougz3 
-		 * for redisConfig class init
-		 */
-		try {
-			RedisConfig.host = LocConfigUtil.getInstance(BaseConstants.JAUTH_URL).getProperties(BaseConstants.REDIS_IP);
-			RedisConfig.port = Integer.valueOf(LocConfigUtil.getInstance(BaseConstants.JAUTH_URL).getProperties(BaseConstants.REDIS_PORT));
-		} catch (Exception e) {
-			LogUtil.error(e.getMessage(),e);
-		}
-		
 	}
 
 }
