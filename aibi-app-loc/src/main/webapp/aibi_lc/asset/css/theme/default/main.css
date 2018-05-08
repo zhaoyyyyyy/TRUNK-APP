@@ -815,6 +815,11 @@
 	background: #fff;
 	border: 1px solid #E9E9E9;
 	border-radius: 6px;
+	position:relative;
+}
+.create-main > i.del-btn-icon{
+	right:10px;
+	top:10px;
 }
 .create-main .ui-main{
 	overflow:visible;
@@ -834,6 +839,9 @@
 	border-radius:6px 0 0 6px;
 	position:relative;
 	z-index:9999;
+}
+.column-info.create-main > .progress{
+	height:256px;
 }
 /* .progress .progress-label > i.icon{
 	background: transparent url(./images/lc-icon.png) no-repeat -458px -257px;
@@ -860,6 +868,9 @@
 	border-right:1px solid #ddd;
 	padding:20px 10px 0px 0px;
 	height:inherit;
+}
+.column-info.create-main .ui-form{
+	padding:0px 10px 0px 0px;
 }
 .create-main .ui-form:last-child{
 	border-right-color:transparent;
@@ -907,6 +918,10 @@ i.del-btn-icon{
 	height:10px;
 	background:url(./images/lc-icon.png) no-repeat -223px -106px;
 	cursor:pointer;
+	position:absolute;
+	right:0;
+	top:0;
+	z-index:9;
 }
 .ui-form-group > .control-input > .label-lists{
 	position:absolute;
