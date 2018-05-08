@@ -266,6 +266,7 @@ window.loc_onload = function() {
 			},
 			/*显示下载窗口*/
 			showDownload:function(){
+				model.sortAttrAndType="";
 				var AttrbuteIdString = model.AttrbuteId;
 				$(".selectList").each(function(){
 					if(model.sortAttrAndType.indexOf($(this).find(".select-Sort").val()) !=-1 ){
