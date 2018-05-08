@@ -93,28 +93,28 @@ window.loc_onload = function() {
 				}
 			},
 			updateCustom : function(item){
-				dataModel.customId = item.labelId;
-				var ssg = window.sessionStorage;
-				ssg.setItem("customId",item.labelId);
-				if(item.updateCycle==3&&item.dataStatusId==3){
+//				dataModel.customId = item.labelId;
+//				var ssg = window.sessionStorage;
+//				ssg.setItem("customId",item.labelId);
+//				if(item.updateCycle==3&&item.dataStatusId==3){
 					var wd = $.window('修改客户群', $.ctx
 							+ '/aibi_lc/pages/custom/custom_update.html?labelId='+item.labelId, 500, 500);
 			    	wd.reload = function() {
 			    		labelMarket.loadLabelInfoList();
 			    	}
-				}else{
-					$.commAjax({
-						  url: $.ctx + "/api/label/labelInfo/findCustomRuleById",
-						  postData:{
-							  customGroupId : item.labelId,
-						  },
-						  onSuccess: function(returnObj){
-							  dataModel.ruleList = returnObj.data;
-							  calculateCenter.submitRules();
-                              $(".ui-calculate-center").addClass("heightAuto");
-						  }
-					});
-				}
+//				}else{
+//					$.commAjax({
+//						  url: $.ctx + "/api/label/labelInfo/findCustomRuleById",
+//						  postData:{
+//							  customGroupId : item.labelId,
+//						  },
+//						  onSuccess: function(returnObj){
+//							  dataModel.ruleList = returnObj.data;
+//							  calculateCenter.submitRules();
+//                              $(".ui-calculate-center").addClass("heightAuto");
+//						  }
+//					});
+//				}
 				
 			},
 			deleteCustomById : function(labelId){
