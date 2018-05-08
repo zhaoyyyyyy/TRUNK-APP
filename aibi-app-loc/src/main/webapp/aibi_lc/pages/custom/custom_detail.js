@@ -266,7 +266,6 @@ window.loc_onload = function() {
 			},
 			/*显示下载窗口*/
 			showDownload:function(){
-				model.sortAttrAndType="";
 				var AttrbuteIdString = model.AttrbuteId;
 				$(".selectList").each(function(){
 					if(model.sortAttrAndType.indexOf($(this).find(".select-Sort").val()) !=-1 ){
@@ -285,21 +284,31 @@ window.loc_onload = function() {
 						}
 					}
 				});
-				if(!model.haveAttr){
-	        			model.sortAttrAndType = "";
-	        			AttrbuteIdString = "";
-	        		}
 				if(model.sortAttrAndType!=null){
-					var dg = $.window('客户群清单下载', $.ctx + '/aibi_lc/pages/custom/custom_download.html?customGroupId='
+					var url = encodeURI(encodeURI($.ctx + '/aibi_lc/pages/custom/custom_download.html?customGroupId='
 						+labelId+'&AttrbuteId='+AttrbuteIdString+'&sortAttrAndType='+model.sortAttrAndType+'&dataDate='
-						+model.dataDate+"&attrbuteNames="+model.calcuElementName, 
-						760, 360, {id:'customDownloadWin'});
+						+model.dataDate+"&attrbuteNames="+model.calcuElementName));
+					var dg = $.window('客户群清单下载', url, 760, 360, {id:'customDownloadWin'});
 					dg.close = function(){
 						if (dg.setInterval) {
 							dg.clearInterval();
 						}
 					}
 				}
+			},
+			haveAttrFun:function(){
+				if (model.haveAttr) {	//点击了不带属性
+					model.haveAttr = false;
+	        			model.sortAttrAndType = "";
+	        			model.AttrbuteId = "";
+	        			model.calcuElementName = "";
+					this.clearAllSelLabels();
+				} else {		//点击了带属性
+					model.haveAttr = true;
+				}
+			},
+			clearAllSelLabels:function() {
+				$("#selectedLabel").empty();
 			}
 		},
 		mounted: function () {

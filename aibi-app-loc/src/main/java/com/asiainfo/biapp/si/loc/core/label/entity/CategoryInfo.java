@@ -183,7 +183,7 @@ public class CategoryInfo extends BaseEntity {
 				Set<CategoryInfo> s =  categoryInfo.getChildren();
 			}
 		} catch (Exception e) {LogUtil.error("标签目录以父查子异常",e);}
-        return list.isEmpty()?new LinkedHashSet<CategoryInfo>() : new LinkedHashSet<CategoryInfo>(list);
+        return (null==list||list.isEmpty())?new LinkedHashSet<CategoryInfo>() : new LinkedHashSet<CategoryInfo>(list);
     }
 
     public void setChildren(Set<CategoryInfo> children) {

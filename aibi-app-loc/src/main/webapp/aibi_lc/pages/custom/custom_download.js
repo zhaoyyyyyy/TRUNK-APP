@@ -57,10 +57,14 @@ var VueModel ={
 				res = "生成中";
 			} else if (data.dataStatus == VueModel.customDownloadRecord.DATA_STATUS_SUCCESS) {//已生成
 				res = "<a href='javascript:downloadGroupList(\"" + data.recordId + "\")' class='s_export' style='color:#00f;'>下载</a>";
-				res += "&nbsp; &nbsp;"+rePreDownList; 
+				if ((!Boolean(VueModel.attrbuteNames)&&!Boolean(data.colNames)) || (VueModel.attrbuteNames == data.colNames)) {
+					res += "&nbsp; &nbsp;"+rePreDownList;
+				}
 			} else if (data.dataStatus == VueModel.customDownloadRecord.DATA_STATUS_FAILED) {//失败
 				res = "<span class='s_delete' >生成失败</span><br/>";
-				res += rePreDownList;
+				if ((!Boolean(VueModel.attrbuteNames)&&!Boolean(data.colNames)) || (VueModel.attrbuteNames == data.colNames)) {
+					res += rePreDownList;
+				}
 			}
 			
 			return res;
@@ -103,7 +107,7 @@ window.loc_onload = function() {
 	var wd = frameElement.lhgDG;
 	VueModel.customGroupId=$.getUrlParam("customGroupId");
 	VueModel.AttrbuteId=Boolean($.getUrlParam("AttrbuteId")) ? $.getUrlParam("AttrbuteId") : "";
-	VueModel.attrbuteNames=Boolean($.getUrlParam("attrbuteNames")) ? $.getUrlParam("attrbuteNames") : "";
+	VueModel.attrbuteNames=Boolean($.getUrlParam("attrbuteNames")) ? decodeURI($.getUrlParam("attrbuteNames")) : "";
 	VueModel.sortAttrAndType=$.getUrlParam("sortAttrAndType");
 	VueModel.dataDate=$.getUrlParam("dataDate");
 	
@@ -142,6 +146,10 @@ window.loc_onload = function() {
 	preDownloadGroupList = function(el,customDownloadRecordId){
 		var elParent = $(el).parent();
 		elParent.parent().children("td[aria-describedby='downloadGrid_fileName']").empty().append("<span>未知</span>");
+		if (VueModel.attrbuteNames) {
+			elParent.parent().children("td[aria-describedby='downloadGrid_colNames']")
+				.empty().append("<span>"+VueModel.attrbuteNames+"</span>");
+		}
 		elParent.attr("title","生成中").empty().append("<span>生成中</span>");
 		
 		$.commAjax({			
@@ -190,8 +198,10 @@ window.loc_onload = function() {
 					
 		    			//模拟form提交下载文件
 		    			var url = $.ctx+'/api/syspush/customDownloadRecord/downloadGroupList';
+		    			var token = $.getCurrentToken();
 		    			var form = $("<form></form>").attr("action",url).attr("method", "post");
-		    			form.append($("<input></input>").attr("type","hidden").attr("name","token").attr("value",$.getToken()));
+		    			form.append($("<input></input>").attr("type","hidden").attr("name","X-Authorization").attr("value",token));
+		    			form.append($("<input></input>").attr("type","hidden").attr("name","token").attr("value",token));
 		    			form.append($("<input></input>").attr("type","hidden").attr("name","localPathFile").attr("value",VueModel.localPathFile));
 		    			form.append($("<input></input>").attr("type","hidden").attr("name","recordId").attr("value",id));
 		    			form.appendTo('body').submit().remove();

@@ -44,11 +44,11 @@
 			</div>
 		</div>
 		<div class="mt10">
-			<div class="radio circle success" @click="haveAttr=false"> 
+			<div class="radio circle success" @click="haveAttrFun"> 
 			   <input type="radio" name="radio19" id="myr3" :checked="!haveAttr"> 
 			   <label for="myr3" v-bind:class="{active:!haveAttr}"><i class="default"></i> 不带属性</label>
 			</div>
-		    <div class="radio circle success" @click="haveAttr=true">
+		    <div class="radio circle success" @click="haveAttrFun">
 			   <input type="radio" name="radio19"  id="myr4" :checked="haveAttr"> 
 			   <label  for="myr4" v-bind:class="{active:haveAttr}"><i class="default"></i> 带属性</label>
 			</div>
