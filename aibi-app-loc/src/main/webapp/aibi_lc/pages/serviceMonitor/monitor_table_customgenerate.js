@@ -49,10 +49,10 @@ function initCustomGenerateTable(monitorDetail){
 				return DateFmt.dateFormatter(value, opts, data);
 			}
 		}],
-	   loadComplete:function(){
-	    	$("#load_dataPrepareTable").hide();
-	    	$("#load_labelGenerateTable").hide();
-	    	$("#load_customPushTable").hide();
+	    ajaxGridOptions:{
+			beforeSend :function(){
+				$("#customGenerateAnchor").find(".loading").show();
+			}
 	    },
 		autowidth : true,
 		viewrecords : true,

@@ -4,7 +4,11 @@
  * ------------------------------------------------------------------
  */
 var monitorMain;////运营监控总览Vue实例
+var sysMonth;//系统设置月周期区间
+var sysDay;//系统设置日周期区间
 window.loc_onload = function() {
+	sysMonth = 1 - $.getSysConfig('LOC_CONFIG_APP_MAX_KEEP_MONTHS');
+    sysDay = 1 - $.getSysConfig('LOC_CONFIG_APP_MAX_KEEP_DAYS');
     monitorMain = new Vue({
         el:"#monitorMain",
         data:{
@@ -109,8 +113,8 @@ window.loc_onload = function() {
             },
            // 日期切换函数
            getTime:function(e){//初始化日期
-        	    var sysMonth = 1 - $.getSysConfig('LOC_CONFIG_APP_MAX_KEEP_MONTHS');
-		        var sysDay = 1 - $.getSysConfig('LOC_CONFIG_APP_MAX_KEEP_DAYS');
+        	    sysMonth = 1 - $.getSysConfig('LOC_CONFIG_APP_MAX_KEEP_MONTHS');
+		        sysDay = 1 - $.getSysConfig('LOC_CONFIG_APP_MAX_KEEP_DAYS');
         	    var that = this;
 	        	var configId = $(e.target).attr("data-cycleId");
 	        	if(Number($(event.currentTarget).parents("div").siblings("select").find("option:selected").val()) === 1){
@@ -201,10 +205,6 @@ window.loc_onload = function() {
         }
     });
 
-//    monitorMain.$nextTick(function () {
-//    	monitorMain.sysDay = 1 - $.getSysConfig('LOC_CONFIG_APP_MAX_KEEP_DAYS');
-//    	monitorMain.sysMonth = 1 - $.getSysConfig('LOC_CONFIG_APP_MAX_KEEP_MONTHS');
-//    });
 };
 
 

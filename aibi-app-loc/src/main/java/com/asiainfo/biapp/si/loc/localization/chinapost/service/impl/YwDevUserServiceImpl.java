@@ -1,7 +1,6 @@
 package com.asiainfo.biapp.si.loc.localization.chinapost.service.impl;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
@@ -95,12 +94,11 @@ public class YwDevUserServiceImpl extends DevUserServiceImpl implements IUserSer
     }
 	@Override
 	public User getUserByToken(String token) throws BaseException{
-//		return super.getUserByToken(token);
 		User user = new User();
 		String username = null;
 		String userId = null;
-		String serviceCode = "21";//TODO
-		String districtId = "370000";//TODO
+		String serviceCode = "21";
+		String districtId = "370000";
 		
 		Map<String,Object> params = new HashMap<String,Object>();
 		params.put("token", token);
@@ -122,7 +120,7 @@ public class YwDevUserServiceImpl extends DevUserServiceImpl implements IUserSer
 		//拿到用户名称
 		try{
 		    params.put("operatorId",userId);
-//		    params.put("operatorId","2000001");//TODO
+//		    params.put("operatorId","2000001");
 	        
 	        String staffInfo = HttpUtil.sendPost(acrmUrl+"/api/auth/userinfo", params);
             JSONObject staffInfoObj = JSONObject.fromObject(staffInfo);
@@ -137,8 +135,8 @@ public class YwDevUserServiceImpl extends DevUserServiceImpl implements IUserSer
 	        
 	        
 	        username = staffvalue.getString("STAFF_NAME");
-	        serviceCode = orginfo.getString("SERVICE_CODE");//TODO
-	        districtId = districtinfo.getString("DISTRICT_ID");//TODO
+	        serviceCode = orginfo.getString("SERVICE_CODE");
+	        districtId = districtinfo.getString("DISTRICT_ID");
 	        
 	        user.setUserName(username);
         }catch(Exception e){
@@ -159,15 +157,15 @@ public class YwDevUserServiceImpl extends DevUserServiceImpl implements IUserSer
 			addOrgChildren(organizationYwx.getChildList(), organizationSetYwx);
 			
 			LinkedHashSet<Organization> organizationPrivaliege = new LinkedHashSet<>();
-			if(!organizationXzqh.getOrgCode().equals("1")){
+			if(!"1".equals(organizationXzqh.getOrgCode())){
 			    organizationPrivaliege.add(organizationXzqh);
 			}
             organizationPrivaliege.add(organizationYwx);
 			
 			//行政区划
 			for(Organization organization : organizationSetXzqh){
-			    if(organization.getOrgCode().equals(districtId)&&organization.getOrgType().equals("3")){
-			        if(!organization.getOrgCode().equals("1")){
+			    if(organization.getOrgCode().equals(districtId)&&"3".equals(organization.getOrgType())){
+			        if(!"1".equals(organization.getOrgCode())){
 			            organizationPrivaliege.add(organization);
 		            }
 			        addXZQHOrgChildren(organization.getChildList(),organizationPrivaliege);
@@ -175,7 +173,7 @@ public class YwDevUserServiceImpl extends DevUserServiceImpl implements IUserSer
 			}
 			//业务线
 			for(Organization organization : organizationSetYwx){
-			    if(organization.getOrgCode().equals(serviceCode)&&organization.getOrgType().equals("1")){
+			    if(organization.getOrgCode().equals(serviceCode)&&"1".equals(organization.getOrgType())){
                     organizationPrivaliege.add(organization);
                     addOrgChildren(organization.getChildList(), organizationPrivaliege);
                 }
@@ -191,7 +189,6 @@ public class YwDevUserServiceImpl extends DevUserServiceImpl implements IUserSer
 			for(Organization organization : organizationPrivaliege){
 				if("3".equals(organization.getOrgType())){
 					String xzqh = organization.getOrgType();
-					//organization.setLevel(2);
 					if(dataPrivaliege.containsKey(xzqh)){
 						List<Organization> organizationList = dataPrivaliege.get(xzqh);
 						organizationList.add(organization);
@@ -233,7 +230,7 @@ public class YwDevUserServiceImpl extends DevUserServiceImpl implements IUserSer
 			Set<Resource> resourcePrivaliege = new HashSet<Resource>();
 			resourcePrivaliege.addAll(resMenu.getChildren());
 			resourcePrivaliege.addAll(resDom.getChildren());
-			if(resourcePrivaliege != null && resourcePrivaliege.size() > 0){
+			if(resourcePrivaliege != null && !resourcePrivaliege.isEmpty()){
 				for(Resource resource : resourcePrivaliege){
 					if(Resource.API.equals(resource.getParentId()) ){
 						apiResource.add(resource);
@@ -255,7 +252,6 @@ public class YwDevUserServiceImpl extends DevUserServiceImpl implements IUserSer
 	}
 	
 	private Set<Organization> addOrgChildren(List<Organization> children,Set<Organization> organizationSet){
-//	    organizationSet.addAll(children);
 	    for(Organization o : children){
 	        organizationSet.add(o);
 	        if(!o.getChildren().isEmpty()){
@@ -268,7 +264,6 @@ public class YwDevUserServiceImpl extends DevUserServiceImpl implements IUserSer
 	
 	private Set<Organization> addXZQHOrgChildren(List<Organization> children,Set<Organization> organizationSet){
 	    loadLevel--;
-//	    organizationSet.addAll(children);
 	    if(loadLevel>0){
 	        for(Organization o : children){
 	            organizationSet.add(o);

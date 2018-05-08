@@ -86,10 +86,10 @@ function initLabelGenerateTable(monitorDetail){
             	$("#catchError").css("display","none");
             }
 		},
-	    loadComplete:function(){
-	    	$("#load_dataPrepareTable").hide();
-	    	$("#load_customGenerateTable").hide();
-	    	$("#load_customPushTable").hide();
+		ajaxGridOptions:{
+			beforeSend :function(){
+				$("#labelGenerateAnchor").find(".loading").show();
+			}
 	    },
 		height : '100%',
 		rowList : [ 10, 20, 30 ],
