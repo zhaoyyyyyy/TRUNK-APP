@@ -314,12 +314,19 @@ var labelMarket = (function (model){
 								maskMassage : '正在查找...',
 								onSuccess: function(res){
 									for(var i=0 ; i<res.rows.length; i++){
-										if(res.rows[i].labelExtInfo.dayLabelDate==null){
-											res.rows[i].labelExtInfo.dayLabelDate="无";
+										if(res.rows[i].labelExtInfo!=undefined&&res.rows[i].labelExtInfo!=null){
+											if(res.rows[i].labelExtInfo.dayLabelDate==null){
+												res.rows[i].labelExtInfo.dayLabelDate="无";
+											}
+											if(res.rows[i].labelExtInfo.monthLabelDate==null){
+												res.rows[i].labelExtInfo.monthLabelDate="无";
+											}
+											res.rows[i].customNum = res.rows[i].labelExtInfo.customNum;
+										}else{
+											res.rows[i].customNum = "0";
 										}
-										if(res.rows[i].labelExtInfo.monthLabelDate==null){
-											res.rows[i].labelExtInfo.monthLabelDate="无";
-										}
+										res.rows[i].customRuleShow = res.rows[i].labelExtInfo.labelOptRuleShow;
+										res.rows[i].customComment = res.rows[i].busiLegend;
 									}
 									dataModel.page.currentPageNo=pageIndex;
 									dataModel.labelInfoList = res.rows;
