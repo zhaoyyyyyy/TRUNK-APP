@@ -35,6 +35,7 @@ var model = {
 	isAdd: true,
 	selected:true,//全选
 	isActive:true, 
+	isShowZblabel:false,//展示纵表列
 	
 	delColumnId:[],//要删除的列信息
 	allDel:false,//旧的信息列全删
@@ -90,6 +91,7 @@ window.loc_onload = function() {
 								model.dimId = list[0].dimTransId;
 							}else if(model.labelTypeId==8){
 								model.isfhbq = true;
+								model.isShowZblabel=true;
 								model.ismodify =true;
 								model.isAdd= false;
 								model.isemmu = false;
@@ -237,6 +239,7 @@ window.loc_onload = function() {
 				},		
 				//选择不同的纵表，获取对应的列信息
 				change_sourceId : function(event){
+					model.isShowZblabel = true;
 					if(model.labelId){
 						model.allDel = true;
 						for(var i=0;i < model.sourceInfoList.length;i++){
