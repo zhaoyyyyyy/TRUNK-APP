@@ -418,7 +418,7 @@ function fun_to_save(){
 		var falg = true;
 		if(model.labelTypeId == 8){
 			var columnCnNameList =[];
-			if($("form[class~=active]").length==0){
+			if($("form[class~=active]").length==1){
 				$.alert("列不能为空");
 				falg =false;
 				return false;
@@ -444,7 +444,7 @@ function fun_to_save(){
 						labelId = model.labelId;
 					}
 					if(url_fh !="" && labelId!=""){
-						var k=0;
+						var k=1;
 						$("form.create-main").each(function(){
 							if($(this).hasClass("active")){
 								var mdaSysTableColumn = $(this).formToJson();
