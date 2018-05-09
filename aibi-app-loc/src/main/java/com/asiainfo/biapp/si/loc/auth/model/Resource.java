@@ -1,8 +1,7 @@
 package com.asiainfo.biapp.si.loc.auth.model;
 
 import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.LinkedHashSet;
 
 import com.asiainfo.biapp.si.loc.base.entity.BaseEntity;
 
@@ -32,7 +31,7 @@ public class Resource  extends BaseEntity{
 	private Integer dispOrder;
 	private Integer status;
 	private String sessionName;
-	private Set<Resource> children = new HashSet<>();
+	private LinkedHashSet<Resource> children = new LinkedHashSet<>();
 	
 	public String getResourceName() {
 		return resourceName;
@@ -106,10 +105,10 @@ public class Resource  extends BaseEntity{
     public void setSessionName(String sessionName) {
         this.sessionName = sessionName;
     }
-    public Set<Resource> getChildren() {
+    public LinkedHashSet<Resource> getChildren() {
         return children;
     }
-    public void setChildren(Set<Resource> children) {
+    public void setChildren(LinkedHashSet<Resource> children) {
         this.children = children;
     }
 	
