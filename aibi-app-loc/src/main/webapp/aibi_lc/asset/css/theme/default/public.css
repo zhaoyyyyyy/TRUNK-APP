@@ -576,7 +576,7 @@ html,body{height: 100%;}
 	position: relative;
 }
 .input-pointer{
-	cursor: pointer !important;
+	cursor: default !important;
 }
 
 .ui-form-group{
@@ -1108,6 +1108,7 @@ radio样式
     width: 1%;
     white-space: nowrap;
     vertical-align: middle;
+    cursor:pointer;
 }
 .input-group .form-control, .input-group-addon, .input-group-btn {
     display: table-cell;

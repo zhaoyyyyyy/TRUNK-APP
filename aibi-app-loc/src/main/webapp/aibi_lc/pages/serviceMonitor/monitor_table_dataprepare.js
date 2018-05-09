@@ -102,6 +102,11 @@ function initDataPrepareTable(monitorDetail){
 /**
  * 表格检索
  */
+function dataSearchKey(event){
+	if(event.keyCode == 13){
+		qryDataPrepareTableByCond();
+	}
+}
 function qryDataPrepareTableByCond(){
 	var sourceTableName = $("#sourceTableName").val();
 	var zbCodesTemp = [];

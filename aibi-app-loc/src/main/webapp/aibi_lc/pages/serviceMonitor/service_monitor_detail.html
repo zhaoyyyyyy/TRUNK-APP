@@ -240,9 +240,10 @@
 							</span>
 				   		 </div>
 	    			</div>
-	    			<form id="formSearch-dataPrepare" class="form-group fright width-210">
+	    			<form id="formSearch-dataPrepare" class="form-group fright width-210" onkeyup="dataSearchKey(event)">
 						<div class="input-group">
-							<input name="sourceTableName" id="sourceTableName" type="text" class="form-control input-pointer" placeholder="请输入表名" />
+							<input name="sourceTableName" id="sourceTableName" type="text" class="form-control input-pointer" placeholder="请输入表名"/>
+							<input id='hiddeninput' type="text" style="display:none" /> 
 							<div class="input-group-addon input-group-icon right-child" id="btn_search_data" data-tableId="dataPrepareTable" data-formSearchId="formSearch-dataPrepare" onclick="qryDataPrepareTableByCond()"></div>			
 						</div>						
 					</form>
@@ -282,7 +283,7 @@
 					    	</label>
 						</span>
 	    			</div>
-	    			<div id="formSearch-labelGenerate" class="form-group fright width-210">
+	    			<div id="formSearch-labelGenerate" class="form-group fright width-210" onkeyup="labelSearchKey(event)">
 						<div class="input-group">
 							<input name="labelName" id="labelGenerateName"  type="text" class="form-control input-pointer" placeholder="请输入标签名称" />
 							<div class="input-group-addon input-group-icon right-child" id="btn_search_label"  onclick="qryLabelGenerateTableByCond();"></div>			
@@ -331,7 +332,7 @@
 	    					{{d.dataName}}
 	    				</span>-->
 	    			</div>
-	    			<div id="formSearch-customGenerate" class="form-group fright width-210">
+	    			<div id="formSearch-customGenerate" class="form-group fright width-210" onkeyup="customSearchKey(event)">
 						<div class="input-group">
 							<input name="labelName" id="customGenerateName" type="text" class="form-control input-pointer" placeholder="请输入客户群名称" />
 							<div class="input-group-addon input-group-icon right-child" id="btn_search_custom" onclick="qryCustomGenerateTableByCond();"></div>			
@@ -363,7 +364,7 @@
     					<input type="checkbox" checked="checked" :value="d.code" onclick="qryCustomPushTableByCond();">
     					{{d.dataName}}
     				</span>-->
-    				<span class='checkbox' v-for="(d,index) in khqtsList">
+					<span class='checkbox push-status' v-for="(d,index) in khqtsList">
 					    <input :id="'typepush'+d.code+index" type="checkbox" class="checkbix" checked="checked" :value="d.code"  onclick="qryCustomPushTableByCond();">
 					    <label role="checkbox"  v-if="d.code==1" :for="'typepush'+d.code+index" class="checkbix">
 				    		<span class="large unStart"></span>{{d.dataName}}
@@ -378,8 +379,14 @@
 				    		<span class="large fail"></span>{{d.dataName}}
 				    	</label>
 					</span>
+					<span class='checkbox push-status'>
+					    <input id="0" type="checkbox" class="checkbix" checked="checked" value="0" onclick="qryCustomPushTableByCond();">
+				    	<label role="checkbox" for="0" class="checkbix">
+				    		<span class="large other"></span>其他
+				    	</label>
+					</span>
     			</div>
-				<div id="formSearch-customPush" class="form-group fright width-210">
+				<div id="formSearch-customPush" class="form-group fright width-210" onkeyup="customPushSearchKey(event)">
 					<div class="input-group">
 						<input name="labelName" id="customPushName" type="text" class="form-control input-pointer" placeholder="请输入客户群名称" />
 						<div class="input-group-addon input-group-icon right-child" id="btn_search_push"  onclick="qryCustomPushTableByCond();"></div>			

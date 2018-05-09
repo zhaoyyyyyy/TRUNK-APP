@@ -1853,6 +1853,9 @@ animation-delay: .8s;
 /*.ui-status > select.active{
 	font-weight:bold;
 }*/
+.ui-status input[type=checkbox].checkbix:checked+label>span{
+	vertical-align: text-bottom;
+}
 .ui-status > span,.ui-status input[type=checkbox].checkbix+label{
 	font-size:12px;
 	line-height:30px;
@@ -1877,9 +1880,9 @@ input[type=checkbox].checkbix:checked+label>span.ready{
 input[type=checkbox].checkbix:checked+label>span.progress{
 	background:#9B7DF6;
 }
-
-
-
+input[type=checkbox].checkbix:checked+label>span.other{
+	background:#dda0dd;
+}
 .ui-status > .control-input{
 	display:inline-block;
 	float:none;
@@ -2021,6 +2024,9 @@ input[type=checkbox].checkbix:checked+label>span.progress{
 	margin:10px 0;
 	line-height: 28px;
 }
+.ui-jqgrid tr td span.info-bold {
+	font-weight:bold
+}
 .ui-store-box{
 	padding:0 10px 0 0;
 	overflow:hidden;
@@ -2101,4 +2107,32 @@ input[type=checkbox].checkbix:checked+label>span.progress{
 .ui-host-charts{
 	width: 100%;
     height: 276px;
+}
+/*授权管理*/
+.column-contain{
+	min-height:600px;
+}
+.column-contain > .ui-menu{
+	width: 25%;
+	background-color:transparent;
+}
+.ui-main > div.column-right{
+	margin: 0 0 0 25%;
+	background-color:transparent;
+}
+.ui-title-icon{
+	font-size:16px;
+	color: #000;
+}
+.ui-title-icon > i{
+	display:inline-block;
+	width:35px;
+	height:35px;
+	font-weight:bold;
+	color:#a0a0a0;
+	font-size:24px;
+	background-color:#f7f7f7;
+	border-radius:50%;
+	text-align:center;
+	vertical-align: middle;
 }

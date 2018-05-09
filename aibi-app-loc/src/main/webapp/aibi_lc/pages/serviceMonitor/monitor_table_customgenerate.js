@@ -72,6 +72,11 @@ function initCustomGenerateTable(monitorDetail){
 /**
  * 表格检索
  */
+function customSearchKey(event){
+	if(event.keyCode == 13){
+		qryCustomGenerateTableByCond();
+	}
+}
 function qryCustomGenerateTableByCond(){
 	var labelName = $("#customGenerateName").val();
 	var khqscCodesTemp = [];

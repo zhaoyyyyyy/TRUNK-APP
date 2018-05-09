@@ -102,6 +102,11 @@ function initLabelGenerateTable(monitorDetail){
 /**
  * 表格检索
  */
+function labelSearchKey(event){
+	if(event.keyCode == 13){
+		qryLabelGenerateTableByCond();
+	}
+}
 function qryLabelGenerateTableByCond(){
 	var labelName = $("#labelGenerateName").val();
 	var zqscCodesTemp = [];

@@ -106,18 +106,23 @@ function initCustomPushTable(monitorDetail){
 /**
  * 表格检索
  */
+function customPushSearchKey(event){
+	if(event.keyCode == 13){
+		qryCustomPushTableByCond();
+	}
+}
 function qryCustomPushTableByCond(){
 	var labelName = $("#customPushName").val();
 	var khqtsCodesTemp = [];
 	//查询准备状态
-	$("#khqtsAll").parents("span").siblings("span").find("input:checkbox:checked").each(function(i){
+	$("#khqtsAll").parents("span").siblings("span.checkbox").find("input:checkbox:checked").each(function(i){
 		khqtsCodesTemp.push($(this).val());
 	});
 	if(khqtsCodesTemp){
 		if(khqtsCodesTemp.length ===0){
 			$("#customPushTable").clearGridData();
 			return;
-		}else if(khqtsCodesTemp.length === monitorDetail.khqscList.length){
+		}else if(khqtsCodesTemp.length === $(".push-status").length){
 			$("#khqtsAll").prop("checked",true);
 		}else{
 			$("#khqtsAll").prop("checked",false);
@@ -145,11 +150,13 @@ function selectAllCustomPushStatus(e){
 		$("#khqtsAll").parents("span").siblings("span").find("input:checkbox").each(function(){
 			$(this).prop("checked",true);
 		});
+		$(".checkboxOther").find("input:checkbox").prop("checked",true);
 		qryCustomPushTableByCond();
 	}else{
 		$("#khqtsAll").parents("span").siblings("span").find("input:checkbox").each(function(){
 			$(this).prop("checked",false);
 		});
+		$(".checkboxOther").find("input:checkbox").prop("checked",false);
 		$("#customPushTable").clearGridData();
 	}
 }
