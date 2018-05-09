@@ -16,7 +16,7 @@ function initDataPrepareTable(monitorDetail){
 			"dataDate" : monitorDetail.qryDataDate.replace(/-/g, "")
 		},
 		datatype : "json",
-		colNames : [ '表名', '准备状态', '抽取状态', '准备完成时间', '抽取完成时间' ],
+		colNames : [ '表名', '准备状态', '抽取状态', '准备完成时间', '抽取完成时间','表ID' ],
 		colModel : [ {
 			name : 'sourceTableName',
 			index : 'sourceTableName',
@@ -76,7 +76,11 @@ function initDataPrepareTable(monitorDetail){
 				}
 				return "";
 			}
-		} ],
+		},{
+    		name : 'sourceTableId',
+    		index : 'sourceTableId',
+    		hidden:true
+    	} ],
 		autowidth : true,
 		viewrecords : true,
 		rowNum : 10,

@@ -12,7 +12,7 @@ function initLabelGenerateTable(monitorDetail){
 			"dataDate" : monitorDetail.qryDataDate.replace(/-/g, "")
 		},
 		datatype : "json",
-		colNames : [ '标签名称', '生成状态', '目标表列名', '表名','表类型','错误信息描述','状态编码' ],
+		colNames : [ '标签名称', '生成状态', '目标表列名', '表名','表类型','错误信息描述','状态编码','标签编码' ],
 		colModel : [ {
     		name : 'labelInfo.labelName',
     		index : 'labelInfo.labelName',
@@ -56,7 +56,11 @@ function initLabelGenerateTable(monitorDetail){
     		sortable : false,
     		align : "center",
     		formatter : function(value) {
-        		return $.getCodeDesc("SJYBLX",value);
+    			if(Number(value) === 1 || Number(value) === 2){
+    				return $.getCodeDesc("SJYBLX",value);
+    			}else{
+    				return "—";
+    			}
         	}
     	},{
     		name : 'exceptionDesc',
@@ -65,6 +69,10 @@ function initLabelGenerateTable(monitorDetail){
     	},{
     		name : 'dataStatus',
     		index : 'dataStatus',
+    		hidden:true
+    	},{
+    		name : 'labelId',
+    		index : 'labelId',
     		hidden:true
     	}],
 		autowidth : true,

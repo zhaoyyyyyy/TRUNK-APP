@@ -13,16 +13,15 @@ function initCustomPushTable(monitorDetail){
 			"dataDate" : monitorDetail.qryDataDate.replace(/-/g, "")
 		},
 		datatype : "json",
-		colNames : [ '客户群名称', '推送平台', '推送时间','推送状态','异常信息','状态编码' ],
+		colNames : [ '客户群名称', '推送平台', '数据日期','推送时间','推送状态','异常信息','状态编码','推送请求ID' ],
 		colModel : [ {
     		name : 'labelPushCycle.labelInfo.labelName',
     		index : 'labelPushCycle.labelInfo.labelName',
-    		width : 110,
+    		width : 100,
     		sortable : false,
     		align : "center",
     		frozen : true
-    	},
-    	 {
+    	},{
     		name : 'labelPushCycle.sysInfo.sysName',
     		index : 'labelPushCycle.sysInfo.sysName',
     		width : 110,
@@ -30,16 +29,21 @@ function initCustomPushTable(monitorDetail){
     		frozen : true,
     		align : "center"
     	},{
+    		name : 'dataDate',
+    		index : 'dataDate',
+    		width : 60,
+    		sortable : false,
+    		align : "center"
+    	},{
     		name : 'startTime',
     		index : 'startTime',
-    		width : 110,
+    		width : 100,
     		sortable : false,
     		align : "center",
     		formatter:function(value, opts, data){
     			return DateFmt.dateFormatter(value, opts, data);
     		}
-    	},
-    	{
+    	},{
     		name : 'pushStatus',
     		index : 'pushStatus',
     		width : 50,
@@ -54,7 +58,7 @@ function initCustomPushTable(monitorDetail){
 					return '<span class="state-success">' +$.getCodeDesc("KHQTSZT",value)+ '</span>';
 				}else if(Number(value)===4){
 					return '<span class="state-fail">' +$.getCodeDesc("KHQTSZT",value)+ '</span>';
-				}else if(Number(value)===0){
+				}else{
 					return '—';
 				}
         		
@@ -63,10 +67,13 @@ function initCustomPushTable(monitorDetail){
     		name : 'exceInfo',
     		index : 'exceInfo',
     		hidden:true
-    	}
-    	,{
+    	},{
     		name : 'pushStatus',
     		index : 'pushStatus',
+    		hidden:true
+    	},{
+    		name : 'reqId',
+    		index : 'reqId',
     		hidden:true
     	}],
 		autowidth : true,

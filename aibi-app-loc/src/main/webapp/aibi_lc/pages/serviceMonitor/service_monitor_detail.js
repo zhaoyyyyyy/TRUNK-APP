@@ -4,21 +4,20 @@
  * ------------------------------------------------------------------
  */
 var monitorDetail;//运营监控明细Vue实例
-var configId;//专区ID
 var sysMonth;//系统设置月周期区间
 var sysDay;//系统设置日周期区间
+var newDay;//最新日周期日期
+var newMonth;//最新月周期日期
 window.loc_onload = function() {	
-    configId = $("#preConfig_list").find("span").attr("configId");
 	sysMonth = 1 - $.getSysConfig('LOC_CONFIG_APP_MAX_KEEP_MONTHS');
     sysDay = 1 - $.getSysConfig('LOC_CONFIG_APP_MAX_KEEP_DAYS');
 	monitorDetail = new Vue({
 		el:"#monitorDetail",
 		data:{
-			configId:"",  //从运营总览传入的专区id
 			serviceMonitorObj:{},  //运营总览
 			qryDataDate:"",//数据日期
-		  	firstDataDay:'',//最新日周期日期
-        	firstDataMonth:'',//最新月周期日期
+		  	chooseDataDay:'',//用户动态选择日周期日期
+		  	chooseDataMonth:'',//用户动态选择月周期日期
 			yyjkList:[],  //运营监控枚举
 			sjzbList:[],  //数据准备状态
 			sjzbBox:[],//数据状态复选框数组
@@ -56,10 +55,17 @@ window.loc_onload = function() {
             getLastestDate:function(fn){
             	var that = this;
             	var iframeDataDate = $.getUrlParam("dataDate");
+            	var iframeReadCycle = $.getUrlParam("readCycle");
     			if(iframeDataDate){
-    				that.firstDataDay = DateFmt.Formate(new Date(iframeDataDate),"yyyy-MM-dd");
-					that.firstDataMonth = DateFmt.Formate(new Date(iframeDataDate),"yyyy-MM");
-					that.qryDataDate = that.firstDataDay;
+    				that.chooseDataDay = DateFmt.Formate(new Date(iframeDataDate),"yyyy-MM-dd");
+					that.chooseDataMonth = DateFmt.Formate(new Date(iframeDataDate),"yyyy-MM");
+					that.readCycle = Number(iframeReadCycle);
+					$("#readCycle").val(that.readCycle);
+					if(that.readCycle === 1){
+						that.qryDataDate = that.chooseDataDay;
+					}else{
+						that.qryDataDate = that.chooseDataMonth;
+					}
 					fn();
     			}else{
     				$.commAjax({
@@ -69,14 +75,19 @@ window.loc_onload = function() {
     					},
     					onSuccess : function(returnObj) {
     						if(returnObj.data){
-    							that.firstDataDay = DateFmt.Formate(new Date(returnObj.data),"yyyy-MM-dd");
-    							that.firstDataMonth = DateFmt.Formate(new Date(returnObj.data),"yyyy-MM");
+    							that.chooseDataDay = DateFmt.Formate(new Date(returnObj.data),"yyyy-MM-dd");
+    							that.chooseDataMonth = DateFmt.Formate(new Date(returnObj.data),"yyyy-MM");
+    							newDay = DateFmt.Formate(new Date(returnObj.data),"yyyy-MM-dd");
+    							newMonth = DateFmt.Formate(new Date(returnObj.data),"yyyy-MM");
     						}else{
     							var now = new Date();
-    							that.firstDataDay = $.dateFormat(new Date(now.getTime() - 2*24*60*60*1000),"yyyy-MM-dd");
-    							that.firstDataMonth = $.dateFormat(new Date(now.getTime() - 2*24*60*60*1000),"yyyy-MM");
+    							that.chooseDataDay = $.dateFormat(new Date(now.getTime() - 2*24*60*60*1000),"yyyy-MM-dd");
+    							that.chooseDataMonth = $.dateFormat(new Date(now.getTime() - 2*24*60*60*1000),"yyyy-MM");
+    							newDay = $.dateFormat(new Date(now.getTime() - 2*24*60*60*1000),"yyyy-MM-dd");
+    							newMonth = $.dateFormat(new Date(now.getTime() - 2*24*60*60*1000),"yyyy-MM");
     						}
-    						that.qryDataDate = that.firstDataDay;
+    						//初始化查询日期
+    						that.qryDataDate = that.chooseDataDay;
     						fn();
     					}
     				});
@@ -133,7 +144,7 @@ window.loc_onload = function() {
 	        	var that = this;
 	            clearTimeout(that.timerId);   // 关闭定时器
 	            that.timerId = setTimeout(function(){
-	            	that.loadMonitorDetailData(that.configId);
+	            	that.loadMonitorDetailData();
 	            	//刷新数据准备表格
 	            	qryDataPrepareTableByCond();
 	     			//刷新标签生成表格
@@ -218,11 +229,11 @@ window.loc_onload = function() {
             	var dateElement=$(event.currentTarget).siblings(".control-input").find("input");
             	this.readCycle =$(event.currentTarget).find("option:selected").val();
             	if(Number(this.readCycle) === 1){
-            		dateElement.val(this.firstDataDay);
-            		this.qryDataDate=this.firstDataDay;
+            		dateElement.val(this.chooseDataDay);
+            		this.qryDataDate=this.chooseDataDay;
 		    	}else{
-		    		dateElement.val(this.firstDataMonth);
-		    		this.qryDataDate=this.firstDataMonth;
+		    		dateElement.val(this.chooseDataMonth);
+		    		this.qryDataDate=this.chooseDataMonth;
 		    	}
             	that.qryDataDate = dateElement.val();
         	    that.changeMonitorByDate();
@@ -236,14 +247,23 @@ window.loc_onload = function() {
 				qryCustomPushTableByCond();
             },
             // 日期切换函数
-            getTime:function(){//初始化日期
-         	   var that = this;
+            getTime:function(){
+               var that = this;
+               sysMonth = 1 - $.getSysConfig('LOC_CONFIG_APP_MAX_KEEP_MONTHS');
+   		       sysDay = 1 - $.getSysConfig('LOC_CONFIG_APP_MAX_KEEP_DAYS');
+   		       //处理从总览跳转过来的初始化日期
+   		       if(!newDay){
+   		    	  newDay = that.chooseDataDay;
+   		       }
+   		       if(!newMonth){
+   		    	  newMonth = that.chooseDataMonth;
+ 		       }
  	           if(Number($(event.currentTarget).parents("div").siblings("select").find("option:selected").val()) === 1){
- 	        		var minDay ='#F{$dp.$DV(\''+that.qryDataDate+'\',{d:'+sysDay+'});}';
+ 	        		var minDay ='#F{$dp.$DV(\''+ newDay +'\',{d:'+sysDay+'});}';
 	        		WdatePicker({
 	        			isShowClear:false,
 	        			dateFmt:'yyyy-MM-dd',
-		    			maxDate:that.qryDataDate,
+		    			maxDate:newDay,
 		    			minDate:minDay,
 		    			onpicked: function(dq) {
 		    				that.qryDataDate = dq.cal.getNewDateStr();
@@ -260,11 +280,11 @@ window.loc_onload = function() {
 		    			}
 		    		});
  	        	}else{
- 	        		var minMonth ='#F{$dp.$DV(\''+that.qryDataDate+'\',{M:'+sysMonth+'});}';
+ 	        		var minMonth ='#F{$dp.$DV(\''+newMonth+'\',{M:'+sysMonth+'});}';
 	        		WdatePicker({
 	        			isShowClear:false,
 	        			dateFmt:'yyyy-MM',
-		    			maxDate:that.qryDataDate,
+		    			maxDate:newMonth,
 		    			minDate:minMonth,
 		    			onpicked: function(dq) {
 		    				that.qryDataDate = dq.cal.getNewDateStr();
@@ -285,13 +305,7 @@ window.loc_onload = function() {
 		},
 		mounted: function(){
 			var that = this;
-			var iframeConfigId = $.getUrlParam("configId");
-			if(iframeConfigId){
-				this.configId = iframeConfigId;
-				$("#preConfig_list").children("a").find(".pre-config-name").attr("configId",iframeConfigId);
-			}else{
-				this.configId = configId;
-			}
+			this.configId = $.getCurrentConfigId();
 
 			//数据字典赋值
 			this.loadDicYyjk();
@@ -344,13 +358,15 @@ window.loc_onload = function() {
 			$("html,body").stop().animate({"scrollTop":scrollTop});
 		});
 	});
+	
 	$(".anchors-list > li.ui-prerecture-item").each(function(){//锚点定位
 		var $index = $(this).index();
 		$(this).find("span.scroll-anchors").click(function(){
 			var scrollTop=$(".scrollBox").eq($index).offset().top-80;
 			$("html,body").stop().animate({"scrollTop":scrollTop});
-		})
-	})
+		});
+	});
+	
 	$(window).scroll(function(){
         var $stop=$(this).scrollTop();
         $(".scrollBox").each(function(e){

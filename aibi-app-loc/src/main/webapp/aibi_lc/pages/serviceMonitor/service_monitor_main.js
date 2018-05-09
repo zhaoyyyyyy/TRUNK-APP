@@ -3,11 +3,11 @@
  * 运行监控总览 add by shaosq 20180420
  * ------------------------------------------------------------------
  */
-var monitorMain;////运营监控总览Vue实例
+var monitorMain;//运营监控总览Vue实例
 var sysMonth;//系统设置月周期区间
 var sysDay;//系统设置日周期区间
-var newDay;
-var newMonth;
+var newDay; //最新日周期日期
+var newMonth; //最新月周期日期
 window.loc_onload = function() {
 	sysMonth = 1 - $.getSysConfig('LOC_CONFIG_APP_MAX_KEEP_MONTHS');
     sysDay = 1 - $.getSysConfig('LOC_CONFIG_APP_MAX_KEEP_DAYS');
@@ -16,10 +16,8 @@ window.loc_onload = function() {
         data:{
         	configId:'',//专区ID
         	readCycle:1,//周期默认为日周期
-        	firstDataDay:'',//最新日周期日期
-        	firstDataMonth:'',//最新月周期日期
-//        	sysDay:'',//系统设置日周期范围
-//        	sysMonth:'',//系统设置月周期范围
+        	chooseDataDay:'',//用户选择日周期日期
+        	chooseDataMonth:'',//用户选择月周期日期
         	configData:[],//专区信息
         	monitorData:[], //运营监控总览数据
         	isChecked:true, //专区全部默认选中
@@ -41,14 +39,16 @@ window.loc_onload = function() {
 					url : $.ctx + "/api/source/TargetTableStatus/selectLastestDateByCycle",
 					onSuccess : function(returnObj) {
 						if(returnObj.data){
-							that.firstDataDay = DateFmt.Formate(new Date(returnObj.data),"yyyy-MM-dd");
-							that.firstDataMonth = DateFmt.Formate(new Date(returnObj.data),"yyyy-MM");
+							that.chooseDataDay = DateFmt.Formate(new Date(returnObj.data),"yyyy-MM-dd");
+							that.chooseDataMonth = DateFmt.Formate(new Date(returnObj.data),"yyyy-MM");
 							newDay = DateFmt.Formate(new Date(returnObj.data),"yyyy-MM-dd");
 							newMonth = DateFmt.Formate(new Date(returnObj.data),"yyyy-MM");
 						}else{
 							var now = new Date();
-							that.firstDataDay = $.dateFormat(new Date(now.getTime() - 2*24*60*60*1000),"yyyy-MM-dd");
-							that.firstDataMonth = $.dateFormat(new Date(now.getTime() - 2*24*60*60*1000),"yyyy-MM");
+							that.chooseDataDay = $.dateFormat(new Date(now.getTime() - 2*24*60*60*1000),"yyyy-MM-dd");
+							that.chooseDataMonth = $.dateFormat(new Date(now.getTime() - 2*24*60*60*1000),"yyyy-MM");
+							newDay = $.dateFormat(new Date(now.getTime() - 2*24*60*60*1000),"yyyy-MM-dd");
+							newMonth = $.dateFormat(new Date(now.getTime() - 2*24*60*60*1000),"yyyy-MM");
 						}
 						fn();
 					}
@@ -81,11 +81,11 @@ window.loc_onload = function() {
 				}
 				if(!item.isChecked){
 					$("#"+configId+"monitor").hide();
-					$("#allChecked").prop('checked',false)
+					$("#allChecked").prop('checked',false);
 				}else{
 					var count=$("#selectAll li").find("input:checked").size();
 					if(count===(monitorMain.configData.length-1)){
-						$("#allChecked").prop('checked',true)
+						$("#allChecked").prop('checked',true);
 					}
 					$("#"+configId+"monitor").show();
 				}
@@ -96,7 +96,7 @@ window.loc_onload = function() {
             	$.commAjax({
                     url: $.ctx + "/api/monitor/overview/queryData",
                     postData : {
-    					"dataDate" :that.firstDataDay.replace(/-/g,"")
+    					"dataDate" :that.chooseDataDay.replace(/-/g,"")
                     },
                     onSuccess: function(returnObj){
                     	that.monitorData = returnObj.data;
@@ -109,9 +109,9 @@ window.loc_onload = function() {
             	var that = this;
             	var dateElement=$(event.currentTarget).siblings(".control-input").find("input");
             	if(Number($(event.currentTarget).find("option:selected").val())=== 1){
-            		dateElement.val(this.firstDataDay);
+            		dateElement.val(this.chooseDataDay);
 		    	}else{
-		    		dateElement.val(this.firstDataMonth);
+		    		dateElement.val(this.chooseDataMonth);
 		    	}
         	  that.changeMonitorByDate(dateElement.val(),configId);
             },
@@ -181,7 +181,9 @@ window.loc_onload = function() {
             jumpPageToDetail:function(detailAnchor,event){
             	var dataDate = $(event.target).parents("ul").siblings('div').find('input').val();
             	var selectConfigId = $(event.target).parents("ul").siblings('div').find('select').attr("data-cycleid");
-            	var locationHref='./service_monitor_detail.html?detailAnchor='+detailAnchor+'&configId='+selectConfigId+'&dataDate='+dataDate;
+            	var selectReadCycle = $(event.target).parents("ul").siblings('div').find('select').val();
+            	$.kvSet("CurrentConfigId",selectConfigId);
+            	var locationHref='./service_monitor_detail.html?detailAnchor='+detailAnchor+'&readCycle='+selectReadCycle+'&dataDate='+dataDate;
             	window.location.href=locationHref;
             },
             //选中与取消选中全部专区

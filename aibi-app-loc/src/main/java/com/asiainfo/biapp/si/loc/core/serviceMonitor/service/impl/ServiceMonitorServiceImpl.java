@@ -165,6 +165,8 @@ public class ServiceMonitorServiceImpl extends BaseServiceImpl<ServiceMonitor, S
         serviceMonitor.setCustomCreatingCount(0);
         serviceMonitor.setCustomSuccessCount(0);
         serviceMonitor.setCustomAppointCount(0);
+        serviceMonitor.setNotPushCount(0);
+        serviceMonitor.setPushWaitCount(0);
         serviceMonitor.setPushFailCount(0);
         serviceMonitor.setPushSuccessCount(0);
         serviceMonitor.setPushingCount(0);

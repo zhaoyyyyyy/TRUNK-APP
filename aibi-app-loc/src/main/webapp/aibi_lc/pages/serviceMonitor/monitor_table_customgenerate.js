@@ -12,11 +12,11 @@ function initCustomGenerateTable(monitorDetail){
 			"dataDate" : monitorDetail.qryDataDate.replace(/-/g, "")
 		},
 		datatype : "json",
-		colNames : [ '客户群名称', '生成状态', '生成时间' ],
+		colNames : [ '客户群名称', '生成状态','数据日期', '生成时间','清单ID' ],
 		colModel : [ {
 			name : 'labelInfo.labelName',
 			index : 'labelInfo.labelName',
-			width : 160,
+			width : 130,
 			align : "center",
 			sortable : false
 		},
@@ -40,15 +40,25 @@ function initCustomGenerateTable(monitorDetail){
 				}
 	    	}
 		},{
+    		name : 'listInfoId.dataDate',
+    		index : 'listInfoId.dataDate',
+    		width : 60,
+    		sortable : false,
+    		align : "center"
+    	},{
 			name : 'dataTime',
 			index : 'dataTime',
-			width : 140,
+			width : 110,
 			sortable : false,
 			align : "center",
 			formatter:function(value, opts, data){
 				return DateFmt.dateFormatter(value, opts, data);
 			}
-		}],
+		},{
+    		name : 'listInfoId.customGroupId',
+    		index : 'listInfoId.customGroupId',
+    		hidden:true
+    	}],
 	    ajaxGridOptions:{
 			beforeSend :function(){
 				$("#customGenerateAnchor").find(".loading").show();
