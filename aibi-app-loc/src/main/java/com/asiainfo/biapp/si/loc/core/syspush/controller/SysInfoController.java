@@ -218,6 +218,10 @@ public class SysInfoController extends BaseController<SysInfo>{
      * @return
      */
     public SysInfo fromToBean(SysInfo sys, SysInfo oldSys){
+    	oldSys.setWebserviceWsdl(sys.getWebserviceWsdl());
+    	oldSys.setWebserviceTargetnamespace(sys.getWebserviceTargetnamespace());
+    	oldSys.setWebserviceMethod(sys.getWebserviceMethod());
+    	oldSys.setWebserviceArgs(sys.getWebserviceArgs());
         if(StringUtil.isNoneBlank(sys.getSysId())){
             oldSys.setSysId(sys.getSysId());
         }
