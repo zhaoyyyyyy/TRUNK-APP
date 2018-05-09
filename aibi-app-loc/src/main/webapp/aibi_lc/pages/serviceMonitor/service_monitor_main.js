@@ -6,6 +6,8 @@
 var monitorMain;////运营监控总览Vue实例
 var sysMonth;//系统设置月周期区间
 var sysDay;//系统设置日周期区间
+var newDay;
+var newMonth;
 window.loc_onload = function() {
 	sysMonth = 1 - $.getSysConfig('LOC_CONFIG_APP_MAX_KEEP_MONTHS');
     sysDay = 1 - $.getSysConfig('LOC_CONFIG_APP_MAX_KEEP_DAYS');
@@ -41,6 +43,8 @@ window.loc_onload = function() {
 						if(returnObj.data){
 							that.firstDataDay = DateFmt.Formate(new Date(returnObj.data),"yyyy-MM-dd");
 							that.firstDataMonth = DateFmt.Formate(new Date(returnObj.data),"yyyy-MM");
+							newDay = DateFmt.Formate(new Date(returnObj.data),"yyyy-MM-dd");
+							newMonth = DateFmt.Formate(new Date(returnObj.data),"yyyy-MM");
 						}else{
 							var now = new Date();
 							that.firstDataDay = $.dateFormat(new Date(now.getTime() - 2*24*60*60*1000),"yyyy-MM-dd");
@@ -118,22 +122,22 @@ window.loc_onload = function() {
         	    var that = this;
 	        	var configId = $(e.target).attr("data-cycleId");
 	        	if(Number($(event.currentTarget).parents("div").siblings("select").find("option:selected").val()) === 1){
-	        		var minDay ='#F{$dp.$DV(\''+ that.firstDataDay+'\',{d:'+sysDay+'});}';
+	        		var minDay ='#F{$dp.$DV(\''+ newDay+'\',{d:'+sysDay+'});}';
 	        		WdatePicker({
 	        			isShowClear:false,
 	        			dateFmt:'yyyy-MM-dd',
-		    			maxDate:that.firstDataDay,
+		    			maxDate:newDay,
 		    			minDate:minDay,
 		    			onpicked: function(dq) {
 		    				that.changeMonitorByDate(dq.cal.getNewDateStr(),configId);
 		    			}
 		    		});
 	        	}else{
-	        		var minMonth ='#F{$dp.$DV(\''+that.firstDataMonth+'\',{M:'+sysMonth+'});}';
+	        		var minMonth ='#F{$dp.$DV(\''+newMonth+'\',{M:'+sysMonth+'});}';
 	        		WdatePicker({
 	        			isShowClear:false,
 	        			dateFmt:'yyyy-MM',
-		    			maxDate:that.firstDataMonth,
+		    			maxDate:newMonth,
 		    			minDate:minMonth,
 		    			onpicked: function(dq) {
 		    				that.changeMonitorByDate(dq.cal.getNewDateStr(),configId);
