@@ -36,7 +36,7 @@ function initDataPrepareTable(monitorDetail){
 			width : 80,
 			align : "center",
 			sortable : false,
-			formatter : function(value, opts, rowData) {
+			formatter : function(value, rowData) {
 				if(rowData.targetTableStatus){
 					//准备完成
 					if(Number(value) !== 2){
@@ -53,7 +53,7 @@ function initDataPrepareTable(monitorDetail){
 			sortable : false,
 			width : 80,
 			align : "center",
-			formatter : function(value, opts, rowData) {
+			formatter : function(value, rowData) {
 				if(rowData.targetTableStatus){
 					var dataStatus = Number(rowData.targetTableStatus.dataStatus);
 					if(typeof value === 'undefined' ){
@@ -130,7 +130,7 @@ function initDataPrepareTable(monitorDetail){
  * 表格检索
  */
 function dataSearchKey(event){
-	if(event.keyCode == 13){
+	if(event.keyCode === 13){
 		qryDataPrepareTableByCond();
 	}
 }

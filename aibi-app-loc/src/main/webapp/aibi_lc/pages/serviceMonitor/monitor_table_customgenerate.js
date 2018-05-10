@@ -26,7 +26,7 @@ function initCustomGenerateTable(monitorDetail){
 			width : 80,
 			align : "center",
 			sortable : false,
-			formatter : function(value, opts, data) {
+			formatter : function(value) {
 				if(Number(value)===0){
         			return '<span class="state-fail">' +$.getCodeDesc("QTZTZD",value)+ '</span>';
         		}else if(Number(value)===1){
@@ -80,13 +80,17 @@ function initCustomGenerateTable(monitorDetail){
 }
 
 /**
- * 表格检索
+ * 表格检索：回车
  */
 function customSearchKey(event){
-	if(event.keyCode == 13){
+	if(event.keyCode === 13){
 		qryCustomGenerateTableByCond();
 	}
 }
+
+/**
+ * 表格检索:点击
+ */
 function qryCustomGenerateTableByCond(){
 	var labelName = $("#customGenerateName").val();
 	var khqscCodesTemp = [];
