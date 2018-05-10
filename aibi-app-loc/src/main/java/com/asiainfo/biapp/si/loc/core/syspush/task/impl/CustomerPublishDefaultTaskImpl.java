@@ -99,6 +99,7 @@ public class CustomerPublishDefaultTaskImpl implements ICustomerPublishTask {
     
  // 查询每页大小
     private static final String EXPORT_TO_FILE_PAGESIZE = "LOC_CONFIG_APP_EXPORT_TO_FILE_PAGESIZE";
+    private static final String SYS_NAME = "coc默认的ftp服务器";
     private static final int ONE = 1;
 
     @Autowired
@@ -264,6 +265,18 @@ public class CustomerPublishDefaultTaskImpl implements ICustomerPublishTask {
             //推送过程
             try {
                 this.customPublish(sysId, customInfo.getCreateUserId());
+                if (attrSettingType == ServiceConstants.LabelAttrRel.ATTR_SETTING_TYPE_DOWNLOAD) {
+                    //当下载时，删除文件服务器信息
+                    SysInfo sysInfo = null;
+                    try {//确认数据库中是否存在
+                        sysInfo = iSysInfoService.selectSysInfoBySysName(SYS_NAME);
+                    } catch (BaseException e) {
+                        LogUtil.info("根据名称查询平台");
+                    }
+                    if (null!=sysInfo && StringUtil.isNotBlank(sysInfo.getSysId())) {//数据库中不存在
+                        iSysInfoService.deleteSysInfoById(sysId);
+                    }
+                }
             } catch (Exception e) {
                 this.updateLog(e,ServiceConstants.LabelPushReq.PUSH_STATUS_FAILED, ServiceConstants.CustomDownloadRecord.DATA_STATUS_FAILED);
                 LogUtil.error("推送失败", e);
