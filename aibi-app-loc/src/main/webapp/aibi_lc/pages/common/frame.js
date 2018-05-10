@@ -53,6 +53,11 @@ function exitLoc(){
 	delete ssg.refreshToken;
 	delete ssg.CurrentConfigId;
 	delete ssg.customId;
+	
+	var exp  = new Date();  //获得当前时间
+	exp.setTime(exp.getTime()-(24*60*60*1000));  //换成毫秒
+	document.cookie = "token= " + ";expires=" + exp.toGMTString()+";path=/";
+	
 	window.location = "login.html";
 }
 /**
