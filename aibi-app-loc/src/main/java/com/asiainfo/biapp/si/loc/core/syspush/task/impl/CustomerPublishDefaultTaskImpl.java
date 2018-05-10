@@ -425,16 +425,18 @@ public class CustomerPublishDefaultTaskImpl implements ICustomerPublishTask {
             if (StringUtil.isEmpty(title)) {
                 title = "手机号码";
             }
-
             if (null != attrRelList && !attrRelList.isEmpty()) {    //有属性列
-                    StringBuffer titleStr = new StringBuffer();
-                    for (LabelAttrRel labelAttrRel : attrRelList) {
-                        titleStr.append(",").append(labelAttrRel.getAttrColName());
+                StringBuffer titleStr = new StringBuffer();
+                for (LabelAttrRel labelAttrRel : attrRelList) {
+                    titleStr.append(",").append(labelAttrRel.getAttrColName());
                 }
-                    title += titleStr.toString();
+                title += titleStr.toString();
             }
-            LogUtil.debug("title："+title);
+        } else {    //无表头
+            title = "";
         }
+        LogUtil.info("title："+title);
+        
         //2.2 是否有加密描述文件
         if (null!=sysInfo.getIsNeedDes() && ServiceConstants.SysInfo.IS_NEED_DES_YES==sysInfo.getIsNeedDes()) {
             res = this.getSql2FileUtils().sql2File(customListSql, title, csvFileTmp);
@@ -464,13 +466,14 @@ public class CustomerPublishDefaultTaskImpl implements ICustomerPublishTask {
             try {
                 LogUtil.debug("zipfile:" + zipFile);
                 if (null!=sysInfo.getIsNeedDes() && ServiceConstants.SysInfo.IS_NEED_DES_YES==sysInfo.getIsNeedDes()) {
-                    FileUtil.zipFileUnPassword(csvFile, zipFileTmp, "UTF-8");
+                    FileUtil.zipFileUnPassword(csvFileTmp, zipFileTmp, "UTF-8");
                     fileTmp = zipFileTmp;
-                    desFile = zipFile;
+                    new File(csvFileTmp).delete();  //删除掉中间文件
                 } else {
                     FileUtil.zipFileUnPassword(csvFile, zipFile, "UTF-8");
-                    desFile = zipFile;
+                    new File(csvFile).delete();  //删除掉中间文件
                 }
+                desFile = zipFile;
             } catch (Exception e) {
                 String allFileName = null;
                 if (null!=sysInfo.getIsNeedDes() && ServiceConstants.SysInfo.IS_NEED_DES_YES==sysInfo.getIsNeedDes()) {
@@ -491,9 +494,8 @@ public class CustomerPublishDefaultTaskImpl implements ICustomerPublishTask {
                     String errorMsg = "数据库中未定义密钥";
                     LogUtil.error(errorMsg);
                 }
-                DESUtil des = new DESUtil(key);
                 // DES 加密文件
-                des.encryptFile(fileTmp, desFile);
+                new DESUtil(key).encryptFile(fileTmp, desFile);
             } catch (Exception e) {
                 LogUtil.error("加密文件出错：" + desFile, e);
                 return resMap;
