@@ -222,6 +222,8 @@ public class SysInfoController extends BaseController<SysInfo>{
     	oldSys.setWebserviceTargetnamespace(sys.getWebserviceTargetnamespace());
     	oldSys.setWebserviceMethod(sys.getWebserviceMethod());
     	oldSys.setWebserviceArgs(sys.getWebserviceArgs());
+    	oldSys.setDescTxt(sys.getDescTxt());
+    	oldSys.setLocalPath(sys.getLocalPath());
         if(StringUtil.isNoneBlank(sys.getSysId())){
             oldSys.setSysId(sys.getSysId());
         }
@@ -242,12 +244,6 @@ public class SysInfoController extends BaseController<SysInfo>{
         }
         if(StringUtil.isNoneBlank(sys.getFtpPort())){
             oldSys.setFtpPort(sys.getFtpPort());
-        }
-        if(StringUtil.isNoneBlank(sys.getLocalPath())){
-            oldSys.setLocalPath(sys.getLocalPath());
-        }
-        if(StringUtil.isNoneBlank(sys.getDescTxt())){
-            oldSys.setDescTxt(sys.getDescTxt());
         }
         if(null != sys.getShowInPage()){
             oldSys.setShowInPage(sys.getShowInPage());
