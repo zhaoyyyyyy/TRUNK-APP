@@ -361,7 +361,7 @@ public class CustomerPublishDefaultTaskImpl implements ICustomerPublishTask {
 	    //1.data2file
 		//本地缓冲目录
         String localPathTmp = cacheProxy.getSYSConfigInfoByKey("LOC_CONFIG_SYS_TEMP_PATH");  
-        if (null != sysInfo.getLocalPath()) {   //以数据库为准
+        if (StringUtil.isNotBlank(sysInfo.getLocalPath())) {   //以数据库为准
             localPathTmp = sysInfo.getLocalPath();
         }
         if (!localPathTmp.endsWith(File.separator)) {
