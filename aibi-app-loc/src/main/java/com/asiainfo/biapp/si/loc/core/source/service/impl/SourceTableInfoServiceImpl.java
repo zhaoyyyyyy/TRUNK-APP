@@ -187,8 +187,7 @@ public class SourceTableInfoServiceImpl extends BaseServiceImpl<SourceTableInfo,
             }
             mdaSysTable.setTableCnName(sourceTableInfo.getSourceTableCnName());
             mdaSysTable.setTableSchema(tableSchema);
-            int tableType = 3;//表类型
-            mdaSysTable.setTableType(tableType);
+            mdaSysTable.setTableType(sourceType);
             mdaSysTable.setUpdateCycle(sourceTableInfo.getReadCycle());
             mdaSysTable.setCreateUserId(sourceTableInfo.getCreateUserId());
             mdaSysTable.setCreateTime(createTime);
