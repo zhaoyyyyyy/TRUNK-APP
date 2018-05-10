@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>数据源管理</title>
+    <!--[if IE]>
+    	<meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <![endif]-->
+    <link rel="stylesheet" theme="default" href="../../asset/css/theme/default/coc_frame.css"/> 
+	<link rel="stylesheet" theme="default" href="../../asset/css/theme/default/main.css"/> 
+   	<script type="text/javascript" src="../../asset/script/common/include.js"></script>
+   	<script type="text/javascript" src=sysAnnouncementMgr.js></script>
+    <!--[if lt IE 9]>
+	    <script src="../../asset/script/component/h5compatibility/html5shiv.min.js"></script>
+	    <script src="../../asset/script/component/h5compatibility/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+    <div class="iframe-nest">
+      	<div class="ui-lc-mian">
+      		<h3 class="pre clearfix ui-tab-title">
+      			<a href=''>总体概览</a>
+	  			<a class="active" href=''>我的消息</a>
+	  			<a href=''>我的审批</a>
+	  			<a href=''>标签排名</a>
+	  			<a href=''>我的收藏</a>
+				<div class="dropdown fright">
+			    	<a href = "javascript:;" class="dropdown-toggle">
+			    		思特奇专区
+			    		<span class="caret"></span>
+			    	</a>
+			    	<ul class="dropdown-menu">
+				       <li><a href="#">Action</a></li>
+				       <li><a href="#">Another</a></li>
+				       <li><a href="#">Something</a></li>
+			        </ul>
+			    </div>
+			</h3>
+      	</div>
+      	<div class="ui-lc-mian mt10">
+      		<div class="clearfix ui-news">
+     				<div class="clearfix">
+     					<button type="button" class="ui-btn" id="sys_announcement">系统公告</button>
+      				<button type="button" class="ui-btn" id="person_notice">个人通知</button>
+      				<button type="button" class="ui-btn ui-btn-default" id="announcement_mgr">公告管理</button>
+      				<div class="form-group fright width-210">
+						<div class="input-group">
+							<input name="configDesc" id="txt_name" type="text" class="form-control input-pointer" placeholder="" />
+							<div class="input-group-addon input-group-icon right-child" id="btn_search"></div>			
+						</div>						
+					</div>
+					<div class="mt20">
+      					<button type="button" class="ui-btn ui-btn-default">增加</button>
+      					<button type="button" id="del_btn" class="ui-btn ui-btn-default">删除</button>
+					</div>
+     				</div>
+     				<div class="ui-table-static mt10 ui-news-table">
+                    <table id="jsonmap1"  class="table"></table>
+                    <div id="pjmap1"></div>
+                </div>
+      				
+      		</div>
+    	</div>      
+		
+		<!-- todo -->
+ 			<!-- 计算中心 -->
+ 		
+ 			<!-- 购物车 -->
+		
+ 		
+		
+		
+    </div>
+</body>
+</html>
