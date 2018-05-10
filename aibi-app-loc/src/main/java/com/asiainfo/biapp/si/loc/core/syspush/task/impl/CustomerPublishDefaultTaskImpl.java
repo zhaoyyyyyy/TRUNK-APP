@@ -99,6 +99,7 @@ public class CustomerPublishDefaultTaskImpl implements ICustomerPublishTask {
     
  // 查询每页大小
     private static final String EXPORT_TO_FILE_PAGESIZE = "LOC_CONFIG_APP_EXPORT_TO_FILE_PAGESIZE";
+    private static final String SYS_NAME = "coc默认的ftp服务器";
     private static final int ONE = 1;
 
     @Autowired
@@ -264,6 +265,18 @@ public class CustomerPublishDefaultTaskImpl implements ICustomerPublishTask {
             //推送过程
             try {
                 this.customPublish(sysId, customInfo.getCreateUserId());
+                if (attrSettingType == ServiceConstants.LabelAttrRel.ATTR_SETTING_TYPE_DOWNLOAD) {
+                    //当下载时，删除文件服务器信息
+                    SysInfo sysInfo = null;
+                    try {//确认数据库中是否存在
+                        sysInfo = iSysInfoService.selectSysInfoBySysName(SYS_NAME);
+                    } catch (BaseException e) {
+                        LogUtil.info("根据名称查询平台");
+                    }
+                    if (null!=sysInfo && StringUtil.isNotBlank(sysInfo.getSysId())) {//数据库中不存在
+                        iSysInfoService.deleteSysInfoById(sysId);
+                    }
+                }
             } catch (Exception e) {
                 this.updateLog(e,ServiceConstants.LabelPushReq.PUSH_STATUS_FAILED, ServiceConstants.CustomDownloadRecord.DATA_STATUS_FAILED);
                 LogUtil.error("推送失败", e);
@@ -361,7 +374,7 @@ public class CustomerPublishDefaultTaskImpl implements ICustomerPublishTask {
 	    //1.data2file
 		//本地缓冲目录
         String localPathTmp = cacheProxy.getSYSConfigInfoByKey("LOC_CONFIG_SYS_TEMP_PATH");  
-        if (null != sysInfo.getLocalPath()) {   //以数据库为准
+        if (StringUtil.isNotBlank(sysInfo.getLocalPath())) {   //以数据库为准
             localPathTmp = sysInfo.getLocalPath();
         }
         if (!localPathTmp.endsWith(File.separator)) {
@@ -425,16 +438,18 @@ public class CustomerPublishDefaultTaskImpl implements ICustomerPublishTask {
             if (StringUtil.isEmpty(title)) {
                 title = "手机号码";
             }
-
             if (null != attrRelList && !attrRelList.isEmpty()) {    //有属性列
-                    StringBuffer titleStr = new StringBuffer();
-                    for (LabelAttrRel labelAttrRel : attrRelList) {
-                        titleStr.append(",").append(labelAttrRel.getAttrColName());
+                StringBuffer titleStr = new StringBuffer();
+                for (LabelAttrRel labelAttrRel : attrRelList) {
+                    titleStr.append(",").append(labelAttrRel.getAttrColName());
                 }
-                    title += titleStr.toString();
+                title += titleStr.toString();
             }
-            LogUtil.debug("title："+title);
+        } else {    //无表头
+            title = "";
         }
+        LogUtil.info("title："+title);
+        
         //2.2 是否有加密描述文件
         if (null!=sysInfo.getIsNeedDes() && ServiceConstants.SysInfo.IS_NEED_DES_YES==sysInfo.getIsNeedDes()) {
             res = this.getSql2FileUtils().sql2File(customListSql, title, csvFileTmp);
@@ -464,13 +479,14 @@ public class CustomerPublishDefaultTaskImpl implements ICustomerPublishTask {
             try {
                 LogUtil.debug("zipfile:" + zipFile);
                 if (null!=sysInfo.getIsNeedDes() && ServiceConstants.SysInfo.IS_NEED_DES_YES==sysInfo.getIsNeedDes()) {
-                    FileUtil.zipFileUnPassword(csvFile, zipFileTmp, "UTF-8");
+                    FileUtil.zipFileUnPassword(csvFileTmp, zipFileTmp, "UTF-8");
                     fileTmp = zipFileTmp;
-                    desFile = zipFile;
+                    new File(csvFileTmp).delete();  //删除掉中间文件
                 } else {
                     FileUtil.zipFileUnPassword(csvFile, zipFile, "UTF-8");
-                    desFile = zipFile;
+                    new File(csvFile).delete();  //删除掉中间文件
                 }
+                desFile = zipFile;
             } catch (Exception e) {
                 String allFileName = null;
                 if (null!=sysInfo.getIsNeedDes() && ServiceConstants.SysInfo.IS_NEED_DES_YES==sysInfo.getIsNeedDes()) {
@@ -491,9 +507,8 @@ public class CustomerPublishDefaultTaskImpl implements ICustomerPublishTask {
                     String errorMsg = "数据库中未定义密钥";
                     LogUtil.error(errorMsg);
                 }
-                DESUtil des = new DESUtil(key);
                 // DES 加密文件
-                des.encryptFile(fileTmp, desFile);
+                new DESUtil(key).encryptFile(fileTmp, desFile);
             } catch (Exception e) {
                 LogUtil.error("加密文件出错：" + desFile, e);
                 return resMap;

@@ -300,8 +300,7 @@ public class LabelPushCycleController extends BaseController<LabelPushCycle>{
             iSysInfoService.saveOrUpdate(sysInfo);
         }
         
-        String sysIds = new StringBuffer(sysInfo.getSysId()).toString();
-        labelPushCycle.setSysIds(sysIds);
+        labelPushCycle.setSysIds(sysInfo.getSysId());
         LabelInfo customInfo = iLabelInfoService.get(labelPushCycle.getCustomGroupId());
         labelPushCycle.setPushCycle(customInfo.getUpdateCycle());
         this.save(labelPushCycle,ServiceConstants.LabelAttrRel.ATTR_SETTING_TYPE_DOWNLOAD);

@@ -24,7 +24,7 @@ $.extend({
 	    } 
 	},
 	setCurrentToken : function(token,refreshToken){
-		var Days = 30;   //cookie 将被保存30天
+		var Days = 1;   //cookie 将被保存1天
 		var exp  = new Date();  //获得当前时间
 		exp.setTime(exp.getTime() + Days*24*60*60*1000);  //换成毫秒
 		document.cookie = "token="+ token + ";expires=" + exp.toGMTString()+";path=/";
