@@ -42,7 +42,7 @@ function COCLogin(){
 		  success: function(returnObj){
 			  if(returnObj && returnObj.status == '200'){
 				  var data = returnObj.data;
-				  if(!$.isExistsToken){
+				  if($.isExistsToken){
 					  $.setCurrentToken(data.token,data.refreshToken);
 				  }
 				  
