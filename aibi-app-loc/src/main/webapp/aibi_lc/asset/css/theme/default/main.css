@@ -841,7 +841,19 @@
 	z-index:9999;
 }
 .column-info.create-main > .progress{
-	height:256px;
+	height:auto;
+	line-height: normal;
+	position: absolute;
+    top: 0;
+    bottom: 0;
+}
+.column-info.create-main > .progress .progress-label{
+	position:relative;
+	top:50%;
+	margin-top:-13px;
+}
+.column-info.create-main .ui-form{
+	height:auto;
 }
 /* .progress .progress-label > i.icon{
 	background: transparent url(./images/lc-icon.png) no-repeat -458px -257px;
@@ -1301,6 +1313,12 @@ span.del-btn{
 .ui-custom-col{
 	width:32%;
 	border:1px solid #DCE2E4;
+	min-height:380px;
+	max-height:480px;
+	overflow-y:auto;
+}
+.ui-custom-col:first-child{
+	border-right:none;
 }
 .ui-custom-col > h3{
 	padding: 10px;
@@ -1310,9 +1328,6 @@ span.del-btn{
 }
 .ui-custom-col > .ui-custom-mes{
 	padding:10px;
-	min-height:320px;
-	max-height:460px;
-	overflow-y:auto;
 }
 .ui-custom-col > .ui-custom-mes > p{
 	height: 34px;
@@ -1977,7 +1992,7 @@ input[type=checkbox].checkbix:checked+label>span.other{
 	color:#FF3333;
 }
 .ui-btn-del{
-	background:#999999;
+	background:#999999!important;
 	color:#fff;
 }
 .ui-news-detail{
@@ -2084,16 +2099,21 @@ input[type=checkbox].checkbix:checked+label>span.other{
     height: 276px;
 }
 /*授权管理*/
-.column-contain{
-	min-height:600px;
+.column-contain {
+	position:relative;
 }
 .column-contain > .ui-menu{
 	width: 25%;
 	background-color:transparent;
 }
+.column-contain > .ui-main{
+	position:absolute;
+}
 .ui-main > div.column-right{
 	margin: 0 0 0 25%;
 	background-color:transparent;
+	padding:0 10px;
+	height:100%
 }
 .ui-title-icon{
 	font-size:16px;
@@ -2128,6 +2148,12 @@ input[type=checkbox].checkbix:checked+label>span.other{
 	text-align:center;
 	height:38px;
 	line-height:38px;
+}
+.ui-warrant-table .ui-jqgrid .ui-jqgrid-btable .ui-state-highlight{
+	background: #3DAC6E !important;
+}
+.ui-warrant-table .ui-jqgrid .ui-jqgrid-btable .ui-state-highlight td{
+	color:#fff;
 }
 .ui-warrant-tab a.active{
 	background-color:#fff;
@@ -2177,8 +2203,11 @@ em.add-droit{
     animation: reveal .2s cubic-bezier(.4,0,.5,1);
     position: relative;
     vertical-align: middle;
+    opacity:0;
+     -webkit-transition: all 250ms cubic-bezier(.4,0,.23,1);
+    transition: all 250ms cubic-bezier(.4,0,.23,1);
 }
-.ui-jqgrid tr td em.add-droit:before {
+em.add-droit:before {
 	content: "";
     margin: auto;
     position: absolute;
@@ -2186,16 +2215,71 @@ em.add-droit{
     left: 2px;
     bottom: 2px;
     right: 3px;
-    border-right: 2px solid #3DAC6E;
-    border-bottom: 2px solid #3DAC6E;
+    border-right: 2px solid #fff;
+    border-bottom: 2px solid #fff;
     -webkit-transform: rotate(45deg);
     transform: rotate(45deg);
     -webkit-animation: checkboxcheck 125ms 50ms cubic-bezier(.1,0,.1,1) forwards;
     animation: checkboxcheck 125ms 50ms cubic-bezier(.1,0,.1,1) forwards;
+}
+.ui-jqgrid tr.ui-state-highlight td em.add-droit{
+	opacity:1;
 }
 .ui-jqgrid tr td a.droit-icon > em{
 	width: 20px;
     height: 20px;
     background-color:#a2b0c4;
     border-radius:4px;
+}
+.label-checkbox{
+	background-color:#f7f7f7;
+}
+.label-checkbox > .radio{
+	display:block;
+	padding:0 15px;
+	height:48px;
+	line-height:48px;
+	margin:0;
+}
+.label-checkbox > .radio label{
+	font-size:14px;
+	margin:0;
+}
+.label-checkbox > .radio.active{
+	background-color:#3DAC6E;
+	color:#fff;
+}
+.label-checkbox > .radio>input[type='radio']+label>em.add-droit{
+	border-radius:50%;
+	border:1px solid #3DAC6E;
+	width:20px;
+	height:20px;
+	background-color:#fff;
+	opacity:1;
+}
+.label-checkbox > .radio>input[type='radio']+label>em.add-droit:before{
+   opacity:0;
+   top: 3px;
+   left: 6px;
+   bottom: 4px;
+   right: 5px;
+   border-right: 2px solid #3DAC6E;
+   border-bottom: 2px solid #3DAC6E;
+   -webkit-transition: all 250ms cubic-bezier(.4,0,.23,1);
+   transition: all 250ms cubic-bezier(.4,0,.23,1);
+}
+.label-checkbox > .radio.success input[type='radio']:checked+label em.add-droit:before{
+	display:inline-block;
+    opacity:1;
+}
+.ui-move-label{
+	position: absolute;
+    height:100%;
+    right: 10px;
+    bottom: 10px;
+    left: 10px;
+    top: 180px;
+}
+.ui-move-label > .ui-custom-col{
+	height:100%;
 }
