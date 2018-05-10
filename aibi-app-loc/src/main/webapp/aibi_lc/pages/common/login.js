@@ -42,7 +42,10 @@ function COCLogin(){
 		  success: function(returnObj){
 			  if(returnObj && returnObj.status == '200'){
 				  var data = returnObj.data;
-				  $.setCurrentToken(data.token,data.refreshToken);
+				  if(!$.isExistsToken){
+					  $.setCurrentToken(data.token,data.refreshToken);
+				  }
+				  
 //				  var ssg = window.sessionStorage;
 //				  if(ssg){
 //					  ssg.setItem("token",data.token);
