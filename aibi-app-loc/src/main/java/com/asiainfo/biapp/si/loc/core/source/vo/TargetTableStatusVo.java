@@ -33,36 +33,4 @@ public class TargetTableStatusVo extends TargetTableStatus {
     
     private static final long serialVersionUID = 2035013017939483936L;
     
-    private String configId;
-    private String dataStatuses;
-    private String isDoings;
-    
-    public String getConfigId() {
-        return configId;
-    }
-    
-    public void setConfigId(String configId) {
-        this.configId = configId;
-    }
-
-    
-    public String getDataStatuses() {
-        return dataStatuses;
-    }
-
-    
-    public void setDataStatuses(String dataStatuses) {
-        this.dataStatuses = dataStatuses;
-    }
-
-    
-    public String getIsDoings() {
-        return isDoings;
-    }
-
-    
-    public void setIsDoings(String isDoings) {
-        this.isDoings = isDoings;
-    }
-    
 }

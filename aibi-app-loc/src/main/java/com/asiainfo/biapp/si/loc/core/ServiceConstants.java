@@ -370,7 +370,7 @@ public class ServiceConstants {
         public static final int TARGET_TABLE_PREPARED = 1;
         
         /**
-         * 数据抽取状态：0-抽取完成，1-抽取中，2-抽取失败
+         * 数据抽取状态：0-抽取完成，1-抽取中，2-抽取失败，3-未抽取
          */
         /** 类型：0-抽取完成 */
         public static final int TARGET_TABLE_EXTRACT_SUCCESS = 0;
@@ -378,6 +378,8 @@ public class ServiceConstants {
         public static final int TARGET_TABLE_EXTRACTING = 1;
         /** 类型：2-抽取失败 */
         public static final int TARGET_TABLE_EXTRACT_FAIL = 2;
+        /** 类型：3-未抽取 */
+        public static final int TARGET_TABLE_NOTEXTRACT = 3;
     }
     /** 标签状态表    */
     public interface LabelStatus{

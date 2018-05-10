@@ -8,12 +8,18 @@
  * 初始化数据准备表格
  */
 function initDataPrepareTable(monitorDetail){
+	var zbCodesTemp = [];
+	//查询准备状态
+	$("#zbList span").find("input:checkbox[name=zbbox]:checked").each(function(i){
+		 zbCodesTemp.push($(this).val());
+	});
 	$("#dataPrepareTable").jqGrid({
-		url : $.ctx + "/api/source/TargetTableStatus/queryPage",
+		url: $.ctx + "/api/source/sourceTableInfo/queryPage",
 		isShowMask : true,
 		postData : {
 			"configId" : monitorDetail.configId,
-			"dataDate" : monitorDetail.qryDataDate.replace(/-/g, "")
+			"dataDate" : monitorDetail.qryDataDate.replace(/-/g, ""),
+			"dataStatuses":zbCodesTemp.join(",")
 		},
 		datatype : "json",
 		colNames : [ '表名', '准备状态', '抽取状态', '准备完成时间', '抽取完成时间','表ID' ],
@@ -25,36 +31,53 @@ function initDataPrepareTable(monitorDetail){
 			align : "center",
 			frozen : true,
 		}, {
-			name : 'dataStatus',
-			index : 'dataStatus',
+			name : 'targetTableStatus.dataStatus',
+			index : 'targetTableStatus.dataStatus',
 			width : 80,
 			align : "center",
 			sortable : false,
-			formatter : function(value) {
-				if(value==0){
-        			return '<span class="state-unStart">' +$.getCodeDesc("SJZBZT",value)+ '</span>';
-        		}else if(value==1){
-					return '<span class="state-success">' +$.getCodeDesc("SJZBZT",value)+ '</span>';
+			formatter : function(value, opts, rowData) {
+				if(rowData.targetTableStatus){
+					//准备完成
+					if(Number(value) !== 2){
+						return '<span class="state-success">' +$.getCodeDesc("SJZBZT",1)+ '</span>';
+					}
+				}else{
+					//未准备
+					return '<span class="state-unStart">' +$.getCodeDesc("SJZBZT",0)+ '</span>';
 				}
 			}
 		}, {
-			name : 'isDoing',
-			index : 'isDoing',
+			name : 'targetTableStatus.isDoing',
+			index : 'targetTableStatus.isDoing',
 			sortable : false,
 			width : 80,
 			align : "center",
-			formatter : function(value, opts, data) {
-				if(Number(value)===0){
-        			return '<span class="state-progress">' +$.getCodeDesc("SJCQZT",value)+ '</span>';
-        		}else if(Number(value)===1){
-					return '<span class="state-success">' +$.getCodeDesc("SJCQZT",value)+ '</span>';
-				}else if(Number(value)===2){
-					return '<span class="state-fail">' +$.getCodeDesc("SJCQZT",value)+ '</span>';
+			formatter : function(value, opts, rowData) {
+				if(rowData.targetTableStatus){
+					var dataStatus = Number(rowData.targetTableStatus.dataStatus);
+					if(typeof value === 'undefined' ){
+						return "";
+					}else{
+						if(Number(value)===1 && dataStatus ===1){//抽取中
+		        			return '<span class="state-progress">' +$.getCodeDesc("SJCQZT",1)+ '</span>';
+		        		}else if(Number(value)===0 && dataStatus ===0){//抽取完成
+							return '<span class="state-success">' +$.getCodeDesc("SJCQZT",0)+ '</span>';
+						}else if(Number(value)===0 && dataStatus ===2){//抽取失败
+							return '<span class="state-fail">' +$.getCodeDesc("SJCQZT",2)+ '</span>';
+						}else if(Number(value)===0 && dataStatus ===1){//未抽取
+							return '<span class="state-unStart">' +$.getCodeDesc("SJCQZT",3)+ '</span>';
+						}else{
+							return "";
+						}
+					}
+				}else{
+					return "";//未准备
 				}
 			}
 		}, {
-			name : 'startTime',
-			index : 'startTime',
+			name : 'targetTableStatus.startTime',
+			index : 'targetTableStatus.startTime',
 			width : 120,
 			sortable : false,
 			align : "center",
@@ -65,8 +88,8 @@ function initDataPrepareTable(monitorDetail){
 				return "";
 			}
 		}, {
-			name : 'endTime',
-			index : 'endTime',
+			name : 'targetTableStatus.endTime',
+			index : 'targetTableStatus.endTime',
 			width : 120,
 			sortable : false,
 			align : "center",

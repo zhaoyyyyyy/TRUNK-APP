@@ -157,6 +157,7 @@ public class ServiceMonitorServiceImpl extends BaseServiceImpl<ServiceMonitor, S
         serviceMonitor.setExtractingCount(0);
         serviceMonitor.setExtractFailCount(0);
         serviceMonitor.setExtractSuccessCount(0);
+        serviceMonitor.setDataPrepareTotal(0);
         serviceMonitor.setGenFailCount(0);
         serviceMonitor.setGenSuccessCount(0);
         serviceMonitor.setCurSaveCount(0);

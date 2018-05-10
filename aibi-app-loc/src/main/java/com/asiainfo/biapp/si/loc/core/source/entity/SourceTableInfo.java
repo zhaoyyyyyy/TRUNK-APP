@@ -19,10 +19,13 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
 
 import com.asiainfo.biapp.si.loc.base.entity.BaseEntity;
 
@@ -226,7 +229,12 @@ public class SourceTableInfo extends BaseEntity {
     @OneToMany(fetch = FetchType.LAZY, targetEntity = SourceInfo.class)
     @JoinColumn(name = "SOURCE_TABLE_ID", insertable = false, updatable = false)
     private List<SourceInfo> sourceInfoList = new ArrayList<>(0);
-
+    
+    @ManyToOne(fetch = FetchType.EAGER)
+    @NotFound(action = NotFoundAction.IGNORE) 
+    @JoinColumn(name = "SOURCE_TABLE_ID", referencedColumnName = "SOURCE_TABLE_ID", insertable = false, updatable = false)
+    private TargetTableStatus targetTableStatus;
+    
     public Integer getDataStore() {
         return dataStore;
     }
@@ -421,6 +429,16 @@ public class SourceTableInfo extends BaseEntity {
 
     public void setStatusId(Integer statusId) {
         this.statusId = statusId;
+    }
+
+    
+    public TargetTableStatus getTargetTableStatus() {
+        return targetTableStatus;
+    }
+
+    
+    public void setTargetTableStatus(TargetTableStatus targetTableStatus) {
+        this.targetTableStatus = targetTableStatus;
     }
 
 }
