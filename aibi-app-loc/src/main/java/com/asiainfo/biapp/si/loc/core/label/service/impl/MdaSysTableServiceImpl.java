@@ -110,39 +110,34 @@ public class MdaSysTableServiceImpl extends BaseServiceImpl<MdaSysTable, String>
         } catch (SqlRunException e1) {
             LogUtil.info(e1);
         }
-        for (int i = 1; i < 3; i++) {
-            if (i == 1) {
-                for (int k = 1; k < 3; k++) {
-                    mdaSysTable = new MdaSysTable();
-                    mdaSysTable.setConfigId(preConfigInfo.getConfigId());
-                    mdaSysTable.setTableSchema(tableSchema);
-                    mdaSysTable.setCreateTime(new Date());
-                    mdaSysTable.setCreateUserId(preConfigInfo.getCreateUserId());
-                    mdaSysTable.setTableName("DW_L_PREF_" + preConfigInfo.getConfigId() + "_");
-                    mdaSysTable.setTableType(i);
-                    mdaSysTable.setUpdateCycle(k);
-                    try {
-                        this.addMdaSysTable(mdaSysTable);
-                    } catch (BaseException e) {
-                        LogUtil.info(e);
-                    }
-                }
-            } else if (i == 2) {
-                for (int j = 1; j < 3; j++) {
-                    mdaSysTable = new MdaSysTable();
-                    mdaSysTable.setConfigId(preConfigInfo.getConfigId());
-                    mdaSysTable.setTableSchema(tableSchema);
-                    mdaSysTable.setCreateTime(new Date());
-                    mdaSysTable.setCreateUserId(preConfigInfo.getCreateUserId());
-                    mdaSysTable.setTableName("DW_G_PREF_" + preConfigInfo.getConfigId() + "_");
-                    mdaSysTable.setTableType(i);
-                    mdaSysTable.setUpdateCycle(j);
-                    try {
-                        this.addMdaSysTable(mdaSysTable);
-                    } catch (BaseException e) {
-                        LogUtil.info(e);
-                    }
-                }
+        for (int k = 1; k < 3; k++) {
+            mdaSysTable = new MdaSysTable();
+            mdaSysTable.setConfigId(preConfigInfo.getConfigId());
+            mdaSysTable.setTableSchema(tableSchema);
+            mdaSysTable.setCreateTime(new Date());
+            mdaSysTable.setCreateUserId(preConfigInfo.getCreateUserId());
+            mdaSysTable.setTableName("DW_L_PREF_" + preConfigInfo.getConfigId() + "_");
+            mdaSysTable.setTableType(1);//用户宽表
+            mdaSysTable.setUpdateCycle(k);
+            try {
+                this.addMdaSysTable(mdaSysTable);
+            } catch (BaseException e) {
+                LogUtil.info(e);
+            }
+        }
+        for (int j = 1; j < 3; j++) {
+            mdaSysTable = new MdaSysTable();
+            mdaSysTable.setConfigId(preConfigInfo.getConfigId());
+            mdaSysTable.setTableSchema(tableSchema);
+            mdaSysTable.setCreateTime(new Date());
+            mdaSysTable.setCreateUserId(preConfigInfo.getCreateUserId());
+            mdaSysTable.setTableName("DW_G_PREF_" + preConfigInfo.getConfigId() + "_");
+            mdaSysTable.setTableType(3);//客户群
+            mdaSysTable.setUpdateCycle(j);
+            try {
+                this.addMdaSysTable(mdaSysTable);
+            } catch (BaseException e) {
+                LogUtil.info(e);
             }
         }
     }
