@@ -15,6 +15,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Parameter;
 
 import com.asiainfo.biapp.si.loc.base.entity.BaseEntity;
 
@@ -58,8 +59,13 @@ public class MdaSysTable extends BaseEntity {
      */
     @Id
     @Column(name = "TABLE_ID")
-    @GenericGenerator(name = "idGenerator", strategy = "uuid")
     @GeneratedValue(generator = "idGenerator")
+    // COC自定义主键自增
+    @GenericGenerator(name = "idGenerator", strategy = "com.asiainfo.biapp.si.loc.base.extend.LocGenerateId", parameters = {
+            @Parameter(name = "name", value = "MDA_TABLE_SEQ"), // 来自DIM_SEQUECE_INFO表的
+            @Parameter(name = "prefix", value = "T"), // ID前缀
+            @Parameter(name = "size", value = "5") // 占位符表示 001-999
+    })
     @ApiParam(value = "表ID")
     private String tableId;
 
