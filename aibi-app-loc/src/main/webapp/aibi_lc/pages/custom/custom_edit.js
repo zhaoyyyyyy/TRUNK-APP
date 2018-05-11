@@ -684,8 +684,7 @@ var labelInfoModel = (function (model){
    				  $.success(returnObj.msg, function(){
 					  var ssg = window.sessionStorage;
 					  delete ssg.customId;
-					  // 标签集市和客户群集市保存成功跳转到客户群
-					  model.goToCustomMarket();
+					  model.back();
    				  });
    				  
    			  },
@@ -715,7 +714,6 @@ var labelInfoModel = (function (model){
 	 * 标签集市和客户群集市保存成功跳转到客户群
 	 */
 	model.goToCustomMarket = function(){
-		debugger
 		var from = $.getUrlParam("from");
 		var returnUrl ="";
 		if(from == 'labelmarket'){//跳转到客户群集市
