@@ -50,6 +50,16 @@ public interface ISourceTableInfoDao extends BaseDao<SourceTableInfo, String> {
      */
     public Page<SourceTableInfo> selectSourceTableInfoPageList(Page<SourceTableInfo> page,
             SourceTableInfoVo sourceTableInfoVo);
+    
+    /**
+     * 根据条件分页查询数据准备状态信息
+     *
+     * @param page
+     * @param sourceTableInfoVo
+     * @return
+     */
+    public Page<SourceTableInfo> selectSourceTableInfoMonitorPageList(Page<SourceTableInfo> page,
+            SourceTableInfoVo sourceTableInfoVo);
 
     /**
      * 根据条件查询列表

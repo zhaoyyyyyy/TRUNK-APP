@@ -14,7 +14,7 @@ function initDataPrepareTable(monitorDetail){
 		 zbCodesTemp.push($(this).val());
 	});
 	$("#dataPrepareTable").jqGrid({
-		url: $.ctx + "/api/source/sourceTableInfo/queryPage",
+		url: $.ctx + "/api/source/sourceTableInfo/queryPageForMonitor",
 		isShowMask : true,
 		postData : {
 			"configId" : monitorDetail.configId,
@@ -31,13 +31,13 @@ function initDataPrepareTable(monitorDetail){
 			align : "center",
 			frozen : true,
 		}, {
-			name : 'targetTableStatus.dataStatus',
-			index : 'targetTableStatus.dataStatus',
+			name : 'dataStatus',
+			index : 'dataStatus',
 			width : 80,
 			align : "center",
 			sortable : false,
-			formatter : function(value, rowData) {
-				if(rowData.targetTableStatus){
+			formatter : function(value) {
+				if(typeof value !== 'undefined' ){
 					//准备完成
 					if(Number(value) !== 2){
 						return '<span class="state-success">' +$.getCodeDesc("SJZBZT",1)+ '</span>';
@@ -48,36 +48,32 @@ function initDataPrepareTable(monitorDetail){
 				}
 			}
 		}, {
-			name : 'targetTableStatus.isDoing',
-			index : 'targetTableStatus.isDoing',
+			name : 'isDoing',
+			index : 'isDoing',
 			sortable : false,
 			width : 80,
 			align : "center",
-			formatter : function(value, rowData) {
-				if(rowData.targetTableStatus){
-					var dataStatus = Number(rowData.targetTableStatus.dataStatus);
-					if(typeof value === 'undefined' ){
-						return "";
-					}else{
-						if(Number(value)===1 && dataStatus ===1){//抽取中
-		        			return '<span class="state-progress">' +$.getCodeDesc("SJCQZT",1)+ '</span>';
-		        		}else if(Number(value)===0 && dataStatus ===0){//抽取完成
-							return '<span class="state-success">' +$.getCodeDesc("SJCQZT",0)+ '</span>';
-						}else if(Number(value)===0 && dataStatus ===2){//抽取失败
-							return '<span class="state-fail">' +$.getCodeDesc("SJCQZT",2)+ '</span>';
-						}else if(Number(value)===0 && dataStatus ===1){//未抽取
-							return '<span class="state-unStart">' +$.getCodeDesc("SJCQZT",3)+ '</span>';
-						}else{
-							return "";
-						}
-					}
+			formatter : function(value,col, rowData) {
+				if(typeof value === 'undefined' ){
+					return "";
 				}else{
-					return "";//未准备
+					var dataStatus = Number(rowData.dataStatus);
+					if(Number(value)===1 && dataStatus ===1){//抽取中
+	        			return '<span class="state-progress">' +$.getCodeDesc("SJCQZT",1)+ '</span>';
+	        		}else if(Number(value)===0 && dataStatus ===0){//抽取完成
+						return '<span class="state-success">' +$.getCodeDesc("SJCQZT",0)+ '</span>';
+					}else if(Number(value)===0 && dataStatus ===2){//抽取失败
+						return '<span class="state-fail">' +$.getCodeDesc("SJCQZT",2)+ '</span>';
+					}else if(Number(value)===0 && dataStatus ===1){//未抽取
+						return '<span class="state-unStart">' +$.getCodeDesc("SJCQZT",3)+ '</span>';
+					}else{
+						return "";
+					}
 				}
 			}
 		}, {
-			name : 'targetTableStatus.startTime',
-			index : 'targetTableStatus.startTime',
+			name : 'startTime',
+			index : 'startTime',
 			width : 120,
 			sortable : false,
 			align : "center",
@@ -88,8 +84,8 @@ function initDataPrepareTable(monitorDetail){
 				return "";
 			}
 		}, {
-			name : 'targetTableStatus.endTime',
-			index : 'targetTableStatus.endTime',
+			name : 'endTime',
+			index : 'endTime',
 			width : 120,
 			sortable : false,
 			align : "center",

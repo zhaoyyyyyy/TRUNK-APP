@@ -19,9 +19,9 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.NotFound;
@@ -60,6 +60,20 @@ import com.asiainfo.biapp.si.loc.base.entity.BaseEntity;
 public class SourceTableInfo extends BaseEntity {
 
     private static final long serialVersionUID = 2035013017939483936L;
+    
+    public SourceTableInfo() {  
+        super();  
+    }  
+    
+    public SourceTableInfo(String sourceTableId,String sourceTableName,Integer dataStatus,Integer isDoing,String startTime,String endTime){
+        super();  
+        this.sourceTableId = sourceTableId;
+        this.sourceTableName = sourceTableName;
+        this.dataStatus = dataStatus;
+        this.isDoing = isDoing;
+        this.startTime = startTime;
+        this.endTime = endTime;
+    }
 
     /**
      * 数据源表ID
@@ -230,10 +244,19 @@ public class SourceTableInfo extends BaseEntity {
     @JoinColumn(name = "SOURCE_TABLE_ID", insertable = false, updatable = false)
     private List<SourceInfo> sourceInfoList = new ArrayList<>(0);
     
-    @ManyToOne(fetch = FetchType.EAGER)
+    @OneToMany(fetch = FetchType.EAGER)
     @NotFound(action = NotFoundAction.IGNORE) 
-    @JoinColumn(name = "SOURCE_TABLE_ID", referencedColumnName = "SOURCE_TABLE_ID", insertable = false, updatable = false)
-    private TargetTableStatus targetTableStatus;
+    @JoinColumn(name = "SOURCE_TABLE_ID", insertable = false, updatable = false)
+    private List<TargetTableStatus> targetTableStatusList= new ArrayList<>(0);
+    
+    @Transient
+    private Integer dataStatus;
+    @Transient
+    private Integer isDoing;
+    @Transient
+    private String startTime;
+    @Transient
+    private String endTime;
     
     public Integer getDataStore() {
         return dataStore;
@@ -432,13 +455,53 @@ public class SourceTableInfo extends BaseEntity {
     }
 
     
-    public TargetTableStatus getTargetTableStatus() {
-        return targetTableStatus;
+    public List<TargetTableStatus> getTargetTableStatusList() {
+        return targetTableStatusList;
     }
 
     
-    public void setTargetTableStatus(TargetTableStatus targetTableStatus) {
-        this.targetTableStatus = targetTableStatus;
+    public void setTargetTableStatusList(List<TargetTableStatus> targetTableStatusList) {
+        this.targetTableStatusList = targetTableStatusList;
     }
 
+    
+    public Integer getDataStatus() {
+        return dataStatus;
+    }
+
+    
+    public void setDataStatus(Integer dataStatus) {
+        this.dataStatus = dataStatus;
+    }
+
+    
+    public Integer getIsDoing() {
+        return isDoing;
+    }
+
+    
+    public void setIsDoing(Integer isDoing) {
+        this.isDoing = isDoing;
+    }
+
+    
+    public String getStartTime() {
+        return startTime;
+    }
+
+    
+    public void setStartTime(String startTime) {
+        this.startTime = startTime;
+    }
+
+    
+    public String getEndTime() {
+        return endTime;
+    }
+
+    
+    public void setEndTime(String endTime) {
+        this.endTime = endTime;
+    }
+    
 }
