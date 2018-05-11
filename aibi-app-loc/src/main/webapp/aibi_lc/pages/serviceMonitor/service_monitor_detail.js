@@ -39,6 +39,7 @@ window.loc_onload = function() {
 			colModel:"",  //表格模型
 			pager:"" ,  //表格分页id
 			readCycle:1,//日期周期
+			queryType:1,//数据准备表格初始化查询准备状态
 			zbFlag:true, //数据准备表格默认显示准备状态
 			isOpen:false,//日期下拉
 			isDown:false,//状态下拉
@@ -277,6 +278,7 @@ window.loc_onload = function() {
 		    				qryCustomGenerateTableByCond();
 		    					//刷新客户群推送表格
 		    				qryCustomPushTableByCond();
+		    				$(this).blur();
 		    			}
 		    		});
  	        	}else{
@@ -298,6 +300,7 @@ window.loc_onload = function() {
 		    				qryCustomGenerateTableByCond();
 		    				//刷新客户群推送表格
 		    				qryCustomPushTableByCond();
+		    				$(this).blur();
 		    			}
 		    		});
  	        	}
@@ -336,7 +339,10 @@ window.loc_onload = function() {
 				//从监控总览页面跳转到指定锚点位置
 				var detailAnchor = $.getUrlParam("detailAnchor");
 				if(detailAnchor){
+					$("#returnBtn").show();
 					location.href="#"+detailAnchor;
+				}else{
+					$("#returnBtn").hide();
 				}
 			});
 		

@@ -70,11 +70,11 @@
 							<div class="per-header clearfix">
 								<span class="fleft" ><em class="data-ready"></em><a @click="jumpPageToDetail('dataPrepareAnchor',$event)">数据准备</a></span>
 								<p class="fright">
-									<span>共<strong>{{item.notPrepareCount + item.preparedCount +item.extractingCount+item.extractSuccessCount+item.extractFailCount}}</strong>张源表  ，
+									<span>共<strong>{{item.dataPrepareTotal}}</strong>张源表  ，
 									成功<strong>{{item.extractSuccessCount}}</strong>个</span>
 								</p>
 							</div>
-							<ul class="per-status ui-label-list mt30">
+							<ul class="per-status ui-label-list mt30"  >
 								<li>
 									<span>未准备</span>
 									<p>{{item.notPrepareCount}}</p>
@@ -84,6 +84,10 @@
 									<p>{{item.preparedCount}}</p>
 								</li>
 								<li class="padding0">
+									<span>未抽取</span>
+									<p>{{item.notExtractCount}}</p>
+								</li>
+								<li >
 									<span>抽取中</span>
 									<p>{{item.extractingCount}}</p>
 								</li>

@@ -84,6 +84,19 @@ public class SourceTableInfoController extends BaseController<SourceTableInfo> {
         }
         return sourceTableInfoPage;
     }
+    
+    @ApiOperation(value = "分页查询数据准备状态信息")
+    @RequestMapping(value = "/sourceTableInfo/queryPageForMonitor", method = RequestMethod.POST)
+    public Page<SourceTableInfo> queryPageForMonitor(@ModelAttribute Page<SourceTableInfo> page,
+            @ModelAttribute SourceTableInfoVo sourceTableInfoVo) {
+        Page<SourceTableInfo> sourceTableInfoPage = new Page<>();
+        try {
+            sourceTableInfoPage = iSourceTableInfoService.selectSourceTableInfoMonitorPageList(page, sourceTableInfoVo);
+        } catch (BaseException e) {
+            sourceTableInfoPage.fail(e);
+        }
+        return sourceTableInfoPage;
+    }
 
     @ApiOperation(value = "不分页查询指标数据源信息配置")
     @RequestMapping(value = "/sourceTableInfo/queryList", method = RequestMethod.POST)

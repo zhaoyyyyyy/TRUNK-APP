@@ -8,12 +8,18 @@
  * 初始化数据准备表格
  */
 function initDataPrepareTable(monitorDetail){
+	var zbCodesTemp = [];
+	//查询准备状态
+	$("#zbList span").find("input:checkbox[name=zbbox]:checked").each(function(i){
+		 zbCodesTemp.push($(this).val());
+	});
 	$("#dataPrepareTable").jqGrid({
-		url : $.ctx + "/api/source/TargetTableStatus/queryPage",
+		url: $.ctx + "/api/source/sourceTableInfo/queryPageForMonitor",
 		isShowMask : true,
 		postData : {
 			"configId" : monitorDetail.configId,
-			"dataDate" : monitorDetail.qryDataDate.replace(/-/g, "")
+			"dataDate" : monitorDetail.qryDataDate.replace(/-/g, ""),
+			"dataStatuses":zbCodesTemp.join(",")
 		},
 		datatype : "json",
 		colNames : [ '表名', '准备状态', '抽取状态', '准备完成时间', '抽取完成时间','表ID' ],
@@ -31,10 +37,14 @@ function initDataPrepareTable(monitorDetail){
 			align : "center",
 			sortable : false,
 			formatter : function(value) {
-				if(value==0){
-        			return '<span class="state-unStart">' +$.getCodeDesc("SJZBZT",value)+ '</span>';
-        		}else if(value==1){
-					return '<span class="state-success">' +$.getCodeDesc("SJZBZT",value)+ '</span>';
+				if(typeof value !== 'undefined' ){
+					//准备完成
+					if(Number(value) !== 2){
+						return '<span class="state-success">' +$.getCodeDesc("SJZBZT",1)+ '</span>';
+					}
+				}else{
+					//未准备
+					return '<span class="state-unStart">' +$.getCodeDesc("SJZBZT",0)+ '</span>';
 				}
 			}
 		}, {
@@ -43,13 +53,22 @@ function initDataPrepareTable(monitorDetail){
 			sortable : false,
 			width : 80,
 			align : "center",
-			formatter : function(value, opts, data) {
-				if(Number(value)===0){
-        			return '<span class="state-progress">' +$.getCodeDesc("SJCQZT",value)+ '</span>';
-        		}else if(Number(value)===1){
-					return '<span class="state-success">' +$.getCodeDesc("SJCQZT",value)+ '</span>';
-				}else if(Number(value)===2){
-					return '<span class="state-fail">' +$.getCodeDesc("SJCQZT",value)+ '</span>';
+			formatter : function(value,col, rowData) {
+				if(typeof value === 'undefined' ){
+					return "";
+				}else{
+					var dataStatus = Number(rowData.dataStatus);
+					if(Number(value)===1 && dataStatus ===1){//抽取中
+	        			return '<span class="state-progress">' +$.getCodeDesc("SJCQZT",1)+ '</span>';
+	        		}else if(Number(value)===0 && dataStatus ===0){//抽取完成
+						return '<span class="state-success">' +$.getCodeDesc("SJCQZT",0)+ '</span>';
+					}else if(Number(value)===0 && dataStatus ===2){//抽取失败
+						return '<span class="state-fail">' +$.getCodeDesc("SJCQZT",2)+ '</span>';
+					}else if(Number(value)===0 && dataStatus ===1){//未抽取
+						return '<span class="state-unStart">' +$.getCodeDesc("SJCQZT",3)+ '</span>';
+					}else{
+						return "";
+					}
 				}
 			}
 		}, {
@@ -107,7 +126,7 @@ function initDataPrepareTable(monitorDetail){
  * 表格检索
  */
 function dataSearchKey(event){
-	if(event.keyCode == 13){
+	if(event.keyCode === 13){
 		qryDataPrepareTableByCond();
 	}
 }

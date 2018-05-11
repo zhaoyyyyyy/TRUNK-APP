@@ -58,6 +58,8 @@ function initLabelGenerateTable(monitorDetail){
     		formatter : function(value) {
     			if(Number(value) === 1 || Number(value) === 2){
     				return $.getCodeDesc("SJYBLX",value);
+    			}else if(Number(value) === 3){
+    				return "客户群源表";
     			}else{
     				return "—";
     			}

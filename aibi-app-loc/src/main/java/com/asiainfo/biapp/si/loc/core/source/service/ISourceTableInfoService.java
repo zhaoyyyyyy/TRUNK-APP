@@ -55,6 +55,18 @@ public interface ISourceTableInfoService extends BaseService<SourceTableInfo, St
     public Page<SourceTableInfo> selectSourceTableInfoPageList(Page<SourceTableInfo> page,
             SourceTableInfoVo sourceTableInfoVo) throws BaseException;
 
+
+    /**
+     * Description: 运营监控明细页面分页查询数据准备状态信息
+     *
+     * @param page
+     * @param sourceTableInfoVo
+     * @return
+     * @throws BaseException
+     */
+    public Page<SourceTableInfo> selectSourceTableInfoMonitorPageList(Page<SourceTableInfo> page,
+            SourceTableInfoVo sourceTableInfoVo) throws BaseException;
+    
     /**
      * Description: 查询指标数据源信息列表
      *

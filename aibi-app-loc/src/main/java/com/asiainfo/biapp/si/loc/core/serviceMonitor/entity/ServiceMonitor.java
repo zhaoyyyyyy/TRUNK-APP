@@ -74,7 +74,16 @@ public class ServiceMonitor extends BaseEntity {
     /**
      * 数据准备视图：v_data_prepare
      * 数据状态 0未准备  1准备完成
-     * 抽取状态 0抽取中  1抽取完成  2抽取失败
+     * 抽取状态 0抽取中  1抽取完成  2抽取失败 3未抽取
+     */
+    /**
+     * 数据准备总数量
+     */
+    @Column(name = "DATA_PREPARE_TOTAL")
+    @ApiParam(value = "数据准备总数量")
+    private Integer dataPrepareTotal;
+    
+    /**
      * 未准备数量
      */
     @Column(name = "NOT_PREPARE_COUNT")
@@ -108,6 +117,13 @@ public class ServiceMonitor extends BaseEntity {
     @Column(name = "EXTRACT_FAIL_COUNT")
     @ApiParam(value = "抽取失败数量")
     private Integer extractFailCount;
+    
+    /**
+     * 未抽取数量
+     */
+    @Column(name = "NOT_EXTRACT_COUNT")
+    @ApiParam(value = "未抽取数量")
+    private Integer notExtractCount;
 
     /**
      * 标签生成视图：v_label_generate
@@ -385,8 +401,15 @@ public class ServiceMonitor extends BaseEntity {
         this.notPushCount = notPushCount;
     }
 
+    public Integer getDataPrepareTotal() {
+        return dataPrepareTotal;
+    }
 
-    
+    public void setDataPrepareTotal(Integer dataPrepareTotal) {
+        this.dataPrepareTotal = dataPrepareTotal;
+    }
+
+
     public Integer getPushWaitCount() {
         return pushWaitCount;
     }
@@ -429,6 +452,18 @@ public class ServiceMonitor extends BaseEntity {
 
 
     
+    
+    public Integer getNotExtractCount() {
+        return notExtractCount;
+    }
+
+
+    
+    public void setNotExtractCount(Integer notExtractCount) {
+        this.notExtractCount = notExtractCount;
+    }
+
+
     public Integer getSortOrder() {
         return sortOrder;
     }

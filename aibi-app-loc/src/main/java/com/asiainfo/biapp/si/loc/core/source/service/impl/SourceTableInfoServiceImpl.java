@@ -39,10 +39,8 @@ import com.asiainfo.biapp.si.loc.core.label.vo.MdaSysTableVo;
 import com.asiainfo.biapp.si.loc.core.source.dao.ISourceTableInfoDao;
 import com.asiainfo.biapp.si.loc.core.source.entity.SourceInfo;
 import com.asiainfo.biapp.si.loc.core.source.entity.SourceTableInfo;
-import com.asiainfo.biapp.si.loc.core.source.entity.TargetTableStatus;
 import com.asiainfo.biapp.si.loc.core.source.service.ISourceInfoService;
 import com.asiainfo.biapp.si.loc.core.source.service.ISourceTableInfoService;
-import com.asiainfo.biapp.si.loc.core.source.service.ITargetTableStatusService;
 import com.asiainfo.biapp.si.loc.core.source.vo.SourceInfoVo;
 import com.asiainfo.biapp.si.loc.core.source.vo.SourceTableInfoVo;
 
@@ -98,7 +96,12 @@ public class SourceTableInfoServiceImpl extends BaseServiceImpl<SourceTableInfo,
 
     public Page<SourceTableInfo> selectSourceTableInfoPageList(Page<SourceTableInfo> page,
             SourceTableInfoVo sourceTableInfoVo) throws BaseException {
-        return iSourceTableInfoDao.selectSourceTableInfoPageList(page, sourceTableInfoVo);
+        return   iSourceTableInfoDao.selectSourceTableInfoPageList(page, sourceTableInfoVo);
+    }
+    
+    public Page<SourceTableInfo> selectSourceTableInfoMonitorPageList(Page<SourceTableInfo> page,
+            SourceTableInfoVo sourceTableInfoVo) throws BaseException {
+        return   iSourceTableInfoDao.selectSourceTableInfoMonitorPageList(page, sourceTableInfoVo);
     }
 
     public List<SourceTableInfo> selectSourceTableInfoList(SourceTableInfoVo sourceTableInfoVo) throws BaseException {

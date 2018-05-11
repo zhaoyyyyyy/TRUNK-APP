@@ -32,5 +32,46 @@ import com.asiainfo.biapp.si.loc.core.source.entity.SourceTableInfo;
 public class SourceTableInfoVo extends SourceTableInfo {
     
     private static final long serialVersionUID = 2035013017939483936L;
+    
+    /**
+     * 运营监控明细查询数据准备准备状态（多个）
+     */
+    private String dataStatuses;
+    
+    /**
+     * 运营监控明细查询数据抽取准备状态（多个）
+     */
+    private String isDoings;
+    
+    /**
+     * 运营监控明细查询数据日期
+     */
+    private String dataDate;
+    
+    public String getDataStatuses() {
+        return dataStatuses;
+    }
+    
+    public void setDataStatuses(String dataStatuses) {
+        this.dataStatuses = dataStatuses;
+    }
+    
+    public String getIsDoings() {
+        return isDoings;
+    }
+    
+    public void setIsDoings(String isDoings) {
+        this.isDoings = isDoings;
+    }
+
+    
+    public String getDataDate() {
+        return dataDate;
+    }
+
+    
+    public void setDataDate(String dataDate) {
+        this.dataDate = dataDate;
+    }
 
 }

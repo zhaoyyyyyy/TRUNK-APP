@@ -7,14 +7,18 @@
 package com.asiainfo.biapp.si.loc.core.source.dao.impl;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Repository;
 
 import com.asiainfo.biapp.si.loc.base.dao.BaseDaoImpl;
 import com.asiainfo.biapp.si.loc.base.page.Page;
 import com.asiainfo.biapp.si.loc.base.utils.StringUtil;
+import com.asiainfo.biapp.si.loc.core.ServiceConstants;
 import com.asiainfo.biapp.si.loc.core.source.dao.ISourceTableInfoDao;
 import com.asiainfo.biapp.si.loc.core.source.entity.SourceTableInfo;
 import com.asiainfo.biapp.si.loc.core.source.vo.SourceTableInfoVo;
@@ -54,7 +58,18 @@ public class SourceTableInfoDaoImpl extends BaseDaoImpl<SourceTableInfo, String>
         Map<String, Object> params = (Map<String, Object>) reMap.get("params");
         return super.findPageByHql(page, reMap.get("hql").toString(), params);
     }
+    
 
+    /**
+     * 运营监控明细页面数据准备表格分页
+     */
+    public Page<SourceTableInfo> selectSourceTableInfoMonitorPageList(Page<SourceTableInfo> page,
+            SourceTableInfoVo sourceTableInfoVo) {
+        Map<String, Object> reMap = fromBeanForMonitor(sourceTableInfoVo);
+        Map<String, Object> params = (Map<String, Object>) reMap.get("params");
+        return super.findPageByHql(page, reMap.get("hql").toString(), params);
+    }
+    
     public List<SourceTableInfo> selectSourceTableInfoList(SourceTableInfoVo sourceTableInfoVo) {
         Map<String, Object> reMap = fromBean(sourceTableInfoVo);
         Map<String, Object> params = (Map<String, Object>) reMap.get("params");
@@ -64,7 +79,7 @@ public class SourceTableInfoDaoImpl extends BaseDaoImpl<SourceTableInfo, String>
     public Map<String, Object> fromBean(SourceTableInfoVo sourceTableInfoVo) {
         Map<String, Object> reMap = new HashMap<>();
         Map<String, Object> params = new HashMap<>();
-        StringBuffer hql = new StringBuffer("from SourceTableInfo s where 1=1 ");
+        StringBuffer hql = new StringBuffer("from SourceTableInfo s where 1=1  ");
         if (StringUtil.isNotBlank(sourceTableInfoVo.getSourceTableId())) {
             hql.append("and s.sourceTableId = :sourceTableId ");
             params.put("sourceTableId", sourceTableInfoVo.getSourceTableId());
@@ -154,5 +169,101 @@ public class SourceTableInfoDaoImpl extends BaseDaoImpl<SourceTableInfo, String>
         reMap.put("params", params);
         return reMap;
     }
+    
+    /**
+     * 运营监控明细页面表格过滤条件：
+     * @param sourceTableInfoVo
+     * VO需要参数：专区ID：configId（必须）,
+     * 数据日期:dataDate（必须）,
+     * 指标源表表名(英文非必须):sourceTableName,
+     * 查询准备状态列表:dataStatuses 0：未准备；1：准备完成（支持多选）,
+     * 查询抽取状态列表:isDoings(支持多选)
+     * @return
+     */
+    public Map<String, Object> fromBeanForMonitor(SourceTableInfoVo sourceTableInfoVo) {
+        Map<String, Object> reMap = new HashMap<>();
+        Map<String, Object> params = new HashMap<>();
+        StringBuffer hql = new StringBuffer("select new SourceTableInfo(s.sourceTableId,s.sourceTableName,t.dataStatus,t.isDoing,t.startTime,t.endTime) "
+                + "from SourceTableInfo s left join s.targetTableStatusList t where 1=1  ");
+        if (StringUtil.isNotBlank(sourceTableInfoVo.getConfigId())) {
+            hql.append("and s.configId = :configId ");
+            params.put("configId", sourceTableInfoVo.getConfigId());
+        }
+        if (StringUtils.isNotBlank(sourceTableInfoVo.getDataDate())) {
+            hql.append("and t.dataDate = :dataDate ");
+            params.put("dataDate", sourceTableInfoVo.getDataDate());
+        }
+  
+        if (StringUtil.isNotBlank(sourceTableInfoVo.getSourceTableName())) {
+            if(sourceTableInfoVo.getSourceTableName().contains("=")){
+                hql.append("and s.sourceTableName =:sourceTableName ");
+                params.put("sourceTableName",sourceTableInfoVo.getSourceTableName().replace("=", ""));
+            }else{
+                hql.append("and s.sourceTableName LIKE:sourceTableName ");
+                params.put("sourceTableName","%"+sourceTableInfoVo.getSourceTableName()+"%");
+            }
+        }
+        //查询准备状态列表  0：未准备；1：准备完成
+        if (StringUtil.isNotEmpty(sourceTableInfoVo.getDataStatuses())) {
+            Set<Integer> statusSet = new HashSet<Integer>();
+            for(String status : sourceTableInfoVo.getDataStatuses().split(",")){
+                statusSet.add(Integer.parseInt(status));
+            }
+            if(statusSet.contains(ServiceConstants.TargetTableStatus.TARGET_TABLE_NOT_PREPARED)){
+                //未准备
+                hql.append("and (s.sourceTableId not in "
+                        + "( select sourceTableId from TargetTableStatus where sourceTableId != 0)  ");
+                if(statusSet.contains(ServiceConstants.TargetTableStatus.TARGET_TABLE_PREPARED)){
+                    //查询准备完成的数据： dataStatus=1
+                    hql.append("or t.dataStatus !=2 ) ");
+                }else{
+                    hql.append(") ");
+                }
+            }else{
+                //查询准备完成的数据：dataStatus !=2 && sourceTableId !=0
+                hql.append("and (t.dataStatus !=2 and t.sourceTableId != 0 )  ");
+            }
+        }
+        //查询抽取状态列表
+        if (StringUtil.isNotEmpty(sourceTableInfoVo.getIsDoings())) {
+            Set<Integer> isdoingSet = new HashSet<Integer>();
+            for(String isDoing : sourceTableInfoVo.getIsDoings().split(",")){
+                isdoingSet.add(Integer.parseInt(isDoing));
+            }
+            hql.append(formatIsdoingCondion(isdoingSet));
+        }
+       
+        reMap.put("hql", hql);
+        reMap.put("params", params);
+        return reMap;
+    }
 
+    /**
+     * 运营监控明细页面，数据抽取列表过滤条件：
+     * @param isdoingSet
+     * @return
+     */
+    public StringBuilder formatIsdoingCondion(Set<Integer> isdoingSet){
+        StringBuilder hql = new StringBuilder();
+        for(Integer isDoing : isdoingSet){
+            if(ServiceConstants.TargetTableStatus.TARGET_TABLE_EXTRACT_SUCCESS == isDoing){
+                // 抽取完成：isDoing=0 && dataStatus=0
+                hql.append("or (t.isDoing = 0 and t.dataStatus =0 ) ");
+            }
+            if(ServiceConstants.TargetTableStatus.TARGET_TABLE_EXTRACTING == isDoing){
+                // 抽取中：isDoing=1 && dataStatus=1
+                hql.append("or (t.isDoing = 1 and t.dataStatus =1 ) ");
+            }
+            if(ServiceConstants.TargetTableStatus.TARGET_TABLE_EXTRACT_FAIL == isDoing){
+                // 抽取失败：isDoing=0 && dataStatus=2
+                hql.append("or (t.isDoing = 0 and t.dataStatus =2 ) ");
+            }
+            if(ServiceConstants.TargetTableStatus.TARGET_TABLE_NOTEXTRACT == isDoing){
+                // 未抽取：isDoing=0 && dataStatus=1
+                hql.append("or (t.isDoing = 0 and t.dataStatus =1 ) ");
+            }
+        }
+        hql.replace(0, 2, "and (").append(") ");
+        return hql;
+    }
 }

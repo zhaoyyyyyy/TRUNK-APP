@@ -130,6 +130,7 @@ window.loc_onload = function() {
 		    			minDate:minDay,
 		    			onpicked: function(dq) {
 		    				that.changeMonitorByDate(dq.cal.getNewDateStr(),configId);
+		    				$(this).blur();
 		    			}
 		    		});
 	        	}else{
@@ -141,6 +142,7 @@ window.loc_onload = function() {
 		    			minDate:minMonth,
 		    			onpicked: function(dq) {
 		    				that.changeMonitorByDate(dq.cal.getNewDateStr(),configId);
+		    				$(this).blur();
 		    			}
 		    		});
 	        	}

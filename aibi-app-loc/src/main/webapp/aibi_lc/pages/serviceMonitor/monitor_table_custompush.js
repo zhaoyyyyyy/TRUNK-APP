@@ -100,8 +100,6 @@ function initCustomPushTable(monitorDetail){
 				$("#customPushAnchor").find(".loading").show();
 			}
 	    },
-		rowNum : 10,
-		rownumbers : true,
 		height : '100%',
 		rowList : [ 10, 20, 30 ],
 		pager : "#customPushPager",
@@ -111,13 +109,17 @@ function initCustomPushTable(monitorDetail){
 
 
 /**
- * 表格检索
+ * 表格检索:回车
  */
 function customPushSearchKey(event){
-	if(event.keyCode == 13){
+	if(event.keyCode === 13){
 		qryCustomPushTableByCond();
 	}
 }
+
+/**
+ * 表格检索：点击查询
+ */
 function qryCustomPushTableByCond(){
 	var labelName = $("#customPushName").val();
 	var khqtsCodesTemp = [];
@@ -176,7 +178,7 @@ function setThisLineChecked(rowId) {
 	var ids = $("#customPushTable").jqGrid("getDataIDs");
 	if (ids) {
 		for (var i = 0; i < ids.length; i++) {
-			if (rowId == ids[i]) {
+			if (rowId === ids[i]) {
 				$('#customPushTable ' + '#' + ids[i]).find("td").addClass("ui-state-highlight");
 			} else {
 				$('#customPushTable ' + '#' + ids[i]).find("td").removeClass("ui-state-highlight");

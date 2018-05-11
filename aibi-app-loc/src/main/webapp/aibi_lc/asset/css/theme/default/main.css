@@ -680,7 +680,7 @@
 .ui-calc-content > .ui-conditionCT > .ui-conditionCT-h4 > em{
     width: 72%;
     height: 36px;
-    background: url(./images/lc-icon.png) no-repeat -497px -17px;
+  /*  background: url(./images/lc-icon.png) no-repeat -497px -17px;*/
     display: inline-block;
     vertical-align: middle;
     cursor: pointer;
@@ -1153,10 +1153,10 @@ span.del-btn{
 	margin:0 0 10px 2%;
 }
 .label-select-main li > .checkbox{
-	padding: 0 10px 10px 10px;
+	padding: 0 20px 10px 10px;
 	background: #FBFBFB;
 	border: 1px solid #E9E9E9;
-	border-radius: 2px;	
+	border-radius: 4px;	
 	height:34px;
 	line-height:34px;
 }
@@ -1348,16 +1348,22 @@ span.del-btn{
 }
 .ui-custom-move > a{
 	display:block;
-	width:30px;
-	height:30px;
-	background:url(images/icons.png) no-repeat;
+	width:42px;
+	height:42px;
+	background:url(images/lc-icon.png) no-repeat;
 	margin:50px auto 0;
 }
 .ui-custom-move > a.ui-custom-left{
-	background-position:-30px -90px;
+	background-position:-583px -42px;
+}
+.ui-custom-move > a.ui-custom-left.active{
+	background-position:-583px -3px;
 }
 .ui-custom-move > a.ui-custom-right{
-	background-position:-81px -90px;
+	background-position:-630px -42px;
+}
+.ui-custom-move > a.ui-custom-right.active{
+	background-position:-630px -3px;
 }
 .ui-custom-btn{
 	text-align:right;
@@ -2282,4 +2288,10 @@ em.add-droit:before {
 }
 .ui-move-label > .ui-custom-col{
 	height:100%;
+}
+.ui-custom-mes.label-select-main{
+	border:none;
+}
+.ui-custom-mes.label-select-main li{
+	width:auto;
 }

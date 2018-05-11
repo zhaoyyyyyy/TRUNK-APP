@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>授权管理</title>
+    <!--[if IE]>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <![endif]-->
+    <link href="../../asset/css/common/reset.css" rel="stylesheet"  />
+    <link href="../../asset/css/jQueryUI/jquery-ui-1.12.1.min.css" rel="stylesheet"  />
+    <link href="../../asset/css/theme/default/page.css" rel="stylesheet"  theme="default"/>
+    <link href="../../asset/script/component/jQueryUI/gird/css/ui.jqgrid.css" rel="stylesheet"  />
+    <link href="../../asset/script/component/tree/css/zTreeStyle/zTreeStyle.css" rel="stylesheet"  />
+    <link href="../../asset/css/theme/default/ui.jqgrid.owner.css" rel="stylesheet"  />
+    <link href="../../asset/css/theme/default/button.css" rel="stylesheet"  />
+    <link href="../../asset/css/theme/default/form.css" rel="stylesheet"  />
+    <link href="../../asset/css/theme/default/tab.css" rel="stylesheet"  />
+    <link href="../../asset/css/theme/default/coc_frame.css" rel="stylesheet"  />
+    <link href="../../asset/css/theme/default/main.css" rel="stylesheet"  />
+    <script type="text/javascript" src="../../asset/script/component/jquery-1.12.4.js"></script>
+    <script src="../../asset/script/component/jQueryUI/jquery-ui-1.12.1.min.js"></script>
+    <script src="../../asset/script/component/vue/vue.min.js"></script>
+    <script src="../../asset/script/common/jquery.util.js"></script>
+    <script src="../../asset/script/component/jQueryUI/gird/page/jquery.page.js"></script>
+    <script src="../../asset/script/component/jQueryUI/gird/js/jquery.jqGrid.min.js"></script>
+    <script src="../../asset/script/component/jQueryUI/gird/js/i18n/grid.locale-cn.js"></script>
+    <script src="./demojs/jqGrid.demo.extend.js"></script>
+	<script type="text/javascript" src="../../asset/script/component/tree/jquery.ztree.all.min.js"></script>
+    <!--
+        H5兼容js CSS3 兼容JS
+    -->
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="http://apps.bdimg.com/libs/html5shiv/3.7/html5shiv.min.js"></script>
+    <script src="http://apps.bdimg.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <script type="text/javascript">
+    	var model = {
+    			slelectedPre:"小包专区",
+//  			labelSelected:[],
+//  			getSlectedLabel:[],
+//  			moveLabel:[],
+//  			checked:false,
+    		}
+
+    	$(function(){
+    		new Vue({
+	    		el : '#dataD',
+				data : model,
+				methods:{
+
+				},
+				mounted: function () {
+				    this.$nextTick(function () {
+				    })
+				}
+	    	})
+    		
+    		 $("#jsonmap1").jqGrid({
+	            url:'../grid.json',
+	            datatype: "json",
+	            colModel:[
+	                {name:'tax',index:'tax', width:10, sortable:true,align:"left",formatter:addDroit},//frozen : true固定列
+                	{name:'invdate',index:'invdate', width:80, jsonmap:"invdate",align:"left"},
+	                {name:'op',index:'op', width:10, sortable:false,formatter:warrantPart,align:"right"}
+	            ],
+//	            rowNum:10,
+	            rowList:[10,20,30],
+	            sortname: '',//排序的字段名称 不需要的话可置为空  取值取自colModel中的index字段
+	            viewrecords: true,
+	            multiselect:false,
+	            rownumbers:false,//是否展示行号
+	            sortorder: "desc",//排序方式
+	            jsonReader: {
+	                repeatitems : false,
+	                id: "0"
+	            },
+	            height: '100%',
+	            width:"100%",
+	            autowidth:true,
+	            gridComplete: function () {
+	                 $(this).closest('.ui-jqgrid-view').find('div.ui-jqgrid-hdiv').hide()
+	             },
+	             onSelectRow: function(ids) { //单击选择行  
+	                var rodData= $("#jsonmap1").getRowData(ids);//
+	                var name=rodData.invdate;
+	                model.slelectedPre=name;
+	            },  
+	        });
+	        function addDroit(cellvalue, options, rowObject){
+	            var html='<em class="ml10 add-droit"></em>';
+	            return html;
+	        };
+	        function warrantPart(cellvalue, options, rowObject){
+	            var html='<a class="droit-icon all-droit mr10"><em></em></a>';
+	            return html;
+// 				var html='<a class="droit-icon part-droit mr10"><em></em></a>';
+//	            return html;
+//	            var html='<a class="droit-icon no-droit mr10"><em></em></a>';
+//	            return html;
+	        };
+	        $(".ui-warrant-tab>a").click(function(){
+	        	$(this).addClass("active");
+	        	$(this).siblings().removeClass("active")
+	        })
+	        $(".label-checkbox > .radio").click(function(){
+	        	if($(this).find("input:checkbox:checked")){
+	        		$(this).addClass("active");
+	        		$(this).siblings(".radio").removeClass("active");
+	        	}else{
+	        		$(this).removeClass("active")
+	        	}
+	        });
+	        labeltree();
+	        function labeltree(){
+			var zTreeObj,
+				setting = {
+					view: {
+						
+					},
+					callback: {
+						onClick: dataClick
+					}
+				},
+				zTreeNodes = [
+					{"name":"在网用户状态", open:false, children: [
+						{ "name":"google"},
+						{ "name":"baidu"},
+						{ "name":"sina"}
+						]
+					},
+					{"name":"在网状态", open:true, children: [
+						{ "name":"停开机状态", open:true,children:[
+							{ "name":"催停类型"},
+							{ "name":"测试"}
+						]
+						},
+						]
+					}
+				];
+				zTreeObj = $.fn.zTree.init($("#ztree"), setting, zTreeNodes);
+			};
+			function dataClick(event, treeId, zTreeNodes){
+				$.ajax({			
+				    url:'../grid.json',
+				    dataType : 'json', 
+				    success: function(data){
+					    for(var i=0;i<data.rows.length;i++){
+					    	if (! document.getElementById("mychckbox"+data.rows[i].id)){
+					    		var html="<li>"+
+						    		"<div class='checkbox'>"+
+						    		"<input type='checkbox' id='mychckbox"+data.rows[i].id+"' onclick='getSelectedLable()' class='checkbix'>"+
+						    		"<label for='mychckbox"+data.rows[i].id+"' aria-label role='checkbox' class='checkbix'>"+
+						    		"<span class='large'></span>"+
+						    		data.rows[i].name+
+						    		"</label>"+
+						    		"</div>"+
+						    		"</li>";
+						    	$("#labelSelected").append(html);
+					    	}
+					    };
+				   }
+			   });
+			};
+			
+    	})
+    	function getSelectedLable(){
+			if($("#labelSelected li").find("input:checkbox:checked").length){
+				$(".ui-custom-right").addClass("active");
+			}else{
+				$(".ui-custom-right").removeClass("active");
+			}
+			if($("#getSlectedLabel li").find("input:checkbox:checked").length){
+				$(".ui-custom-left").addClass("active");
+			}else{
+				$(".ui-custom-left").removeClass("active");
+			}
+		}
+    	function addLabelIn(){
+    		if($("#labelSelected li").find("input:checkbox:checked").length){
+    			var html=$("#labelSelected li").find("input:checkbox:checked").parents("li")
+    			$("#labelSelected li").find("input:checkbox:checked").parents("li").remove();
+    			$("#getSlectedLabel").append(html);
+    			if($("#labelSelected li").find("input:checkbox:checked").length==0){
+    				$(".ui-custom-right").removeClass("active");
+    			}
+    			$("#getSlectedLabel li").find("input:checkbox").prop("checked",false)
+    		}
+    	}
+    	function addLabelOut(){
+    		if($("#getSlectedLabel li").find("input:checkbox:checked").length){
+    			var html=$("#getSlectedLabel li").find("input:checkbox:checked").parents("li")
+    			$("#getSlectedLabel li").find("input:checkbox:checked").parents("li").remove();
+    			$("#labelSelected").append(html);
+    			if($("#getSlectedLabel li").find("input:checkbox:checked").length==0){
+    				$(".ui-custom-left").removeClass("active");
+    			}
+    			$("#labelSelected li").find("input:checkbox").prop("checked",false)
+    		}
+    	}
+    	
+    </script>
+</head>
+<body>
+    <div id="dataD" class="iframe-nest">
+      	<div class="ui-lc-mian clearfix">
+      		<h3 class="pre clearfix">
+      			授权管理
+      			<div class="dropdown fright">
+			    	<a href = "javascript:;" class="dropdown-toggle">
+			    		思特奇专区
+			    		<span class="caret"></span>
+			    	</a>
+			    	<ul class="dropdown-menu">
+				       <li><a href="#">Action</a></li>
+				       <li><a href="#">Another</a></li>
+				       <li><a href="#">Something</a></li>
+			        </ul>
+			    </div>
+      		</h3>
+      		<div class="clearfix column-contain">
+      			<div class="fleft ui-menu">
+      				<h3 class="ui-title-icon"><i class="mr10">1</i>专区选择</h3>
+      				<div class="ui-warrant-pre">
+      					<div class="ui-warrant-tab clearfix mt10">
+	      					<a class="active" href="javascript:;">所有专区</a>
+	      					<a class="droit-icon all-droit" href="javascript:;"><em></em>全部授权</a>
+	      					<a class="droit-icon part-droit" href="javascript:;"><em></em>部分授权</a>
+	      					<a class="droit-icon no-droit" href="javascript:;"><em></em>未授权</a>
+	      				</div>
+	      				<P class="selected-pre mt10">已选专区：<span>{{model.slelectedPre}}</span></P>
+	      				<div class="ui-table-static mt10 ui-warrant-table">
+		                    <table id="jsonmap1"  class="table"></table>
+		                    <div id="pjmap1"></div>
+		                </div>
+      				</div>
+      			</div>
+      			<div class="fleft ui-main">
+      				<div class="column-right">
+      					<h3 class="ui-title-icon"><i class="mr10">2</i>标签选择</h3>
+      					<div class="label-checkbox mt10">
+      						<div class="radio circle success active"> 
+							   <input type="radio" name="radio19" id="myr3" checked="checked"> 
+							   <label for="myr3"><em class="add-droit mr10"></em>取消授权</label>
+							   <span class="ml20">（取消授权的所有标签）</span>
+							</div>
+      						<div class="radio circle success"> 
+							   <input type="radio" name="radio19" id="myr4"> 
+							   <label for="myr4"><em class="add-droit mr10"></em>授权所有标签</label>
+							   <span class="ml20">（授权全部标签）</span>
+							</div>
+							<div class="radio circle success"> 
+							   <input type="radio" name="radio19" id="myr5"> 
+							   <label for="myr5"><em class="add-droit mr10"></em>选择标签</label>
+							</div>
+      					</div>
+      					<div class="clearfix mt20 ui-move-label">
+					    	<div class="ui-custom-col fleft">
+					    		<div class="form-group width-210 ml20 mt10">
+					                <div class="input-group">
+					                    <input type="text" class="form-control" placeholder="" id="labelName" >
+					                     <input id='hiddeninput' type="text" style="display:none" /> 
+					                    <div class="input-group-addon input-group-icon right-child" id="btn_search"></div>
+					                </div>
+					            </div>
+								<div class="ui-custom-mes">
+									<ul id="ztree" class="ztree">
+							
+									</ul>
+								</div>
+							</div>
+							<div class="ui-custom-col fleft">
+								<div class="ui-custom-mes label-select-main">
+									<ul class="clearfix" id="labelSelected">
+										<!--<li>
+											<div class="checkbox">
+											    <input id="mycheckbox12" type="checkbox" class="checkbix" onclick="getSelectedLable()">
+											    <label aria-label="" role="checkbox" for="mycheckbox12" class="checkbix">
+											    		<span class="large"></span>性别
+											    </label>
+											</div>
+										</li>
+										<li>
+											<div class="checkbox">
+											    <input id="mycheckbox13" type="checkbox" class="checkbix" onclick="getSelectedLable()">
+											    <label aria-label="" role="checkbox" for="mycheckbox13" class="checkbix">
+											    		<span class="large"></span>职业
+											    </label>
+											</div>
+										</li>
+										<li>
+											<div class="checkbox">
+											    <input id="mycheckbox14" type="checkbox" class="checkbix" onclick="getSelectedLable()">
+											    <label aria-label="" role="checkbox" for="mycheckbox14" class="checkbix">
+											    		<span class="large"></span>学校教育
+											    </label>
+											</div>
+										</li>
+										<li>
+											<div class="checkbox">
+											    <input id="mycheckbox15" type="checkbox" class="checkbix" onclick="getSelectedLable()">
+											    <label aria-label="" role="checkbox" for="mycheckbox15" class="checkbix">
+											    		<span class="large"></span>测试
+											    </label>
+											</div>
+										</li>
+										<li class="fleft">
+											<div class="checkbox">
+											    <input id="mycheckbox16" type="checkbox" class="checkbix" onclick="getSelectedLable()">
+											    <label aria-label="" role="checkbox" for="mycheckbox16" class="checkbix">
+											    		<span class="large"></span>测试2
+											    </label>
+											</div>
+										</li>-->
+										<!--<li class="fleft" v-for="(item,index) in labelSelected">
+											<div class="checkbox">
+											    <input :id="'typed'+index" type="checkbox" class="checkbix" :checked="item.checked" @click="getSelectedLable(item)">
+											    <label aria-label="" role="checkbox" :for="'typed'+index" class="checkbix">
+											    		<span class="large"></span>{{item.name}}
+											    </label>
+											</div>
+										</li>-->
+									</ul>
+								</div>
+							</div>
+							<div class="ui-custom-move fleft">
+								<a class="ui-custom-right" @click="addLabelIn()"></a>
+								<a class="ui-custom-left" onclick="addLabelOut()"></a>
+							</div>
+							<div class="ui-custom-col fleft">
+								<div class="ui-custom-mes label-select-main">
+									<ul class="label-selected clearfix" id="getSlectedLabel">
+									</ul>
+								</div>
+							</div>
+						</div>	
+      				</div>
+      			</div>
+      		</div>
+      		<div class="ui-custom-btn">
+      			<button type="button" class="ui-btn ui-btn-ghost-brand mr10">取消</button>
+				<button type="button" class="ui-btn ui-btn-default mr10">确认</button>
+      		</div>
+      	</div>
+    </div>      
+</body>
+</html>
