@@ -278,7 +278,7 @@ input[type=checkbox].checkbix+label>span {
 }
 .ui-jqgrid .ui-jqgrid-btable .ui-state-hover {
     border: 1px solid #ccc !important;
-    background: #EDF7FF !important;
+    background: rgba(237,247,255,0.3);
     font-weight: normal !important;
 }
 .ui-jqgrid  span.ui-icon {
