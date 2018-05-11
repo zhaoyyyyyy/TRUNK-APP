@@ -680,7 +680,7 @@
 .ui-calc-content > .ui-conditionCT > .ui-conditionCT-h4 > em{
     width: 72%;
     height: 36px;
-    background: url(./images/lc-icon.png) no-repeat -497px -17px;
+  /*  background: url(./images/lc-icon.png) no-repeat -497px -17px;*/
     display: inline-block;
     vertical-align: middle;
     cursor: pointer;
