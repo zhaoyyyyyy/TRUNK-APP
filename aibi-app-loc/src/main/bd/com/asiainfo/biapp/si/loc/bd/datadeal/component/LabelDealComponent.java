@@ -229,7 +229,7 @@ public class LabelDealComponent {
         List<String> labelIdLists = labelIdList;
         LogUtil.info(threadNumber + "插入指标状态表");
         String sql = "select label_id from " + DIM_LABEL_STATUS;
-        LogUtil.info(threadNumber + "获取" + DIM_LABEL_STATUS + "中不存在的标签"+sql);
+        LogUtil.info(threadNumber + "获取" + DIM_LABEL_STATUS + "中已经存在的标签"+sql);
         Connection connection = null;
         ResultSet res = null;
         PreparedStatement pstm = null;
@@ -252,7 +252,7 @@ public class LabelDealComponent {
         }
         startTime=System.currentTimeMillis();
         connection = new JdbcManager().getConnection();
-        String insertSql = "insert into " + DIM_LABEL_STATUS + " values(?," + data_date + "," + 0 + ",'" + TimeUtil.getCurrentDayYYYYMMDD() + "',0)";
+        String insertSql = "insert into " + DIM_LABEL_STATUS + " values(?," + data_date + "," + 1 + ",'" + TimeUtil.getCurrentDayYYYYMMDD() + "',0)";
         try {
             connection.setAutoCommit(false);
             LogUtil.info(threadNumber + DIM_LABEL_STATUS + "中不存在的标签为：" + labelIdLists);
