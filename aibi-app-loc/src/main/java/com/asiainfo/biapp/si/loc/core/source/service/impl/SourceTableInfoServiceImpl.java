@@ -41,6 +41,7 @@ import com.asiainfo.biapp.si.loc.core.source.entity.SourceInfo;
 import com.asiainfo.biapp.si.loc.core.source.entity.SourceTableInfo;
 import com.asiainfo.biapp.si.loc.core.source.service.ISourceInfoService;
 import com.asiainfo.biapp.si.loc.core.source.service.ISourceTableInfoService;
+import com.asiainfo.biapp.si.loc.core.source.service.ITargetTableStatusService;
 import com.asiainfo.biapp.si.loc.core.source.vo.SourceInfoVo;
 import com.asiainfo.biapp.si.loc.core.source.vo.SourceTableInfoVo;
 
@@ -85,6 +86,9 @@ public class SourceTableInfoServiceImpl extends BaseServiceImpl<SourceTableInfo,
     private IMdaSysTableService iMdaSysTableService;
     
     @Autowired
+    private ITargetTableStatusService iTargetTableStatusService;
+    
+    @Autowired
     private IBackSqlService iBackSqlService;
     
     static final Integer sourceType = 2;
@@ -101,7 +105,34 @@ public class SourceTableInfoServiceImpl extends BaseServiceImpl<SourceTableInfo,
     
     public Page<SourceTableInfo> selectSourceTableInfoMonitorPageList(Page<SourceTableInfo> page,
             SourceTableInfoVo sourceTableInfoVo) throws BaseException {
-        return   iSourceTableInfoDao.selectSourceTableInfoMonitorPageList(page, sourceTableInfoVo);
+        if (StringUtils.isEmpty(sourceTableInfoVo.getConfigId())) {
+            throw new ParamRequiredException("专区ID不能为空");
+        }
+        if (StringUtils.isEmpty(sourceTableInfoVo.getDataDate())) {
+            throw new ParamRequiredException("数据日期不能为空");
+        }
+        List<SourceTableInfo> notPrepareData =  iSourceTableInfoDao.selectNotPrepareData(sourceTableInfoVo);
+        Page<SourceTableInfo>  sourceTableInfoPage = iSourceTableInfoDao.selectSourceTableInfoMonitorPageList(page, sourceTableInfoVo);
+        if(sourceTableInfoPage != null && sourceTableInfoPage.getData()!=null && sourceTableInfoPage.getData().size() >0){
+            List<SourceTableInfo> sourceTableInfoList = sourceTableInfoPage.getData();
+            //包含未准备数据
+            if(StringUtils.isNotBlank(sourceTableInfoVo.getDataStatuses()) 
+                    && sourceTableInfoVo.getDataStatuses().indexOf("0") != -1){
+                sourceTableInfoList.addAll(notPrepareData);
+            }
+            sourceTableInfoPage.setData(sourceTableInfoList);
+        }else{
+            //只选择未准备
+            if(StringUtils.isNotBlank(sourceTableInfoVo.getDataStatuses()) 
+                    && "0".equals(sourceTableInfoVo.getDataStatuses())){
+                sourceTableInfoPage = new Page<SourceTableInfo>();
+                sourceTableInfoPage.setPageStart(1);
+                sourceTableInfoPage.setPageSize(10);
+                sourceTableInfoPage.setTotalCount(notPrepareData.size());
+                sourceTableInfoPage.setData(notPrepareData);
+            }
+        }
+        return sourceTableInfoPage;
     }
 
     public List<SourceTableInfo> selectSourceTableInfoList(SourceTableInfoVo sourceTableInfoVo) throws BaseException {

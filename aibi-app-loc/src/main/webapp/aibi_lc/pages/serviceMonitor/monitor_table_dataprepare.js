@@ -37,14 +37,12 @@ function initDataPrepareTable(monitorDetail){
 			align : "center",
 			sortable : false,
 			formatter : function(value) {
-				if(typeof value !== 'undefined' ){
-					//准备完成
-					if(Number(value) !== 2){
-						return '<span class="state-success">' +$.getCodeDesc("SJZBZT",1)+ '</span>';
-					}
-				}else{
+				if(value === null || Number(value) === 2){
 					//未准备
 					return '<span class="state-unStart">' +$.getCodeDesc("SJZBZT",0)+ '</span>';
+				}else{
+					//准备完成
+					return '<span class="state-success">' +$.getCodeDesc("SJZBZT",1)+ '</span>';
 				}
 			}
 		}, {
@@ -54,7 +52,7 @@ function initDataPrepareTable(monitorDetail){
 			width : 80,
 			align : "center",
 			formatter : function(value,col, rowData) {
-				if(typeof value === 'undefined' ){
+				if(typeof value === 'undefined' || value === null ){
 					return "";
 				}else{
 					var dataStatus = Number(rowData.dataStatus);

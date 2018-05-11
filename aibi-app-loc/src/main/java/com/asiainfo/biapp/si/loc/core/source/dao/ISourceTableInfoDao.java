@@ -52,6 +52,12 @@ public interface ISourceTableInfoDao extends BaseDao<SourceTableInfo, String> {
             SourceTableInfoVo sourceTableInfoVo);
     
     /**
+     *  查询未准备好的数据
+     *  @param configId
+     */
+    public List<SourceTableInfo> selectNotPrepareData(SourceTableInfoVo sourceTableInfoVo);
+    
+    /**
      * 根据条件分页查询数据准备状态信息
      *
      * @param page

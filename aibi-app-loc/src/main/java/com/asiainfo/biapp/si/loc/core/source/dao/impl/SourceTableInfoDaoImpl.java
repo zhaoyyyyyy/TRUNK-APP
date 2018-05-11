@@ -61,10 +61,29 @@ public class SourceTableInfoDaoImpl extends BaseDaoImpl<SourceTableInfo, String>
     
 
     /**
+     * 查询未准备好的数据
+     * @param configId
+     * @return
+     */
+    public List<SourceTableInfo> selectNotPrepareData(SourceTableInfoVo sourceTableInfoVo) {
+        String hql = "from  SourceTableInfo  where configId = :configId and sourceTableId not in "
+                + "( select a.sourceTableId from TargetTableStatus a where a.sourceTableId != 0 and a.dataDate = :dataDate)";
+        Map<String, Object> params = new HashMap<>();
+        params.put("configId",sourceTableInfoVo.getConfigId());
+        params.put("dataDate",sourceTableInfoVo.getDataDate());
+        return super.findListByHql(hql, params);
+    }
+    
+    /**
      * 运营监控明细页面数据准备表格分页
+     * @param page
+     * @param sourceTableInfoVo
      */
     public Page<SourceTableInfo> selectSourceTableInfoMonitorPageList(Page<SourceTableInfo> page,
             SourceTableInfoVo sourceTableInfoVo) {
+        if(StringUtil.isNotEmpty(sourceTableInfoVo.getDataStatuses()) && "0".equals(sourceTableInfoVo.getDataStatuses())){
+            return null;
+        }
         Map<String, Object> reMap = fromBeanForMonitor(sourceTableInfoVo);
         Map<String, Object> params = (Map<String, Object>) reMap.get("params");
         return super.findPageByHql(page, reMap.get("hql").toString(), params);
@@ -203,23 +222,13 @@ public class SourceTableInfoDaoImpl extends BaseDaoImpl<SourceTableInfo, String>
                 params.put("sourceTableName","%"+sourceTableInfoVo.getSourceTableName()+"%");
             }
         }
-        //查询准备状态列表  0：未准备；1：准备完成
+        //查询准备完成状态列表 
         if (StringUtil.isNotEmpty(sourceTableInfoVo.getDataStatuses())) {
             Set<Integer> statusSet = new HashSet<Integer>();
             for(String status : sourceTableInfoVo.getDataStatuses().split(",")){
                 statusSet.add(Integer.parseInt(status));
             }
-            if(statusSet.contains(ServiceConstants.TargetTableStatus.TARGET_TABLE_NOT_PREPARED)){
-                //未准备
-                hql.append("and (s.sourceTableId not in "
-                        + "( select sourceTableId from TargetTableStatus where sourceTableId != 0)  ");
-                if(statusSet.contains(ServiceConstants.TargetTableStatus.TARGET_TABLE_PREPARED)){
-                    //查询准备完成的数据： dataStatus=1
-                    hql.append("or t.dataStatus !=2 ) ");
-                }else{
-                    hql.append(") ");
-                }
-            }else{
+            if(statusSet.contains(ServiceConstants.TargetTableStatus.TARGET_TABLE_PREPARED)){
                 //查询准备完成的数据：dataStatus !=2 && sourceTableId !=0
                 hql.append("and (t.dataStatus !=2 and t.sourceTableId != 0 )  ");
             }
