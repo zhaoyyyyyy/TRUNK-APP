@@ -14,6 +14,7 @@ import com.asiainfo.biapp.si.loc.base.extend.SpringContextHolder;
 import com.asiainfo.biapp.si.loc.bd.datadeal.util.TimeUtil;
 import com.asiainfo.biapp.si.loc.bd.list.service.ICyclicityListDataService;
 import com.asiainfo.biapp.si.loc.bd.list.service.impl.CyclicityListDataServiceImpl;
+import com.asiainfo.biapp.si.loc.cache.CocCacheProxy;
 import com.asiainfo.biapp.si.loc.core.ServiceConstants;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -90,6 +91,8 @@ public class WideLabelTask implements Runnable {
             LogUtil.info(threadNumber+"加载用户全量表失败,专区ID为：" + config_id);
         }
         LogUtil.info(new StringBuffer(threadNumber+"专区生成数据耗时").append(" cost:").append((System.currentTimeMillis()-startTime)/1000).append("ms."));
+        CocCacheProxy.getCacheProxy().reflashAllCache();
+        cyclicityListDataService.runDayListDataByConfigId(config_id, data_date);
     }
 
     private void handleLabel(String data_date, String config_id, Integer data_cycle) {
@@ -203,7 +206,6 @@ public class WideLabelTask implements Runnable {
             labelDealComponent.updateDimLabelStatus(labelIdList);
             labelDealComponent.insertIntoDimLabelStatus(labelIdList);
             LogUtil.info(threadNumber + "专区" + config_id + "标签生成结束");
-            cyclicityListDataService.runDayListDataByConfigId(config_id, data_date);
         } else {
             if (sourceTableIdList.size() > 0) {
                 labelDealComponent.updateDimTargetTableStatus(1, 0, sourceTableIdList,null);

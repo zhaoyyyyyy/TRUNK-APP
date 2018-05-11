@@ -9,7 +9,11 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+
+import com.asiainfo.biapp.si.loc.base.extend.SpringContextHolder;
 import com.asiainfo.biapp.si.loc.bd.datadeal.util.TimeUtil;
+import com.asiainfo.biapp.si.loc.bd.list.service.ICyclicityListDataService;
+import com.asiainfo.biapp.si.loc.cache.CocCacheProxy;
 import com.asiainfo.biapp.si.loc.core.ServiceConstants;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Component;
@@ -23,6 +27,7 @@ import com.asiainfo.biapp.si.loc.bd.datadeal.util.JdbcManager;
  */
 @Component
 public class VerticalLabelTask implements Runnable {
+    private ICyclicityListDataService cyclicityListDataService;
     private String threadNumber;
     private String data_date = "";
     private String config_id = "";
@@ -46,9 +51,10 @@ public class VerticalLabelTask implements Runnable {
     }
 
     public void run() {
+        cyclicityListDataService = (ICyclicityListDataService) SpringContextHolder.getBean("cyclicityListDataServiceImpl");
         Long startTime=System.currentTimeMillis();
         threadNumber = Thread.currentThread().getName() + "————" + config_id + "：\n";
-       JdbcManager jdbcManager=new JdbcManager();
+        JdbcManager jdbcManager=new JdbcManager();
         ALL_USER_MAP = jdbcManager.getAllUserTable(config_id);
         if (ALL_USER_MAP.size() > 0) {
             //生成纵表标签
@@ -57,6 +63,8 @@ public class VerticalLabelTask implements Runnable {
             LogUtil.error(threadNumber+"加载用户全量表失败,专区ID为：" + config_id);
         }
         LogUtil.info(new StringBuffer(threadNumber+"专区生成数据耗时").append(" cost:").append((System.currentTimeMillis()-startTime)/1000).append("s."));
+        CocCacheProxy.getCacheProxy().reflashAllCache();      
+	    cyclicityListDataService.runDayListDataByConfigId(config_id, data_date);
     }
 
     private void Label() {
@@ -134,6 +142,7 @@ public class VerticalLabelTask implements Runnable {
         } else {
             LogUtil.info(threadNumber + "没找到可跑的标签，专区结束");
         }
+
     }
 
     /**
