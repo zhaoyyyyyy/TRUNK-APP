@@ -6,6 +6,7 @@
 
 package com.asiainfo.biapp.si.loc.core.label.service.impl;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -15,6 +16,8 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.asiainfo.biapp.si.loc.auth.model.DicData;
+import com.asiainfo.biapp.si.loc.auth.service.impl.DicDataServiceImpl;
 import com.asiainfo.biapp.si.loc.base.dao.BaseDao;
 import com.asiainfo.biapp.si.loc.base.exception.BaseException;
 import com.asiainfo.biapp.si.loc.base.exception.ParamRequiredException;
@@ -63,6 +66,8 @@ public class MdaSysTableServiceImpl extends BaseServiceImpl<MdaSysTable, String>
     private IMdaSysTableDao iMdaSysTableDao;
     @Autowired
     private IBackSqlService iBackSqlService;
+    @Autowired
+    private DicDataServiceImpl dicDataServiceImpl;
 
     @Override
     protected BaseDao<MdaSysTable, String> getBaseDao() {
@@ -110,36 +115,51 @@ public class MdaSysTableServiceImpl extends BaseServiceImpl<MdaSysTable, String>
         } catch (SqlRunException e1) {
             LogUtil.info(e1);
         }
-        for (int k = 1; k < 3; k++) {
-            mdaSysTable = new MdaSysTable();
-            mdaSysTable.setConfigId(preConfigInfo.getConfigId());
-            mdaSysTable.setTableSchema(tableSchema);
-            mdaSysTable.setCreateTime(new Date());
-            mdaSysTable.setCreateUserId(preConfigInfo.getCreateUserId());
-            mdaSysTable.setTableName("DW_L_PREF_" + preConfigInfo.getConfigId() + "_");
-            mdaSysTable.setTableType(1);//用户宽表
-            mdaSysTable.setUpdateCycle(k);
-            try {
-                this.addMdaSysTable(mdaSysTable);
-            } catch (BaseException e) {
-                LogUtil.info(e);
+        List<DicData> sjyblxList = new ArrayList<>();
+        try {
+            sjyblxList = dicDataServiceImpl.queryDataListByCode("SJYBLX");
+        } catch (BaseException e1) {
+            LogUtil.error(e1.getMessage());
+        }
+        List<String> codeList = new ArrayList<>();
+        for(DicData d : sjyblxList){
+            codeList.add(d.getCode());
+        }
+        if(codeList.contains("1")){//用户宽表
+            for (int k = 1; k < 3; k++) {
+                mdaSysTable = new MdaSysTable();
+                mdaSysTable.setConfigId(preConfigInfo.getConfigId());
+                mdaSysTable.setTableSchema(tableSchema);
+                mdaSysTable.setCreateTime(new Date());
+                mdaSysTable.setCreateUserId(preConfigInfo.getCreateUserId());
+                mdaSysTable.setTableName("DW_L_PREF_" + preConfigInfo.getConfigId() + "_");
+                mdaSysTable.setTableType(1);//用户宽表
+                mdaSysTable.setUpdateCycle(k);
+                try {
+                    this.addMdaSysTable(mdaSysTable);
+                } catch (BaseException e) {
+                    LogUtil.info(e);
+                }
             }
         }
-        for (int j = 1; j < 3; j++) {
-            mdaSysTable = new MdaSysTable();
-            mdaSysTable.setConfigId(preConfigInfo.getConfigId());
-            mdaSysTable.setTableSchema(tableSchema);
-            mdaSysTable.setCreateTime(new Date());
-            mdaSysTable.setCreateUserId(preConfigInfo.getCreateUserId());
-            mdaSysTable.setTableName("DW_G_PREF_" + preConfigInfo.getConfigId() + "_");
-            mdaSysTable.setTableType(3);//客户群
-            mdaSysTable.setUpdateCycle(j);
-            try {
-                this.addMdaSysTable(mdaSysTable);
-            } catch (BaseException e) {
-                LogUtil.info(e);
+        if(codeList.contains("3")){//客户群
+            for (int j = 1; j < 3; j++) {
+                mdaSysTable = new MdaSysTable();
+                mdaSysTable.setConfigId(preConfigInfo.getConfigId());
+                mdaSysTable.setTableSchema(tableSchema);
+                mdaSysTable.setCreateTime(new Date());
+                mdaSysTable.setCreateUserId(preConfigInfo.getCreateUserId());
+                mdaSysTable.setTableName("DW_G_PREF_" + preConfigInfo.getConfigId() + "_");
+                mdaSysTable.setTableType(3);//客户群
+                mdaSysTable.setUpdateCycle(j);
+                try {
+                    this.addMdaSysTable(mdaSysTable);
+                } catch (BaseException e) {
+                    LogUtil.info(e);
+                }
             }
         }
+        
     }
 
     public List<MdaSysTable> selectMdaSysTableListByConfigAndType(String configId, Integer updateCycle) {
