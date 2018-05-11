@@ -852,8 +852,15 @@
 	top:50%;
 	margin-top:-13px;
 }
+.column-info.create-main .ui-form-group{
+	width: auto;
+}
 .column-info.create-main .ui-form{
 	height:auto;
+	width: 100%;
+}
+.column-info.create-main .ui-form  .ui-form-group > .control-input{
+	width:360px;
 }
 /* .progress .progress-label > i.icon{
 	background: transparent url(./images/lc-icon.png) no-repeat -458px -257px;
