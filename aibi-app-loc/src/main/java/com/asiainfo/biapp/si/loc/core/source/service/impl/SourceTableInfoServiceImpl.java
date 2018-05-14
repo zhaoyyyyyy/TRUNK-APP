@@ -111,26 +111,26 @@ public class SourceTableInfoServiceImpl extends BaseServiceImpl<SourceTableInfo,
         if (StringUtils.isEmpty(sourceTableInfoVo.getDataDate())) {
             throw new ParamRequiredException("数据日期不能为空");
         }
+        //查询专区下未准备数量
         List<SourceTableInfo> notPrepareData =  iSourceTableInfoDao.selectNotPrepareData(sourceTableInfoVo);
         Page<SourceTableInfo>  sourceTableInfoPage = iSourceTableInfoDao.selectSourceTableInfoMonitorPageList(page, sourceTableInfoVo);
-        if(sourceTableInfoPage != null && sourceTableInfoPage.getData()!=null && sourceTableInfoPage.getData().size() >0){
-            List<SourceTableInfo> sourceTableInfoList = sourceTableInfoPage.getData();
-            //包含未准备数据
-            if(StringUtils.isNotBlank(sourceTableInfoVo.getDataStatuses()) 
-                    && sourceTableInfoVo.getDataStatuses().indexOf("0") != -1){
-                sourceTableInfoList.addAll(notPrepareData);
-            }
-            sourceTableInfoPage.setData(sourceTableInfoList);
-        }else{
-            //只选择未准备
-            if(StringUtils.isNotBlank(sourceTableInfoVo.getDataStatuses()) 
-                    && "0".equals(sourceTableInfoVo.getDataStatuses())){
+        if(StringUtils.isNotBlank(sourceTableInfoVo.getDataStatuses())){
+            if("0".equals(sourceTableInfoVo.getDataStatuses())){
                 sourceTableInfoPage = new Page<SourceTableInfo>();
                 sourceTableInfoPage.setPageStart(1);
                 sourceTableInfoPage.setPageSize(10);
                 sourceTableInfoPage.setTotalCount(notPrepareData.size());
                 sourceTableInfoPage.setData(notPrepareData);
+            }else if(sourceTableInfoVo.getDataStatuses().indexOf(",")!=-1){
+                List<SourceTableInfo> sourceTableInfoList = sourceTableInfoPage.getData();
+                sourceTableInfoList.addAll(notPrepareData);
+                sourceTableInfoPage.setData(sourceTableInfoList);
             }
+        }else if(StringUtils.isEmpty(sourceTableInfoVo.getDataStatuses()) && StringUtils.isEmpty(sourceTableInfoVo.getIsDoings())){
+            //运营总览点击专区跳转
+            List<SourceTableInfo> sourceTableInfoList = sourceTableInfoPage.getData();
+            sourceTableInfoList.addAll(notPrepareData);
+            sourceTableInfoPage.setData(sourceTableInfoList);
         }
         return sourceTableInfoPage;
     }

@@ -27,6 +27,9 @@ import com.asiainfo.biapp.si.loc.core.prefecture.vo.PreConfigInfoVo;
 import com.asiainfo.biapp.si.loc.core.serviceMonitor.dao.IServiceMonitorDao;
 import com.asiainfo.biapp.si.loc.core.serviceMonitor.entity.ServiceMonitor;
 import com.asiainfo.biapp.si.loc.core.serviceMonitor.service.IServiceMonitorService;
+import com.asiainfo.biapp.si.loc.core.source.dao.ISourceTableInfoDao;
+import com.asiainfo.biapp.si.loc.core.source.entity.SourceTableInfo;
+import com.asiainfo.biapp.si.loc.core.source.vo.SourceTableInfoVo;
 
 /**
  * 
@@ -59,6 +62,9 @@ public class ServiceMonitorServiceImpl extends BaseServiceImpl<ServiceMonitor, S
     @Autowired
     private IServiceMonitorDao iServiceMonitorDao;
     
+    @Autowired
+    private ISourceTableInfoDao iSourceTableInfoDao;
+    
     @Override
     protected BaseDao<ServiceMonitor, String> getBaseDao() {
         return iServiceMonitorDao;
@@ -74,53 +80,88 @@ public class ServiceMonitorServiceImpl extends BaseServiceImpl<ServiceMonitor, S
         preConfigInfoVo.setConfigStatus(1);
         //获取用户权限下所有有效的专区
         List<PreConfigInfo> preConfigInfos = iPreConfigInfoService.selectPreConfigInfoList(preConfigInfoVo,user);
-        if(!preConfigInfos.isEmpty()){
-            List<String> configIds = new ArrayList<String>();
-            Map<String,Integer> configSortMap = new HashMap<String,Integer>();
-            for(int i=0;i<preConfigInfos.size();i++){
-                PreConfigInfo preConfigInfo  = preConfigInfos.get(i);
-                configIds.add(preConfigInfo.getConfigId());
-                configSortMap.put(preConfigInfo.getConfigId(), i+1);
-            }
-            //获取所有专区下监控数据
-            serviceMonitors = iServiceMonitorDao.selectServiceMonitorList(configIds,dataDate);
-            if(serviceMonitors.isEmpty()){
-                //没有查到监控数据的专区赋值
-                for(String configId : configIds){
-                    serviceMonitors.add(createServiceMonitor(configId, dataDate));
+        if(preConfigInfos !=null && preConfigInfos.size() >0){
+            if(!preConfigInfos.isEmpty()){
+                List<String> configIds = new ArrayList<String>();
+                Map<String,Integer> configSortMap = new HashMap<String,Integer>();
+                for(int i=0;i<preConfigInfos.size();i++){
+                    PreConfigInfo preConfigInfo  = preConfigInfos.get(i);
+                    configIds.add(preConfigInfo.getConfigId());
+                    configSortMap.put(preConfigInfo.getConfigId(), i+1);
                 }
-            }else if(serviceMonitors.size() <configIds.size()){
-                List<String> hasConfigIds = new ArrayList<String>();
-                for(ServiceMonitor serviceMonitor : serviceMonitors){
-                    hasConfigIds.add(serviceMonitor.getConfigId());
-                }
-                configIds.removeAll(hasConfigIds);
-                //没有查到监控数据的专区赋值
-                for(String configId : configIds){
-                    serviceMonitors.add(createServiceMonitor(configId, dataDate));
-                }
-            }
-            
-            for(ServiceMonitor serviceMonitor : serviceMonitors){
-                serviceMonitor.setSortOrder(configSortMap.get(serviceMonitor.getConfigId())); 
-            }
-            
-            //根据专区顺序排序
-            Collections.sort(serviceMonitors, new Comparator<ServiceMonitor>(){
-                @Override
-                public int compare(ServiceMonitor o1, ServiceMonitor o2) {
-                    if(o1.getSortOrder() != null && o2.getSortOrder() != null ){
-                        return o1.getSortOrder() < o2.getSortOrder()? -1 :1;
-                    }else{
-                        return -1;
+
+                //获取所有专区下监控数据
+                serviceMonitors = iServiceMonitorDao.selectServiceMonitorList(configIds,dataDate);
+                if(serviceMonitors.isEmpty()){
+                    //没有查到监控数据的专区赋值
+                    for(String configId : configIds){
+                        serviceMonitors.add(createServiceMonitor(configId, dataDate));
+                    }
+                }else if(serviceMonitors.size() <configIds.size()){
+                    List<String> hasConfigIds = new ArrayList<String>();
+                    for(ServiceMonitor serviceMonitor : serviceMonitors){
+                        hasConfigIds.add(serviceMonitor.getConfigId());
+                    }
+                    configIds.removeAll(hasConfigIds);
+                    //没有查到监控数据的专区赋值
+                    for(String configId : configIds){
+                        serviceMonitors.add(createServiceMonitor(configId, dataDate));
                     }
                 }
                 
-            });
+                // 所有专区下未准备数量
+                Map<String,Integer> notPrepareMap = mapNotPrepareData(configIds,dataDate);
+                for(ServiceMonitor serviceMonitor : serviceMonitors){
+                    if(notPrepareMap.get(serviceMonitor.getConfigId()) != null){
+                        serviceMonitor.setNotPrepareCount(notPrepareMap.get(serviceMonitor.getConfigId()));
+                    }
+                    serviceMonitor.setSortOrder(configSortMap.get(serviceMonitor.getConfigId())); 
+                }
+                
+                //根据专区顺序排序
+                Collections.sort(serviceMonitors, new Comparator<ServiceMonitor>(){
+                    @Override
+                    public int compare(ServiceMonitor o1, ServiceMonitor o2) {
+                        if(o1.getSortOrder() != null && o2.getSortOrder() != null ){
+                            return o1.getSortOrder() < o2.getSortOrder()? -1 :1;
+                        }else{
+                            return -1;
+                        }
+                    }
+                    
+                });
+            }
         }
         return serviceMonitors;
     }
 
+
+    /**
+     * 根据专区获取未准备数量
+     *
+     * @return
+     */
+    private Map<String, Integer> mapNotPrepareData(List<String> configIds,String dataDate) {
+        Map<String, Integer> notPrepareMap = new HashMap<String,Integer>();
+        SourceTableInfoVo sourceTableInfoVo= new SourceTableInfoVo();
+        if(configIds.size() ==1 ){
+            sourceTableInfoVo.setConfigId(configIds.get(0));
+        }else{
+            sourceTableInfoVo.setConfigId( StringUtils.join(configIds.toArray(), ","));
+        }
+        sourceTableInfoVo.setDataDate(dataDate);
+        List<SourceTableInfo> sourceTableInfoList =  iSourceTableInfoDao.selectNotPrepareData(sourceTableInfoVo);
+        if(sourceTableInfoList != null && sourceTableInfoList.size() > 0){
+            for(SourceTableInfo sourceTableInfo : sourceTableInfoList ){
+                if(notPrepareMap.containsKey(sourceTableInfo.getConfigId())){
+                    notPrepareMap.put(sourceTableInfo.getConfigId(), notPrepareMap.get(sourceTableInfo.getConfigId()) + 1);
+                }else{
+                    notPrepareMap.put(sourceTableInfo.getConfigId(), 1);
+                }
+            }
+        }
+        return notPrepareMap;
+    }
 
     @Override
     public ServiceMonitor queryDataByPreConfig(String configId, String dataDate) throws BaseException {
@@ -133,6 +174,12 @@ public class ServiceMonitorServiceImpl extends BaseServiceImpl<ServiceMonitor, S
         ServiceMonitor serviceMonitor = iServiceMonitorDao.selectServiceMonitorByConfigId(configId, dataDate);
         if(serviceMonitor == null){
             serviceMonitor = createServiceMonitor(configId, dataDate);
+        }
+        List<String> configIds = new ArrayList<String>();
+        configIds.add(configId);
+        Map<String,Integer> notPrepareMap = mapNotPrepareData(configIds,dataDate);
+        if(notPrepareMap != null && notPrepareMap.size() > 0 && notPrepareMap.containsKey(configId)){
+            serviceMonitor.setNotPrepareCount(notPrepareMap.get(configId));
         }
         return serviceMonitor;
     }

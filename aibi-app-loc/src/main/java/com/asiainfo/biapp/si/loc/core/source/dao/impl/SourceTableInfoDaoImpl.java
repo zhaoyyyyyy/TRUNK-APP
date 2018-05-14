@@ -66,12 +66,27 @@ public class SourceTableInfoDaoImpl extends BaseDaoImpl<SourceTableInfo, String>
      * @return
      */
     public List<SourceTableInfo> selectNotPrepareData(SourceTableInfoVo sourceTableInfoVo) {
-        String hql = "from  SourceTableInfo  where configId = :configId and sourceTableId not in "
-                + "( select a.sourceTableId from TargetTableStatus a where a.sourceTableId != 0 and a.dataDate = :dataDate)";
+        StringBuilder hql =new StringBuilder();
+        hql.append("from  SourceTableInfo l where 1=1 ");
+                
         Map<String, Object> params = new HashMap<>();
-        params.put("configId",sourceTableInfoVo.getConfigId());
+        if (StringUtil.isNotEmpty(sourceTableInfoVo.getConfigId())) {
+            if(sourceTableInfoVo.getConfigId().indexOf(",") != -1){
+                Set<String> configIdSet = new HashSet<String>();
+                for(String configId : sourceTableInfoVo.getConfigId().split(",")){
+                    configIdSet.add(configId);
+                }
+                hql.append("and l.configId in (:configIdSet) "); 
+                params.put("configIdSet", configIdSet);
+            }else{
+                hql.append("and configId = :configId ");
+                params.put("configId", sourceTableInfoVo.getConfigId());
+            }
+        }
+        hql.append("and l.sourceTableId not in ");
+        hql.append("( select a.sourceTableId from TargetTableStatus a where a.sourceTableId != 0 and a.dataDate = :dataDate)");
         params.put("dataDate",sourceTableInfoVo.getDataDate());
-        return super.findListByHql(hql, params);
+        return super.findListByHql(hql.toString(), params);
     }
     
     /**
