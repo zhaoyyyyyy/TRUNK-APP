@@ -6,9 +6,9 @@ window.loc_onload = function() {
 				for(i in idArr){
 					var a = $("#jsonmap1").getRowData(idArr[i]);
 					if (i == idArr.length-1){
-						ids += a.announcementId;
+						ids += ('\''+a.announcementId+'\'');
 					} else {
-						ids += (a.announcementId+",");
+						ids += ('\''+a.announcementId+'\',');
 					}
 				}
 				$.confirm("确定删除所选公告吗？", function() {
@@ -20,9 +20,7 @@ window.loc_onload = function() {
 						},
 						onSuccess: function(data){
 							if (data.data == "success") {
-								$("#jsonmap1").setGridParam({
-									postData : ""
-								}).trigger("reloadGrid", [ {
+								$("#jsonmap1").trigger("reloadGrid", [ {
 									page : 1
 								} ]);
 							}
@@ -31,6 +29,17 @@ window.loc_onload = function() {
 				});
 			}
 		})
+		$("#add_btn").click(function(){
+	    	var wd = $.window('新增系统公告', $.ctx
+				+ '/aibi_lc/pages/home/sysAnnouncement_add.html', 800, 600);
+	    	wd.reload = function() {
+	    		$("#jsonmap1").trigger("reloadGrid", [ {
+					page : 1
+				} ]);
+	    	}
+		})
+		
+		
 		$("#person_notice").click(function(){
 			if(($.ctx+'/aibi_lc/pages/home/personNotice.html') != window.location.pathname){
 				window.location.href = $.ctx+'/aibi_lc/pages/home/personNotice.html';
@@ -102,15 +111,30 @@ window.loc_onload = function() {
             colNames:['公告id','标题','内容', '类型', '发布日期','有效截止日期','优先级','公告状态','操作'],
             colModel:[
                 {name:'announcementId',index:'announcementId', align:"center",hidden:true},
-                {name:'announcementName',index:'announcementName', width:100, sortable:true,frozen : true ,align:"center"},//frozen : true固定列
+                {name:'announcementName',index:'announcementName', width:100, sortable:true,frozen : true ,align:"center",formatter:alarm},//frozen : true固定列
                 {name:'announcementDetail',index:'announcementDetail', width:100,align:"center"},
-                {name:'typeId',index:'typeId',sortable:false, width:60,align:"center"},
+                {name:'typeId',index:'typeId',sortable:false, width:60,align:"center",
+                	formatter: function(v) {
+                		return $.getCodeDesc('GGLX', v)
+                	}
+                },
                 {name:'releaseDate',index:'releaseDate', width:80,align:"center",formatter:formatReleaseDate},
                 {name:'effectiveTime',index:'effectiveTime', width:80,align:"center",formatter:formatEffectiveDate},
-                {name:'priorityId',index:'priorityId', width:50,align:"center"},
-                {name:'status',index:'status', width:50,align:"center"},
+                {name:'priorityId',index:'priorityId', width:50,align:"center",
+                	formatter: function(v) {
+                		return $.getCodeDesc('GGYXJ', v)
+                	}
+                },
+                {name:'status',index:'status', width:50,align:"center",
+                	formatter: function(v) {
+                		return $.getCodeDesc('GGZT', v)
+                	}
+                },
                 {name:'op',index:'op', width:50, sortable:false,formatter:del,align:"center"}
             ],
+            postData: {
+				"announcementName" : $("#txt_name").val()
+			},
             multiselect: true,
             multiboxonly: true,
             rowNum:10,
@@ -136,7 +160,12 @@ window.loc_onload = function() {
             return getSmpFormatDateByLong(rowObject.effectiveTime,true);
     }
 		function alarm(cellvalue, options, rowObject){
-            var html='<a><em class="label-store ui-news-alarm"></em>' +rowObject.id+ '</a>';
+			var html="";
+			if (rowObject.priorityId == 0){
+				html='<a><em class="label-store ui-news-alarm"></em>' +rowObject.announcementName+ '</a>';
+			} else {
+				html = rowObject.announcementName;
+			}
             return html;
         }
         function del(cellvalue, options, rowObject){
@@ -145,20 +174,19 @@ window.loc_onload = function() {
         }
 	};
 	
-	/*function refresh(url) {    
-		debugger
-	    var page = $('#jsonmap1').getGridParam('page'); // current page    
-	    var rows = $('#jsonmap1').getGridParam('rows'); // rows      
-	    var sidx = $('#jsonmap1').getGridParam('sidx'); // sidx    
-	    var sord = $('#jsonmap1').getGridParam('sord'); // sord    
-	    jQuery("#jsonmap1").jqGrid('setGridParam', {    
-	        url : url,    
-	        page:page,    
-	        rows:rows,    
-	        sidx:sidx,    
-	        sord:sord    
-	    }).trigger("reloadGrid"); 
-	}*/
+	//搜索
+	function search(){
+		$("#jsonmap1").setGridParam( //G,P要大写
+				{
+					url:$.ctx+'/api/message/locSysAnnouncement/queryPage',
+					postData: {
+						"announcementName" : $("#txt_name").val()
+					},
+				}
+		) .trigger("reloadGrid", [ {
+			page : 1
+		} ]);
+	}
 	
 	//删除公告	
 	function deleteSysAnouncement(obj){
@@ -171,9 +199,7 @@ window.loc_onload = function() {
 				},
 				onSuccess: function(data){
 					if (data.data == "success") {
-						$("#jsonmap1").setGridParam({
-							postData : ""
-						}).trigger("reloadGrid", [ {
+						$("#jsonmap1").trigger("reloadGrid", [ {
 							page : 1
 						} ]);
 					}

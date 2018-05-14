@@ -164,7 +164,6 @@ window.loc_onload = function() {
          		}
          		opts.afterGridLoad(data);
          		$("#totalSize").text("全部："+data.totalCount)
-         		console.log(data.rows[0]);
          		$("#unreadSize").text(data.rows[0].unreadSize);
              }
         });

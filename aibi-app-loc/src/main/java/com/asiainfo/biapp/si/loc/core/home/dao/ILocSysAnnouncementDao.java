@@ -42,6 +42,14 @@ public interface ILocSysAnnouncementDao extends BaseDao<LocSysAnnouncement, Stri
      */
     Page<LocSysAnnouncement> selectILocSysAnnouncement(Page<LocSysAnnouncement> page,
             LocSysAnnouncementVo locSysAnnouncementVo);
+    
+    /**
+     * 
+     * Description:根据id获取系统公告 
+     *
+     * @return
+     */
+    LocSysAnnouncement selectLocSysAnnouncementById(String id);
 
     /**
      * 新增
@@ -65,13 +73,22 @@ public interface ILocSysAnnouncementDao extends BaseDao<LocSysAnnouncement, Stri
     void deleteLocSysAnnouncement(LocSysAnnouncement locSysAnnouncement);
     
     /**
-     * 批量删除   ids格式; 1,2,3
+     * 批量删除   ids格式; ‘1,2,3’
      * Description: 
      *
      * @param ids
      */
     void deleteLocSysAnnouncement(String ids);
 
+
+    /**
+     * 逻辑批量删除   ids格式; ‘1,2,3’
+     * Description: 
+     *
+     * @param ids
+     */
+    void updateSysAnnouncementStatus(String ids);
+    
     /**
      * 模糊搜索 or
      */

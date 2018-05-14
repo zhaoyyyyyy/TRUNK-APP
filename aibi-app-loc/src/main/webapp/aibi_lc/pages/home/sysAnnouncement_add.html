@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>新增系统公告</title>
+<!--[if IE]>
+    	<meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <![endif]-->
+<link rel="stylesheet" theme="default" href="../../asset/css/theme/default/coc_frame.css" />
+<link rel="stylesheet" theme="default" href="../../asset/css/theme/default/main.css" />
+<script type="text/javascript" src="../../asset/script/common/include.js"></script>
+<script type="text/javascript" src="sysAnnouncement_add.js"></script>
+<style type="text/css">
+[v-cloak] {
+	display: none;
+}
+</style>
+<!--[if lt IE 9]>
+	    <script src="../../asset/script/component/h5compatibility/html5shiv.min.js"></script>
+	    <script src="../../asset/script/component/h5compatibility/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+	<div id="dataD" class="iframe-nest" v-cloak>
+		<div class="ui-reg-main">
+			<div class="ui-lc-mian">
+				<form id="saveDataForm">
+					<div class="ui-reg-search">
+						<div class="form-horizontal ui-form dimtable-table">
+							<div class="ui-form-group">
+								<label class="control-label fleft"><span class="input-required">*</span>标题:</label>
+								<div class="control-input">
+									<input name="announcementName" type="text"  class="fleft form-control easyui-validatebox"
+									required="true"	placeholder="请输入系统公告标题" />
+								</div>
+							</div>
+							<div class="ui-form-group">
+								<label class="control-label fleft" for="configDesc"><span class="input-required">*</span>内容:</label>
+								<div class="control-input">
+									<textarea required="true" rows="5" name="announcementDetail" class="form-control form-control-textarea easyui-validatebox"></textarea>
+								</div>
+							</div>
+							<div class="ui-form-group">
+								<label class="control-label fleft"><span class="input-required">*</span>公告类型:</label>
+								<div class="control-input">
+									<select name="typeId" dicCode="GGLX"
+										type="text" required="true"
+										class="form-control input-pointer easyui-validatebox"></select>
+
+								</div>
+							</div>
+							<div class="ui-form-group">
+								<label class="control-label fleft"><span class="input-required">*</span>公告优先级:</label>
+								 <label class="rdoDefaultCol">
+									<input type="radio" name="priorityId"  value="0" checked="checked">重要
+								</label>
+								<label class="rdoDefaultCol">
+									<input type="radio" name="priorityId"  value="1"/>普通
+								</label>
+							</div>
+							
+							<div class="ui-form-group">
+								<label class="control-label fleft" for="invalidTime"><span class="input-required">*</span>有效截止期:</label> 
+								<div class="control-input">
+									<input name="effectiveTime" type="text"
+									required="true"	class="form-control input-pointer easyui-validatebox" data-dismiss="formDatepicker#sendTime" id="invalidTime" placeholder="请选择失效日期" />
+								</div>
+							</div>
+							
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

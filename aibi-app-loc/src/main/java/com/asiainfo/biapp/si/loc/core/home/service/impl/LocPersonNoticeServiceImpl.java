@@ -79,7 +79,7 @@ public class LocPersonNoticeServiceImpl extends BaseServiceImpl<LocPersonNotice,
      * @see com.asiainfo.biapp.si.loc.core.home.service.ILocPersonNoticeService#selectUnreadSize()
      */
     @Override
-    public int selectUnreadSize() {
-        return iLocPersonNoticeDao.selectUnreadSize();
+    public int selectUnreadCount() {
+        return iLocPersonNoticeDao.selectUnreadCount();
     }
 }

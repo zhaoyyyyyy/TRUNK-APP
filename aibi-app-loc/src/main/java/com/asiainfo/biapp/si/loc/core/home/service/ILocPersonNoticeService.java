@@ -30,7 +30,7 @@ public interface ILocPersonNoticeService extends BaseService<LocPersonNotice, St
 
     Page<LocPersonNotice> selectLocPersonNoticeList(Page<LocPersonNotice> page, LocPersonNoticeVo locPersonNoticeVo) throws BaseException;
     
-    int selectUnreadSize();
+    int selectUnreadCount();
     
     LocPersonNotice selectLocPersonNoticeById(LocPersonNoticeVo locPersonNoticeVo);
 

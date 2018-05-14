@@ -71,7 +71,7 @@ window.loc_onload = function() {
     			/*"announcementDetail" : $("#txt_name").val(),
     			"announcementName" : $("#txt_name").val()*/
     		},
-            colNames:['公告名称','发布时间','公告内容','公告id','阅读状态','名称无格式'],
+            colNames:['公告名称','发布时间','公告内容','公告id','阅读状态','名称无格式','优先级'],
             colModel:[
                 {name:'announcementName',index:'announcementName', width:30, sortable:true,frozen : false ,align:"center",formatter:alarm},//frozen : true固定列 ,formatter:alarm
                 {name:'releaseDate',index:'releaseDate', width:60, align:"center",formatter:formatDate},
@@ -79,6 +79,7 @@ window.loc_onload = function() {
                 {name:'announcementId',index:'announcementId', align:"center",hidden:true},
                 {name:'readStatus',index:'readStatus', align:"center",hidden:true},
                 {name:'announcementName',index:'announcementNameNull', align:"center",hidden:true},
+                {name:'priorityId',index:'priorityId', align:"center",hidden:true},
             ],
             rowNum:10,
             rowList:[10,20,30],
@@ -175,30 +176,29 @@ window.loc_onload = function() {
         function alarm(cellvalue, options, rowObject){
            // var html='<a><em class="label-store ui-news-alarm"></em>' +rowObject.announcementName+ '</a>';
         	var html = "";
-        	if (rowObject.readStatus == 2) {
-        		html = '<span class="info-bold">'+rowObject.announcementName+'</span>';
-        	} else if (rowObject[4] == 1){
-        		html = rowObject[5];
+        	if (rowObject.priorityId ==0 || rowObject[6] == 0) {
+        		if (rowObject.readStatus == 2) {
+        			html = '<a><em class="label-store ui-news-alarm"></em><span class="info-bold">'+rowObject.announcementName+'</span></a>';
+        		} else if (rowObject[4] == 1){
+        			html = '<a><em class="label-store ui-news-alarm"></em>'+rowObject[5]+'</a>';
+        		} else {
+        			html = '<a><em class="label-store ui-news-alarm"></em>'+rowObject.announcementName+'</a>' ; 
+        		}
         	} else {
-        		html = rowObject.announcementName ; 
+        		if (rowObject.readStatus == 2) {
+        			html = '<span class="info-bold">'+rowObject.announcementName+'</span>';
+        		} else if (rowObject[4] == 1){
+        			html = rowObject[5];
+        		} else {
+        			html = rowObject.announcementName; 
+        		}
         	}
             return html;
         }
 	}
 
 
-//搜索
-function search(){
-	$("#jsonmap1").setGridParam( //G,P要大写
-			{
-				url:$.ctx+'/api/message/locSysAnnouncement/queryPage',
-				postData: {
-					"announcementDetail" : $("#txt_name").val(),
-					"announcementName" : $("#txt_name").val()
-				},
-			}
-	) .trigger("reloadGrid");
-}
+
 
 
 //扩展Date的format方法   

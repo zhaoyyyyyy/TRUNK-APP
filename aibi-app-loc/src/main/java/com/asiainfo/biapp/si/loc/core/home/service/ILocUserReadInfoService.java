@@ -1,6 +1,5 @@
 package com.asiainfo.biapp.si.loc.core.home.service;
 
-import com.asiainfo.biapp.si.loc.base.page.Page;
 import com.asiainfo.biapp.si.loc.base.service.BaseService;
 import com.asiainfo.biapp.si.loc.core.home.entity.LocUserReadInfo;
 import com.asiainfo.biapp.si.loc.core.home.entity.LocUserReadInfoPK;
@@ -29,11 +28,13 @@ import com.asiainfo.biapp.si.loc.core.home.vo.LocUserReadInfoVo;
 public interface ILocUserReadInfoService extends BaseService<LocUserReadInfo, String> {
     LocUserReadInfo selectLocUserReadInfo( LocUserReadInfoVo locUserReadInfoVo);
     
-    int selectTotalSize();
+    int selectCount(LocUserReadInfoVo locUserReadInfoVo);
 
     void insertLocUserReadInfo(LocUserReadInfo locUserReadInfo);
 
     void updateLocUserReadInfo(LocUserReadInfo locUserReadInfo);
 
     void deleteLocUserReadInfo(LocUserReadInfoPK locUserReadInfoPK);
+    
+    void deleteLocUserReadInfo(String announcementIds);
 }

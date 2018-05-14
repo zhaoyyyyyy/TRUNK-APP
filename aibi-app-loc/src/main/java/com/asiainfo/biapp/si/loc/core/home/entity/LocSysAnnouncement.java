@@ -8,9 +8,12 @@ import io.swagger.annotations.ApiParam;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+
+import org.hibernate.annotations.GenericGenerator;
 
 import java.util.Date;
 
@@ -45,6 +48,8 @@ import java.util.Date;
 public class LocSysAnnouncement extends BaseEntity {
 
     @Id
+    @GenericGenerator(name="idGenerator", strategy="uuid") 
+    @GeneratedValue(generator="idGenerator") //使用uuid的生成策略  
     @Column(name = "ANNOUNCEMENT_ID")
     @ApiParam(value = "公告id")
     private String announcementId;

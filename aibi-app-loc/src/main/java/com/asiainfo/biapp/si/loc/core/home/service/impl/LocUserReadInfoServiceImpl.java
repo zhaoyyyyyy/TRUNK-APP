@@ -1,17 +1,16 @@
 package com.asiainfo.biapp.si.loc.core.home.service.impl;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.asiainfo.biapp.si.loc.base.dao.BaseDao;
-import com.asiainfo.biapp.si.loc.base.page.Page;
 import com.asiainfo.biapp.si.loc.base.service.impl.BaseServiceImpl;
 import com.asiainfo.biapp.si.loc.core.home.dao.ILocUserReadInfoDao;
 import com.asiainfo.biapp.si.loc.core.home.entity.LocUserReadInfo;
 import com.asiainfo.biapp.si.loc.core.home.entity.LocUserReadInfoPK;
 import com.asiainfo.biapp.si.loc.core.home.service.ILocUserReadInfoService;
 import com.asiainfo.biapp.si.loc.core.home.vo.LocUserReadInfoVo;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Title : LocUserReadInfoServiceImpl
@@ -70,7 +69,16 @@ public class LocUserReadInfoServiceImpl extends BaseServiceImpl<LocUserReadInfo,
      * @see com.asiainfo.biapp.si.loc.core.home.service.ILocUserReadInfoService#selectTotalSize()
      */
     @Override
-    public int selectTotalSize() {
-        return locUserReadInfoDao.selectCount();
+    public int selectCount(LocUserReadInfoVo locUserReadInfoVo) {
+        return locUserReadInfoDao.selectCount(locUserReadInfoVo);
+    }
+
+    /**
+     * {@inheritDoc}
+     * @see com.asiainfo.biapp.si.loc.core.home.service.ILocUserReadInfoService#deleteLocUserReadInfo(java.lang.String)
+     */
+    @Override
+    public void deleteLocUserReadInfo(String announcementIds) {
+        locUserReadInfoDao.deleteLocUserReadInfo(announcementIds);
     }
 }

@@ -65,9 +65,15 @@ public class MessageMgrController extends BaseController {
     private static final int IS_READ = 1;
 
     private static final int NOT_REAAD = 2;
-    
+
+    private static final int IS_SUCCESS = 1;
+
+    private static final int DELETED = 0;
+
+    private static final int EFFECTIVE = 1;
+
     private static final int FIRST_SIZE = 0;
-    
+
     private static final String SUCCESS = "success";
 
     @Autowired
@@ -82,23 +88,16 @@ public class MessageMgrController extends BaseController {
     @RequestMapping(value = "/locSysAnnouncement/queryPage", method = RequestMethod.POST)
     @ApiOperation(value = "分页查询系统公告")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "announcementDetail", value = "公告内容", required = false, paramType = "query", dataType = "string"),
             @ApiImplicitParam(name = "announcementName", value = "公告名字", required = false, paramType = "query", dataType = "string") })
     public Page<LocSysAnnouncement> findLocSysAnnouncementPage(@ModelAttribute Page<LocSysAnnouncement> page,
             @ModelAttribute LocSysAnnouncementVo locSysAnnouncementVo) {
         Page<LocSysAnnouncement> locSysAnnouncementPage = new Page<LocSysAnnouncement>();
         try {
             User user = this.getLoginUser();
-            if (StringUtil.isNotEmpty(locSysAnnouncementVo.getAnnouncementName())) {
-                // 搜索
-                locSysAnnouncementPage = locSysAnnouncementService.searchLocSysAnnouncement(page, locSysAnnouncementVo);
-            } else {
-                locSysAnnouncementPage = locSysAnnouncementService.selectLocSysAnnouncement(page, locSysAnnouncementVo);
-            }
+            locSysAnnouncementPage = locSysAnnouncementService.selectLocSysAnnouncement(page, locSysAnnouncementVo);
             List<LocSysAnnouncement> rows = locSysAnnouncementPage.getRows();
             LocUserReadInfoVo locUserReadInfoVo = new LocUserReadInfoVo();
-            int totalSize = locUserReadInfoService.selectTotalSize();
-            LocSysAnnouncementVo vo = new LocSysAnnouncementVo();
+            int totalSize = locUserReadInfoService.selectCount(null);
             for (LocSysAnnouncement locSysAnnouncement : rows) {
                 locUserReadInfoVo.setUserId(user.getUserName());
                 locUserReadInfoVo.setAnnouncementId(locSysAnnouncement.getAnnouncementId());
@@ -108,7 +107,7 @@ public class MessageMgrController extends BaseController {
                 } else {
                     locSysAnnouncement.setReadStatus(IS_READ);
                 }
-                locSysAnnouncement.setUnread(locSysAnnouncementPage.getTotalCount()-totalSize);
+                locSysAnnouncement.setUnread(locSysAnnouncementPage.getTotalCount() - totalSize);
             }
         } catch (BaseException e) {
             locSysAnnouncementPage.fail(e);
@@ -140,33 +139,50 @@ public class MessageMgrController extends BaseController {
     @ApiOperation(value = "删除系统公告")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "announcementId", value = "公告id", required = false, paramType = "query", dataType = "string") })
-    //ids格式："1,2,3,4"
-    public WebResult<String> deleteLocSysAnnouncement(@ModelAttribute LocSysAnnouncementVo locSysAnnouncementVo,String ids) {
+    // ids格式："'1','2','3','4'"
+    public WebResult<String> deleteLocSysAnnouncement(@ModelAttribute LocSysAnnouncementVo locSysAnnouncementVo,
+            String ids) {
+        WebResult<String> webResult = new WebResult<>();
+        // 逻辑删除
+        if (StringUtil.isNotEmpty(ids)) {
+            locSysAnnouncementService.deleteByUpdateLocSysAnnouncement(ids);
+        } else {
+            LocSysAnnouncement locSysAnnouncement = locSysAnnouncementService
+                .getLocSysAnnouncementById(locSysAnnouncementVo.getAnnouncementId());
+            locSysAnnouncement.setStatus(DELETED);
+            locSysAnnouncementService.updateLocSysAnnouncement(locSysAnnouncement);
+            ids = "'" + locSysAnnouncement.getAnnouncementId() + "'";
+        }
+        // 删除个人阅读信息
+        locUserReadInfoService.deleteLocUserReadInfo(ids);
+        return webResult.success("删除成功", SUCCESS);
+    }
+
+    @RequestMapping(value = "/locSysAnnouncement/save", method = RequestMethod.POST)
+    @ApiOperation(value = "新增系统公告")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "announcementId", value = "公告id", required = false, paramType = "query", dataType = "string") })
+    public WebResult<String> addLocSysAnnouncement(@ModelAttribute LocSysAnnouncement locSysAnnouncement) {
         WebResult<String> webResult = new WebResult<>();
         try {
             User user = this.getLoginUser();
-            if (StringUtil.isNotEmpty(ids)) {
-                locSysAnnouncementService.deleteLocSysAnnouncement(ids);
-            } else {
-                locSysAnnouncementService.deleteLocSysAnnouncement(locSysAnnouncementVo);
-            }
+            locSysAnnouncement.setReleaseUserId(user.getUserName());
+            locSysAnnouncement.setStatus(EFFECTIVE);
+            locSysAnnouncement.setReleaseDate(new Date());
+            locSysAnnouncement.setIsSuccess(IS_SUCCESS);
+            locSysAnnouncementService.insertLocSysAnnouncement(locSysAnnouncement);
         } catch (BaseException e) {
-           webResult.fail(e);
+            webResult.fail(e);
         }
-        
-        return webResult.success("删除成功", SUCCESS);
+        return webResult.success("添加成功", SUCCESS);
     }
-    
-    
-    
-    
-    
+
     @RequestMapping(value = "/personNotice/queryPage", method = RequestMethod.POST)
     @ApiOperation(value = "个人通知查询")
     public Page<LocPersonNotice> findLocPersonNoticePage(@ModelAttribute Page<LocPersonNotice> page,
             @ModelAttribute LocPersonNoticeVo locPersonNoticeVo) {
         Page<LocPersonNotice> locPersonNoticePage = new Page<LocPersonNotice>();
-        int unreadSize = locPersonNoticeService.selectUnreadSize();
+        int unreadSize = locPersonNoticeService.selectUnreadCount();
         try {
             User user = this.getLoginUser();
             locPersonNoticeVo.setReceiveUserId(user.getUserName());
@@ -175,12 +191,13 @@ public class MessageMgrController extends BaseController {
             locPersonNoticePage.fail(e);
         }
         if (!locPersonNoticePage.getRows().isEmpty()) {
-            locPersonNoticePage.getRows().get(FIRST_SIZE).setUnreadSize(unreadSize);;
+            locPersonNoticePage.getRows().get(FIRST_SIZE).setUnreadSize(unreadSize);
+            ;
         }
         return locPersonNoticePage;
 
     }
-    
+
     @RequestMapping(value = "/personNotice/read", method = RequestMethod.POST)
     @ApiOperation(value = "个人通知阅读")
     @ApiImplicitParams({
@@ -198,7 +215,5 @@ public class MessageMgrController extends BaseController {
         }
         return webResult.success("阅读成功", null);
     }
-    
-    
 
 }

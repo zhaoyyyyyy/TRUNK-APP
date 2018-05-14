@@ -26,15 +26,7 @@
 	  			<a href=''>标签排名</a>
 	  			<a href=''>我的收藏</a>
 				<div class="dropdown fright">
-			    	<a href = "javascript:;" class="dropdown-toggle">
-			    		思特奇专区
-			    		<span class="caret"></span>
-			    	</a>
-			    	<ul class="dropdown-menu">
-				       <li><a href="#">Action</a></li>
-				       <li><a href="#">Another</a></li>
-				       <li><a href="#">Something</a></li>
-			        </ul>
+			    	
 			    </div>
 			</h3>
       	</div>
@@ -45,13 +37,13 @@
       				<button type="button" class="ui-btn" id="person_notice">个人通知</button>
       				<button type="button" class="ui-btn ui-btn-default" id="announcement_mgr">公告管理</button>
       				<div class="form-group fright width-210">
-						<div class="input-group">
-							<input name="configDesc" id="txt_name" type="text" class="form-control input-pointer" placeholder="" />
-							<div class="input-group-addon input-group-icon right-child" id="btn_search"></div>			
-						</div>						
+							<div class="input-group">
+								<input name="configDesc" id="txt_name"  placeholder="请输入标签关键字" type="text" class="form-control input-pointer" placeholder="" />
+								<div class="input-group-addon input-group-icon right-child" onClick = "search()" id="btn_search"></div>			
+							</div>						
 					</div>
 					<div class="mt20">
-      					<button type="button" class="ui-btn ui-btn-default">增加</button>
+      					<button type="button" id="add_btn" class="ui-btn ui-btn-default">增加</button>
       					<button type="button" id="del_btn" class="ui-btn ui-btn-del ml10">删除</button>
 					</div>
      				</div>
@@ -59,7 +51,7 @@
                     <table id="jsonmap1"  class="table"></table>
                     <div id="pjmap1"></div>
                 </div>
-      				
+      			<div id = "add_sysAnnouncement"></div>	
       		</div>
     	</div>      
 		

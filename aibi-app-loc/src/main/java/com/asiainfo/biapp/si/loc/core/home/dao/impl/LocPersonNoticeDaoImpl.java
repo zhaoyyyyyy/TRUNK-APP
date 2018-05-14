@@ -64,57 +64,62 @@ public class LocPersonNoticeDaoImpl extends BaseDaoImpl<LocPersonNotice, String>
         Map<String, Object> reMap = new HashMap<>();
         Map<String, Object> params = new HashMap<>();
         StringBuffer hql = new StringBuffer("from LocPersonNotice l where 1=1 ");
-        if (StringUtil.isNotBlank(locPersonNoticeVo.getLabelId())) {
-            hql.append("and l.labelId = :labelId ");
-            params.put("categoryId", locPersonNoticeVo.getLabelId());
-        }
-        if (StringUtil.isNotBlank(locPersonNoticeVo.getNoticeDetail())) {
-            hql.append("and l.noticeDetail = :noticeDetail ");
-            params.put("noticeDetail", locPersonNoticeVo.getNoticeDetail());
-        }
-        if (StringUtil.isNotBlank(locPersonNoticeVo.getNoticeId())) {
-            hql.append("and l.noticeId = :noticeId ");
-            params.put("noticeId", locPersonNoticeVo.getNoticeId());
-        }
-        if (StringUtil.isNotBlank(locPersonNoticeVo.getNoticeName())) {
-            hql.append("and l.noticeName = :noticeName ");
-            params.put("noticeName", locPersonNoticeVo.getNoticeName());
-        }
-        if (null != locPersonNoticeVo.getNoticeTypeId()) {
-            hql.append("and l.noticeTypeId = :noticeTypeId ");
-            params.put("noticeTypeId", locPersonNoticeVo.getNoticeTypeId());
-        }
-        if (null != locPersonNoticeVo.getNoticeSendTime()) {
-            hql.append("and l.noticeSendTime = :noticeSendTime ");
-            params.put("noticeSendTime", locPersonNoticeVo.getNoticeSendTime());
-        }
-        if (null != locPersonNoticeVo.getStatus()) {
-            hql.append("and l.status = :status ");
-            params.put("status", locPersonNoticeVo.getStatus());
-        }
-        if (StringUtil.isNotBlank(locPersonNoticeVo.getReleaseUserId())) {
-            hql.append("and l.releaseUserId = :releaseUserId ");
-            params.put("releaseUserId", locPersonNoticeVo.getReleaseUserId());
-        }
-        if (StringUtil.isNotBlank(locPersonNoticeVo.getReceiveUserId())) {
-            hql.append("and l.receiveUserId = :receiveUserId ");
-            params.put("receiveUserId", locPersonNoticeVo.getReceiveUserId());
-        }
-        if (null != locPersonNoticeVo.getReadStatus()) {
-            hql.append("and l.readStatus = :readStatus ");
-            params.put("readStatus", locPersonNoticeVo.getReadStatus());
-        }
-        if (null != locPersonNoticeVo.getIsSuccess()) {
-            hql.append("and l.isSuccess = :isSuccess ");
-            params.put("isSuccess", locPersonNoticeVo.getIsSuccess());
-        }
-        if (null != locPersonNoticeVo.getIsShowTip()) {
-            hql.append("and l.isShowTip = :isShowTip ");
-            params.put("isShowTip", locPersonNoticeVo.getIsShowTip());
+        if (null != locPersonNoticeVo){
+            if (StringUtil.isNotBlank(locPersonNoticeVo.getLabelId())) {
+                hql.append("and l.labelId = :labelId ");
+                params.put("categoryId", locPersonNoticeVo.getLabelId());
+            }
+            if (StringUtil.isNotBlank(locPersonNoticeVo.getNoticeDetail())) {
+                hql.append("and l.noticeDetail = :noticeDetail ");
+                params.put("noticeDetail", locPersonNoticeVo.getNoticeDetail());
+            }
+            if (StringUtil.isNotBlank(locPersonNoticeVo.getNoticeId())) {
+                hql.append("and l.noticeId = :noticeId ");
+                params.put("noticeId", locPersonNoticeVo.getNoticeId());
+            }
+            if (StringUtil.isNotBlank(locPersonNoticeVo.getNoticeName())) {
+                hql.append("and l.noticeName = :noticeName ");
+                params.put("noticeName", locPersonNoticeVo.getNoticeName());
+            }
+            if (null != locPersonNoticeVo.getNoticeTypeId()) {
+                hql.append("and l.noticeTypeId = :noticeTypeId ");
+                params.put("noticeTypeId", locPersonNoticeVo.getNoticeTypeId());
+            }
+            if (null != locPersonNoticeVo.getNoticeSendTime()) {
+                hql.append("and l.noticeSendTime = :noticeSendTime ");
+                params.put("noticeSendTime", locPersonNoticeVo.getNoticeSendTime());
+            }
+            if (null != locPersonNoticeVo.getStatus()) {
+                hql.append("and l.status = :status ");
+                params.put("status", locPersonNoticeVo.getStatus());
+            }
+            if (StringUtil.isNotBlank(locPersonNoticeVo.getReleaseUserId())) {
+                hql.append("and l.releaseUserId = :releaseUserId ");
+                params.put("releaseUserId", locPersonNoticeVo.getReleaseUserId());
+            }
+            if (StringUtil.isNotBlank(locPersonNoticeVo.getReceiveUserId())) {
+                hql.append("and l.receiveUserId = :receiveUserId ");
+                params.put("receiveUserId", locPersonNoticeVo.getReceiveUserId());
+            }
+            if (null != locPersonNoticeVo.getReadStatus()) {
+                hql.append("and l.readStatus = :readStatus ");
+                params.put("readStatus", locPersonNoticeVo.getReadStatus());
+            }
+            if (null != locPersonNoticeVo.getIsSuccess()) {
+                hql.append("and l.isSuccess = :isSuccess ");
+                params.put("isSuccess", locPersonNoticeVo.getIsSuccess());
+            }
+            if (null != locPersonNoticeVo.getIsShowTip()) {
+                hql.append("and l.isShowTip = :isShowTip ");
+                params.put("isShowTip", locPersonNoticeVo.getIsShowTip());
+            }
+            reMap.put("params", params);
+        } else {
+            reMap.put("params", null);
         }
         hql.append("order by l.noticeSendTime desc ");
         reMap.put("hql", hql);
-        reMap.put("params", params);
+       
         return reMap;
     }
 
@@ -140,8 +145,8 @@ public class LocPersonNoticeDaoImpl extends BaseDaoImpl<LocPersonNotice, String>
      * @see com.asiainfo.biapp.si.loc.core.home.dao.ILocPersonNoticeDao#selectUnreadSize()
      */
     @Override
-    public int selectUnreadSize() {
-        String hql = " from LocPersonNotice where readStatus = 2";
+    public int selectUnreadCount() {
+        String hql = "from LocPersonNotice where readStatus = 2";
         return super.getCount(hql, null);
     }
 }

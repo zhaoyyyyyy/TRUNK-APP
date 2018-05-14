@@ -67,6 +67,6 @@ public interface ILocPersonNoticeDao extends BaseDao<LocPersonNotice, String> {
      *
      * @return
      */
-    int selectUnreadSize();
+    int selectUnreadCount();
 
 }

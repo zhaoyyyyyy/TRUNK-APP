@@ -30,9 +30,19 @@ public interface ILocSysAnnouncementService extends BaseService<LocSysAnnounceme
 
     Page<LocSysAnnouncement> searchLocSysAnnouncement(Page<LocSysAnnouncement> page, LocSysAnnouncementVo locSysAnnouncement);
     
+    LocSysAnnouncement getLocSysAnnouncementById(String id);
+    
     void insertLocSysAnnouncement(LocSysAnnouncement locSysAnnouncement);
 
     void updateLocSysAnnouncement(LocSysAnnouncement locSysAnnouncement);
+    
+    /**
+     * 
+     * Description: 逻辑删除系统公告
+     *
+     * @param ids
+     */
+    void deleteByUpdateLocSysAnnouncement(String ids);
 
     void deleteLocSysAnnouncement(LocSysAnnouncement locSysAnnouncement);
 

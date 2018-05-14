@@ -5,9 +5,12 @@ import io.swagger.annotations.ApiParam;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+
+import org.hibernate.annotations.GenericGenerator;
 
 import java.util.Date;
 
@@ -38,6 +41,8 @@ public class LocPersonNotice extends BaseEntity {
 
     @Id
     @Column(name = "NOTICE_ID")
+    @GenericGenerator(name="idGenerator", strategy="uuid") 
+    @GeneratedValue(generator="idGenerator") //使用uuid的生成策略  
     @ApiParam(value = "通知ID ")
     private String noticeId;
 

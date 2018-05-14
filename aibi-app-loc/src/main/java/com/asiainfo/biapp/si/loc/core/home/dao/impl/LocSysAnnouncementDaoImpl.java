@@ -61,14 +61,14 @@ public class LocSysAnnouncementDaoImpl extends BaseDaoImpl<LocSysAnnouncement, S
     private Map<String, Object> fromBean(LocSysAnnouncementVo locSysAnnouncementVo) {
         Map<String, Object> reMap = new HashMap<>();
         Map<String, Object> params = new HashMap<>();
-        StringBuffer hql = new StringBuffer("from LocSysAnnouncement l where 1=1 ");
+        StringBuffer hql = new StringBuffer("from LocSysAnnouncement l where l.status != 0 ");
         if (StringUtil.isNotBlank(locSysAnnouncementVo.getAnnouncementId())) {
             hql.append("and l.announcementId = :announcementId ");
             params.put("announcementId", locSysAnnouncementVo.getAnnouncementId());
         }
         if (StringUtil.isNotBlank(locSysAnnouncementVo.getAnnouncementName())) {
-            hql.append("and l.announcementName = :announcementName ");
-            params.put("announcementName", locSysAnnouncementVo.getAnnouncementName());
+            hql.append("and l.announcementName like :announcementName ");
+            params.put("announcementName", "%"+locSysAnnouncementVo.getAnnouncementName()+"%");
         }
         if (StringUtil.isNotBlank(locSysAnnouncementVo.getAnnouncementDetail())) {
             hql.append("and l.announcementDetail = :announcementDetail ");
@@ -149,6 +149,27 @@ public class LocSysAnnouncementDaoImpl extends BaseDaoImpl<LocSysAnnouncement, S
             String sql = "delete from LOC_SYS_ANNOUNCEMENT where ANNOUNCEMENT_ID in (" +ids + ")"; 
             super.excuteSql(sql, null);
         }
+    }
+
+    /**
+     * {@inheritDoc}
+     * @see com.asiainfo.biapp.si.loc.core.home.dao.ILocSysAnnouncementDao#updateSysAnnouncement(java.lang.String)
+     */
+    @Override
+    public void updateSysAnnouncementStatus(String ids) {
+        if (StringUtil.isNotEmpty(ids)){
+            String sql = "update LOC_SYS_ANNOUNCEMENT  set STATUS = 0 where ANNOUNCEMENT_ID in (" +ids + ")"; 
+            super.excuteSql(sql, null);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     * @see com.asiainfo.biapp.si.loc.core.home.dao.ILocSysAnnouncementDao#selectLocSysAnnouncementById()
+     */
+    @Override
+    public LocSysAnnouncement selectLocSysAnnouncementById(String id) {
+        return super.get(id);
     }
     
     

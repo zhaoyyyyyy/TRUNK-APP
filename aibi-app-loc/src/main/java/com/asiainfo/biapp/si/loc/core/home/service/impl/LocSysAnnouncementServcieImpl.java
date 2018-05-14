@@ -86,4 +86,25 @@ public class LocSysAnnouncementServcieImpl extends BaseServiceImpl<LocSysAnnounc
     public void deleteLocSysAnnouncement(String ids) {
         locSysAnnouncementDao.deleteLocSysAnnouncement(ids);
     }
+
+    
+
+    /**
+     * {@inheritDoc}
+     * @see com.asiainfo.biapp.si.loc.core.home.service.ILocSysAnnouncementService#deleteByUpdateLocSysAnnouncement(java.lang.String)
+     */
+    @Override
+    public void deleteByUpdateLocSysAnnouncement(String ids) {
+        locSysAnnouncementDao.updateSysAnnouncementStatus(ids);
+    }
+
+
+    /**
+     * {@inheritDoc}
+     * @see com.asiainfo.biapp.si.loc.core.home.service.ILocSysAnnouncementService#getLocSysAnnouncementById(java.lang.String)
+     */
+    @Override
+    public LocSysAnnouncement getLocSysAnnouncementById(String id) {
+        return locSysAnnouncementDao.selectLocSysAnnouncementById(id);
+    }
 }

@@ -1,7 +1,6 @@
 package com.asiainfo.biapp.si.loc.core.home.dao;
 
 import com.asiainfo.biapp.si.loc.base.dao.BaseDao;
-import com.asiainfo.biapp.si.loc.base.page.Page;
 import com.asiainfo.biapp.si.loc.core.home.entity.LocUserReadInfo;
 import com.asiainfo.biapp.si.loc.core.home.entity.LocUserReadInfoPK;
 import com.asiainfo.biapp.si.loc.core.home.vo.LocUserReadInfoVo;
@@ -35,7 +34,15 @@ public interface ILocUserReadInfoDao extends BaseDao<LocUserReadInfo, String> {
      *
      * @return
      */
-    int selectCount();
+    int selectCount(LocUserReadInfoVo locUserReadInfoVo);
+    
+    /**
+     * 
+     * Description: 批量删除 
+     *
+     * @param announcementIds："'1,2,3'"
+     */
+    void deleteLocUserReadInfo(String announcementIds);
     
     void insertLocUserReadInfo(LocUserReadInfo locUserReadInfo);
 
