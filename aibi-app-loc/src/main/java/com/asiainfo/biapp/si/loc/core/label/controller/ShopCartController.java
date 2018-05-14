@@ -276,8 +276,9 @@ public class ShopCartController extends BaseController {
 		WebResult<String> webResult = new WebResult<>();
 		boolean success = true;
 		String msg = "抱歉，该标签数据未准备好，不能添加到收纳篮！";
+		List<LabelRuleVo> rules = new ArrayList<>();
 		try {
-			List<LabelRuleVo> rules = getSessionLabelRuleList();
+			rules = getSessionLabelRuleList();
 			Integer sort = 0;
 			if (rules.size() > 0) {
 				sort = rules.get(rules.size() - 1).getSortNum();
@@ -554,7 +555,7 @@ public class ShopCartController extends BaseController {
 	 * @date 2017年12月22日
 	 */
 	private List<LabelRuleVo> getSessionLabelRuleList() {
-		List<LabelRuleVo> rules = null;
+		List<LabelRuleVo> rules = new ArrayList<>();
 		try {
 			String ruleStrs = (String) getSessionAttribute(ServiceConstants.SHOP_CART_RULE);
 			if (StringUtil.isEmpty(ruleStrs)) {

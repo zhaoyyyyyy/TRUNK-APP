@@ -136,7 +136,7 @@ public class CategoryInfoServiceImpl extends BaseServiceImpl<CategoryInfo, Strin
 
     @CacheEvict(value="LabelInfo",allEntries=true)
     public void addCategoryInfo(CategoryInfo categoryInfo) throws BaseException {
-        if(categoryInfo != null && StringUtil.isEmpty(categoryInfo.getParentId())){
+        if(null != categoryInfo && StringUtil.isEmpty(categoryInfo.getParentId())){
             categoryInfo.setParentId(null);
         }
         if(categoryInfo != null && StringUtils.isBlank(categoryInfo.getCategoryName())){

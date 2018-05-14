@@ -48,8 +48,8 @@ public class CustomerManagerServiceImpl implements ICustomerManagerService {
 	
 	@Override
 	public boolean createCustomerList(String customId,ExploreQueryParam model) throws BaseException {
-		LabelInfo customGroup = null;
-		LabelExtInfo labelExtInfo = null ;
+		LabelInfo customGroup = new LabelInfo();
+		LabelExtInfo labelExtInfo = new LabelExtInfo() ;
 		ListInfo listInfo=new ListInfo();
 		try {
 			// 1.获取sql
