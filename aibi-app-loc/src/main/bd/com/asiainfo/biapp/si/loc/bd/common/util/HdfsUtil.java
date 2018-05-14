@@ -119,14 +119,18 @@ public class HdfsUtil {
 
 			FSDataInputStream in = null;
 			BufferedWriter out = null;
+			InputStreamReader input = null;
+			BufferedReader bf = null;
+			FileOutputStream fileoutput = null;
+			OutputStreamWriter output = null;
 			try {
 				//先读出input流
 				in = fs.open(srcPath);
 				//由于追加方式写入不支持字节流读取，只能先转成字符流
-				InputStreamReader input = new InputStreamReader(in);
-				BufferedReader bf = new BufferedReader(input);
-				FileOutputStream fileoutput = new FileOutputStream(dst, false);
-				OutputStreamWriter output = new OutputStreamWriter(fileoutput,"gbk");
+				input = new InputStreamReader(in);
+				bf = new BufferedReader(input);
+				fileoutput = new FileOutputStream(dst, false);
+				output = new OutputStreamWriter(fileoutput,"gbk");
 				out = new BufferedWriter(output);
 				// 打开一个随机访问文件流，按读写方式     
 				String valueString = null;
@@ -134,15 +138,17 @@ public class HdfsUtil {
 					out.write(valueString);
 					out.newLine();//由于工具类不做自动换行，只能手动增加换行操作
 				}
-				bf.close();
-				in.close();
-				out.close();
-				input.close();
-				fileoutput.close();
-				output.close();
+				
 			} catch (IOException e) {
 				IOUtils.closeStream(in);
 				throw e;
+			} finally {
+			    output.close();
+                fileoutput.close();
+                bf.close();
+                input.close();
+			    out.close();
+			    in.close();
 			}
 
 			// 下载hdfs上的文件
