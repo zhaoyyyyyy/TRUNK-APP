@@ -22,7 +22,7 @@ function initDataPrepareTable(monitorDetail){
 			"dataStatuses":zbCodesTemp.join(",")
 		},
 		datatype : "json",
-		colNames : [ '表名', '准备状态', '抽取状态', '准备完成时间', '抽取完成时间','表ID' ],
+		colNames : [ '表名', '准备状态', '抽取状态', '准备完成时间', '抽取完成时间','表ID','异常信息','准备状态编码','抽取状态编码' ],
 		colModel : [ {
 			name : 'sourceTableName',
 			index : 'sourceTableName',
@@ -97,7 +97,20 @@ function initDataPrepareTable(monitorDetail){
     		name : 'sourceTableId',
     		index : 'sourceTableId',
     		hidden:true
-    	} ],
+    	},{
+    		name : 'exceptionDesc',
+    		index : 'exceptionDesc',
+    		hidden:true
+    	} ,{
+    		name : 'dataStatus',
+    		index : 'dataStatus',
+    		hidden:true
+    	},{
+    		name : 'isDoing',
+    		index : 'isDoing',
+    		hidden:true
+    	}
+    	],
 		autowidth : true,
 		viewrecords : true,
 		rowNum : 10,
@@ -105,6 +118,18 @@ function initDataPrepareTable(monitorDetail){
 		jsonReader : {
 			repeatitems : false,
 			id : "0"
+		},
+		onSelectRow: function (id) {
+			setDataPrepareLineChecked(id);
+            var rowData = $("#dataPrepareTable").jqGrid("getRowData", id);
+            var dataStatus = rowData.dataStatus;
+            var isDoing = rowData.isDoing;
+            if(isDoing && dataStatus && (Number(isDoing) ===0 && Number(dataStatus) ===2)){//抽取失败
+            	$("#dataPrepareError").css("display","");
+            	$("#dataPrepareError span").text(rowData.exceptionDesc);
+            }else{
+            	$("#dataPrepareError").css("display","none");
+            }
 		},
 		ajaxGridOptions:{
 			beforeSend :function(){
@@ -232,4 +257,23 @@ function changeDataPrepareTableByStatus(e){
 	}
 	
 	qryDataPrepareTableByCond();
+}
+
+
+/**
+ * 设置选中行样式
+ * 
+ * @param rowId
+ */
+function setDataPrepareLineChecked(rowId) {
+	var ids = $("#dataPrepareTable").jqGrid("getDataIDs");
+	if (ids) {
+		for (var i = 0; i < ids.length; i++) {
+			if (rowId === ids[i]) {
+				$('#dataPrepareTable ' + '#' + ids[i]).find("td").addClass("ui-state-highlight");
+			} else {
+				$('#dataPrepareTable ' + '#' + ids[i]).find("td").removeClass("ui-state-highlight");
+			}
+		}
+	}
 }

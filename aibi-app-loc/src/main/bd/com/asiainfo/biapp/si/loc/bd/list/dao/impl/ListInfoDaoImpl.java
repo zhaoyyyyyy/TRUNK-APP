@@ -51,7 +51,7 @@ public class ListInfoDaoImpl extends BaseDaoImpl<ListInfo, String> implements IL
                 params.put("customGroupId", listInfoVo.getListInfoId().getCustomGroupId());
             }
             if(StringUtil.isNotBlank(listInfoVo.getListInfoId().getDataDate())){
-                hql.append("and l.listInfo.dataDate = :dataDate ");
+                hql.append("and l.labelInfo.dataDate = :dataDate ");
                 params.put("dataDate", listInfoVo.getListInfoId().getDataDate());
             }
         }

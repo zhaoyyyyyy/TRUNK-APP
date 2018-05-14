@@ -6,9 +6,10 @@
 
 package com.asiainfo.biapp.si.loc.core.label.entity;
 
+import io.swagger.annotations.ApiParam;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -31,13 +32,12 @@ import com.asiainfo.biapp.si.loc.base.extend.SpringContextHolder;
 import com.asiainfo.biapp.si.loc.base.utils.LogUtil;
 import com.asiainfo.biapp.si.loc.base.utils.StringUtil;
 import com.asiainfo.biapp.si.loc.core.label.service.ICategoryInfoService;
+import com.asiainfo.biapp.si.loc.core.label.service.ILabelExeInfoService;
 import com.asiainfo.biapp.si.loc.core.label.service.ILabelExtInfoService;
 import com.asiainfo.biapp.si.loc.core.label.service.ILabelVerticalColumnRelService;
 import com.asiainfo.biapp.si.loc.core.label.service.IMdaSysTableColService;
 import com.asiainfo.biapp.si.loc.core.label.vo.LabelVerticalColumnRelVo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-
-import io.swagger.annotations.ApiParam;
 
 /**
  * Title : LabelInfo
@@ -310,6 +310,9 @@ public class LabelInfo extends BaseEntity {
     // insertable = false, updatable = false)
     private LabelExtInfo labelExtInfo;
 
+    @Transient
+    private LabelExeInfo  labelExeInfo;
+    
     public Set<String> getCategoryIdSet() {
         return categoryIdSet;
     }
@@ -614,6 +617,22 @@ public class LabelInfo extends BaseEntity {
         this.sourceTableType = sourceTableType;
     }
 
+    
+    public LabelExeInfo getLabelExeInfo() {
+        ILabelExeInfoService labelExeInfoService = (ILabelExeInfoService) SpringContextHolder
+            .getBean("labelExeInfoServiceImpl");
+        try {
+            return labelExeInfoService.selectLabelExeInfoByLabelId(labelId, dataDate);
+        } catch (BaseException e) {
+        }
+        return null;
+    }
+
+    
+    public void setLabelExeInfo(LabelExeInfo labelExeInfo) {
+        this.labelExeInfo = labelExeInfo;
+    }
+    
    /* public String getDataType() {
         return dataType;
     }

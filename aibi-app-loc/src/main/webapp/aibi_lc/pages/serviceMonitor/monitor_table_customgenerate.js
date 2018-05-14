@@ -12,7 +12,7 @@ function initCustomGenerateTable(monitorDetail){
 			"dataDate" : monitorDetail.qryDataDate.replace(/-/g, "")
 		},
 		datatype : "json",
-		colNames : [ '客户群名称', '生成状态','数据日期', '生成时间','清单ID' ],
+		colNames : [ '客户群名称', '生成状态','数据日期', '生成时间','清单ID','生成状态编码','异常信息' ],
 		colModel : [ {
 			name : 'labelInfo.labelName',
 			index : 'labelInfo.labelName',
@@ -58,7 +58,26 @@ function initCustomGenerateTable(monitorDetail){
     		name : 'listInfoId.customGroupId',
     		index : 'listInfoId.customGroupId',
     		hidden:true
+    	},{
+    		name : 'dataStatus',
+    		index : 'dataStatus',
+    		hidden:true
+    	},{
+    		name : 'exceptionDesc',
+    		index : 'exceptionDesc',
+    		hidden:true
     	}],
+    	onSelectRow: function (id) {
+			setCustomGenerateLineColor(id);
+            var rowData = $("#customGenerateTable").jqGrid("getRowData", id);
+            var dataStatus = rowData.dataStatus;
+            if(dataStatus && Number(dataStatus) === 0){
+            	$("#customGenerateError").css("display","");
+            	$("#customGenerateError span").text(rowData.exceptionDesc);
+            }else{
+            	$("#customGenerateError").css("display","none");
+            }
+		},
 	    ajaxGridOptions:{
 			beforeSend :function(){
 				$("#customGenerateAnchor").find(".loading").show();
@@ -136,5 +155,23 @@ function selectAllCustomGenerateStatus(e){
 			$(this).prop("checked",false);
 		});
 		$("#customGenerateTable").clearGridData();
+	}
+}
+
+/**
+ * 设置选中行样式
+ * 
+ * @param rowId
+ */
+function setCustomGenerateLineColor(rowId) {
+	var ids = $("#customGenerateTable").jqGrid("getDataIDs");
+	if (ids) {
+		for (var i = 0; i < ids.length; i++) {
+			if (rowId === ids[i]) {
+				$('#customGenerateTable ' + '#' + ids[i]).find("td").addClass("ui-state-highlight");
+			} else {
+				$('#customGenerateTable ' + '#' + ids[i]).find("td").removeClass("ui-state-highlight");
+			}
+		}
 	}
 }

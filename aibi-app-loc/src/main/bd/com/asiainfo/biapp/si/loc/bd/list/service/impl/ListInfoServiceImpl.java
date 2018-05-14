@@ -12,6 +12,7 @@ import com.asiainfo.biapp.si.loc.base.exception.BaseException;
 import com.asiainfo.biapp.si.loc.base.exception.ParamRequiredException;
 import com.asiainfo.biapp.si.loc.base.page.Page;
 import com.asiainfo.biapp.si.loc.base.service.impl.BaseServiceImpl;
+import com.asiainfo.biapp.si.loc.base.utils.StringUtil;
 import com.asiainfo.biapp.si.loc.bd.list.dao.IListInfoDao;
 import com.asiainfo.biapp.si.loc.bd.list.entity.ListInfo;
 import com.asiainfo.biapp.si.loc.bd.list.entity.ListInfoId;
@@ -32,12 +33,23 @@ public class ListInfoServiceImpl extends BaseServiceImpl<ListInfo, String>  impl
 	private IListInfoDao listInfoDao;
 
 	@Override
-	public Page<ListInfo> selectListInfoPageList(Page<ListInfo> page, ListInfoVo listInfoVo) throws BaseException {
-		if(null==page){
-			throw new ParamRequiredException("selectListInfoPageList :page is null!");
-		}
-		return listInfoDao.selectListInfoPageList(page, listInfoVo);
-	}
+    public Page<ListInfo> selectListInfoPageList(Page<ListInfo> page, ListInfoVo listInfoVo) throws BaseException {
+        if (null == page) {
+            throw new ParamRequiredException("selectListInfoPageList :page is null!");
+        }
+        Page<ListInfo> listInfoPage = listInfoDao.selectListInfoPageList(page, listInfoVo);
+        if (listInfoPage != null && listInfoPage.getData() != null && listInfoPage.getData().size() > 0) {
+            List<ListInfo> listInfoList = listInfoPage.getData();
+            for (ListInfo listInfo : listInfoList) {
+                if (listInfo.getLabelInfo() != null && listInfo.getLabelInfo().getLabelExeInfo() != null
+                        && StringUtil.isNotBlank(listInfo.getLabelInfo().getLabelExeInfo().getExcpInfo())) {
+                    listInfo.setExceptionDesc(listInfo.getLabelInfo().getLabelExeInfo().getExcpInfo());
+                }
+            }
+            listInfoPage.setData(listInfoList);
+        }
+        return listInfoPage;
+    }
 
 	@Override
 	public List<ListInfo> selectListInfoList(ListInfoVo listInfoVo) throws BaseException {

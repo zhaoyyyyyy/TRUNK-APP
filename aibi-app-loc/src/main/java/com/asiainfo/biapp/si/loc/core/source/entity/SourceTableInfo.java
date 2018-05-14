@@ -65,7 +65,7 @@ public class SourceTableInfo extends BaseEntity {
         super();  
     }  
     
-    public SourceTableInfo(String sourceTableId,String sourceTableName,Integer dataStatus,Integer isDoing,String startTime,String endTime){
+    public SourceTableInfo(String sourceTableId,String sourceTableName,Integer dataStatus,Integer isDoing,String startTime,String endTime,String exceptionDesc){
         super();  
         this.sourceTableId = sourceTableId;
         this.sourceTableName = sourceTableName;
@@ -73,6 +73,7 @@ public class SourceTableInfo extends BaseEntity {
         this.isDoing = isDoing;
         this.startTime = startTime;
         this.endTime = endTime;
+        this.exceptionDesc = exceptionDesc;
     }
 
     /**
@@ -257,6 +258,8 @@ public class SourceTableInfo extends BaseEntity {
     private String startTime;
     @Transient
     private String endTime;
+    @Transient
+    private String exceptionDesc;
     
     public Integer getDataStore() {
         return dataStore;
@@ -498,10 +501,20 @@ public class SourceTableInfo extends BaseEntity {
     public String getEndTime() {
         return endTime;
     }
-
     
     public void setEndTime(String endTime) {
         this.endTime = endTime;
     }
+    
+    public String getExceptionDesc() {
+        return exceptionDesc;
+    }
+
+    
+    public void setExceptionDesc(String exceptionDesc) {
+        this.exceptionDesc = exceptionDesc;
+    }
+
+  
     
 }

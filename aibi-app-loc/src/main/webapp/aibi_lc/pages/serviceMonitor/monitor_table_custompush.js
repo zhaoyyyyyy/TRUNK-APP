@@ -85,10 +85,10 @@ function initCustomPushTable(monitorDetail){
 			id : "0"
 		},
 		onSelectRow: function (id) {
-			setThisLineChecked(id);
+			setCustomPushLineChecked(id);
             var rowData = $("#customPushTable").jqGrid("getRowData", id);
             var pushStatus = rowData.pushStatus;
-            if(pushStatus && Number(pushStatus) === 0){
+            if(pushStatus && Number(pushStatus) === 4){
             	$("#customPushError").css("display","");
             	$("#customPushError span").text(rowData.exceInfo);
             }else{
@@ -174,7 +174,7 @@ function selectAllCustomPushStatus(e){
  * 
  * @param rowId
  */
-function setThisLineChecked(rowId) {
+function setCustomPushLineChecked(rowId) {
 	var ids = $("#customPushTable").jqGrid("getDataIDs");
 	if (ids) {
 		for (var i = 0; i < ids.length; i++) {

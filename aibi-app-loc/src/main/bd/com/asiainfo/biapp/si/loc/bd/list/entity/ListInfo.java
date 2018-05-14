@@ -11,6 +11,7 @@ import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.hibernate.annotations.NotFound;
 import org.hibernate.annotations.NotFoundAction;
@@ -88,6 +89,9 @@ public class ListInfo extends BaseEntity{
     @JoinColumn(name = "GROUP_ID", referencedColumnName = "LABEL_ID", insertable = false, updatable = false)
     private LabelInfo labelInfo;
 
+    @Transient
+    private String exceptionDesc;
+    
     public Integer getCustomNum() {
 		return customNum;
 	}
@@ -136,4 +140,15 @@ public class ListInfo extends BaseEntity{
     public void setLabelInfo(LabelInfo labelInfo) {
         this.labelInfo = labelInfo;
     }
+
+    
+    public String getExceptionDesc() {
+        return exceptionDesc;
+    }
+
+    
+    public void setExceptionDesc(String exceptionDesc) {
+        this.exceptionDesc = exceptionDesc;
+    }
+    
 }
