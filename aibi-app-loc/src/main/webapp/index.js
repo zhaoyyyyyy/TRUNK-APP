@@ -15,7 +15,7 @@ var auto_Login = (function (model){
         model.asshow = {
         		failLoginUrl: "./aibi_lc/pages/common/login.html",
         		autoLoginFun:function(applyToken){
-        			var applySuccess = applyToken("sfadmin");
+        			var applySuccess = applyToken("admin");
         			if(applySuccess){
         				return './aibi_lc/pages/common/frame.html#serviceMonitor/service_monitor_main';
         			}

@@ -13,13 +13,25 @@ eureka:
     serviceUrl:
       defaultZone: "${jauth-url}/eureka/"
   instance:
-    leaseExpirationDurationInSeconds: 1
-    leaseRenewalIntervalInSeconds: 1
+    leaseExpirationDurationInSeconds: 600000
+    leaseRenewalIntervalInSeconds: 6000000
 zuul:
+  host:
+    connect-timeout-millis: 60
+    socket-timeout-millis: 60
   routes:
     loc:
-      path: /loc/**
+      path: /**
       serviceId: loc
     jauth:
       path: /jauth/**
-      url: ${jauth-url}
+      serviceId: jauth
+ribbon:
+  readTimeout: 60000
+  connectTimeout: 60000
+hystrix:
+  command:
+    default:
+      execution:
+        timeout:
+          enabled: false

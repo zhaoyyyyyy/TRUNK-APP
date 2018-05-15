@@ -1,6 +1,6 @@
 function autoLogin(){
-	applyToken("sfadmin");
-	window.location.href = 'http://10.1.235.181:8441/aibi_lc/pages/common/frame.html#serviceMonitor/service_monitor_detail';
+	applyToken("admin");
+	window.location.href = 'http://10.1.235.181:8441/aibi_lc/pages/common/frame.html#serviceMonitor/service_monitor_main';
 }
 
 function applyToken(username){
