@@ -51,9 +51,12 @@ public class LogUtil {
     }
 
     public static void debug(Object message) {
-        StackTraceElement ste = getClassName();
-        String className = ste.getClassName();
-        String method = ste.getMethodName();
+        String className = new String("");
+        String method = new String("");
+        if(null!=getClassName()){
+            className = getClassName().getClassName();
+            method = getClassName().getMethodName();
+        }
         String threadName = Thread.currentThread().getName();
         saveLog(LEVEL_DEBUG, threadName, className, method, message);
         Logger log = getLogger(className);
@@ -63,9 +66,12 @@ public class LogUtil {
     }
 
     public static void info(Object message) {
-        StackTraceElement ste = getClassName();
-        String className = ste.getClassName();
-        String method = ste.getMethodName();
+        String className = new String("");
+        String method = new String("");
+        if(null!=getClassName()){
+            className = getClassName().getClassName();
+            method = getClassName().getMethodName();
+        }
         String threadName = Thread.currentThread().getName();
         saveLog(LEVEL_INFO, threadName, className, method, message);
         Logger log = getLogger(className);
@@ -75,9 +81,12 @@ public class LogUtil {
     }
 
     public static void warn(Object message) {
-        StackTraceElement ste = getClassName();
-        String className = ste.getClassName();
-        String method = ste.getMethodName();
+        String className = new String("");
+        String method = new String("");
+        if(null!=getClassName()){
+            className = getClassName().getClassName();
+            method = getClassName().getMethodName();
+        }
         String threadName = Thread.currentThread().getName();
         saveLog(LEVEL_WARN, threadName, className, method, message);
         Logger log = getLogger(className);
@@ -86,9 +95,12 @@ public class LogUtil {
 
     public static void error(Object message) {
         // 获取堆栈信息
-        StackTraceElement ste = getClassName();
-        String className = ste.getClassName();
-        String method = ste.getMethodName();
+        String className = new String("");
+        String method = new String("");
+        if(null!=getClassName()){
+            className = getClassName().getClassName();
+            method = getClassName().getMethodName();
+        }
         String threadName = Thread.currentThread().getName();
         saveLog(LEVEL_ERROR, threadName, className, method, message);
         Logger log = getLogger(className);
@@ -97,9 +109,12 @@ public class LogUtil {
 
     public static void error(Object message, Throwable t) {
         // 获取堆栈信息
-        StackTraceElement ste = getClassName();
-        String className = ste.getClassName();
-        String method = ste.getMethodName();
+        String className = new String("");
+        String method = new String("");
+        if(null!=getClassName()){
+            className = getClassName().getClassName();
+            method = getClassName().getMethodName();
+        }
         String threadName = Thread.currentThread().getName();
         saveLog(LEVEL_ERROR, threadName, className, method, message + ":" + t.getMessage());
         Logger log = getLogger(className);

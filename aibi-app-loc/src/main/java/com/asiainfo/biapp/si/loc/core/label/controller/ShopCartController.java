@@ -239,7 +239,6 @@ public class ShopCartController extends BaseController {
 		WebResult<String> webResult = new WebResult<>();
 		boolean success = true;
 		String msg = "抱歉，该客户群无规则、无清单可用，不能添加到收纳篮！";
-		//msg = "客户群已经被删除，无法加入到购物车！";
 		try {
 			LabelInfo customGroup = labelInfoService.selectLabelInfoById(labelId);
 			
@@ -280,7 +279,7 @@ public class ShopCartController extends BaseController {
 		try {
 			rules = getSessionLabelRuleList();
 			Integer sort = 0;
-			if (rules.size() > 0) {
+			if (!rules.isEmpty()) {
 				sort = rules.get(rules.size() - 1).getSortNum();
 				sort = sort + 1;// 排序标号 ,默认规则为"and"
 				rules.add(generateRule("and", ServiceConstants.LabelRule.ELEMENT_TYPE_OPERATOR, sort));

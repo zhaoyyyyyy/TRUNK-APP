@@ -83,9 +83,6 @@ public class CategoryInfoServiceImpl extends BaseServiceImpl<CategoryInfo, Strin
         if(categoryInfoVo.getSysId()==null){
             throw new ParamRequiredException("专区ID不能为空");
         }
-//        if(categoryInfoVo.getSysType()==null){
-//            throw new ParamRequiredException("专区类型不能为空");
-//        }
         return iCategoryInfoDao.selectCategoryInfoList(categoryInfoVo);
     }
     
@@ -142,7 +139,7 @@ public class CategoryInfoServiceImpl extends BaseServiceImpl<CategoryInfo, Strin
         if(categoryInfo != null && StringUtils.isBlank(categoryInfo.getCategoryName())){
             throw new ParamRequiredException("分类名称不能为空");
         }
-        if(categoryInfo.getCategoryName().length()>LENGTH){
+        if(null != categoryInfo &&categoryInfo.getCategoryName().length()>LENGTH){
             throw new ParamRequiredException("分类名称过长");
         }
         CategoryInfoVo categoryInfoVo = new CategoryInfoVo();

@@ -22,7 +22,6 @@ import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.IOUtils;
 import org.apache.hadoop.security.UserGroupInformation;
-import org.apache.log4j.Logger;
 
 import com.asiainfo.biapp.si.loc.base.utils.LogUtil;
 
@@ -33,12 +32,11 @@ import com.asiainfo.biapp.si.loc.base.utils.LogUtil;
  * 
  */
 public class HdfsUtil {
-	private static final Logger log = Logger.getLogger(HdfsUtil.class);
 	static FileSystem fs = null;
 	private static int fileLevel;
 	static String hdfsUrl;
 
-	public static void initEnvi(String uri, String user) throws IOException,
+	private static void initEnvi(String uri, String user) throws IOException,
 			InterruptedException, URISyntaxException {
 		UserGroupInformation ugi = UserGroupInformation.createRemoteUser(user);
 		hdfsUrl = uri;
@@ -52,7 +50,7 @@ public class HdfsUtil {
 			     }
 			 });
 		} catch (Exception e) {
-			e.printStackTrace();
+			LogUtil.error(e.getMessage());
 		}
 
 	}
@@ -108,10 +106,7 @@ public class HdfsUtil {
 		for (FileStatus status : listStatus) {
 
 			String name = status.getPath().getName();
-			if(name.startsWith("_")){
-				continue;
-			}
-			if(name.startsWith(".")){
+			if(name.startsWith("_") || name.startsWith(".")){
 				continue;
 			}
 			String localPath = src + name;
@@ -143,16 +138,26 @@ public class HdfsUtil {
 				IOUtils.closeStream(in);
 				throw e;
 			} finally {
-			    output.close();
-                fileoutput.close();
-                bf.close();
-                input.close();
-			    out.close();
-			    in.close();
+			    if(null!=output){
+			        output.close();
+			    }
+			    if(null!=fileoutput){
+			        fileoutput.close();
+                }
+			    if(null!=bf){
+			        bf.close();
+                }
+			    if(null!=input){
+			        input.close();
+                }
+			    if(null!=out){
+			        out.close();
+                }
+			    if(null!=in){
+			        in.close();
+                }
 			}
 
-			// 下载hdfs上的文件
-			// fs.copyToLocalFile(false,srcPath, dstPath,true);
 
 		}
 		// 释放资源
@@ -160,7 +165,7 @@ public class HdfsUtil {
 		LogUtil.debug(" hdfsUtil   getFile OVER ------------");
 	}
 
-	public static void fileLocation(String fPath) throws FileNotFoundException,
+	private static void fileLocation(String fPath) throws FileNotFoundException,
 			IllegalArgumentException, IOException {
 		Path path = new Path(fPath);
 		if (checkPath(path))
@@ -252,7 +257,6 @@ public class HdfsUtil {
 		in.close();
 		out.close();
 		fileoutput.close();
-		// fs.close();
 	}
 
 	public static void catFile(String remoteFile) throws IOException {
@@ -268,7 +272,6 @@ public class HdfsUtil {
 			IOUtils.copyBytes(fsdis, System.out, 4096, false);
 		} finally {
 			IOUtils.closeStream(fsdis);
-			// fs.close();
 		}
 	}
 
