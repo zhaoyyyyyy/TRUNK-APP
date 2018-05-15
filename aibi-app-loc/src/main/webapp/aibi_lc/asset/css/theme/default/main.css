@@ -2017,7 +2017,7 @@ input[type=checkbox].checkbix:checked+label>span.other{
 	margin-bottom:-10000px; */
 	padding-left:10px;
 	padding-right:10px;
-	min-height:360px;
+	padding-bottom: 10px;
 }
 .ui-news-detail > h3{
 	font-weight: 700;
@@ -2030,6 +2030,12 @@ input[type=checkbox].checkbix:checked+label>span.other{
 	padding:0 10px;
 	margin:10px 0;
 	line-height: 28px;
+}
+.ui-news-detail > p{
+	min-height:360px;
+	max-height:400px;
+	overflow-y:auto;
+	margin-bottom: 0px;
 }
 .ui-jqgrid tr td span.info-bold {
 	font-weight:bold
