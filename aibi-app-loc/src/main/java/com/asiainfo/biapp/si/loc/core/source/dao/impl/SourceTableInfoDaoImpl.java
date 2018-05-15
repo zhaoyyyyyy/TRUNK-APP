@@ -83,6 +83,15 @@ public class SourceTableInfoDaoImpl extends BaseDaoImpl<SourceTableInfo, String>
                 params.put("configId", sourceTableInfoVo.getConfigId());
             }
         }
+        if (StringUtil.isNotBlank(sourceTableInfoVo.getSourceTableName())) {
+            if(sourceTableInfoVo.getSourceTableName().contains("=")){
+                hql.append("and l.sourceTableName =:sourceTableName ");
+                params.put("sourceTableName",sourceTableInfoVo.getSourceTableName().replace("=", ""));
+            }else{
+                hql.append("and l.sourceTableName LIKE:sourceTableName ");
+                params.put("sourceTableName","%"+sourceTableInfoVo.getSourceTableName()+"%");
+            }
+        }
         hql.append("and l.sourceTableId not in ");
         hql.append("( select a.sourceTableId from TargetTableStatus a where a.sourceTableId != 0 and a.dataDate = :dataDate)");
         params.put("dataDate",sourceTableInfoVo.getDataDate());

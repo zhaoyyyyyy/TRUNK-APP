@@ -130,11 +130,11 @@ window.loc_onload = function() {
 					}
 				});
 			},
-			// 设置页面刷新频率
-	        refresh:function(value){
-	            this.setTimes(value);
-	            this.setTimer();
-	        },
+//			// 设置页面刷新频率
+//	        refresh:function(event){
+//	            this.setTimes($(event.target).val());
+//	            this.setTimer();
+//	        },
 	        // 设置页面频率
 	        setTimes:function (value) {
 	            var val = Number(value);
@@ -345,13 +345,12 @@ window.loc_onload = function() {
 					$("#returnBtn").hide();
 				}
 			});
-		
-			//默认刷新频率
-			this.refresh(this.defaultPl);
-			
 		}
 		
 	});
+    
+	//默认刷新频率
+    refresh(monitorDetail.defaultPl);
     
 	$(".ui-pre-progress a").each(function(){//锚点定位
 		var anchors=$(this);
@@ -383,6 +382,10 @@ window.loc_onload = function() {
         });
     });
 	
+	$("#refreshId").change(function(){
+		refresh($(this).children('option:selected').val());
+	});
+	
 };
 
 /**
@@ -413,7 +416,11 @@ function scroll(){
     }
 }
 
-
+//设置页面刷新频率
+function refresh(val){
+	monitorDetail.setTimes(val);
+	monitorDetail.setTimer();
+}
 window.onscroll =function(){//吸顶导航
     if(scroll().top>=281){
         $(".ui-pre-progress").addClass("active");
