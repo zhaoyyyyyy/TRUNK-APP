@@ -72,15 +72,15 @@ function toAdminConsole(){
 		url: $.ctx+ '/api/config/springConfig',
 		postData:{'key':'jauth-url'},
 		onSuccess:function(obj){
-			var ssg = window.sessionStorage;
-			window.open(obj.data+"#"+ssg.getItem('token'));    
+			var token = $.getCurrentToken();
+			window.open(obj.data+"#"+token);    
 		}
 	});
 }
 
 //页面初始化加载页面及菜单
 window.loc_onload = function(){
-	loadPage();
+	
 	$(document).click(function(ev){
 		var e = ev||event ;
 		e.stopPropagation?e.stopPropagation():e.cancelBubble=true;
@@ -95,17 +95,19 @@ window.loc_onload = function(){
 			new Vue({ el:'#accordion', data: {resourceList:obj.data.menuResource} });
 			new Vue({ el:'#user_opt_ul', data: {username:obj.data.userName} });
 			
+			
+			var $accordion = $("#accordion");
 			//渲染手风琴菜单并显示
-			$("#accordion").accordion({
+			$accordion.accordion({
 				heightStyle: "content",
 				icons:false
 			});
-			$("#accordion").show();
+			$accordion.show();
 			
 			
-			var $accordin = $('#accordion a');
+			var $accordionA = $('a',$accordion);
 			//点击菜单
-			$accordin.click(function(){
+			$accordionA.click(function(){
 				var self = this;
 				if(!$(this).parent().parent().is("#accordion")){
 					$('#accordion li').removeClass("active");
@@ -116,9 +118,22 @@ window.loc_onload = function(){
 					window.location.hash = $(self).attr('href');
 				}
 			});
-			//点击菜单
-			if($accordin && $accordin.length >0){
-				$('#accordion a').eq(0).click();
+			
+			//当单点登录直接跳转到某个页面的时候，回显菜单  frame.html#serviceMonitor/service_monitor_main
+			var hash = window.location.hash;
+			if(hash){
+				$accordionA.eq(0).click();
+				var $activeMenuAs = $accordionA.filter('[href=\''+hash+'\']').eq(0);
+				if($activeMenuAs.length > 0){
+					$activeMenuA = $activeMenuAs.eq(0);
+					var $activeMenuUl = $activeMenuA.parent().parent();
+					if(!$activeMenuUl.is("#accordion")){
+						$activeMenuUl.parent().prev().click();
+					}
+					$activeMenuA.click();
+				}
+			}else if($accordionA && $accordionA.length >0){//点击菜单
+				$accordionA.eq(0).click();
 			}
 		}
 	});

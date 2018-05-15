@@ -1,6 +1,6 @@
 function autoLogin(){
 	applyToken("sfadmin");
-	window.location.href = 'http://10.1.235.181:8441/aibi_lc/pages/common/frame.html#label/label_market';
+	window.location.href = 'http://10.1.235.181:8441/aibi_lc/pages/common/frame.html#serviceMonitor/service_monitor_detail';
 }
 
 function applyToken(username){
