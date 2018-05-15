@@ -239,12 +239,12 @@ html,body{height: 100%;}
 	z-index: 2;
 }
 .ui-header > .ui-header-logo > img{
-	width: 49px;
-	height: 42px;
+	width: 52px;
+	height: 52px;
 	position: absolute;
 	left: 50%;
 	top: 50%;
-	margin: -21px 0 0 -28px;
+	margin: -26px 0 0 -28px;
 }
 .ui-header > .ui-header-content{
 	width: 100%;
