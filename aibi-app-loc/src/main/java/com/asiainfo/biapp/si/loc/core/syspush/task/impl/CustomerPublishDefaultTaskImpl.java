@@ -178,7 +178,8 @@ public class CustomerPublishDefaultTaskImpl implements ICustomerPublishTask {
             bufferedRowSize = Integer.valueOf(pageSzie);
         }
 	}
-
+    
+    @Override
 	public void run() {
 	    LogUtil.info("Enter "+this.getClass().getSimpleName()+".run()");
         LogUtil.debug("客户群推送 "+CUSTOMER_PUBLISH_PRE_WAIT_TIME/THOUSAND+" 秒后开始执行。。。");

@@ -55,12 +55,12 @@ var VueModel ={
 				res = "<a href='javascript:void(0);' class='s_edit' onclick='preDownloadGroupList(this,null);' style='color:#00f;'>生成文件</a>";
 			} else if (data.dataStatus == VueModel.customDownloadRecord.DATA_STATUS_DOING) {//生成中
 				res = "生成中";
-			} else if (data.dataStatus == VueModel.customDownloadRecord.DATA_STATUS_SUCCESS) {//已生成
+			} else if (data.dataStatus === VueModel.customDownloadRecord.DATA_STATUS_SUCCESS) {//已生成
 				res = "<a href='javascript:downloadGroupList(\"" + data.recordId + "\")' class='s_export' style='color:#00f;'>下载</a>";
 				if ((!Boolean(VueModel.attrbuteNames)&&!Boolean(data.colNames)) || (VueModel.attrbuteNames == data.colNames)) {
 					res += "&nbsp; &nbsp;"+rePreDownList;
 				}
-			} else if (data.dataStatus == VueModel.customDownloadRecord.DATA_STATUS_FAILED) {//失败
+			} else if (data.dataStatus === VueModel.customDownloadRecord.DATA_STATUS_FAILED) {//失败
 				res = "<span class='s_delete' >生成失败</span><br/>";
 				if ((!Boolean(VueModel.attrbuteNames)&&!Boolean(data.colNames)) || (VueModel.attrbuteNames == data.colNames)) {
 					res += rePreDownList;
@@ -104,7 +104,6 @@ var VueModel ={
 	}
 };
 window.loc_onload = function() {
-	var wd = frameElement.lhgDG;
 	VueModel.customGroupId=$.getUrlParam("customGroupId");
 	VueModel.AttrbuteId=Boolean($.getUrlParam("AttrbuteId")) ? $.getUrlParam("AttrbuteId") : "";
 	VueModel.attrbuteNames=Boolean($.getUrlParam("attrbuteNames")) ? decodeURI($.getUrlParam("attrbuteNames")) : "";

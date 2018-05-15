@@ -174,14 +174,11 @@ public class CategoryInfo extends BaseEntity {
     public Set<CategoryInfo> getChildren() {
     	List<CategoryInfo> list = null;
     	try {
-			ICategoryInfoService categoryInfoService = (ICategoryInfoService) SpringContextHolder.getBean("categoryInfoServiceImpl");
+		ICategoryInfoService categoryInfoService = (ICategoryInfoService) SpringContextHolder.getBean("categoryInfoServiceImpl");
 	    	CategoryInfoVo categoryInfoVo = new CategoryInfoVo();
 	    	categoryInfoVo.setParentId(categoryId);
 	    	categoryInfoVo.setSysId(sysId);
-			list = categoryInfoService.selectCategoryInfoList(categoryInfoVo);
-			for(CategoryInfo categoryInfo: list){
-				Set<CategoryInfo> s =  categoryInfo.getChildren();
-			}
+		list = categoryInfoService.selectCategoryInfoList(categoryInfoVo);
 		} catch (Exception e) {LogUtil.error("标签目录以父查子异常",e);}
         return (null==list||list.isEmpty())?new LinkedHashSet<CategoryInfo>() : new LinkedHashSet<CategoryInfo>(list);
     }

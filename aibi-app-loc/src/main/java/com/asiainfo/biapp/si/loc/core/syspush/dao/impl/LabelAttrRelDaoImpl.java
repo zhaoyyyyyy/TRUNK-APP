@@ -70,7 +70,7 @@ public class LabelAttrRelDaoImpl extends BaseDaoImpl<LabelAttrRel, String> imple
     public Map<String, Object> fromBean(LabelAttrRelVo labelAttrRelVo){
         Map<String, Object> reMap = new HashMap<>();
         Map<String, Object> params = new HashMap<>();
-        StringBuffer hql = new StringBuffer("from LabelAttrRel l where 1=1 ");
+        StringBuilder hql = new StringBuilder("from LabelAttrRel l where 1=1 ");
         if(StringUtil.isNoneBlank(labelAttrRelVo.getPriKey())){
             hql.append("and l.priKey = :priKey ");
             params.put("priKey", labelAttrRelVo.getPriKey());
@@ -94,10 +94,9 @@ public class LabelAttrRelDaoImpl extends BaseDaoImpl<LabelAttrRel, String> imple
             if(null != labelAttrRelVo.getModifyTimeEnd()){
                 hql.append("and l.modifyTime <= "+labelAttrRelVo.getModifyTimeEnd()+" ");
             }
-        } else if(null!=labelAttrRelVo.getModifyTimeStart() && null==labelAttrRelVo.getModifyTimeEnd()){
-            if(null != labelAttrRelVo.getModifyTimeStart()){
-                hql.append("and l.modifyTime = "+labelAttrRelVo.getModifyTimeStart()+" ");
-            }
+        } else if(null!=labelAttrRelVo.getModifyTimeStart() && null==labelAttrRelVo.getModifyTimeEnd() 
+                && null != labelAttrRelVo.getModifyTimeStart()){
+            hql.append("and l.modifyTime = "+labelAttrRelVo.getModifyTimeStart()+" ");
         }
             
         if(StringUtil.isNoneBlank(labelAttrRelVo.getAttrColType())){
