@@ -91,16 +91,40 @@ var dataDateModel = (function (model){
 			  onSuccess: function(){
 				    //验证sql
 					var checkedModelListStr = dataModel.checkedModelList.join(',');
-					if(wd.curWin.calculateCenter.validateSql(labelMonthArg,labelDayArg,checkedModelListStr)){
-						wd.curWin.calculateCenter.submitForExplore(labelMonthArg,labelDayArg,checkedModelListStr);
-						wd.cancel();
-					}
+					model.validateSql(labelMonthArg,labelDayArg,checkedModelListStr,wd);
 			  },
 			  onFailure: function(returnObj){
 				  $.alert(returnObj.msg);
 			  }
 		});
 	};
+	/**
+	 * sql验证
+	 * dataPrivaliege : 逗号分隔
+	 */
+	model.validateSql = function(labelMonth,labelDay,dataPrivaliege,wd){
+		var flag = false;				
+		//验证sql
+		var actionUrl = $.ctx + '/api/shopCart/validateSql';
+		$.commAjax({
+			  url: actionUrl,
+			  isShowMask : true,
+			  maskMassage : '正在校验规则中，请稍等...',
+			  postData:{
+				  "monthLabelDate":labelMonth,
+				  "dayLabelDate":labelDay,
+				  "dataPrivaliege" : dataPrivaliege
+			  },
+			  onSuccess: function(){
+				  wd.curWin.calculateCenter.submitForExplore(labelMonth,labelDay,dataPrivaliege);
+				  wd.cancel();
+			  },
+			  onFailure:function(returnObj){
+				  $.alert(returnObj.msg);
+			  }
+		});
+		return flag;
+	}
 	/**
 	 * 查询用户数据权限
 	 */

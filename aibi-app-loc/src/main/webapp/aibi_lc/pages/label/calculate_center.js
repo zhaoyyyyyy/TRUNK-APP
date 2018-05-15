@@ -566,13 +566,12 @@ var calculateCenter = (function (model){
 	 * sql验证
 	 * dataPrivaliege : 逗号分隔
 	 */
-	model.validateSql = function(labelMonth,labelDay,dataPrivaliege){
+	model.validateSql = function(labelMonth,labelDay,dataPrivaliege,callback){
 		var flag = false;				
 		//验证sql
 		var actionUrl = $.ctx + '/api/shopCart/validateSql';
 		$.commAjax({
 			  url: actionUrl,
-			  async	: false,//同步
 			  isShowMask : true,
 			  maskMassage : '正在校验规则中，请稍等...',
 			  postData:{
@@ -583,6 +582,7 @@ var calculateCenter = (function (model){
 			  onSuccess: function(){
 				    //删除失效的标签
 					flag = true;
+					callback();
 			  },
 			  onFailure:function(returnObj){
 				  $.alert(returnObj.msg);
@@ -609,7 +609,6 @@ var calculateCenter = (function (model){
 			//只有清单时,不弹出对话框,直接探索
 			$.commAjax({
 				  url: $.ctx + "/api/shopCart/findEaliestDataDate",
-				  async	: false,//同步
 				  onSuccess: function(returnObj){
 					  	var result = returnObj.data;
 					  	dataModel.existMonthLabel = result.existMonthLabel;
@@ -626,21 +625,19 @@ var calculateCenter = (function (model){
 							if(dataModel.labelDay){
 								labelDayTemp = dataModel.labelDay.replace(/-/g,"")
 							}
-							if(model.validateSql(labelMonthTemp,labelDayTemp)){
+							model.validateSql(labelMonthTemp,labelDayTemp,'',function(){
 								model.submitForExplore(labelMonthTemp,labelDayTemp);
-							}
-							existLabel = false;
+							});
+						}else{
+							//包含标签设置标签数据日期
+							var wd = $.window("标签数据日期", $.ctx + '/aibi_lc/pages/labelDialog/shopCartDataDateSet.html', 600, 500);
+					    	wd.reload = function() {
+					    		model.refreshShopCart();
+					    	}
 						}
 				  }
 			});
-			if(!existLabel){
-				return false;
-			}
-			//设置标签数据日期
-			var wd = $.window("标签数据日期", $.ctx + '/aibi_lc/pages/labelDialog/shopCartDataDateSet.html', 600, 500);
-	    	wd.reload = function() {
-	    		model.refreshShopCart();
-	    	}
+			
 		}else{
 			dataModel.exploreCustomNum = "--";
 		}
@@ -689,7 +686,6 @@ var calculateCenter = (function (model){
 			//只有清单时,不弹出对话框,直接探索
 			$.commAjax({
 				  url: $.ctx + "/api/shopCart/findEaliestDataDate",
-				  async	: true,//同步
 				  onSuccess: function(returnObj){
 					  	var status = returnObj.status;
 					  	var result = returnObj.data;
@@ -708,13 +704,14 @@ var calculateCenter = (function (model){
 							if(dataModel.labelDay){
 								labelDayTemp = dataModel.labelDay.replace(/-/g,"")
 							}
-							if(model.validateSql(labelMonthTemp,labelDayTemp)){
+							model.validateSql(labelMonthTemp,labelDayTemp,'',function(){
 								if(dataModel.customId!=""&&dataModel.customId!=undefined){
 									window.location='../custom/custom_edit.html?from='+from+'&customId='+dataModel.customId;
 								}else{
 									window.location='../custom/custom_edit.html?from='+from;
 								}
-							}
+								
+							});
 						}
 						
 				  }

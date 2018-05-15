@@ -321,7 +321,7 @@ var labelInfoModel = (function (model){
 					  for(var i=0;i<dataModel.dataPrivaliegeList.length;i++){
 						  var orgs = dataModel.labelInfo.orgId;
 						  var org = dataModel.dataPrivaliegeList[i].id;
-						  if(orgs.indexOf(org) != -1){
+						  if(orgs && orgs.indexOf(org) != -1){
 							  dataModel.checkedModelList.push(org);
 						  }
 					  }
