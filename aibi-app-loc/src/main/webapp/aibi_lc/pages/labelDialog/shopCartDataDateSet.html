@@ -6,7 +6,9 @@
 <!--[if IE]>
     	<meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
     <![endif]-->
+    <link rel="stylesheet" theme="default" href="../../asset/css/common/reset.css"/> 
 	<link rel="stylesheet" theme="default" href="../../asset/css/theme/default/coc_frame.css" />
+	<link rel="stylesheet" theme="default" href="../../asset/css/theme/default/main.css"/> 
 	<script type="text/javascript" src="../../asset/script/common/include.js"></script>
 	<script type="text/javascript" src="shopCartDataDateSet.js"></script>
 <style type="text/css">
@@ -22,7 +24,7 @@
 <body>
 	<div id="dataDateSet" class="iframe-nest" v-cloak>
 		<form>
-      		<div class="ui-lc-mian">
+      		<div class="">
       			<div class="ui-reg-search">
 						<div class="form-horizontal ui-form dimtable-table">
 							<div class="ui-form-group" v-if="existMonthLabel">
@@ -53,9 +55,9 @@
 				</div>
 	        </div>
 	        
-	        <div class="ui-lc-mian" v-if="isShowPrivaliegeDiv"> 
+	        <div class="" v-if="isShowPrivaliegeDiv"> 
 	        	<div class="ui-reg-search">
-						<div class="form-horizontal ui-form dimtable-table">
+						<div class="form-horizontal ui-form">
 							<div class="ui-form-group">
 								<label class="control-label fleft" for="labelMonth">数据范围限制：</label> 
 								<div class="control-input">
@@ -79,5 +81,10 @@
 	        </div>
      	</form>
     </div>     
+	<div class="ui-dialog add-dialog loading" id="dialog">
+		<p>正在校验规则中，请稍等...</p>
+	</div>
+
+
 </body>
 </html>

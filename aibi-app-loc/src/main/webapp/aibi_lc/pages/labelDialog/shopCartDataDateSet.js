@@ -17,7 +17,13 @@ window.loc_onload = function() {
 	$('#labelMonth').val(dataModel.labelMonth);
 	$('#labelDay').val(dataModel.labelDay);
 	dataDateModel.getDataPrivaliege();
-
+	$("#dialog").dialog({
+	      modal: true,
+	      autoOpen: false,
+	      open:function(){
+	      	$(".ui-dialog .ui-widget-header").hide();
+	      }
+	});
 	//获取数据rule
 	wd.addBtn("ok", "继续", function() {
 		var labelMonthTemp = "";
@@ -79,16 +85,23 @@ var dataDateModel = (function (model){
      * 传入参数：newLabelMonthFormat所选月数据日期；newLabelDayFormat所选日数据日期
      * {flag:true,msg:""} flag:true所选数据日期早于标签生效日期，false没有早于标签生效日期
 	 */
-	model.checkRuleEffectDate = function(labelMonthArg,labelDayArg,wd){
+	model.checkRuleEffectDate = function(labelMonthArg,labelDayArg,wd){debugger
+		$("#dialog").dialog({
+		      modal: true,
+		      autoOpen: true,
+		});
 		$.commAjax({
 			  url: $.ctx + "/api/shopCart/checkRuleEffectDate",
 			  postData:{
 				  "newLabelMonthFormat":labelMonthArg,
 				  "newLabelDayFormat":labelDayArg
 			  },
-			  isShowMask : true,
-			  maskMassage : '正在校验规则中，请稍等...',
+			  isShowMask : false,
+//			  maskMassage : '正在校验规则中，请稍等...',
 			  onSuccess: function(){
+				  $("#dialog").dialog({
+					    autoOpen: false,
+				   });
 				    //验证sql
 					var checkedModelListStr = dataModel.checkedModelList.join(',');
 					model.validateSql(labelMonthArg,labelDayArg,checkedModelListStr,wd);
@@ -103,19 +116,26 @@ var dataDateModel = (function (model){
 	 * dataPrivaliege : 逗号分隔
 	 */
 	model.validateSql = function(labelMonth,labelDay,dataPrivaliege,wd){
+		$("#dialog").dialog({
+		      modal: true,
+		      autoOpen: true,
+		});
 		var flag = false;				
 		//验证sql
 		var actionUrl = $.ctx + '/api/shopCart/validateSql';
 		$.commAjax({
 			  url: actionUrl,
-			  isShowMask : true,
-			  maskMassage : '正在校验规则中，请稍等...',
+			  isShowMask : false,
+//			  maskMassage : '正在校验规则中，请稍等...',
 			  postData:{
 				  "monthLabelDate":labelMonth,
 				  "dayLabelDate":labelDay,
 				  "dataPrivaliege" : dataPrivaliege
 			  },
 			  onSuccess: function(){
+				  $("#dialog").dialog({
+					    autoOpen: true,
+				   });
 				  wd.curWin.calculateCenter.submitForExplore(labelMonth,labelDay,dataPrivaliege);
 				  wd.cancel();
 			  },

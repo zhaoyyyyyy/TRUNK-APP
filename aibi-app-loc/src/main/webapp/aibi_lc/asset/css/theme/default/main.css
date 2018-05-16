@@ -755,6 +755,13 @@
 	border-radius:50%;
 	display:none;
 }
+.ui-dialog.loading{
+	border: 4px solid #E5F2F8!important;
+    color: #454545!important;
+	background:url(../../../../asset/images/loading.gif) no-repeat 10px center!important;
+	padding:15px 0 15px 60px!important;
+	min-height:auto!important;
+}
 /**tip top*/
 .ui-conditionCT .tooltip {
     display: inline-block;
@@ -939,7 +946,7 @@ i.del-btn-icon{
 	cursor:pointer;
 	position:absolute;
 	right:0;
-	top:0;
+	top:5px;
 	z-index:9;
 }
 .ui-form-group > .control-input > .label-lists{
@@ -992,6 +999,8 @@ span.del-btn{
 .ui-enum-item > li > span.del-btn{
 	border: 1px solid #E9E9E9;
 	background: #F7F7F7;
+	position:relative;
+	padding:0 15px 0 10px;
 }
 .ui-enum-item > li.active > span > i{
 	font-size:18px;
