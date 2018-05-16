@@ -142,7 +142,6 @@ window.loc_onload = function() {
             pager: '#pjmap1',//分页的id
             sortname: '',//排序的字段名称 不需要的话可置为空  取值取自colModel中的index字段
             viewrecords: true,
-            multiselect:true,
             rownumbers:false,//是否展示行号
             sortorder: "desc",//排序方式
             jsonReader: {

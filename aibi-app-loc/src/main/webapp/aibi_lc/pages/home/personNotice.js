@@ -98,10 +98,13 @@ window.loc_onload = function() {
             			postData : {
             				"noticeId": a.noticeId
             			},
-            			onSuccess: function(){
-            				$("#unreadSize").text($("#unreadSize").text()-1);
-            				$("#jsonmap1").setCell(rowid,"readStatus",1);
-            				$("#jsonmap1").setCell(rowid,"noticeName",1);//有fomatter在  此处修改的参数无效
+            			onSuccess: function(data){
+            				//鼠标快速点击可能会出现阅读同一条消息未读数量减少多次情况 在此进行优化
+            				if (data.execption === null) {
+            					$("#jsonmap1").setCell(rowid,"readStatus",1);
+            					$("#unreadSize").text($("#unreadSize").text()-1);
+            					$("#jsonmap1").setCell(rowid,"noticeName",1);//有fomatter在  此处修改的参数无效
+            				}
             			}
             		});
             	}
@@ -118,6 +121,15 @@ window.loc_onload = function() {
             width:"100%",
             autowidth:true,
             gridComplete: function (data) {
+        		var _self = this;
+        		var thisId = $(_self).attr("id");
+        		var opts = _self.p;
+        		$(opts.pager).on("change","#"+thisId+"_listbox",function(){
+        			var rowNum = $(this).val();
+        			$(_self).jqGrid('setGridParam',{ 
+        				"rowNum": rowNum,
+                    }).trigger("reloadGrid");
+                });
                 $(this).closest('.ui-jqgrid-view').find('div.ui-jqgrid-hdiv').hide();
                 var a = $("#jsonmap1").getRowData(1);
                 $("#announcementName_right").text(a.noticeName);

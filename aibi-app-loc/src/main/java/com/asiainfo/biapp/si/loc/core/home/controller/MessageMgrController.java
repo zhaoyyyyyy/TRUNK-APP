@@ -144,6 +144,7 @@ public class MessageMgrController extends BaseController {
             String ids) {
         WebResult<String> webResult = new WebResult<>();
         // 逻辑删除
+        String ammouncementIds = ids;
         if (StringUtil.isNotEmpty(ids)) {
             locSysAnnouncementService.deleteByUpdateLocSysAnnouncement(ids);
         } else {
@@ -151,10 +152,10 @@ public class MessageMgrController extends BaseController {
                 .getLocSysAnnouncementById(locSysAnnouncementVo.getAnnouncementId());
             locSysAnnouncement.setStatus(DELETED);
             locSysAnnouncementService.updateLocSysAnnouncement(locSysAnnouncement);
-            ids = "'" + locSysAnnouncement.getAnnouncementId() + "'";
+            ammouncementIds = "'" + locSysAnnouncement.getAnnouncementId() + "'";
         }
         // 删除个人阅读信息
-        locUserReadInfoService.deleteLocUserReadInfo(ids);
+        locUserReadInfoService.deleteLocUserReadInfo(ammouncementIds);
         return webResult.success("删除成功", SUCCESS);
     }
 
@@ -192,7 +193,6 @@ public class MessageMgrController extends BaseController {
         }
         if (!locPersonNoticePage.getRows().isEmpty()) {
             locPersonNoticePage.getRows().get(FIRST_SIZE).setUnreadSize(unreadSize);
-            ;
         }
         return locPersonNoticePage;
 
@@ -208,6 +208,9 @@ public class MessageMgrController extends BaseController {
             User user = this.getLoginUser();
             locPersonNoticeVo.setReceiveUserId(user.getUserName());
             LocPersonNotice locPersonNotice = locPersonNoticeService.selectLocPersonNoticeById(locPersonNoticeVo);
+            if (locPersonNotice.getReadStatus() == IS_READ) {
+                throw new BaseException("该消息已阅读");
+            }
             locPersonNotice.setReadStatus(IS_READ);
             locPersonNoticeService.updateLocPersonNotice(locPersonNotice);
         } catch (BaseException e) {

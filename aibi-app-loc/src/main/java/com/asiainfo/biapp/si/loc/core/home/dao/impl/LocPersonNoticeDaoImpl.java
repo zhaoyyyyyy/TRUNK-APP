@@ -36,11 +36,12 @@ import java.util.Map;
 @Repository
 public class LocPersonNoticeDaoImpl extends BaseDaoImpl<LocPersonNotice, String> implements ILocPersonNoticeDao {
     private static final int FIRST_INDEX = 0;
+    private static final String PARAMS = "params";
     
     @Override
     public Page<LocPersonNotice> selectLocPersonNoticeList(Page<LocPersonNotice> page,LocPersonNoticeVo locPersonNoticeVo) {
         Map<String, Object> reMap = fromBean(locPersonNoticeVo);
-        Map<String, Object> params = (Map<String, Object>) reMap.get("params");
+        Map<String, Object> params = (Map<String, Object>) reMap.get(PARAMS);
         return super.findPageByHql(page,reMap.get("hql").toString(), params);
     }
 
@@ -131,7 +132,7 @@ public class LocPersonNoticeDaoImpl extends BaseDaoImpl<LocPersonNotice, String>
     @Override
     public LocPersonNotice selectLocPersonNoticeById(LocPersonNoticeVo locPersonNoticeVo) {
         Map<String, Object> reMap = fromBean(locPersonNoticeVo);
-        Map<String, Object> params = (Map<String, Object>) reMap.get("params");
+        Map<String, Object> params = (Map<String, Object>) reMap.get(PARAMS);
         List<LocPersonNotice> locPersonNoticeList = super.findListByHql(reMap.get("hql").toString(), params);
         if (locPersonNoticeList !=null && !locPersonNoticeList.isEmpty()){
             return locPersonNoticeList.get(FIRST_INDEX);

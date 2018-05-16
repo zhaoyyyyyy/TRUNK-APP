@@ -120,6 +120,15 @@ window.loc_onload = function() {
             width:"100%",
             autowidth:true,
             gridComplete: function () {
+            	var _self = this;
+        		var thisId = $(_self).attr("id");
+        		var opts = _self.p;
+        		$(opts.pager).on("change","#"+thisId+"_listbox",function(){
+        			var rowNum = $(this).val();
+        			$(_self).jqGrid('setGridParam',{ 
+        				"rowNum": rowNum,
+                    }).trigger("reloadGrid");
+                });
                 $(this).closest('.ui-jqgrid-view').find('div.ui-jqgrid-hdiv').hide();
                 var a = $("#jsonmap1").getRowData(1);
             	$("#announcementName_right").text(a.announcementName);
