@@ -345,7 +345,7 @@ public class VerticalLabelTask implements Runnable {
                 //更新标签状态：
                 List<String> list1 = getLabelIdByTargetName(targetTableName + "_");
                 //todo 更新标签状态
-                if (list1.size() > 0) {
+                if (list1 != null && list1.size() > 0) {
                     labelDealComponent.updateLocLabelInfo(list1);
                     labelDealComponent.updateDimLabelStatus(list1);
                     labelDealComponent.insertIntoDimLabelStatus(list1);
