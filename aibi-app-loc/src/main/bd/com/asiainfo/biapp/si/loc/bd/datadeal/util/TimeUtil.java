@@ -29,7 +29,7 @@ public class TimeUtil {
         } catch (ParseException e) {
             LogUtil.error(e);
         }
-        return formatter1.format(newDate);
+        return null == newDate ? null : formatter1.format(newDate);
     }
 
     public static final String DATETIME_FORMAT = "yyyy-MM-dd HH:mm:ss";
@@ -898,7 +898,7 @@ public class TimeUtil {
     public static String getEarlierDate(String dateAStr, String dateBStr, String format) {
         Date dateA = TimeUtil.string2Date(dateAStr, format);
         Date dateB = TimeUtil.string2Date(dateBStr, format);
-        if (dateA.getTime() > dateB.getTime()) {
+        if (null!=dateA && null != dateB && dateA.getTime() > dateB.getTime()) {
             return dateBStr;
         } else {
             return dateAStr;
