@@ -398,12 +398,14 @@ var calculateCenter = (function (model){
 		e.stopPropagation?e.stopPropagation():e.cancelBubble=true;
 		$(".onDelPar").removeClass("onDelPar");
 		$(t).addClass("onDelPar");
-		var posX=$(t).offset().left+9;
-		var posY=$(t).offset().top+7;
+		var posX=$(t).offset().left;
+//		var posY=$(t).offset().top+7;
+		var posY=$(t).parents(".ui-bracket").position().top+5;
 		if($("body > #delPar").length===0){
 			var _ul=$('<ul class="ui-bracket-list" id="delPar"><li><a href="javascript:void(0)">删除括号</a></li><li><a href="javascript:void(0)">删除括号与内容</a></li></ul>');
-			_ul.appendTo("body");
-			$(document).click(function(){$("#delPar").hide()});
+//			_ul.appendTo("body");
+			$(_ul).appendTo($("#sortable"))
+			$(document).click(function(){$("#delPar").remove()});
 			$("#delPar li").eq(0).bind("click",model.delThisPars);
 			$("#delPar li").eq(1).bind("click",model.delThisParsAndCT);
 		}
@@ -411,6 +413,7 @@ var calculateCenter = (function (model){
 		if(posX+tarW>winW){
 			posX=winW-tarW-6;
 		}			
+//		tar.css({"left":posX+"px","top":posY+"px"}).slideDown("fast");
 		tar.css({"left":posX+"px","top":posY+"px"}).slideDown("fast");
 	}
 	/**

@@ -555,10 +555,10 @@
 	display:block;
 }
 .ui-bracket-list{
-	position:fixed;
+	position:absolute;
 	left:140px;
 	top:200px;
-	z-index:99999999;
+	z-index:9999;
 	background:#fff;
 	border:1px solid #ccc;
 	padding:3px;
