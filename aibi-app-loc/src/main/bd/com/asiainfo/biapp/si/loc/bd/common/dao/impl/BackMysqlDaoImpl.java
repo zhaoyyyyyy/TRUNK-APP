@@ -9,19 +9,15 @@ package com.asiainfo.biapp.si.loc.bd.common.dao.impl;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
-
-import javax.sql.DataSource;
 
 import org.springframework.stereotype.Repository;
 
 import com.asiainfo.biapp.si.loc.base.exception.SqlRunException;
 import com.asiainfo.biapp.si.loc.base.utils.LogUtil;
 import com.asiainfo.biapp.si.loc.bd.common.dao.IBackSqlDao;
-import com.asiainfo.biapp.si.loc.bd.common.util.JDBCUtil;
 
 /**
  * 后台库是mysql库的情况下
@@ -54,33 +50,67 @@ public class BackMysqlDaoImpl extends BaseBackDaoImpl implements IBackSqlDao{
     }
 
 	@Override
-	public List<Map<String, String>> queryTableLikeTableName(String tableName) {
-		try{
-            Connection connection = this.getBackConnection();
+	public List<Map<String, String>> queryTableLikeTableName(String tableName) throws SqlRunException {
+	    Connection connection = null;
+	    PreparedStatement prestmt = null;
+	    try{
+            connection = this.getBackConnection();
             String sql = "SELECT table_name FROM information_schema.tables WHERE table_name like '%"+tableName+"%' ORDER BY table_name DESC";
+            
             LogUtil.info(sql);
-            PreparedStatement preparedStatement = connection.prepareStatement(sql);
-            ResultSet resultSet =  preparedStatement.executeQuery();
-            List ls = resultSetToList(resultSet);
-            return ls;
+            
+            prestmt = connection.prepareStatement(sql);
+            return resultSetToList(prestmt.executeQuery());
         }catch (Exception e){
-            e.printStackTrace();
+            throw new SqlRunException(e.getMessage());
+        }finally {
+            if (null != prestmt) {
+                try {
+                    prestmt.close();
+                } catch (SQLException e) {
+                    LogUtil.error("PreparedStatement 关闭异常！", e);
+                }
+            }
+            if (null != connection) {
+                try {
+                    connection.close();
+                } catch (SQLException e) {
+                    LogUtil.error("Connection 关闭异常！", e);
+                }
+            }
         }
-		return null;
 	}
 
 	@Override
-	public List<Map<String, String>> queryTableColumn(String tableName) {
-        try{
-            Connection connection = this.getBackConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement("Select distinct COLUMN_NAME, DATA_TYPE, COLUMN_COMMENT from INFORMATION_SCHEMA.COLUMNS Where table_name='"+tableName+"'");
-            ResultSet resultSet =  preparedStatement.executeQuery();
-            List ls = resultSetToList(resultSet);
-            return ls;
+	public List<Map<String, String>> queryTableColumn(String tableName) throws SqlRunException {
+        Connection connection = null;
+        PreparedStatement prestmt = null;
+	    try{
+            connection = this.getBackConnection();
+            String sql = "Select distinct COLUMN_NAME, DATA_TYPE, COLUMN_COMMENT from INFORMATION_SCHEMA.COLUMNS Where table_name='"+tableName+"'";
+
+            LogUtil.info(sql);
+            
+            prestmt = connection.prepareStatement(sql);
+            return resultSetToList(prestmt.executeQuery());
         }catch (Exception e){
-            e.printStackTrace();
+            throw new SqlRunException(e.getMessage());
+        }finally {
+            if (null != prestmt) {
+                try {
+                    prestmt.close();
+                } catch (SQLException e) {
+                    LogUtil.error("PreparedStatement 关闭异常！", e);
+                }
+            }
+            if (null != connection) {
+                try {
+                    connection.close();
+                } catch (SQLException e) {
+                    LogUtil.error("Connection 关闭异常！", e);
+                }
+            }
         }
-		return null;
 	}
 
 	@Override
@@ -114,19 +144,37 @@ public class BackMysqlDaoImpl extends BaseBackDaoImpl implements IBackSqlDao{
 	}
 
 	@Override
-	public List<Map<String, String>> queryForPage(String selectSql, Integer pageStart, Integer pageSize) {
+	public List<Map<String, String>> queryForPage(String selectSql, Integer pageStart, Integer pageSize) throws SqlRunException {
         pageStart = pageStart == null? 0 : pageStart;
         String limitSql = pageSize == null ? " ": " limit "+ pageSize+","+pageSize;
+        Connection connection = null;
+        PreparedStatement prestmt = null;       
         try{
-            Connection connection = this.getBackConnection();
+            connection = this.getBackConnection();
             String sql = selectSql+limitSql;
-            PreparedStatement preparedStatement = connection.prepareStatement(sql);
-            ResultSet resultSet =  preparedStatement.executeQuery();
-            return resultSetToList(resultSet);
+
+            LogUtil.info(sql);
+            
+            prestmt = connection.prepareStatement(sql);
+            return resultSetToList(prestmt.executeQuery());
         }catch (Exception e){
-            e.printStackTrace();
+            throw new SqlRunException(e.getMessage());
+        }finally {
+            if (null != prestmt) {
+                try {
+                    prestmt.close();
+                } catch (SQLException e) {
+                    LogUtil.error("PreparedStatement 关闭异常！", e);
+                }
+            }
+            if (null != connection) {
+                try {
+                    connection.close();
+                } catch (SQLException e) {
+                    LogUtil.error("Connection 关闭异常！", e);
+                }
+            }
         }
-		return null;
 	}
     public List<Map<String, String>> queryBySql(String sql) throws SqlRunException{
 			return null;
@@ -176,18 +224,39 @@ public class BackMysqlDaoImpl extends BaseBackDaoImpl implements IBackSqlDao{
 	}
 
 	@Override
-	public boolean insertDataToTabByPartion(String sql,String tableName,String partionID) {
-		StringBuffer sb = new StringBuffer();
+	public boolean insertDataToTabByPartion(String sql,String tableName,String partionID) throws SqlRunException {
+        Connection connection = null;
+        PreparedStatement prestmt = null;
+        
+	    StringBuffer sb = new StringBuffer();
 		sb.append("insert into ").append(tableName).append("(").append(partionID).append(") ").append(sql);
 		Boolean res = true;
 		try {
-			Connection connection = this.getBackConnection();
-			PreparedStatement preparedStatement = connection.prepareStatement(sb.toString());
-			res = preparedStatement.execute();
-		} catch (Exception e) {
-			res = false;
-			e.printStackTrace();
-		}
+			connection = this.getBackConnection();
+
+            LogUtil.info(sb.toString());
+            
+			prestmt = connection.prepareStatement(sb.toString());
+			res = prestmt.execute();
+		}catch (Exception e){
+		    res = false;
+            throw new SqlRunException(e.getMessage());
+        }finally {
+            if (null != prestmt) {
+                try {
+                    prestmt.close();
+                } catch (SQLException e) {
+                    LogUtil.error("PreparedStatement 关闭异常！", e);
+                }
+            }
+            if (null != connection) {
+                try {
+                    connection.close();
+                } catch (SQLException e) {
+                    LogUtil.error("Connection 关闭异常！", e);
+                }
+            }
+        }
 		return res;
 	}
 
