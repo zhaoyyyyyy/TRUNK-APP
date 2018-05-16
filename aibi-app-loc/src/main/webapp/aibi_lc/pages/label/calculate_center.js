@@ -581,6 +581,8 @@ var calculateCenter = (function (model){
 			  },
 			  onSuccess: function(){
 				    //删除失效的标签
+				    $(".shop-icon").removeClass("loading");
+				  	$(".shop-icon").find(".spinners").css("opacity",0);
 					flag = true;
 					callback();
 			  },
@@ -666,7 +668,11 @@ var calculateCenter = (function (model){
 			 onFailure:function(returnObj){
 				dataModel.exploreCustomNum = 0;
 				$.alert(returnObj.msg);
-			 }
+			 },
+			 beforeSend:function(){
+				 	$(".shop-icon").addClass("loading");
+				 	$(".shop-icon").find(".spinners").css("opacity",1);
+			}
 		});
 	};
 	/**
