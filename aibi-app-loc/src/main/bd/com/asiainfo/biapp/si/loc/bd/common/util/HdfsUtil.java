@@ -248,15 +248,17 @@ public class HdfsUtil {
 		FileOutputStream fileoutput = new FileOutputStream(new File(filename));
 		OutputStream out = new BufferedOutputStream(fileoutput);
 
-		byte[] b = new byte[1024];
-		int numBytes = 0;
-		while ((numBytes = in.read(b)) > 0) {
-			out.write(b, 0, numBytes);
-		}
-
-		in.close();
-		out.close();
-		fileoutput.close();
+		try {
+            byte[] b = new byte[1024];
+            int numBytes = 0;
+            while ((numBytes = in.read(b)) > 0) {
+                out.write(b, 0, numBytes);
+            } 
+        } finally {
+            in.close();
+            out.close();
+            fileoutput.close();
+        }
 	}
 
 	public static void catFile(String remoteFile) throws IOException {
