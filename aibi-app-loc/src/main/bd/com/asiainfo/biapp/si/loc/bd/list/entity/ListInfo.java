@@ -54,7 +54,7 @@ public class ListInfo extends BaseEntity{
 	private static final long serialVersionUID = 1L;
 
 	@EmbeddedId
-	private ListInfoId listInfo;
+	private ListInfoId listInfoId;
 	
 	/**
 	 * 清单总数
@@ -125,11 +125,11 @@ public class ListInfo extends BaseEntity{
 	}
 
 	public ListInfoId getListInfoId() {
-		return listInfo;
+		return listInfoId;
 	}
 
-	public void setListInfoId(ListInfoId listInfo) {
-		this.listInfo = listInfo;
+	public void setListInfoId(ListInfoId listInfoId) {
+		this.listInfoId = listInfoId;
 	}
 	
     
