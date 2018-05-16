@@ -555,16 +555,16 @@
 	display:block;
 }
 .ui-bracket-list{
-	position:absolute;
+	position:fixed;
 	left:140px;
 	top:200px;
-	z-index:99;
+	z-index:99999999;
 	background:#fff;
 	border:1px solid #ccc;
 	padding:3px;
 	margin: 0 0 0 12px;
 	width:120px;
-	display:none;
+/* 	display:none; */
 }
 .ui-bracket-list > li{
 	line-height:22px;
