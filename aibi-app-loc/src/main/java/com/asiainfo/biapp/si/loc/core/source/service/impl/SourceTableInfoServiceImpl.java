@@ -126,7 +126,7 @@ public class SourceTableInfoServiceImpl extends BaseServiceImpl<SourceTableInfo,
                 sourceTableInfoList.addAll(notPrepareData);
                 sourceTableInfoPage.setData(sourceTableInfoList);
             }
-        }else if(StringUtils.isEmpty(sourceTableInfoVo.getDataStatuses()) && StringUtils.isEmpty(sourceTableInfoVo.getIsDoings())){
+        }else {
             //运营总览点击专区跳转
             List<SourceTableInfo> sourceTableInfoList = sourceTableInfoPage.getData();
             sourceTableInfoList.addAll(notPrepareData);

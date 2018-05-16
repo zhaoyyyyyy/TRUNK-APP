@@ -2,6 +2,7 @@ package com.asiainfo.biapp.si.loc.auth.service.impl;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -192,6 +193,10 @@ public class DevUserServiceImpl extends BaseServiceImpl<User, String> implements
 				if(Resource.API.equals(resource.getParentId()) ){
 					apiResource.add(resource);
 				}else if(Resource.MENU.equals(resource.getParentId()) ){
+				    
+				    // 过滤有权限的子资源
+				    setResourcePrivaliegeChildren(resource,resourcePrivaliege,resource.getId());
+		            
 					menuResource.add(resource);
 				}else if(Resource.DOM.equals(resource.getParentId()) ){
 					domResource.add(resource);
@@ -207,8 +212,23 @@ public class DevUserServiceImpl extends BaseServiceImpl<User, String> implements
 		return user;
 	}
 
-	
-
-	
-	
+	/**
+	 * 过滤有权限的子菜单
+	 * add by shaosq 20180516
+	 * @param resource
+	 * @param resourcePrivaliege
+	 * @param parentId
+	 */
+    private void setResourcePrivaliegeChildren(Resource resource, List<Resource> resourcePrivaliege, String parentId) {
+         LinkedHashSet<Resource> children = new  LinkedHashSet<Resource>();
+         for(Resource child : resourcePrivaliege){
+             if(StringUtil.isNotEmpty(child.getParentId()) && child.getParentId().equals(parentId)){
+                 children.add(child);
+                 setResourcePrivaliegeChildren(child,resourcePrivaliege,child.getId());
+             }
+         }
+         if(children.size() > 0){
+             resource.setChildren(children);
+         }
+    }
 }
