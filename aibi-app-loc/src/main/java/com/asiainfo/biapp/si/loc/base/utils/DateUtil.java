@@ -1010,15 +1010,11 @@ public class DateUtil {
     public static String getEarlierDate(String dateAStr,String dateBStr,String format){
     	Date dateA = DateUtil.string2Date(dateAStr, format);
     	Date dateB = DateUtil.string2Date(dateBStr, format);
-    	if(dateA.getTime()>dateB.getTime()){
+    	if(null!=dateA && null!=dateB && dateA.getTime()>dateB.getTime()){
     		return dateBStr;
     	}else{
     		return dateAStr;
     	}
     }
 	
-	public static void main(String[] args) {
-
-		System.out.println(getEarlierDate("20150201","20150202","yyyyMMdd"));
-	}
 }

@@ -537,6 +537,7 @@ public class FtpUtil {
 		isIxistsForder(localPath);
 		// 列出该目录下所有文件
 		FTPFile[] fs = ftpClient.listFiles();
+		OutputStream is = null;
 		try {
 			// 遍历所有文件，找到指定的文件
 			for (FTPFile ff : fs) {
@@ -545,10 +546,9 @@ public class FtpUtil {
 					// 根据绝对路径初始化文件
 					File localFile = new File(localPath + File.separator + ff.getName());
 					// 输出流
-					OutputStream is = new FileOutputStream(localFile);
+					is = new FileOutputStream(localFile);
 					// 下载文件
 					ftpClient.retrieveFile(ff.getName(), is);
-					is.close();
 					LogUtil.debug("[" + ff.getName() + "]下载成功");
 				}
 			}
@@ -556,7 +556,11 @@ public class FtpUtil {
 		} catch (Exception e) {
 			flag = false;
 			return flag;
-		}
+		}finally {
+		    if (null != is) {
+                is.close();
+            }
+        }
 		return flag;
 	}
 
@@ -580,16 +584,16 @@ public class FtpUtil {
 		isIxistsForder(localPath);
 		// 列出该目录下所有文件
 		FTPFile[] fs = ftpClient.listFiles();
+		OutputStream os = null;
 		try {
 			// 遍历所有文件，找到指定的文件
 			for (FTPFile ff : fs) {
 				if (fileNames.contains(ff.getName())) {
 					// 根据绝对路径初始化文件
 					File localFile = new File(localPath + File.separator + ff.getName());
-					OutputStream os = new FileOutputStream(localFile);
+					os = new FileOutputStream(localFile);
 					// 下载文件
 					ftpClient.retrieveFile(ff.getName(), os);
-					os.close();
 					LogUtil.debug("[" + ff.getName() + "]下载成功");
 				}
 			}
@@ -597,7 +601,11 @@ public class FtpUtil {
 		} catch (Exception e) {
 			flag = false;
 			return flag;
-		}
+		}finally {
+		    if (null != os) {
+                os.close();
+            }
+        }
 		return flag;
 	}
 

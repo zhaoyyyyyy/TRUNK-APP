@@ -191,7 +191,7 @@ public class HttpUtil {
 	                result += line;
 	            }
 	        } catch (Exception e) {
-	        	throw e;
+	            LogUtil.error(e);
 	        }
 	        // 使用finally块来关闭输入流
 	        finally {
@@ -200,7 +200,7 @@ public class HttpUtil {
 	                    in.close();
 	                }
 	            } catch (Exception e2) {
-	            	throw e2;
+	                LogUtil.error(e2);
 	            }
 	        }
 	        return result;
@@ -302,7 +302,7 @@ public class HttpUtil {
 	                result += line;
 	            }
 	        } catch (Exception e) {
-	        	throw e;
+                LogUtil.error(e);
 	        }
 	        //使用finally块来关闭输出流、输入流
 	        finally{
@@ -315,7 +315,7 @@ public class HttpUtil {
 	                }
 	            }
 	            catch(IOException ex){
-	            	throw ex;
+	                LogUtil.error(ex);
 	            }
 	        }
 	        return result;

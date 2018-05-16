@@ -16,6 +16,7 @@ import org.hibernate.id.IdentifierGenerator;
 import org.hibernate.service.ServiceRegistry;
 import org.hibernate.type.Type;
 
+import com.asiainfo.biapp.si.loc.base.utils.LogUtil;
 import com.asiainfo.biapp.si.loc.base.utils.StringUtil;
 
 /**
@@ -73,9 +74,11 @@ public class LocGenerateId implements IdentifierGenerator,Configurable  {
     public Serializable generate(SessionImplementor session, Object object)
             throws HibernateException {
         Connection connection = session.connection();
+        PreparedStatement ps = null;
+        ResultSet rs = null;
         try {
-            PreparedStatement ps = connection.prepareStatement("SELECT nextval('"+name+"') as nextval");
-            ResultSet rs = ps.executeQuery();
+            ps = connection.prepareStatement("SELECT nextval('"+name+"') as nextval");
+            rs = ps.executeQuery();
             if (rs.next()) {
                 int id = rs.getInt("nextval");
                 String code = prefix + StringUtils.leftPad("" + id,size, '0');
@@ -84,6 +87,28 @@ public class LocGenerateId implements IdentifierGenerator,Configurable  {
         } catch (SQLException e) {
             throw new HibernateException(
                     "Unable to generate Stock Code Sequence");
+        }finally {
+            if (null != rs) {
+                try {
+                    rs.close();
+                } catch (SQLException e) {
+                    LogUtil.error("ResultSet 关闭异常！", e);
+                } 
+            }
+            if (null != ps) {
+                try {
+                    ps.close();
+                } catch (SQLException e) {
+                    LogUtil.error("PreparedStatement 关闭异常！", e);
+                } 
+            }
+            if (null != connection) {
+                try {
+                    connection.close();
+                } catch (SQLException e) {
+                    LogUtil.error("connection 关闭异常！", e);
+                } 
+            }
         }
         return null;
     }

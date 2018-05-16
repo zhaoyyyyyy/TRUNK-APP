@@ -190,10 +190,12 @@ public class FileUtil {
             if (StringUtil.isEmpty(content)) {
                 f.createNewFile();//仅创建一个空文件
             } else {//向文件中写入内容
-                BufferedWriter bw = new BufferedWriter(new FileWriter(f));
+                FileWriter fileWriter = new FileWriter(f);
+                BufferedWriter bw = new BufferedWriter(fileWriter);
                 bw.append(content.replace("\\n", System.getProperty("line.separator")));
                 bw.flush();
                 bw.close();
+                fileWriter.close();
             }
         }
     }
@@ -275,6 +277,7 @@ public class FileUtil {
         ZipEntry entry = null;
         int bufferSize = 2048;
         InputStream in = null;
+        FileInputStream fin = null;
         try {
             os = new BufferedOutputStream(new FileOutputStream(destZipFile), bufferSize);
             zipOut = new ZipOutputStream(os);
@@ -291,7 +294,8 @@ public class FileUtil {
                 entry = new ZipEntry(f.getName());
                 zipOut.putNextEntry(entry);
                 //byte data[] = readFileByte(f);一次读取性能较慢
-                in = new BufferedInputStream(new FileInputStream(f), bufferSize);
+                fin = new FileInputStream(f);
+                in = new BufferedInputStream(fin, bufferSize);
                 byte data[] = new byte[bufferSize];
                 int count;
                 while ((count = in.read(data, 0, bufferSize)) != -1) {
@@ -308,6 +312,7 @@ public class FileUtil {
             LogUtil.error("zipFileUnPassword error:", e);
         } finally {
             LogUtil.debug("The cost of compressing files :  " + (System.currentTimeMillis() - t1) + "ms");
+            fin.close();
             zipOut.close();
             os.close();
         }
