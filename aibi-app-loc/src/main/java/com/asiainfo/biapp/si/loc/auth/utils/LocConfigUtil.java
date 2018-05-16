@@ -87,7 +87,8 @@ public class LocConfigUtil {
             if (StringUtils.isBlank(strs[i])) {
                 continue;
             }
-            JSONObject jsobj = JSONObject.fromObject(strs[i] += "}");
+            strs[i] += "}";
+            JSONObject jsobj = JSONObject.fromObject(strs[i]);
             returnMap.put(jsobj.getString("configKey"), jsobj.getString("configVal"));
         }
         return returnMap;
