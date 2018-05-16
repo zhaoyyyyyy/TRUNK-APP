@@ -413,11 +413,13 @@ public class BackHiveDaoImpl extends BaseBackDaoImpl implements IBackSqlDao{
 		sb.append("CREATE TABLE ").append(super.getCurBackDbSchema()).append(".").append(tableName);
 		sb.append("(");
 		Set<String> keySet = columnName.keySet();
-		for(String colName : keySet){
-			if(primaryKey.contains(colName)){
-				continue;
-			}
-			sb.append(colName).append(" ").append(columnName.get(colName)).append(",");
+		if (!primaryKey.isEmpty()) {
+		    for(String colName : keySet){
+		        if(primaryKey.contains(colName)){
+		            continue;
+		        }
+		        sb.append(colName).append(" ").append(columnName.get(colName)).append(",");
+		    }
 		}
 		sb.delete(sb.length()-1, sb.length());
 		sb.append(")");
