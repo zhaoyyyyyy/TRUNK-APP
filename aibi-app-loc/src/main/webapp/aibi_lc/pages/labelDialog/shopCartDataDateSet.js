@@ -85,7 +85,7 @@ var dataDateModel = (function (model){
      * 传入参数：newLabelMonthFormat所选月数据日期；newLabelDayFormat所选日数据日期
      * {flag:true,msg:""} flag:true所选数据日期早于标签生效日期，false没有早于标签生效日期
 	 */
-	model.checkRuleEffectDate = function(labelMonthArg,labelDayArg,wd){debugger
+	model.checkRuleEffectDate = function(labelMonthArg,labelDayArg,wd){
 		$("#dialog").dialog({
 		      modal: true,
 		      autoOpen: true,
