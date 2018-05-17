@@ -303,6 +303,26 @@ window.loc_onload = function() {
 						  model.isActive=false;
 					}
 				},
+				sourceSelect:function(){
+					if(model.updateCycle==""){
+						$.alert("请先选择更新周期")
+					}else {
+						var win = $.window('指标配置', $.ctx + '/aibi_lc/pages/label/sourceInfo_mgr.html?readCycle='+model.updateCycle, 900, 500);
+						win.addKpis = function(chooseKpis) {
+							model.sourceIdList = chooseKpis;
+							var dependx="";
+							model.dependIndexList=[];
+							for(var i=0; i<chooseKpis.length; i++){
+								model.dependIndexList.push(chooseKpis[i])
+							}
+							for(var i=0; i<model.dependIndexList.length; i++){
+								dependx += model.dependIndexList[i]+","
+							}
+							model.dependIndex= dependx.substr(0,dependx.length-1);
+							$("#dependIndex").val(dependx.substr(0,dependx.length-1));
+						}
+					}	
+				},
 			},
 			mounted: function () {
 			    this.$nextTick(function () {
@@ -360,29 +380,6 @@ window.loc_onload = function() {
 	});
 	
 	
-	
-	
-	//指标选择
-	$('#btn_index_select').click(function() {
-		if(model.updateCycle==""){
-			$.alert("请先选择更新周期")
-		}else {
-			var win = $.window('指标配置', $.ctx + '/aibi_lc/pages/label/sourceInfo_mgr.html?readCycle='+model.updateCycle, 900, 500);
-			win.addKpis = function(chooseKpis) {
-				model.sourceIdList = chooseKpis;
-				var dependx="";
-				model.dependIndexList=[];
-				for(var i=0; i<chooseKpis.length; i++){
-					model.dependIndexList.push(chooseKpis[i])
-				}
-				for(var i=0; i<model.dependIndexList.length; i++){
-					dependx += model.dependIndexList[i]+","
-				}
-				model.dependIndex= dependx.substr(0,dependx.length-1);
-				$("#dependIndex").val(dependx.substr(0,dependx.length-1));
-			}
-		}	
-	});
 }
 
 

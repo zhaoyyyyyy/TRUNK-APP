@@ -105,7 +105,7 @@ public class BackAdsDaoImpl  extends BaseBackDaoImpl implements IBackSqlDao{
             rs =  st.executeQuery();
             return resultSetToList(rs);
         }catch (Exception e){
-            e.printStackTrace();
+            LogUtil.error(e.getMessage(), e);
         }finally{
         	JDBCUtil.getInstance().free(conn, st, rs);
         }
