@@ -1954,7 +1954,9 @@ input[type=checkbox].checkbix:checked+label>span.other{
 }
 .catch-error > span{
 	color:#FF0000;
-	margin:0 0 0 10px;
+	margin:10px 0 0 0px;
+	display:block;
+	line-height: 22px;
 }
 .state-ready{
 	color:#1DB6E1;
@@ -2320,4 +2322,34 @@ em.add-droit:before {
 }
 .ui-custom-mes.label-select-main li{
 	width:auto;
+}
+/*版本查看*/
+.ui-edition.column-contain{
+	overflow:hidden;
+	color:#333;
+	height:100%;
+}
+.ui-edition.column-contain > .ui-menu{
+	border-right:1px solid #DCE2E4;
+}
+.ui-edition-list.ui-label-list > li.ui-store-item{
+	float:none;
+	width:100%;
+}
+.ui-edition-list.ui-label-list > li.ui-store-item > div{
+	padding: 9px 10px;
+}
+.ui-edition-list.ui-label-list > li.ui-store-item > div:hover,
+.ui-edition-list.ui-label-list > li.ui-store-item > div.active{
+	background-color:#36a455;
+	color:#fff;
+}
+.ui-edition-form > .ui-form-group{
+	display:block;
+	border-bottom:1px solid #DCE2E4;
+	line-height:36px;
+	margin-bottom:0;
+}
+.ui-edition-form.form-horizontal .ui-form-group .control-label{
+	min-width:165px;
 }
