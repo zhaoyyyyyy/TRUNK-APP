@@ -154,6 +154,7 @@ function dataSearchKey(event){
 	}
 }
 function qryDataPrepareTableByCond(){
+	$("#dataPrepareError").css("display","none");
 	var sourceTableName = $("#sourceTableName").val();
 	var zbCodesTemp = [];
 	var cqCodesTemp = [];

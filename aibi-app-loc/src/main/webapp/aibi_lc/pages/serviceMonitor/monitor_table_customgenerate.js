@@ -111,6 +111,7 @@ function customSearchKey(event){
  * 表格检索:点击
  */
 function qryCustomGenerateTableByCond(){
+	$("#customGenerateError").css("display","none");
 	var labelName = $("#customGenerateName").val();
 	var khqscCodesTemp = [];
 	//查询准备状态

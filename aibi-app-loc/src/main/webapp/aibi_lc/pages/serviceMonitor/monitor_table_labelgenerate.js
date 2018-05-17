@@ -118,6 +118,7 @@ function labelSearchKey(event){
 	}
 }
 function qryLabelGenerateTableByCond(){
+	$("#catchError").css("display","none");
 	var labelName = $("#labelGenerateName").val();
 	var zqscCodesTemp = [];
 	$("#bqscAll").parents("span").siblings("span").find("input:checkbox:checked").each(function(){

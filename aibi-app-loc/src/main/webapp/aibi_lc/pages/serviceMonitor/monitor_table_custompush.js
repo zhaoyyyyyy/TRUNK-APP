@@ -121,6 +121,7 @@ function customPushSearchKey(event){
  * 表格检索：点击查询
  */
 function qryCustomPushTableByCond(){
+	$("#customPushError").css("display","none");
 	var labelName = $("#customPushName").val();
 	var khqtsCodesTemp = [];
 	//查询准备状态
