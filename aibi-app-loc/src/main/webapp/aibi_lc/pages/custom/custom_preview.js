@@ -1,5 +1,5 @@
 window.loc_onload = function() {
-	 labelId = $.getUrlParam("labelId");
+	 var labelId = $.getUrlParam("labelId");
 	 $.commAjax({			
 		    url : $.ctx+'/api/syspush/labelPushCycle/findGroupListCols',
 		    dataType : 'json', 

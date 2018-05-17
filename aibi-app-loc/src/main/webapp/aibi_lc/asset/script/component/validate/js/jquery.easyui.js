@@ -392,6 +392,7 @@ String.prototype.length2 = function() {
 					idcard_array = idcard.split("");
 					if (area[parseInt(idcard.substr(0, 2))] == null)
 						return false;
+					var ereg;
 					switch (idcard.length) {
 						
 						case 18 :

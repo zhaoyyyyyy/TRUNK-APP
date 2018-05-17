@@ -298,7 +298,7 @@ jQuery.extend({
 		height = getHeight(content, height); // 窗口高度
 		callback = callback || $.noop; // 确认后执行的方法
 		type = type || 'alert-message';
-		title = '提示信息'; // 窗口标题
+		var title = '提示信息'; // 窗口标题
 		
 		if (dg) {
 			alertDG = new dg.curWin.J.dialog({

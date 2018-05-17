@@ -104,7 +104,7 @@ window.loc_onload = function() {
 			model.customRule=data.data;
 			for (var i=0;i<model.customRule.length;i++){
 				if(model.customRule[i].elementType ==5){
-					html = "<div class='ui-custom-item clearfix clearfix' ><a><span> "+model.customRule[i].attrName+"</span></a><a><span>清单:"+model.customRule[i].attrVal+"</span></div>"
+					var html = "<div class='ui-custom-item clearfix clearfix' ><a><span> "+model.customRule[i].attrName+"</span></a><a><span>清单:"+model.customRule[i].attrVal+"</span></div>"
 					$("#labelDetail").append(html);
 				}
         		if(model.customRule[i].elementType ==2){
@@ -371,7 +371,7 @@ window.loc_onload = function() {
 			    	$.fn.zTree.init($("#ztree"), install, ztreeObj);
 		    	}  
 	   });
-		install = {
+	var	install = {
 			view: {
 				selectedMulti: false,
 			},

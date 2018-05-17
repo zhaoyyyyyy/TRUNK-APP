@@ -542,7 +542,7 @@ function ztreeFunc(){
 		    	$.fn.zTree.init($(".ztree"), setting, ztreeObj)
 	    	}  
    });
-	setting = {
+	var setting = {
 		view: {
 			selectedMulti: false,
 		},
@@ -585,7 +585,7 @@ function getData(tag){
 	if($(tag).parents(".create-main").hasClass("active")){
 		$(tag).parents(".create-main").removeClass("active");
 	}else{
-		formD=$(tag).parents(".create-main").addClass("active");
+		$(tag).parents(".create-main").addClass("active");
 	}
 		
 }

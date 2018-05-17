@@ -125,7 +125,7 @@ window.loc_onload = function(){
 				$accordionA.eq(0).click();
 				var $activeMenuAs = $accordionA.filter('[href=\''+hash+'\']').eq(0);
 				if($activeMenuAs.length > 0){
-					$activeMenuA = $activeMenuAs.eq(0);
+					var $activeMenuA = $activeMenuAs.eq(0);
 					var $activeMenuUl = $activeMenuA.parent().parent();
 					if(!$activeMenuUl.is("#accordion")){
 						$activeMenuUl.parent().prev().click();

@@ -221,7 +221,7 @@ function ztreeFunc(){
 		    	$.fn.zTree.init($(".ztree"), setting, ztreeObj)
 	    	}  
    });
-	setting = {
+	var setting = {
 		view: {
 			selectedMulti: false,
 		},

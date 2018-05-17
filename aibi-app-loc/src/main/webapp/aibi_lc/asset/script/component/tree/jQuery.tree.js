@@ -22,7 +22,7 @@
 					
 			};
 			option = $.extend(defaults,option);
-			this.setting = setting =  option.setting;
+			this.setting = option.setting;
 			var id = option.id ,treeData = option.treeData,expandAll= option.expandAll;
 			this.treeData = treeData;
 			this.instance = $.fn.zTree.init($("#" + id), setting,treeData);

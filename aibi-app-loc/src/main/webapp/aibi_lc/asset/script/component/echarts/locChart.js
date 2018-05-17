@@ -49,7 +49,7 @@ var locChart = {
 	e:{},
 	init:function(element,chartId) { // optSetting：初始化option
 		var chart = echarts.init(element);
-		e = chart;
+		var e = chart;
 		 
 		if(chartId){ //如果传入图表ID，则缓存起来供之后调用
 			locChart.chartMap[chartId] = e;

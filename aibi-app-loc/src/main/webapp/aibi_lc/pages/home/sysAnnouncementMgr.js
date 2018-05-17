@@ -3,7 +3,7 @@ window.loc_onload = function() {
 			var idArr = $("#jsonmap1").jqGrid('getGridParam','selarrrow');
 			if (idArr.length>0){
 				var ids = "";
-				for(i in idArr){
+				for(var i in idArr){
 					var a = $("#jsonmap1").getRowData(idArr[i]);
 					if (i == idArr.length-1){
 						ids += ('\''+a.announcementId+'\'');

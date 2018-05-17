@@ -6,7 +6,7 @@ window.loc_common_init = function (){
 	
 	//初始化下拉框
 	$('select[dicCode]').each(function(){
-		$self = $(this);
+		var $self = $(this);
 		var dicData = $.getDicData($self.attr('dicCode'));
 		
 		$self.append('<option value="">--全部--</option>');

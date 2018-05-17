@@ -142,7 +142,7 @@ window.loc_onload = function() {
 	});
 	
 	/* 清单生成*/
-	preDownloadGroupList = function(el,customDownloadRecordId){
+	var preDownloadGroupList = function(el,customDownloadRecordId){
 		var elParent = $(el).parent();
 		elParent.parent().children("td[aria-describedby='downloadGrid_fileName']").empty().append("<span>未知</span>");
 		if (VueModel.attrbuteNames) {
@@ -178,7 +178,7 @@ window.loc_onload = function() {
 		});
 	}
 	/* 清单下载*/
-	downloadGroupList = function(id){
+	var downloadGroupList = function(id){
 	    	$.commAjax({
 	    		url:$.ctx + '/api/syspush/customDownloadRecord/updateDownloadNum',
 	    		postData:{

@@ -39,7 +39,7 @@ window.loc_onload = function() {
 		    },
 		    maskMassage : 'Load...'
 	   });
-		setting = {  
+	var setting = {  
 			edit:{
 				drag:{
 					isCopy: false,
@@ -497,7 +497,7 @@ window.loc_onload = function() {
 			    	$.fn.zTree.init($("#labeltree"), install, ztreeObj)
 		    	}  
 	   });
-		install = {
+		var install = {
 			view: {
 				selectedMulti: false,
 			},
