@@ -110,26 +110,34 @@ public class HdfsUtil {
 			Path srcPath = new Path(localPath);
 
 			FSDataInputStream in = null;
+			InputStreamReader ins = null;
 			BufferedWriter out = null;
+			BufferedReader bf = null;
+			FileOutputStream fout = null;
 			try {
 				//先读出input流
 				in = fs.open(srcPath);
 				//由于追加方式写入不支持字节流读取，只能先转成字符流
-				BufferedReader bf = new BufferedReader(new InputStreamReader(in));
-				out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(dst, true),"gbk"));
+				ins = new InputStreamReader(in);
+                bf = new BufferedReader(ins);
+				fout = new FileOutputStream(dst, true);
+                out = new BufferedWriter(new OutputStreamWriter(fout,"gbk"));
 				// 打开一个随机访问文件流，按读写方式     
 				String valueString = null;
 				while ((valueString=bf.readLine())!=null) {
 					out.write(valueString);
 					out.newLine();//由于工具类不做自动换行，只能手动增加换行操作
 				}
-				bf.close();
-				in.close();
-				out.close();
 			} catch (IOException e) {
 				IOUtils.closeStream(in);
 				throw e;
-			}
+			}finally {
+			    bf.close();
+			    ins.close();
+			    in.close();
+			    fout.close();
+			    out.close();
+            }
 
 			// 下载hdfs上的文件
 			// fs.copyToLocalFile(false,srcPath, dstPath,true);
@@ -220,8 +228,8 @@ public class HdfsUtil {
 		String filename = fPath.substring(fPath.lastIndexOf('/') + 1,
 				fPath.length());
 
-		OutputStream out = new BufferedOutputStream(new FileOutputStream(
-				new File(filename)));
+		FileOutputStream fout = new FileOutputStream(new File(filename));
+        OutputStream out = new BufferedOutputStream(fout);
 
 		byte[] b = new byte[1024];
 		int numBytes = 0;
@@ -230,6 +238,7 @@ public class HdfsUtil {
 		}
 
 		in.close();
+		fout.close();
 		out.close();
 		// fs.close();
 	}
