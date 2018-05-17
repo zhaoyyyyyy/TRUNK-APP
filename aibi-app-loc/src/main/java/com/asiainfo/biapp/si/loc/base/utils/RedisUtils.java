@@ -540,7 +540,7 @@ public class RedisUtils {
 			// 返还到连接池
 			returnJedisResource(jedis);
 		}
-		return jedis.randomKey();
+		return null!=jedis ? jedis.randomKey() : null;
 	}
 
 	/**

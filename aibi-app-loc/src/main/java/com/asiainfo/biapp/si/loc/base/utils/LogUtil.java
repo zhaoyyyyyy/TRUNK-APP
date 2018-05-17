@@ -53,14 +53,15 @@ public class LogUtil {
     public static void debug(Object message) {
         String className = new String("");
         String method = new String("");
-        if(null!=getClassName()){
-            className = getClassName().getClassName();
-            method = getClassName().getMethodName();
+        StackTraceElement classNameTemp = getClassName();
+        if(null!=classNameTemp){
+            className = classNameTemp.getClassName();
+            method = classNameTemp.getMethodName();
         }
         String threadName = Thread.currentThread().getName();
         saveLog(LEVEL_DEBUG, threadName, className, method, message);
         Logger log = getLogger(className);
-        if (log.isDebugEnabled()) {
+        if (null!=log && log.isDebugEnabled()) {
             log.debug(message);
         }
     }
@@ -68,14 +69,15 @@ public class LogUtil {
     public static void info(Object message) {
         String className = new String("");
         String method = new String("");
-        if(null!=getClassName()){
-            className = getClassName().getClassName();
-            method = getClassName().getMethodName();
+        StackTraceElement classNameTemp = getClassName();
+        if(null!=classNameTemp){
+            className = classNameTemp.getClassName();
+            method = classNameTemp.getMethodName();
         }
         String threadName = Thread.currentThread().getName();
         saveLog(LEVEL_INFO, threadName, className, method, message);
         Logger log = getLogger(className);
-        if (log.isInfoEnabled()) {
+        if (null!=log && log.isInfoEnabled()) {
             log.info(message);
         }
     }
@@ -83,42 +85,51 @@ public class LogUtil {
     public static void warn(Object message) {
         String className = new String("");
         String method = new String("");
-        if(null!=getClassName()){
-            className = getClassName().getClassName();
-            method = getClassName().getMethodName();
+        StackTraceElement classNameTemp = getClassName();
+        if(null != classNameTemp){
+            className = classNameTemp.getClassName();
+            method = classNameTemp.getMethodName();
         }
         String threadName = Thread.currentThread().getName();
         saveLog(LEVEL_WARN, threadName, className, method, message);
         Logger log = getLogger(className);
-        log.warn(message);
+        if (null != log) {
+            log.warn(message);
+        }
     }
 
     public static void error(Object message) {
         // 获取堆栈信息
         String className = new String("");
         String method = new String("");
-        if(null!=getClassName()){
-            className = getClassName().getClassName();
-            method = getClassName().getMethodName();
+        StackTraceElement classNameTemp = getClassName();
+        if(null!=classNameTemp){
+            className = classNameTemp.getClassName();
+            method = classNameTemp.getMethodName();
         }
         String threadName = Thread.currentThread().getName();
         saveLog(LEVEL_ERROR, threadName, className, method, message);
         Logger log = getLogger(className);
-        log.error(message);
+        if (null != log) {
+            log.error(message);
+        }
     }
 
     public static void error(Object message, Throwable t) {
         // 获取堆栈信息
         String className = new String("");
         String method = new String("");
-        if(null!=getClassName()){
-            className = getClassName().getClassName();
-            method = getClassName().getMethodName();
+        StackTraceElement classNameTemp = getClassName();
+        if(null!=classNameTemp){
+            className = classNameTemp.getClassName();
+            method = classNameTemp.getMethodName();
         }
         String threadName = Thread.currentThread().getName();
         saveLog(LEVEL_ERROR, threadName, className, method, message + ":" + t.getMessage());
         Logger log = getLogger(className);
-        log.error(message, t);
+        if (null != log) {
+            log.error(message, t);
+        }
     }
 
     /**
@@ -165,7 +176,7 @@ public class LogUtil {
      * @param msg
      */
     private static void saveLog(String level, String threadName, String interfaceUrl, String method, Object msg) {
-    	//是否记录DEBUG日志
+        //是否记录DEBUG日志
      	String saveDebugLog = LocCacheBase.getInstance().getSysConfigInfoByKey("LOC_CONFIG_APP_SAVE_ALL_DEBUG_LOG");
 		//saveDebugLog = LocConfigUtil.getInstance(jauthUrl).getProperties("LOC_CONFIG_APP_SAVE_ALL_DEBUG_LOG");
 		if(LEVEL_DEBUG.equals(level) && !"true".equals(saveDebugLog)){
@@ -202,10 +213,14 @@ public class LogUtil {
 
             HttpUtil.sendPost(jauthUrl + "/api/log/monitor/save", params);
         } catch (Exception e) {
-        	StackTraceElement ste = getClassName();
-  	      	String className = ste.getClassName();
-  	      	Logger log = getLogger(className);
-  	      	log.error("给JAUTH同步日志出错",e);
+            StackTraceElement ste = getClassName();
+  	      	if (null != ste) {
+                String className = ste.getClassName();
+                Logger log = getLogger(className);
+                if (null != log) {
+                    log.error("给JAUTH同步日志出错", e);
+                }
+            }
         }
     }
 

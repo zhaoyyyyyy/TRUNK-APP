@@ -143,9 +143,12 @@ public class CategoryInfoServiceImpl extends BaseServiceImpl<CategoryInfo, Strin
             throw new ParamRequiredException("分类名称过长");
         }
         CategoryInfoVo categoryInfoVo = new CategoryInfoVo();
-        categoryInfoVo.setSysId(categoryInfo.getSysId());
-        categoryInfo.setSortNum(iCategoryInfoDao.selectAllCategoryInfoList(categoryInfoVo).size()+1);
-        super.saveOrUpdate(categoryInfo);
+        if(null != categoryInfo){
+            categoryInfoVo.setSysId(categoryInfo.getSysId());
+            categoryInfo.setSortNum(iCategoryInfoDao.selectAllCategoryInfoList(categoryInfoVo).size()+1);
+            super.saveOrUpdate(categoryInfo);
+        }
+        
     }
 
     @CacheEvict(value="LabelInfo",allEntries=true)

@@ -51,27 +51,49 @@ public final class ZipUtil {
 	public static byte[] getEncryptZipByte(File[] srcfile, String password, String encode) {
 		ByteArrayOutputStream tempOStream = new ByteArrayOutputStream(1024);
 		byte[] tempBytes = null;
+		EncryptZipOutput out = null;
+		FileInputStream in = null;
 		byte[] buf = new byte[1024];
 		try {
-			EncryptZipOutput out = new EncryptZipOutput(tempOStream, password);
+			out = new EncryptZipOutput(tempOStream, password);
 			out.setEncoding(encode);
 			for (int i = 0; i < srcfile.length; i++) {
-				FileInputStream in = new FileInputStream(srcfile[i]);
+				in = new FileInputStream(srcfile[i]);
 				out.putNextEntry(new EncryptZipEntry(srcfile[i].getName()));
 				int len;
 				while ((len = in.read(buf)) > 0) {
 					out.write(buf, 0, len);
 				}
 				out.closeEntry();
-				in.close();
 			}
 			tempOStream.flush();
-			out.close();
 			tempBytes = tempOStream.toByteArray();
-			tempOStream.close();
 		} catch (IOException e) {
 		    LogUtil.error("IOException:", e);
-		}
+		}finally {
+		    if (null != in) {
+		        try {
+	                in.close();
+		        } catch (IOException e) {
+		            LogUtil.error(e);
+		        }
+		    }
+		    if (null != out) {
+                try {
+                    out.close();
+                } catch (IOException e) {
+                    LogUtil.error(e);
+                }
+            }
+            if (null != tempOStream) {
+                try {
+                    tempOStream.close();
+                } catch (IOException e) {
+                    LogUtil.error(e);
+                }
+            }
+            
+        }
 
 		return tempBytes;
 	}

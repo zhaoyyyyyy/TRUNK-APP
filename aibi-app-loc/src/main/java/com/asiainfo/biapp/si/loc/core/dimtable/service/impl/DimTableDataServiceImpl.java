@@ -114,19 +114,21 @@ public class DimTableDataServiceImpl extends BaseServiceImpl<DimTableData, DimTa
                 if (null != dimTableInfos && !dimTableInfos.isEmpty()) {
                     for (DimTableInfo dimTableInfo : dimTableInfos) {
                         //获取sql，并查询，入库
-                        sql = this.getSql(schema, dimTableInfo, new StringBuilder());
-                        LogUtil.info("查询维表(" + dimTableInfo.getDimTableName() + "):" + sql);
-                        try {
-                            num = backServiceImpl.queryCount(sql);
-                        } catch (SqlRunException e) {
-                            //本维表注册的有问题，跳过
-                            LogUtil.warn("查询维表(" + dimTableInfo.getDimTableName() + ")总条数出错！");
-                            continue;
+                        if (null != dimTableInfo) {
+                            sql = this.getSql(schema, dimTableInfo, new StringBuilder());
+                            LogUtil.info("查询维表(" + dimTableInfo.getDimTableName() + "):" + sql);
+                            try {
+                                num = backServiceImpl.queryCount(sql);
+                            } catch (SqlRunException e) {
+                                //本维表注册的有问题，跳过
+                                LogUtil.warn("查询维表(" + dimTableInfo.getDimTableName() + ")总条数出错！");
+                                continue;
+                            }
+                            if (num > PAGE_SIZE) {
+                                forNum = (int) Math.ceil(num / PAGE_SIZE);
+                            }
+                            this.dimTableInfo2Data(dimTableInfo, sql, forNum);
                         }
-                        if (num > PAGE_SIZE) {
-                            forNum = (int) Math.ceil(num / PAGE_SIZE);
-                        }
-                        this.dimTableInfo2Data(dimTableInfo, sql, forNum);
                     }
                 } else {
                     LogUtil.info("维表("+tableName+")没有注册或没有数据。");

@@ -190,12 +190,21 @@ public class FileUtil {
             if (StringUtil.isEmpty(content)) {
                 f.createNewFile();//仅创建一个空文件
             } else {//向文件中写入内容
-                FileWriter fileWriter = new FileWriter(f);
-                BufferedWriter bw = new BufferedWriter(fileWriter);
-                bw.append(content.replace("\\n", System.getProperty("line.separator")));
-                bw.flush();
-                bw.close();
-                fileWriter.close();
+                FileWriter fileWriter = null;
+                BufferedWriter bw = null;
+                try {
+                    fileWriter = new FileWriter(f);
+                    bw = new BufferedWriter(fileWriter);
+                    bw.append(content.replace("\\n", System.getProperty("line.separator")));
+                    bw.flush();
+                } finally {
+                    if (null != bw) {
+                        bw.close();
+                    }
+                    if (null != fileWriter) {
+                        fileWriter.close();
+                    }
+                }
             }
         }
     }
@@ -312,9 +321,15 @@ public class FileUtil {
             LogUtil.error("zipFileUnPassword error:", e);
         } finally {
             LogUtil.debug("The cost of compressing files :  " + (System.currentTimeMillis() - t1) + "ms");
-            fin.close();
-            zipOut.close();
-            os.close();
+            if (null != fin) {
+                fin.close();
+            }
+            if (null != zipOut) {
+                zipOut.close();
+            }
+            if (null != os) {
+                os.close();
+            }
         }
     }
 
