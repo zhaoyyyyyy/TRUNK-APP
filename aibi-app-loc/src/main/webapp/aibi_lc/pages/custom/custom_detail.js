@@ -462,6 +462,11 @@ window.loc_onload = function() {
 	   });
     });
     $("#selectedLabel").delegate("input","click",function(){//右边
+    	if($("#selectedLabel li").find("input:checkbox:checked").length){
+			$(".ui-custom-left").addClass("active");
+		}else{
+			$(".ui-custom-left").removeClass("active");
+		}
 		if($(this).siblings("label").hasClass("active")){
 			$(this).siblings("label").removeClass("active");
 			$(this).prop("checked", false);
@@ -471,6 +476,9 @@ window.loc_onload = function() {
 		}
 	})
     $("#custom_left").click(function(){
+    	if($("#OptionalLabel li").find("input:checkbox:checked").length==0){
+			$(".ui-custom-left").removeClass("active");
+		}
     	var attrId ="",attrName="";
 		$("#selectedLabel label[class~=active]").each(function(){
 			//$("#addALine").html("");
@@ -519,6 +527,11 @@ window.loc_onload = function() {
 		}
     })
     $("#OptionalLabel").delegate("input","click",function(){//左边
+    	if($("#OptionalLabel li").find("input:checkbox:checked").length){
+			$(".ui-custom-right").addClass("active");
+		}else{
+			$(".ui-custom-right").removeClass("active");
+		}
 		if($(this).siblings("label").hasClass("active")){
 			$(this).siblings("label").removeClass("active");
 			$(this).prop("checked", false);
@@ -529,6 +542,9 @@ window.loc_onload = function() {
 	})
     $("#custom_right").click(function(){
     	//$("#addALine").html("");
+    	if($("#selectedLabel li").find("input:checkbox:checked").length==0){
+			$(".ui-custom-right").removeClass("active");
+		}
     	var attrId ="",attrName="";
     	if(model.calcuElementNamesLength + $("#OptionalLabel label[class~=active]").length<=10){
     		$("#OptionalLabel label[class~=active]").each(function(){
