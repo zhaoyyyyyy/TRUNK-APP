@@ -47,11 +47,11 @@ public class ListInfoDaoImpl extends BaseDaoImpl<ListInfo, String> implements IL
         StringBuilder hql = new StringBuilder("from ListInfo l where 1=1 ");
         if (null != listInfoVo.getListInfoId() ) {
             if(StringUtil.isNotBlank(listInfoVo.getListInfoId().getCustomGroupId())){
-                hql.append("and l.listInfo.customGroupId = :customGroupId ");
+                hql.append("and l.listInfoId.customGroupId = :customGroupId ");
                 params.put("customGroupId", listInfoVo.getListInfoId().getCustomGroupId());
             }
             if(StringUtil.isNotBlank(listInfoVo.getListInfoId().getDataDate())){
-                hql.append("and l.dataDate = :dataDate ");
+                hql.append("and l.listInfoId.dataDate = :dataDate ");
                 params.put("dataDate", listInfoVo.getListInfoId().getDataDate());
             }
         }

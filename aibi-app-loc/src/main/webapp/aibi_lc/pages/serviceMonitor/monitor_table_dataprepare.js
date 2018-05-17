@@ -37,7 +37,7 @@ function initDataPrepareTable(monitorDetail){
 			align : "center",
 			sortable : false,
 			formatter : function(value) {
-				if(value === null || Number(value) === 2){
+				if(value === null){
 					//未准备
 					return '<span class="state-unStart">' +$.getCodeDesc("SJZBZT",0)+ '</span>';
 				}else{

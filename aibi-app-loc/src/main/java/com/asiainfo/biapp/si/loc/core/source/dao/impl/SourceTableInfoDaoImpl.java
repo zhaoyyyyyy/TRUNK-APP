@@ -93,7 +93,7 @@ public class SourceTableInfoDaoImpl extends BaseDaoImpl<SourceTableInfo, String>
             }
         }
         hql.append("and l.sourceTableId not in ");
-        hql.append("( select a.sourceTableId from TargetTableStatus a where a.sourceTableId != 0 and a.dataDate = :dataDate)");
+        hql.append("( select a.sourceTableId from TargetTableStatus a where a.sourceTableId != '0' and a.dataDate = :dataDate)");
         params.put("dataDate",sourceTableInfoVo.getDataDate());
         return super.findListByHql(hql.toString(), params);
     }
@@ -219,7 +219,7 @@ public class SourceTableInfoDaoImpl extends BaseDaoImpl<SourceTableInfo, String>
      * VO需要参数：专区ID：configId（必须）,
      * 数据日期:dataDate（必须）,
      * 指标源表表名(英文非必须):sourceTableName,
-     * 查询准备状态列表:dataStatuses 0：未准备；1：准备完成（支持多选）,
+     * 查询准备状态列表:准备完成,
      * 查询抽取状态列表:isDoings(支持多选)
      * @return
      */
@@ -227,7 +227,7 @@ public class SourceTableInfoDaoImpl extends BaseDaoImpl<SourceTableInfo, String>
         Map<String, Object> reMap = new HashMap<>();
         Map<String, Object> params = new HashMap<>();
         StringBuffer hql = new StringBuffer("select new SourceTableInfo(s.sourceTableId,s.sourceTableName,t.dataStatus,t.isDoing,t.startTime,t.endTime,t.exceptionDesc) "
-                + "from SourceTableInfo s left join s.targetTableStatusList t where 1=1  ");
+                + "from SourceTableInfo s join s.targetTableStatusList t where 1=1  ");
         if (StringUtil.isNotBlank(sourceTableInfoVo.getConfigId())) {
             hql.append("and s.configId = :configId ");
             params.put("configId", sourceTableInfoVo.getConfigId());
@@ -254,7 +254,7 @@ public class SourceTableInfoDaoImpl extends BaseDaoImpl<SourceTableInfo, String>
             }
             if(statusSet.contains(ServiceConstants.TargetTableStatus.TARGET_TABLE_PREPARED)){
                 //查询准备完成的数据：dataStatus !=2 && sourceTableId !=0
-                hql.append("and (t.dataStatus !=2 and t.sourceTableId != 0 )  ");
+                hql.append("and (t.dataStatus !=2 and t.sourceTableId != '0' )  ");
             }
         }
         //查询抽取状态列表
