@@ -2352,4 +2352,19 @@ em.add-droit:before {
 }
 .ui-edition-form.form-horizontal .ui-form-group .control-label{
 	min-width:165px;
+	padding:0;
+}
+/*版本比较*/
+.ui-version > .ui-form-group,
+.ui-version > .form-horizontal{
+	width:50%;
+}
+.ui-version > .form-horizontal{
+	border-top:1px solid #DCE2E4;
+}
+.ui-version > .form-horizontal:first-child{
+	border-right:1px solid #DCE2E4;
+}
+.ui-version .ui-edition-form > .ui-form-group.active{
+	background:#EAFFF2;
 }
