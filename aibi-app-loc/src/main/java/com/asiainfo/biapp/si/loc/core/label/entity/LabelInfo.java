@@ -67,7 +67,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
  */
 @Entity
 @Table(name = "LOC_LABEL_INFO")
-public class LabelInfo extends BaseEntity {
+public class LabelInfo  {
 
     private static final long serialVersionUID = 2035013017939483936L;
 

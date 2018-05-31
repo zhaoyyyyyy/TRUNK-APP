@@ -230,6 +230,14 @@
             <version>0.1.52</version>  
         </dependency>  
 
+
+		<!-- 解决依赖漏掉的情况，偶尔发生 -->
+		<dependency>
+		    <groupId>net.sf.ezmorph</groupId>
+		    <artifactId>ezmorph</artifactId>
+		    <version>1.0.6</version>
+		</dependency>
+		
 	</dependencies>
 
 

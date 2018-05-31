@@ -36,8 +36,8 @@ import com.asiainfo.biapp.si.loc.core.home.vo.LocUserReadInfoVo;
 @Repository
 public class LocUserReadInfoDaoImpl extends BaseDaoImpl<LocUserReadInfo, String> implements ILocUserReadInfoDao {
     private static final int FIRST_INDEX = 0; 
-
-    @Override
+    
+    /*@Override
     public LocUserReadInfo selectLocUserReadInfo(LocUserReadInfoVo locUserReadInfoVo) {
         Map<String, Object> reMap = fromBean(locUserReadInfoVo);
         Map<String, Object> params = (Map<String, Object>) reMap.get("params");
@@ -46,13 +46,25 @@ public class LocUserReadInfoDaoImpl extends BaseDaoImpl<LocUserReadInfo, String>
             return userReadInfoList.get(FIRST_INDEX);
         }
         return null;
-    }
-
+    }*/
+    
     @Override
+	public LocUserReadInfo selectLocUserReadInfo(LocUserReadInfoVo locUserReadInfoVo) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void insertLocUserReadInfo(LocUserReadInfo locUserReadInfo) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/*@Override
     public void insertLocUserReadInfo(LocUserReadInfo locUserReadInfo) {
         super.saveOrUpdate(locUserReadInfo);
     }
-
+*/
     @Override
     public void updateLocUserReadInfo(LocUserReadInfo locUserReadInfo) {
         super.update(locUserReadInfo);
